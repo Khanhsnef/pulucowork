@@ -5,9 +5,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd /Users/ts-1148/Desktop/Cowork && git add -A && git diff --cached --quiet || git commit -m \"auto-sync: $(date +'%Y-%m-%d %H:%M')\" && git push 2>/dev/null || true",
-            "timeout": 30,
-            "statusMessage": "Syncing to GitHub..."
+            "command": "cd /Users/ts-1148/Desktop/Cowork && git add -A && git diff --cached --quiet || git commit -m \"auto-sync: $(date +'%Y-%m-%d %H:%M')\" && git push 2>/dev/null || true; rsync -a --delete --exclude='.git/' /Users/ts-1148/Desktop/Cowork/ \"/Users/ts-1148/Library/CloudStorage/GoogleDrive-lephuongkhanh1995@gmail.com/My Drive/Cowork/\" 2>/dev/null || true",
+            "timeout": 60,
+            "statusMessage": "Syncing to GitHub & Drive..."
           }
         ]
       }
