@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /Users/ts-1148/Desktop/Cowork && git add -A && git diff --cached --quiet || git commit -m \"auto-sync: $(date +'%Y-%m-%d %H:%M')\" && git push 2>/dev/null || true",
+            "timeout": 30,
+            "statusMessage": "Syncing to GitHub..."
+          }
+        ]
+      }
+    ]
+  }
+}
