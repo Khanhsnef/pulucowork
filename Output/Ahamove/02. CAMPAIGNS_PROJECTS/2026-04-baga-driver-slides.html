@@ -6,635 +6,730 @@
 <title>BAGA DRIVER — Phân tích 2024-2025</title>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Lexend', sans-serif;
-    background: #f0f4f8;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
-    padding: 40px 24px;
-  }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-  /* ─── SLIDE SHELL ─── */
-  .slide {
-    width: 1080px;
-    background: #ffffff;
-    border-radius: 2.5rem;
-    overflow: hidden;
-    box-shadow: 0 8px 40px rgba(14,65,116,.12);
-  }
+body {
+  font-family: 'Lexend', sans-serif;
+  background: #08111F;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  min-height: 100vh;
+}
 
-  /* ─── HEADER ─── */
-  .slide-header {
-    background: #0E4174;
-    padding: 28px 48px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .slide-header .brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .brand-dot {
-    width: 36px; height: 36px;
-    background: #FF7F32;
-    border-radius: 50%;
-  }
-  .brand-name {
-    font-size: 22px;
-    font-weight: 800;
-    color: #fff;
-    letter-spacing: -0.5px;
-  }
-  .slide-meta {
-    font-size: 13px;
-    font-weight: 400;
-    color: rgba(255,255,255,.65);
-    text-align: right;
-    line-height: 1.6;
-  }
-  .slide-title {
-    font-size: 28px;
-    font-weight: 800;
-    color: #fff;
-    letter-spacing: -0.5px;
-  }
-  .slide-subtitle {
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(255,255,255,.7);
-    margin-top: 4px;
-  }
+/* ── SLIDE SHELL 16:9 ── */
+.slide {
+  width: 1280px;
+  height: 720px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
 
-  /* ─── BODY ─── */
-  .slide-body {
-    padding: 36px 48px 40px;
-    background: #f8fafc;
-  }
+/* ── SHARED BG ── */
+.slide-bg {
+  position: absolute; inset: 0;
+  background: #080F1D;
+}
+.slide-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 110%, rgba(255,127,50,.13) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 10% -10%, rgba(14,65,116,.5) 0%, transparent 55%);
+}
 
-  /* ─── KPI CARDS ─── */
-  .kpi-row {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 32px;
-  }
-  .kpi-card {
-    flex: 1;
-    background: #fff;
-    border: 1.5px solid #e5eaf2;
-    border-radius: 1.5rem;
-    padding: 20px 24px;
-  }
-  .kpi-card.primary {
-    background: #FF7F32;
-    border-color: #FF7F32;
-  }
-  .kpi-card.primary .kpi-value,
-  .kpi-card.primary .kpi-label { color: #fff; }
-  .kpi-value {
-    font-size: 40px;
-    font-weight: 900;
-    color: #0E4174;
-    letter-spacing: -1.5px;
-    line-height: 1;
-  }
-  .kpi-label {
-    font-size: 13px;
-    font-weight: 500;
-    color: #64748b;
-    margin-top: 6px;
-    line-height: 1.4;
-  }
-  .kpi-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 999px;
-    margin-top: 8px;
-  }
-  .badge-warn { background: #FEF3C7; color: #92400E; }
-  .badge-ok   { background: #D1FAE5; color: #065F46; }
+/* ── NOISE TEXTURE ── */
+.slide-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: .4;
+  pointer-events: none;
+}
 
-  /* ─── TWO-COL ─── */
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
+/* ── GRID LINES ── */
+.grid-lines {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
 
-  /* ─── PANEL ─── */
-  .panel {
-    background: #fff;
-    border: 1.5px solid #e5eaf2;
-    border-radius: 1.5rem;
-    padding: 24px;
-  }
-  .panel-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #0E4174;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    letter-spacing: .4px;
-  }
-  .panel-sub {
-    font-size: 12px;
-    color: #94a3b8;
-    margin-bottom: 18px;
-  }
+/* ── ORANGE ACCENT LINE ── */
+.accent-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #FF7F32 0%, #FF4E00 40%, transparent 100%);
+}
 
-  /* ─── BAR CHART (SVG-less horizontal) ─── */
-  .bar-item {
-    margin-bottom: 14px;
-  }
-  .bar-label-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 5px;
-  }
-  .bar-city { font-size: 13px; font-weight: 600; color: #1e293b; }
-  .bar-pct  { font-size: 18px; font-weight: 800; color: #FF7F32; }
-  .bar-track {
-    height: 12px;
-    background: #e2e8f0;
-    border-radius: 999px;
-    overflow: hidden;
-  }
-  .bar-fill {
-    height: 100%;
-    border-radius: 999px;
-    background: #FF7F32;
-  }
-  .bar-pool {
-    font-size: 11px;
-    color: #94a3b8;
-    margin-top: 4px;
-  }
+/* ── SLIDE CONTENT (relative) ── */
+.slide-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 56px 36px;
+}
 
-  /* ─── SURVIVAL COMPARE ─── */
-  .survival-row {
-    display: flex;
-    gap: 20px;
-    align-items: stretch;
-  }
-  .survival-city {
-    flex: 1;
-    border-radius: 1.25rem;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .survival-city.han { background: #FEF2F2; border: 2px solid #FCA5A5; }
-  .survival-city.sgn { background: #F0FDF4; border: 2px solid #6EE7B7; }
-  .city-name {
-    font-size: 13px;
-    font-weight: 700;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: .5px;
-  }
-  .survival-pct {
-    font-size: 56px;
-    font-weight: 900;
-    letter-spacing: -2px;
-    line-height: 1;
-  }
-  .han .survival-pct { color: #EF4444; }
-  .sgn .survival-pct { color: #10B981; }
-  .survival-status {
-    font-size: 12px;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 999px;
-    display: inline-block;
-    width: fit-content;
-  }
-  .han .survival-status { background: #FEE2E2; color: #991B1B; }
-  .sgn .survival-status { background: #D1FAE5; color: #065F46; }
-  .survival-detail {
-    font-size: 12px;
-    color: #64748b;
-    line-height: 1.8;
-  }
-  .survival-detail span { font-weight: 700; color: #1e293b; }
+/* ── HEADER ── */
+.s-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  flex-shrink: 0;
+}
+.s-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.eyebrow-dot {
+  width: 8px; height: 8px;
+  background: #FF7F32;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255,127,50,.8);
+}
+.eyebrow-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #FF7F32;
+}
+.s-title {
+  font-size: 30px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+}
+.s-subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255,255,255,.4);
+  margin-top: 4px;
+}
+.s-slide-num {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,.2);
+  text-align: right;
+  letter-spacing: 1px;
+}
+.s-slide-num span { color: rgba(255,255,255,.6); }
 
-  /* ─── DONUT (inline SVG) ─── */
-  .donut-wrap {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-top: 6px;
-  }
-  .donut-legend { flex: 1; }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: #475569;
-    margin-bottom: 8px;
-  }
-  .legend-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .legend-val { font-weight: 700; color: #1e293b; }
+/* ── GLASS CARD ── */
+.glass {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.glass:hover { border-color: rgba(255,255,255,.12); }
 
-  /* ─── QUARTERLY BARS (SVG) ─── */
-  .q-row {
-    display: flex;
-    gap: 12px;
-    align-items: flex-end;
-    margin-top: 8px;
-    height: 90px;
-  }
-  .q-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-  .q-bar-wrap {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    height: 72px;
-  }
-  .q-bar {
-    width: 100%;
-    border-radius: 6px 6px 0 0;
-    background: #0E4174;
-    transition: height .3s;
-  }
-  .q-val { font-size: 11px; font-weight: 700; color: #0E4174; }
-  .q-label { font-size: 10px; color: #94a3b8; font-weight: 500; }
-  .q-cost { font-size: 10px; color: #FF7F32; font-weight: 600; }
+/* ── TYPOGRAPHY ── */
+.label-xs {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+}
+.num-hero {
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: -3px;
+  line-height: 1;
+  color: #fff;
+}
+.num-lg {
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  line-height: 1;
+  color: #fff;
+}
+.num-md {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: #fff;
+}
+.orange { color: #FF7F32; }
+.dim { color: rgba(255,255,255,.5); }
+.small { font-size: 12px; color: rgba(255,255,255,.45); font-weight: 400; line-height: 1.6; }
 
-  /* ─── INSIGHT BOX ─── */
-  .insight {
-    background: #EFF6FF;
-    border-left: 4px solid #0E4174;
-    border-radius: 0 1rem 1rem 0;
-    padding: 14px 18px;
-    margin-top: 24px;
-    font-size: 13px;
-    color: #1e3a5f;
-    line-height: 1.7;
-  }
-  .insight strong { color: #0E4174; }
+/* ── PILL BADGE ── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.pill-warn { background: rgba(239,68,68,.15); color: #F87171; border: 1px solid rgba(239,68,68,.25); }
+.pill-ok   { background: rgba(16,185,129,.15); color: #34D399; border: 1px solid rgba(16,185,129,.25); }
+.pill-info { background: rgba(255,127,50,.15); color: #FF9F62; border: 1px solid rgba(255,127,50,.25); }
 
-  /* ─── ACTION ITEMS ─── */
-  .action-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .action-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 13px;
-    color: #334155;
-    line-height: 1.5;
-  }
-  .action-num {
-    width: 22px; height: 22px;
-    background: #0E4174;
-    color: #fff;
-    border-radius: 50%;
-    font-size: 11px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
+/* ── PROGRESS BAR ── */
+.prog-track {
+  height: 6px;
+  background: rgba(255,255,255,.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 8px 0 4px;
+}
+.prog-fill { height: 100%; border-radius: 999px; }
 
-  /* ─── FOOTER ─── */
-  .slide-footer {
-    background: #fff;
-    border-top: 1px solid #e5eaf2;
-    padding: 14px 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .footer-tag {
-    font-size: 11px;
-    color: #94a3b8;
-    font-weight: 500;
-  }
-  .footer-page {
-    font-size: 11px;
-    font-weight: 700;
-    color: #0E4174;
-  }
+/* ── SEPARATOR ── */
+.sep {
+  height: 1px;
+  background: rgba(255,255,255,.07);
+  margin: 14px 0;
+}
 
-  /* ─── DIVIDER ─── */
-  .section-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .divider-line { flex: 1; height: 1px; background: #e5eaf2; }
-  .divider-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: .8px;
-    white-space: nowrap;
-  }
+/* ═══════════════════════════
+   SLIDE 1 LAYOUT
+═══════════════════════════ */
+.s1-body {
+  display: grid;
+  grid-template-columns: 220px 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+}
+/* Hero card spans 2 rows */
+.s1-hero {
+  grid-row: 1 / 3;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgba(255,127,50,.08);
+  border: 1px solid rgba(255,127,50,.2);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.s1-hero::before {
+  content: '';
+  position: absolute;
+  bottom: -40px; right: -40px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(255,127,50,.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.s1-city-card {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.city-flag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.city-flag-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+
+/* ═══════════════════════════
+   SLIDE 2 LAYOUT
+═══════════════════════════ */
+.s2-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+}
+.s2-chart-card {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  padding: 24px 26px;
+  display: flex;
+  flex-direction: column;
+}
+.s2-survival-card {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 20px 24px;
+  display: flex;
+  gap: 14px;
+}
+.s2-action-card {
+  grid-column: 2;
+  grid-row: 2;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* survival city block */
+.surv-block {
+  flex: 1;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.surv-block.han {
+  background: rgba(239,68,68,.08);
+  border: 1px solid rgba(239,68,68,.18);
+}
+.surv-block.sgn {
+  background: rgba(16,185,129,.08);
+  border: 1px solid rgba(16,185,129,.18);
+}
+.surv-pct {
+  font-size: 44px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+}
+.surv-block.han .surv-pct { color: #F87171; }
+.surv-block.sgn .surv-pct { color: #34D399; }
+.surv-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(255,255,255,.4);
+}
+.surv-row span { color: rgba(255,255,255,.75); font-weight: 600; }
+
+/* action items */
+.action-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.action-item:last-child { border-bottom: none; padding-bottom: 0; }
+.action-icon {
+  width: 20px; height: 20px;
+  background: rgba(255,127,50,.15);
+  border: 1px solid rgba(255,127,50,.3);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 800;
+  color: #FF7F32;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.action-text {
+  font-size: 11.5px;
+  color: rgba(255,255,255,.6);
+  line-height: 1.5;
+}
+.action-text strong { color: rgba(255,255,255,.9); font-weight: 600; }
+
+/* ── FOOTER ── */
+.s-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  flex-shrink: 0;
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer-brand-logo {
+  width: 20px; height: 20px;
+  background: #FF7F32;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255,127,50,.5);
+}
+.footer-brand-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,.35);
+  letter-spacing: 1px;
+}
+.footer-tag {
+  font-size: 10px;
+  color: rgba(255,255,255,.2);
+  letter-spacing: 1px;
+}
+
+/* ── SCROLLABLE WRAPPER ── */
+.slides-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 1280px;
+}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     SLIDE 1 — THỰC TRẠNG TRANG BỊ BAGA
-═══════════════════════════════════════════ -->
+<div class="slides-wrap">
+
+<!-- ═══════════════════════════════════════
+     SLIDE 01 — THỰC TRẠNG TRANG BỊ
+═══════════════════════════════════════ -->
 <div class="slide">
-  <div class="slide-header">
-    <div>
-      <div class="brand">
-        <div class="brand-dot"></div>
-        <span class="brand-name">Ahamove</span>
-      </div>
-      <div class="slide-title" style="margin-top:14px">BAGA DRIVER — Thực Trạng Trang Bị</div>
-      <div class="slide-subtitle">Khảo sát giai đoạn 9/4 – 15/4 | HAN & SGN</div>
-    </div>
-    <div class="slide-meta">Driver Management<br>Q2 2026</div>
-  </div>
+  <div class="slide-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="accent-line"></div>
 
-  <div class="slide-body">
+  <div class="slide-content">
 
-    <!-- KPI ROW -->
-    <div class="kpi-row">
-      <div class="kpi-card primary">
-        <div class="kpi-value">7,365</div>
-        <div class="kpi-label">Tổng tài xế đã có baga</div>
+    <!-- HEADER -->
+    <div class="s-header">
+      <div>
+        <div class="s-eyebrow">
+          <div class="eyebrow-dot"></div>
+          <span class="eyebrow-text">Baga Driver Program · Khảo sát 9/4–15/4</span>
+        </div>
+        <div class="s-title">Thực Trạng Trang Bị Baga</div>
+        <div class="s-subtitle">Tỷ lệ tài xế đã có baga trên tổng pool · HAN & SGN</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-value">2,768</div>
-        <div class="kpi-label">Tài xế có baga tại Hà Nội</div>
-        <span class="kpi-badge badge-warn">38.6% pool HAN</span>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-value">4,597</div>
-        <div class="kpi-label">Tài xế có baga tại Sài Gòn</div>
-        <span class="kpi-badge badge-ok">49.0% pool SGN</span>
-      </div>
+      <div class="s-slide-num"><span>01</span> / 02</div>
     </div>
 
-    <!-- TWO COL -->
-    <div class="two-col">
+    <!-- BODY GRID -->
+    <div class="s1-body">
 
-      <!-- LEFT: Tỷ lệ trang bị -->
-      <div class="panel">
-        <div class="panel-title">Tỷ lệ trang bị baga / Pool tài xế</div>
-        <div class="panel-sub">Đã có baga ÷ Tổng tài xế khảo sát theo thành phố</div>
-
-        <div class="bar-item">
-          <div class="bar-label-row">
-            <span class="bar-city">HÀ NỘI</span>
-            <span class="bar-pct">38.6%</span>
-          </div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width:38.6%; background:#0E4174;"></div>
-          </div>
-          <div class="bar-pool">Pool: 7,174 tài xế &nbsp;|&nbsp; Đã có: 2,768 &nbsp;|&nbsp; Chưa có: 4,406</div>
-        </div>
-
-        <div class="bar-item" style="margin-bottom:0">
-          <div class="bar-label-row">
-            <span class="bar-city">SÀI GÒN</span>
-            <span class="bar-pct">49.0%</span>
-          </div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width:49%;"></div>
-          </div>
-          <div class="bar-pool">Pool: 9,582 tài xế &nbsp;|&nbsp; Đã có: 4,597 &nbsp;|&nbsp; Chưa có: 4,985</div>
-        </div>
-      </div>
-
-      <!-- RIGHT: Gap analysis -->
-      <div class="panel">
-        <div class="panel-title">Phân tích Gap</div>
-        <div class="panel-sub">Tài xế chưa được trang bị — cơ hội mở rộng</div>
-
-        <!-- Donut SGN -->
-        <div style="margin-bottom:16px">
-          <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:8px">SÀI GÒN — 9,582 tài xế</div>
-          <div class="donut-wrap">
-            <svg width="72" height="72" viewBox="0 0 72 72">
-              <circle cx="36" cy="36" r="28" fill="none" stroke="#e2e8f0" stroke-width="12"/>
-              <!-- 49% = 175.6deg → stroke-dasharray = 49% of circumference (175.93) = 86.2 -->
-              <circle cx="36" cy="36" r="28" fill="none" stroke="#FF7F32" stroke-width="12"
-                stroke-dasharray="86.2 175.93" stroke-dashoffset="44" stroke-linecap="round" transform="rotate(-90 36 36)"/>
-              <text x="36" y="40" text-anchor="middle" font-size="13" font-weight="800" fill="#0E4174" font-family="Lexend">49%</text>
-            </svg>
-            <div class="donut-legend">
-              <div class="legend-item"><div class="legend-dot" style="background:#FF7F32"></div>Đã có baga <span class="legend-val" style="margin-left:4px">4,597</span></div>
-              <div class="legend-item"><div class="legend-dot" style="background:#e2e8f0"></div>Chưa có baga <span class="legend-val" style="margin-left:4px">4,985</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Donut HAN -->
+      <!-- HERO CARD -->
+      <div class="s1-hero">
         <div>
-          <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:8px">HÀ NỘI — 7,174 tài xế</div>
-          <div class="donut-wrap">
-            <svg width="72" height="72" viewBox="0 0 72 72">
-              <circle cx="36" cy="36" r="28" fill="none" stroke="#e2e8f0" stroke-width="12"/>
-              <!-- 38.6% of circumference -->
-              <circle cx="36" cy="36" r="28" fill="none" stroke="#0E4174" stroke-width="12"
-                stroke-dasharray="67.9 175.93" stroke-dashoffset="44" stroke-linecap="round" transform="rotate(-90 36 36)"/>
-              <text x="36" y="40" text-anchor="middle" font-size="13" font-weight="800" fill="#0E4174" font-family="Lexend">39%</text>
-            </svg>
-            <div class="donut-legend">
-              <div class="legend-item"><div class="legend-dot" style="background:#0E4174"></div>Đã có baga <span class="legend-val" style="margin-left:4px">2,768</span></div>
-              <div class="legend-item"><div class="legend-dot" style="background:#e2e8f0"></div>Chưa có baga <span class="legend-val" style="margin-left:4px">4,406</span></div>
+          <div class="label-xs" style="margin-bottom:12px">Toàn quốc</div>
+          <div class="num-hero">7,365</div>
+          <div style="font-size:14px;color:rgba(255,255,255,.5);margin-top:8px;font-weight:400;line-height:1.5">
+            Tài xế đã được<br>trang bị baga
+          </div>
+        </div>
+
+        <div>
+          <div class="sep"></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+            <span class="label-xs">HAN</span>
+            <span style="font-size:13px;font-weight:700;color:#FF7F32">2,768</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+            <span class="label-xs">SGN</span>
+            <span style="font-size:13px;font-weight:700;color:#FF7F32">4,597</span>
+          </div>
+          <div class="sep"></div>
+          <div class="small">Giai đoạn khảo sát<br>09/04 – 15/04/2026</div>
+        </div>
+      </div>
+
+      <!-- HAN CARD -->
+      <div class="glass s1-city-card">
+        <div>
+          <div class="city-flag">
+            <div class="city-flag-dot" style="background:#5B9CF6;box-shadow:0 0 6px rgba(91,156,246,.8)"></div>
+            <span class="label-xs" style="color:#5B9CF6">Hà Nội</span>
+          </div>
+
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <div class="num-lg">38.6<span class="orange" style="font-size:24px">%</span></div>
+          </div>
+          <div class="small" style="margin-top:4px">Tỷ lệ có baga / Pool HAN</div>
+
+          <div class="prog-track" style="margin-top:14px">
+            <div class="prog-fill" style="width:38.6%;background:linear-gradient(90deg,#3B82F6,#60A5FA)"></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+            <div>
+              <div style="font-size:20px;font-weight:800;color:#fff">2,768</div>
+              <div class="label-xs" style="margin-top:3px">Đã có baga</div>
             </div>
+            <div>
+              <div style="font-size:20px;font-weight:800;color:rgba(255,255,255,.35)">4,406</div>
+              <div class="label-xs" style="margin-top:3px">Chưa có</div>
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <span class="pill pill-warn">⚠ Gap 10.4pp vs SGN</span>
+          </div>
+          <div class="small" style="margin-top:8px">Pool: 7,174 tài xế</div>
+        </div>
+      </div>
+
+      <!-- SGN CARD -->
+      <div class="glass s1-city-card">
+        <div>
+          <div class="city-flag">
+            <div class="city-flag-dot" style="background:#FF7F32;box-shadow:0 0 6px rgba(255,127,50,.8)"></div>
+            <span class="label-xs" style="color:#FF7F32">Sài Gòn</span>
+          </div>
+
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <div class="num-lg">49.0<span class="orange" style="font-size:24px">%</span></div>
+          </div>
+          <div class="small" style="margin-top:4px">Tỷ lệ có baga / Pool SGN</div>
+
+          <div class="prog-track" style="margin-top:14px">
+            <div class="prog-fill" style="width:49%;background:linear-gradient(90deg,#FF7F32,#FFAE70)"></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+            <div>
+              <div style="font-size:20px;font-weight:800;color:#fff">4,597</div>
+              <div class="label-xs" style="margin-top:3px">Đã có baga</div>
+            </div>
+            <div>
+              <div style="font-size:20px;font-weight:800;color:rgba(255,255,255,.35)">4,985</div>
+              <div class="label-xs" style="margin-top:3px">Chưa có</div>
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <span class="pill pill-ok">✓ Tốt hơn HAN</span>
+          </div>
+          <div class="small" style="margin-top:8px">Pool: 9,582 tài xế</div>
+        </div>
+      </div>
+
+      <!-- INSIGHT ROW — spans col 2+3 -->
+      <div class="glass" style="grid-column:2/4;padding:18px 24px;display:flex;align-items:center;gap:20px;">
+        <div style="width:3px;height:44px;background:linear-gradient(180deg,#FF7F32,transparent);border-radius:2px;flex-shrink:0;"></div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#FF9F62;letter-spacing:.5px;margin-bottom:4px">KEY INSIGHT</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.6">
+            SGN vượt HAN <strong style="color:#fff">10.4pp</strong> về tỷ lệ trang bị — tài xế SGN nhận đơn bulky hiệu quả hơn.
+            HAN còn <strong style="color:#FF7F32">4,406 tài xế chưa có baga</strong> là cơ hội mở rộng capacity nhận đơn nặng tại Hà Nội.
           </div>
         </div>
       </div>
 
-    </div><!-- /two-col -->
+    </div><!-- /s1-body -->
 
-    <div class="insight">
-      <strong>Key Insight:</strong> SGN vượt trội HAN 10.4pp về tỷ lệ trang bị baga (49% vs 39%). Tài xế SGN có khả năng nhận đơn bulky tốt hơn. HAN còn <strong>4,406 tài xế chưa có baga</strong> — đây là cơ hội mở rộng capacity nhận đơn nặng tại Hà Nội.
+    <!-- FOOTER -->
+    <div class="s-footer">
+      <div class="footer-brand">
+        <div class="footer-brand-logo"></div>
+        <span class="footer-brand-name">AHAMOVE</span>
+      </div>
+      <div class="footer-tag">DRIVER MANAGEMENT · INTERNAL ONLY · 2026</div>
     </div>
 
-  </div><!-- /body -->
-  <div class="slide-footer">
-    <span class="footer-tag">Ahamove Driver Management &nbsp;|&nbsp; Internal Only</span>
-    <span class="footer-page">01 / 02</span>
-  </div>
-</div>
+  </div><!-- /slide-content -->
+</div><!-- /slide 1 -->
 
 
-<!-- ═══════════════════════════════════════════
-     SLIDE 2 — HIỆU QUẢ ĐẦU TƯ & CHURN ANALYSIS
-═══════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     SLIDE 02 — HIỆU QUẢ ĐẦU TƯ & CHURN
+═══════════════════════════════════════ -->
 <div class="slide">
-  <div class="slide-header">
-    <div>
-      <div class="brand">
-        <div class="brand-dot"></div>
-        <span class="brand-name">Ahamove</span>
+  <div class="slide-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="accent-line"></div>
+
+  <div class="slide-content">
+
+    <!-- HEADER -->
+    <div class="s-header">
+      <div>
+        <div class="s-eyebrow">
+          <div class="eyebrow-dot"></div>
+          <span class="eyebrow-text">Baga Driver Program · Q4/2024 – Q4/2025</span>
+        </div>
+        <div class="s-title">Hiệu Quả Đầu Tư & Churn Analysis</div>
+        <div class="s-subtitle">Tổng chi phí 1.471 tỷ VNĐ · 5,788 tài xế archived · Survival rate HAN vs SGN</div>
       </div>
-      <div class="slide-title" style="margin-top:14px">BAGA DRIVER — Hiệu Quả Đầu Tư & Churn</div>
-      <div class="slide-subtitle">Review tài xế churn nhận Baga | Q4/2024 – Q4/2025 | Tổng chi phí: 1.471 tỷ VNĐ</div>
-    </div>
-    <div class="slide-meta">Driver Management<br>Q2 2026</div>
-  </div>
-
-  <div class="slide-body">
-
-    <!-- TOP ROW: Chi phí theo quý + Survival -->
-    <div class="two-col" style="margin-bottom:24px">
-
-      <!-- Chi phí theo quý -->
-      <div class="panel">
-        <div class="panel-title">Chi phí & Tài xế Archive theo Quý</div>
-        <div class="panel-sub">Xu hướng giảm dần — hiệu quả kiểm soát cải thiện</div>
-
-        <div class="q-row">
-          <!-- Q4 2024: max = 2785, scale to 72px -->
-          <div class="q-col">
-            <div class="q-val">2,785</div>
-            <div class="q-bar-wrap"><div class="q-bar" style="height:72px; background:#0E4174;"></div></div>
-            <div class="q-label">Q4/24</div>
-            <div class="q-cost">710M</div>
-          </div>
-          <div class="q-col">
-            <div class="q-val">1,405</div>
-            <div class="q-bar-wrap"><div class="q-bar" style="height:36px; background:#0E4174;"></div></div>
-            <div class="q-label">Q1/25</div>
-            <div class="q-cost">355M</div>
-          </div>
-          <div class="q-col">
-            <div class="q-val">925</div>
-            <div class="q-bar-wrap"><div class="q-bar" style="height:24px; background:#FF7F32;"></div></div>
-            <div class="q-label">Q2/25</div>
-            <div class="q-cost">235M</div>
-          </div>
-          <div class="q-col">
-            <div class="q-val">502</div>
-            <div class="q-bar-wrap"><div class="q-bar" style="height:13px; background:#FF7F32;"></div></div>
-            <div class="q-label">Q3/25</div>
-            <div class="q-cost">127M</div>
-          </div>
-          <div class="q-col">
-            <div class="q-val">171</div>
-            <div class="q-bar-wrap"><div class="q-bar" style="height:5px; background:#10B981;"></div></div>
-            <div class="q-label">Q4/25</div>
-            <div class="q-cost">44M</div>
-          </div>
-        </div>
-
-        <div style="margin-top:16px; padding-top:14px; border-top:1px solid #e5eaf2; display:flex; gap:16px;">
-          <div style="flex:1; text-align:center;">
-            <div style="font-size:28px;font-weight:900;color:#0E4174;letter-spacing:-1px;">1.471B</div>
-            <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Tổng chi phí</div>
-          </div>
-          <div style="flex:1; text-align:center;">
-            <div style="font-size:28px;font-weight:900;color:#EF4444;letter-spacing:-1px;">5,788</div>
-            <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Tổng tài xế archived</div>
-          </div>
-          <div style="flex:1; text-align:center;">
-            <div style="font-size:28px;font-weight:900;color:#0E4174;letter-spacing:-1px;">254K</div>
-            <div style="font-size:11px;color:#94a3b8;margin-top:2px;">CPO baga trung bình</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Survival Rate -->
-      <div class="panel">
-        <div class="panel-title">Tỷ lệ sống sót tài xế baga</div>
-        <div class="panel-sub">Active / Tổng tài xế nhận baga theo thành phố</div>
-
-        <div class="survival-row">
-          <div class="survival-city han">
-            <div class="city-name">Hà Nội</div>
-            <div class="survival-pct">34%</div>
-            <span class="survival-status">⚠ Báo động</span>
-            <div class="survival-detail">
-              Tổng nhận baga: <span>2,418</span><br>
-              Churn (archived): <span style="color:#EF4444">1,589</span><br>
-              Còn active: <span>829</span>
-            </div>
-          </div>
-          <div class="survival-city sgn">
-            <div class="city-name">Sài Gòn</div>
-            <div class="survival-pct">55%</div>
-            <span class="survival-status">✓ Tích cực</span>
-            <div class="survival-detail">
-              Tổng nhận baga: <span>3,370</span><br>
-              Churn (archived): <span style="color:#EF4444">1,502</span><br>
-              Còn active: <span>1,868</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Gap bar -->
-        <div style="margin-top:16px;padding:12px;background:#f8fafc;border-radius:1rem;">
-          <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px">Gap HAN vs SGN</div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="font-size:11px;color:#EF4444;font-weight:600;width:28px">34%</div>
-            <div style="flex:1;height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;">
-              <div style="display:flex;height:100%;">
-                <div style="width:34%;background:#EF4444;border-radius:999px 0 0 999px;"></div>
-                <div style="width:21%;background:#FF7F32;"></div>
-                <div style="width:45%;background:#e2e8f0;"></div>
-              </div>
-            </div>
-            <div style="font-size:11px;color:#10B981;font-weight:600;width:28px">55%</div>
-          </div>
-          <div style="font-size:11px;color:#64748b;margin-top:6px;">Gap: <strong style="color:#FF7F32">21 percentage points</strong> — SGN hiệu quả hơn HAN đáng kể</div>
-        </div>
-      </div>
-
-    </div><!-- /two-col -->
-
-    <!-- ACTION ITEMS -->
-    <div class="panel" style="background:#fff;">
-      <div class="panel-title" style="margin-bottom:14px">Đề xuất Hành động</div>
-      <ul class="action-list">
-        <li>
-          <div class="action-num">1</div>
-          <div><strong>Ưu tiên giải quyết churn HAN (34%):</strong> Phân tích root cause — thu nhập EPH, tần suất nhận đơn bulky, và chất lượng hỗ trợ sau trang bị để thiết kế intervention phù hợp.</div>
-        </li>
-        <li>
-          <div class="action-num">2</div>
-          <div><strong>Nhân rộng mô hình SGN về HAN:</strong> Áp dụng chính sách retention đang hiệu quả tại SGN (55%) — khuyến khích, follow-up sau trang bị, và target đúng tài xế core tier.</div>
-        </li>
-        <li>
-          <div class="action-num">3</div>
-          <div><strong>Tối ưu ROI trang bị baga:</strong> Chỉ trang bị cho tài xế đạt ngưỡng hoạt động tối thiểu (vd. ≥15 đơn/tuần), tránh lãng phí chi phí cho tài xế có nguy cơ churn cao.</div>
-        </li>
-      </ul>
+      <div class="s-slide-num"><span>02</span> / 02</div>
     </div>
 
-  </div><!-- /body -->
-  <div class="slide-footer">
-    <span class="footer-tag">Ahamove Driver Management &nbsp;|&nbsp; Internal Only</span>
-    <span class="footer-page">02 / 02</span>
-  </div>
-</div>
+    <!-- BODY GRID -->
+    <div class="s2-body">
 
+      <!-- CHART CARD (left, full height) -->
+      <div class="glass s2-chart-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div>
+            <div class="label-xs" style="margin-bottom:6px">Chi phí & Driver Archived theo Quý</div>
+            <div style="display:flex;align-items:baseline;gap:8px">
+              <span class="num-md">1.471B</span>
+              <span class="small">VNĐ tổng chi phí</span>
+            </div>
+          </div>
+          <span class="pill pill-info">↓ -94% Q4→Q4</span>
+        </div>
+
+        <!-- SVG AREA CHART -->
+        <svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg" style="flex:1;width:100%">
+          <defs>
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FF7F32" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#FF7F32" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#FF4E00"/>
+              <stop offset="100%" stop-color="#FF9F62"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- Grid lines -->
+          <line x1="60" y1="20" x2="460" y2="20" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+          <line x1="60" y1="60" x2="460" y2="60" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+          <line x1="60" y1="100" x2="460" y2="100" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+          <line x1="60" y1="140" x2="460" y2="140" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+
+          <!-- Y-axis labels -->
+          <text x="52" y="24" text-anchor="end" font-size="9" fill="rgba(255,255,255,.25)" font-family="Lexend">2785</text>
+          <text x="52" y="104" text-anchor="end" font-size="9" fill="rgba(255,255,255,.25)" font-family="Lexend">1000</text>
+          <text x="52" y="144" text-anchor="end" font-size="9" fill="rgba(255,255,255,.25)" font-family="Lexend">0</text>
+
+          <!-- Area fill
+               scale: max=2785 → y=20, 0 → y=140, range=120px
+               Q4/24: 2785 → y=20
+               Q1/25: 1405 → y=20+(1380/2785)*120=79.4
+               Q2/25: 925  → y=20+(1860/2785)*120=100.1
+               Q3/25: 502  → y=20+(2283/2785)*120=118.2
+               Q4/25: 171  → y=20+(2614/2785)*120=132.6
+               x positions: 100,200,300,380,460
+          -->
+          <path d="M100,20 C130,20 155,79 200,79 C240,79 265,100 300,100 C335,100 355,118 380,118 C415,118 440,133 460,133 L460,140 L100,140 Z"
+                fill="url(#areaGrad)"/>
+
+          <!-- Line -->
+          <path d="M100,20 C130,20 155,79 200,79 C240,79 265,100 300,100 C335,100 355,118 380,118 C415,118 440,133 460,133"
+                fill="none" stroke="url(#lineGrad)" stroke-width="2.5" stroke-linecap="round" filter="url(#glow)"/>
+
+          <!-- Data points + labels -->
+          <circle cx="100" cy="20" r="5" fill="#FF4E00" filter="url(#glow)"/>
+          <text x="100" y="13" text-anchor="middle" font-size="9.5" fill="#FF9F62" font-weight="700" font-family="Lexend">2,785</text>
+
+          <circle cx="200" cy="79" r="4" fill="#FF7F32"/>
+          <text x="200" y="72" text-anchor="middle" font-size="9.5" fill="#FF9F62" font-weight="700" font-family="Lexend">1,405</text>
+
+          <circle cx="300" cy="100" r="4" fill="#FF7F32"/>
+          <text x="300" y="93" text-anchor="middle" font-size="9.5" fill="#FF9F62" font-weight="700" font-family="Lexend">925</text>
+
+          <circle cx="380" cy="118" r="4" fill="#FF9F62"/>
+          <text x="380" y="111" text-anchor="middle" font-size="9.5" fill="#FF9F62" font-weight="700" font-family="Lexend">502</text>
+
+          <circle cx="460" cy="133" r="4" fill="#34D399"/>
+          <text x="460" y="126" text-anchor="middle" font-size="9.5" fill="#34D399" font-weight="700" font-family="Lexend">171</text>
+
+          <!-- X labels -->
+          <text x="100" y="158" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.35)" font-family="Lexend">Q4/24</text>
+          <text x="200" y="158" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.35)" font-family="Lexend">Q1/25</text>
+          <text x="300" y="158" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.35)" font-family="Lexend">Q2/25</text>
+          <text x="380" y="158" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.35)" font-family="Lexend">Q3/25</text>
+          <text x="460" y="158" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.35)" font-family="Lexend">Q4/25</text>
+
+          <!-- Cost labels below -->
+          <text x="100" y="170" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.2)" font-family="Lexend">710M</text>
+          <text x="200" y="170" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.2)" font-family="Lexend">355M</text>
+          <text x="300" y="170" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.2)" font-family="Lexend">235M</text>
+          <text x="380" y="170" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.2)" font-family="Lexend">127M</text>
+          <text x="460" y="170" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.2)" font-family="Lexend">44M</text>
+        </svg>
+
+        <!-- Bottom stats -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)">
+          <div>
+            <div style="font-size:18px;font-weight:800;color:#FF7F32">5,788</div>
+            <div class="label-xs" style="margin-top:2px">Total archived</div>
+          </div>
+          <div>
+            <div style="font-size:18px;font-weight:800;color:#fff">2,697</div>
+            <div class="label-xs" style="margin-top:2px">Còn active</div>
+          </div>
+          <div>
+            <div style="font-size:18px;font-weight:800;color:#A78BFA">254K</div>
+            <div class="label-xs" style="margin-top:2px">Cost/driver avg</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SURVIVAL CARD -->
+      <div class="glass s2-survival-card">
+        <div class="surv-block han">
+          <div class="label-xs" style="color:rgba(248,113,113,.7)">Hà Nội</div>
+          <div class="surv-pct">34%</div>
+          <span class="pill pill-warn" style="font-size:10px">⚠ Báo động</span>
+          <div class="sep"></div>
+          <div class="surv-row">Active <span>829</span></div>
+          <div class="surv-row">Churn <span style="color:#F87171">1,589</span></div>
+          <div class="surv-row">Tổng <span>2,418</span></div>
+        </div>
+        <div class="surv-block sgn">
+          <div class="label-xs" style="color:rgba(52,211,153,.7)">Sài Gòn</div>
+          <div class="surv-pct">55%</div>
+          <span class="pill pill-ok" style="font-size:10px">✓ Tích cực</span>
+          <div class="sep"></div>
+          <div class="surv-row">Active <span>1,868</span></div>
+          <div class="surv-row">Churn <span style="color:#F87171">1,502</span></div>
+          <div class="surv-row">Tổng <span>3,370</span></div>
+        </div>
+      </div>
+
+      <!-- ACTION CARD -->
+      <div class="glass s2-action-card">
+        <div class="label-xs" style="margin-bottom:12px">Đề xuất Hành động</div>
+
+        <div class="action-item">
+          <div class="action-icon">01</div>
+          <div class="action-text">
+            <strong>Audit root cause churn HAN:</strong> Phân tích EPH, tần suất đơn bulky, support quality để thiết kế intervention riêng cho Hà Nội.
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-icon">02</div>
+          <div class="action-text">
+            <strong>Nhân rộng model SGN → HAN:</strong> Áp dụng chính sách retention đang cho survival rate 55% tại SGN — follow-up chu kỳ 30/60/90 ngày sau trang bị.
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-icon">03</div>
+          <div class="action-text">
+            <strong>Gate trang bị theo activity:</strong> Chỉ cấp baga cho tài xế ≥15 đơn/tuần để tối ưu ROI, tránh chi phí cho nhóm churn sớm.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /s2-body -->
+
+    <!-- FOOTER -->
+    <div class="s-footer">
+      <div class="footer-brand">
+        <div class="footer-brand-logo"></div>
+        <span class="footer-brand-name">AHAMOVE</span>
+      </div>
+      <div class="footer-tag">DRIVER MANAGEMENT · INTERNAL ONLY · 2026</div>
+    </div>
+
+  </div><!-- /slide-content -->
+</div><!-- /slide 2 -->
+
+</div><!-- /slides-wrap -->
 </body>
 </html>
