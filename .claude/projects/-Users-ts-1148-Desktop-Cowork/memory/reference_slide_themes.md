@@ -10,7 +10,7 @@ Ba theme HTML slide đã build sẵn, lưu tại `output/templates/`:
 |-------|------|-----|----------|
 | **DARK** | `output/templates/slide-theme-dark.html` | `#080F1D` | Glassmorphism `.glass`, text trắng opacity thấp, glow effects |
 | **NAVY** | `output/templates/slide-theme-navy.html` | `#1A2E48` | Glassmorphism `.glass`, text trắng opacity cao, contrast tốt hơn dark |
-| **LIGHT** | `output/templates/slide-theme-light.html` | `#F2F4F8` | White `.card` + shadow, text tối `#0A1828`, printable |
+| **LIGHT** | `output/templates/slide-theme-light.html` | `#DDE3EC` | Tinted cards (blue/orange/navy/chart/action/insight) + soft gradient border, text tối `#0A1828` |
 
 **How to apply:** Copy `<style>` block từ file theme vào slide HTML mới. Mọi màu sắc đều là CSS `--variables` trong `:root`.
 
