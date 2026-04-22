@@ -10,7 +10,7 @@
 
 body {
   font-family: 'Lexend', sans-serif;
-  background: #1C2D44;
+  background: #E8ECF2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,7 +19,6 @@ body {
   min-height: 100vh;
 }
 
-/* ── SLIDE SHELL 16:9 ── */
 .slide {
   width: 1280px;
   height: 720px;
@@ -28,708 +27,508 @@ body {
   flex-shrink: 0;
 }
 
-/* ── SHARED BG ── */
+/* ── BG ── */
 .slide-bg {
   position: absolute; inset: 0;
-  background: #1A2E48;
+  background: #F2F4F8;
 }
 .slide-bg::before {
   content: '';
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 80% 110%, rgba(255,127,50,.18) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 10% -10%, rgba(14,65,116,.6) 0%, transparent 55%);
+    radial-gradient(ellipse 55% 45% at 100% 100%, rgba(255,127,50,.09) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 55% at 0% 0%, rgba(14,65,116,.07) 0%, transparent 50%);
 }
 
-/* ── NOISE TEXTURE ── */
-.slide-bg::after {
-  content: '';
-  position: absolute; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  opacity: .4;
-  pointer-events: none;
-}
-
-/* ── GRID LINES ── */
+/* ── GRID ── */
 .grid-lines {
   position: absolute; inset: 0; pointer-events: none;
   background-image:
-    linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px);
+    linear-gradient(rgba(14,65,116,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14,65,116,.05) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
-/* ── ORANGE ACCENT LINE ── */
+/* ── ACCENT LINE ── */
 .accent-line {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #FF7F32 0%, #FF4E00 40%, transparent 100%);
+  position: absolute; top:0; left:0; right:0; height:4px;
+  background: linear-gradient(90deg, #0E4174 0%, #FF7F32 50%, transparent 100%);
 }
 
-/* ── SLIDE CONTENT (relative) ── */
+/* ── CONTENT ── */
 .slide-content {
-  position: relative;
-  z-index: 2;
+  position: relative; z-index: 2;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 40px 56px 36px;
+  display: flex; flex-direction: column;
+  padding: 38px 56px 32px;
 }
 
 /* ── HEADER ── */
 .s-header {
-  display: flex;
-  align-items: flex-start;
+  display: flex; align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 32px;
-  flex-shrink: 0;
+  margin-bottom: 28px; flex-shrink: 0;
 }
 .s-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
 }
 .eyebrow-dot {
-  width: 8px; height: 8px;
-  background: #FF7F32;
-  border-radius: 50%;
-  box-shadow: 0 0 8px rgba(255,127,50,.8);
+  width: 7px; height: 7px;
+  background: #FF7F32; border-radius: 50%;
 }
 .eyebrow-text {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
   color: #FF7F32;
 }
 .s-title {
-  font-size: 30px;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.8px;
-  line-height: 1.15;
+  font-size: 28px; font-weight: 900;
+  color: #0A1828; letter-spacing: -0.8px; line-height: 1.15;
 }
 .s-subtitle {
-  font-size: 13px;
-  font-weight: 400;
-  color: rgba(255,255,255,.7);
-  margin-top: 4px;
+  font-size: 12.5px; font-weight: 400;
+  color: #6B7A8D; margin-top: 3px;
 }
 .s-slide-num {
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(255,255,255,.45);
-  text-align: right;
-  letter-spacing: 1px;
+  font-size: 12px; font-weight: 700;
+  color: #B0BACC; letter-spacing: 1px; text-align: right;
 }
-.s-slide-num span { color: rgba(255,255,255,.9); }
+.s-slide-num span { color: #0E4174; }
 
-/* ── GLASS CARD ── */
-.glass {
-  background: rgba(255,255,255,.1);
-  border: 1px solid rgba(255,255,255,.22);
+/* ── CARD ── */
+.card {
+  background: #FFFFFF;
+  border: 1px solid #DDE3EC;
   border-radius: 20px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px rgba(14,65,116,.06), 0 4px 16px rgba(14,65,116,.04);
 }
-.glass:hover { border-color: rgba(255,255,255,.32); }
 
 /* ── TYPOGRAPHY ── */
 .label-xs {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.65);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: #8A97A8;
 }
 .num-hero {
-  font-size: 64px;
-  font-weight: 900;
-  letter-spacing: -3px;
-  line-height: 1;
-  color: #fff;
+  font-size: 62px; font-weight: 900;
+  letter-spacing: -3px; line-height: 1; color: #0A1828;
 }
 .num-lg {
-  font-size: 42px;
-  font-weight: 900;
-  letter-spacing: -1.5px;
-  line-height: 1;
-  color: #fff;
+  font-size: 40px; font-weight: 900;
+  letter-spacing: -1.5px; line-height: 1; color: #0A1828;
 }
 .num-md {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  line-height: 1;
-  color: #fff;
+  font-size: 26px; font-weight: 800;
+  letter-spacing: -1px; line-height: 1; color: #0A1828;
 }
 .orange { color: #FF7F32; }
-.dim { color: rgba(255,255,255,.8); }
-.small { font-size: 12px; color: rgba(255,255,255,.75); font-weight: 400; line-height: 1.6; }
+.blue   { color: #0E4174; }
+.muted  { color: #8A97A8; }
+.body-sm { font-size: 12px; color: #5A6778; font-weight: 400; line-height: 1.6; }
 
-/* ── PILL BADGE ── */
+/* ── PILL ── */
 .pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 10.5px; font-weight: 700;
 }
-.pill-warn { background: rgba(239,68,68,.15); color: #F87171; border: 1px solid rgba(239,68,68,.25); }
-.pill-ok   { background: rgba(16,185,129,.15); color: #34D399; border: 1px solid rgba(16,185,129,.25); }
-.pill-info { background: rgba(255,127,50,.15); color: #FF9F62; border: 1px solid rgba(255,127,50,.25); }
+.pill-warn { background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
+.pill-ok   { background: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; }
+.pill-info { background: #FFF7ED; color: #C2410C; border: 1px solid #FED7AA; }
+.pill-blue { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
 
-/* ── PROGRESS BAR ── */
+/* ── PROGRESS ── */
 .prog-track {
-  height: 6px;
-  background: rgba(255,255,255,.2);
-  border-radius: 999px;
-  overflow: hidden;
-  margin: 8px 0 4px;
+  height: 7px; background: #EDF0F5;
+  border-radius: 999px; overflow: hidden; margin: 10px 0 4px;
 }
 .prog-fill { height: 100%; border-radius: 999px; }
 
-/* ── SEPARATOR ── */
-.sep {
-  height: 1px;
-  background: rgba(255,255,255,.18);
-  margin: 14px 0;
-}
+/* ── SEP ── */
+.sep { height: 1px; background: #E8ECF2; margin: 12px 0; }
 
-/* ═══════════════════════════
-   SLIDE 1 LAYOUT
-═══════════════════════════ */
+/* ── SLIDE 1 LAYOUT ── */
 .s1-body {
   display: grid;
-  grid-template-columns: 220px 1fr 1fr;
+  grid-template-columns: 210px 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 14px;
-  flex: 1;
-  min-height: 0;
+  gap: 14px; flex: 1; min-height: 0;
 }
-/* Hero card spans 2 rows */
 .s1-hero {
   grid-row: 1 / 3;
-  padding: 28px 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: rgba(255,127,50,.18);
-  border: 1px solid rgba(255,127,50,.4);
-  border-radius: 20px;
-  position: relative;
-  overflow: hidden;
+  padding: 26px 22px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: linear-gradient(145deg, #0E4174 0%, #0A2E5C 100%);
+  border: none; border-radius: 20px; position: relative; overflow: hidden;
+  box-shadow: 0 4px 24px rgba(14,65,116,.25);
 }
-.s1-hero::before {
+.s1-hero::after {
   content: '';
-  position: absolute;
-  bottom: -40px; right: -40px;
-  width: 160px; height: 160px;
-  background: radial-gradient(circle, rgba(255,127,50,.2) 0%, transparent 70%);
+  position: absolute; bottom: -50px; right: -50px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(255,127,50,.25) 0%, transparent 65%);
   pointer-events: none;
 }
 .s1-city-card {
-  padding: 20px 22px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  padding: 18px 20px;
+  display: flex; flex-direction: column; justify-content: space-between;
 }
-.city-flag {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
+.city-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-bottom: 8px;
 }
-.city-flag-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-}
+.city-dot { width: 6px; height: 6px; border-radius: 50%; }
 
-/* ═══════════════════════════
-   SLIDE 2 LAYOUT
-═══════════════════════════ */
+/* ── SLIDE 2 LAYOUT ── */
 .s2-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 14px;
-  flex: 1;
-  min-height: 0;
+  gap: 14px; flex: 1; min-height: 0;
 }
-.s2-chart-card {
-  grid-column: 1;
-  grid-row: 1 / 3;
-  padding: 24px 26px;
-  display: flex;
-  flex-direction: column;
-}
-.s2-survival-card {
-  grid-column: 2;
-  grid-row: 1;
-  padding: 20px 24px;
-  display: flex;
-  gap: 14px;
-}
-.s2-action-card {
-  grid-column: 2;
-  grid-row: 2;
-  padding: 20px 24px;
-  display: flex;
-  flex-direction: column;
-}
+.s2-chart { grid-column:1; grid-row:1/3; padding:22px 24px; display:flex; flex-direction:column; }
+.s2-surv  { grid-column:2; grid-row:1;   padding:18px 20px; display:flex; gap:12px; }
+.s2-act   { grid-column:2; grid-row:2;   padding:18px 20px; display:flex; flex-direction:column; }
 
-/* survival city block */
+/* survival block */
 .surv-block {
-  flex: 1;
-  border-radius: 14px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex:1; border-radius:14px; padding:14px;
+  display:flex; flex-direction:column; gap:5px;
 }
-.surv-block.han {
-  background: rgba(239,68,68,.18);
-  border: 1px solid rgba(239,68,68,.35);
-}
-.surv-block.sgn {
-  background: rgba(16,185,129,.15);
-  border: 1px solid rgba(16,185,129,.35);
-}
-.surv-pct {
-  font-size: 44px;
-  font-weight: 900;
-  letter-spacing: -2px;
-  line-height: 1;
-}
-.surv-block.han .surv-pct { color: #F87171; }
-.surv-block.sgn .surv-pct { color: #34D399; }
-.surv-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: rgba(255,255,255,.7);
-}
-.surv-row span { color: #fff; font-weight: 600; }
+.surv-block.han { background:#FEF2F2; border:1.5px solid #FECACA; }
+.surv-block.sgn { background:#F0FDF4; border:1.5px solid #BBF7D0; }
+.surv-pct { font-size: 42px; font-weight: 900; letter-spacing:-2px; line-height:1; }
+.surv-block.han .surv-pct { color:#DC2626; }
+.surv-block.sgn .surv-pct { color:#16A34A; }
+.surv-row { display:flex; justify-content:space-between; font-size:10.5px; color:#8A97A8; }
+.surv-row span { color:#1E293B; font-weight:600; }
 
-/* action items */
-.action-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255,255,255,.15);
+/* action */
+.act-item {
+  display:flex; align-items:flex-start; gap:9px;
+  padding:7px 0; border-bottom:1px solid #EDF0F5;
 }
-.action-item:last-child { border-bottom: none; padding-bottom: 0; }
-.action-icon {
-  width: 20px; height: 20px;
-  background: rgba(255,127,50,.15);
-  border: 1px solid rgba(255,127,50,.3);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  font-weight: 800;
-  color: #FF7F32;
-  flex-shrink: 0;
-  margin-top: 1px;
+.act-item:last-child { border-bottom:none; padding-bottom:0; }
+.act-num {
+  width:19px; height:19px; background:#0E4174; color:#fff;
+  border-radius:6px; font-size:9px; font-weight:800;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;
 }
-.action-text {
-  font-size: 11.5px;
-  color: rgba(255,255,255,.85);
-  line-height: 1.5;
-}
-.action-text strong { color: #fff; font-weight: 600; }
+.act-txt { font-size:11px; color:#4A5568; line-height:1.55; }
+.act-txt strong { color:#0A1828; font-weight:700; }
 
 /* ── FOOTER ── */
 .s-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 20px;
-  flex-shrink: 0;
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:16px; flex-shrink:0;
 }
-.footer-brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.footer-brand { display:flex; align-items:center; gap:7px; }
+.footer-logo {
+  width:18px; height:18px; background:#FF7F32;
+  border-radius:50%;
 }
-.footer-brand-logo {
-  width: 20px; height: 20px;
-  background: #FF7F32;
-  border-radius: 50%;
-  box-shadow: 0 0 8px rgba(255,127,50,.5);
-}
-.footer-brand-name {
-  font-size: 11px;
-  font-weight: 700;
-  color: rgba(255,255,255,.65);
-  letter-spacing: 1px;
-}
-.footer-tag {
-  font-size: 10px;
-  color: rgba(255,255,255,.5);
-  letter-spacing: 1px;
-}
-
-/* ── SCROLLABLE WRAPPER ── */
-.slides-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  width: 1280px;
-}
+.footer-name { font-size:10px; font-weight:800; color:#0E4174; letter-spacing:1.5px; }
+.footer-tag  { font-size:10px; color:#A0AABB; letter-spacing:.8px; }
 </style>
 </head>
 <body>
 
-<div class="slides-wrap">
-
-<!-- ═══════════════════════════════════════
-     SLIDE 01 — THỰC TRẠNG TRANG BỊ
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════
+     SLIDE 01
+═══════════════════════ -->
 <div class="slide">
   <div class="slide-bg"></div>
   <div class="grid-lines"></div>
   <div class="accent-line"></div>
-
   <div class="slide-content">
 
-    <!-- HEADER -->
     <div class="s-header">
       <div>
-        <div class="s-eyebrow">
-          <div class="eyebrow-dot"></div>
-          <span class="eyebrow-text">Baga Driver Program · Khảo sát 9/4–15/4</span>
-        </div>
+        <div class="s-eyebrow"><div class="eyebrow-dot"></div><span class="eyebrow-text">Baga Driver Program · Khảo sát 9/4 – 15/4</span></div>
         <div class="s-title">Thực Trạng Trang Bị Baga</div>
         <div class="s-subtitle">Tỷ lệ tài xế đã có baga trên tổng pool · HAN & SGN</div>
       </div>
       <div class="s-slide-num"><span>01</span> / 02</div>
     </div>
 
-    <!-- BODY GRID -->
     <div class="s1-body">
 
-      <!-- HERO CARD -->
+      <!-- HERO -->
       <div class="s1-hero">
         <div>
-          <div class="label-xs" style="margin-bottom:12px">Toàn quốc</div>
-          <div class="num-hero">7,365</div>
-          <div style="font-size:14px;color:rgba(255,255,255,.85);margin-top:8px;font-weight:400;line-height:1.5">
-            Tài xế đã được<br>trang bị baga
-          </div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:10px">Toàn quốc</div>
+          <div style="font-size:58px;font-weight:900;letter-spacing:-3px;line-height:1;color:#fff">7,365</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:8px;line-height:1.5">Tài xế đã được<br>trang bị baga</div>
         </div>
-
         <div>
-          <div class="sep"></div>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
-            <span class="label-xs">HAN</span>
-            <span style="font-size:13px;font-weight:700;color:#FF7F32">2,768</span>
+          <div style="height:1px;background:rgba(255,255,255,.15);margin:0 0 12px"></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+            <span style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.45)">HAN</span>
+            <span style="font-size:14px;font-weight:800;color:#FF7F32">2,768</span>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
-            <span class="label-xs">SGN</span>
-            <span style="font-size:13px;font-weight:700;color:#FF7F32">4,597</span>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px">
+            <span style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.45)">SGN</span>
+            <span style="font-size:14px;font-weight:800;color:#FF7F32">4,597</span>
           </div>
-          <div class="sep"></div>
-          <div class="small">Giai đoạn khảo sát<br>09/04 – 15/04/2026</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.4);">09/04 – 15/04/2026</div>
         </div>
       </div>
 
-      <!-- HAN CARD -->
-      <div class="glass s1-city-card">
+      <!-- HAN -->
+      <div class="card s1-city-card">
         <div>
-          <div class="city-flag">
-            <div class="city-flag-dot" style="background:#5B9CF6;box-shadow:0 0 6px rgba(91,156,246,.8)"></div>
-            <span class="label-xs" style="color:#5B9CF6">Hà Nội</span>
+          <div class="city-badge">
+            <div class="city-dot" style="background:#3B82F6"></div>
+            <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3B82F6">Hà Nội</span>
           </div>
-
-          <div style="display:flex;align-items:baseline;gap:10px">
-            <div class="num-lg">38.6<span class="orange" style="font-size:24px">%</span></div>
+          <div style="display:flex;align-items:baseline;gap:4px">
+            <span class="num-lg">38.6</span>
+            <span style="font-size:22px;font-weight:800;color:#FF7F32">%</span>
           </div>
-          <div class="small" style="margin-top:4px">Tỷ lệ có baga / Pool HAN</div>
-
-          <div class="prog-track" style="margin-top:14px">
+          <div class="body-sm" style="margin-top:3px">Tỷ lệ có baga / Pool HAN</div>
+          <div class="prog-track">
             <div class="prog-fill" style="width:38.6%;background:linear-gradient(90deg,#3B82F6,#60A5FA)"></div>
           </div>
         </div>
-
         <div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div>
-              <div style="font-size:20px;font-weight:800;color:#fff">2,768</div>
-              <div class="label-xs" style="margin-top:3px">Đã có baga</div>
+              <div style="font-size:19px;font-weight:800;color:#0A1828">2,768</div>
+              <div class="label-xs" style="margin-top:2px">Đã có baga</div>
             </div>
             <div>
-              <div style="font-size:20px;font-weight:800;color:rgba(255,255,255,.65)">4,406</div>
-              <div class="label-xs" style="margin-top:3px">Chưa có</div>
+              <div style="font-size:19px;font-weight:800;color:#B0BACC">4,406</div>
+              <div class="label-xs" style="margin-top:2px">Chưa có</div>
             </div>
           </div>
-          <div style="margin-top:10px">
-            <span class="pill pill-warn">⚠ Gap 10.4pp vs SGN</span>
+          <div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between">
+            <span class="pill pill-warn">⚠ Gap 10.4pp</span>
+            <span class="body-sm">Pool: 7,174</span>
           </div>
-          <div class="small" style="margin-top:8px">Pool: 7,174 tài xế</div>
         </div>
       </div>
 
-      <!-- SGN CARD -->
-      <div class="glass s1-city-card">
+      <!-- SGN -->
+      <div class="card s1-city-card">
         <div>
-          <div class="city-flag">
-            <div class="city-flag-dot" style="background:#FF7F32;box-shadow:0 0 6px rgba(255,127,50,.8)"></div>
-            <span class="label-xs" style="color:#FF7F32">Sài Gòn</span>
+          <div class="city-badge">
+            <div class="city-dot" style="background:#FF7F32"></div>
+            <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#FF7F32">Sài Gòn</span>
           </div>
-
-          <div style="display:flex;align-items:baseline;gap:10px">
-            <div class="num-lg">49.0<span class="orange" style="font-size:24px">%</span></div>
+          <div style="display:flex;align-items:baseline;gap:4px">
+            <span class="num-lg">49.0</span>
+            <span style="font-size:22px;font-weight:800;color:#FF7F32">%</span>
           </div>
-          <div class="small" style="margin-top:4px">Tỷ lệ có baga / Pool SGN</div>
-
-          <div class="prog-track" style="margin-top:14px">
+          <div class="body-sm" style="margin-top:3px">Tỷ lệ có baga / Pool SGN</div>
+          <div class="prog-track">
             <div class="prog-fill" style="width:49%;background:linear-gradient(90deg,#FF7F32,#FFAE70)"></div>
           </div>
         </div>
-
         <div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div>
-              <div style="font-size:20px;font-weight:800;color:#fff">4,597</div>
-              <div class="label-xs" style="margin-top:3px">Đã có baga</div>
+              <div style="font-size:19px;font-weight:800;color:#0A1828">4,597</div>
+              <div class="label-xs" style="margin-top:2px">Đã có baga</div>
             </div>
             <div>
-              <div style="font-size:20px;font-weight:800;color:rgba(255,255,255,.65)">4,985</div>
-              <div class="label-xs" style="margin-top:3px">Chưa có</div>
+              <div style="font-size:19px;font-weight:800;color:#B0BACC">4,985</div>
+              <div class="label-xs" style="margin-top:2px">Chưa có</div>
             </div>
           </div>
-          <div style="margin-top:10px">
-            <span class="pill pill-ok">✓ Tốt hơn HAN</span>
-          </div>
-          <div class="small" style="margin-top:8px">Pool: 9,582 tài xế</div>
-        </div>
-      </div>
-
-      <!-- INSIGHT ROW — spans col 2+3 -->
-      <div class="glass" style="grid-column:2/4;padding:18px 24px;display:flex;align-items:center;gap:20px;">
-        <div style="width:3px;height:44px;background:linear-gradient(180deg,#FF7F32,transparent);border-radius:2px;flex-shrink:0;"></div>
-        <div>
-          <div style="font-size:12px;font-weight:700;color:#FF9F62;letter-spacing:.5px;margin-bottom:4px">KEY INSIGHT</div>
-          <div style="font-size:13px;color:rgba(255,255,255,.88);line-height:1.6">
-            SGN vượt HAN <strong style="color:#fff">10.4pp</strong> về tỷ lệ trang bị — tài xế SGN nhận đơn bulky hiệu quả hơn.
-            HAN còn <strong style="color:#FF7F32">4,406 tài xế chưa có baga</strong> là cơ hội mở rộng capacity nhận đơn nặng tại Hà Nội.
+          <div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between">
+            <span class="pill pill-ok">✓ Dẫn đầu</span>
+            <span class="body-sm">Pool: 9,582</span>
           </div>
         </div>
       </div>
 
-    </div><!-- /s1-body -->
+      <!-- INSIGHT -->
+      <div class="card" style="grid-column:2/4;padding:16px 22px;display:flex;align-items:center;gap:16px;">
+        <div style="width:3px;height:40px;background:linear-gradient(180deg,#FF7F32,#0E4174);border-radius:2px;flex-shrink:0"></div>
+        <div>
+          <div style="font-size:10px;font-weight:800;color:#FF7F32;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Key Insight</div>
+          <div style="font-size:13px;color:#374151;line-height:1.6">
+            SGN vượt HAN <strong style="color:#0E4174">10.4pp</strong> về tỷ lệ trang bị — tài xế SGN xử lý đơn bulky hiệu quả hơn.
+            HAN còn <strong style="color:#FF7F32">4,406 tài xế chưa có baga</strong> — cơ hội lớn để mở rộng capacity nhận đơn nặng tại Hà Nội.
+          </div>
+        </div>
+      </div>
 
-    <!-- FOOTER -->
+    </div>
+
     <div class="s-footer">
-      <div class="footer-brand">
-        <div class="footer-brand-logo"></div>
-        <span class="footer-brand-name">AHAMOVE</span>
-      </div>
+      <div class="footer-brand"><div class="footer-logo"></div><span class="footer-name">AHAMOVE</span></div>
       <div class="footer-tag">DRIVER MANAGEMENT · INTERNAL ONLY · 2026</div>
     </div>
 
-  </div><!-- /slide-content -->
-</div><!-- /slide 1 -->
+  </div>
+</div>
 
 
-<!-- ═══════════════════════════════════════
-     SLIDE 02 — HIỆU QUẢ ĐẦU TƯ & CHURN
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════
+     SLIDE 02
+═══════════════════════ -->
 <div class="slide">
   <div class="slide-bg"></div>
   <div class="grid-lines"></div>
   <div class="accent-line"></div>
-
   <div class="slide-content">
 
-    <!-- HEADER -->
     <div class="s-header">
       <div>
-        <div class="s-eyebrow">
-          <div class="eyebrow-dot"></div>
-          <span class="eyebrow-text">Baga Driver Program · Q4/2024 – Q4/2025</span>
-        </div>
+        <div class="s-eyebrow"><div class="eyebrow-dot"></div><span class="eyebrow-text">Baga Driver Program · Q4/2024 – Q4/2025</span></div>
         <div class="s-title">Hiệu Quả Đầu Tư & Churn Analysis</div>
         <div class="s-subtitle">Tổng chi phí 1.471 tỷ VNĐ · 5,788 tài xế archived · Survival rate HAN vs SGN</div>
       </div>
       <div class="s-slide-num"><span>02</span> / 02</div>
     </div>
 
-    <!-- BODY GRID -->
     <div class="s2-body">
 
-      <!-- CHART CARD (left, full height) -->
-      <div class="glass s2-chart-card">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+      <!-- CHART -->
+      <div class="card s2-chart">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
           <div>
-            <div class="label-xs" style="margin-bottom:6px">Chi phí & Driver Archived theo Quý</div>
+            <div class="label-xs" style="margin-bottom:5px">Driver Archived theo Quý</div>
             <div style="display:flex;align-items:baseline;gap:8px">
               <span class="num-md">1.471B</span>
-              <span class="small">VNĐ tổng chi phí</span>
+              <span class="body-sm">VNĐ tổng chi phí</span>
             </div>
           </div>
           <span class="pill pill-info">↓ -94% Q4→Q4</span>
         </div>
 
-        <!-- SVG AREA CHART -->
-        <svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg" style="flex:1;width:100%">
+        <svg viewBox="0 0 480 178" xmlns="http://www.w3.org/2000/svg" style="flex:1;width:100%">
           <defs>
-            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#FF7F32" stop-opacity="0.3"/>
+            <linearGradient id="aG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FF7F32" stop-opacity="0.18"/>
               <stop offset="100%" stop-color="#FF7F32" stop-opacity="0"/>
             </linearGradient>
-            <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="#FF4E00"/>
-              <stop offset="100%" stop-color="#FF9F62"/>
+            <linearGradient id="lG" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#0E4174"/>
+              <stop offset="60%" stop-color="#FF7F32"/>
+              <stop offset="100%" stop-color="#16A34A"/>
             </linearGradient>
             <filter id="glow">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              <feGaussianBlur stdDeviation="1.5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
           </defs>
 
-          <!-- Grid lines -->
-          <line x1="60" y1="20" x2="460" y2="20" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
-          <line x1="60" y1="60" x2="460" y2="60" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
-          <line x1="60" y1="100" x2="460" y2="100" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
-          <line x1="60" y1="140" x2="460" y2="140" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+          <!-- grid -->
+          <line x1="58" y1="18" x2="462" y2="18" stroke="#E8ECF2" stroke-width="1"/>
+          <line x1="58" y1="52" x2="462" y2="52" stroke="#E8ECF2" stroke-width="1"/>
+          <line x1="58" y1="86" x2="462" y2="86" stroke="#E8ECF2" stroke-width="1"/>
+          <line x1="58" y1="120" x2="462" y2="120" stroke="#E8ECF2" stroke-width="1"/>
+          <line x1="58" y1="138" x2="462" y2="138" stroke="#DDE3EC" stroke-width="1"/>
 
-          <!-- Y-axis labels -->
-          <text x="52" y="24" text-anchor="end" font-size="9" fill="rgba(255,255,255,.65)" font-family="Lexend">2785</text>
-          <text x="52" y="104" text-anchor="end" font-size="9" fill="rgba(255,255,255,.65)" font-family="Lexend">1000</text>
-          <text x="52" y="144" text-anchor="end" font-size="9" fill="rgba(255,255,255,.65)" font-family="Lexend">0</text>
+          <!-- y labels -->
+          <text x="50" y="22" text-anchor="end" font-size="9" fill="#A0AABB" font-family="Lexend">2785</text>
+          <text x="50" y="90" text-anchor="end" font-size="9" fill="#A0AABB" font-family="Lexend">1000</text>
+          <text x="50" y="142" text-anchor="end" font-size="9" fill="#A0AABB" font-family="Lexend">0</text>
 
-          <!-- Area fill
-               scale: max=2785 → y=20, 0 → y=140, range=120px
-               Q4/24: 2785 → y=20
-               Q1/25: 1405 → y=20+(1380/2785)*120=79.4
-               Q2/25: 925  → y=20+(1860/2785)*120=100.1
-               Q3/25: 502  → y=20+(2283/2785)*120=118.2
-               Q4/25: 171  → y=20+(2614/2785)*120=132.6
-               x positions: 100,200,300,380,460
-          -->
-          <path d="M100,20 C130,20 155,79 200,79 C240,79 265,100 300,100 C335,100 355,118 380,118 C415,118 440,133 460,133 L460,140 L100,140 Z"
-                fill="url(#areaGrad)"/>
+          <!-- area: y scale 18(max)→138(0), range=120
+               2785→18, 1405→78, 925→98, 502→116, 171→131.6 -->
+          <path d="M100,18 C130,18 160,78 200,78 C235,78 262,98 300,98 C335,98 358,116 385,116 C415,116 440,131 462,131 L462,138 L100,138 Z"
+                fill="url(#aG)"/>
+          <path d="M100,18 C130,18 160,78 200,78 C235,78 262,98 300,98 C335,98 358,116 385,116 C415,116 440,131 462,131"
+                fill="none" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round" filter="url(#glow)"/>
 
-          <!-- Line -->
-          <path d="M100,20 C130,20 155,79 200,79 C240,79 265,100 300,100 C335,100 355,118 380,118 C415,118 440,133 460,133"
-                fill="none" stroke="url(#lineGrad)" stroke-width="2.5" stroke-linecap="round" filter="url(#glow)"/>
+          <!-- points -->
+          <circle cx="100" cy="18" r="5" fill="#0E4174" filter="url(#glow)"/>
+          <text x="100" y="11" text-anchor="middle" font-size="9.5" fill="#0E4174" font-weight="700" font-family="Lexend">2,785</text>
 
-          <!-- Data points + labels -->
-          <circle cx="100" cy="20" r="5" fill="#FF4E00" filter="url(#glow)"/>
-          <text x="100" y="13" text-anchor="middle" font-size="9.5" fill="#FF9F62" font-weight="700" font-family="Lexend">2,785</text>
+          <circle cx="200" cy="78" r="4" fill="#3B6FC4"/>
+          <text x="200" y="71" text-anchor="middle" font-size="9.5" fill="#3B6FC4" font-weight="700" font-family="Lexend">1,405</text>
 
-          <circle cx="200" cy="79" r="4" fill="#FF7F32"/>
-          <text x="200" y="72" text-anchor="middle" font-size="9.5" fill="#FF9F62" font-weight="700" font-family="Lexend">1,405</text>
+          <circle cx="300" cy="98" r="4" fill="#FF7F32"/>
+          <text x="300" y="91" text-anchor="middle" font-size="9.5" fill="#FF7F32" font-weight="700" font-family="Lexend">925</text>
 
-          <circle cx="300" cy="100" r="4" fill="#FF7F32"/>
-          <text x="300" y="93" text-anchor="middle" font-size="9.5" fill="#FF9F62" font-weight="700" font-family="Lexend">925</text>
+          <circle cx="385" cy="116" r="4" fill="#FF9F62"/>
+          <text x="385" y="109" text-anchor="middle" font-size="9.5" fill="#FF9F62" font-weight="700" font-family="Lexend">502</text>
 
-          <circle cx="380" cy="118" r="4" fill="#FF9F62"/>
-          <text x="380" y="111" text-anchor="middle" font-size="9.5" fill="#FF9F62" font-weight="700" font-family="Lexend">502</text>
+          <circle cx="462" cy="131" r="4" fill="#16A34A"/>
+          <text x="462" y="124" text-anchor="middle" font-size="9.5" fill="#16A34A" font-weight="700" font-family="Lexend">171</text>
 
-          <circle cx="460" cy="133" r="4" fill="#34D399"/>
-          <text x="460" y="126" text-anchor="middle" font-size="9.5" fill="#34D399" font-weight="700" font-family="Lexend">171</text>
+          <!-- x labels -->
+          <text x="100" y="153" text-anchor="middle" font-size="9" fill="#8A97A8" font-family="Lexend">Q4/24</text>
+          <text x="200" y="153" text-anchor="middle" font-size="9" fill="#8A97A8" font-family="Lexend">Q1/25</text>
+          <text x="300" y="153" text-anchor="middle" font-size="9" fill="#8A97A8" font-family="Lexend">Q2/25</text>
+          <text x="385" y="153" text-anchor="middle" font-size="9" fill="#8A97A8" font-family="Lexend">Q3/25</text>
+          <text x="462" y="153" text-anchor="middle" font-size="9" fill="#8A97A8" font-family="Lexend">Q4/25</text>
 
-          <!-- X labels -->
-          <text x="100" y="158" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)" font-family="Lexend">Q4/24</text>
-          <text x="200" y="158" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)" font-family="Lexend">Q1/25</text>
-          <text x="300" y="158" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)" font-family="Lexend">Q2/25</text>
-          <text x="380" y="158" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)" font-family="Lexend">Q3/25</text>
-          <text x="460" y="158" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)" font-family="Lexend">Q4/25</text>
-
-          <!-- Cost labels below -->
-          <text x="100" y="170" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.55)" font-family="Lexend">710M</text>
-          <text x="200" y="170" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.55)" font-family="Lexend">355M</text>
-          <text x="300" y="170" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.55)" font-family="Lexend">235M</text>
-          <text x="380" y="170" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.55)" font-family="Lexend">127M</text>
-          <text x="460" y="170" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.55)" font-family="Lexend">44M</text>
+          <!-- cost labels -->
+          <text x="100" y="166" text-anchor="middle" font-size="8.5" fill="#B0BACC" font-family="Lexend">710M</text>
+          <text x="200" y="166" text-anchor="middle" font-size="8.5" fill="#B0BACC" font-family="Lexend">355M</text>
+          <text x="300" y="166" text-anchor="middle" font-size="8.5" fill="#B0BACC" font-family="Lexend">235M</text>
+          <text x="385" y="166" text-anchor="middle" font-size="8.5" fill="#B0BACC" font-family="Lexend">127M</text>
+          <text x="462" y="166" text-anchor="middle" font-size="8.5" fill="#B0BACC" font-family="Lexend">44M</text>
         </svg>
 
-        <!-- Bottom stats -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px;padding-top:12px;border-top:1px solid rgba(255,255,255,.18)">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-top:12px;border-top:1px solid #E8ECF2">
           <div>
-            <div style="font-size:18px;font-weight:800;color:#FF7F32">5,788</div>
+            <div style="font-size:18px;font-weight:800;color:#DC2626">5,788</div>
             <div class="label-xs" style="margin-top:2px">Total archived</div>
           </div>
           <div>
-            <div style="font-size:18px;font-weight:800;color:#fff">2,697</div>
+            <div style="font-size:18px;font-weight:800;color:#0E4174">2,697</div>
             <div class="label-xs" style="margin-top:2px">Còn active</div>
           </div>
           <div>
-            <div style="font-size:18px;font-weight:800;color:#A78BFA">254K</div>
-            <div class="label-xs" style="margin-top:2px">Cost/driver avg</div>
+            <div style="font-size:18px;font-weight:800;color:#7C3AED">254K</div>
+            <div class="label-xs" style="margin-top:2px">CPO baga avg</div>
           </div>
         </div>
       </div>
 
-      <!-- SURVIVAL CARD -->
-      <div class="glass s2-survival-card">
+      <!-- SURVIVAL -->
+      <div class="card s2-surv">
         <div class="surv-block han">
-          <div class="label-xs" style="color:rgba(248,113,113,.7)">Hà Nội</div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#DC2626">Hà Nội</div>
           <div class="surv-pct">34%</div>
-          <span class="pill pill-warn" style="font-size:10px">⚠ Báo động</span>
-          <div class="sep"></div>
+          <span class="pill pill-warn" style="font-size:10px;width:fit-content">⚠ Báo động</span>
+          <div style="height:1px;background:#FECACA;margin:6px 0"></div>
           <div class="surv-row">Active <span>829</span></div>
-          <div class="surv-row">Churn <span style="color:#F87171">1,589</span></div>
+          <div class="surv-row">Churn <span style="color:#DC2626">1,589</span></div>
           <div class="surv-row">Tổng <span>2,418</span></div>
         </div>
         <div class="surv-block sgn">
-          <div class="label-xs" style="color:rgba(52,211,153,.7)">Sài Gòn</div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#16A34A">Sài Gòn</div>
           <div class="surv-pct">55%</div>
-          <span class="pill pill-ok" style="font-size:10px">✓ Tích cực</span>
-          <div class="sep"></div>
+          <span class="pill pill-ok" style="font-size:10px;width:fit-content">✓ Tích cực</span>
+          <div style="height:1px;background:#BBF7D0;margin:6px 0"></div>
           <div class="surv-row">Active <span>1,868</span></div>
-          <div class="surv-row">Churn <span style="color:#F87171">1,502</span></div>
+          <div class="surv-row">Churn <span style="color:#DC2626">1,502</span></div>
           <div class="surv-row">Tổng <span>3,370</span></div>
         </div>
       </div>
 
-      <!-- ACTION CARD -->
-      <div class="glass s2-action-card">
-        <div class="label-xs" style="margin-bottom:12px">Đề xuất Hành động</div>
-
-        <div class="action-item">
-          <div class="action-icon">01</div>
-          <div class="action-text">
-            <strong>Audit root cause churn HAN:</strong> Phân tích EPH, tần suất đơn bulky, support quality để thiết kế intervention riêng cho Hà Nội.
-          </div>
+      <!-- ACTIONS -->
+      <div class="card s2-act">
+        <div class="label-xs" style="margin-bottom:10px">Đề xuất Hành động</div>
+        <div class="act-item">
+          <div class="act-num">01</div>
+          <div class="act-txt"><strong>Audit root cause churn HAN:</strong> Phân tích EPH, tần suất đơn bulky, support quality để thiết kế intervention riêng cho Hà Nội.</div>
         </div>
-        <div class="action-item">
-          <div class="action-icon">02</div>
-          <div class="action-text">
-            <strong>Nhân rộng model SGN → HAN:</strong> Áp dụng chính sách retention đang cho survival rate 55% tại SGN — follow-up chu kỳ 30/60/90 ngày sau trang bị.
-          </div>
+        <div class="act-item">
+          <div class="act-num">02</div>
+          <div class="act-txt"><strong>Nhân rộng model SGN → HAN:</strong> Áp dụng chính sách retention cho survival 55% — follow-up chu kỳ 30/60/90 ngày sau trang bị.</div>
         </div>
-        <div class="action-item">
-          <div class="action-icon">03</div>
-          <div class="action-text">
-            <strong>Gate trang bị theo activity:</strong> Chỉ cấp baga cho tài xế ≥15 đơn/tuần để tối ưu ROI, tránh chi phí cho nhóm churn sớm.
-          </div>
+        <div class="act-item">
+          <div class="act-num">03</div>
+          <div class="act-txt"><strong>Gate trang bị theo activity:</strong> Chỉ cấp baga cho tài xế ≥15 đơn/tuần để tối ưu ROI, tránh lãng phí chi phí nhóm churn sớm.</div>
         </div>
       </div>
 
-    </div><!-- /s2-body -->
+    </div>
 
-    <!-- FOOTER -->
     <div class="s-footer">
-      <div class="footer-brand">
-        <div class="footer-brand-logo"></div>
-        <span class="footer-brand-name">AHAMOVE</span>
-      </div>
+      <div class="footer-brand"><div class="footer-logo"></div><span class="footer-name">AHAMOVE</span></div>
       <div class="footer-tag">DRIVER MANAGEMENT · INTERNAL ONLY · 2026</div>
     </div>
 
-  </div><!-- /slide-content -->
-</div><!-- /slide 2 -->
+  </div>
+</div>
 
-</div><!-- /slides-wrap -->
 </body>
 </html>
