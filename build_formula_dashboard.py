@@ -219,29 +219,29 @@ for col,w in zip('ABCDEFGHIJKLMNOPQ',[2,16,14,14,14,2,14,14,14,14,2,14,14,14,14,
 # W3 = LARGE(array, count_of_W1 + count_of_W2 + 1)  etc.
 ws['B2'] = "=MAX('SVC DATA'!$B:$B)"
 ws['B2'].number_format = 'DD/MM/YYYY'
-ws['C2'] = "=LARGE('SVC DATA'!$B:$B,COUNTIF('SVC DATA'!$B:$B,$B$2)+1)"
+ws['C2'] = "=IFERROR(LARGE('SVC DATA'!$B:$B,COUNTIF('SVC DATA'!$B:$B,$B$2)+1),\"\")"
 ws['C2'].number_format = 'DD/MM/YYYY'
-ws['D2'] = "=LARGE('SVC DATA'!$B:$B,COUNTIF('SVC DATA'!$B:$B,$B$2)+COUNTIF('SVC DATA'!$B:$B,$C$2)+1)"
+ws['D2'] = "=IFERROR(LARGE('SVC DATA'!$B:$B,COUNTIF('SVC DATA'!$B:$B,$B$2)+COUNTIF('SVC DATA'!$B:$B,$C$2)+1),\"\")"
 ws['D2'].number_format = 'DD/MM/YYYY'
-ws['E2'] = "=LARGE('SVC DATA'!$B:$B,COUNTIF('SVC DATA'!$B:$B,$B$2)+COUNTIF('SVC DATA'!$B:$B,$C$2)+COUNTIF('SVC DATA'!$B:$B,$D$2)+1)"
+ws['E2'] = "=IFERROR(LARGE('SVC DATA'!$B:$B,COUNTIF('SVC DATA'!$B:$B,$B$2)+COUNTIF('SVC DATA'!$B:$B,$C$2)+COUNTIF('SVC DATA'!$B:$B,$D$2)+1),\"\")"
 ws['E2'].number_format = 'DD/MM/YYYY'
-ws['F2'] = "=LARGE('SVC DATA'!$B:$B,COUNTIF('SVC DATA'!$B:$B,$B$2)+COUNTIF('SVC DATA'!$B:$B,$C$2)+COUNTIF('SVC DATA'!$B:$B,$D$2)+COUNTIF('SVC DATA'!$B:$B,$E$2)+1)"
+ws['F2'] = "=IFERROR(LARGE('SVC DATA'!$B:$B,COUNTIF('SVC DATA'!$B:$B,$B$2)+COUNTIF('SVC DATA'!$B:$B,$C$2)+COUNTIF('SVC DATA'!$B:$B,$D$2)+COUNTIF('SVC DATA'!$B:$B,$E$2)+1),\"\")"
 ws['F2'].number_format = 'DD/MM/YYYY'
-ws['G2'] = "=LARGE('SVC DATA'!$B:$B,COUNTIF('SVC DATA'!$B:$B,$B$2)+COUNTIF('SVC DATA'!$B:$B,$C$2)+COUNTIF('SVC DATA'!$B:$B,$D$2)+COUNTIF('SVC DATA'!$B:$B,$E$2)+COUNTIF('SVC DATA'!$B:$B,$F$2)+1)"
+ws['G2'] = "=IFERROR(LARGE('SVC DATA'!$B:$B,COUNTIF('SVC DATA'!$B:$B,$B$2)+COUNTIF('SVC DATA'!$B:$B,$C$2)+COUNTIF('SVC DATA'!$B:$B,$D$2)+COUNTIF('SVC DATA'!$B:$B,$E$2)+COUNTIF('SVC DATA'!$B:$B,$F$2)+1),\"\")"
 ws['G2'].number_format = 'DD/MM/YYYY'
 
 # DFD week chain (H:M)
 ws['H2'] = "=MAX('DFD DATA'!$B:$B)"
 ws['H2'].number_format = 'DD/MM/YYYY'
-ws['I2'] = "=LARGE('DFD DATA'!$B:$B,COUNTIF('DFD DATA'!$B:$B,$H$2)+1)"
+ws['I2'] = "=IFERROR(LARGE('DFD DATA'!$B:$B,COUNTIF('DFD DATA'!$B:$B,$H$2)+1),\"\")"
 ws['I2'].number_format = 'DD/MM/YYYY'
-ws['J2'] = "=LARGE('DFD DATA'!$B:$B,COUNTIF('DFD DATA'!$B:$B,$H$2)+COUNTIF('DFD DATA'!$B:$B,$I$2)+1)"
+ws['J2'] = "=IFERROR(LARGE('DFD DATA'!$B:$B,COUNTIF('DFD DATA'!$B:$B,$H$2)+COUNTIF('DFD DATA'!$B:$B,$I$2)+1),\"\")"
 ws['J2'].number_format = 'DD/MM/YYYY'
-ws['K2'] = "=LARGE('DFD DATA'!$B:$B,COUNTIF('DFD DATA'!$B:$B,$H$2)+COUNTIF('DFD DATA'!$B:$B,$I$2)+COUNTIF('DFD DATA'!$B:$B,$J$2)+1)"
+ws['K2'] = "=IFERROR(LARGE('DFD DATA'!$B:$B,COUNTIF('DFD DATA'!$B:$B,$H$2)+COUNTIF('DFD DATA'!$B:$B,$I$2)+COUNTIF('DFD DATA'!$B:$B,$J$2)+1),\"\")"
 ws['K2'].number_format = 'DD/MM/YYYY'
-ws['L2'] = "=LARGE('DFD DATA'!$B:$B,COUNTIF('DFD DATA'!$B:$B,$H$2)+COUNTIF('DFD DATA'!$B:$B,$I$2)+COUNTIF('DFD DATA'!$B:$B,$J$2)+COUNTIF('DFD DATA'!$B:$B,$K$2)+1)"
+ws['L2'] = "=IFERROR(LARGE('DFD DATA'!$B:$B,COUNTIF('DFD DATA'!$B:$B,$H$2)+COUNTIF('DFD DATA'!$B:$B,$I$2)+COUNTIF('DFD DATA'!$B:$B,$J$2)+COUNTIF('DFD DATA'!$B:$B,$K$2)+1),\"\")"
 ws['L2'].number_format = 'DD/MM/YYYY'
-ws['M2'] = "=LARGE('DFD DATA'!$B:$B,COUNTIF('DFD DATA'!$B:$B,$H$2)+COUNTIF('DFD DATA'!$B:$B,$I$2)+COUNTIF('DFD DATA'!$B:$B,$J$2)+COUNTIF('DFD DATA'!$B:$B,$K$2)+COUNTIF('DFD DATA'!$B:$B,$L$2)+1)"
+ws['M2'] = "=IFERROR(LARGE('DFD DATA'!$B:$B,COUNTIF('DFD DATA'!$B:$B,$H$2)+COUNTIF('DFD DATA'!$B:$B,$I$2)+COUNTIF('DFD DATA'!$B:$B,$J$2)+COUNTIF('DFD DATA'!$B:$B,$K$2)+COUNTIF('DFD DATA'!$B:$B,$L$2)+1),\"\")"
 ws['M2'].number_format = 'DD/MM/YYYY'
 
 # Row 3: pre-computed KPI values for W1 and W2 (used in delta sub-texts)
@@ -464,7 +464,7 @@ for i, wc in enumerate(week_params):
         wow_ar  = '"—"'
 
     for val,fmt,col in zip(
-        [f'=TEXT({wc},"W/E DD/MM/YY")',req_w,acc_w,cmp_w,ar_w,fr_w,wow_req,wow_ar],
+        [f'=IFERROR(IF({wc}="","","W/E "&TEXT({wc},"DD/MM/YY")),"")',req_w,acc_w,cmp_w,ar_w,fr_w,wow_req,wow_ar],
         ['@','#,##0','#,##0','#,##0','0.0%','0.0%','0.0%','0.00%'],
         [2,3,4,5,6,7,8,9]):
         c = ws.cell(row=row,column=col,value=val)
@@ -591,7 +591,7 @@ for i,wc in enumerate(dfd_params):
     dfd_tot = f"=SUMIF({DFD}!$B:$B,{wc},{DFD}!$D:$D)"
     wow = f"=IFERROR({dfd_tot[1:]}/SUMIF({DFD}!$B:$B,{nwc},{DFD}!$D:$D)-1,\"—\")" if nwc else '"—"'
     for val,fmt,col in zip(
-        [f'=TEXT({wc},"W/E DD/MM/YY")', dfd_tot,
+        [f'=IFERROR(IF({wc}="","","W/E "&TEXT({wc},"DD/MM/YY")),"")', dfd_tot,
          f"=SUMIF({DFD}!$B:$B,{wc},{DFD}!$E:$E)",
          f"=SUMIF({DFD}!$B:$B,{wc},{DFD}!$F:$F)",
          f"=SUMIF({DFD}!$B:$B,{wc},{DFD}!$G:$G)", wow],
