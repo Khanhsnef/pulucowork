@@ -1831,6 +1831,59 @@
       font-weight: 700;
     }
 
+    /* ── Phone hint popup ── */
+    .phone-hint-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: #0E4174;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-left: 5px;
+      vertical-align: middle;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .phone-hint-icon:hover { background: #FF7F32; }
+    .phone-hint-popup {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      z-index: 200;
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 1rem;
+      padding: 14px 16px 12px;
+      box-shadow: 0 8px 28px rgba(14,65,116,.13);
+      min-width: 270px;
+      font-size: .82rem;
+    }
+    .phone-hint-popup.open { display: block; }
+    .phone-hint-arrow {
+      position: absolute;
+      top: -7px;
+      right: 20px;
+      width: 13px;
+      height: 13px;
+      background: #fff;
+      border-left: 1.5px solid #e2e8f0;
+      border-top: 1.5px solid #e2e8f0;
+      transform: rotate(45deg);
+    }
+    .phone-hint-title { font-weight: 700; color: #0E4174; margin: 0 0 8px; font-size: .86rem; }
+    .phone-hint-row { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; color: #374151; }
+    .phone-hint-row code { background: #f3f4f6; padding: 1px 5px; border-radius: 4px; font-size: .8rem; letter-spacing: .03em; }
+    .phone-hint-badge { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+    .phone-hint-badge.ok  { background: #d1fae5; color: #065f46; }
+    .phone-hint-badge.err { background: #fee2e2; color: #991b1b; }
+    .phone-hint-note { margin: 8px 0 0; font-size: .77rem; color: #6b7280; font-style: italic; }
+
     .form-submit {
       display: block;
       width: 100%;
@@ -2871,9 +2924,20 @@
               <label class="form-label" for="f-name">Họ và tên <span class="req">*</span></label>
               <input class="form-control" id="f-name" type="text" placeholder="Nguyễn Văn A" required />
             </div>
-            <div class="form-group">
-              <label class="form-label" for="f-phone">Số điện thoại <span class="req">*</span></label>
-              <input class="form-control" id="f-phone" type="tel" placeholder="84912345678" required />
+            <div class="form-group" style="position:relative;">
+              <label class="form-label" for="f-phone">
+                Số điện thoại <span class="req">*</span>
+                <span class="phone-hint-icon" id="phoneHintBtn" onclick="togglePhoneHint(event)" title="Hướng dẫn nhập số">?</span>
+              </label>
+              <div class="phone-hint-popup" id="phoneHintPopup">
+                <div class="phone-hint-arrow"></div>
+                <p class="phone-hint-title">📱 Cách nhập số điện thoại</p>
+                <div class="phone-hint-row"><span class="phone-hint-badge ok">✓</span><span>Bắt đầu bằng <b>84</b>: <code>84912345678</code></span></div>
+                <div class="phone-hint-row"><span class="phone-hint-badge ok">✓</span><span>Bắt đầu bằng <b>0</b>: <code>0912345678</code></span></div>
+                <div class="phone-hint-row"><span class="phone-hint-badge err">✗</span><span>Không dùng dấu cách hay gạch ngang</span></div>
+                <p class="phone-hint-note">Hệ thống tự động chuyển đầu số 0 → 84</p>
+              </div>
+              <input class="form-control" id="f-phone" type="tel" placeholder="0912345678 hoặc 84912345678" required />
             </div>
           </div>
 
@@ -3169,19 +3233,43 @@
     // ── FORM SUBMIT ──
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyXkc95skBx9uR6r2T3JR_l4t2q0O6VBY0PdJkw__cV1iZefExs46RrI0u19SSiT-g/exec';
 
+    // ── Phone hint popup toggle ──
+    function togglePhoneHint(e) {
+      e.stopPropagation();
+      document.getElementById('phoneHintPopup').classList.toggle('open');
+    }
+    document.addEventListener('click', () => {
+      document.getElementById('phoneHintPopup')?.classList.remove('open');
+    });
+
+    // ── Auto-convert 0xxxx → 84xxxx on blur ──
+    document.getElementById('f-phone').addEventListener('blur', function () {
+      let v = this.value.replace(/[\s\-]/g, '');
+      if (/^0[0-9]{9}$/.test(v)) {
+        this.value = '84' + v.slice(1);
+      }
+    });
+
+    function normalizePhone(raw) {
+      let v = raw.replace(/[\s\-]/g, '');
+      if (/^0[0-9]{9}$/.test(v)) v = '84' + v.slice(1);
+      return v;
+    }
+
     function submitForm(e) {
       e.preventDefault();
       const name = document.getElementById('f-name').value.trim();
-      const phone = document.getElementById('f-phone').value.trim();
+      const rawPhone = document.getElementById('f-phone').value.trim();
+      const phone = normalizePhone(rawPhone);
       const area = document.querySelector('input[name="area"]:checked');
       const interest = document.querySelector('input[name="interest"]:checked');
       const acc = document.querySelector('input[name="acc_status"]:checked');
       const ev = document.querySelector('input[name="has_ev"]:checked');
-      if (!name || !phone || !area || !interest || !acc || !ev) {
+      if (!name || !rawPhone || !area || !interest || !acc || !ev) {
         showToast('Vui lòng điền đầy đủ các trường bắt buộc (*)', 'warning'); return;
       }
-      if (!/^84[0-9]{9}$/.test(phone.replace(/\s/g, ''))) {
-        showToast('Số điện thoại không hợp lệ. Vui lòng kiểm tra lại.', 'error'); return;
+      if (!/^84[0-9]{9}$/.test(phone)) {
+        showToast('Số điện thoại không hợp lệ. Nhập đầu 0 (VD: 0912345678) hoặc 84 (VD: 84912345678).', 'error'); return;
       }
 
       // Disable button, show loading state
