@@ -3135,7 +3135,7 @@
       });
       if (!open) {
         btn.classList.add('open');
-        body.style.maxHeight = body.scrollHeight + 'px';
+        body.style.maxHeight = (body.scrollHeight || 800) + 'px';
       }
     }
 
