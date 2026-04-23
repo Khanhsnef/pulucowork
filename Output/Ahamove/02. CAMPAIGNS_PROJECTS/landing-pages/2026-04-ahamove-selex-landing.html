@@ -1931,12 +1931,17 @@
     }
 
     .acc-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height .3s ease;
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .3s ease;
+    }
+
+    .acc-body.open {
+      grid-template-rows: 1fr;
     }
 
     .acc-body-inner {
+      overflow: hidden;
       padding: 0 1.125rem .875rem;
       font-size: .8rem;
       color: var(--gray-500);
@@ -3131,11 +3136,11 @@
       const open = btn.classList.contains('open');
       document.querySelectorAll('.acc-btn').forEach(b => {
         b.classList.remove('open');
-        b.nextElementSibling.style.maxHeight = '0';
+        b.nextElementSibling.classList.remove('open');
       });
       if (!open) {
         btn.classList.add('open');
-        body.style.maxHeight = (body.scrollHeight || 800) + 'px';
+        body.classList.add('open');
       }
     }
 
