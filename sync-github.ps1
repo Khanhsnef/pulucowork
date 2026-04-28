@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 $env:PATH += ";C:\Program Files\Git\cmd"
 
-$workDir = "C:\Users\lephu\pulucowork"
+$workDir = "C:\Users\lephu\Desktop\pulucowork"
 $logFile = "$workDir\sync-github.log"
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
