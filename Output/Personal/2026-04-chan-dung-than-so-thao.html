@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bản Đồ Linh Hồn | Nguyễn Thanh Thảo · 18/12/1996</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose:    #F43F5E;
+    --rose-s:  #FDA4AF;
+    --rose-p:  #FFF1F2;
+    --violet:  #7C3AED;
+    --violet-s:#C4B5FD;
+    --teal:    #0D9488;
+    --teal-s:  #5EEAD4;
+    --amber:   #D97706;
+    --amber-s: #FCD34D;
+    --deep:    #0A0514;
+    --navy:    #130B26;
+    --card-bg: rgba(255,255,255,0.03);
+    --border:  rgba(255,255,255,0.07);
+    --text:    #EDE9FE;
+    --muted:   #A78BFA;
+    --soft:    #7C6FAA;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lexend',sans-serif;background:var(--deep);color:var(--text);line-height:1.7;overflow-x:hidden}
+
+  body::before{
+    content:'';position:fixed;inset:0;
+    background:
+      radial-gradient(ellipse at 15% 40%,rgba(124,58,237,0.25) 0%,transparent 55%),
+      radial-gradient(ellipse at 85% 25%,rgba(244,63,94,0.12) 0%,transparent 45%),
+      radial-gradient(ellipse at 50% 85%,rgba(13,148,136,0.08) 0%,transparent 50%);
+    pointer-events:none;z-index:0
+  }
+
+  .stars{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+  .star{position:absolute;border-radius:50%;background:white;animation:twk var(--d,3s) ease-in-out infinite;opacity:var(--o,.4)}
+  @keyframes twk{0%,100%{opacity:var(--o,.4);transform:scale(1)}50%{opacity:calc(var(--o,.4)*0.25);transform:scale(.6)}}
+
+  .container{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 24px}
+
+  /* ── HERO ── */
+  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px;position:relative}
+  .badge{display:inline-block;border:1px solid var(--rose);color:var(--rose);font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:6px 20px;border-radius:100px;margin-bottom:28px}
+  .hero-title{font-size:clamp(16px,3vw,22px);font-weight:300;color:var(--muted);letter-spacing:4px;text-transform:uppercase;margin-bottom:12px}
+  .hero-name{font-size:clamp(36px,6vw,64px);font-weight:800;line-height:1.1;background:linear-gradient(135deg,#FDA4AF,#F43F5E,#9333EA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;letter-spacing:-1px}
+  .hero-date{font-size:clamp(22px,4vw,38px);font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:8px}
+  .hero-time{font-size:15px;color:var(--soft);margin-bottom:48px;letter-spacing:1px}
+
+  /* ── BIRTH GRID ── */
+  .birth-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:700px;margin:0 auto 36px}
+  .bc{background:rgba(255,255,255,0.04);border:1px solid rgba(244,63,94,0.18);border-radius:16px;padding:18px 14px;backdrop-filter:blur(8px)}
+  .bc .lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--rose);margin-bottom:6px;opacity:.8}
+  .bc .val{font-size:20px;font-weight:700;color:var(--text)}
+  .bc .sub{font-size:12px;color:var(--soft);margin-top:3px}
+
+  .key-nums{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .kn{display:flex;flex-direction:column;align-items:center;background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.25);border-radius:12px;padding:10px 18px;min-width:80px}
+  .kn .n{font-size:30px;font-weight:900;color:var(--rose);line-height:1}
+  .kn .l{font-size:10px;color:var(--soft);text-align:center;margin-top:4px}
+
+  .scroll-cue{margin-top:44px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--soft);font-size:12px;letter-spacing:1px;animation:bounce 2s ease-in-out infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+  .scroll-arrow{width:20px;height:20px;border-right:2px solid var(--rose);border-bottom:2px solid var(--rose);transform:rotate(45deg);opacity:.5}
+
+  /* ── NAV ── */
+  .toc{position:sticky;top:0;z-index:100;background:rgba(10,5,20,0.88);backdrop-filter:blur(16px);border-bottom:1px solid rgba(244,63,94,0.12);padding:10px 24px}
+  .toc-inner{max-width:960px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+  .toc-inner::-webkit-scrollbar{display:none}
+  .ti{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:100px;font-size:11px;color:var(--soft);white-space:nowrap;cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+  .ti:hover{color:var(--rose);border-color:rgba(244,63,94,.3);background:rgba(244,63,94,.05)}
+  .tn{width:16px;height:16px;background:rgba(244,63,94,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--rose);font-weight:700;flex-shrink:0}
+
+  /* ── SECTION ── */
+  .section{padding:72px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+  .sec-tag{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--rose);margin-bottom:12px;opacity:.8}
+  .sec-title{font-size:clamp(26px,3.5vw,40px);font-weight:800;line-height:1.15;color:var(--text);margin-bottom:12px}
+  .sec-lead{font-size:15px;color:var(--soft);max-width:580px;line-height:1.8}
+
+  /* ── CARDS ── */
+  .card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:26px;margin-bottom:14px;transition:border-color .2s}
+  .card:hover{border-color:rgba(244,63,94,.2)}
+  .card-rose{background:rgba(244,63,94,.05);border-color:rgba(244,63,94,.2)}
+  .card-violet{background:rgba(124,58,237,.12);border-color:rgba(124,58,237,.25)}
+  .card-teal{background:rgba(13,148,136,.07);border-color:rgba(13,148,136,.2)}
+  .card-amber{background:rgba(217,119,6,.07);border-color:rgba(217,119,6,.2)}
+
+  .ct{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
+  .ct-r{color:var(--rose)}.ct-v{color:var(--violet-s)}.ct-t{color:var(--teal-s)}.ct-a{color:var(--amber-s)}
+  .ct-em{color:#34D399}.ct-wh{color:var(--text)}
+
+  /* ── PLANETS ── */
+  .planet-row{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0}
+  .pt{display:flex;align-items:center;gap:8px;padding:7px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;font-size:12px}
+  .pi{font-size:15px}
+  .pn{color:var(--soft);font-size:10px}
+  .ps{color:var(--text);font-weight:600}
+
+  /* ── TRAIT GRID ── */
+  .trait-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .trait{display:flex;align-items:flex-start;gap:11px}
+  .ti-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;margin-top:2px}
+  .ti-r{background:rgba(244,63,94,.1)}
+  .ti-v{background:rgba(124,58,237,.12)}
+  .ti-t{background:rgba(13,148,136,.1)}
+  .ti-a{background:rgba(217,119,6,.1)}
+  .ti-e{background:rgba(5,150,105,.1)}
+  .trait-body strong{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+  .trait-body span{font-size:12px;color:var(--soft);line-height:1.55}
+
+  /* ── TIMELINE ── */
+  .timeline{position:relative;padding-left:30px}
+  .timeline::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--rose),rgba(244,63,94,.1))}
+  .tl-item{position:relative;margin-bottom:28px}
+  .tl-dot{position:absolute;left:-26px;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid var(--rose);background:var(--deep)}
+  .tl-dot.active{background:var(--rose);box-shadow:0 0 10px rgba(244,63,94,.5)}
+  .tl-y{font-size:11px;font-weight:700;color:var(--rose);letter-spacing:1px;margin-bottom:3px}
+  .tl-t{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+  .tl-d{font-size:12px;color:var(--soft);line-height:1.6}
+  .badge{display:inline-block;padding:2px 9px;border-radius:100px;font-size:10px;font-weight:600;margin-left:6px}
+  .b-now{background:rgba(244,63,94,.15);color:var(--rose)}
+  .b-peak{background:rgba(5,150,105,.15);color:#34D399}
+  .b-warn{background:rgba(217,119,6,.15);color:var(--amber-s)}
+  .b-turn{background:rgba(124,58,237,.15);color:var(--violet-s)}
+
+  /* ── SCORE BAR ── */
+  .score{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .slabel{font-size:12px;color:var(--soft);min-width:130px}
+  .sbar{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:100px;overflow:hidden}
+  .sfill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--rose),var(--rose-s))}
+  .sval{font-size:12px;font-weight:700;color:var(--rose);min-width:60px;text-align:right}
+
+  /* ── PINNACLE ── */
+  .pin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .pc{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:18px 14px;text-align:center}
+  .pc.cur{border-color:rgba(244,63,94,.4);background:rgba(244,63,94,.05)}
+  .pc-n{font-size:34px;font-weight:900;color:var(--rose);line-height:1;margin-bottom:5px}
+  .pc-a{font-size:10px;color:var(--soft);margin-bottom:6px;letter-spacing:.5px}
+  .pc-nm{font-size:12px;font-weight:600;color:var(--text);margin-bottom:5px}
+  .pc-d{font-size:11px;color:var(--soft);line-height:1.5}
+
+  /* ── CALLOUT ── */
+  .callout{border-left:3px solid var(--rose);padding:14px 18px;background:rgba(244,63,94,.05);border-radius:0 12px 12px 0;margin:18px 0}
+  .callout p{font-size:13px;color:var(--soft);line-height:1.7}
+  .callout strong{color:var(--rose)}
+
+  /* ── 2-COL ── */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+  /* ── STEPS ── */
+  .steps{display:flex;flex-direction:column;gap:14px}
+  .step{display:flex;gap:14px;align-items:flex-start}
+  .step-n{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--rose),#9333EA);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:white;flex-shrink:0}
+  .step-b strong{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+  .step-b p{font-size:12px;color:var(--soft);line-height:1.6}
+
+  /* ── LETTER ── */
+  .letter{background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(10,5,20,.6));border:1px solid rgba(244,63,94,.22);border-radius:24px;padding:44px;position:relative;overflow:hidden}
+  .letter::before{content:'"';position:absolute;top:-20px;left:20px;font-size:180px;color:rgba(244,63,94,.06);font-family:Georgia,serif;line-height:1;pointer-events:none}
+  .letter p{font-size:15px;line-height:2;color:var(--text);margin-bottom:18px;position:relative}
+  .letter p:last-child{margin-bottom:0}
+  .letter em{color:var(--rose);font-style:normal;font-weight:600}
+
+  /* ── LIST ── */
+  ul.clist{list-style:none;display:flex;flex-direction:column;gap:9px}
+  ul.clist li{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--soft);line-height:1.6}
+  ul.clist li::before{content:'◆';font-size:7px;color:var(--rose);margin-top:5px;flex-shrink:0}
+
+  /* ── COMPARISON BOX ── */
+  .compare{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px;margin-top:14px}
+  .cmp-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;color:var(--muted)}
+  .cmp-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .cmp-him{flex:1;text-align:right;font-size:12px;color:var(--soft)}
+  .cmp-vs{font-size:10px;color:var(--text);background:rgba(255,255,255,.08);border-radius:6px;padding:3px 8px;flex-shrink:0}
+  .cmp-her{flex:1;font-size:12px;color:var(--rose)}
+  .cmp-him strong,.cmp-her strong{color:var(--text)}
+
+  /* ── DIVIDER ── */
+  .div{display:flex;align-items:center;gap:14px;margin:28px 0;opacity:.25}
+  .div::before,.div::after{content:'';flex:1;height:1px;background:var(--rose)}
+  .div span{font-size:14px;color:var(--rose)}
+
+  /* ── FOOTER ── */
+  .footer{text-align:center;padding:56px 24px;color:var(--soft);font-size:12px;letter-spacing:1px;opacity:.45}
+
+  /* ── UTILS ── */
+  p{font-size:13px;color:var(--soft);line-height:1.8;margin-bottom:10px}
+  p:last-child{margin-bottom:0}
+  strong{color:var(--text)}
+  .mb-16{margin-bottom:16px}.mb-24{margin-bottom:24px}.mt-16{margin-top:16px}.mt-24{margin-top:24px}
+  .inline-n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3);border-radius:7px;font-size:13px;font-weight:800;color:var(--rose);margin-right:5px;vertical-align:middle}
+  .hl{background:rgba(244,63,94,.1);border-radius:5px;padding:1px 7px;color:#FDA4AF;font-weight:600}
+
+  @media(max-width:640px){
+    .birth-grid{grid-template-columns:repeat(2,1fr)}
+    .trait-grid{grid-template-columns:1fr}
+    .two-col{grid-template-columns:1fr}
+    .pin-grid{grid-template-columns:repeat(2,1fr)}
+    .letter{padding:26px 20px}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div style="max-width:740px;width:100%">
+    <div class="badge">Bản Đồ Linh Hồn · Phân Tích Toàn Diện</div>
+    <div class="hero-title">Nguyễn Thanh Thảo</div>
+    <div class="hero-name">Người Nhân Mã<br>Mang Trái Tim Bọ Cạp</div>
+    <div class="hero-date">18 · 12 · 1996</div>
+    <div class="hero-time">18:40 · Việt Nam</div>
+
+    <div class="birth-grid">
+      <div class="bc">
+        <div class="lbl">Cung Mặt Trời</div>
+        <div class="val">Nhân Mã ♐</div>
+        <div class="sub">27° Sagittarius</div>
+      </div>
+      <div class="bc">
+        <div class="lbl">Cung Mọc</div>
+        <div class="val">Cự Giải ♋</div>
+        <div class="sub">~11° Cancer · 18h40</div>
+      </div>
+      <div class="bc">
+        <div class="lbl">Cung Mặt Trăng</div>
+        <div class="val">Bọ Cạp ♏</div>
+        <div class="sub">~3° Scorpio</div>
+      </div>
+      <div class="bc">
+        <div class="lbl">Số Đường Đời</div>
+        <div class="val" style="color:var(--rose)">1</div>
+        <div class="sub">Tiên Phong · Lãnh Đạo</div>
+      </div>
+      <div class="bc">
+        <div class="lbl">Số Ngày Sinh</div>
+        <div class="val" style="color:var(--rose)">9</div>
+        <div class="sub">Nhân Văn · Trí Tuệ</div>
+      </div>
+      <div class="bc">
+        <div class="lbl">Năm Cá Nhân 2026</div>
+        <div class="val" style="color:var(--rose)">4</div>
+        <div class="sub">Xây Nền · Ổn Định</div>
+      </div>
+    </div>
+
+    <div class="key-nums">
+      <div class="kn"><div class="n">1</div><div class="l">Đường Đời</div></div>
+      <div class="kn"><div class="n">9</div><div class="l">Ngày Sinh</div></div>
+      <div class="kn"><div class="n">3</div><div class="l">Đỉnh Cao I</div></div>
+      <div class="kn"><div class="n">7</div><div class="l">Đỉnh Cao II</div></div>
+      <div class="kn"><div class="n">1</div><div class="l">Đỉnh Cao III</div></div>
+      <div class="kn"><div class="n">1</div><div class="l">Đỉnh Cao IV</div></div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Cuộn xuống để khám phá</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#s1" class="ti"><span class="tn">1</span>Chân Dung</a>
+    <a href="#s2" class="ti"><span class="tn">2</span>Sứ Mệnh</a>
+    <a href="#s3" class="ti"><span class="tn">3</span>Thử Thách</a>
+    <a href="#s4" class="ti"><span class="tn">4</span>Chu Kỳ</a>
+    <a href="#s5" class="ti"><span class="tn">5</span>Sự Nghiệp</a>
+    <a href="#s6" class="ti"><span class="tn">6</span>Tình Yêu</a>
+    <a href="#s7" class="ti"><span class="tn">7</span>Sức Khoẻ</a>
+    <a href="#s8" class="ti"><span class="tn">8</span>Nỗi Sợ</a>
+    <a href="#s9" class="ti"><span class="tn">9</span>Tương Lai</a>
+    <a href="#s10" class="ti"><span class="tn">10</span>Lời Nhắn</a>
+    <a href="#s11" class="ti"><span class="tn">⚭</span>Song Hành</a>
+  </div>
+</nav>
+
+<!-- ═══ S1: CHÂN DUNG ═══ -->
+<section class="section" id="s1">
+  <div class="container">
+    <div style="margin-bottom:44px">
+      <div class="sec-tag">01 · Chân Dung Tổng Thể</div>
+      <h2 class="sec-title">Người Khám Phá Có<br>Chiều Sâu Bí Ẩn</h2>
+      <p class="sec-lead">Mặt Trời Nhân Mã + Mặt Trăng Bọ Cạp + Cung Mọc Cự Giải tạo ra một nhân cách vô cùng phức tạp: vừa tự do phóng khoáng, vừa sâu sắc như đại dương, vừa ấm áp bảo vệ như tổ ấm.</p>
+    </div>
+
+    <div class="card card-rose mb-16">
+      <div class="ct ct-r">Bản Đồ Hành Tinh · 18/12/1996 · 18h40</div>
+      <div class="planet-row">
+        <div class="pt"><span class="pi">☀️</span><span><span class="pn">Mặt Trời</span><br><span class="ps">Nhân Mã ♐</span></span></div>
+        <div class="pt"><span class="pi">🌙</span><span><span class="pn">Mặt Trăng</span><br><span class="ps">Bọ Cạp ♏</span></span></div>
+        <div class="pt"><span class="pi">⬆️</span><span><span class="pn">Cung Mọc</span><br><span class="ps">Cự Giải ♋</span></span></div>
+        <div class="pt"><span class="pi">☿️</span><span><span class="pn">Mercury</span><br><span class="ps">Nhân Mã ♐</span></span></div>
+        <div class="pt"><span class="pi">♀️</span><span><span class="pn">Venus</span><br><span class="ps">Ma Kết ♑</span></span></div>
+        <div class="pt"><span class="pi">♂️</span><span><span class="pn">Mars</span><br><span class="ps">Thiên Bình ♎</span></span></div>
+        <div class="pt"><span class="pi">♃</span><span><span class="pn">Jupiter</span><br><span class="ps">Nhân Mã ♐</span></span></div>
+        <div class="pt"><span class="pi">♄</span><span><span class="pn">Saturn</span><br><span class="ps">Bạch Dương ♈</span></span></div>
+        <div class="pt"><span class="pi">♅</span><span><span class="pn">Uranus</span><br><span class="ps">Bảo Bình ♒</span></span></div>
+        <div class="pt"><span class="pi">♆</span><span><span class="pn">Neptune</span><br><span class="ps">Ma Kết ♑</span></span></div>
+        <div class="pt"><span class="pi">♇</span><span><span class="pn">Pluto</span><br><span class="ps">Nhân Mã ♐</span></span></div>
+      </div>
+      <p style="font-size:11px;color:var(--soft);margin-top:4px">⚠ Jupiter + Pluto + Sun + Mercury đều ở Nhân Mã — đây là bản đồ sao với <strong style="color:var(--rose)">năng lượng Nhân Mã cực mạnh</strong>.</p>
+    </div>
+
+    <div class="card mb-16">
+      <div class="ct ct-em">Điểm Mạnh Cốt Lõi</div>
+      <div class="trait-grid">
+        <div class="trait">
+          <div class="ti-icon ti-r">🏹</div>
+          <div class="trait-body">
+            <strong>Tầm nhìn rộng & tư duy tự do (Nhân Mã × 4)</strong>
+            <span>Sun + Mercury + Jupiter + Pluto đều ở Nhân Mã — không ai có tầm nhìn xa hơn bạn trong phòng. Bạn thấy được toàn cảnh khi người khác còn bận lo chi tiết.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-v">🔮</div>
+          <div class="trait-body">
+            <strong>Trực giác sâu sắc & đọc người (Mặt Trăng Bọ Cạp)</strong>
+            <span>Mặt Trăng Bọ Cạp ban cho bạn khả năng đọc cảm xúc và ý định của người khác như đọc sách. Bạn biết ai đang nói thật trước khi họ kịp chứng minh.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-t">🏠</div>
+          <div class="trait-body">
+            <strong>Bản năng bảo vệ & nuôi dưỡng (Cung Mọc Cự Giải)</strong>
+            <span>Người gặp bạn lần đầu cảm nhận sự ấm áp và an toàn. Bạn tạo ra "tổ ấm" ở bất cứ nơi nào bạn đặt chân — không phải nhà vật lý mà là bầu không khí.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-a">🌟</div>
+          <div class="trait-body">
+            <strong>Lòng nhân ái & nhân sinh quan sâu (Số Ngày Sinh 9)</strong>
+            <span>Số 9 là số của trí tuệ được trải nghiệm. Bạn có khả năng cảm thông ở mức độ hiếm gặp, và bị thu hút bởi những vấn đề lớn hơn cuộc đời cá nhân.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-e">🦅</div>
+          <div class="trait-body">
+            <strong>Sự bền bỉ trong biến đổi (Pluto Nhân Mã)</strong>
+            <span>Thế hệ sinh cùng thời với bạn được định mệnh dẫn dắt những thay đổi triết học và tư tưởng lớn. Bạn không sợ những chuyển hoá sâu sắc — bạn phát triển nhờ chúng.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-r">💎</div>
+          <div class="trait-body">
+            <strong>Cam kết nghiêm túc trong tình yêu (Venus Ma Kết)</strong>
+            <span>Khi yêu là yêu thật, yêu lâu dài, yêu có trách nhiệm. Không dễ mở lòng, nhưng một khi đã mở, đó là sự trung thành không lay chuyển.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-violet">
+      <div class="ct ct-v">Điểm Yếu Cần Nhận Diện</div>
+      <div class="trait-grid">
+        <div class="trait">
+          <div class="ti-icon ti-v">🎯</div>
+          <div class="trait-body">
+            <strong>Thiếu kiên nhẫn với giới hạn (Nhân Mã × 4)</strong>
+            <span>Với 4 hành tinh ở Nhân Mã, mọi giới hạn đều cảm thấy ngột ngạt. Dễ bỏ cuộc ở giai đoạn chi tiết và thực thi, vì đã bị hút bởi ý tưởng tiếp theo.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-r">🌊</div>
+          <div class="trait-body">
+            <strong>Cảm xúc cực đoan (Mặt Trăng Bọ Cạp)</strong>
+            <span>Bọ Cạp không có cung bậc trung gian: hoặc yêu sâu sắc hoặc thờ ơ hoàn toàn. Đây là sức mạnh nhưng cũng là điểm dễ tổn thương nhất.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-a">🔒</div>
+          <div class="trait-body">
+            <strong>Rút lui khi bị tổn thương (Cự Giải + Bọ Cạp)</strong>
+            <span>Khi cảm thấy không an toàn, phản xạ tự nhiên là đóng cửa và rút vào vỏ. Người xung quanh có thể không biết chuyện gì đang xảy ra cho đến khi quá muộn.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-t">⚖️</div>
+          <div class="trait-body">
+            <strong>Xung đột giữa tự do và ổn định</strong>
+            <span>Nhân Mã muốn bay, Cự Giải muốn có tổ ấm, Bọ Cạp muốn kết nối sâu. Ba lực kéo theo ba hướng — và đôi khi bạn không biết mình thật sự muốn gì.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout mt-24">
+      <p><strong>Cốt lõi nhân cách:</strong> Bạn là <em>người tự do có trái tim ở nhà</em>. Nhân Mã muốn khám phá không giới hạn, nhưng Mặt Trăng Bọ Cạp và Cung Mọc Cự Giải đặt trái tim bạn vào những kết nối sâu sắc và gia đình. Mâu thuẫn lớn nhất của bạn: <strong>làm thế nào để tự do mà không cô đơn, kết nối mà không mất bản thân?</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S2: SỨ MỆNH ═══ -->
+<section class="section" id="s2">
+  <div class="container">
+    <div style="margin-bottom:44px">
+      <div class="sec-tag">02 · Sứ Mệnh Cuộc Đời</div>
+      <h2 class="sec-title">Người Truyền Sáng<br>Và Chữa Lành</h2>
+      <p class="sec-lead">Số Đường Đời 1 + Số Ngày Sinh 9 + Nhân Mã × 4 tạo ra sứ mệnh độc đáo: <strong>tiên phong mở đường</strong> trong lĩnh vực có ý nghĩa nhân văn sâu sắc.</p>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card card-rose">
+        <div class="ct ct-r">Thần Số Học Nói Gì</div>
+        <p><span class="inline-n">1</span><strong>Số Đường Đời 1</strong> — Tiên phong, tự lập, mở đường. Giống như chồng bạn, bạn được sinh ra để <em>bắt đầu những điều mới</em>. Nhưng với năng lượng Nhân Mã, con đường đó có màu sắc triết học và nhân văn hơn.</p>
+        <p style="margin-top:10px"><span class="inline-n">9</span><strong>Số Ngày Sinh 9</strong> — Số của sự hoàn chỉnh, trí tuệ qua trải nghiệm, và lòng nhân ái. ĐĐ 1 định hướng hành động, Ngày Sinh 9 định hướng <em>mục đích</em>. Tổ hợp này: <strong>Lãnh đạo để phục vụ điều gì đó lớn hơn bản thân.</strong></p>
+        <p style="margin-top:10px"><span class="inline-n">3</span><strong>Đỉnh Cao I (số 3)</strong> — Giai đoạn 0–35 tuổi là giai đoạn của sự sáng tạo, biểu đạt và phát triển tiếng nói cá nhân. Học cách chia sẻ chiều sâu nội tâm của bạn ra thế giới.</p>
+      </div>
+      <div class="card card-violet">
+        <div class="ct ct-v">Chiêm Tinh Xác Nhận</div>
+        <p><strong>Nhân Mã × 4 (Sun, Mercury, Jupiter, Pluto)</strong> — Sứ mệnh của bạn có liên quan đến <em>mở rộng nhận thức</em>: giáo dục, triết học, du lịch, văn hoá, hoặc bất cứ thứ gì giúp người khác thấy thế giới rộng lớn hơn.</p>
+        <p style="margin-top:10px"><strong>Mặt Trăng Bọ Cạp</strong> — Bạn có khả năng chạm đến chiều sâu tâm lý người khác. Sứ mệnh có yếu tố <em>chữa lành và biến đổi</em> — giúp người khác đi qua những tối tăm để ra ánh sáng.</p>
+        <p style="margin-top:10px"><strong>Cung Mọc Cự Giải</strong> — Cách bạn thực hiện sứ mệnh: thông qua <em>sự kết nối ấm áp, cộng đồng và gia đình</em>. Không phải leader lạnh lùng từ xa — mà là người dẫn đường bằng trái tim.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ct ct-em">Sứ Mệnh Tổng Hợp</div>
+      <p style="font-size:15px;line-height:1.9;color:var(--text)">Sứ mệnh của bạn là <strong>mở rộng thế giới quan của những người xung quanh</strong> — thông qua kiến thức, câu chuyện, trải nghiệm, hoặc sự kết nối có chiều sâu. Bạn có khả năng vừa tự do như Nhân Mã vừa chữa lành như Bọ Cạp vừa nuôi dưỡng như Cự Giải. Khi ba năng lượng này được sử dụng cùng nhau — bạn tạo ra sự thay đổi thật sự trong cuộc đời người khác.</p>
+      <div class="div"><span>◆</span></div>
+      <p><strong>Lĩnh vực phù hợp nhất:</strong> Giáo dục, tư vấn, coaching, nghiên cứu, viết lách, phát triển con người, tâm lý học, sáng tạo nội dung, hoặc bất cứ lĩnh vực nào đòi hỏi <em>vừa tư duy rộng vừa cảm nhận sâu</em>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S3: THỬ THÁCH ═══ -->
+<section class="section" id="s3">
+  <div class="container">
+    <div style="margin-bottom:44px">
+      <div class="sec-tag">03 · Những Thử Thách Định Mệnh</div>
+      <h2 class="sec-title">Bài Học Lớn<br>Cuộc Đời Đặt Ra</h2>
+      <p class="sec-lead">Thử thách thần số học: <strong>6 · 2 · 4</strong>. Chiêm tinh: <strong>Saturn Bạch Dương + Mặt Trăng Bọ Cạp</strong>.</p>
+    </div>
+
+    <div class="card card-rose mb-16">
+      <div class="ct ct-r">Thử Thách Lớn Nhất: Số 4 — Kỷ Luật Và Nền Tảng</div>
+      <p>Nghịch lý của người Nhân Mã × 4: <strong>tinh thần bay cao nhưng cuộc đời đòi hỏi phải xây nền tảng</strong>. Thử thách số 4 xuất hiện xuyên suốt — yêu cầu bạn phải kiên nhẫn, có kỷ luật, và hoàn thành những việc nhàm chán nhưng cần thiết.</p>
+      <p style="margin-top:10px"><strong>Biểu hiện:</strong> Bắt đầu nhiều thứ nhưng khó hoàn thành. Dễ chán những thứ đã quen. Tìm kiếm kích thích mới thay vì đào sâu vào những gì đang có.</p>
+      <div class="callout" style="margin-top:14px;border-left-color:#A78BFA;background:rgba(124,58,237,.07)">
+        <p><strong style="color:#A78BFA">Bài học:</strong> Tự do thật sự không phải là không có cam kết — mà là có đủ nền tảng vững chắc để bay mà không sợ rơi. Kỷ luật là điều kiện cho tự do, không phải kẻ thù của tự do.</p>
+      </div>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card">
+        <div class="ct ct-v">Thử Thách Số 6 — Trách Nhiệm & Tình Yêu</div>
+        <p>Giai đoạn trẻ (0–35), thử thách lớn là <strong>học cách yêu mà không mất bản thân</strong>. Số 6 liên quan đến gia đình, trách nhiệm, và sự cân bằng trong các mối quan hệ.</p>
+        <p style="margin-top:9px"><strong>Biểu hiện:</strong> Có xu hướng hi sinh quá mức trong tình yêu. Khó đặt ranh giới với người thân. Cảm giác có lỗi khi đặt bản thân lên trước.</p>
+        <p style="margin-top:9px"><strong>Bài học:</strong> Cho đi từ sự sung mãn, không phải từ sự thiếu thốn. Yêu bản thân là điều kiện để yêu người khác lành mạnh.</p>
+      </div>
+      <div class="card">
+        <div class="ct ct-t">Thử Thách Số 2 — Tin Tưởng & Hợp Tác</div>
+        <p>Giai đoạn trưởng thành (36–44), thách thức chuyển sang <strong>học cách tin tưởng và dễ bị tổn thương (vulnerable)</strong>. Mặt Trăng Bọ Cạp làm cho thử thách này càng sâu sắc hơn.</p>
+        <p style="margin-top:9px"><strong>Biểu hiện:</strong> Kiểm tra lòng tin của người khác trước khi mở lòng. Khó tha thứ hoàn toàn khi bị tổn thương. Đôi khi trừng phạt bằng sự im lặng.</p>
+        <p style="margin-top:9px"><strong>Bài học:</strong> Không phải tất cả mọi người đều sẽ phản bội bạn. Lịch sử không nhất thiết phải là định mệnh.</p>
+      </div>
+    </div>
+
+    <div class="card card-amber mb-16">
+      <div class="ct ct-a">Saturn Return (2025–2026): Đang Xảy Ra Ngay Bây Giờ ⚡</div>
+      <p>Saturn trở về Bạch Dương — cung lúc bạn sinh ra — vào năm <strong>2025–2026</strong>. Đây là "kỳ thi đầu đời" quan trọng nhất, xảy ra một lần ở tuổi 29–30.</p>
+      <div class="two-col" style="margin-top:14px">
+        <div>
+          <p style="margin-bottom:8px"><strong style="color:var(--amber-s)">Saturn Bạch Dương thách thức bạn về:</strong></p>
+          <ul class="clist">
+            <li>Khẳng định bản thân và quyền tự quyết</li>
+            <li>Dũng cảm hành động không cần được phép</li>
+            <li>Xây dựng bản sắc cá nhân độc lập</li>
+            <li>Đặt ranh giới rõ ràng dựa trên giá trị của mình</li>
+          </ul>
+        </div>
+        <div>
+          <p style="margin-bottom:8px"><strong style="color:var(--teal-s)">Nếu vượt qua Saturn Return:</strong></p>
+          <ul class="clist">
+            <li>Rõ ràng hơn về "tôi là ai, tôi muốn gì"</li>
+            <li>Tự tin hành động mà không cần sự đồng thuận của tất cả</li>
+            <li>Bước vào giai đoạn 30s với bản sắc vững chắc</li>
+            <li>Thoát khỏi những khuôn mẫu từ tuổi thơ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S4: CHU KỲ ═══ -->
+<section class="section" id="s4">
+  <div class="container">
+    <div style="margin-bottom:44px">
+      <div class="sec-tag">04 · Chu Kỳ Phát Triển</div>
+      <h2 class="sec-title">Bản Đồ Thời Gian<br>Cuộc Đời</h2>
+      <p class="sec-lead">4 Đỉnh Cao: <strong>3 → 7 → 1 → 1</strong> — hành trình từ biểu đạt sáng tạo đến trí tuệ sâu, rồi bứt phá lãnh đạo mạnh mẽ ở nửa sau cuộc đời.</p>
+    </div>
+
+    <div class="card mb-24">
+      <div class="ct ct-r">Bốn Đỉnh Cao Cuộc Đời</div>
+      <div class="pin-grid" style="margin-top:14px">
+        <div class="pc cur">
+          <div class="pc-n">3</div>
+          <div class="pc-a">Tuổi 0–35 · 1996–2031</div>
+          <div class="pc-nm">Sáng Tạo & Biểu Đạt</div>
+          <div class="pc-d">Học cách thể hiện bản thân qua ngôn ngữ, sáng tạo và kết nối. Giai đoạn hình thành tiếng nói cá nhân.</div>
+        </div>
+        <div class="pc">
+          <div class="pc-n">7</div>
+          <div class="pc-a">Tuổi 36–44 · 2032–2040</div>
+          <div class="pc-nm">Trí Tuệ & Chiều Sâu</div>
+          <div class="pc-d">Đào sâu vào kiến thức và tâm linh. Thời điểm của phân tích, nghiên cứu, và khám phá nội tâm. Có thể cảm thấy cô đơn nhưng rất giàu chiều sâu.</div>
+        </div>
+        <div class="pc">
+          <div class="pc-n">1</div>
+          <div class="pc-a">Tuổi 45–53 · 2041–2049</div>
+          <div class="pc-nm">Lãnh Đạo Độc Lập</div>
+          <div class="pc-d">Bứt phá lớn — xây dựng con đường riêng hoàn toàn. Trí tuệ của Đỉnh Cao 2 kết hợp hành động của số 1 = đỉnh cao ảnh hưởng cá nhân.</div>
+        </div>
+        <div class="pc">
+          <div class="pc-n">1</div>
+          <div class="pc-a">Tuổi 54+ · 2050+</div>
+          <div class="pc-nm">Di Sản & Tiên Phong</div>
+          <div class="pc-d">Hai Đỉnh Cao 1 liên tiếp (45–53 và 54+) tạo ra giai đoạn lãnh đạo bền vững và dài hạn — hiếm gặp và rất mạnh mẽ.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ct ct-r">Timeline Năm Cá Nhân Trọng Yếu</div>
+      <div class="timeline" style="margin-top:18px">
+        <div class="tl-item">
+          <div class="tl-dot active"></div>
+          <div class="tl-y">2026 — Năm Cá Nhân 4 <span class="badge b-now">Hiện Tại</span></div>
+          <div class="tl-t">Năm Xây Nền Tảng</div>
+          <div class="tl-d">Sau năm 3 sôi nổi, năm 4 đòi hỏi kỷ luật và xây dựng có hệ thống. Không phải năm của bứt phá ngoài — mà là năm đặt móng bên trong. <strong>Đây là giai đoạn đầu tư, không phải thu hoạch.</strong> Và nó cần thiết cho 2029–2030.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-y">2028 — Năm Cá Nhân 6</div>
+          <div class="tl-t">Năm Của Tình Yêu & Gia Đình</div>
+          <div class="tl-d">Năm 6 đặc biệt quan trọng với Cung Mọc Cự Giải. Chủ đề gia đình, hôn nhân, nhà cửa, và trách nhiệm sẽ nổi lên mạnh. Có thể là năm những quyết định quan trọng về gia đình được đưa ra.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-y">2029 — Năm Cá Nhân 7</div>
+          <div class="tl-t">Năm Hướng Nội & Phát Triển Tinh Thần</div>
+          <div class="tl-d">Năm 7 cộng hưởng hoàn hảo với Mặt Trăng Bọ Cạp: chiều sâu, nghiên cứu, tâm linh, và khám phá bản thân. Không phải năm của hoạt động bên ngoài — là năm của phát triển bên trong.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-y">2030 — Năm Cá Nhân 8 <span class="badge b-peak">Đỉnh Cao</span></div>
+          <div class="tl-t">Năm Thu Hoạch Tài Chính & Sự Nghiệp</div>
+          <div class="tl-d">Năm 8 = năm quyền lực và thành công vật chất. Đây là đỉnh cao của chu kỳ 9 năm này. Những gì được xây dựng từ 2022–2029 sẽ tạo ra kết quả rõ ràng vào năm 2030.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-y">2032 — Năm Cá Nhân 1 <span class="badge b-turn">Bước Ngoặt</span></div>
+          <div class="tl-t">Chu Kỳ Mới + Đỉnh Cao 2 — Tuổi 36</div>
+          <div class="tl-d">Năm 2032: PY1 khởi đầu chu kỳ 9 năm mới, đồng thời Đỉnh Cao 2 (số 7: Trí Tuệ) bắt đầu. <strong>Đây là giai đoạn bạn bước vào chiều sâu thực sự của mình.</strong></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-y">2038 — Uranus Opposition <span class="badge b-warn">Chú Ý</span></div>
+          <div class="tl-t">Khủng Hoảng Giữa Đời — Tuổi 42</div>
+          <div class="tl-d">Uranus đối diện Uranus — "midlife crisis" thiên văn. Với Nhân Mã dominant, câu hỏi về tự do, ý nghĩa và bản sắc sẽ rất mãnh liệt. Cần cẩn thận với quyết định bốc đồng giai đoạn này.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S5: SỰ NGHIỆP ═══ -->
+<section class="section" id="s5">
+  <div class="container">
+    <div style="margin-bottom:44px">
+      <div class="sec-tag">05 · Sự Nghiệp & Tài Chính</div>
+      <h2 class="sec-title">Con Đường Phát Triển<br>Dựa Trên Ý Nghĩa</h2>
+      <p class="sec-lead">Nhân Mã × 4 + Đường Đời 1 + Ngày Sinh 9: người làm việc hiệu quả nhất khi công việc có <em>mục đích và ý nghĩa rõ ràng</em>, không chỉ thu nhập.</p>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card card-rose">
+        <div class="ct ct-r">Con Đường Phù Hợp</div>
+        <ul class="clist">
+          <li><strong>Giảng dạy, coaching, mentoring</strong> — kết hợp Nhân Mã (truyền đạt kiến thức) và Số 9 (phục vụ người khác). Bạn giúp người khác trưởng thành một cách tự nhiên.</li>
+          <li><strong>Nghiên cứu, phân tích, tư vấn chiến lược</strong> — Mặt Trăng Bọ Cạp tạo ra khả năng đào sâu đến tận gốc rễ vấn đề. Kết hợp tầm nhìn Nhân Mã = rất mạnh.</li>
+          <li><strong>Sáng tạo nội dung, viết lách, truyền thông</strong> — Mercury Nhân Mã có khả năng diễn đạt ý tưởng phức tạp một cách hấp dẫn và dễ hiểu.</li>
+          <li><strong>Lĩnh vực phát triển con người / tâm lý</strong> — Bọ Cạp cho phép bạn đi vào chiều sâu tâm lý. Đây là điểm mà ít người sánh được với bạn.</li>
+        </ul>
+      </div>
+      <div class="card card-violet">
+        <div class="ct ct-v">Cạm Bẫy Nghề Nghiệp</div>
+        <ul class="clist">
+          <li><strong>Nhảy việc vì chán, không phải vì tăng trưởng</strong> — Nhân Mã dễ chán sau khi đã nắm được "big picture". Phân biệt rõ: đây là dấu hiệu tăng trưởng hay chỉ là bồn chồn?</li>
+          <li><strong>Chọn ý nghĩa nhưng thiếu nền tảng tài chính</strong> — Venus Ma Kết thực tế về tiền, nhưng Nhân Mã dễ bỏ qua điều đó vì đam mê. Cần cân bằng.</li>
+          <li><strong>Làm quá nhiều cho người khác, quên mục tiêu cá nhân</strong> — Số 9 có xu hướng hi sinh. Đảm bảo bạn không chỉ phục vụ tầm nhìn của người khác.</li>
+          <li><strong>Trì hoãn hành động vì chờ "hoàn hảo"</strong> — Mặt Trăng Bọ Cạp đôi khi phân tích quá sâu trước khi bước đi. ĐĐ 1 cần hành động.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ct ct-em">Dự Báo Tài Chính Theo Chu Kỳ</div>
+      <div class="score" style="margin-top:14px">
+        <span class="slabel">2025 (PY 3)</span>
+        <div class="sbar"><div class="sfill" style="width:60%"></div></div>
+        <span class="sval">Tốt</span>
+      </div>
+      <div class="score">
+        <span class="slabel">2026 (PY 4) ← Nay</span>
+        <div class="sbar"><div class="sfill" style="width:45%"></div></div>
+        <span class="sval">Đầu Tư</span>
+      </div>
+      <div class="score">
+        <span class="slabel">2027 (PY 5)</span>
+        <div class="sbar"><div class="sfill" style="width:55%"></div></div>
+        <span class="sval">Biến Động</span>
+      </div>
+      <div class="score">
+        <span class="slabel">2028 (PY 6)</span>
+        <div class="sbar"><div class="sfill" style="width:70%"></div></div>
+        <span class="sval">Ổn Định</span>
+      </div>
+      <div class="score">
+        <span class="slabel">2029 (PY 7)</span>
+        <div class="sbar"><div class="sfill" style="width:55%"></div></div>
+        <span class="sval">Hướng Nội</span>
+      </div>
+      <div class="score">
+        <span class="slabel">2030 (PY 8 ⭐)</span>
+        <div class="sbar"><div class="sfill" style="width:88%"></div></div>
+        <span class="sval">Đỉnh Cao</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S6: TÌNH YÊU ═══ -->
+<section class="section" id="s6">
+  <div class="container">
+    <div style="margin-bottom:44px">
+      <div class="sec-tag">06 · Tình Yêu & Hôn Nhân</div>
+      <h2 class="sec-title">Yêu Sâu Nhưng<br>Cần Tự Do Bay</h2>
+      <p class="sec-lead">Venus Ma Kết + Mặt Trăng Bọ Cạp + Mặt Trời Nhân Mã: tam giác tình yêu phức tạp nhất — cam kết nghiêm túc, cảm xúc sâu sắc, nhưng linh hồn cần không gian.</p>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card card-rose">
+        <div class="ct ct-r">Bạn Bị Thu Hút Bởi</div>
+        <p><strong>Venus Ma Kết</strong> — Người có tham vọng, kỷ luật và tầm nhìn dài hạn. Không thích người nói nhiều làm ít. Bị hấp dẫn bởi sự ổn định và đáng tin.</p>
+        <p style="margin-top:9px"><strong>Mặt Trăng Bọ Cạp</strong> — Chiều sâu, bí ẩn, sự chân thành đến mức không cần che giấu. Không bị thu hút bởi người hời hợt hoặc fake.</p>
+        <p style="margin-top:9px"><strong>Nhân Mã</strong> — Người có triết lý sống, ham học hỏi, và không ngại khám phá. Một cuộc trò chuyện thú vị về ý tưởng lớn hơn tất cả.</p>
+        <p style="margin-top:9px"><strong>Profile lý tưởng:</strong> Người vừa đủ ổn định để Cự Giải cảm thấy an toàn, vừa đủ sâu sắc để Bọ Cạp tin tưởng, vừa đủ tư duy để Nhân Mã không chán.</p>
+      </div>
+      <div class="card card-violet">
+        <div class="ct ct-v">Cách Bạn Yêu</div>
+        <p><strong>Chậm và thận trọng</strong> — Venus Ma Kết không vội vàng. Cần thấy bằng chứng về sự đáng tin trước khi đầu tư cảm xúc. Một khi đã yêu, là toàn tâm toàn ý.</p>
+        <p style="margin-top:9px"><strong>Yêu bằng hành động thực tế</strong> — Ít nói "anh/em yêu" hoa mỹ, nhiều hành động cụ thể thể hiện sự quan tâm. Venus Ma Kết tin rằng tình yêu được xây dựng bằng thời gian và trách nhiệm.</p>
+        <p style="margin-top:9px"><strong>Mặt Trăng Bọ Cạp:</strong> Khi bị tổn thương, có thể rút lui hoàn toàn mà không giải thích. Người yêu cần học cách đọc tín hiệu im lặng của bạn.</p>
+        <p style="margin-top:9px"><strong>Nhân Mã cần:</strong> Không gian cá nhân, không bị kiểm soát, và người bạn đời tôn trọng tự do của mình.</p>
+      </div>
+    </div>
+
+    <div class="card card-teal">
+      <div class="ct ct-t">Bài Học Tình Cảm Quan Trọng</div>
+      <div class="trait-grid">
+        <div class="trait">
+          <div class="ti-icon ti-r">🌊</div>
+          <div class="trait-body">
+            <strong>Học cách nói ra khi bị tổn thương</strong>
+            <span>Bọ Cạp có xu hướng im lặng và trừng phạt thay vì bày tỏ. Người bạn đời cần được biết bạn đang cảm thấy gì — không phải đoán mò.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-v">🦅</div>
+          <div class="trait-body">
+            <strong>Tự do không mâu thuẫn với cam kết</strong>
+            <span>Nhân Mã thường sợ bị "nhốt" trong tình yêu. Nhưng mối quan hệ lành mạnh là nơi bạn có thể là phiên bản tự do nhất của mình — không phải chọn một trong hai.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-a">⚖️</div>
+          <div class="trait-body">
+            <strong>Đặt kỳ vọng rõ ràng</strong>
+            <span>Venus Ma Kết có tiêu chuẩn cao nhưng đôi khi không nói rõ. Người bạn đời không thể đáp ứng kỳ vọng nếu không biết kỳ vọng là gì.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-t">💚</div>
+          <div class="trait-body">
+            <strong>Tha thứ là giải phóng chính mình</strong>
+            <span>Bọ Cạp có trí nhớ dài. Nhưng giữ sự tổn thương lâu dài nhất là với chính bạn. Tha thứ không có nghĩa là chấp nhận — mà là buông gánh nặng.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S7: SỨC KHOẺ ═══ -->
+<section class="section" id="s7">
+  <div class="container">
+    <div style="margin-bottom:44px">
+      <div class="sec-tag">07 · Sức Khoẻ & Tinh Thần</div>
+      <h2 class="sec-title">Cơ Thể Nói<br>Ngôn Ngữ Cảm Xúc</h2>
+      <p class="sec-lead">Nhân Mã cai quản hông và đùi. Bọ Cạp cai quản hệ sinh dục và bài tiết. Cự Giải cai quản dạ dày và hệ tiêu hoá. Ba cung này tạo ra bản đồ sức khoẻ riêng.</p>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card card-rose">
+        <div class="ct ct-r">Điểm Cần Chú Ý</div>
+        <ul class="clist">
+          <li><strong>Hệ tiêu hoá & dạ dày</strong> (Cung Mọc Cự Giải) — Cảm xúc và stress thường biểu hiện qua dạ dày. Khi lo lắng hoặc bị tổn thương, ăn uống và tiêu hoá đầu tiên bị ảnh hưởng.</li>
+          <li><strong>Vùng hông & thắt lưng</strong> (Nhân Mã) — Căng thẳng tích lũy ở vùng lưng dưới. Cần vận động thường xuyên và stretching định kỳ.</li>
+          <li><strong>Sức khoẻ nội tiết & hormone</strong> (Bọ Cạp) — Chu kỳ nội tiết dễ bị ảnh hưởng bởi stress cảm xúc. Chú ý đặc biệt đến tháng khi áp lực cao.</li>
+          <li><strong>Burnout cảm xúc</strong> — Mặt Trăng Bọ Cạp + Cung Mọc Cự Giải tạo ra người hấp thụ năng lượng cảm xúc của người xung quanh mà không hay biết.</li>
+        </ul>
+      </div>
+      <div class="card card-teal">
+        <div class="ct ct-t">Thực Hành Cân Bằng</div>
+        <ul class="clist">
+          <li><strong>Vận động tự do, không gò bó</strong> — Nhân Mã cần cảm giác tự do trong vận động: nhảy, yoga lưu động, chạy bộ ngoài trời, bơi lội. Không thích gym cứng nhắc.</li>
+          <li><strong>Bảo vệ không gian cảm xúc</strong> — Học cách "cleanse" sau khi tiếp xúc với nhiều người: thiền, đi bộ một mình, âm nhạc, viết nhật ký.</li>
+          <li><strong>Thiên nhiên và ánh sáng tự nhiên</strong> — Cả Nhân Mã và Cự Giải đều cần năng lượng từ thiên nhiên. Đặc biệt là nước (biển, sông, mưa) — phục hồi Cự Giải rất nhanh.</li>
+          <li><strong>Ngủ đủ giấc là ưu tiên số 1</strong> — Bọ Cạp xử lý cảm xúc sâu nhất trong giấc ngủ. Thiếu ngủ với Mặt Trăng Bọ Cạp = dễ bị kéo vào vòng xoáy tiêu cực.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Sức khoẻ tinh thần — cảnh báo quan trọng:</strong> Nhân Mã thường giả vờ ổn — "mọi thứ tốt mà, tôi tự do mà!" — trong khi Bọ Cạp đang xử lý những tổn thương sâu bên trong. Sự kết hợp này tạo ra người <em>ngoài vui trong buồn</em>. Không cần phải luôn mạnh mẽ. Tìm một người hoặc không gian an toàn để được thật sự thành thật về cảm xúc.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S8: NỖI SỢ ═══ -->
+<section class="section" id="s8">
+  <div class="container">
+    <div style="margin-bottom:44px">
+      <div class="sec-tag">08 · Nỗi Sợ & Niềm Tin Giới Hạn</div>
+      <h2 class="sec-title">Bóng Tối<br>Cần Được Chiếu Sáng</h2>
+      <p class="sec-lead">Mặt Trăng Bọ Cạp là một trong những vị trí nhạy cảm nhất trong chiêm tinh. Nỗi sợ không được nhận ra thường gây ra nhiều tổn hại nhất.</p>
+    </div>
+
+    <div class="card card-violet mb-16">
+      <div class="ct ct-v">Nỗi Sợ Sâu Nhất: Bị Phản Bội & Mất Kiểm Soát (Mặt Trăng Bọ Cạp)</div>
+      <p>Mặt Trăng Bọ Cạp mang ký ức về những lần bị tổn thương sâu sắc nhất — dù từ kiếp này hay kiếp trước theo quan điểm tâm linh. Nỗi sợ cốt lõi: <strong>"Nếu tôi hoàn toàn mở lòng, tôi sẽ bị phản bội và tàn phá."</strong></p>
+      <ul class="clist" style="margin-top:12px">
+        <li>Kiểm tra người khác nhiều lần trước khi thật sự tin tưởng</li>
+        <li>Giữ "bằng chứng" về sự phản bội trong ký ức rất lâu</li>
+        <li>Có xu hướng đóng cửa hoàn toàn khi cảm thấy nguy hiểm</li>
+        <li>Đôi khi "trừng phạt" người thân bằng sự im lặng hoặc rút lui</li>
+      </ul>
+      <div class="callout" style="margin-top:14px;border-left-color:var(--violet-s);background:rgba(124,58,237,.07)">
+        <p><strong style="color:var(--violet-s)">Sự thật giải phóng:</strong> Không ai có thể "lấy" đi bản thân bạn trừ khi bạn cho phép. Mở lòng không có nghĩa là bất lực. Bọ Cạp mạnh nhất khi chọn tin tưởng <em>trong khi vẫn biết mình có thể sống sót nếu bị tổn thương</em>.</p>
+      </div>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card">
+        <div class="ct ct-r">Nỗi Sợ Số 2: Bị Ràng Buộc (Nhân Mã)</div>
+        <p>Nhân Mã mang nỗi sợ sâu: <strong>"Nếu tôi cam kết, tôi sẽ mất tự do."</strong> Điều này tạo ra xu hướng rời bỏ trước khi mọi thứ quá sâu, hoặc giữ khoảng cách cảm xúc dù đang trong mối quan hệ.</p>
+        <p style="margin-top:9px"><strong>Niềm tin giới hạn:</strong> "Tình yêu = mất tự do." / "Cam kết = nhà tù." / "Nếu tôi ở lại lâu, tôi sẽ bị nuốt chửng."</p>
+        <p style="margin-top:9px"><strong>Hệ quả:</strong> Self-sabotage trong mối quan hệ đang tốt. Tạo ra khoảng cách không cần thiết.</p>
+      </div>
+      <div class="card">
+        <div class="ct ct-a">Nỗi Sợ Số 3: Không Đủ Tốt (Saturn Bạch Dương)</div>
+        <p>Saturn Bạch Dương tạo ra nỗi sợ về <strong>bản sắc và năng lực cá nhân</strong>: "Tôi có thật sự đủ giỏi không? Tôi có xứng đáng chiếm không gian này không?"</p>
+        <p style="margin-top:9px"><strong>Biểu hiện:</strong> Tự kiểm duyệt trước khi chia sẻ ý kiến. Hỏi ý kiến người khác quá nhiều trước khi quyết định. Ngại đứng lên đòi những gì mình xứng đáng được nhận.</p>
+        <p style="margin-top:9px"><strong>Saturn Return 2025–2026</strong> đang yêu cầu bạn đối mặt và vượt qua điều này.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S9: TƯƠNG LAI ═══ -->
+<section class="section" id="s9">
+  <div class="container">
+    <div style="margin-bottom:44px">
+      <div class="sec-tag">09 · Phiên Bản Tương Lai Lý Tưởng</div>
+      <h2 class="sec-title">Thanh Thảo Của<br>20 Năm Tới</h2>
+    </div>
+
+    <div class="card card-rose mb-24">
+      <div class="ct ct-r">Phiên Bản 2046 — Tuổi 50</div>
+      <p style="font-size:14px;line-height:2;color:var(--text)">Bạn của năm 2046 là người đã <strong>tìm được sự hoà giải giữa Nhân Mã và Bọ Cạp</strong> — vừa tự do vừa sâu sắc. Không còn phải chọn giữa khám phá và kết nối sâu. Đang ở Đỉnh Cao 3 (số 1) — giai đoạn lãnh đạo mạnh mẽ và độc lập nhất của cuộc đời — xây dựng thứ gì đó mang ý nghĩa thật sự cho cộng đồng.</p>
+      <div class="div"><span>◆</span></div>
+      <div class="trait-grid" style="margin-top:0">
+        <div class="trait">
+          <div class="ti-icon ti-r">🏹</div>
+          <div class="trait-body">
+            <strong>Sự nghiệp</strong>
+            <span>Đang dẫn dắt hoặc xây dựng một điều gì đó mang tính giáo dục, phát triển con người, hoặc mở rộng nhận thức. Đội ngũ tin tưởng và học hỏi từ bạn.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-v">🔮</div>
+          <div class="trait-body">
+            <strong>Nội tâm</strong>
+            <span>Không còn sợ chiều sâu của chính mình. Bọ Cạp trong bạn là nguồn sức mạnh, không còn là nguồn đau.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-t">🌺</div>
+          <div class="trait-body">
+            <strong>Tình cảm</strong>
+            <span>Mối quan hệ nơi bạn vừa có không gian tự do, vừa có kết nối sâu. Đã học được cách tin tưởng mà không lo sợ.</span>
+          </div>
+        </div>
+        <div class="trait">
+          <div class="ti-icon ti-a">🌍</div>
+          <div class="trait-body">
+            <strong>Ảnh hưởng</strong>
+            <span>Nhân Mã × 4 cuối cùng được dùng đúng mục đích: mở rộng thế giới quan của nhiều người hơn bạn có thể tưởng tượng hôm nay.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ct ct-r">Lộ Trình 5 Bước</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">1</div>
+          <div class="step-b">
+            <strong>2026: Vượt Qua Saturn Return — Khẳng Định Bản Thân</strong>
+            <p>Trả lời một câu hỏi: "Tôi muốn gì — không phải những gì người khác muốn cho tôi?" Viết ra. Không phải kế hoạch lớn — chỉ là sự trung thực với chính mình. Đây là nền tảng của tất cả những gì đến sau.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <div class="step-b">
+            <strong>2027–2028: Xây Một Năng Lực Chiều Sâu</strong>
+            <p>Nhân Mã dễ bề rộng hơn chiều sâu. Chọn một lĩnh vực và đào thật sâu trong 2 năm này. Đây là giai đoạn đầu tư vào bản thân — khoá học, nghiên cứu, thực hành nghiêm túc. Nền tảng này sẽ trả về gấp 10 lần vào 2030.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <div class="step-b">
+            <strong>2029–2030: Chia Sẻ Những Gì Bạn Biết</strong>
+            <p>Năm 7 (2029) là năm học và chiêm nghiệm. Năm 8 (2030) là năm đưa tri thức đó ra thế giới và nhận lại giá trị. Đây là thời điểm để xây dựng ảnh hưởng trong lĩnh vực bạn đã chọn.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">4</div>
+          <div class="step-b">
+            <strong>2031–2040: Bước Vào Đỉnh Cao 2 (Số 7 — Trí Tuệ)</strong>
+            <p>Đây là giai đoạn của nghiên cứu sâu, triết học, và tâm linh. Đừng chống lại sự hướng nội của giai đoạn này. Những người vĩ đại nhất có Đỉnh Cao 7 đều tạo ra tác phẩm lớn nhất trong im lặng và chiều sâu của giai đoạn này.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">5</div>
+          <div class="step-b">
+            <strong>2041+: Hai Đỉnh Cao 1 — Dẫn Dắt Độc Lập</strong>
+            <p>Hai Đỉnh Cao số 1 liên tiếp (45–53 và 54+) là profile hiếm gặp. Giai đoạn cuối cuộc đời của bạn có tiềm năng là giai đoạn ảnh hưởng lớn nhất, độc lập nhất — không phải thu mình về. Tất cả những gì xây dựng trước đó đang chuẩn bị cho giai đoạn này.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S10: LỜI NHẮN ═══ -->
+<section class="section" id="s10">
+  <div class="container">
+    <div style="margin-bottom:44px">
+      <div class="sec-tag">10 · Lời Nhắn Từ Bản Đồ Sao</div>
+      <h2 class="sec-title">Thông Điệp<br>Dành Riêng Cho Thảo</h2>
+    </div>
+
+    <div class="letter">
+      <p>
+        Ta biết bạn đang đứng ở một ngưỡng cửa. Ngưỡng cửa của tuổi 29–30 — nơi Saturn Bạch Dương đang nhìn thẳng vào mắt bạn và hỏi: <em>"Bạn là ai, khi không có sự xác nhận của bất cứ ai?"</em>
+      </p>
+
+      <p>
+        Ta muốn nói với bạn về cái đêm bạn được sinh ra — <em>18:40, khi mặt trời đang chìm xuống</em> và bầu trời chuyển từ xanh sang tím. Bạn được sinh ra trong khoảnh khắc chuyển giao — giữa ánh sáng và bóng tối, giữa ngày và đêm. Đó không phải ngẫu nhiên. Bạn được sinh ra để sống ở ranh giới giữa những thứ đối lập và tìm ra cách hoà giải chúng.
+      </p>
+
+      <p>
+        <em>Nhân Mã của bạn muốn bay.</em> Đúng. Hãy bay. Nhưng Bọ Cạp trong tim bạn biết một sự thật mà Nhân Mã cần học: <strong>những cuộc phiêu lưu sâu sắc nhất không phải là những chuyến đi — mà là những mối kết nối đủ dũng cảm để thật sự thấu hiểu nhau.</strong>
+      </p>
+
+      <p>
+        Bạn có một món quà hiếm gặp: khả năng cảm nhận điều mà người khác không nói ra. Mặt Trăng Bọ Cạp của bạn đọc được những gì ẩn sâu bên dưới lời nói và nụ cười. Đây không phải gánh nặng — đây là siêu năng lực. Nhưng bạn cần học cách <em>dùng nó để chữa lành, không phải để bảo vệ mình khỏi thế giới.</em>
+      </p>
+
+      <p>
+        Cung Mọc Cự Giải tạo ra vẻ ngoài ấm áp và dễ gần của bạn — mọi người cảm thấy an toàn khi ở bên bạn. Và đó là sự thật. Nhưng có một điều ta muốn bạn nhớ: <strong>bạn cũng được phép cần ai đó để cảm thấy an toàn.</strong> Không phải lúc nào bạn cũng phải là cảng neo cho người khác trong khi tự mình lênh đênh.
+      </p>
+
+      <p>
+        Saturn Bạch Dương đang hỏi bạn điều này: <em>Khi nào bạn sẽ dừng xin phép để chiếm không gian trong cuộc đời của chính mình?</em> Bạn không cần được phép. Bạn chưa bao giờ cần được phép.
+      </p>
+
+      <p>
+        Và một điều cuối cùng — về ĐĐ 1 mà bạn chia sẻ với người đồng hành: <em>hai người ĐĐ 1 bên nhau không phải để một người dẫn và một người theo</em>. Điều đó không bao giờ hoạt động. Hai người ĐĐ 1 bên nhau là để <strong>cùng nhau xây những điều mà một mình không ai làm được</strong> — trong khi vẫn giữ được ngọn lửa riêng của mỗi người cháy sáng.
+      </p>
+
+      <p style="text-align:right;color:var(--rose);font-size:12px;margin-top:28px;font-weight:600">
+        — Bản Đồ Sao 18/12/1996<br>
+        <span style="font-weight:300;color:var(--soft)">18:40 · Việt Nam</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S11: SO SÁNH CẶP ĐÔI ═══ -->
+<section class="section" id="s11" style="padding-bottom:120px">
+  <div class="container">
+    <div style="margin-bottom:44px">
+      <div class="sec-tag">11 · Song Hành Cặp Đôi · Bonus</div>
+      <h2 class="sec-title">Hai Người ĐĐ 1<br>Và Nghệ Thuật Song Hành</h2>
+      <p class="sec-lead">Cả hai đều có Số Đường Đời 1 — trường hợp hiếm gặp trong thần số học. Đây không phải trùng hợp.</p>
+    </div>
+
+    <div class="compare mb-16">
+      <div class="cmp-title">So Sánh Nhanh · Khanh (08/05/1995) vs Thảo (18/12/1996)</div>
+      <div class="cmp-row">
+        <div class="cmp-him"><strong>Kim Ngưu ♉</strong> — Xây bền, ổn định</div>
+        <div class="cmp-vs">Mặt Trời</div>
+        <div class="cmp-her"><strong>Nhân Mã ♐</strong> — Khám phá, mở rộng</div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-him"><strong>Sư Tử ♌</strong> — Cần được công nhận</div>
+        <div class="cmp-vs">Mặt Trăng</div>
+        <div class="cmp-her"><strong>Bọ Cạp ♏</strong> — Chiều sâu & trực giác</div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-him"><strong>Song Tử ♊</strong> — Trí tuệ & giao tiếp</div>
+        <div class="cmp-vs">Cung Mọc</div>
+        <div class="cmp-her"><strong>Cự Giải ♋</strong> — Nuôi dưỡng & bảo vệ</div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-him"><strong>Song Tử ♊</strong> — Yêu trí tuệ & giao tiếp</div>
+        <div class="cmp-vs">Venus</div>
+        <div class="cmp-her"><strong>Ma Kết ♑</strong> — Yêu cam kết & ổn định</div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-him"><strong>1</strong> — Tiên phong · Builder</div>
+        <div class="cmp-vs">ĐĐ</div>
+        <div class="cmp-her"><strong>1</strong> — Tiên phong · Explorer</div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-him"><strong>8</strong> — Quyền lực & vật chất</div>
+        <div class="cmp-vs">Ngày Sinh</div>
+        <div class="cmp-her"><strong>9</strong> — Nhân văn & trí tuệ</div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-him"><strong>5</strong> — Năm thay đổi</div>
+        <div class="cmp-vs">PY 2026</div>
+        <div class="cmp-her"><strong>4</strong> — Năm xây nền</div>
+      </div>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card card-rose">
+        <div class="ct ct-r">Điểm Mạnh Cặp Đôi</div>
+        <ul class="clist">
+          <li><strong>Khanh xây, Thảo mở rộng</strong> — Kim Ngưu của Khanh xây nền tảng vững chắc. Nhân Mã của Thảo mang tầm nhìn và ý nghĩa. Tổ hợp này rất mạnh trong cả gia đình lẫn sự nghiệp chung.</li>
+          <li><strong>Cùng Saturn Return 2024–2026</strong> — Cả hai đang qua thử thách Saturn Return cùng lúc. Đây là cơ hội để cùng nhau trưởng thành sâu sắc.</li>
+          <li><strong>Venus Song Tử (Khanh) ← → Mặt Trăng Bọ Cạp (Thảo)</strong> — Khanh bị thu hút bởi trí tuệ và chiều sâu của Thảo. Thảo cảm nhận được sự chân thật của Khanh qua Bọ Cạp trực giác.</li>
+          <li><strong>Ngày Sinh 8 + 9 = 17 → 8</strong> — Tổng số ngày sinh của hai người đều quy về số 8: cặp đôi này có tiềm năng nghiệp lực tài chính mạnh khi làm việc cùng nhau.</li>
+        </ul>
+      </div>
+      <div class="card card-violet">
+        <div class="ct ct-v">Thách Thức Cặp Đôi</div>
+        <ul class="clist">
+          <li><strong>Hai ĐĐ 1 = Hai người cần lãnh đạo</strong> — Đây là thách thức lớn nhất. Cần xây dựng văn hoá "lãnh đạo theo lĩnh vực": mỗi người là chuyên gia và quyết định trong domain của mình.</li>
+          <li><strong>Khanh ổn định × Thảo tự do</strong> — Kim Ngưu cần ổn định, Nhân Mã cần thay đổi. Cần đàm phán về nhịp độ thay đổi và mức độ ổn định trong cuộc sống chung.</li>
+          <li><strong>Sư Tử cần công nhận × Bọ Cạp rút lui khi tổn thương</strong> — Khi Thảo im lặng vì bị tổn thương, Khanh cảm thấy không được ghi nhận. Học cách đọc ngôn ngữ im lặng của nhau.</li>
+          <li><strong>Cùng Saturn Return</strong> — Khi cả hai đang "kỳ thi tốt nghiệp", áp lực nhân đôi. Cần cẩn thận không trút áp lực Saturn Return của mình lên đối phương.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="text-align:center;padding:36px">
+      <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--rose);margin-bottom:14px;opacity:.8">Thông Điệp Cho Cặp Đôi</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);line-height:1.6;max-width:580px;margin:0 auto">
+        Hai người Đường Đời 1 không gặp nhau để một người trở thành<br>
+        bóng mờ của người kia. Họ gặp nhau để <em style="color:var(--rose)">cùng nhau xây được<br>
+        điều mà một mình không ai dám nghĩ đến.</em>
+      </div>
+      <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:20px">
+        <span class="badge b-now" style="font-size:11px;padding:5px 14px">Saturn Return Đồng Thời</span>
+        <span class="badge b-peak" style="font-size:11px;padding:5px 14px">PY8 Khanh 2029 · PY8 Thảo 2030</span>
+        <span class="badge b-turn" style="font-size:11px;padding:5px 14px">Cả Hai Bắt Đầu Lại 2031–2032</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <div>Nguyễn Thanh Thảo · 18/12/1996 · 18:40 · Việt Nam</div>
+  <div style="margin-top:4px">Được tạo 2026-04-28 · Cá nhân & Bảo mật</div>
+  <div style="margin-top:4px">Thần Số Học · Chiêm Tinh Học Phương Tây · Bản Đồ Thiên Văn</div>
+</div>
+
+<script>
+  const s = document.getElementById('stars');
+  for(let i=0;i<160;i++){
+    const el=document.createElement('div');el.className='star';
+    const sz=Math.random()*2.5+.5;
+    el.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${2+Math.random()*4}s;--o:${.2+Math.random()*.65};animation-delay:${Math.random()*4}s`;
+    s.appendChild(el);
+  }
+</script>
+</body>
+</html>
