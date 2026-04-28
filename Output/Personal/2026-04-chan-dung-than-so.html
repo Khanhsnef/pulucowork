@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bản Đồ Linh Hồn | 08/05/1995</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8C98A;
+    --gold-pale: #F5E6C8;
+    --deep: #080F1D;
+    --navy: #0D1B35;
+    --indigo: #162447;
+    --purple: #1E1B4B;
+    --violet: #2D1B6B;
+    --muted: #8892A4;
+    --text: #E2E8F0;
+    --text-soft: #94A3B8;
+    --teal: #0D9488;
+    --rose: #E11D48;
+    --amber: #D97706;
+    --emerald: #059669;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Lexend', sans-serif;
+    background: var(--deep);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── STARFIELD ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(45,27,107,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(13,27,53,0.4) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(201,169,110,0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .stars {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite;
+    opacity: var(--op, 0.5);
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: var(--op, 0.5); transform: scale(1); }
+    50% { opacity: calc(var(--op, 0.5) * 0.3); transform: scale(0.7); }
+  }
+
+  /* ─── LAYOUT ─── */
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    opacity: 0.9;
+  }
+
+  .hero-title {
+    font-size: clamp(42px, 7vw, 80px);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--gold-pale) 0%, var(--gold) 50%, #8B6914 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--text-soft);
+    font-weight: 300;
+    margin-bottom: 56px;
+    letter-spacing: 1px;
+  }
+
+  /* ─── BIRTH DATA GRID ─── */
+  .birth-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 720px;
+    margin: 0 auto 40px;
+  }
+
+  .birth-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,169,110,0.2);
+    border-radius: 16px;
+    padding: 20px 16px;
+    backdrop-filter: blur(8px);
+  }
+
+  .birth-card .label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+
+  .birth-card .value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .birth-card .sub {
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-top: 4px;
+  }
+
+  /* ─── KEY NUMBERS ROW ─── */
+  .key-numbers {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .num-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(201,169,110,0.08);
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 12px;
+    padding: 12px 20px;
+    min-width: 90px;
+  }
+
+  .num-pill .n {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .num-pill .l {
+    font-size: 10px;
+    color: var(--text-soft);
+    text-align: center;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ─── SCROLL CUE ─── */
+  .scroll-cue {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-soft);
+    font-size: 12px;
+    letter-spacing: 1px;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  .scroll-arrow {
+    width: 24px;
+    height: 24px;
+    border-right: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    transform: rotate(45deg);
+    opacity: 0.5;
+  }
+
+  /* ─── NAV ─── */
+  .toc {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8,15,29,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+    padding: 12px 24px;
+  }
+
+  .toc-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .toc-inner::-webkit-scrollbar { display: none; }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    color: var(--text-soft);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    border: 1px solid transparent;
+  }
+
+  .toc-item:hover {
+    color: var(--gold);
+    border-color: rgba(201,169,110,0.3);
+    background: rgba(201,169,110,0.06);
+  }
+
+  .toc-num {
+    width: 18px;
+    height: 18px;
+    background: rgba(201,169,110,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ─── SECTION ─── */
+  .section {
+    padding: 80px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .section-header {
+    margin-bottom: 48px;
+  }
+
+  .section-tag {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .section-lead {
+    font-size: 16px;
+    color: var(--text-soft);
+    max-width: 600px;
+    line-height: 1.8;
+  }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover {
+    border-color: rgba(201,169,110,0.2);
+  }
+
+  .card-gold {
+    background: rgba(201,169,110,0.06);
+    border-color: rgba(201,169,110,0.2);
+  }
+
+  .card-purple {
+    background: rgba(45,27,107,0.2);
+    border-color: rgba(139,92,246,0.2);
+  }
+
+  .card-teal {
+    background: rgba(13,148,136,0.08);
+    border-color: rgba(13,148,136,0.2);
+  }
+
+  .card-rose {
+    background: rgba(225,29,72,0.06);
+    border-color: rgba(225,29,72,0.2);
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+
+  .ct-gold { color: var(--gold); }
+  .ct-purple { color: #A78BFA; }
+  .ct-teal { color: #2DD4BF; }
+  .ct-rose { color: #FB7185; }
+  .ct-emerald { color: #34D399; }
+  .ct-amber { color: #FCD34D; }
+
+  /* ─── TRAIT GRID ─── */
+  .trait-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .trait-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .trait-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .ti-gold { background: rgba(201,169,110,0.12); }
+  .ti-purple { background: rgba(139,92,246,0.12); }
+  .ti-teal { background: rgba(13,148,136,0.12); }
+  .ti-rose { background: rgba(225,29,72,0.12); }
+  .ti-amber { background: rgba(217,119,6,0.12); }
+
+  .trait-text strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .trait-text span {
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.5;
+  }
+
+  /* ─── PLANET ROW ─── */
+  .planet-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .planet-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    font-size: 13px;
+  }
+
+  .planet-icon {
+    font-size: 16px;
+  }
+
+  .planet-name {
+    color: var(--text-soft);
+    font-size: 11px;
+  }
+
+  .planet-sign {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ─── TIMELINE ─── */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold), rgba(201,169,110,0.1));
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 32px;
+  }
+
+  .tl-dot {
+    position: absolute;
+    left: -28px;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    background: var(--deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tl-dot.active {
+    background: var(--gold);
+    box-shadow: 0 0 12px rgba(201,169,110,0.5);
+  }
+
+  .tl-dot-inner {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .tl-year {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .tl-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .tl-desc {
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.6;
+  }
+
+  .tl-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+
+  .tb-now { background: rgba(201,169,110,0.15); color: var(--gold); }
+  .tb-peak { background: rgba(5,150,105,0.15); color: #34D399; }
+  .tb-warn { background: rgba(225,29,72,0.12); color: #FB7185; }
+  .tb-turn { background: rgba(139,92,246,0.15); color: #A78BFA; }
+
+  /* ─── SCORE BAR ─── */
+  .score-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .score-label {
+    font-size: 13px;
+    color: var(--text-soft);
+    min-width: 130px;
+  }
+
+  .score-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .score-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  }
+
+  .score-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    min-width: 36px;
+    text-align: right;
+  }
+
+  /* ─── CALL OUT ─── */
+  .callout {
+    border-left: 3px solid var(--gold);
+    padding: 16px 20px;
+    background: rgba(201,169,110,0.06);
+    border-radius: 0 12px 12px 0;
+    margin: 20px 0;
+  }
+
+  .callout p {
+    font-size: 14px;
+    color: var(--text-soft);
+    line-height: 1.7;
+  }
+
+  .callout strong {
+    color: var(--gold);
+  }
+
+  /* ─── 2-COL ─── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* ─── STEPS ─── */
+  .steps {
+    counter-reset: step;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #8B6914);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--deep);
+    flex-shrink: 0;
+  }
+
+  .step-body strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .step-body p {
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.6;
+  }
+
+  /* ─── LETTER ─── */
+  .letter {
+    background: linear-gradient(135deg, rgba(45,27,107,0.3), rgba(13,27,53,0.5));
+    border: 1px solid rgba(201,169,110,0.25);
+    border-radius: 24px;
+    padding: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .letter::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: 24px;
+    font-size: 200px;
+    color: rgba(201,169,110,0.06);
+    font-family: Georgia, serif;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .letter p {
+    font-size: 16px;
+    line-height: 2;
+    color: var(--text);
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .letter p:last-child { margin-bottom: 0; }
+
+  .letter em {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* ─── PINNACLE TABLE ─── */
+  .pinnacle-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .pinnacle-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+
+  .pinnacle-card.current {
+    border-color: rgba(201,169,110,0.4);
+    background: rgba(201,169,110,0.06);
+  }
+
+  .pc-num {
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .pc-age {
+    font-size: 11px;
+    color: var(--text-soft);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .pc-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .pc-desc {
+    font-size: 11px;
+    color: var(--text-soft);
+    line-height: 1.5;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 32px 0;
+    opacity: 0.3;
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .divider span {
+    font-size: 16px;
+    color: var(--gold);
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--text-soft);
+    font-size: 12px;
+    letter-spacing: 1px;
+    opacity: 0.5;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    .birth-grid { grid-template-columns: repeat(2, 1fr); }
+    .trait-grid { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .pinnacle-grid { grid-template-columns: repeat(2, 1fr); }
+    .letter { padding: 28px 24px; }
+  }
+
+  /* ─── UTILITIES ─── */
+  p { font-size: 14px; color: var(--text-soft); line-height: 1.8; margin-bottom: 12px; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-16 { margin-bottom: 16px; }
+  .mb-24 { margin-bottom: 24px; }
+  .mt-24 { margin-top: 24px; }
+
+  .inline-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: rgba(201,169,110,0.12);
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--gold);
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .highlight {
+    background: rgba(201,169,110,0.1);
+    border-radius: 6px;
+    padding: 2px 8px;
+    color: var(--gold-pale);
+    font-weight: 600;
+  }
+
+  ul.custom {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  ul.custom li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+    color: var(--text-soft);
+    line-height: 1.6;
+  }
+
+  ul.custom li::before {
+    content: '◆';
+    font-size: 8px;
+    color: var(--gold);
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- STARS -->
+<div class="stars" id="stars"></div>
+
+<!-- ═══════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<section class="hero">
+  <div style="max-width:760px;width:100%">
+    <div class="hero-badge">Bản Đồ Linh Hồn · Phân Tích Toàn Diện</div>
+    <h1 class="hero-title">08 · 05 · 1995</h1>
+    <p class="hero-sub">7:00 sáng · Cai Lậy, Tiền Giang · Việt Nam</p>
+
+    <div class="birth-grid">
+      <div class="birth-card">
+        <div class="label">Cung Mặt Trời</div>
+        <div class="value">Kim Ngưu ♉</div>
+        <div class="sub">18° Taurus</div>
+      </div>
+      <div class="birth-card">
+        <div class="label">Cung Mọc</div>
+        <div class="value">Song Tử ♊</div>
+        <div class="sub">~5° Gemini · 7h sáng</div>
+      </div>
+      <div class="birth-card">
+        <div class="label">Cung Mặt Trăng</div>
+        <div class="value">Sư Tử ♌</div>
+        <div class="sub">~7° Leo</div>
+      </div>
+      <div class="birth-card">
+        <div class="label">Số Đường Đời</div>
+        <div class="value" style="color:var(--gold)">1</div>
+        <div class="sub">Tiên Phong · Lãnh Đạo</div>
+      </div>
+      <div class="birth-card">
+        <div class="label">Số Ngày Sinh</div>
+        <div class="value" style="color:var(--gold)">8</div>
+        <div class="sub">Quyền Lực · Nghiệp Lực</div>
+      </div>
+      <div class="birth-card">
+        <div class="label">Năm Cá Nhân 2026</div>
+        <div class="value" style="color:var(--gold)">5</div>
+        <div class="sub">Biến Chuyển · Tự Do</div>
+      </div>
+    </div>
+
+    <div class="key-numbers">
+      <div class="num-pill">
+        <div class="n">1</div>
+        <div class="l">Đường Đời</div>
+      </div>
+      <div class="num-pill">
+        <div class="n">8</div>
+        <div class="l">Ngày Sinh</div>
+      </div>
+      <div class="num-pill">
+        <div class="n">4</div>
+        <div class="l">Đỉnh Cao I</div>
+      </div>
+      <div class="num-pill">
+        <div class="n">5</div>
+        <div class="l">Đỉnh Cao II</div>
+      </div>
+      <div class="num-pill">
+        <div class="n">9</div>
+        <div class="l">Đỉnh Cao III</div>
+      </div>
+      <div class="num-pill">
+        <div class="n">11</div>
+        <div class="l">Đỉnh Cao IV</div>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Cuộn xuống để khám phá</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#s1" class="toc-item"><span class="toc-num">1</span>Chân Dung</a>
+    <a href="#s2" class="toc-item"><span class="toc-num">2</span>Sứ Mệnh</a>
+    <a href="#s3" class="toc-item"><span class="toc-num">3</span>Thử Thách</a>
+    <a href="#s4" class="toc-item"><span class="toc-num">4</span>Chu Kỳ</a>
+    <a href="#s5" class="toc-item"><span class="toc-num">5</span>Sự Nghiệp</a>
+    <a href="#s6" class="toc-item"><span class="toc-num">6</span>Tình Yêu</a>
+    <a href="#s7" class="toc-item"><span class="toc-num">7</span>Sức Khoẻ</a>
+    <a href="#s8" class="toc-item"><span class="toc-num">8</span>Nỗi Sợ</a>
+    <a href="#s9" class="toc-item"><span class="toc-num">9</span>Tương Lai</a>
+    <a href="#s10" class="toc-item"><span class="toc-num">10</span>Lời Nhắn</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     S1: CHÂN DUNG TỔNG THỂ
+════════════════════════════════════════ -->
+<section class="section" id="s1">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">01 · Chân Dung Tổng Thể</div>
+      <h2 class="section-title">Người Tiên Phong Mang<br>Trái Tim Sư Tử</h2>
+      <p class="section-lead">
+        Sự kết hợp của Số Đường Đời <strong>1</strong>, Ngày Sinh <strong>8</strong>,
+        Mặt Trời <strong>Kim Ngưu</strong>, Cung Mọc <strong>Song Tử</strong>,
+        và Mặt Trăng <strong>Sư Tử</strong> tạo ra một chân dung vừa mâu thuẫn vừa cực kỳ mạnh mẽ.
+      </p>
+    </div>
+
+    <!-- Planet summary -->
+    <div class="card card-gold mb-16">
+      <div class="card-title ct-gold">Bản Đồ Hành Tinh · 08/05/1995</div>
+      <div class="planet-row">
+        <div class="planet-tag"><span class="planet-icon">☀️</span><span><span class="planet-name">Mặt Trời</span><br><span class="planet-sign">Kim Ngưu ♉</span></span></div>
+        <div class="planet-tag"><span class="planet-icon">🌙</span><span><span class="planet-name">Mặt Trăng</span><br><span class="planet-sign">Sư Tử ♌</span></span></div>
+        <div class="planet-tag"><span class="planet-icon">⬆️</span><span><span class="planet-name">Cung Mọc</span><br><span class="planet-sign">Song Tử ♊</span></span></div>
+        <div class="planet-tag"><span class="planet-icon">☿️</span><span><span class="planet-name">Mercury</span><br><span class="planet-sign">Kim Ngưu ♉</span></span></div>
+        <div class="planet-tag"><span class="planet-icon">♀️</span><span><span class="planet-name">Venus</span><br><span class="planet-sign">Song Tử ♊</span></span></div>
+        <div class="planet-tag"><span class="planet-icon">♂️</span><span><span class="planet-name">Mars</span><br><span class="planet-sign">Sư Tử ♌</span></span></div>
+        <div class="planet-tag"><span class="planet-icon">♃</span><span><span class="planet-name">Jupiter</span><br><span class="planet-sign">Nhân Mã ♐</span></span></div>
+        <div class="planet-tag"><span class="planet-icon">♄</span><span><span class="planet-name">Saturn</span><br><span class="planet-sign">Song Ngư ♓</span></span></div>
+        <div class="planet-tag"><span class="planet-icon">♅</span><span><span class="planet-name">Uranus</span><br><span class="planet-sign">Bảo Bình ♒</span></span></div>
+        <div class="planet-tag"><span class="planet-icon">♆</span><span><span class="planet-name">Neptune</span><br><span class="planet-sign">Ma Kết ♑</span></span></div>
+        <div class="planet-tag"><span class="planet-icon">♇</span><span><span class="planet-name">Pluto</span><br><span class="planet-sign">Nhân Mã ♐</span></span></div>
+      </div>
+    </div>
+
+    <!-- Điểm mạnh -->
+    <div class="card mb-16">
+      <div class="card-title ct-emerald">Điểm Mạnh Cốt Lõi</div>
+      <div class="trait-grid">
+        <div class="trait-item">
+          <div class="trait-icon ti-gold">👑</div>
+          <div class="trait-text">
+            <strong>Bản năng lãnh đạo bẩm sinh (ĐĐ 1 + Mars Leo)</strong>
+            <span>Luôn muốn đứng đầu, dẫn dắt người khác. Không thoải mái ở vị trí thứ hai. Có khả năng truyền cảm hứng và tạo động lực cho team.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-teal">🏗️</div>
+          <div class="trait-text">
+            <strong>Kiên định & xây dựng có hệ thống (Kim Ngưu + Mercury Taurus)</strong>
+            <span>Không từ bỏ dễ dàng. Một khi đã cam kết, sẽ theo đuổi đến cùng với sự kiên nhẫn hiếm có. Tư duy thực tế, logic, bền vững.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-purple">⚡</div>
+          <div class="trait-text">
+            <strong>Trí tuệ nhanh nhạy & đa chiều (Cung Mọc Song Tử)</strong>
+            <span>Nắm bắt thông tin cực nhanh. Có khả năng giao tiếp, thuyết phục và kết nối với nhiều kiểu người khác nhau một cách tự nhiên.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-amber">🔥</div>
+          <div class="trait-text">
+            <strong>Năng lượng thực thi mạnh mẽ (Ngày Sinh 8)</strong>
+            <span>Số 8 là số của quyền lực và hành động. Có khả năng biến ý tưởng thành kết quả thực tế, đặc biệt trong lĩnh vực có tác động lớn và có thể đo lường được.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-rose">🌟</div>
+          <div class="trait-text">
+            <strong>Tầm nhìn xa & niềm tin lớn (Jupiter Nhân Mã)</strong>
+            <span>Jupiter ở Nhân Mã — cung bản địa — tạo ra tư duy chiến lược và khả năng nhìn xa. Tin tưởng vào khả năng bản thân và không ngại đặt mục tiêu tham vọng.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-gold">💎</div>
+          <div class="trait-text">
+            <strong>Lòng trung thành & sự đáng tin (Kim Ngưu + Venus Song Tử)</strong>
+            <span>Khi đã cam kết trong công việc hoặc tình cảm, sẽ rất trung thành. Người khác cảm thấy được kết nối và tin tưởng bạn một cách tự nhiên.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Điểm yếu -->
+    <div class="card card-rose">
+      <div class="card-title ct-rose">Điểm Yếu Cần Nhận Diện</div>
+      <div class="trait-grid">
+        <div class="trait-item">
+          <div class="trait-icon ti-rose">🦏</div>
+          <div class="trait-text">
+            <strong>Cứng đầu & kháng cự thay đổi (Kim Ngưu cố định)</strong>
+            <span>Bản năng của Kim Ngưu là "nếu chưa hỏng, đừng sửa". Điều này có thể khiến bạn bỏ lỡ cơ hội hoặc trở nên lỗi thời khi thị trường thay đổi nhanh.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-amber">🎭</div>
+          <div class="trait-text">
+            <strong>Cần sự công nhận (Mặt Trăng Sư Tử)</strong>
+            <span>Mặt Trăng Sư Tử tạo ra nhu cầu được nhìn nhận, đánh giá cao. Nếu nỗ lực không được ghi nhận, cảm xúc có thể dao động và thiếu động lực làm việc.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-purple">🎯</div>
+          <div class="trait-text">
+            <strong>Phân tán & thiếu chiều sâu (Cung Mọc Song Tử)</strong>
+            <span>Cung Mọc Song Tử dễ bị hấp dẫn bởi nhiều thứ cùng lúc. Nguy cơ bắt đầu nhiều dự án nhưng không hoàn thành triệt để bất cứ điều gì.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-rose">⚖️</div>
+          <div class="trait-text">
+            <strong>Vấn đề kiểm soát & quyền lực (Số 8 + ĐĐ 1)</strong>
+            <span>Khi cảm thấy không kiểm soát được tình huống, có thể trở nên độc đoán hoặc quá áp đặt. Đây là bài học nghiệp lực quan trọng nhất cần học suốt đời.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout mt-24">
+      <p><strong>Cốt lõi nhân cách:</strong> Bạn là người có <em>ý chí sắt đá của Kim Ngưu</em>, <em>trí tuệ linh hoạt của Song Tử</em>, và <em>trái tim hoàng gia của Sư Tử</em> — tất cả đặt trong một con đường đời số 1 của người tiên phong. Mâu thuẫn nội tâm lớn nhất: bạn muốn <strong>ổn định</strong> (Kim Ngưu) nhưng linh hồn lại được sinh ra để <strong>tiên phong và thay đổi</strong> (ĐĐ 1). Giải quyết mâu thuẫn này là chìa khoá toàn bộ cuộc đời bạn.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     S2: SỨ MỆNH
+════════════════════════════════════════ -->
+<section class="section" id="s2">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">02 · Sứ Mệnh Cuộc Đời</div>
+      <h2 class="section-title">Người Xây Dựng<br>Con Đường Mới</h2>
+      <p class="section-lead">
+        Số Đường Đời 1 + Cung Mặt Trời Kim Ngưu + Cung Mọc Song Tử phác họa
+        một sứ mệnh rõ ràng: <strong>khai phá, xây dựng hệ thống, và truyền cảm hứng.</strong>
+      </p>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card card-gold">
+        <div class="card-title ct-gold">Thần Số Học Nói Gì</div>
+        <p><span class="inline-num">1</span> <strong>Số Đường Đời 1</strong> — con số của người tiên phong, người sáng lập, người đặt viên gạch đầu tiên. Bạn được sinh ra để <strong>bắt đầu những điều chưa từng có</strong>, không phải để tiếp quản những gì người khác đã xây.</p>
+        <p style="margin-top:12px"><span class="inline-num">8</span> <strong>Số Ngày Sinh 8</strong> — số của nghiệp lực tài chính và quyền lực. Sứ mệnh của bạn không chỉ là xây dựng cho bản thân — mà là <strong>tạo ra nguồn lực vật chất có ý nghĩa</strong> phục vụ mục tiêu lớn hơn.</p>
+        <p style="margin-top:12px"><span class="inline-num">11</span> <strong>Đỉnh Cao Cuộc Đời số Master 11</strong> — từ tuổi 54 trở đi, bạn sẽ bước vào giai đoạn trở thành người truyền cảm hứng, người dẫn đường tinh thần trong lĩnh vực của mình.</p>
+      </div>
+      <div class="card card-purple">
+        <div class="card-title ct-purple">Chiêm Tinh Xác Nhận</div>
+        <p><strong>Mặt Trời Kim Ngưu</strong> định nghĩa <em>sứ mệnh thực thi</em>: bạn không chỉ mơ — bạn phải biến tầm nhìn thành thứ hữu hình, có thể chạm tay vào và đo lường được.</p>
+        <p style="margin-top:12px"><strong>Cung Mọc Song Tử</strong> là <em>công cụ thực hiện sứ mệnh</em>: trí tuệ, giao tiếp, kết nối mạng lưới. Bạn đến thế giới này bằng cách nói chuyện với người khác, học hỏi không ngừng và lan truyền ý tưởng.</p>
+        <p style="margin-top:12px"><strong>Jupiter Nhân Mã</strong> là <em>la bàn định hướng</em>: triết lý, ý nghĩa, mở rộng không giới hạn. Bạn phát triển mạnh nhất khi công việc có <em>mục đích lớn hơn bản thân</em>.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title ct-teal">Sứ Mệnh Tổng Hợp — Phiên Bản Thực Tế</div>
+      <p style="font-size:15px;line-height:1.9;color:var(--text)">
+        Sứ mệnh của bạn là <strong>xây dựng những hệ thống, con đường, hoặc tổ chức mà chưa ai dám làm</strong> — và làm điều đó với sự kiên định của Kim Ngưu, trí tuệ của Song Tử, và trái tim quảng đại của Sư Tử. Bạn không được sinh ra để là <em>người thực thi xuất sắc</em> trong hệ thống của người khác — bạn được sinh ra để <em>tạo ra hệ thống mới</em>.
+      </p>
+      <div class="divider"><span>◆</span></div>
+      <p><strong>Lĩnh vực phù hợp nhất:</strong> Bất cứ nơi nào đòi hỏi xây dựng từ đầu (startup, mở rộng thị trường mới, tái cơ cấu tổ chức), có yếu tố con người và hệ thống, đòi hỏi tư duy chiến lược kết hợp thực thi, và có cơ hội để bạn để lại dấu ấn cá nhân.</p>
+    </div>
+
+    <div class="callout mt-24">
+      <p><strong>Lời khuyên thực tế:</strong> Sứ mệnh số 1 thường bị cản trở bởi hai bẫy: <em>(1) Quá cẩn thận, chờ đợi điều kiện hoàn hảo</em> — bản năng Kim Ngưu. <em>(2) Theo đuổi sự độc lập cực đoan, từ chối cộng tác</em> — bóng tối của ĐĐ 1. Thực tế, người ĐĐ 1 thành công nhất là người biết <strong>lãnh đạo đội nhóm</strong>, không phải người cô đơn tự làm mọi thứ.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     S3: THỬ THÁCH
+════════════════════════════════════════ -->
+<section class="section" id="s3">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">03 · Những Thử Thách Định Mệnh</div>
+      <h2 class="section-title">Ba Bài Kiểm Tra<br>Mà Số Phận Đặt Ra</h2>
+      <p class="section-lead">
+        Con số Thử Thách trong thần số học: <strong>3 · 2 · 1</strong>.
+        Trong chiêm tinh: <strong>Saturn Song Ngư</strong> và <strong>Pluto Nhân Mã</strong>.
+      </p>
+    </div>
+
+    <div class="card card-rose mb-16">
+      <div class="card-title ct-rose">Thử Thách Lớn Nhất: Số 1 — Bài Học Về Bản Thân</div>
+      <p>Nghịch lý cốt lõi của người Đường Đời 1: <strong>bạn cần học cách tự lãnh đạo bản thân trước khi lãnh đạo người khác</strong>. Thách thức số 1 xuất hiện khi bạn đối mặt với quyết định lớn phải tự mình đưa ra — không có ai chống lưng, không có bản đồ, không có tiền lệ.</p>
+      <p style="margin-top:10px"><strong>Biểu hiện thực tế:</strong> Thường cảm thấy cô đơn trong vai trò lãnh đạo. Đấu tranh giữa <em>"tôi muốn"</em> và <em>"mọi người kỳ vọng"</em>. Sợ thất bại theo cách công khai.</p>
+      <p style="margin-top:10px"><strong>Bài học cần học:</strong> Độc lập không có nghĩa là đơn độc. Tự tin không có nghĩa là arrogance. Dũng cảm nhất không phải là không sợ — mà là tiến về phía trước dù đang sợ.</p>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card card-purple">
+        <div class="card-title ct-purple">Thử Thách Số 3 — Biểu Đạt & Bản Sắc</div>
+        <p>Giai đoạn trẻ (0–35 tuổi), thử thách lớn nhất là <strong>dám thể hiện bản sắc cá nhân</strong>. Số 3 là số của sự sáng tạo và tự biểu đạt — nhưng Kim Ngưu thường ẩn náu sau sự thực tế và ổn định.</p>
+        <p style="margin-top:10px"><strong>Biểu hiện:</strong> Có ý tưởng sáng tạo nhưng không dám chia sẻ. Tự kiểm duyệt quá mức. Sợ bị phán xét khi thể hiện quan điểm khác biệt.</p>
+        <p style="margin-top:10px"><strong>Bài học:</strong> Tiếng nói của bạn có giá trị. Chia sẻ góc nhìn cá nhân không phải là rủi ro — đó chính là sứ mệnh.</p>
+      </div>
+      <div class="card card-teal">
+        <div class="card-title ct-teal">Thử Thách Số 2 — Mối Quan Hệ & Hợp Tác</div>
+        <p>Giai đoạn trưởng thành (36–44 tuổi), thử thách chuyển sang <strong>cân bằng giữa độc lập và phụ thuộc</strong>. Người ĐĐ 1 thường khó tin tưởng và trao quyền cho người khác.</p>
+        <p style="margin-top:10px"><strong>Biểu hiện:</strong> Muốn kiểm soát tất cả. Cảm thấy người khác làm không đạt tiêu chuẩn. Xung đột trong quan hệ đối tác và hôn nhân.</p>
+        <p style="margin-top:10px"><strong>Bài học:</strong> Sức mạnh thật sự là biết tin tưởng và buông bỏ đúng lúc. Người lãnh đạo giỏi nhất là người tạo ra nhà lãnh đạo tiếp theo.</p>
+      </div>
+    </div>
+
+    <div class="card mb-16">
+      <div class="card-title ct-amber">Saturn Return (2024–2026): Thử Thách Thiên Văn Lớn Nhất</div>
+      <p>Saturn trở về vị trí lúc bạn sinh ra (Song Ngư) vào giai đoạn <strong>2024–2026 — đúng bây giờ</strong>. Đây là "kỳ thi tốt nghiệp" lần đầu tiên trong cuộc đời (tuổi 29–31), xảy ra với tất cả mọi người nhưng mỗi người học bài học khác nhau.</p>
+      <div class="two-col" style="margin-top:16px">
+        <div>
+          <p style="margin-bottom:8px"><strong style="color:var(--gold)">Saturn Song Ngư thách thức bạn về:</strong></p>
+          <ul class="custom">
+            <li>Thiết lập ranh giới cảm xúc rõ ràng</li>
+            <li>Đối mặt với những ảo tưởng về bản thân</li>
+            <li>Kỷ luật trong thực hành tâm linh/nội tâm</li>
+            <li>Trách nhiệm với cảm xúc của người khác</li>
+          </ul>
+        </div>
+        <div>
+          <p style="margin-bottom:8px"><strong style="color:var(--teal)">Nếu vượt qua Saturn Return:</strong></p>
+          <ul class="custom">
+            <li>Bước vào giai đoạn 30s với nền tảng vững chắc</li>
+            <li>Rõ ràng hơn về con đường thật sự muốn đi</li>
+            <li>Thoát khỏi những mối quan hệ/công việc không phù hợp</li>
+            <li>Bản lĩnh và chiều sâu nội tâm tăng đáng kể</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     S4: CHU KỲ PHÁT TRIỂN
+════════════════════════════════════════ -->
+<section class="section" id="s4">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">04 · Chu Kỳ Phát Triển</div>
+      <h2 class="section-title">Bản Đồ Thời Gian<br>Cuộc Đời</h2>
+      <p class="section-lead">
+        Kết hợp 4 Đỉnh Cao thần số học và chu kỳ Năm Cá Nhân 9 năm để xác định
+        những cột mốc chuyển đổi lớn trong cuộc đời.
+      </p>
+    </div>
+
+    <!-- Pinnacles -->
+    <div class="card mb-24">
+      <div class="card-title ct-gold">Bốn Đỉnh Cao Cuộc Đời (Pinnacles)</div>
+      <div class="pinnacle-grid" style="margin-top:16px">
+        <div class="pinnacle-card current">
+          <div class="pc-num">4</div>
+          <div class="pc-age">Tuổi 0–35 · 1995–2030</div>
+          <div class="pc-name">Xây Nền Móng</div>
+          <div class="pc-desc">Giai đoạn học hỏi, xây dựng, rèn giũa kỷ luật. Công sức âm thầm tạo ra nền tảng vững chắc cho tất cả những gì đến sau.</div>
+        </div>
+        <div class="pinnacle-card">
+          <div class="pc-num">5</div>
+          <div class="pc-age">Tuổi 36–44 · 2031–2039</div>
+          <div class="pc-name">Tự Do & Bứt Phá</div>
+          <div class="pc-desc">Giai đoạn thay đổi lớn, cơ hội mở rộng, phá vỡ giới hạn. Năng lượng 5 = mọi thứ có thể xảy ra nếu dám thay đổi.</div>
+        </div>
+        <div class="pinnacle-card">
+          <div class="pc-num">9</div>
+          <div class="pc-age">Tuổi 45–53 · 2040–2048</div>
+          <div class="pc-name">Trí Tuệ & Cho Đi</div>
+          <div class="pc-desc">Giai đoạn thu hoạch trí tuệ, chia sẻ kiến thức, tác động đến cộng đồng rộng lớn hơn. Năng lượng của người thầy.</div>
+        </div>
+        <div class="pinnacle-card">
+          <div class="pc-num" style="font-size:26px">11</div>
+          <div class="pc-age">Tuổi 54+ · 2049+</div>
+          <div class="pc-name">Thức Tỉnh Tinh Thần</div>
+          <div class="pc-desc">Master 11 — giai đoạn giác ngộ, truyền cảm hứng ở cấp độ cao nhất. Tiềm năng trở thành người dẫn đường cho thế hệ sau.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline năm cá nhân -->
+    <div class="card">
+      <div class="card-title ct-gold">Timeline Năm Cá Nhân · Giai Đoạn Trọng Yếu</div>
+      <div class="timeline" style="margin-top:20px">
+
+        <div class="tl-item">
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-year">2022 — Năm Cá Nhân 1</div>
+          <div class="tl-title">Chu Kỳ Mới Bắt Đầu</div>
+          <div class="tl-desc">Hạt giống của 9 năm tiếp theo được gieo vào năm này. Những quyết định, mối quan hệ, và hướng đi được chọn vào 2022 sẽ định hình cả một thập kỷ.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot active"></div>
+          <div class="tl-year">2026 — Năm Cá Nhân 5 <span class="tl-badge tb-now">Hiện Tại</span></div>
+          <div class="tl-title">Năm Của Thay Đổi & Tự Do</div>
+          <div class="tl-desc">Năm 5 là năm xáo trộn nhiều nhất — nhưng cũng mang nhiều cơ hội nhất. Những gì không phù hợp sẽ rời đi. Những cơ hội bất ngờ sẽ xuất hiện. <strong>Đây không phải lúc ổn định — đây là lúc liều lĩnh có tính toán.</strong></div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-year">2029 — Năm Cá Nhân 8 <span class="tl-badge tb-peak">Đỉnh Cao</span></div>
+          <div class="tl-title">Năm Thu Hoạch Sự Nghiệp & Tài Chính</div>
+          <div class="tl-desc">Năm 8 cộng hưởng với Số Ngày Sinh 8 — tạo ra sức mạnh gấp đôi. Đây là năm có tiềm năng thăng tiến lớn nhất, tài chính tốt nhất trong chu kỳ này. Cần chuẩn bị từ 2027–2028.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-year">2030 — Năm Cá Nhân 9 <span class="tl-badge tb-turn">Bước Ngoặt</span></div>
+          <div class="tl-title">Kết Thúc Chu Kỳ & Đỉnh Cao 1 — Tuổi 35</div>
+          <div class="tl-desc">Năm 9 là năm kết thúc — buông bỏ, thanh lọc, và chuẩn bị. Đồng thời là năm cuối của Đỉnh Cao 1 (0-35 tuổi). Kép quan trọng: đây là năm chuyển hoá sâu sắc nhất trong giai đoạn đầu cuộc đời.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-year">2031 — Năm Cá Nhân 1 <span class="tl-badge tb-peak">Đỉnh Cao</span></div>
+          <div class="tl-title">Chu Kỳ Mới + Đỉnh Cao 2 Bắt Đầu — Tuổi 36</div>
+          <div class="tl-desc">Sự kiện 30 năm có một lần: PY1 khởi đầu chu kỳ 9 năm mới, đồng thời Đỉnh Cao 2 (số 5: Tự Do & Bứt Phá) bắt đầu. <strong>Năm 2031 là bản lề lớn nhất cuộc đời giai đoạn đầu.</strong></div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-year">2037 — Uranus Opposition <span class="tl-badge tb-warn">Thử Thách</span></div>
+          <div class="tl-title">Khủng Hoảng Giữa Đời — Tuổi 42</div>
+          <div class="tl-desc">Uranus đối diện chính nó — "midlife crisis" thiên văn. Với Uranus ở Bảo Bình, đây là lúc câu hỏi về tự do, đột phá và bản sắc cá nhân nổi lên mạnh mẽ nhất. Cần cẩn thận với các quyết định bốc đồng.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     S5: SỰ NGHIỆP & TÀI CHÍNH
+════════════════════════════════════════ -->
+<section class="section" id="s5">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">05 · Sự Nghiệp & Tài Chính</div>
+      <h2 class="section-title">Con Đường Đến<br>Đỉnh Cao Vật Chất</h2>
+      <p class="section-lead">
+        Số 8 + Đường Đời 1 + Saturn Song Ngư: người sinh ra để đạt thành công vật chất lớn,
+        nhưng qua con đường <em>kỷ luật và nghiệp lực</em>, không phải may mắn.
+      </p>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card card-gold">
+        <div class="card-title ct-gold">Xu Hướng Sự Nghiệp Phù Hợp</div>
+        <ul class="custom">
+          <li><strong>Lãnh đạo & quản lý cấp cao</strong> — ĐĐ 1 + Ngày Sinh 8 tạo ra profile C-suite tự nhiên. Cần ở vị trí có quyền quyết định thật sự.</li>
+          <li><strong>Xây dựng hệ thống/tổ chức</strong> — Kim Ngưu có bản năng xây dựng bền vững. Phù hợp với vai trò thiết kế quy trình, mở rộng quy mô, tái cơ cấu.</li>
+          <li><strong>Tư vấn chiến lược & phân tích</strong> — Cung Mọc Song Tử + Jupiter Nhân Mã tạo ra khả năng nhìn big picture và diễn giải rõ ràng.</li>
+          <li><strong>Entrepreneurship</strong> — Tổ hợp ĐĐ 1 + Số 8 là profile founder điển hình nhất trong thần số học.</li>
+        </ul>
+      </div>
+      <div class="card card-rose">
+        <div class="card-title ct-rose">Cạm Bẫy Cần Tránh</div>
+        <ul class="custom">
+          <li><strong>Ở lại vai trò "số 2" quá lâu</strong> — Bạn sẽ trở nên tù túng và thất vọng. ĐĐ 1 cần tự chủ.</li>
+          <li><strong>Lạm dụng quyền lực</strong> — Số 8 có bóng tối: độc tài, ép buộc. Đây là nghiệp lực cần nhận thức rõ.</li>
+          <li><strong>Bỏ qua trực giác vì tiền</strong> — Kim Ngưu có xu hướng ở lại nơi an toàn dù không hạnh phúc vì lý do tài chính. Đây là bẫy lớn nhất.</li>
+          <li><strong>Thiếu kiên nhẫn với quá trình</strong> — Thành công với Số 8 đến muộn nhưng bền. Đừng từ bỏ ở giữa chừng.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card mb-16">
+      <div class="card-title ct-teal">Dự Báo Tài Chính Theo Chu Kỳ</div>
+      <div class="score-item mt-24" style="margin-top:16px">
+        <span class="score-label">2022–2024 (PY 1–3)</span>
+        <div class="score-bar"><div class="score-fill" style="width:55%"></div></div>
+        <span class="score-val">Vừa</span>
+      </div>
+      <div class="score-item">
+        <span class="score-label">2025–2026 (PY 4–5)</span>
+        <div class="score-bar"><div class="score-fill" style="width:45%"></div></div>
+        <span class="score-val">Biến Động</span>
+      </div>
+      <div class="score-item">
+        <span class="score-label">2027–2028 (PY 6–7)</span>
+        <div class="score-bar"><div class="score-fill" style="width:65%"></div></div>
+        <span class="score-val">Tốt</span>
+      </div>
+      <div class="score-item">
+        <span class="score-label">2029 (PY 8 ⭐)</span>
+        <div class="score-bar"><div class="score-fill" style="width:90%"></div></div>
+        <span class="score-val">Đỉnh Cao</span>
+      </div>
+      <div class="score-item">
+        <span class="score-label">2030 (PY 9)</span>
+        <div class="score-bar"><div class="score-fill" style="width:50%"></div></div>
+        <span class="score-val">Buông Bỏ</span>
+      </div>
+      <div class="score-item">
+        <span class="score-label">2031+ (Chu Kỳ Mới)</span>
+        <div class="score-bar"><div class="score-fill" style="width:80%"></div></div>
+        <span class="score-val">Bứt Phá</span>
+      </div>
+      <p style="margin-top:12px;font-size:12px">Đây là dự báo năng lượng, không phải con số tuyệt đối. Thực tế phụ thuộc vào hành động cụ thể.</p>
+    </div>
+
+    <div class="callout">
+      <p><strong>Quy luật nghiệp lực Số 8:</strong> Tiền và quyền lực sẽ đến với bạn — nhưng <em>không phải miễn phí</em>. Số 8 dạy rằng mọi thứ vật chất đạt được phải đi kèm với trách nhiệm. Khi bạn dùng tài chính/quyền lực để phục vụ mục đích lớn hơn bản thân, dòng chảy tài chính sẽ liên tục. Khi dùng để tích trữ hoặc kiểm soát, chu kỳ mất mát sẽ bắt đầu.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     S6: TÌNH YÊU & HÔN NHÂN
+════════════════════════════════════════ -->
+<section class="section" id="s6">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">06 · Tình Yêu & Hôn Nhân</div>
+      <h2 class="section-title">Trái Tim Trung Thành<br>Trong Cái Đầu Tự Do</h2>
+      <p class="section-lead">
+        Venus Song Tử + Mặt Trăng Sư Tử + Mặt Trời Kim Ngưu: mâu thuẫn đẹp đẽ nhất
+        trong bản đồ sao — giữa <em>khao khát tự do</em> và <em>lòng trung thành sâu sắc</em>.
+      </p>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card card-purple">
+        <div class="card-title ct-purple">Bạn Thường Bị Thu Hút Bởi</div>
+        <p><strong>Venus Song Tử</strong> — bạn bị cuốn hút bởi người thông minh, hài hước, có khả năng giao tiếp tốt. Một cuộc trò chuyện thú vị có thể hấp dẫn hơn cả ngoại hình.</p>
+        <p style="margin-top:10px"><strong>Mặt Trăng Sư Tử</strong> — bạn cần người đối tác công nhận và ngưỡng mộ bạn, nhưng đồng thời bạn cũng sẵn sàng ngưỡng mộ và tôn vinh họ. Cần sự đối xứng trong tình cảm.</p>
+        <p style="margin-top:10px"><strong>Mặt Trời Kim Ngưu</strong> — bạn tìm kiếm sự ổn định, đáng tin cậy, và cam kết lâu dài. Không thích các mối quan hệ hời hợt.</p>
+        <p style="margin-top:10px"><strong>Profile lý tưởng:</strong> Người vừa có chiều sâu trí tuệ (Song Tử), vừa có sự ổn định và trung thành (Kim Ngưu/Ma Kết), vừa có năng lượng tích cực và tự tin (Sư Tử).</p>
+      </div>
+      <div class="card card-gold">
+        <div class="card-title ct-gold">Cách Bạn Yêu</div>
+        <p><strong>Chậm mà chắc</strong> — Kim Ngưu không vội vào tình yêu. Cần thời gian để xây dựng lòng tin. Nhưng khi đã yêu, là yêu hết lòng và lâu dài.</p>
+        <p style="margin-top:10px"><strong>Ngôn ngữ tình yêu chính:</strong> Acts of Service (hành động cụ thể) và Quality Time (thời gian chất lượng). Bạn bày tỏ tình cảm qua việc làm, không phải lời nói hoa mỹ.</p>
+        <p style="margin-top:10px"><strong>Mặt Trăng Sư Tử cần được:</strong> ngợi khen, đánh giá cao, và cảm thấy đặc biệt trong mắt người yêu. Thiếu điều này, bạn sẽ dần rút lui cảm xúc.</p>
+        <p style="margin-top:10px"><strong>Venus Song Tử cần:</strong> cuộc trò chuyện không bao giờ nhạt, sự mới mẻ và phát triển trong mối quan hệ.</p>
+      </div>
+    </div>
+
+    <div class="card card-rose mb-16">
+      <div class="card-title ct-rose">Bài Học Cần Học Trong Tình Cảm</div>
+      <div class="trait-grid">
+        <div class="trait-item">
+          <div class="trait-icon ti-rose">🎭</div>
+          <div class="trait-text">
+            <strong>Bỏ mặt nạ "mọi thứ đều ổn"</strong>
+            <span>Mặt Trăng Sư Tử thường che giấu tổn thương sau vẻ ngoài mạnh mẽ. Mối quan hệ thật sự cần bạn biết dễ bị tổn thương (vulnerable) đúng lúc.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-amber">⚖️</div>
+          <div class="trait-text">
+            <strong>Học cách buông kiểm soát</strong>
+            <span>ĐĐ 1 + Số 8 có xu hướng muốn kiểm soát cả trong tình yêu. Tình yêu lành mạnh cần không gian và sự bình đẳng thật sự.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-teal">🌊</div>
+          <div class="trait-text">
+            <strong>Không lý trí hoá cảm xúc</strong>
+            <span>Venus Song Tử có xu hướng phân tích tình cảm thay vì cảm nhận. Đôi khi trái tim cần được phép đơn giản là cảm — không cần giải thích.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-purple">💫</div>
+          <div class="trait-text">
+            <strong>Kiên nhẫn với sự không hoàn hảo</strong>
+            <span>Kim Ngưu có tiêu chuẩn cao. Hôn nhân dài hạn đòi hỏi chấp nhận người bạn đời với cả khiếm khuyết — và biết ơn những gì họ có.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     S7: SỨC KHOẺ & TINH THẦN
+════════════════════════════════════════ -->
+<section class="section" id="s7">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">07 · Sức Khoẻ & Tinh Thần</div>
+      <h2 class="section-title">Cơ Thể Là Đền Thờ<br>Bị Bỏ Quên</h2>
+      <p class="section-lead">
+        Kim Ngưu cai quản cổ họng và tuyến giáp. Sư Tử cai quản tim và lưng trên.
+        Saturn Song Ngư: cảnh báo về ranh giới cảm xúc và sức khoẻ tinh thần.
+      </p>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card card-rose">
+        <div class="card-title ct-rose">Điểm Cần Chú Ý Sức Khoẻ</div>
+        <ul class="custom">
+          <li><strong>Vùng cổ họng, tuyến giáp</strong> (Kim Ngưu) — Stress thường biểu hiện qua cổ, vai. Kiểm tra tuyến giáp định kỳ, đặc biệt khi có giai đoạn căng thẳng kéo dài.</li>
+          <li><strong>Tim mạch và lưng trên</strong> (Mặt Trăng Sư Tử) — Áp lực tự đặt ra quá cao có thể ảnh hưởng hệ tim mạch. Theo dõi huyết áp.</li>
+          <li><strong>Hệ thần kinh</strong> (Cung Mọc Song Tử) — Không tắt được "chế độ suy nghĩ". Dễ bị lo âu mãn tính, mất ngủ khi đầu óc quá tải.</li>
+          <li><strong>Hệ tiêu hoá</strong> — Căng thẳng cảm xúc thường ảnh hưởng dạ dày. Ăn uống lành mạnh là ưu tiên, không phải tuỳ chọn.</li>
+        </ul>
+      </div>
+      <div class="card card-teal">
+        <div class="card-title ct-teal">Thực Hành Cân Bằng Phù Hợp</div>
+        <ul class="custom">
+          <li><strong>Vận động nhịp nhàng, liên tục</strong> — Kim Ngưu phù hợp với các bài tập có tính lặp lại và xây dựng dần (strength training, yoga, đi bộ trong tự nhiên).</li>
+          <li><strong>Thực hành im lặng có chủ đích</strong> — Cung Mọc Song Tử cần được nghỉ ngơi khỏi thông tin. Ít nhất 20–30 phút/ngày không có màn hình.</li>
+          <li><strong>Kết nối với thiên nhiên</strong> — Kim Ngưu (cung đất) và Sư Tử (cung lửa) đều được nạp năng lượng bởi thiên nhiên — đặc biệt là ánh nắng và không khí trong lành.</li>
+          <li><strong>Biểu đạt cảm xúc qua sáng tạo</strong> — Viết nhật ký, âm nhạc, nấu ăn — bất cứ thứ gì giúp cảm xúc được thể hiện ra ngoài thay vì dồn nén bên trong.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title ct-amber">Thách Thức Tinh Thần Cốt Lõi</div>
+      <p><strong>Saturn Song Ngư</strong> cảnh báo về ranh giới tinh thần mờ nhạt — dễ hấp thụ năng lượng tiêu cực của người xung quanh. Bạn có thể không nhận ra mình đang "carry" cảm xúc của người khác cho đến khi quá tải.</p>
+      <p style="margin-top:10px">Biểu hiện phổ biến: cảm thấy mệt mỏi vô lý sau khi gặp nhiều người, cảm giác trách nhiệm quá mức với vấn đề của người khác, khó tách biệt công việc và cuộc sống.</p>
+      <p style="margin-top:10px"><strong>Liều thuốc:</strong> Học cách nhận biết khi nào năng lượng bạn đang cảm nhận là của bạn và khi nào là của người khác. Thực hành đặt ranh giới cảm xúc — không phải thô lỗ, mà là bảo vệ nguồn lực của mình.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     S8: NỖI SỢ & NIỀM TIN GIỚI HẠN
+════════════════════════════════════════ -->
+<section class="section" id="s8">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">08 · Nỗi Sợ & Niềm Tin Giới Hạn</div>
+      <h2 class="section-title">Những Xiềng Xích<br>Vô Hình</h2>
+      <p class="section-lead">
+        Mặt Trăng Sư Tử + Saturn Song Ngư + Số Linh Hồn (nếu tên đầy đủ) tiết lộ
+        những nỗi sợ ngầm ẩn mà bạn có thể chưa nhận diện.
+      </p>
+    </div>
+
+    <div class="card card-purple mb-16">
+      <div class="card-title ct-purple">Nỗi Sợ Số 1: Thất Bại Công Khai (Mặt Trăng Sư Tử)</div>
+      <p>Mặt Trăng Sư Tử tạo ra danh tính gắn liền với hình ảnh và sự công nhận. Nỗi sợ sâu nhất không phải là thất bại — mà là <strong>thất bại khi người khác đang nhìn</strong>. Điều này đôi khi khiến bạn:</p>
+      <ul class="custom" style="margin-top:10px">
+        <li>Không thử những điều mà bạn không chắc chắn sẽ thành công</li>
+        <li>Tránh né tình huống có thể khiến bạn trông không năng lực</li>
+        <li>Làm việc gấp đôi để duy trì hình ảnh "người luôn có câu trả lời"</li>
+        <li>Khó thừa nhận sai lầm hoặc cần giúp đỡ</li>
+      </ul>
+      <div class="callout" style="margin-top:16px;border-left-color:#A78BFA;background:rgba(139,92,246,0.06)">
+        <p><strong style="color:#A78BFA">Sự thật giải phóng:</strong> Người Sư Tử dũng cảm nhất là người dám thất bại công khai và đứng dậy công khai. Đây mới là sức mạnh Sư Tử thật sự — không phải sự hoàn hảo.</p>
+      </div>
+    </div>
+
+    <div class="two-col mb-16">
+      <div class="card">
+        <div class="card-title ct-rose">Nỗi Sợ Số 2: Mất Kiểm Soát (ĐĐ 1 + Số 8)</div>
+        <p>Người ĐĐ 1 có niềm tin sâu sắc: "Nếu tôi không kiểm soát, mọi thứ sẽ đổ vỡ." Số 8 tăng cường điều này — tạo ra bản năng nắm quyền kiểm soát như bản năng sinh tồn.</p>
+        <p style="margin-top:10px"><strong>Niềm tin giới hạn:</strong> "Muốn làm đúng thì phải tự làm." / "Tin người khác thì sẽ bị phụ." / "Tôi phải luôn là người mạnh nhất trong phòng."</p>
+        <p style="margin-top:10px"><strong>Hệ quả:</strong> Burn-out, cô đơn, và không thể scale bất cứ thứ gì vì không thể trao quyền.</p>
+      </div>
+      <div class="card">
+        <div class="card-title ct-amber">Nỗi Sợ Số 3: Không Xứng Đáng (Saturn Song Ngư)</div>
+        <p>Saturn Song Ngư tạo ra lớp niềm tin sâu: "Tôi chưa làm đủ để xứng đáng với những gì tôi muốn." Đây thường là niềm tin ẩn — bạn không nói ra, nhưng nó ảnh hưởng đến mọi quyết định.</p>
+        <p style="margin-top:10px"><strong>Biểu hiện:</strong> Self-sabotage khi gần đến thành công. Cảm giác "impostor syndrome". Làm việc quá sức để chứng minh giá trị.</p>
+        <p style="margin-top:10px"><strong>Sự thật:</strong> Saturn Song Ngư dạy rằng bạn không cần <em>kiếm</em> quyền tồn tại và xứng đáng — đó là quyền bẩm sinh.</p>
+      </div>
+    </div>
+
+    <div class="card card-teal">
+      <div class="card-title ct-teal">Cách Phá Vỡ Những Niềm Tin Này</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Nhận diện không phán xét</strong>
+            <p>Mỗi khi cảm thấy cần kiểm soát, sợ thất bại, hoặc không xứng đáng — hãy gọi tên nó: "Đây là Mặt Trăng Sư Tử đang nói. Đây là Saturn Song Ngư." Nhận ra không có nghĩa là đồng ý.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Thu thập bằng chứng ngược lại</strong>
+            <p>Danh sách 10 lần bạn từ bỏ kiểm soát và mọi thứ vẫn ổn. 10 lần bạn thất bại và vẫn sống sót. Bộ não cần dữ liệu thực tế để cập nhật niềm tin cũ.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Thực hành trao quyền nhỏ mỗi ngày</strong>
+            <p>ĐĐ 1 và Số 8 được lập trình để tự làm mọi thứ. Mỗi ngày, có chủ đích trao một việc nhỏ cho người khác — và quan sát mà không can thiệp.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     S9: PHIÊN BẢN TƯƠNG LAI LÝ TƯỞNG
+════════════════════════════════════════ -->
+<section class="section" id="s9">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">09 · Phiên Bản Tương Lai Lý Tưởng</div>
+      <h2 class="section-title">Bạn Của 20 Năm Tới<br>Trông Như Thế Nào?</h2>
+      <p class="section-lead">
+        Nếu sống đúng với năng lượng bản đồ sao — không phải phiên bản lý tưởng hoá,
+        mà là phiên bản <em>thật nhất và mạnh mẽ nhất</em> có thể đạt được.
+      </p>
+    </div>
+
+    <div class="card card-gold mb-24">
+      <div class="card-title ct-gold">Phiên Bản 2046 — Tuổi 51</div>
+      <p style="font-size:15px;line-height:2;color:var(--text)">
+        Bạn của năm 2046 là người đã <strong>xây dựng được một di sản có thể đứng vững không cần sự hiện diện của bạn</strong>. Không nhất thiết phải là tên tuổi nổi tiếng — nhưng chắc chắn là người mà trong lĩnh vực của họ, nhiều người biết đến và tôn trọng vì những gì họ đã tạo ra.
+      </p>
+      <div class="divider"><span>◆</span></div>
+      <div class="trait-grid" style="margin-top:0">
+        <div class="trait-item">
+          <div class="trait-icon ti-gold">🏛️</div>
+          <div class="trait-text">
+            <strong>Sự nghiệp</strong>
+            <span>Đang ở hoặc gần đỉnh cao của vai trò leadership trong lĩnh vực mình chọn. Đã xây dựng được đội ngũ mạnh có thể vận hành độc lập.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-teal">💚</div>
+          <div class="trait-text">
+            <strong>Tài chính</strong>
+            <span>Tự do tài chính thật sự — không phải giàu theo nghĩa số, mà là không bao giờ đưa quyết định quan trọng vì áp lực tiền bạc.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-purple">🌺</div>
+          <div class="trait-text">
+            <strong>Tình cảm</strong>
+            <span>Mối quan hệ sâu sắc, bình đẳng, và phát triển cùng nhau. Đã học được cách yêu mà không kiểm soát.</span>
+          </div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-icon ti-amber">🌟</div>
+          <div class="trait-text">
+            <strong>Nội tâm</strong>
+            <span>Không còn cần sự công nhận từ bên ngoài để cảm thấy mình có giá trị. Bình tĩnh và vững chắc từ bên trong.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title ct-gold">Lộ Trình 5 Bước Để Đạt Được</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>2026–2027: Làm Rõ Định Nghĩa Thành Công Của Riêng Bạn</strong>
+            <p>Năm 5 là năm của tự do — dùng nó để thoát khỏi định nghĩa thành công của người khác. Viết ra: "Cuộc đời thành công với tôi trông như thế nào?" không phải theo tiêu chuẩn xã hội, mà theo tiêu chuẩn của con người sinh ngày 08/05/1995.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>2027–2029: Đầu Tư Vào Năng Lực Lãnh Đạo Con Người</strong>
+            <p>Giai đoạn PY 6-8 là thời điểm vàng để xây dựng đội ngũ, học cách trao quyền và nhân bản bản thân. Đây là điều kiện tiên quyết để bứt phá ở Đỉnh Cao 2 (2031+). Không thể đi một mình đến giai đoạn tiếp theo.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>2029–2030: Thu Hoạch & Thanh Lọc</strong>
+            <p>PY 8 thu hoạch — PY 9 thanh lọc. Năm 2029 là lúc gặt những gì đã gieo từ 2022. Năm 2030, có chủ đích buông bỏ những thứ không còn phù hợp với giai đoạn tiếp theo: mối quan hệ, vai trò, niềm tin, thói quen.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>2031–2039: Dám Bứt Phá Ở Đỉnh Cao 2 (Số 5)</strong>
+            <p>Đỉnh Cao số 5 đòi hỏi dũng cảm đi vào những con đường chưa rõ. Đây là giai đoạn mở rộng lớn nhất — địa lý, ảnh hưởng, hoặc impact. Kim Ngưu sẽ muốn ở lại an toàn. Nhưng Đường Đời 1 đang gọi bạn tiến về phía trước.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <strong>2040–2048: Trở Thành Người Dẫn Đường (Đỉnh Cao 3 — Số 9)</strong>
+            <p>Đỉnh Cao số 9 là năng lượng của sự cho đi và truyền lại. Những gì bạn học được trong 45 năm đầu đời — thất bại, chiến thắng, bài học — bây giờ phục vụ cho điều gì đó lớn hơn bản thân. Mentoring, viết sách, xây dựng hệ sinh thái, hoặc bất cứ điều gì mang lại ý nghĩa cho người khác.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     S10: LỜI NHẮN TỪ BẢN ĐỒ SAO
+════════════════════════════════════════ -->
+<section class="section" id="s10" style="padding-bottom:120px">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">10 · Lời Nhắn Từ Bản Đồ Sao</div>
+      <h2 class="section-title">Thông Điệp Riêng<br>Dành Cho Bạn</h2>
+      <p class="section-lead">
+        Nếu bản đồ sao của bạn — tất cả những hành tinh, những con số, những chu kỳ —
+        có thể nói chuyện trực tiếp với bạn ngay lúc này.
+      </p>
+    </div>
+
+    <div class="letter">
+      <p>
+        Ta biết bạn mệt. Không phải mệt thể xác — mà là cái mệt của người đang gánh quá nhiều trong im lặng. Mệt vì cố gắng chứng minh điều gì đó với ai đó. Mệt vì sợ rằng nếu dừng lại một giây, tất cả sẽ đổ vỡ.
+      </p>
+
+      <p>
+        Ta muốn nói với bạn rằng: <em>bạn được sinh ra vào lúc 7 giờ sáng</em> — khoảnh khắc bình minh đang lên, khi bóng tối chưa kịp tan hết nhưng ánh sáng đã bắt đầu. Đó là bạn. Bạn không phải là ban ngày hoàn toàn, bạn cũng không phải bóng đêm. Bạn là <em>sự chuyển tiếp</em> — người đứng ở ranh giới giữa những gì đã là và những gì có thể trở thành.
+      </p>
+
+      <p>
+        <em>Mặt Trời Kim Ngưu của bạn đã xây đúng.</em> Bạn không phải kiểu người xây lâu đài trên cát. Những gì bạn đặt tay vào, bạn xây để tồn tại. Nhưng có một điều Kim Ngưu chưa nói với bạn: <strong>đôi khi cần phá vỡ những gì cũ để xây điều mới hơn</strong>. Và bạn đang đứng ở cửa ngõ của một cuộc phá vỡ như vậy.
+      </p>
+
+      <p>
+        <em>Cung Mọc Song Tử của bạn mang bạn đến với thế giới bằng ngôn ngữ và ý tưởng.</em> Nhưng bạn có đang thật sự nói điều mình muốn nói? Hay bạn đang nói những gì người khác muốn nghe? Tiếng nói thật của bạn — phiên bản chưa được kiểm duyệt, chưa được tối ưu cho audience — đó là điều thế giới đang cần từ bạn.
+      </p>
+
+      <p>
+        <em>Mặt Trăng Sư Tử của bạn muốn được nhìn thấy.</em> Và ta nói với bạn điều này với tất cả sự trân trọng: <strong>bạn xứng đáng được nhìn thấy</strong>. Không phải vì bạn đã làm đủ, không phải vì bạn đã chứng minh đủ. Mà vì đó là bản chất của bạn — như mặt trời không cần chứng minh mình sáng.
+      </p>
+
+      <p>
+        Năm 2026 này, <em>Năm Cá Nhân 5 của bạn</em>, là năm ta đã chuẩn bị từ rất lâu. Những gì bạn đang cảm thấy — xáo trộn, không chắc chắn, cảm giác có gì đó cần thay đổi — <strong>đó không phải dấu hiệu sai đường. Đó là dấu hiệu bạn đang tỉnh dậy đúng lúc.</strong>
+      </p>
+
+      <p>
+        Điều duy nhất ta muốn bạn thay đổi ngay từ bây giờ, không phải là chiến lược, không phải là kế hoạch, không phải là hành động: đó là <em>cách bạn đối xử với bản thân khi không ai nhìn</em>. Bởi vì người ĐĐ 1 mang Sư Tử trong tim và Kim Ngưu trong xương — người đó chỉ có thể xây được những điều vĩ đại từ một nền tảng bên trong vững chắc.
+      </p>
+
+      <p>
+        <em>Hãy ngừng hỏi "tôi có đủ giỏi không?" và bắt đầu hỏi "tôi muốn tạo ra điều gì?"</em>
+      </p>
+
+      <p style="text-align:right;color:var(--gold);font-size:13px;margin-top:32px;font-weight:600">
+        — Bản Đồ Sao 08/05/1995<br>
+        <span style="font-weight:300;color:var(--text-soft)">Cai Lậy, Tiền Giang · 7:00 Sáng</span>
+      </p>
+    </div>
+
+    <!-- Final summary -->
+    <div class="card card-gold" style="margin-top:32px;text-align:center;padding:40px">
+      <div style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;opacity:0.8">Tóm Tắt Chân Dung</div>
+      <div style="font-size:22px;font-weight:700;color:var(--text);line-height:1.5;max-width:600px;margin:0 auto">
+        Người tiên phong (ĐĐ 1) với sức mạnh vật chất (Số 8),<br>
+        xây bền vững (Kim Ngưu), tư duy linh hoạt (Song Tử),<br>
+        trái tim quảng đại (Sư Tử) — và hành trình học<br>
+        cách <em style="color:var(--gold)">lãnh đạo từ bên trong</em>.
+      </div>
+      <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:24px">
+        <span class="tl-badge tb-now" style="font-size:12px;padding:6px 16px">Saturn Return 2024–2026</span>
+        <span class="tl-badge tb-peak" style="font-size:12px;padding:6px 16px">Đỉnh Cao Sự Nghiệp 2029</span>
+        <span class="tl-badge tb-turn" style="font-size:12px;padding:6px 16px">Bản Lề 2030–2031</span>
+        <span class="tl-badge" style="background:rgba(139,92,246,0.15);color:#A78BFA;font-size:12px;padding:6px 16px">Master 11 từ Tuổi 54</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>Được tạo lúc 2026-04-28 · Cá nhân & Bảo mật</div>
+  <div style="margin-top:4px">Thần Số Học · Chiêm Tinh Học Phương Tây · Bản Đồ Thiên Văn</div>
+</div>
+
+<script>
+  // Generate stars
+  const starsEl = document.getElementById('stars');
+  const count = 180;
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      width: ${size}px;
+      height: ${size}px;
+      --dur: ${2 + Math.random() * 4}s;
+      --op: ${0.2 + Math.random() * 0.7};
+      animation-delay: ${Math.random() * 4}s;
+    `;
+    starsEl.appendChild(s);
+  }
+</script>
+</body>
+</html>
