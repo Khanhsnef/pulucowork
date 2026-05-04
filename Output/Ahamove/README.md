@@ -65,7 +65,8 @@ Output/Ahamove/
 | `2026-03-fuel-price-impact-analysis.xlsx` | 05. ANALYSIS | Phân tích tác động giá xăng Q1 |
 | `2026-Q2-DM-OKR-assignment.xlsx` | 07. TEAM_MGMT | OKR assignment cho từng member |
 | `dm-weekly-review-template.pptx` | 07. TEAM_MGMT | Template weekly review DM team |
+| `2026-05-claude-guide-for-team.md` | 07. TEAM_MGMT | Hướng dẫn Claude AI toàn diện cho team (dành cho người chưa biết gì) |
 
 ---
 
-*Last updated: 2026-04-22*
+*Last updated: 2026-05-04*
