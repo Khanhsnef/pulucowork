@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Claude AI — Tài Liệu Training Toàn Diện · Ahamove DM Team 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#0E4174;--blue2:#1a5499;--blue3:#EEF4FB;
+  --orange:#FF7F32;--orange2:#FFF4EC;
+  --green:#10B981;--green2:#D1FAE5;
+  --red:#EF4444;--red2:#FEE2E2;
+  --purple:#8B5CF6;--purple2:#EDE9FE;
+  --bg:#F8FAFC;--card:#fff;--border:#E2E8F0;
+  --text:#1E293B;--mid:#475569;--light:#94A3B8;
+  --code:#F1F5F9;
+}
+body{font-family:'Lexend',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.65}
+a{color:var(--blue);text-decoration:none}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--blue);padding:0 24px;display:flex;align-items:center;gap:0;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-logo{color:#fff;font-weight:800;font-size:13px;padding:12px 16px 12px 0;border-right:1px solid rgba(255,255,255,.2);margin-right:4px;white-space:nowrap;flex-shrink:0}
+.nav a{color:rgba(255,255,255,.75);font-size:11px;font-weight:500;padding:12px 12px;white-space:nowrap;transition:.15s;flex-shrink:0}
+.nav a:hover{color:#fff;background:rgba(255,255,255,.1)}
+.nav-dot{color:rgba(255,255,255,.3);padding:0 2px;font-size:10px;flex-shrink:0}
+
+/* ── WRAP ── */
+.wrap{max-width:1080px;margin:0 auto;padding:32px 24px 64px}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,var(--blue) 0%,#1a5499 55%,#0d3461 100%);border-radius:20px;padding:52px 44px;margin-bottom:44px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;border-radius:50%;background:rgba(255,127,50,.1);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-80px;left:30%;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
+.hero-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.hero-tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:20px;text-transform:uppercase}
+.ht-orange{background:var(--orange);color:#fff}
+.ht-outline{background:rgba(255,255,255,.12);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2)}
+.hero h1{color:#fff;font-size:34px;font-weight:800;line-height:1.2;margin-bottom:12px}
+.hero h1 span{color:var(--orange)}
+.hero p{color:rgba(255,255,255,.72);font-size:13.5px;max-width:640px;line-height:1.7}
+.hero-stats{display:flex;gap:24px;margin-top:28px;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat .num{color:#fff;font-size:22px;font-weight:800}
+.hero-stat .lbl{color:rgba(255,255,255,.6);font-size:10px;font-weight:500;margin-top:2px}
+
+/* ── SECTION ── */
+.section{margin-bottom:52px;scroll-margin-top:50px}
+.sec-label{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.sec-label::after{content:'';flex:1;height:1.5px;background:linear-gradient(to right,var(--border),transparent)}
+.sec-title{font-size:22px;font-weight:800;color:var(--blue);margin-bottom:6px}
+.sec-sub{font-size:13px;color:var(--mid);margin-bottom:24px}
+
+/* ── CARDS ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+.card-t{border-top:3px solid var(--blue)}
+.card-to{border-top:3px solid var(--orange)}
+.card-tg{border-top:3px solid var(--green)}
+.card-tp{border-top:3px solid var(--purple)}
+.card h3{font-size:13px;font-weight:700;margin-bottom:6px}
+.card p{font-size:12px;color:var(--mid);line-height:1.65}
+.card .icon{font-size:24px;margin-bottom:10px}
+
+/* ── BADGES ── */
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;margin:2px 2px 0 0}
+.bd-blue{background:#DBEAFE;color:#1E40AF}
+.bd-green{background:var(--green2);color:#065F46}
+.bd-orange{background:#FFEDD5;color:#C2410C}
+.bd-gray{background:var(--code);color:var(--mid)}
+.bd-purple{background:var(--purple2);color:#6D28D9}
+.bd-red{background:var(--red2);color:#991B1B}
+
+/* ── TABLES ── */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:var(--blue);color:#fff;padding:9px 12px;text-align:left;font-weight:600;font-size:11px}
+.tbl th.orange{background:var(--orange)}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.tbl tr:nth-child(even) td{background:var(--bg)}
+.tbl tr:hover td{background:#f0f7ff}
+.yes{color:var(--green);font-weight:700;font-size:13px}
+.no{color:#CBD5E1;font-size:13px}
+.partial{color:var(--orange);font-weight:700;font-size:11px}
+.cell-g{background:#F0FDF4!important}
+.cell-b{background:#EFF6FF!important}
+.cell-o{background:#FFF7ED!important}
+
+/* ── COMPARISON BOXES ── */
+.cmp-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+.cmp-box{border-radius:14px;padding:16px 14px;text-align:center;border:2px solid transparent}
+.cmp-box .cmp-icon{font-size:26px;margin-bottom:8px}
+.cmp-box .cmp-name{font-size:12px;font-weight:700;margin-bottom:4px}
+.cmp-box .cmp-sub{font-size:10.5px;color:var(--mid)}
+.cmp-web{background:#EFF6FF;border-color:#93C5FD}
+.cmp-desk{background:#F0FDF4;border-color:#86EFAC}
+.cmp-code{background:#FFF7ED;border-color:#FDB67A}
+.cmp-cowork{background:linear-gradient(135deg,#EFF6FF,#F5F3FF);border-color:var(--blue);box-shadow:0 0 0 2px rgba(14,65,116,.12)}
+.cmp-ide{background:var(--purple2);border-color:#C4B5FD}
+.cmp-best{position:relative}
+.cmp-best::after{content:'★ RECOMMENDED';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--orange);color:#fff;font-size:8.5px;font-weight:800;padding:2px 7px;border-radius:8px;white-space:nowrap}
+
+/* ── FEATURE MATRIX ── */
+.matrix-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--border)}
+.matrix{width:100%;border-collapse:collapse;font-size:11.5px;min-width:700px}
+.matrix th{padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-align:center;position:sticky;top:0}
+.matrix th:first-child{text-align:left;background:var(--blue);color:#fff}
+.matrix th.col-web{background:#1D4ED8;color:#fff}
+.matrix th.col-desk{background:#166534;color:#fff}
+.matrix th.col-code{background:#C2410C;color:#fff}
+.matrix th.col-cowork{background:var(--blue);color:#fff}
+.matrix th.col-ide{background:#6D28D9;color:#fff}
+.matrix td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:middle;text-align:center}
+.matrix td:first-child{text-align:left;font-weight:500;background:var(--bg)}
+.matrix .cat-row td{background:#F8FAFC;font-weight:700;color:var(--mid);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;text-align:left!important}
+
+/* ── FREE TIER BOX ── */
+.free-box{background:linear-gradient(135deg,#F0FDF4,#ECFDF5);border:2px solid #86EFAC;border-radius:16px;padding:24px}
+.pro-box{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:2px solid #93C5FD;border-radius:16px;padding:24px}
+.tier-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.tier-badge{font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px}
+.tb-free{background:#10B981;color:#fff}
+.tb-pro{background:#1D4ED8;color:#fff}
+.tb-cowork{background:var(--blue);color:#fff}
+.tier-price{font-size:13px;font-weight:700;color:var(--mid)}
+
+/* ── WHY COWORK ── */
+.why-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.why-item:last-child{border-bottom:none}
+.why-num{width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.why-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.why-desc{font-size:12px;color:var(--mid);line-height:1.65}
+.why-before{font-size:11px;background:var(--red2);color:#991B1B;padding:3px 8px;border-radius:6px;display:inline-block;margin:4px 0}
+.why-after{font-size:11px;background:var(--green2);color:#065F46;padding:3px 8px;border-radius:6px;display:inline-block;margin:4px 0}
+
+/* ── IDE SECTION ── */
+.ide-diagram{background:var(--code);border-radius:14px;padding:24px;font-family:monospace;font-size:12px;line-height:1.8;overflow-x:auto}
+.ide-layer{border:1px dashed var(--border);border-radius:8px;padding:10px 14px;margin-bottom:8px}
+.ide-layer .lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mid);margin-bottom:6px}
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pro-list,.con-list{border-radius:12px;padding:16px}
+.pro-list{background:#F0FDF4;border:1px solid #86EFAC}
+.con-list{background:#FFF5F5;border:1px solid #FCA5A5}
+.pro-list h4{color:#065F46;font-size:12px;font-weight:700;margin-bottom:10px}
+.con-list h4{color:#991B1B;font-size:12px;font-weight:700;margin-bottom:10px}
+.pc-item{font-size:11.5px;margin-bottom:6px;display:flex;gap:6px;align-items:flex-start;line-height:1.55}
+.pc-item::before{flex-shrink:0;margin-top:2px}
+.pro-list .pc-item::before{content:'✓';color:var(--green);font-weight:700}
+.con-list .pc-item::before{content:'✗';color:var(--red);font-weight:700}
+
+/* ── WORKFLOW ── */
+.flow{display:flex;align-items:stretch;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-bottom:14px}
+.flow-step{flex:1;padding:14px 12px;text-align:center;border-right:1px solid var(--border);background:var(--card)}
+.flow-step:last-child{border-right:none}
+.flow-step .sn{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.flow-step .st{font-size:11px;font-weight:700;color:var(--text);margin-bottom:3px}
+.flow-step .ss{font-size:10.5px;color:var(--mid)}
+.flow-step.orange .sn{background:var(--orange)}
+.flow-step.green .sn{background:var(--green)}
+.flow-step.purple .sn{background:var(--purple)}
+
+/* ── PROMPT SECTION ── */
+.prompt-box{border-radius:12px;overflow:hidden;margin-bottom:12px}
+.prompt-label{font-size:10.5px;font-weight:700;padding:7px 14px;letter-spacing:.05em}
+.pb-bad .prompt-label{background:#FEE2E2;color:#991B1B}
+.pb-good .prompt-label{background:#D1FAE5;color:#065F46}
+.prompt-content{background:var(--code);padding:12px 14px;font-family:monospace;font-size:11.5px;line-height:1.65;border:1px solid var(--border);border-top:none}
+
+/* ── GLOSSARY ── */
+.glos-table{width:100%;border-collapse:collapse;font-size:12px}
+.glos-table th{background:var(--blue);color:#fff;padding:8px 12px;text-align:left;font-size:11px;font-weight:700}
+.glos-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.glos-table tr:nth-child(even) td{background:var(--bg)}
+.glos-term{font-weight:700;font-family:monospace;font-size:11.5px;color:var(--blue);white-space:nowrap}
+
+/* ── CODE ── */
+code{font-family:monospace;font-size:11px;background:var(--code);padding:2px 6px;border-radius:4px;color:var(--blue)}
+.code-block{background:var(--code);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:monospace;font-size:11.5px;line-height:1.7;overflow-x:auto;margin:8px 0}
+
+/* ── CALLOUT ── */
+.callout{border-radius:10px;padding:12px 16px;font-size:12px;margin:10px 0;display:flex;gap:10px;align-items:flex-start}
+.callout .ci{flex-shrink:0;font-size:16px;margin-top:1px}
+.ca-blue{background:var(--blue3);border-left:3px solid #93C5FD;color:var(--blue)}
+.ca-orange{background:#FFF7ED;border-left:3px solid #FDB67A;color:#7C2D12}
+.ca-green{background:#F0FDF4;border-left:3px solid #86EFAC;color:#065F46}
+.ca-red{background:#FFF5F5;border-left:3px solid #FCA5A5;color:#991B1B}
+
+/* ── TIMELINE ── */
+.tl{padding-left:26px;position:relative}
+.tl::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(to bottom,var(--blue),var(--orange))}
+.tl-item{position:relative;margin-bottom:14px}
+.tl-dot{position:absolute;left:-22px;top:4px;width:11px;height:11px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px var(--blue);background:var(--blue)}
+.tl-dot.o{box-shadow:0 0 0 2px var(--orange);background:var(--orange)}
+.tl-dot.g{box-shadow:0 0 0 2px var(--green);background:var(--green)}
+.tl-t{font-size:12px;font-weight:700;margin-bottom:2px}
+.tl-d{font-size:11.5px;color:var(--mid);line-height:1.6}
+
+/* ── CHECKLIST ── */
+.checklist{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 20px}
+.checklist h4{font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.cl-item{display:flex;gap:10px;align-items:flex-start;padding:6px 0;font-size:12px;border-bottom:1px solid var(--border)}
+.cl-item:last-child{border-bottom:none}
+.cl-box{width:16px;height:16px;border:1.5px solid var(--border);border-radius:4px;flex-shrink:0;margin-top:2px}
+
+/* ── DIVIDER ── */
+.divider{border:none;border-top:1px solid var(--border);margin:36px 0}
+
+/* ── LIVE BADGE ── */
+.live{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--green);background:var(--green2);padding:3px 9px;border-radius:20px}
+.live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── PRINT ── */
+@media print{
+  .nav{display:none}
+  .hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .section{page-break-inside:avoid}
+}
+@media(max-width:768px){
+  .grid-2,.grid-3,.grid-4,.cmp-row,.pros-cons{grid-template-columns:1fr}
+  .cmp-row{grid-template-columns:1fr 1fr}
+  .hero{padding:32px 24px}
+  .hero h1{font-size:24px}
+  .flow{flex-direction:column}
+  .flow-step{border-right:none;border-bottom:1px solid var(--border)}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">Claude AI Guide</div>
+  <a href="#s1">AI là gì?</a><span class="nav-dot">·</span>
+  <a href="#s2">Claude</a><span class="nav-dot">·</span>
+  <a href="#s3">Nguyên lý</a><span class="nav-dot">·</span>
+  <a href="#s4">Nền tảng</a><span class="nav-dot">·</span>
+  <a href="#s5">So sánh</a><span class="nav-dot">·</span>
+  <a href="#s6">Gói Free</a><span class="nav-dot">·</span>
+  <a href="#s7">Cowork</a><span class="nav-dot">·</span>
+  <a href="#s8">IDE</a><span class="nav-dot">·</span>
+  <a href="#s9">Prompt</a><span class="nav-dot">·</span>
+  <a href="#s10">Ứng dụng</a><span class="nav-dot">·</span>
+  <a href="#s11">Giới hạn</a><span class="nav-dot">·</span>
+  <a href="#s12">Bảo mật</a><span class="nav-dot">·</span>
+  <a href="#s13">Từ điển</a>
+</nav>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-meta">
+    <span class="hero-tag ht-orange">Ahamove · Driver Management Team</span>
+    <span class="hero-tag ht-outline">Training Document · 2026-05-04</span>
+    <span class="hero-tag ht-outline">Dành cho người mới bắt đầu</span>
+  </div>
+  <h1>Claude AI —<br><span>Tài Liệu Training Toàn Diện</span></h1>
+  <p>Từ "AI là gì?" đến cách dùng Claude Code, Cowork, IDE tích hợp — mọi thứ bạn cần biết để bắt đầu dùng AI trong công việc hàng ngày. Không cần biết code, không cần nền tảng kỹ thuật.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">13</div><div class="lbl">Phần nội dung</div></div>
+    <div class="hero-stat"><div class="num">5</div><div class="lbl">Nền tảng giải thích</div></div>
+    <div class="hero-stat"><div class="num">20+</div><div class="lbl">Workflow & diagram</div></div>
+    <div class="hero-stat"><div class="num">30+</div><div class="lbl">Thuật ngữ định nghĩa</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 1: AI LÀ GÌ -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s1">
+  <div class="sec-label">Phần 1</div>
+  <div class="sec-title">AI Là Gì?</div>
+  <div class="sec-sub">Giải thích không cần kỹ thuật — ai cũng hiểu được</div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <div>
+      <p style="font-size:13px;margin-bottom:14px">Hãy nghĩ AI (Trí tuệ nhân tạo) như một <strong>nhân viên đã đọc gần như toàn bộ internet</strong> — sách, bài báo, Wikipedia, diễn đàn, tài liệu kỹ thuật… — rồi học cách <strong>trả lời câu hỏi, viết văn bản, phân tích và lý luận</strong> dựa trên tất cả kiến thức đó.</p>
+      <p style="font-size:13px;color:var(--mid)">Khác với phần mềm thông thường (bấm nút → làm đúng 1 việc cố định), AI <strong>hiểu ngôn ngữ tự nhiên</strong> — bạn nói chuyện bình thường với nó như nói chuyện với người.</p>
+    </div>
+    <div>
+      <table class="tbl">
+        <tr><th>Điều nhiều người nghĩ</th><th>Thực tế</th></tr>
+        <tr><td>AI có ý thức, cảm xúc như người</td><td style="color:var(--mid);font-size:11.5px">AI không có ý thức — xử lý văn bản theo xác suất thống kê</td></tr>
+        <tr><td>AI biết hết mọi thứ</td><td style="color:var(--mid);font-size:11.5px">Chỉ biết những gì đã được học. Có thể sai, có thể bịa</td></tr>
+        <tr><td>AI thay thế toàn bộ con người</td><td style="color:var(--mid);font-size:11.5px">Thay thế <strong>tác vụ</strong>, không thay thế <strong>tư duy & judgement</strong></td></tr>
+        <tr><td>Phải biết code mới dùng được</td><td style="color:var(--mid);font-size:11.5px">Ai cũng dùng được — chỉ cần biết gõ chữ</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 2: CLAUDE LÀ AI -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s2">
+  <div class="sec-label">Phần 2</div>
+  <div class="sec-title">Claude Là Ai? Anthropic Là Ai?</div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card card-t">
+      <div class="icon">🏢</div>
+      <h3>Anthropic — Công ty tạo ra Claude</h3>
+      <p><strong>Anthropic</strong> là công ty AI thành lập năm 2021 tại Mỹ, tách ra từ OpenAI (công ty tạo ChatGPT). Tập trung vào <strong>AI an toàn và đáng tin cậy</strong>. Claude là sản phẩm chính, ra mắt 2023. Hiện tại (2026) đang ở thế hệ <strong>Claude 4</strong> với các model: Haiku (nhanh/nhẹ), Sonnet (cân bằng), Opus (mạnh nhất).</p>
+    </div>
+    <div class="card card-to">
+      <div class="icon">⚖️</div>
+      <h3>Claude vs ChatGPT</h3>
+      <table class="tbl" style="margin-top:6px">
+        <tr><th>Tiêu chí</th><th>Claude</th><th>ChatGPT</th></tr>
+        <tr><td>Độ an toàn</td><td class="yes">Thiết kế từ đầu</td><td style="color:var(--mid)">Thêm vào sau</td></tr>
+        <tr><td>Văn phong</td><td class="yes">Tự nhiên, sâu</td><td style="color:var(--mid)">Đôi khi cứng</td></tr>
+        <tr><td>Lý luận dài</td><td class="yes">Rất mạnh</td><td style="color:var(--mid)">Tốt</td></tr>
+        <tr><td>Trung thực</td><td class="yes">Nói thẳng khi không chắc</td><td style="color:var(--mid)">Đôi khi bịa</td></tr>
+        <tr><td>Giá</td><td style="color:var(--mid)">Free / Pro $20/tháng</td><td style="color:var(--mid)">Free / Plus $20/tháng</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 3: NGUYÊN LÝ -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s3">
+  <div class="sec-label">Phần 3</div>
+  <div class="sec-title">Nguyên Lý Hoạt Động</div>
+  <div class="sec-sub">Claude "nghĩ" như thế nào? — Không cần biết kỹ thuật</div>
+
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card card-t">
+      <div class="icon">📚</div>
+      <h3>Học từ hàng tỷ văn bản</h3>
+      <p>Trong quá trình training, Claude đọc hàng tỷ câu văn và học cách dự đoán "từ tiếp theo có thể là gì". Không có não bộ thật sự — nhưng kết quả giống suy nghĩ con người đến ngạc nhiên.</p>
+    </div>
+    <div class="card card-to">
+      <div class="icon">🧠</div>
+      <h3>Context Window</h3>
+      <p><strong>Context window</strong> = "bộ nhớ làm việc" trong 1 cuộc trò chuyện. Claude thấy toàn bộ lịch sử hội thoại từ đầu → trả lời dựa trên TẤT CẢ context đó.</p>
+      <div class="callout ca-orange" style="margin-top:10px;font-size:11px"><div class="ci">⚠</div><div>Tắt tab → Claude quên hết. Mỗi conversation mới = trang giấy trắng.</div></div>
+    </div>
+    <div class="card card-tg">
+      <div class="icon">🚫</div>
+      <h3>Claude KHÔNG thể:</h3>
+      <p style="margin-bottom:8px">• Nhớ bạn sau khi đóng hội thoại (trừ khi có Memory)<br>• Truy cập internet real-time (trừ khi được cài tool)<br>• Tự lưu file vào máy bạn<br>• Tự hành động khi không có lệnh</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 4: CÁC NỀN TẢNG -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s4">
+  <div class="sec-label">Phần 4</div>
+  <div class="sec-title">Các Nền Tảng Claude</div>
+  <div class="sec-sub">5 cách dùng Claude — khác nhau cơ bản về khả năng và mức độ phức tạp</div>
+
+  <div class="cmp-row" style="margin-bottom:28px">
+    <div class="cmp-box cmp-web">
+      <div class="cmp-icon">🌐</div>
+      <div class="cmp-name">Claude.ai Web</div>
+      <div class="cmp-sub">Trình duyệt<br>Không cài gì</div>
+    </div>
+    <div class="cmp-box cmp-desk">
+      <div class="cmp-icon">🖥️</div>
+      <div class="cmp-name">Claude Desktop</div>
+      <div class="cmp-sub">App Mac/Windows<br>Hỗ trợ MCP</div>
+    </div>
+    <div class="cmp-box cmp-code">
+      <div class="cmp-icon">💻</div>
+      <div class="cmp-name">Claude Code</div>
+      <div class="cmp-sub">Terminal / CLI<br>Thao tác file thật</div>
+    </div>
+    <div class="cmp-box cmp-cowork cmp-best">
+      <div class="cmp-icon">🏢</div>
+      <div class="cmp-name">Cowork</div>
+      <div class="cmp-sub">Môi trường đầy đủ<br>Memory + Skills + Tools</div>
+    </div>
+    <div class="cmp-box cmp-ide">
+      <div class="cmp-icon">⌨️</div>
+      <div class="cmp-name">IDE Extension</div>
+      <div class="cmp-sub">VSCode / Cursor<br>Tích hợp code editor</div>
+    </div>
+  </div>
+
+  <!-- PLATFORM DETAIL CARDS -->
+  <div style="display:flex;flex-direction:column;gap:16px">
+
+    <!-- claude.ai web -->
+    <div class="card" style="border-left:4px solid #1D4ED8">
+      <div style="display:flex;align-items:flex-start;gap:16px">
+        <div style="font-size:28px">🌐</div>
+        <div style="flex:1">
+          <h3 style="font-size:14px;margin-bottom:4px">claude.ai (Web) — Dành cho mọi người</h3>
+          <p style="margin-bottom:10px"><strong>Truy cập:</strong> Mở trình duyệt → claude.ai → đăng nhập. Không cần cài gì.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+            <span class="badge bd-green">✓ Chat hỏi đáp</span>
+            <span class="badge bd-green">✓ Upload file PDF/Excel/Word</span>
+            <span class="badge bd-green">✓ Projects (workspace)</span>
+            <span class="badge bd-green">✓ Mọi thiết bị</span>
+            <span class="badge bd-red">✗ Không thao tác file trên máy</span>
+            <span class="badge bd-red">✗ Không tự động hóa</span>
+          </div>
+          <div class="callout ca-blue" style="font-size:11.5px"><div class="ci">💡</div><div><strong>Projects trong claude.ai:</strong> Tạo "không gian làm việc" riêng cho từng chủ đề — lưu System Prompt cố định + tài liệu nền (SOP, brand guide). Mọi hội thoại trong Project đều kế thừa context đó, không cần paste lại mỗi lần.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Claude Desktop -->
+    <div class="card" style="border-left:4px solid #166534">
+      <div style="display:flex;align-items:flex-start;gap:16px">
+        <div style="font-size:28px">🖥️</div>
+        <div style="flex:1">
+          <h3 style="font-size:14px;margin-bottom:4px">Claude Desktop — App cài trên máy</h3>
+          <p style="margin-bottom:10px"><strong>Truy cập:</strong> Tải tại claude.ai/download → cài đặt → đăng nhập. Giao diện giống claude.ai nhưng là app riêng.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+            <span class="badge bd-green">✓ Tất cả tính năng của Web</span>
+            <span class="badge bd-green">✓ Không bị lẫn với tab trình duyệt</span>
+            <span class="badge bd-green">✓ Hỗ trợ MCP — kết nối Gmail/Calendar/Drive</span>
+            <span class="badge bd-red">✗ Vẫn cần internet</span>
+            <span class="badge bd-red">✗ MCP phải tự cấu hình (phức tạp)</span>
+          </div>
+          <div class="callout ca-green" style="font-size:11.5px"><div class="ci">💡</div><div><strong>MCP (Model Context Protocol):</strong> Chuẩn kết nối cho phép Claude "với tay" sang Gmail, Google Calendar, Notion, Slack... Desktop hỗ trợ cài MCP thủ công — nhưng cần kỹ thuật. Cowork đã cài sẵn và cấu hình tự động.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Claude Code -->
+    <div class="card" style="border-left:4px solid #C2410C">
+      <div style="display:flex;align-items:flex-start;gap:16px">
+        <div style="font-size:28px">💻</div>
+        <div style="flex:1">
+          <h3 style="font-size:14px;margin-bottom:4px">Claude Code — Thao tác file thật trên máy</h3>
+          <p style="margin-bottom:10px">Phiên bản Claude chạy <strong>trong terminal (cửa sổ dòng lệnh)</strong>. Không phải chat — Claude thực sự đọc, ghi, sửa file trên máy tính của bạn.</p>
+          <table class="tbl" style="margin-bottom:10px">
+            <tr><th>claude.ai / Desktop</th><th>Claude Code</th></tr>
+            <tr><td>Claude trả lời text trong ô chat</td><td>Claude thao tác file thật trên máy bạn</td></tr>
+            <tr><td>Không tự chạy lệnh</td><td>Tự chạy lệnh, đọc/sửa file, chạy script</td></tr>
+            <tr><td>Không nhớ project qua session</td><td>Đọc toàn bộ codebase/project</td></tr>
+            <tr><td>Dùng tay từng câu</td><td>Có thể chạy task dài tự động</td></tr>
+          </table>
+          <p style="font-size:12px;color:var(--mid)"><strong>Dùng qua 3 cách:</strong> (1) CLI — gõ <code>claude</code> trong terminal  (2) claude.ai/code — giao diện web  (3) IDE Extension — tích hợp VSCode/JetBrains</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 5: BẢNG SO SÁNH ĐẦY ĐỦ -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s5">
+  <div class="sec-label">Phần 5</div>
+  <div class="sec-title">Bảng So Sánh Đầy Đủ</div>
+  <div class="sec-sub">Nền tảng nào làm được gì — một cái nhìn tổng quan</div>
+
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th style="width:28%">Tính năng</th>
+          <th class="col-web">🌐 claude.ai Web</th>
+          <th class="col-desk">🖥️ Desktop</th>
+          <th class="col-code">💻 Claude Code</th>
+          <th class="col-cowork">🏢 Cowork</th>
+          <th class="col-ide">⌨️ IDE Extension</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="cat-row"><td colspan="6">Tính năng cơ bản</td></tr>
+        <tr><td>Chat hỏi đáp</td><td class="yes cell-b">✓</td><td class="yes cell-g">✓</td><td class="yes cell-o">✓</td><td class="yes">✓</td><td class="yes cell-b">✓</td></tr>
+        <tr><td>Upload file (PDF/Excel/Word)</td><td class="yes cell-b">✓</td><td class="yes cell-g">✓</td><td class="yes cell-o">✓</td><td class="yes">✓</td><td class="yes cell-b">✓</td></tr>
+        <tr><td>Tạo Projects / Workspace</td><td class="yes cell-b">✓</td><td class="yes cell-g">✓</td><td class="no">—</td><td class="yes">✓</td><td class="no">—</td></tr>
+        <tr><td>Dùng trên điện thoại</td><td class="yes cell-b">✓</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+
+        <tr class="cat-row"><td colspan="6">Kết nối & Tích hợp</td></tr>
+        <tr><td>Kết nối Gmail</td><td class="no">—</td><td class="partial">Cần setup MCP</td><td class="no">—</td><td class="yes">✓ Sẵn có</td><td class="no">—</td></tr>
+        <tr><td>Kết nối Google Calendar</td><td class="no">—</td><td class="partial">Cần setup MCP</td><td class="no">—</td><td class="yes">✓ Sẵn có</td><td class="no">—</td></tr>
+        <tr><td>Kết nối Google Drive</td><td class="no">—</td><td class="partial">Cần setup MCP</td><td class="no">—</td><td class="yes">✓ Sẵn có</td><td class="no">—</td></tr>
+        <tr><td>Kết nối NotebookLM</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓ Sẵn có</td><td class="no">—</td></tr>
+
+        <tr class="cat-row"><td colspan="6">Thao tác File & Máy tính</td></tr>
+        <tr><td>Đọc/ghi file thật trên máy</td><td class="no">—</td><td class="no">—</td><td class="yes cell-o">✓</td><td class="yes">✓</td><td class="yes cell-b">✓</td></tr>
+        <tr><td>Chạy lệnh terminal</td><td class="no">—</td><td class="no">—</td><td class="yes cell-o">✓</td><td class="yes">✓</td><td class="yes cell-b">✓</td></tr>
+        <tr><td>Hiểu toàn bộ cấu trúc project</td><td class="no">—</td><td class="no">—</td><td class="yes cell-o">✓</td><td class="yes">✓</td><td class="yes cell-b">✓</td></tr>
+        <tr><td>Sửa code trực tiếp trong editor</td><td class="no">—</td><td class="no">—</td><td class="partial">Qua terminal</td><td class="partial">Qua terminal</td><td class="yes cell-b">✓ Trực tiếp</td></tr>
+
+        <tr class="cat-row"><td colspan="6">Memory & Tự động hóa</td></tr>
+        <tr><td>Nhớ bạn qua nhiều session</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓ Memory files</td><td class="no">—</td></tr>
+        <tr><td>Skills / lệnh tắt</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓ /xlsx /pptx...</td><td class="no">—</td></tr>
+        <tr><td>Sub-agents chuyên biệt</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓ 9 agents</td><td class="no">—</td></tr>
+        <tr><td>Auto-sync Git + Drive sau session</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓ Hook tự động</td><td class="no">—</td></tr>
+        <tr><td>Cấu hình theo team/công ty</td><td class="partial">Giới hạn</td><td class="partial">Giới hạn</td><td class="partial">CLAUDE.md</td><td class="yes">✓ Đầy đủ</td><td class="partial">Giới hạn</td></tr>
+
+        <tr class="cat-row"><td colspan="6">Yêu cầu kỹ thuật</td></tr>
+        <tr><td>Không cần cài đặt gì</td><td class="yes cell-b">✓</td><td class="no">Cài app</td><td class="no">Cài CLI</td><td class="no">Setup cần thời gian</td><td class="no">Cài extension</td></tr>
+        <tr><td>Phù hợp người mới 100%</td><td class="yes cell-b">✓</td><td class="yes cell-g">✓</td><td class="no">Cần terminal</td><td class="partial">Cần hướng dẫn</td><td class="partial">Cần VSCode</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 6: GÓI FREE VS PRO VS COWORK -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s6">
+  <div class="sec-label">Phần 6</div>
+  <div class="sec-title">Gói Free, Pro & Cowork</div>
+  <div class="sec-sub">Không có Cowork thì làm gì? Gói Free đủ dùng không?</div>
+
+  <div class="grid-3" style="margin-bottom:24px">
+    <!-- Free -->
+    <div class="free-box">
+      <div class="tier-header">
+        <span class="tier-badge tb-free">FREE</span>
+        <span class="tier-price">$0/tháng</span>
+      </div>
+      <p style="font-size:12.5px;color:var(--mid);margin-bottom:12px">Đủ dùng cho người mới bắt đầu và dùng không thường xuyên.</p>
+      <div style="font-size:12px">
+        <div style="font-weight:700;color:var(--green);margin-bottom:6px">Làm được:</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ Chat không giới hạn (có rate limit)</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ Upload file (dung lượng giới hạn)</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ Tạo Projects</div>
+        <div style="color:var(--mid);margin-bottom:12px">✓ Model Sonnet (mạnh nhưng không phải Opus)</div>
+        <div style="font-weight:700;color:var(--red);margin-bottom:6px">Giới hạn:</div>
+        <div style="color:var(--mid);margin-bottom:2px">✗ Số tin nhắn/ngày bị giới hạn</div>
+        <div style="color:var(--mid);margin-bottom:2px">✗ Không dùng Opus (model mạnh nhất)</div>
+        <div style="color:var(--mid)">✗ File upload nhỏ hơn</div>
+      </div>
+    </div>
+    <!-- Pro -->
+    <div class="pro-box">
+      <div class="tier-header">
+        <span class="tier-badge tb-pro">PRO</span>
+        <span class="tier-price">$20/tháng</span>
+      </div>
+      <p style="font-size:12.5px;color:var(--mid);margin-bottom:12px">Dùng hàng ngày cho công việc. Mở khóa toàn bộ tính năng claude.ai.</p>
+      <div style="font-size:12px">
+        <div style="font-weight:700;color:var(--green);margin-bottom:6px">Thêm so với Free:</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ Dùng Opus 4 (model mạnh nhất)</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ Tin nhắn nhiều hơn ~5x</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ File upload lớn hơn</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ Ưu tiên xử lý</div>
+        <div style="color:var(--mid);margin-bottom:12px">✓ Early access tính năng mới</div>
+        <div style="font-weight:700;color:var(--red);margin-bottom:6px">Vẫn không có:</div>
+        <div style="color:var(--mid);margin-bottom:2px">✗ Không có Memory qua session</div>
+        <div style="color:var(--mid);margin-bottom:2px">✗ Không auto-sync Git/Drive</div>
+        <div style="color:var(--mid)">✗ Không có Skills/Sub-agents</div>
+      </div>
+    </div>
+    <!-- Cowork -->
+    <div class="card" style="background:linear-gradient(135deg,#EFF6FF,#F5F3FF);border:2px solid var(--blue)">
+      <div class="tier-header">
+        <span class="tier-badge tb-cowork">COWORK</span>
+        <span class="tier-price">Pro + setup</span>
+      </div>
+      <p style="font-size:12.5px;color:var(--mid);margin-bottom:12px">Môi trường đầy đủ. Cần Pro account + thời gian setup ban đầu.</p>
+      <div style="font-size:12px">
+        <div style="font-weight:700;color:var(--blue);margin-bottom:6px">Thêm so với Pro:</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ Memory — nhớ bạn vĩnh viễn</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ 9 Sub-agents chuyên biệt</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ /Skills lệnh tắt thông minh</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ Đọc/ghi file thật trên máy</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ Kết nối Gmail/Calendar/Drive</div>
+        <div style="color:var(--mid);margin-bottom:2px">✓ Auto-sync Git + Google Drive</div>
+        <div style="color:var(--mid)">✓ Cấu hình CLAUDE.md theo team</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hướng dẫn cho người dùng Free -->
+  <div style="background:#fffbeb;border:1.5px solid #FCD34D;border-radius:14px;padding:20px">
+    <h3 style="font-size:13px;font-weight:700;color:#92400E;margin-bottom:14px">📌 Bạn đang dùng gói Free — Làm thế nào tận dụng tối đa?</h3>
+    <div class="grid-2">
+      <div>
+        <div class="tl">
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-t">Tạo Projects cho từng mảng công việc</div><div class="tl-d">Ví dụ: "Driver Ops", "Competitive Intel", "Reporting" — upload SOP/template vào đó. Không cần paste lại mỗi lần hỏi.</div></div>
+          <div class="tl-item"><div class="tl-dot o"></div><div class="tl-t">Viết System Prompt rõ ràng trong Project</div><div class="tl-d">Ví dụ: "Tôi là ops manager tại công ty logistics. Luôn trả lời tiếng Việt. Dùng bảng biểu thay văn xuôi."</div></div>
+          <div class="tl-item"><div class="tl-dot g"></div><div class="tl-t">Lưu template prompt vào Notion/Lark</div><div class="tl-d">Vì Claude không nhớ qua session với Free, hãy lưu các prompt mạnh nhất của bạn vào một nơi và copy-paste khi cần.</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-t">Không cần Claude Code</div><div class="tl-d">80% công việc văn phòng hoàn toàn làm được với claude.ai Free — viết, phân tích, tóm tắt, brainstorm.</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="callout ca-blue" style="margin-bottom:10px"><div class="ci">💡</div><div><strong>Mẹo Free:</strong> Mỗi Project trong claude.ai Free cho phép upload tối đa ~5 file tài liệu nền. Dùng để upload: SOP vận hành, template report, bảng KPI. Claude sẽ tự dùng khi bạn hỏi trong Project đó.</div></div>
+        <div class="callout ca-orange"><div class="ci">⚠</div><div><strong>Rate limit Free:</strong> Khi hết lượt trong ngày, claude.ai sẽ thông báo. Giải pháp: chia task lớn thành nhiều phần nhỏ hơn, hoặc dùng lại vào hôm sau.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 7: COWORK — TẠI SAO TIỆN HƠN -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s7">
+  <div class="sec-label">Phần 7</div>
+  <div class="sec-title">Cowork — Tại Sao Tiện Hơn Cho Daily Work?</div>
+  <div class="sec-sub">So sánh cụ thể từng tình huống thực tế</div>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px">
+    <div class="why-item">
+      <div class="why-num">1</div>
+      <div>
+        <div class="why-title">Claude không bao giờ hỏi "bạn làm gì?" lần thứ hai</div>
+        <div class="why-before">Không có Cowork: "Xin chào, tôi là Khanh, Driver Management Leader tại Ahamove. Tôi phụ trách xe máy Instant, không phụ trách xe tải…" (lặp lại mỗi session)</div>
+        <div class="why-after">Có Cowork: Memory files → Claude biết bạn là ai, scope là gì, metrics cần theo dõi là gì → làm việc ngay từ câu đầu tiên</div>
+      </div>
+    </div>
+    <div class="why-item">
+      <div class="why-num">2</div>
+      <div>
+        <div class="why-title">Không mất dữ liệu dù quên commit</div>
+        <div class="why-before">Không có Cowork: Làm xong quên push → sáng hôm sau ở văn phòng không có file mới, phải làm lại</div>
+        <div class="why-after">Có Cowork: settings.json hook → mỗi khi Claude dừng, tự động git push + sync Google Drive → máy nào cũng có bản mới nhất</div>
+      </div>
+    </div>
+    <div class="why-item">
+      <div class="why-num">3</div>
+      <div>
+        <div class="why-title">Đúng chuyên gia đúng việc — không cần hướng dẫn</div>
+        <div class="why-before">Không có Cowork: "Tôi muốn bạn đóng vai SQL analyst và viết query theo chuẩn BigQuery với data validation..." (paste mỗi lần)</div>
+        <div class="why-after">Có Cowork: Claude tự nhận ra "cần query data" → kích hoạt sql-analyst agent → viết đúng format BigQuery ngay</div>
+      </div>
+    </div>
+    <div class="why-item">
+      <div class="why-num">4</div>
+      <div>
+        <div class="why-title">Lệnh tắt /skill thay vì giải thích dài</div>
+        <div class="why-before">Không có Cowork: "Tạo cho tôi 1 file Excel chuyên nghiệp với các sheet sau, format bảng đẹp, dùng màu brand của Ahamove là #0E4174…" (20 dòng instruction)</div>
+        <div class="why-after">Có Cowork: <code>/xlsx</code> → Claude biết chính xác cần làm gì, output chuẩn ngay lần đầu</div>
+      </div>
+    </div>
+    <div class="why-item">
+      <div class="why-num">5</div>
+      <div>
+        <div class="why-title">Claude học từ feedback của bạn vĩnh viễn</div>
+        <div class="why-before">Không có Cowork: "Lần sau đừng dùng thư viện chart ngoài nhé" → Claude quên sau session đó → lần sau phải nhắc lại</div>
+        <div class="why-after">Có Cowork: feedback được lưu vào <code>memory/feedback_visualization.md</code> → không bao giờ quên, không cần nhắc lại</div>
+      </div>
+    </div>
+    <div class="why-item" style="border-bottom:none">
+      <div class="why-num">6</div>
+      <div>
+        <div class="why-title">Thao tác file thật — không copy-paste thủ công</div>
+        <div class="why-before">Không có Cowork: Copy data từ Excel → paste vào chat → Claude phân tích → copy kết quả → paste vào file</div>
+        <div class="why-after">Có Cowork: Claude đọc thẳng file Excel trên máy → xử lý → ghi kết quả ra file mới → mở file lên là xong</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kiến trúc Cowork -->
+  <div style="background:linear-gradient(135deg,#F8FAFC,var(--blue3));border:1px solid var(--border);border-radius:16px;padding:24px">
+    <h3 style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:16px">🏗️ Kiến trúc 4 tầng của Cowork</h3>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:10px;padding:12px 16px">
+        <div style="font-size:10.5px;font-weight:700;color:#1D4ED8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Tầng 1 — Danh tính & Bối cảnh</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge bd-blue">CLAUDE.md</span><span class="badge bd-blue">AGENTS.md</span><span class="badge bd-blue">about-me.md</span><span class="badge bd-blue">my-rules.md</span><span class="badge bd-blue">my-voice.md</span></div>
+      </div>
+      <div style="text-align:center;font-size:18px;color:var(--light)">↓</div>
+      <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;padding:12px 16px">
+        <div style="font-size:10.5px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Tầng 2 — Bộ nhớ liên tục (Memory Layer)</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge bd-green">user_profile.md</span><span class="badge bd-green">user_rules.md</span><span class="badge bd-green">user_voice.md</span><span class="badge bd-green">agent_lark_persona.md</span><span class="badge bd-green">feedback_*.md</span></div>
+      </div>
+      <div style="text-align:center;font-size:18px;color:var(--light)">↓</div>
+      <div style="background:#FFF7ED;border:1.5px solid #FDB67A;border-radius:10px;padding:12px 16px">
+        <div style="font-size:10.5px;font-weight:700;color:#C2410C;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Tầng 3 — Sub-Agents Chuyên Biệt</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge bd-orange">sql-analyst</span><span class="badge bd-orange">report-writer</span><span class="badge bd-orange">competitive-intel</span><span class="badge bd-orange">driver-comms</span><span class="badge bd-orange">+5 agents khác</span></div>
+      </div>
+      <div style="text-align:center;font-size:18px;color:var(--light)">↓</div>
+      <div style="background:#F5F3FF;border:1.5px solid #C4B5FD;border-radius:10px;padding:12px 16px">
+        <div style="font-size:10.5px;font-weight:700;color:#6D28D9;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Tầng 4 — Tự động hóa & Đầu ra</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge bd-purple">settings.json hooks</span><span class="badge bd-purple">GitHub auto-sync</span><span class="badge bd-purple">Google Drive sync</span><span class="badge bd-purple">output/Ahamove/ (7 folders)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 8: IDE INTEGRATION -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s8">
+  <div class="sec-label">Phần 8</div>
+  <div class="sec-title">IDE Là Gì? Tại Sao Dùng IDE + Claude?</div>
+  <div class="sec-sub">Giải thích cho người chưa biết gì về lập trình — tại sao nhiều người dùng VSCode/Cursor để làm việc với Claude</div>
+
+  <!-- IDE là gì -->
+  <div class="grid-2" style="margin-bottom:20px">
+    <div>
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--blue)">IDE là gì?</h3>
+      <p style="font-size:13px;margin-bottom:12px"><strong>IDE (Integrated Development Environment)</strong> = Môi trường phát triển tích hợp — một phần mềm soạn thảo văn bản/code siêu mạnh, giống như Word nhưng dành cho viết code và quản lý file.</p>
+      <p style="font-size:13px;color:var(--mid);margin-bottom:14px">Hãy hình dung IDE như một "văn phòng kỹ thuật số" đầy đủ tiện nghi: bạn có thể xem cây thư mục file bên trái, soạn thảo bên phải, chạy terminal phía dưới, và Claude ngồi ngay bên cạnh — tất cả trong 1 cửa sổ.</p>
+      <div class="callout ca-blue"><div class="ci">💡</div><div><strong>IDE phổ biến nhất hiện nay:</strong><br>• <strong>VS Code</strong> (Microsoft) — miễn phí, phổ biến nhất<br>• <strong>Cursor</strong> — VS Code nhưng tích hợp AI sâu hơn<br>• <strong>Windsurf</strong> — IDE AI-first mới nổi<br>• <strong>JetBrains</strong> (IntelliJ, PyCharm) — cho developer chuyên nghiệp</div></div>
+    </div>
+    <div>
+      <div class="ide-diagram">
+        <div style="color:#94A3B8;font-size:11px;margin-bottom:8px"># Giao diện VS Code + Claude Code</div>
+        <div class="ide-layer">
+          <div class="lbl">Sidebar — Cây thư mục file</div>
+          <div style="color:#475569">📁 Cowork/<br>&nbsp;&nbsp;📁 output/Ahamove/<br>&nbsp;&nbsp;📄 CLAUDE.md<br>&nbsp;&nbsp;📄 AGENTS.md</div>
+        </div>
+        <div class="ide-layer">
+          <div class="lbl">Editor — Đang mở file</div>
+          <div style="color:#10B981">2026-05-guide.md &nbsp;|&nbsp; gen_pdf.py</div>
+        </div>
+        <div class="ide-layer">
+          <div class="lbl">Terminal — Claude Code chạy ở đây</div>
+          <div style="color:#FF7F32">$ claude<br><span style="color:#94A3B8">Claude Code v1.x — Working on Cowork/</span><br><span style="color:#fff">Khanh: "Sửa phần section 4..."</span><br><span style="color:#10B981">Claude: [đọc file, sửa trực tiếp] ✓</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tại sao dùng IDE + Claude -->
+  <div class="card" style="margin-bottom:16px">
+    <h3 style="font-size:14px;margin-bottom:14px;color:var(--blue)">Khi dùng VSCode + Claude Code Extension — Hoạt động thế nào?</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="sn">1</div>
+        <div class="st">Mở VSCode</div>
+        <div class="ss">Cài Claude Code extension từ marketplace</div>
+      </div>
+      <div class="flow-step">
+        <div class="sn">2</div>
+        <div class="st">Claude thấy toàn bộ project</div>
+        <div class="ss">Đọc tất cả file trong folder, hiểu cấu trúc</div>
+      </div>
+      <div class="flow-step orange">
+        <div class="sn">3</div>
+        <div class="st">Bạn highlight đoạn text/code</div>
+        <div class="ss">Chọn → hỏi Claude về đúng phần đó</div>
+      </div>
+      <div class="flow-step orange">
+        <div class="sn">4</div>
+        <div class="st">Claude sửa trực tiếp</div>
+        <div class="ss">Không copy-paste — sửa thẳng vào file</div>
+      </div>
+      <div class="flow-step green">
+        <div class="sn">5</div>
+        <div class="st">Diff review</div>
+        <div class="ss">Xem chính xác Claude đã thay đổi gì</div>
+      </div>
+    </div>
+    <div class="callout ca-blue" style="margin-top:12px"><div class="ci">🔑</div><div>Chế độ hoạt động: IDE Extension dùng <strong>Claude Code engine</strong> phía sau — nghĩa là có đủ khả năng đọc/ghi file thật, không chỉ là chat. Đây là lý do nó mạnh hơn claude.ai web cho công việc thực tế với file.</div></div>
+  </div>
+
+  <!-- Pros & Cons -->
+  <h3 style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--blue)">Điểm mạnh & Điểm yếu của IDE Integration</h3>
+  <div class="pros-cons">
+    <div class="pro-list">
+      <h4>✓ Điểm mạnh</h4>
+      <div class="pc-item">Claude thấy toàn bộ file trong project — không cần copy-paste từng đoạn vào chat</div>
+      <div class="pc-item">Sửa trực tiếp vào file — không cần download/upload lại</div>
+      <div class="pc-item">Diff view — thấy chính xác những gì thay đổi trước khi accept</div>
+      <div class="pc-item">Highlight đoạn code cụ thể → hỏi về đúng phần đó</div>
+      <div class="pc-item">Tích hợp Git — commit, push ngay trong IDE</div>
+      <div class="pc-item">Làm việc với nhiều file cùng lúc — Claude hiểu mối quan hệ giữa các file</div>
+      <div class="pc-item">Phù hợp với workflow của developer và power user</div>
+    </div>
+    <div class="con-list">
+      <h4>✗ Điểm yếu</h4>
+      <div class="pc-item">Cần cài đặt VSCode/Cursor và extension — mất thời gian setup lần đầu</div>
+      <div class="pc-item">Giao diện phức tạp hơn claude.ai web — không phù hợp người mới hoàn toàn</div>
+      <div class="pc-item">Tiêu tốn tài nguyên máy hơn (RAM/CPU)</div>
+      <div class="pc-item">Không dùng được trên điện thoại</div>
+      <div class="pc-item">Không có Memory tự động như Cowork (trừ khi cấu hình thêm)</div>
+      <div class="pc-item">Cần có tài khoản Claude Pro hoặc API key</div>
+    </div>
+  </div>
+
+  <!-- Ai nên dùng IDE -->
+  <div style="margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
+    <h3 style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--blue)">Ai nên dùng IDE + Claude?</h3>
+    <table class="tbl">
+      <tr><th>Bạn là ai?</th><th>Nên dùng gì?</th><th>Lý do</th></tr>
+      <tr><td>Người mới bắt đầu, dùng thỉnh thoảng</td><td><span class="badge bd-blue">claude.ai Web (Free)</span></td><td style="font-size:11.5px;color:var(--mid)">Đơn giản nhất, không cần setup, đủ dùng 80% nhu cầu</td></tr>
+      <tr><td>Dùng Claude hàng ngày cho công việc</td><td><span class="badge bd-blue">claude.ai Pro</span></td><td style="font-size:11.5px;color:var(--mid)">Nhiều lượt hơn, model mạnh hơn, Projects đầy đủ</td></tr>
+      <tr><td>Power user, muốn tự động hóa</td><td><span class="badge bd-blue">Cowork (recommended)</span></td><td style="font-size:11.5px;color:var(--mid)">Memory + Skills + auto-sync + sub-agents — làm việc nhanh gấp 3x</td></tr>
+      <tr><td>Developer, Data Analyst, làm với nhiều file</td><td><span class="badge bd-purple">VSCode + Claude Code</span></td><td style="font-size:11.5px;color:var(--mid)">Thao tác file trực tiếp, diff view, tích hợp Git</td></tr>
+      <tr><td>Developer muốn tối ưu nhất</td><td><span class="badge bd-purple">Cursor / Windsurf</span></td><td style="font-size:11.5px;color:var(--mid)">IDE AI-first, Claude tích hợp sâu hơn, ít friction hơn VSCode</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 9: CÁCH VIẾT PROMPT -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s9">
+  <div class="sec-label">Phần 9</div>
+  <div class="sec-title">Cách Viết Prompt Hiệu Quả</div>
+  <div class="sec-sub">Prompt = Lệnh/câu hỏi gửi cho Claude. Viết tốt hơn → kết quả tốt hơn ngay lần đầu</div>
+
+  <!-- COAT Formula -->
+  <div style="background:linear-gradient(135deg,var(--blue3),#FFF7ED);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px">
+    <h3 style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:14px">Công thức COAT — Dễ nhớ, dễ áp dụng</h3>
+    <div class="grid-4">
+      <div style="background:#fff;border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)">
+        <div style="font-size:28px;font-weight:800;color:var(--blue);margin-bottom:4px">C</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">Context</div>
+        <div style="font-size:11px;color:var(--mid)">Bối cảnh là gì? Bạn đang ở tình huống nào?</div>
+      </div>
+      <div style="background:#fff;border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)">
+        <div style="font-size:28px;font-weight:800;color:var(--orange);margin-bottom:4px">O</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">Objective</div>
+        <div style="font-size:11px;color:var(--mid)">Mục tiêu muốn đạt được là gì?</div>
+      </div>
+      <div style="background:#fff;border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)">
+        <div style="font-size:28px;font-weight:800;color:var(--green);margin-bottom:4px">A</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">Audience</div>
+        <div style="font-size:11px;color:var(--mid)">Đối tượng nhận là ai? Nền tảng kiến thức của họ?</div>
+      </div>
+      <div style="background:#fff;border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)">
+        <div style="font-size:28px;font-weight:800;color:var(--purple);margin-bottom:4px">T</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">Tone/Format</div>
+        <div style="font-size:11px;color:var(--mid)">Giọng văn? Định dạng? Độ dài?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bad vs Good -->
+  <div class="grid-2" style="margin-bottom:20px">
+    <div>
+      <div class="prompt-box pb-bad">
+        <div class="prompt-label">✗ Prompt kém — Claude không biết làm gì</div>
+        <div class="prompt-content">viết email</div>
+      </div>
+      <div class="prompt-box pb-good">
+        <div class="prompt-label">✓ Prompt tốt — Đầy đủ COAT</div>
+        <div class="prompt-content">Tôi đang làm HR tại công ty logistics. [C]
+Viết email từ chối lịch sự cho ứng viên
+vị trí Operations Executive sau vòng PV. [O]
+Gửi cho ứng viên đã phỏng vấn. [A]
+Giọng chuyên nghiệp, ấm áp, ≤120 từ,
+tiếng Việt. [T]</div>
+      </div>
+    </div>
+    <div>
+      <h4 style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--blue)">5 kỹ thuật prompt nâng cao</h4>
+      <table class="tbl">
+        <tr><th>Kỹ thuật</th><th>Khi nào dùng</th></tr>
+        <tr><td><strong>Giao vai</strong><br><code style="font-size:10px">Bạn là expert X...</code></td><td style="font-size:11px;color:var(--mid)">Cần góc nhìn chuyên gia cụ thể</td></tr>
+        <tr><td><strong>Cho ví dụ mẫu</strong><br><code style="font-size:10px">Output theo format: ...</code></td><td style="font-size:11px;color:var(--mid)">Cần output đúng cấu trúc</td></tr>
+        <tr><td><strong>Step-by-step</strong><br><code style="font-size:10px">Giải thích từng bước...</code></td><td style="font-size:11px;color:var(--mid)">Cần giải thích rõ ràng</td></tr>
+        <tr><td><strong>Phê bình</strong><br><code style="font-size:10px">Chỉ ra 3 điểm yếu...</code></td><td style="font-size:11px;color:var(--mid)">Review và cải thiện output</td></tr>
+        <tr><td><strong>Rút gọn</strong><br><code style="font-size:10px">Còn 5 bullets, mỗi dòng ≤1 dòng</code></td><td style="font-size:11px;color:var(--mid)">Output quá dài cần tóm gọn</td></tr>
+      </table>
+      <div class="callout ca-green" style="margin-top:10px;font-size:11.5px"><div class="ci">💡</div><div>Claude nhớ toàn bộ hội thoại trong cùng 1 tab. Nói "sửa lại đoạn 2", "thêm ví dụ", "dịch sang tiếng Anh" — không cần giải thích lại từ đầu.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 10: ỨNG DỤNG -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s10">
+  <div class="sec-label">Phần 10</div>
+  <div class="sec-title">Áp Dụng Vào Công Việc</div>
+
+  <div class="grid-2" style="margin-bottom:16px">
+    <!-- Viết lách -->
+    <div>
+      <h3 style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px">📝 Viết lách & Soạn thảo</h3>
+      <table class="tbl">
+        <tr><th>Tác vụ</th><th>Prompt mẫu</th></tr>
+        <tr><td style="font-size:11px">Viết email</td><td style="font-size:11px;color:var(--mid)">Viết email [mục đích] gửi [ai], giọng [chuyên nghiệp/thân thiện], dưới [X] từ</td></tr>
+        <tr><td style="font-size:11px">Thông báo nội bộ</td><td style="font-size:11px;color:var(--mid)">Soạn thông báo về [nội dung], dưới 200 từ, dễ hiểu</td></tr>
+        <tr><td style="font-size:11px">Viết JD</td><td style="font-size:11px;color:var(--mid)">Viết JD vị trí [tên], yêu cầu [kỹ năng], tại [công ty/ngành]</td></tr>
+        <tr><td style="font-size:11px">Tóm tắt tài liệu</td><td style="font-size:11px;color:var(--mid)">Upload file + "Tóm tắt thành 5 điểm chính"</td></tr>
+      </table>
+    </div>
+    <!-- Phân tích -->
+    <div>
+      <h3 style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px">📊 Phân tích & Báo cáo</h3>
+      <table class="tbl">
+        <tr><th>Tác vụ</th><th>Prompt mẫu</th></tr>
+        <tr><td style="font-size:11px">Phân tích số liệu</td><td style="font-size:11px;color:var(--mid)">Upload Excel + "Phân tích xu hướng, top 3 insight"</td></tr>
+        <tr><td style="font-size:11px">Root cause analysis</td><td style="font-size:11px;color:var(--mid)">[Chỉ số] giảm [X%] trong [thời gian]. 5 nguyên nhân tiềm ẩn?</td></tr>
+        <tr><td style="font-size:11px">Tóm tắt họp</td><td style="font-size:11px;color:var(--mid)">Paste nội dung + "Tóm tắt: Quyết định / Action item / Vấn đề còn mở"</td></tr>
+        <tr><td style="font-size:11px">Outline slide</td><td style="font-size:11px;color:var(--mid)">Tạo outline [chủ đề], 10 slides, đối tượng là [ai]</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Driver Management use cases -->
+  <div style="background:linear-gradient(135deg,var(--blue3),#fff);border:1.5px solid #93C5FD;border-radius:14px;padding:20px">
+    <h3 style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px">🚴 Use Cases Thực Tế — Driver Management Team</h3>
+    <table class="tbl">
+      <tr><th style="width:38%">Tình huống</th><th>Cách dùng Claude</th></tr>
+      <tr><td style="font-size:11.5px">Soạn thông báo chính sách mới cho tài xế</td><td style="font-size:11.5px;color:var(--mid)">Viết thông báo chính sách [X] bằng ngôn ngữ đơn giản, tài xế dễ hiểu, dưới 150 chữ</td></tr>
+      <tr><td style="font-size:11.5px">Phân tích báo cáo AR/FR tuần</td><td style="font-size:11.5px;color:var(--mid)">Upload báo cáo + "Tóm tắt và chỉ ra khu vực nào cần ưu tiên can thiệp"</td></tr>
+      <tr><td style="font-size:11.5px">Chuẩn bị nội dung họp team weekly</td><td style="font-size:11.5px;color:var(--mid)">Tạo agenda họp team ops tuần, dựa trên các vấn đề: [list]</td></tr>
+      <tr><td style="font-size:11.5px">Viết script training tài xế mới</td><td style="font-size:11.5px;color:var(--mid)">Viết script quy trình [X] cho tài xế mới, đơn giản, có ví dụ cụ thể</td></tr>
+      <tr><td style="font-size:11.5px">Phân tích feedback tài xế</td><td style="font-size:11.5px;color:var(--mid)">Paste feedback + "Phân loại theo chủ đề, top 3 vấn đề nhiều nhất"</td></tr>
+      <tr><td style="font-size:11.5px">Nghiên cứu động thái đối thủ</td><td style="font-size:11.5px;color:var(--mid)">Phân tích chiến lược incentive của Grab/Be/XanhSM gần đây và tác động lên supply tài xế</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 11: GIỚI HẠN -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s11">
+  <div class="sec-label">Phần 11</div>
+  <div class="sec-title">Những Điều Claude KHÔNG Làm Được</div>
+
+  <div class="callout ca-red" style="margin-bottom:16px"><div class="ci">⚠</div><div><strong>Hallucination:</strong> Claude đôi khi bịa ra thông tin nghe có vẻ đúng nhưng sai hoàn toàn. Đặc biệt với số liệu thống kê, tên người, ngày tháng, thông tin pháp lý/y tế. <strong>Nguyên tắc vàng: Claude là assistant thông minh, không phải nguồn sự thật.</strong></div></div>
+
+  <div class="grid-2">
+    <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:12px;padding:16px">
+      <h4 style="color:#065F46;font-size:12px;font-weight:700;margin-bottom:10px">✓ NÊN dùng Claude</h4>
+      <div style="font-size:12px;color:#065F46;line-height:2">
+        ✓ Draft văn bản, email, báo cáo<br>
+        ✓ Brainstorm ý tưởng<br>
+        ✓ Tóm tắt tài liệu dài<br>
+        ✓ Giải thích khái niệm<br>
+        ✓ Viết code, công thức<br>
+        ✓ Phân tích cấu trúc vấn đề
+      </div>
+    </div>
+    <div style="background:#FFF5F5;border:1px solid #FCA5A5;border-radius:12px;padding:16px">
+      <h4 style="color:#991B1B;font-size:12px;font-weight:700;margin-bottom:10px">✗ KHÔNG dùng Claude thay thế</h4>
+      <div style="font-size:12px;color:#991B1B;line-height:2">
+        ✗ Quyết định chiến lược quan trọng (chưa verify)<br>
+        ✗ Số liệu tài chính chính xác (phải kiểm tra)<br>
+        ✗ Tư vấn pháp lý, y tế<br>
+        ✗ Thay thế judgement của con người<br>
+        ✗ Thông tin real-time (giá, tin tức hôm nay)<br>
+        ✗ Đầu ra cuối cùng khi chưa review
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 12: BẢO MẬT -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s12">
+  <div class="sec-label">Phần 12</div>
+  <div class="sec-title">Bảo Mật & Lưu Ý Quan Trọng</div>
+
+  <div class="callout ca-orange" style="margin-bottom:16px"><div class="ci">⚠</div><div><strong>TUYỆT ĐỐI KHÔNG chia sẻ với Claude:</strong> Mật khẩu / Tài khoản ngân hàng / Thông tin cá nhân nhạy cảm của tài xế (CMND, SĐT, địa chỉ) / Dữ liệu kinh doanh mật / Hợp đồng bảo mật.<br><br>Khi bạn gõ vào claude.ai, dữ liệu được gửi lên server của Anthropic. Hãy anonymize trước khi hỏi.</div></div>
+
+  <div class="grid-2">
+    <div class="prompt-box pb-bad">
+      <div class="prompt-label">✗ SAI — Đưa thông tin thật</div>
+      <div class="prompt-content">Phân tích dữ liệu tài xế Ahamove:
+Nguyễn Văn A - SĐT 0901234567 - AR 45%
+Trần Thị B - SĐT 0987654321 - AR 62%</div>
+    </div>
+    <div class="prompt-box pb-good">
+      <div class="prompt-label">✓ ĐÚNG — Anonymize trước</div>
+      <div class="prompt-content">Phân tích dữ liệu tài xế ẩn danh:
+Tài xế X - AR 45%, Tài xế Y - AR 62%
+Chỉ ra pattern và đề xuất cải thiện.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PHẦN 13: TỪ ĐIỂN -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section" id="s13">
+  <div class="sec-label">Phần 13</div>
+  <div class="sec-title">Từ Điển Thuật Ngữ</div>
+  <div class="sec-sub">Mọi thuật ngữ bạn sẽ gặp khi làm việc với Claude</div>
+
+  <table class="glos-table">
+    <tr><th style="width:26%">Thuật ngữ</th><th>Giải thích đơn giản</th></tr>
+    <tr><td><span class="glos-term">AI</span></td><td>Trí tuệ nhân tạo — phần mềm có khả năng xử lý ngôn ngữ và lý luận</td></tr>
+    <tr><td><span class="glos-term">LLM</span></td><td>"Large Language Model" — loại AI được train trên lượng văn bản khổng lồ. Claude và ChatGPT đều là LLM</td></tr>
+    <tr><td><span class="glos-term">Prompt</span></td><td>Câu lệnh/câu hỏi bạn gửi cho Claude. Prompt tốt = kết quả tốt</td></tr>
+    <tr><td><span class="glos-term">Context Window</span></td><td>"Bộ nhớ làm việc" — lượng text Claude xử lý được trong 1 hội thoại. Tắt tab → mất hết</td></tr>
+    <tr><td><span class="glos-term">Hallucination</span></td><td>Khi AI tự bịa ra thông tin sai nhưng trình bày tự tin như thật. Luôn verify thông tin quan trọng</td></tr>
+    <tr><td><span class="glos-term">Training</span></td><td>Quá trình "học" của AI — đọc hàng tỷ tài liệu để hiểu ngôn ngữ và cách trả lời</td></tr>
+    <tr><td><span class="glos-term">Knowledge Cutoff</span></td><td>Ngày Claude ngừng được cập nhật kiến thức. Sau đó không biết tin tức mới</td></tr>
+    <tr><td><span class="glos-term">Model</span></td><td>Phiên bản AI cụ thể. Claude có: Haiku (nhanh/nhẹ), Sonnet (cân bằng), Opus (mạnh nhất)</td></tr>
+    <tr><td><span class="glos-term">Token</span></td><td>Đơn vị đo văn bản (~3/4 từ tiếng Anh). Giới hạn context window tính bằng token</td></tr>
+    <tr><td><span class="glos-term">API</span></td><td>Cách kết nối Claude vào phần mềm/app khác. Developer dùng API để build ứng dụng có AI</td></tr>
+    <tr><td><span class="glos-term">Agent</span></td><td>Claude được trang bị thêm tools (tìm kiếm web, đọc file, chạy code) để tự thực hiện task phức tạp hơn</td></tr>
+    <tr><td><span class="glos-term">System Prompt</span></td><td>Lệnh nền cài sẵn định hình cách Claude phản hồi. Bạn thường không thấy nhưng nó ảnh hưởng mọi câu trả lời</td></tr>
+    <tr><td><span class="glos-term">MCP</span></td><td>"Model Context Protocol" — chuẩn kết nối Claude với Gmail, Calendar, Notion, Slack...</td></tr>
+    <tr><td><span class="glos-term">Projects (Workspace)</span></td><td>Không gian làm việc trong claude.ai — lưu system prompt + tài liệu nền để dùng lại nhiều lần</td></tr>
+    <tr><td><span class="glos-term">Claude Code</span></td><td>Claude chạy trong terminal/IDE — có thể đọc/ghi file thật trên máy tính, thao tác codebase</td></tr>
+    <tr><td><span class="glos-term">Claude Desktop</span></td><td>App Mac/Windows giống claude.ai nhưng hỗ trợ kết nối MCP thêm tool ngoài</td></tr>
+    <tr><td><span class="glos-term">Cowork</span></td><td>Môi trường làm việc đầy đủ xây trên Claude Code — có Memory, Skills, sub-agents, auto-sync</td></tr>
+    <tr><td><span class="glos-term">Memory</span></td><td>Hệ thống lưu trữ thông tin qua nhiều session — Claude nhớ bạn là ai, preferences, dự án đang chạy</td></tr>
+    <tr><td><span class="glos-term">Skills</span></td><td>Lệnh tắt /tên trong Cowork — gõ /xlsx, /pptx, /pdf... Claude thực hiện task phức tạp theo quy trình định sẵn</td></tr>
+    <tr><td><span class="glos-term">Sub-agent</span></td><td>Claude "phân thân" thành chuyên gia con — sql-analyst, report-writer, driver-comms... mỗi agent có persona và output format riêng</td></tr>
+    <tr><td><span class="glos-term">Hook</span></td><td>Hành động tự động được kích hoạt khi có sự kiện — ví dụ: hook Stop = tự git push mỗi khi Claude dừng</td></tr>
+    <tr><td><span class="glos-term">IDE</span></td><td>"Integrated Development Environment" — phần mềm soạn thảo code siêu mạnh (VSCode, Cursor). Khi tích hợp Claude, có thể thao tác file trực tiếp</td></tr>
+    <tr><td><span class="glos-term">VSCode</span></td><td>Visual Studio Code — IDE miễn phí phổ biến nhất của Microsoft. Cài Claude Code extension để dùng AI trực tiếp trong editor</td></tr>
+    <tr><td><span class="glos-term">Cursor</span></td><td>IDE AI-first xây trên nền VSCode, tích hợp Claude/GPT sâu hơn. Phổ biến trong developer 2024-2026</td></tr>
+    <tr><td><span class="glos-term">Diff View</span></td><td>Chức năng trong IDE hiển thị chính xác những gì thay đổi (màu đỏ = xóa, màu xanh = thêm) — kiểm soát được Claude đã làm gì</td></tr>
+    <tr><td><span class="glos-term">CLAUDE.md</span></td><td>File cấu hình gốc trong Cowork — Claude đọc đầu tiên để hiểu context công ty, brand, quy tắc output</td></tr>
+    <tr><td><span class="glos-term">Anthropic</span></td><td>Công ty tạo ra Claude. Thành lập 2021 tại Mỹ, tập trung vào AI an toàn</td></tr>
+  </table>
+</div>
+
+<hr class="divider">
+
+<!-- CHECKLIST CUỐI -->
+<div style="background:linear-gradient(135deg,var(--blue),#1a5499);border-radius:16px;padding:28px;margin-bottom:32px">
+  <h2 style="color:#fff;font-size:20px;font-weight:800;margin-bottom:20px;text-align:center">Bắt Đầu Ngay Hôm Nay!</h2>
+  <div class="grid-2">
+    <div class="checklist" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)">
+      <h4 style="color:#fff;border-bottom-color:rgba(255,255,255,.2)">✅ Checklist 15 phút đầu tiên</h4>
+      <div class="cl-item" style="border-bottom-color:rgba(255,255,255,.15);color:#fff"><div class="cl-box" style="border-color:rgba(255,255,255,.4)"></div>Tạo tài khoản tại claude.ai</div>
+      <div class="cl-item" style="border-bottom-color:rgba(255,255,255,.15);color:#fff"><div class="cl-box" style="border-color:rgba(255,255,255,.4)"></div>Gửi 1 câu hỏi bất kỳ để làm quen giao diện</div>
+      <div class="cl-item" style="border-bottom-color:rgba(255,255,255,.15);color:#fff"><div class="cl-box" style="border-color:rgba(255,255,255,.4)"></div>Thử upload 1 file PDF/Excel và hỏi tóm tắt</div>
+      <div class="cl-item" style="border-bottom-color:rgba(255,255,255,.15);color:#fff"><div class="cl-box" style="border-color:rgba(255,255,255,.4)"></div>Thử viết 1 email theo công thức COAT</div>
+      <div class="cl-item" style="border-bottom-color:none;color:#fff"><div class="cl-box" style="border-color:rgba(255,255,255,.4)"></div>Tạo 1 Project cho mảng công việc chính</div>
+    </div>
+    <div style="color:rgba(255,255,255,.85);font-size:13px;padding:4px 0">
+      <div style="margin-bottom:12px"><strong style="color:#FF7F32">Câu hỏi có đáp án rõ ràng, không nhạy cảm</strong><br>→ Hỏi Claude trước</div>
+      <div style="margin-bottom:12px"><strong style="color:#FF7F32">Câu hỏi cần judgement, context nội bộ</strong><br>→ Hỏi đồng nghiệp/quản lý</div>
+      <div><strong style="color:#FF7F32">Câu hỏi quan trọng, output đi vào thực tế</strong><br>→ Claude draft trước, bạn review sau</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center;color:var(--light);font-size:12px;padding-bottom:16px">
+  <div><span class="live">Cowork đang hoạt động</span></div>
+  <div style="margin-top:10px">Tài liệu biên soạn bởi <strong style="color:var(--mid)">Driver Management Team — Ahamove</strong></div>
+  <div style="margin-top:4px">Câu hỏi hoặc góp ý: <strong style="color:var(--mid)">khanhlp@ahamove.com</strong></div>
+  <div style="margin-top:4px">Cập nhật: 2026-05-04 · 13 phần · Dùng font Lexend + màu brand Ahamove</div>
+</div>
+
+</div><!-- /wrap -->
+</body>
+</html>
