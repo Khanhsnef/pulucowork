@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cowork Architecture — Tại sao cần cấu trúc file như vậy?</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#0E4174;--blue-lt:#1a5499;--orange:#FF7F32;--green:#10B981;--red:#EF4444;
+  --bg:#F8FAFC;--card:#fff;--border:#E2E8F0;--text:#1E293B;--mid:#475569;--light:#94A3B8;
+  --code-bg:#F1F5F9;--accent-bg:#EEF4FB;
+}
+body{font-family:'Lexend',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6}
+/* Layout */
+.wrap{max-width:1100px;margin:0 auto;padding:32px 24px}
+/* Header */
+.hero{background:linear-gradient(135deg,var(--blue) 0%,#1a5499 60%,#0d3461 100%);border-radius:20px;padding:48px 40px;margin-bottom:40px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:280px;height:280px;border-radius:50%;background:rgba(255,127,50,.12);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-60px;left:20%;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none}
+.hero-tag{display:inline-block;background:var(--orange);color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;padding:4px 12px;border-radius:20px;margin-bottom:14px;text-transform:uppercase}
+.hero h1{color:#fff;font-size:32px;font-weight:800;line-height:1.25;margin-bottom:10px}
+.hero p{color:rgba(255,255,255,.75);font-size:14px;max-width:600px}
+/* Section */
+.section{margin-bottom:48px}
+.section-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+/* Cards */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;position:relative}
+.card-blue{border-top:3px solid var(--blue)}
+.card-orange{border-top:3px solid var(--orange)}
+.card-green{border-top:3px solid var(--green)}
+.card-red{border-top:3px solid var(--red)}
+.card h3{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.card p{font-size:12.5px;color:var(--mid);line-height:1.6}
+.file-badge{font-family:monospace;font-size:11px;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:2px 8px;color:var(--blue);display:inline-block;margin-bottom:10px}
+.tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin:2px 2px 0 0}
+.tag-blue{background:#DBEAFE;color:#1D4ED8}
+.tag-green{background:#D1FAE5;color:#065F46}
+.tag-orange{background:#FFEDD5;color:#C2410C}
+.tag-gray{background:#F1F5F9;color:#475569}
+/* File list */
+.file-list{list-style:none}
+.file-list li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px}
+.file-list li:last-child{border-bottom:none}
+.file-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:1px}
+.fi-blue{background:#DBEAFE}
+.fi-orange{background:#FFEDD5}
+.fi-green{background:#D1FAE5}
+.fi-purple{background:#EDE9FE}
+.fi-gray{background:#F1F5F9}
+.file-list .name{font-weight:600;font-size:11.5px;color:var(--text);font-family:monospace}
+.file-list .desc{color:var(--mid);font-size:11.5px}
+
+/* === WORKFLOW === */
+.workflow{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+.workflow h3{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+/* horizontal flow */
+.flow-row{display:flex;align-items:center;gap:0;flex-wrap:wrap}
+.flow-node{background:var(--accent-bg);border:1.5px solid #93C5FD;border-radius:12px;padding:10px 14px;font-size:11.5px;font-weight:600;color:var(--blue);text-align:center;min-width:90px;position:relative}
+.flow-node.orange{background:#FFEDD5;border-color:#FDBA74;color:#C2410C}
+.flow-node.green{background:#D1FAE5;border-color:#6EE7B7;color:#065F46}
+.flow-node.gray{background:#F8FAFC;border-color:var(--border);color:var(--mid)}
+.flow-node.dark{background:var(--blue);border-color:var(--blue);color:#fff}
+.flow-node small{display:block;font-weight:400;font-size:10px;opacity:.75;margin-top:2px}
+.arrow{color:#94A3B8;font-size:18px;padding:0 6px;flex-shrink:0}
+.flow-col{display:flex;flex-direction:column;gap:8px;align-items:center}
+.arrow-down{color:#94A3B8;font-size:16px;line-height:1}
+/* vertical timeline flow */
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--blue),var(--orange))}
+.tl-item{position:relative;margin-bottom:16px}
+.tl-dot{position:absolute;left:-24px;top:4px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px var(--blue);background:var(--blue)}
+.tl-dot.orange{box-shadow:0 0 0 2px var(--orange);background:var(--orange)}
+.tl-dot.green{box-shadow:0 0 0 2px var(--green);background:var(--green)}
+.tl-title{font-size:12px;font-weight:700;margin-bottom:3px}
+.tl-desc{font-size:11.5px;color:var(--mid)}
+/* decision tree */
+.dtree{display:flex;flex-direction:column;gap:10px}
+.dt-row{display:flex;align-items:center;gap:8px}
+.dt-q{background:var(--blue);color:#fff;border-radius:10px;padding:7px 12px;font-size:11.5px;font-weight:600;flex-shrink:0}
+.dt-a{display:flex;flex-direction:column;gap:6px;flex:1}
+.dt-option{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:11px;display:flex;align-items:center;gap:6px}
+.dt-label{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;flex-shrink:0}
+.dt-yes{background:#D1FAE5;color:#065F46}
+.dt-no{background:#FEE2E2;color:#991B1B}
+.dt-result{background:var(--orange);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:600}
+
+/* Arch diagram */
+.arch{background:linear-gradient(135deg,#F8FAFC 0%,#EEF4FB 100%);border:1px solid var(--border);border-radius:16px;padding:24px}
+.arch-title{text-align:center;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:20px}
+.arch-layer{border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.arch-layer h4{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.arch-items{display:flex;gap:8px;flex-wrap:wrap}
+.arch-item{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11.5px;font-weight:500;display:flex;align-items:center;gap:6px}
+.layer-1{background:#EFF6FF;border:1.5px solid #93C5FD}
+.layer-1 h4{color:#1D4ED8}
+.layer-2{background:#F0FDF4;border:1.5px solid #86EFAC}
+.layer-2 h4{color:#166534}
+.layer-3{background:#FFF7ED;border:1.5px solid #FDB67A}
+.layer-3 h4{color:#C2410C}
+.layer-4{background:#F5F3FF;border:1.5px solid #C4B5FD}
+.layer-4 h4{color:#6D28D9}
+.layer-conn{text-align:center;color:var(--light);font-size:18px;margin:-4px 0;line-height:1}
+
+/* Code snippet */
+.code{background:var(--code-bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:monospace;font-size:11.5px;color:var(--text);line-height:1.7;overflow-x:auto;margin:10px 0}
+.code .cm{color:#94A3B8}
+.code .kw{color:#6366F1;font-weight:600}
+.code .str{color:#10B981}
+.code .hl{background:#FEF9C3;border-radius:3px;padding:0 3px}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:12px}
+.cmp-table th{background:var(--blue);color:#fff;padding:8px 12px;text-align:left;font-weight:600}
+.cmp-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.cmp-table tr:nth-child(even) td{background:var(--bg)}
+.cmp-table .yes{color:var(--green);font-weight:700}
+.cmp-table .no{color:var(--red)}
+
+/* Hook flow */
+.hook-flow{display:flex;align-items:stretch;gap:0;background:var(--code-bg);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.hf-step{flex:1;padding:14px;text-align:center;border-right:1px solid var(--border);position:relative}
+.hf-step:last-child{border-right:none}
+.hf-step .num{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.hf-step .label{font-size:11px;font-weight:600;color:var(--text);margin-bottom:3px}
+.hf-step .sub{font-size:10.5px;color:var(--mid)}
+.hf-step.orange .num{background:var(--orange)}
+.hf-step.green .num{background:var(--green)}
+
+/* Big flow diagram for session start */
+.big-flow{display:flex;flex-direction:column;gap:16px;align-items:center}
+.bf-row{display:flex;align-items:center;gap:12px;width:100%}
+.bf-box{border-radius:12px;padding:12px 16px;font-size:12px;font-weight:600;text-align:center;flex:1}
+.bf-box small{display:block;font-weight:400;font-size:10.5px;margin-top:3px;opacity:.8}
+.bf-arrow{font-size:20px;color:var(--light);flex-shrink:0}
+
+/* Summary table */
+.sum-table{width:100%;border-collapse:collapse;font-size:12px}
+.sum-table th{padding:9px 14px;text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.sum-table td{padding:9px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.sum-table tr:nth-child(even) td{background:var(--bg)}
+.importance{font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px}
+.imp-core{background:#DBEAFE;color:#1E40AF}
+.imp-high{background:#D1FAE5;color:#065F46}
+.imp-med{background:#FEF3C7;color:#92400E}
+
+/* Footer */
+.footer{text-align:center;padding:32px 0;color:var(--light);font-size:11.5px;border-top:1px solid var(--border);margin-top:48px}
+
+/* Pulse badge */
+.live{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:var(--green);background:#D1FAE5;padding:3px 9px;border-radius:20px}
+.live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+hr.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+@media(max-width:720px){.grid-2,.grid-3{grid-template-columns:1fr}.flow-row{flex-direction:column}.hf-step{border-right:none;border-bottom:1px solid var(--border)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Ahamove · Driver Management Team · 2026-05-04</div>
+  <h1>Cowork Architecture<br>Tại sao cần cấu trúc file như vậy?</h1>
+  <p>Giải thích ý nghĩa từng file input, cấu trúc hệ thống và workflow hoạt động của môi trường Cowork — để team hiểu <em>tại sao</em> Khanh cần tạo các file .md, skills, agents và folder như vậy.</p>
+</div>
+
+<!-- SECTION 0: BIG PICTURE -->
+<div class="section">
+  <div class="section-title">Bức tranh tổng thể</div>
+  <div class="arch">
+    <div class="arch-title">Kiến trúc Cowork — Các tầng cấu hình</div>
+    <div class="arch-layer layer-1">
+      <h4>🧠 Tầng 1 — Danh tính & Bối cảnh (Identity Layer)</h4>
+      <div class="arch-items">
+        <div class="arch-item">📄 CLAUDE.md <small style="color:var(--mid);font-size:10px"> system prompt</small></div>
+        <div class="arch-item">🤖 AGENTS.md <small style="color:var(--mid);font-size:10px"> persona chính</small></div>
+        <div class="arch-item">👤 Personal/about-me.md</div>
+        <div class="arch-item">📐 Personal/my-rules.md</div>
+        <div class="arch-item">🎙 Personal/my-voice.md</div>
+      </div>
+    </div>
+    <div class="layer-conn">↓</div>
+    <div class="arch-layer layer-2">
+      <h4>💾 Tầng 2 — Bộ nhớ liên tục (Memory Layer)</h4>
+      <div class="arch-items">
+        <div class="arch-item">🗂 MEMORY.md <small style="color:var(--mid);font-size:10px"> index</small></div>
+        <div class="arch-item">👤 user_profile.md</div>
+        <div class="arch-item">📋 user_rules.md</div>
+        <div class="arch-item">🎙 user_voice.md</div>
+        <div class="arch-item">🤖 agent_lark_persona.md</div>
+        <div class="arch-item">📊 feedback_visualization.md</div>
+        <div class="arch-item">🎨 reference_slide_themes.md</div>
+      </div>
+    </div>
+    <div class="layer-conn">↓</div>
+    <div class="arch-layer layer-3">
+      <h4>⚡ Tầng 3 — Chuyên gia con (Sub-Agents Layer)</h4>
+      <div class="arch-items">
+        <div class="arch-item">🔍 sql-analyst.md</div>
+        <div class="arch-item">📝 report-writer.md</div>
+        <div class="arch-item">🏆 competitive-intel.md</div>
+        <div class="arch-item">📣 driver-comms.md</div>
+        <div class="arch-item">🌐 landing-page-builder.md</div>
+        <div class="arch-item">✍️ content-writer.md</div>
+        <div class="arch-item">🎪 event-planner.md</div>
+        <div class="arch-item">📅 meeting-prep.md</div>
+        <div class="arch-item">📊 weekly-review.md</div>
+      </div>
+    </div>
+    <div class="layer-conn">↓</div>
+    <div class="arch-layer layer-4">
+      <h4>🔧 Tầng 4 — Tự động hóa & Đầu ra (Automation Layer)</h4>
+      <div class="arch-items">
+        <div class="arch-item">⚙️ .claude/settings.json <small style="color:var(--mid);font-size:10px"> hooks</small></div>
+        <div class="arch-item">🔄 _scripts/sync-push.sh</div>
+        <div class="arch-item">📂 output/Ahamove/ <small style="color:var(--mid);font-size:10px"> 7 folders</small></div>
+        <div class="arch-item">🐙 GitHub repo</div>
+        <div class="arch-item">☁️ Google Drive</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1: CÁC FILE INPUT -->
+<div class="section">
+  <div class="section-title">Phân tích từng file input</div>
+  <div class="grid-2">
+
+    <!-- CLAUDE.md -->
+    <div class="card card-blue">
+      <div class="file-badge">CLAUDE.md</div>
+      <h3>⚙️ System Prompt Gốc</h3>
+      <p>File quan trọng nhất. Được Claude đọc <strong>đầu tiên</strong> mỗi lần bắt đầu làm việc. Xác định toàn bộ "bối cảnh công ty" — Ahamove là gì, Khanh là ai, brand colors, quy tắc đặt tên file, cấu trúc output folder bắt buộc.</p>
+      <div style="margin-top:12px">
+        <span class="tag tag-blue">Company context</span>
+        <span class="tag tag-blue">Brand guidelines</span>
+        <span class="tag tag-blue">Output rules</span>
+        <span class="tag tag-blue">AI conventions</span>
+      </div>
+      <div style="margin-top:12px;font-size:11.5px;color:var(--mid)">
+        <strong>Nếu không có:</strong> Claude không biết Ahamove là gì, không biết phải lưu file ở đâu, không biết màu brand là gì.
+      </div>
+    </div>
+
+    <!-- AGENTS.md -->
+    <div class="card card-orange">
+      <div class="file-badge">AGENTS.md</div>
+      <h3>🤖 Persona Chiến lược</h3>
+      <p>Định nghĩa Claude là <em>"Enterprise Strategic AI Decision Architect"</em> — một chuyên gia về Supply-Demand Optimization và Driver Management. Xác định khung tư duy (Decision Navigator), cấu trúc tài liệu Lark Docs 3 phần, và bảng routing sang sub-agents.</p>
+      <div style="margin-top:12px">
+        <span class="tag tag-orange">Expert persona</span>
+        <span class="tag tag-orange">Lark Docs format</span>
+        <span class="tag tag-orange">Sub-agent routing</span>
+      </div>
+      <div style="margin-top:12px;font-size:11.5px;color:var(--mid)">
+        <strong>Nếu không có:</strong> Claude trả lời như chatbot thông thường, không đứng từ góc nhìn chuyên gia vận hành logistics.
+      </div>
+    </div>
+
+    <!-- about-me.md -->
+    <div class="card card-green">
+      <div class="file-badge">Personal/about-me.md</div>
+      <h3>👤 Hồ sơ Người dùng</h3>
+      <p>Khanh là ai, làm gì hàng ngày, scale của Ahamove (45.5M đơn/năm, 30,900+ tài xế xe máy), các metrics theo dõi (AR, FR, CPO, EPH, RPH…), chiến lược 2026 và competitive landscape với Grab/Be/XanhSM.</p>
+      <div style="margin-top:12px">
+        <span class="tag tag-green">User profile</span>
+        <span class="tag tag-green">Business context</span>
+        <span class="tag tag-green">KPI definitions</span>
+      </div>
+      <div style="margin-top:12px;font-size:11.5px;color:var(--mid)">
+        <strong>Nếu không có:</strong> Claude không hiểu tại sao "AR" lại quan trọng, không biết scope xe máy vs xe tải, không biết đối thủ là ai.
+      </div>
+    </div>
+
+    <!-- my-rules.md -->
+    <div class="card card-blue">
+      <div class="file-badge">Personal/my-rules.md</div>
+      <h3>📐 Quy tắc làm việc</h3>
+      <p>22 quy tắc cụ thể: brief trước khi làm, Pyramid Principle, SQL first, không bịa data, không lời khuyên chung chung, không xóa file khi chưa hỏi, ưu tiên bảng biểu hơn văn xuôi, cân nhắc context cạnh tranh với Grab/Be/XanhSM.</p>
+      <div style="margin-top:12px">
+        <span class="tag tag-blue">Working protocol</span>
+        <span class="tag tag-blue">Quality standards</span>
+        <span class="tag tag-blue">Anti-patterns</span>
+      </div>
+      <div style="margin-top:12px;font-size:11.5px;color:var(--mid)">
+        <strong>Nếu không có:</strong> Claude sẽ nói lan man, đưa lời khuyên vô nghĩa, không proactive hỏi khi thiếu context.
+      </div>
+    </div>
+
+    <!-- my-voice.md -->
+    <div class="card card-orange">
+      <div class="file-badge">Personal/my-voice.md</div>
+      <h3>🎙 Giọng văn & Format</h3>
+      <p>Tone chuyên nghiệp + trực diện, data-driven, action-oriented. Song ngữ Việt-Anh tự nhiên. Pyramid Principle + MECE + S-C-R. Bảng biểu &gt; bullet &gt; văn xuôi. Kèm 3 writing samples chuẩn để Claude "nhại" đúng giọng.</p>
+      <div style="margin-top:12px">
+        <span class="tag tag-orange">Tone of voice</span>
+        <span class="tag tag-orange">Format preferences</span>
+        <span class="tag tag-orange">Thinking frameworks</span>
+      </div>
+      <div style="margin-top:12px;font-size:11.5px;color:var(--mid)">
+        <strong>Nếu không có:</strong> Claude sẽ viết văn phong "AI robot" — đầy rào đón, thiếu số liệu, không phù hợp với phong cách trình bày của Khanh.
+      </div>
+    </div>
+
+    <!-- settings.json -->
+    <div class="card card-green">
+      <div class="file-badge">.claude/settings.json</div>
+      <h3>⚙️ Automation Hooks</h3>
+      <p>Cấu hình hành động tự động chạy <strong>mỗi khi Claude dừng làm việc</strong>: (1) git add + commit + push lên GitHub, (2) rsync đồng bộ toàn bộ folder sang Google Drive. Đảm bảo không mất dữ liệu, làm việc trên nhiều máy.</p>
+      <div style="margin-top:12px">
+        <span class="tag tag-green">Auto git push</span>
+        <span class="tag tag-green">Google Drive sync</span>
+        <span class="tag tag-green">Stop hook</span>
+      </div>
+      <div style="margin-top:12px;font-size:11.5px;color:var(--mid)">
+        <strong>Nếu không có:</strong> Phải tự nhớ commit và sync thủ công sau mỗi lần làm việc — dễ quên, dễ mất dữ liệu.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION 2: SUB-AGENTS -->
+<div class="section">
+  <div class="section-title">Sub-Agents — .claude/agents/</div>
+  <p style="font-size:12.5px;color:var(--mid);margin-bottom:16px">Mỗi file trong <code style="font-size:11px;background:var(--code-bg);padding:2px 6px;border-radius:4px">.claude/agents/</code> là một "chuyên gia con" với persona, hành vi và output format riêng. Claude tự động chọn đúng agent theo loại task — không cần gọi thủ công.</p>
+  <ul class="file-list">
+    <li>
+      <div class="file-icon fi-blue">🔍</div>
+      <div><div class="name">sql-analyst.md</div><div class="desc">Senior Data Engineer — Viết SQL production-grade cho BigQuery. Kích hoạt khi cần query AR, FR, CPO, Active Drivers, EPH, RPH, Mini-hub metrics. Tư duy Kimball dimensional modeling, luôn thêm data validation layer.</div></div>
+    </li>
+    <li>
+      <div class="file-icon fi-blue">📝</div>
+      <div><div class="name">report-writer.md</div><div class="desc">Report Writer — Có data sẵn → viết báo cáo Lark Docs chuẩn enterprise với cấu trúc 3 phần: Executive Summary / Analysis Framework / Value Realization.</div></div>
+    </li>
+    <li>
+      <div class="file-icon fi-orange">🏆</div>
+      <div><div class="name">competitive-intel.md</div><div class="desc">Competitive Intelligence Analyst — Phân tích động thái Grab Express, Be Delivery, XanhSM, SPX/GHN. Đánh giá tác động lên supply tài xế và chiến lược phản ứng.</div></div>
+    </li>
+    <li>
+      <div class="file-icon fi-orange">📣</div>
+      <div><div class="name">driver-comms.md</div><div class="desc">Driver Communications Writer — Viết thông báo, script, nội dung Zalo OA cho tài xế. Ngôn ngữ đơn giản, thực tiễn, phù hợp từng tầng tài xế (Part-time, Full-time, Mini-hub).</div></div>
+    </li>
+    <li>
+      <div class="file-icon fi-green">🌐</div>
+      <div><div class="name">landing-page-builder.md</div><div class="desc">Landing Page Builder — Tạo landing page HTML với brand Ahamove. Kích hoạt khi cần tuyển tài xế, campaign EV, Mega Sale. Dùng inline SVG, không dùng thư viện chart ngoài.</div></div>
+    </li>
+    <li>
+      <div class="file-icon fi-purple">✍️</div>
+      <div><div class="name">content-writer.md</div><div class="desc">Content Writer — Caption mạng xã hội, blog, LinkedIn post, script video cho kênh cộng đồng tài xế Ahamove.</div></div>
+    </li>
+    <li>
+      <div class="file-icon fi-purple">🎪</div>
+      <div><div class="name">event-planner.md</div><div class="desc">Event Planner — Lên kế hoạch event offline/online cho cộng đồng tài xế: run-of-show, checklist logistics, ngân sách, KPI đo lường sau event.</div></div>
+    </li>
+    <li>
+      <div class="file-icon fi-gray">📅</div>
+      <div><div class="name">meeting-prep.md</div><div class="desc">Meeting Prep — Chuẩn bị trước cuộc họp quan trọng: tóm tắt context, câu hỏi cần hỏi, rủi ro cần lường trước, action items dự kiến.</div></div>
+    </li>
+    <li>
+      <div class="file-icon fi-gray">📊</div>
+      <div><div class="name">weekly-review.md</div><div class="desc">Weekly Review — Tổng kết cuối tuần: so sánh KPI vs target, highlight top 3 rủi ro, action items tuần tới, gửi draft cho stakeholders.</div></div>
+    </li>
+  </ul>
+</div>
+
+<!-- SECTION 3: MEMORY FILES -->
+<div class="section">
+  <div class="section-title">Memory Files — Bộ nhớ liên tục</div>
+  <div class="grid-2">
+    <div>
+      <p style="font-size:12.5px;color:var(--mid);margin-bottom:14px">Memory files giải quyết vấn đề lớn nhất của AI: <strong>quên hết sau mỗi session</strong>. Mỗi file lưu một loại kiến thức cụ thể, được đọc tự động khi mở session mới.</p>
+      <ul class="file-list">
+        <li>
+          <div class="file-icon fi-blue">👤</div>
+          <div><div class="name">user_profile.md</div><div class="desc">Khanh là ai, role, scope, metrics theo dõi hàng ngày, chiến lược 2026 — Claude không cần hỏi lại "bạn làm gì?"</div></div>
+        </li>
+        <li>
+          <div class="file-icon fi-orange">📋</div>
+          <div><div class="name">user_rules.md</div><div class="desc">Các quy tắc làm việc đã được học: brief trước, chờ confirm, SQL first, không bịa data, Pyramid Principle</div></div>
+        </li>
+        <li>
+          <div class="file-icon fi-orange">🎙</div>
+          <div><div class="name">user_voice.md</div><div class="desc">Giọng văn, format trình bày ưu tiên (bảng &gt; bullet), từ vựng chuyên ngành quen dùng</div></div>
+        </li>
+        <li>
+          <div class="file-icon fi-purple">🤖</div>
+          <div><div class="name">agent_lark_persona.md</div><div class="desc">Cấu trúc chuẩn Enterprise Strategic AI + định dạng Lark Docs 3 phần</div></div>
+        </li>
+        <li>
+          <div class="file-icon fi-green">📊</div>
+          <div><div class="name">feedback_visualization.md</div><div class="desc">Feedback đã học: infographic dùng SVG → React → HTML, không dùng thư viện chart ngoài</div></div>
+        </li>
+        <li>
+          <div class="file-icon fi-gray">🎨</div>
+          <div><div class="name">reference_slide_themes.md</div><div class="desc">3 CSS theme presets cho HTML slides: dark / navy / light</div></div>
+        </li>
+      </ul>
+    </div>
+    <div class="workflow" style="margin-bottom:0">
+      <h3>🔄 Workflow: Memory hoạt động như thế nào?</h3>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-title">Session 1 — Khanh dạy Claude</div>
+          <div class="tl-desc">"Tôi là Khanh, Driver Management Leader. Đừng bao giờ bịa số liệu. Trả lời bằng tiếng Việt."</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot orange"></div>
+          <div class="tl-title">Claude ghi nhớ → tạo file</div>
+          <div class="tl-desc">Claude tự tạo <code style="font-size:10px">user_profile.md</code>, <code style="font-size:10px">user_rules.md</code>, <code style="font-size:10px">user_voice.md</code> trong thư mục memory.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-title">Session 2 — Khanh quay lại</div>
+          <div class="tl-desc">Claude đọc lại memory files → <em>đã biết</em> Khanh là ai, không hỏi lại từ đầu.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot orange"></div>
+          <div class="tl-title">Khanh feedback → Claude cập nhật</div>
+          <div class="tl-desc">"Lần sau đừng dùng thư viện chart ngoài" → Claude update <code style="font-size:10px">feedback_visualization.md</code>.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot green"></div>
+          <div class="tl-title">Session N — Claude đã "quen" Khanh</div>
+          <div class="tl-desc">Không cần giải thích lại context, Claude làm việc ngay từ đầu với đúng giọng văn và format.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: WORKFLOWS CHÍNH -->
+<div class="section">
+  <div class="section-title">Workflow chi tiết</div>
+
+  <!-- WF1: Session Start -->
+  <div class="workflow">
+    <h3>📖 Workflow 1 — Claude đọc gì khi bắt đầu một session?</h3>
+    <div class="hook-flow">
+      <div class="hf-step">
+        <div class="num">1</div>
+        <div class="label">CLAUDE.md</div>
+        <div class="sub">Đọc system prompt gốc: Ahamove context, brand, output rules</div>
+      </div>
+      <div class="hf-step">
+        <div class="num">2</div>
+        <div class="label">AGENTS.md</div>
+        <div class="sub">Load persona: Enterprise Strategic AI Decision Architect</div>
+      </div>
+      <div class="hf-step">
+        <div class="num">3</div>
+        <div class="label">MEMORY.md</div>
+        <div class="sub">Đọc index → load các memory file liên quan</div>
+      </div>
+      <div class="hf-step orange">
+        <div class="num">4</div>
+        <div class="label">Personal files</div>
+        <div class="sub">about-me + my-rules + my-voice → hiểu Khanh</div>
+      </div>
+      <div class="hf-step green">
+        <div class="num">5</div>
+        <div class="label">Sẵn sàng</div>
+        <div class="sub">Claude đã có đủ context để làm việc ngay</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--mid);background:var(--bg);border-radius:8px;padding:10px 14px">
+      💡 <strong>Tại sao không viết hết vào 1 file?</strong> Tách ra giúp Claude cập nhật từng phần độc lập mà không phá vỡ phần khác. Memory files thay đổi liên tục theo thời gian, CLAUDE.md thì ổn định.
+    </div>
+  </div>
+
+  <!-- WF2: Task execution -->
+  <div class="workflow">
+    <h3>⚡ Workflow 2 — Claude xử lý một yêu cầu như thế nào?</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <div class="dtree">
+          <div class="dt-row">
+            <div class="dt-q">Khanh gửi request</div>
+          </div>
+          <div style="text-align:center;color:var(--light);font-size:16px">↓</div>
+          <div class="dt-row">
+            <div class="dt-q">Cần query data?</div>
+            <div class="dt-a">
+              <div class="dt-option"><span class="dt-label dt-yes">CÓ</span> → Kích hoạt <strong>sql-analyst.md</strong></div>
+              <div class="dt-option"><span class="dt-label dt-no">KHÔNG</span> → Tiếp tục phân loại</div>
+            </div>
+          </div>
+          <div style="text-align:center;color:var(--light);font-size:16px">↓</div>
+          <div class="dt-row">
+            <div class="dt-q">Liên quan đối thủ?</div>
+            <div class="dt-a">
+              <div class="dt-option"><span class="dt-label dt-yes">CÓ</span> → Kích hoạt <strong>competitive-intel.md</strong></div>
+            </div>
+          </div>
+          <div style="text-align:center;color:var(--light);font-size:16px">↓</div>
+          <div class="dt-row">
+            <div class="dt-q">Viết cho tài xế?</div>
+            <div class="dt-a">
+              <div class="dt-option"><span class="dt-label dt-yes">CÓ</span> → Kích hoạt <strong>driver-comms.md</strong></div>
+            </div>
+          </div>
+          <div style="text-align:center;color:var(--light);font-size:16px">↓</div>
+          <div class="dt-row">
+            <div class="dt-q">Tạo báo cáo?</div>
+            <div class="dt-a">
+              <div class="dt-option"><span class="dt-label dt-yes">CÓ</span> → Kích hoạt <strong>report-writer.md</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--mid);margin-bottom:10px">Sau khi xác định agent:</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Brief dàn ý trước</div>
+            <div class="tl-desc">Theo my-rules: phác thảo approach, deliverable dự kiến. Chờ Khanh confirm.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot orange"></div>
+            <div class="tl-title">Thực thi với đúng format</div>
+            <div class="tl-desc">Dùng giọng văn từ my-voice.md, cấu trúc từ AGENTS.md (Pyramid Principle, bảng biểu).</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Lưu file đúng folder</div>
+            <div class="tl-desc">Theo CLAUDE.md: đặt tên lowercase-hyphen, tiền tố YYYY-MM-, lưu đúng category trong <code style="font-size:10px">output/Ahamove/</code>.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot green"></div>
+            <div class="tl-title">Update README.md</div>
+            <div class="tl-desc">Thêm entry mới vào File Index trong README.md của Ahamove folder.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WF3: Auto-sync -->
+  <div class="workflow">
+    <h3>🔄 Workflow 3 — Auto-sync khi Claude dừng làm việc</h3>
+    <div class="hook-flow" style="margin-bottom:14px">
+      <div class="hf-step">
+        <div class="num">1</div>
+        <div class="label">Claude dừng</div>
+        <div class="sub">Session kết thúc hoặc Khanh gõ /stop</div>
+      </div>
+      <div class="hf-step">
+        <div class="num">2</div>
+        <div class="label">Hook: Stop</div>
+        <div class="sub">settings.json kích hoạt command tự động</div>
+      </div>
+      <div class="hf-step">
+        <div class="num">3</div>
+        <div class="label">git add -A</div>
+        <div class="sub">Stage tất cả file thay đổi</div>
+      </div>
+      <div class="hf-step orange">
+        <div class="num">4</div>
+        <div class="label">git commit + push</div>
+        <div class="sub">Auto-sync: 2026-05-04 11:00 → GitHub</div>
+      </div>
+      <div class="hf-step green">
+        <div class="num">5</div>
+        <div class="label">rsync → Drive</div>
+        <div class="sub">Mirror toàn bộ folder lên Google Drive</div>
+      </div>
+    </div>
+    <div class="code">
+<span class="cm">// Đây là nội dung thực tế trong settings.json</span>
+{
+  <span class="kw">"hooks"</span>: {
+    <span class="kw">"Stop"</span>: [{
+      <span class="kw">"hooks"</span>: [{
+        <span class="kw">"type"</span>: <span class="str">"command"</span>,
+        <span class="kw">"command"</span>: <span class="str"><span class="hl">"git add -A && git commit -m 'auto-sync' && git push"</span>
+                  + " && rsync ... /GoogleDrive/Cowork/"</span>,
+        <span class="kw">"statusMessage"</span>: <span class="str">"Syncing to GitHub &amp; Drive..."</span>
+      }]
+    }]
+  }
+}
+    </div>
+    <div style="font-size:11.5px;color:var(--mid);background:var(--bg);border-radius:8px;padding:10px 14px;margin-top:10px">
+      💡 <strong>Ý nghĩa thực tế:</strong> Khanh làm việc ở nhà xong → Hook tự push lên GitHub → Sáng hôm sau ở văn phòng chỉ cần <code style="font-size:10px">git pull</code> là có đủ mọi thứ. Không cần nhớ commit thủ công, không bao giờ mất dữ liệu.
+    </div>
+  </div>
+
+  <!-- WF4: Output folder -->
+  <div class="workflow">
+    <h3>📁 Workflow 4 — Tại sao cần cấu trúc output/Ahamove/ như vậy?</h3>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:12px;color:var(--mid);margin-bottom:12px">Không có cấu trúc → Claude lưu file tùy ý → sau 1 tháng không tìm được gì. Cấu trúc 7 folder theo <strong>chức năng</strong> (không theo nguồn) giúp:</p>
+        <ul style="font-size:12px;color:var(--mid);padding-left:16px;line-height:2">
+          <li>Tìm file theo chủ đề trong &lt;10 giây</li>
+          <li>Claude biết chính xác lưu gì ở đâu — không hỏi</li>
+          <li>README.md là "bản đồ" luôn cập nhật</li>
+          <li>Git history cho thấy evolution của từng chủ đề</li>
+        </ul>
+      </div>
+      <div>
+        <table class="cmp-table">
+          <tr><th>Folder</th><th>Lưu gì</th></tr>
+          <tr><td>01. STRATEGY_PLANNING</td><td style="color:var(--mid);font-size:11px">Tiering, OKR, AOP, MiniHub strategy</td></tr>
+          <tr><td>02. CAMPAIGNS_PROJECTS</td><td style="color:var(--mid);font-size:11px">Mega Sales, Rollout, landing pages</td></tr>
+          <tr><td>03. DRIVER_COMMUNITY</td><td style="color:var(--mid);font-size:11px">Events, Zalo comms, content</td></tr>
+          <tr><td>04. OPS_METRICS</td><td style="color:var(--mid);font-size:11px">SQL queries, dashboards, raw CSV</td></tr>
+          <tr><td>05. ANALYSIS_REPORTS</td><td style="color:var(--mid);font-size:11px">RCA, fraud, unit economics</td></tr>
+          <tr><td>06. COMPETITIVE_INTEL</td><td style="color:var(--mid);font-size:11px">Battlecards Grab/Be/XanhSM</td></tr>
+          <tr><td>07. TEAM_MANAGEMENT</td><td style="color:var(--mid);font-size:11px">Training, 1:1, performance, OKR</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: SO SÁNH CÓ vs KHÔNG -->
+<div class="section">
+  <div class="section-title">Hiệu quả — Có cấu trúc vs Không có</div>
+  <table class="cmp-table" style="font-size:12px">
+    <tr>
+      <th style="width:22%">Tình huống</th>
+      <th style="width:39%;background:#B91C1C">Không có cấu trúc file</th>
+      <th style="width:39%;background:#065F46">Có cấu trúc Cowork</th>
+    </tr>
+    <tr>
+      <td><strong>Mở session mới</strong></td>
+      <td class="no">Phải giới thiệu lại "Tôi là Khanh, làm ở Ahamove..." mất 5-10 phút</td>
+      <td class="yes">Claude đọc memory files → sẵn sàng làm việc ngay</td>
+    </tr>
+    <tr>
+      <td><strong>Yêu cầu viết thông báo cho tài xế</strong></td>
+      <td class="no">Claude viết văn phong "AI robot", thiếu thực tiễn, phải sửa nhiều lần</td>
+      <td class="yes">driver-comms agent kích hoạt → đúng giọng tài xế, đúng format ngay lần đầu</td>
+    </tr>
+    <tr>
+      <td><strong>Cần query SQL</strong></td>
+      <td class="no">Claude hỏi 5 câu về DB platform, granularity, filter trước khi viết</td>
+      <td class="yes">sql-analyst agent biết Khanh dùng BigQuery, tự hỏi đúng 1-2 câu cần thiết</td>
+    </tr>
+    <tr>
+      <td><strong>Làm xong, tắt máy</strong></td>
+      <td class="no">Không commit → sáng hôm sau ở văn phòng không có file mới</td>
+      <td class="yes">Hook tự push GitHub + sync Drive → máy nào cũng có bản mới nhất</td>
+    </tr>
+    <tr>
+      <td><strong>Sửa lỗi "đừng bịa data"</strong></td>
+      <td class="no">Phải nhắc mỗi lần "đừng bịa nhé" — Claude quên sau mỗi session</td>
+      <td class="yes">Feedback được lưu vào memory file → không bao giờ quên</td>
+    </tr>
+    <tr>
+      <td><strong>Tìm lại báo cáo tháng trước</strong></td>
+      <td class="no">File nằm lung tung trên Desktop, không nhớ tên</td>
+      <td class="yes">README.md là index đầy đủ → tìm trong &lt;10 giây</td>
+    </tr>
+    <tr>
+      <td><strong>Làm việc trên 2 máy</strong></td>
+      <td class="no">Copy USB / email file cho mình — dễ nhầm phiên bản</td>
+      <td class="yes">git pull ở máy mới → có đúng version mới nhất</td>
+    </tr>
+  </table>
+</div>
+
+<!-- SECTION 6: TÓM TẮT -->
+<div class="section">
+  <div class="section-title">Tóm tắt — Vai trò từng loại file</div>
+  <table class="sum-table">
+    <tr style="background:var(--blue)">
+      <th style="color:#fff;width:25%">File / Folder</th>
+      <th style="color:#fff;width:15%">Loại</th>
+      <th style="color:#fff;width:45%">Vai trò</th>
+      <th style="color:#fff;width:15%">Mức độ</th>
+    </tr>
+    <tr><td><code style="font-size:11px">CLAUDE.md</code></td><td>System Prompt</td><td>Xác định toàn bộ bối cảnh công ty, brand, quy tắc output — Claude đọc đầu tiên</td><td><span class="importance imp-core">Cốt lõi</span></td></tr>
+    <tr><td><code style="font-size:11px">AGENTS.md</code></td><td>Persona</td><td>Định hình Claude là chuyên gia gì, cấu trúc tài liệu chuẩn, routing sang sub-agents</td><td><span class="importance imp-core">Cốt lõi</span></td></tr>
+    <tr><td><code style="font-size:11px">Personal/</code></td><td>Context files</td><td>Khanh là ai (about-me), làm việc thế nào (my-rules), viết thế nào (my-voice)</td><td><span class="importance imp-core">Cốt lõi</span></td></tr>
+    <tr><td><code style="font-size:11px">.claude/agents/</code></td><td>Sub-agents</td><td>9 chuyên gia con với persona riêng — SQL, Report, Comms, Competitive Intel...</td><td><span class="importance imp-high">Cao</span></td></tr>
+    <tr><td><code style="font-size:11px">memory/</code></td><td>Memory</td><td>Bộ nhớ liên tục qua sessions — Claude nhớ feedback, preferences, project context</td><td><span class="importance imp-high">Cao</span></td></tr>
+    <tr><td><code style="font-size:11px">.claude/settings.json</code></td><td>Automation</td><td>Hook tự động push GitHub + sync Google Drive sau mỗi session</td><td><span class="importance imp-high">Cao</span></td></tr>
+    <tr><td><code style="font-size:11px">output/Ahamove/</code></td><td>Output structure</td><td>7 folder theo chức năng + README.md index — không bao giờ mất file</td><td><span class="importance imp-med">Trung bình</span></td></tr>
+    <tr><td><code style="font-size:11px">_scripts/</code></td><td>Scripts</td><td>sync-push.sh và sync-pull.sh để sync thủ công khi cần</td><td><span class="importance imp-med">Trung bình</span></td></tr>
+  </table>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="live">Cowork đang hoạt động</div>
+  <div style="margin-top:8px">Tài liệu biên soạn bởi Driver Management Team — Ahamove · 2026-05-04</div>
+  <div style="margin-top:4px">Câu hỏi: khanhlp@ahamove.com</div>
+</div>
+
+</div>
+</body>
+</html>
