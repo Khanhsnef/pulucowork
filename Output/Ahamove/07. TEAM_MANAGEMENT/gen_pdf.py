@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Generate Claude Guide PDF for Ahamove Driver Management Team"""
+"""Generate Claude Guide PDF for Ahamove Driver Management Team — Tiếng Việt có dấu"""
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
@@ -13,13 +13,10 @@ from reportlab.platypus import (
 )
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
-from reportlab.platypus.flowables import Flowable
 import os
 
 # ── Fonts ─────────────────────────────────────────────────────────────────────
 FONT_PATH = "/Library/Fonts/Arial Unicode.ttf"
-pdfmetrics.registerFont(TTFont("ArialUni", FONT_PATH))
 pdfmetrics.registerFont(TTFont("ArialUni", FONT_PATH))
 
 # ── Brand Colors ───────────────────────────────────────────────────────────────
@@ -29,13 +26,11 @@ SUCCESS    = colors.HexColor("#10B981")
 DANGER     = colors.HexColor("#EF4444")
 BG_GRAY    = colors.HexColor("#F8FAFC")
 BG_BLUE_LT = colors.HexColor("#EEF4FB")
-BG_ORANGE  = colors.HexColor("#FFF4EC")
 BORDER     = colors.HexColor("#E2E8F0")
 TEXT_DARK  = colors.HexColor("#1E293B")
 TEXT_MID   = colors.HexColor("#475569")
 TEXT_LIGHT = colors.HexColor("#94A3B8")
 CODE_BG    = colors.HexColor("#F1F5F9")
-CODE_TEXT  = colors.HexColor("#0F172A")
 WHITE      = colors.white
 
 PAGE_W, PAGE_H = A4
@@ -49,49 +44,32 @@ def S(name, **kw):
     return ParagraphStyle(name, **defaults)
 
 ST = {
-    "h1"       : S("h1", fontSize=22, leading=28, textColor=WHITE,
-                   fontName="ArialUni", spaceBefore=0, spaceAfter=0),
-    "h2"       : S("h2", fontSize=14, leading=20, textColor=WHITE,
-                   fontName="ArialUni", spaceBefore=0, spaceAfter=0),
-    "h3"       : S("h3", fontSize=11, leading=16, textColor=BLUE,
-                   fontName="ArialUni", spaceBefore=8, spaceAfter=4),
-    "h4"       : S("h4", fontSize=10, leading=15, textColor=ORANGE,
-                   fontName="ArialUni", spaceBefore=6, spaceAfter=3),
-    "body"     : S("body", fontSize=9.5, leading=15, textColor=TEXT_DARK,
-                   spaceAfter=6, alignment=TA_JUSTIFY),
-    "body_sm"  : S("body_sm", fontSize=9, leading=14, textColor=TEXT_MID,
-                   spaceAfter=4),
-    "bullet"   : S("bullet", fontSize=9.5, leading=14, textColor=TEXT_DARK,
-                   leftIndent=12, firstLineIndent=0, spaceAfter=3,
-                   bulletIndent=4),
-    "code"     : S("code", fontSize=8.5, leading=13, textColor=CODE_TEXT,
-                   fontName="Courier", backColor=CODE_BG,
-                   leftIndent=8, rightIndent=8, spaceBefore=4, spaceAfter=6),
-    "callout"  : S("callout", fontSize=9.5, leading=14, textColor=BLUE,
-                   backColor=BG_BLUE_LT, leftIndent=10, rightIndent=10,
-                   spaceBefore=4, spaceAfter=6),
-    "warn"     : S("warn", fontSize=9.5, leading=14, textColor="#7C2D12",
-                   backColor="#FEF3C7", leftIndent=10, rightIndent=10,
-                   spaceBefore=4, spaceAfter=6),
-    "toc_item" : S("toc_item", fontSize=10, leading=18, textColor=TEXT_DARK,
-                   leftIndent=8),
-    "toc_num"  : S("toc_num", fontSize=10, leading=18, textColor=ORANGE,
-                   fontName="ArialUni"),
+    "h2"      : S("h2", fontSize=14, leading=20, textColor=WHITE,
+                  spaceBefore=0, spaceAfter=0),
+    "h3"      : S("h3", fontSize=11, leading=16, textColor=BLUE,
+                  spaceBefore=8, spaceAfter=4),
+    "h4"      : S("h4", fontSize=10, leading=15, textColor=ORANGE,
+                  spaceBefore=6, spaceAfter=3),
+    "body"    : S("body", fontSize=9.5, leading=15, textColor=TEXT_DARK,
+                  spaceAfter=6, alignment=TA_JUSTIFY),
+    "bullet"  : S("bullet", fontSize=9.5, leading=14, textColor=TEXT_DARK,
+                  leftIndent=12, spaceAfter=3),
+    "code"    : S("code", fontSize=8.5, leading=13, textColor=TEXT_DARK,
+                  fontName="Courier", leftIndent=8, spaceBefore=4, spaceAfter=6),
+    "callout" : S("callout", fontSize=9.5, leading=14, textColor=BLUE,
+                  leftIndent=10, rightIndent=10, spaceBefore=4, spaceAfter=6),
+    "toc_item": S("toc_item", fontSize=10, leading=18, textColor=TEXT_DARK,
+                  leftIndent=8),
+    "toc_num" : S("toc_num", fontSize=10, leading=18, textColor=ORANGE),
     "cover_sub": S("cover_sub", fontSize=11, leading=18, textColor=WHITE,
                    alignment=TA_CENTER),
-    "cover_tag": S("cover_tag", fontSize=9, leading=14,
-                   textColor=colors.HexColor("#CBD5E1"),
-                   alignment=TA_CENTER),
-    "footer"   : S("footer", fontSize=8, leading=10,
-                   textColor=TEXT_LIGHT, alignment=TA_CENTER),
-    "th"       : S("th", fontSize=9, leading=13, textColor=WHITE,
-                   fontName="ArialUni", alignment=TA_CENTER),
-    "td"       : S("td", fontSize=9, leading=13, textColor=TEXT_DARK,
-                   spaceAfter=0),
-    "td_code"  : S("td_code", fontSize=8.5, leading=12, textColor=ORANGE,
-                   fontName="Courier"),
-    "label"    : S("label", fontSize=8, leading=12, textColor=WHITE,
-                   fontName="ArialUni", alignment=TA_CENTER),
+    "footer"  : S("footer", fontSize=8, leading=10,
+                  textColor=TEXT_LIGHT, alignment=TA_CENTER),
+    "th"      : S("th", fontSize=9, leading=13, textColor=WHITE,
+                  alignment=TA_CENTER),
+    "td"      : S("td", fontSize=9, leading=13, textColor=TEXT_DARK, spaceAfter=0),
+    "label"   : S("label", fontSize=8, leading=12, textColor=WHITE,
+                  alignment=TA_CENTER),
 }
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
@@ -105,14 +83,14 @@ def hr(color=BORDER, thickness=0.5):
     return HRFlowable(width="100%", thickness=thickness, color=color,
                       spaceBefore=2*mm, spaceAfter=2*mm)
 
-def section_header(number, title, icon=""):
+def section_header(number, title):
     tbl = Table(
-        [[Paragraph(f"{icon} {number}. {title}", ST["h2"])]],
+        [[Paragraph(f"{number}. {title}", ST["h2"])]],
         colWidths=[PAGE_W - 2*MARGIN],
     )
     tbl.setStyle(TableStyle([
-        ("BACKGROUND", (0,0), (-1,-1), BLUE),
-        ("ROUNDEDCORNERS", [6]),
+        ("BACKGROUND",    (0,0), (-1,-1), BLUE),
+        ("ROUNDEDCORNERS",[6]),
         ("TOPPADDING",    (0,0), (-1,-1), 8),
         ("BOTTOMPADDING", (0,0), (-1,-1), 8),
         ("LEFTPADDING",   (0,0), (-1,-1), 12),
@@ -126,23 +104,22 @@ def sub_header(title):
 def sub2_header(title):
     return p(title, "h4")
 
-def bullet(items):
-    """items: list of str"""
-    out = []
-    for item in items:
-        out.append(Paragraph(f"• {item}", ST["bullet"]))
-    return out
+def bullets(items):
+    return [Paragraph(f"• {item}", ST["bullet"]) for item in items]
 
 def code_block(text):
     lines = text.strip().split("\n")
-    content = "<br/>".join(l.replace(" ", "&nbsp;").replace("<","&lt;").replace(">","&gt;") for l in lines)
+    content = "<br/>".join(
+        l.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace(" ","&nbsp;")
+        for l in lines
+    )
     tbl = Table(
         [[Paragraph(content, ST["code"])]],
         colWidths=[PAGE_W - 2*MARGIN - 4*mm],
     )
     tbl.setStyle(TableStyle([
-        ("BACKGROUND", (0,0), (-1,-1), CODE_BG),
-        ("ROUNDEDCORNERS", [4]),
+        ("BACKGROUND",    (0,0), (-1,-1), CODE_BG),
+        ("ROUNDEDCORNERS",[4]),
         ("TOPPADDING",    (0,0), (-1,-1), 6),
         ("BOTTOMPADDING", (0,0), (-1,-1), 6),
         ("LEFTPADDING",   (0,0), (-1,-1), 8),
@@ -150,198 +127,171 @@ def code_block(text):
     ]))
     return KeepTogether([tbl, sp(2)])
 
-def callout(text, style="callout"):
-    icon = "💡" if style == "callout" else "⚠️"
+def callout(text, warn=False):
+    icon = "⚠" if warn else "💡"
+    bg  = colors.HexColor("#FEF3C7") if warn else BG_BLUE_LT
+    bd  = colors.HexColor("#FCD34D") if warn else colors.HexColor("#93C5FD")
+    tc  = colors.HexColor("#92400E") if warn else BLUE
+    style = ParagraphStyle("cb", fontName="ArialUni", fontSize=9.5, leading=14,
+                            textColor=tc, leftIndent=10, rightIndent=10)
     tbl = Table(
-        [[Paragraph(f"{icon}  {text}", ST[style])]],
+        [[Paragraph(f"{icon}  {text}", style)]],
         colWidths=[PAGE_W - 2*MARGIN - 4*mm],
     )
-    bg = BG_BLUE_LT if style == "callout" else colors.HexColor("#FEF3C7")
-    bd = colors.HexColor("#93C5FD") if style == "callout" else colors.HexColor("#FCD34D")
     tbl.setStyle(TableStyle([
-        ("BACKGROUND", (0,0), (-1,-1), bg),
-        ("ROUNDEDCORNERS", [4]),
-        ("TOPPADDING",    (0,0), (-1,-1), 6),
-        ("BOTTOMPADDING", (0,0), (-1,-1), 6),
+        ("BACKGROUND",    (0,0), (-1,-1), bg),
+        ("ROUNDEDCORNERS",[4]),
+        ("TOPPADDING",    (0,0), (-1,-1), 7),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 7),
         ("LEFTPADDING",   (0,0), (-1,-1), 10),
         ("BOX",           (0,0), (-1,-1), 1, bd),
     ]))
     return KeepTogether([tbl, sp(2)])
 
-def make_table(headers, rows, col_widths=None, highlight_col=None):
+def make_table(headers, rows, col_widths=None):
     usable = PAGE_W - 2*MARGIN - 4*mm
     if col_widths is None:
         col_widths = [usable / len(headers)] * len(headers)
-
-    header_row = [Paragraph(h, ST["th"]) for h in headers]
-    data = [header_row]
-    for i, row in enumerate(rows):
+    data = [[Paragraph(h, ST["th"]) for h in headers]]
+    for row in rows:
         data.append([Paragraph(str(c), ST["td"]) for c in row])
-
     tbl = Table(data, colWidths=col_widths, repeatRows=1)
-    style = [
-        ("BACKGROUND",    (0, 0), (-1, 0), BLUE),
-        ("ROWBACKGROUNDS",(0, 1), (-1, -1), [WHITE, BG_GRAY]),
-        ("GRID",          (0, 0), (-1, -1), 0.4, BORDER),
-        ("TOPPADDING",    (0, 0), (-1, -1), 5),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-        ("LEFTPADDING",   (0, 0), (-1, -1), 7),
-        ("RIGHTPADDING",  (0, 0), (-1, -1), 7),
-        ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
+    tbl.setStyle(TableStyle([
+        ("BACKGROUND",    (0,0), (-1,0), BLUE),
+        ("ROWBACKGROUNDS",(0,1), (-1,-1), [WHITE, BG_GRAY]),
+        ("GRID",          (0,0), (-1,-1), 0.4, BORDER),
+        ("TOPPADDING",    (0,0), (-1,-1), 5),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 5),
+        ("LEFTPADDING",   (0,0), (-1,-1), 7),
+        ("RIGHTPADDING",  (0,0), (-1,-1), 7),
+        ("VALIGN",        (0,0), (-1,-1), "MIDDLE"),
         ("ROUNDEDCORNERS",[4]),
-    ]
-    if highlight_col is not None:
-        for r in range(1, len(data)):
-            style.append(("TEXTCOLOR", (highlight_col, r), (highlight_col, r), ORANGE))
-    tbl.setStyle(TableStyle(style))
+    ]))
     return KeepTogether([tbl, sp(3)])
 
 def badge(text, color=BLUE):
-    tbl = Table([[Paragraph(text, ST["label"])]], colWidths=[28*mm])
+    tbl = Table([[Paragraph(text, ST["label"])]], colWidths=[60*mm])
     tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0,0), (-1,-1), color),
-        ("TOPPADDING",    (0,0), (-1,-1), 3),
-        ("BOTTOMPADDING", (0,0), (-1,-1), 3),
+        ("TOPPADDING",    (0,0), (-1,-1), 4),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 4),
         ("ROUNDEDCORNERS",[8]),
     ]))
     return tbl
 
-# ── Page template ──────────────────────────────────────────────────────────────
-class PageTemplate:
-    def __init__(self, total_pages=None):
-        self.total = total_pages
-
-    def __call__(self, canvas_obj, doc):
-        canvas_obj.saveState()
-        w, h = A4
-        # Header bar
-        canvas_obj.setFillColor(BLUE)
-        canvas_obj.rect(0, h - 10*mm, w, 10*mm, fill=1, stroke=0)
-        canvas_obj.setFillColor(ORANGE)
-        canvas_obj.rect(0, h - 11.5*mm, w, 1.5*mm, fill=1, stroke=0)
-        # Header text
-        canvas_obj.setFillColor(WHITE)
-        canvas_obj.setFont("ArialUni", 7.5)
-        canvas_obj.drawString(MARGIN, h - 6.5*mm, "AHAMOVE  •  DRIVER MANAGEMENT TEAM")
-        canvas_obj.setFont("ArialUni", 7)
-        canvas_obj.drawRightString(w - MARGIN, h - 6.5*mm, "Claude AI — Huong Dan Toan Dien")
-        # Footer bar
-        canvas_obj.setFillColor(BG_GRAY)
-        canvas_obj.rect(0, 0, w, 10*mm, fill=1, stroke=0)
-        canvas_obj.setFillColor(BORDER)
-        canvas_obj.rect(0, 10*mm, w, 0.5, fill=1, stroke=0)
-        # Footer text
-        canvas_obj.setFillColor(TEXT_LIGHT)
-        canvas_obj.setFont("ArialUni", 7.5)
-        canvas_obj.drawString(MARGIN, 3.5*mm, "khanhlp@ahamove.com  •  2026-05-04")
-        page_num = doc.page
-        canvas_obj.drawRightString(w - MARGIN, 3.5*mm, f"Trang {page_num}")
-        canvas_obj.restoreState()
+# ── Page Template ──────────────────────────────────────────────────────────────
+def page_template(canvas_obj, doc):
+    canvas_obj.saveState()
+    w, h = A4
+    canvas_obj.setFillColor(BLUE)
+    canvas_obj.rect(0, h - 10*mm, w, 10*mm, fill=1, stroke=0)
+    canvas_obj.setFillColor(ORANGE)
+    canvas_obj.rect(0, h - 11.5*mm, w, 1.5*mm, fill=1, stroke=0)
+    canvas_obj.setFillColor(WHITE)
+    canvas_obj.setFont("ArialUni", 7.5)
+    canvas_obj.drawString(MARGIN, h - 6.5*mm, "AHAMOVE  •  DRIVER MANAGEMENT TEAM")
+    canvas_obj.setFont("ArialUni", 7)
+    canvas_obj.drawRightString(w - MARGIN, h - 6.5*mm, "Claude AI — Hướng Dẫn Toàn Diện")
+    canvas_obj.setFillColor(BG_GRAY)
+    canvas_obj.rect(0, 0, w, 10*mm, fill=1, stroke=0)
+    canvas_obj.setFillColor(BORDER)
+    canvas_obj.rect(0, 10*mm, w, 0.5, fill=1, stroke=0)
+    canvas_obj.setFillColor(TEXT_LIGHT)
+    canvas_obj.setFont("ArialUni", 7.5)
+    canvas_obj.drawString(MARGIN, 3.5*mm, "khanhlp@ahamove.com  •  2026-05-04")
+    canvas_obj.drawRightString(w - MARGIN, 3.5*mm, f"Trang {doc.page}")
+    canvas_obj.restoreState()
 
 # ── Cover Page ─────────────────────────────────────────────────────────────────
 def cover_page():
-    elements = []
-
-    # Big blue background card
-    cover_tbl = Table(
+    el = []
+    title_tbl = Table(
         [[Paragraph("CLAUDE AI", ParagraphStyle("ct", fontName="ArialUni",
-                    fontSize=36, leading=44, textColor=WHITE,
-                    alignment=TA_CENTER)),
-          ]],
+            fontSize=40, leading=50, textColor=WHITE, alignment=TA_CENTER))]],
         colWidths=[PAGE_W - 2*MARGIN],
     )
-    cover_tbl.setStyle(TableStyle([
+    title_tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0,0), (-1,-1), BLUE),
-        ("TOPPADDING",    (0,0), (-1,-1), 24),
-        ("BOTTOMPADDING", (0,0), (-1,-1), 24),
+        ("TOPPADDING",    (0,0), (-1,-1), 26),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 26),
         ("ROUNDEDCORNERS",[12]),
     ]))
-
-    subtitle_tbl = Table(
-        [[Paragraph("Huong Dan Toan Dien Cho Team", ST["cover_sub"])]],
+    sub_tbl = Table(
+        [[Paragraph("Hướng Dẫn Toàn Diện Cho Team", ST["cover_sub"])]],
         colWidths=[PAGE_W - 2*MARGIN],
     )
-    subtitle_tbl.setStyle(TableStyle([
+    sub_tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0,0), (-1,-1), colors.HexColor("#0A2E56")),
         ("TOPPADDING",    (0,0), (-1,-1), 10),
         ("BOTTOMPADDING", (0,0), (-1,-1), 10),
         ("ROUNDEDCORNERS",[8]),
     ]))
+    el += [sp(20), title_tbl, sp(4), sub_tbl, sp(8)]
 
-    elements += [
-        sp(20),
-        cover_tbl,
-        sp(4),
-        subtitle_tbl,
-        sp(8),
-    ]
-
-    # Tag row
-    tags = [
-        ("Danh cho nguoi moi bat dau", BLUE),
-        ("10 Phan Chi Tiet", ORANGE),
-        ("Ung dung thuc te", SUCCESS),
-    ]
-    tag_cells = [[badge(t, c) for t, c in tags]]
-    tag_tbl = Table(tag_cells, colWidths=[62*mm, 52*mm, 52*mm])
+    tag_data = [[
+        badge("Dành cho người mới bắt đầu", BLUE),
+        badge("10 Phần Chi Tiết", ORANGE),
+        badge("Ứng dụng thực tế", SUCCESS),
+    ]]
+    tag_tbl = Table(tag_data, colWidths=[66*mm, 56*mm, 56*mm])
     tag_tbl.setStyle(TableStyle([
-        ("ALIGN",    (0,0), (-1,-1), "CENTER"),
-        ("VALIGN",   (0,0), (-1,-1), "MIDDLE"),
-        ("LEFTPADDING",  (0,0), (-1,-1), 4),
-        ("RIGHTPADDING", (0,0), (-1,-1), 4),
+        ("ALIGN",        (0,0), (-1,-1), "CENTER"),
+        ("VALIGN",       (0,0), (-1,-1), "MIDDLE"),
+        ("LEFTPADDING",  (0,0), (-1,-1), 3),
+        ("RIGHTPADDING", (0,0), (-1,-1), 3),
     ]))
-    elements += [tag_tbl, sp(12)]
+    el += [tag_tbl, sp(12)]
 
-    # Meta info box
-    meta_rows = [
-        ["Danh cho",   "Thanh vien team chua tung dung AI / Claude"],
-        ["Muc tieu",   "Hieu Claude la gi, dung duoc ngay, ap dung vao cong viec"],
-        ["Cap nhat",   "2026-05-04"],
-        ["Bien soan",  "Khanh (Driver Management Leader) — Ahamove"],
+    meta = [
+        ["Dành cho",  "Thành viên team chưa từng dùng AI / Claude"],
+        ["Mục tiêu",  "Hiểu Claude là gì, dùng được ngay, áp dụng vào công việc"],
+        ["Cập nhật",  "2026-05-04"],
+        ["Biên soạn", "Khanh — Driver Management Leader, Ahamove"],
     ]
-    meta_data = []
-    for k, v in meta_rows:
-        meta_data.append([
-            Paragraph(k, ParagraphStyle("mk", fontName="ArialUni", fontSize=9,
-                       textColor=ORANGE)),
-            Paragraph(v, ParagraphStyle("mv", fontName="ArialUni", fontSize=9,
-                       textColor=TEXT_DARK)),
-        ])
-    meta_tbl = Table(meta_data, colWidths=[38*mm, PAGE_W - 2*MARGIN - 42*mm])
+    meta_data = [[
+        Paragraph(k, ParagraphStyle("mk", fontName="ArialUni", fontSize=9, textColor=ORANGE)),
+        Paragraph(v, ParagraphStyle("mv", fontName="ArialUni", fontSize=9, textColor=TEXT_DARK)),
+    ] for k, v in meta]
+    meta_tbl = Table(meta_data, colWidths=[38*mm, PAGE_W-2*MARGIN-42*mm])
     meta_tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0,0), (-1,-1), BG_GRAY),
         ("BOX",           (0,0), (-1,-1), 0.5, BORDER),
         ("INNERGRID",     (0,0), (-1,-1), 0.3, BORDER),
-        ("TOPPADDING",    (0,0), (-1,-1), 6),
-        ("BOTTOMPADDING", (0,0), (-1,-1), 6),
+        ("TOPPADDING",    (0,0), (-1,-1), 7),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 7),
         ("LEFTPADDING",   (0,0), (-1,-1), 10),
         ("ROUNDEDCORNERS",[6]),
     ]))
-    elements += [meta_tbl, PageBreak()]
-    return elements
+    el += [meta_tbl, PageBreak()]
+    return el
 
-# ── TOC ────────────────────────────────────────────────────────────────────────
+# ── Mục lục ───────────────────────────────────────────────────────────────────
 def toc():
     items = [
-        ("1", "AI La Gi? — Giai thich khong can ky thuat"),
-        ("2", "Claude La Ai? — Anthropic La Ai?"),
-        ("3", "Nguyen Ly Hoat Dong"),
-        ("4", "Cac Nen Tang Claude — Dung o dau, khac gi nhau?"),
-        ("5", "Bat Dau Dung Claude — Step by step"),
-        ("6", "Cach Viet Prompt Hieu Qua"),
-        ("7", "Ap Dung Vao Cong Viec Thuc Te"),
-        ("8", "Nhung Dieu Claude KHONG Lam Duoc"),
-        ("9", "Bao Mat & Luu Y Quan Trong"),
-        ("10", "Tu Dien Thuat Ngu"),
+        ("1",  "AI Là Gì? — Giải thích không cần kỹ thuật"),
+        ("2",  "Claude Là Ai? — Anthropic Là Ai?"),
+        ("3",  "Nguyên Lý Hoạt Động"),
+        ("4",  "Các Nền Tảng Claude — Dùng ở đâu, khác gì nhau?"),
+        ("5",  "Bắt Đầu Dùng Claude — Step by step"),
+        ("6",  "Cách Viết Prompt Hiệu Quả"),
+        ("7",  "Áp Dụng Vào Công Việc Thực Tế"),
+        ("8",  "Những Điều Claude KHÔNG Làm Được"),
+        ("9",  "Bảo Mật & Lưu Ý Quan Trọng"),
+        ("10", "Từ Điển Thuật Ngữ"),
     ]
-    tbl_data = []
-    for num, title in items:
-        tbl_data.append([
-            Paragraph(num, ST["toc_num"]),
-            Paragraph(title, ST["toc_item"]),
-        ])
-
-    tbl = Table(tbl_data, colWidths=[12*mm, PAGE_W - 2*MARGIN - 16*mm])
+    header_tbl = Table(
+        [[Paragraph("MỤC LỤC", ParagraphStyle("toch", fontName="ArialUni",
+            fontSize=16, leading=22, textColor=WHITE, alignment=TA_CENTER))]],
+        colWidths=[PAGE_W - 2*MARGIN],
+    )
+    header_tbl.setStyle(TableStyle([
+        ("BACKGROUND",    (0,0), (-1,-1), BLUE),
+        ("TOPPADDING",    (0,0), (-1,-1), 10),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 10),
+        ("ROUNDEDCORNERS",[8]),
+    ]))
+    data = [[Paragraph(n, ST["toc_num"]), Paragraph(t, ST["toc_item"])] for n, t in items]
+    tbl = Table(data, colWidths=[12*mm, PAGE_W-2*MARGIN-16*mm])
     tbl.setStyle(TableStyle([
         ("ROWBACKGROUNDS", (0,0), (-1,-1), [WHITE, BG_GRAY]),
         ("TOPPADDING",     (0,0), (-1,-1), 7),
@@ -351,287 +301,263 @@ def toc():
         ("LINEBELOW",      (0,0), (-1,-2), 0.3, BORDER),
         ("VALIGN",         (0,0), (-1,-1), "MIDDLE"),
     ]))
-
-    header_tbl = Table(
-        [[Paragraph("MUC LUC", ParagraphStyle("toch",
-            fontName="ArialUni", fontSize=16, leading=22,
-            textColor=WHITE, alignment=TA_CENTER))]],
-        colWidths=[PAGE_W - 2*MARGIN],
-    )
-    header_tbl.setStyle(TableStyle([
-        ("BACKGROUND",    (0,0), (-1,-1), BLUE),
-        ("TOPPADDING",    (0,0), (-1,-1), 10),
-        ("BOTTOMPADDING", (0,0), (-1,-1), 10),
-        ("ROUNDEDCORNERS",[8]),
-    ]))
-
     return [header_tbl, sp(4), tbl, PageBreak()]
 
-# ── Section 1 — AI La Gi ──────────────────────────────────────────────────────
+# ── Phần 1 — AI là gì ─────────────────────────────────────────────────────────
 def section1():
-    el = [section_header("1", "AI La Gi?", "")]
-    el.append(p("Hay nghi AI (Tri tue nhan tao) nhu mot <b>nhan vien da doc gan nhu toan bo internet</b> — sach, bai bao, code, tai lieu khoa hoc, Wikipedia, dien dan... — roi hoc cach <b>tra loi cau hoi, viet van ban, phan tich du lieu va ly luan</b> dua tren tat ca kien thuc do."))
-    el.append(p("Khac voi phan mem thong thuong (ban bam nut → no lam dung 1 viec co dinh), AI <b>hieu ngon ngu tu nhien</b> — tuc la ban noi chuyen binh thuong voi no nhu noi chuyen voi nguoi."))
+    el = [section_header("1", "AI Là Gì?")]
+    el.append(p("Hãy nghĩ AI (Trí tuệ nhân tạo) như một <b>nhân viên đã đọc gần như toàn bộ internet</b> — sách, bài báo, code, tài liệu khoa học, Wikipedia, diễn đàn... — rồi học cách <b>trả lời câu hỏi, viết văn bản, phân tích dữ liệu và lý luận</b> dựa trên tất cả kiến thức đó."))
+    el.append(p("Khác với phần mềm thông thường (bạn bấm nút → nó làm đúng 1 việc cố định), AI <b>hiểu ngôn ngữ tự nhiên</b> — tức là bạn nói chuyện bình thường với nó như nói chuyện với người."))
     el.append(sub_header("AI ≠ Robot trong phim"))
-    headers = ["Dieu nhieu nguoi nghi", "Thuc te"]
     rows = [
-        ["AI co y thuc, cam xuc nhu nguoi", "AI khong co y thuc. No xu ly van ban theo xac suat thong ke"],
-        ["AI biet het moi thu", "AI chi biet nhung gi da duoc hoc. Co the sai, co the bia"],
-        ["AI se thay the toan bo con nguoi", "AI thay the <b>tac vu</b>, khong thay the <b>tu duy & judgement</b>"],
-        ["Phai biet code moi dung duoc", "Ai cung dung duoc — chi can biet go chu"],
+        ["AI có ý thức, cảm xúc như người",      "AI không có ý thức. Nó xử lý văn bản theo xác suất thống kê"],
+        ["AI biết hết mọi thứ",                  "AI chỉ biết những gì đã được học. Có thể sai, có thể bịa"],
+        ["AI sẽ thay thế toàn bộ con người",     "AI thay thế <b>tác vụ</b>, không thay thế <b>tư duy &amp; judgement</b>"],
+        ["Phải biết code mới dùng được",         "Ai cũng dùng được — chỉ cần biết gõ chữ"],
     ]
-    el.append(make_table(headers, rows, col_widths=[80*mm, PAGE_W-2*MARGIN-84*mm]))
+    w = PAGE_W - 2*MARGIN - 4*mm
+    el.append(make_table(["Điều nhiều người nghĩ", "Thực tế"], rows,
+                         col_widths=[80*mm, w-80*mm]))
     return el
 
-# ── Section 2 — Claude La Ai ──────────────────────────────────────────────────
+# ── Phần 2 — Claude là ai ─────────────────────────────────────────────────────
 def section2():
-    el = [section_header("2", "Claude La Ai? Anthropic La Ai?", "")]
-    el.append(sub_header("Anthropic — Cong ty tao ra Claude"))
-    el.append(p("<b>Anthropic</b> la cong ty AI thanh lap nam 2021 tai My, tach ra tu OpenAI (cong ty tao ChatGPT). Anthropic tap trung vao <b>AI an toan va dang tin cay</b> — triet ly cua ho la tao ra AI giup ich cho con nguoi ma khong gay hai."))
-    el.append(p("<b>Claude</b> la san pham AI chinh cua Anthropic, ra mat nam 2023. Hien tai (2026) dang o the he <b>Claude 4</b>."))
-    el.append(sub_header("Claude vs ChatGPT — Khac nhau the nao?"))
-    headers = ["Tieu chi", "Claude (Anthropic)", "ChatGPT (OpenAI)"]
+    el = [section_header("2", "Claude Là Ai? Anthropic Là Ai?")]
+    el.append(sub_header("Anthropic — Công ty tạo ra Claude"))
+    el.append(p("<b>Anthropic</b> là công ty AI thành lập năm 2021 tại Mỹ, tách ra từ OpenAI (công ty tạo ChatGPT). Anthropic tập trung vào <b>AI an toàn và đáng tin cậy</b> — triết lý của họ là tạo ra AI giúp ích cho con người mà không gây hại."))
+    el.append(p("<b>Claude</b> là sản phẩm AI chính của Anthropic, ra mắt năm 2023. Hiện tại (2026) đang ở thế hệ <b>Claude 4</b>."))
+    el.append(sub_header("Claude vs ChatGPT — Khác nhau thế nào?"))
     rows = [
-        ["Do an toan", "Thiet ke tu dau voi tieu chi an toan", "Them vao sau"],
-        ["Van phong", "Tu nhien, co chieu sau, it 'robot' hon", "Doi khi cung, cong thuc"],
-        ["Ly luan dai", "Rat manh — xu ly tai lieu dai tot", "Tot nhung doi khi lac de"],
-        ["Code", "Xuat sac", "Xuat sac"],
-        ["Phan tich", "Manh, trung thuc ve gioi han", "Tot"],
-        ["Gia", "Free / Pro $20/thang", "Free / Plus $20/thang"],
+        ["Độ an toàn",  "Thiết kế từ đầu với tiêu chí an toàn", "Thêm vào sau"],
+        ["Văn phong",   "Tự nhiên, có chiều sâu, ít 'robot' hơn", "Đôi khi cứng, công thức"],
+        ["Lý luận dài", "Rất mạnh — xử lý tài liệu dài tốt",    "Tốt nhưng đôi khi lạc đề"],
+        ["Code",        "Xuất sắc",                              "Xuất sắc"],
+        ["Phân tích",   "Mạnh, trung thực về giới hạn",          "Tốt"],
+        ["Giá",         "Free / Pro $20/tháng",                  "Free / Plus $20/tháng"],
     ]
-    w = (PAGE_W - 2*MARGIN - 4*mm)
-    el.append(make_table(headers, rows, col_widths=[40*mm, (w-40*mm)/2, (w-40*mm)/2]))
-    el.append(callout("Tom lai: Ca hai deu manh. Claude thuong duoc danh gia cao hon ve van ban chuyen sau, phan tich, va do trung thuc — Claude hay noi thang khi khong chac, thay vi bia."))
+    w = PAGE_W - 2*MARGIN - 4*mm
+    el.append(make_table(["Tiêu chí", "Claude (Anthropic)", "ChatGPT (OpenAI)"], rows,
+                         col_widths=[38*mm, (w-38*mm)/2, (w-38*mm)/2]))
+    el.append(callout("Tóm lại: Cả hai đều mạnh. Claude thường được đánh giá cao hơn về <b>văn bản chuyên sâu, phân tích, và độ trung thực</b> — Claude hay nói thẳng khi không chắc, thay vì bịa."))
     return el
 
-# ── Section 3 — Nguyen Ly ─────────────────────────────────────────────────────
+# ── Phần 3 — Nguyên lý ────────────────────────────────────────────────────────
 def section3():
-    el = [section_header("3", "Nguyen Ly Hoat Dong", "")]
-    el.append(sub_header("Claude 'nghi' nhu the nao? (Khong can biet ky thuat)"))
-    el.append(p("Hay tuong tuong Claude nhu nguoi da <b>doc hang ty cau van</b> trong suot qua trinh training (huan luyen). Tu do, Claude hoc duoc:"))
-    el += bullet(["Khi A thi thuong tiep theo la B",
-                  "Cau hoi dang X thuong duoc tra loi theo cau truc Y",
-                  "Van ban tot trong nhu the nao"])
-    el.append(p("Khi ban go cau hoi, Claude <b>du doan tung tu tiep theo</b> theo xac suat cao nhat de tao ra cau tra loi co nghia. Khong co 'nao bo' that su — nhung ket qua tao ra rat giong voi suy nghi con nguoi."))
-    el.append(sub_header("Context Window — 'Bo nho lam viec' cua Claude"))
-    el.append(p("<b>Context window</b> la luong van ban Claude co the 'nhin thay' va xu ly trong 1 lan tro chuyen."))
+    el = [section_header("3", "Nguyên Lý Hoạt Động")]
+    el.append(sub_header("Claude 'nghĩ' như thế nào? (Không cần biết kỹ thuật)"))
+    el.append(p("Hãy tưởng tượng Claude như người đã <b>đọc hàng tỷ câu văn</b> trong suốt quá trình training (huấn luyện). Từ đó, Claude học được:"))
+    el += bullets(["Khi A thì thường tiếp theo là B",
+                   "Câu hỏi dạng X thường được trả lời theo cấu trúc Y",
+                   "Văn bản tốt trông như thế nào"])
+    el.append(p("Khi bạn gõ câu hỏi, Claude <b>dự đoán từng từ tiếp theo</b> theo xác suất cao nhất để tạo ra câu trả lời có nghĩa. Không có 'não bộ' thật sự — nhưng kết quả tạo ra rất giống với suy nghĩ con người."))
+    el.append(sub_header("Context Window — 'Bộ nhớ làm việc' của Claude"))
+    el.append(p("<b>Context window</b> là lượng văn bản Claude có thể 'nhìn thấy' và xử lý trong 1 lần trò chuyện."))
     el.append(code_block(
-        "Ban go:          [Cau hoi cua ban]\n"
-        "Claude nhin thay: [Toan bo lich su hoi thoai tu dau den gio]\n"
-        "→ Tra loi dua tren TAT CA context do"
+        "Bạn gõ:           [Câu hỏi của bạn]\n"
+        "Claude nhìn thấy: [Toàn bộ lịch sử hội thoại từ đầu đến giờ]\n"
+        "→ Trả lời dựa trên TẤT CẢ context đó"
     ))
-    el.append(callout("Quan trong: Khi ban tat tab / mo cuoc tro chuyen moi → Claude quen het. Moi conversation la mot trang giay trang moi."))
-    el.append(sub_header("Claude KHONG co kha nang:"))
-    el += bullet([
-        "<b>Nho ban</b> sau khi dong hoi thoai (tru khi dung tinh nang Memory)",
-        "<b>Truy cap internet real-time</b> (tru khi duoc cai tool tim kiem)",
-        "<b>Luu file vao may ban</b> tu dong",
-        "<b>Tu hanh dong</b> ma khong co lenh tu ban",
+    el.append(callout("Quan trọng: Khi bạn tắt tab / mở cuộc trò chuyện mới → Claude quên hết. Mỗi conversation là một trang giấy trắng mới."))
+    el.append(sub_header("Claude KHÔNG có khả năng:"))
+    el += bullets([
+        "<b>Nhớ bạn</b> sau khi đóng hội thoại (trừ khi dùng tính năng Memory)",
+        "<b>Truy cập internet real-time</b> (trừ khi được cài tool tìm kiếm)",
+        "<b>Lưu file vào máy bạn</b> tự động",
+        "<b>Tự hành động</b> mà không có lệnh từ bạn",
     ])
     return el
 
-# ── Section 4 — Cac Nen Tang ─────────────────────────────────────────────────
+# ── Phần 4 — Các nền tảng ─────────────────────────────────────────────────────
 def section4():
-    el = [section_header("4", "Cac Nen Tang Claude", "")]
-    el.append(p("Claude khong chi co mot cach dung — co nhieu 'cua vao' khac nhau, phu hop voi nhu cau khac nhau. Phan nay giai thich ro tung nen tang."))
-
-    # Overview diagram
-    el.append(sub_header("Ban do tong quan"))
+    el = [section_header("4", "Các Nền Tảng Claude")]
+    el.append(p("Claude không chỉ có một cách dùng — có nhiều 'cửa vào' khác nhau, phù hợp với nhu cầu khác nhau. Phần này giải thích rõ từng nền tảng để bạn chọn đúng công cụ cho đúng việc."))
+    el.append(sub_header("Bản đồ tổng quan"))
     el.append(code_block(
-        "CLAUDE CO THE DUNG QUA:\n"
+        "CLAUDE CÓ THỂ DÙNG QUA:\n"
         "│\n"
-        "├── claude.ai (Web)    → Trinh duyet web (ai cung dung duoc, khong cai gi)\n"
-        "├── Claude Desktop     → App cai tren may Mac/Windows\n"
-        "├── Claude Code        → Cong cu cho lap trinh vien (chay trong terminal)\n"
+        "├── claude.ai (Web)   → Trình duyệt web (ai cũng dùng được, không cài gì)\n"
+        "├── Claude Desktop    → App cài trên máy Mac/Windows\n"
+        "├── Claude Code       → Công cụ chuyên sâu (chạy trong terminal)\n"
         "│       ├── CLI (terminal)\n"
         "│       ├── Web: claude.ai/code\n"
         "│       └── IDE Extension (VS Code, JetBrains)\n"
-        "└── Cowork             → Moi truong lam viec day du xay tren Claude Code"
+        "└── Cowork            → Môi trường làm việc đầy đủ xây trên Claude Code"
     ))
 
-    # Claude.ai Web
-    el.append(sub2_header("claude.ai (Web) — Danh cho moi nguoi"))
-    el.append(p("<b>La gi:</b> Trang web tai claude.ai — cach don gian nhat de dung Claude. Mo trinh duyet, go claude.ai, dang nhap la xong."))
-    el += bullet([
-        "Chat hoi dap, viet van ban, phan tich",
-        "Upload file (PDF, Word, Excel, anh) de Claude doc",
-        "Tao <b>Projects</b> (workspace) de luu ngu canh tai su dung",
-        "Dung tren moi thiet bi: laptop, dien thoai, may tinh bang",
+    # claude.ai web
+    el.append(sub2_header("claude.ai (Web) — Dành cho mọi người"))
+    el.append(p("<b>Là gì:</b> Trang web tại claude.ai — cách đơn giản nhất để dùng Claude. Mở trình duyệt, gõ claude.ai, đăng nhập là xong."))
+    el += bullets([
+        "Chat hỏi đáp, viết văn bản, phân tích",
+        "Upload file (PDF, Word, Excel, ảnh) để Claude đọc",
+        "Tạo <b>Projects</b> (workspace) để lưu ngữ cảnh tái sử dụng",
+        "Dùng trên mọi thiết bị: laptop, điện thoại, máy tính bảng",
     ])
-    el.append(p("<b>Gioi han:</b> Chi la chat — khong the tu dong hoa, khong ket noi sau voi email/lich, khong thao tac file tren may ban."))
+    el.append(p("<b>Giới hạn:</b> Chỉ là chat — không thể tự động hóa, không kết nối sâu với email/lịch, không thao tác file trên máy bạn."))
     el.append(sp(2))
 
     # Claude Desktop
-    el.append(sub2_header("Claude Desktop — App may tinh"))
-    el.append(p("<b>La gi:</b> Ung dung cai dat tren may tinh (Mac hoac Windows), giao dien giong claude.ai nhung chay nhu mot app rieng."))
-    headers = ["Tieu chi", "Claude.ai Web", "Claude Desktop"]
-    rows = [
-        ["Can mo trinh duyet", "Co", "Khong (app doc lap)"],
-        ["Giao dien", "Giong nhau", "Giong nhau"],
-        ["Tinh nang", "Nhu nhau", "Nhu nhau + tich hop MCP"],
-        ["Offline", "Khong", "Khong (van can internet)"],
-        ["MCP Tools", "Khong", "Co the cai them"],
-    ]
+    el.append(sub2_header("Claude Desktop — App máy tính"))
+    el.append(p("<b>Là gì:</b> Ứng dụng cài đặt trên máy tính (Mac hoặc Windows), giao diện giống claude.ai nhưng chạy như một app riêng. Tải về tại claude.ai/download."))
     w = PAGE_W - 2*MARGIN - 4*mm
-    el.append(make_table(headers, rows, col_widths=[55*mm, (w-55*mm)/2, (w-55*mm)/2]))
-    el.append(callout("<b>MCP (Model Context Protocol)</b> = Chuan ket noi cho phep Claude 'voi tay' sang cac app khac: Google Calendar, Gmail, Notion, Slack... Desktop cho phep cai them cac ket noi nay, con web thi khong."))
+    rows = [
+        ["Cần mở trình duyệt", "Có", "Không (app độc lập)"],
+        ["Giao diện",          "Giống nhau", "Giống nhau"],
+        ["Tính năng",          "Như nhau", "Như nhau + tích hợp MCP"],
+        ["Offline",            "Không", "Không (vẫn cần internet)"],
+        ["MCP Tools",          "Không", "Có thể cài thêm"],
+    ]
+    el.append(make_table(["Tiêu chí", "Claude.ai Web", "Claude Desktop"], rows,
+                         col_widths=[55*mm, (w-55*mm)/2, (w-55*mm)/2]))
+    el.append(callout("<b>MCP (Model Context Protocol)</b> = Chuẩn kết nối cho phép Claude 'với tay' sang các app khác: Google Calendar, Gmail, Notion, Slack... Desktop cho phép cài thêm các kết nối này, còn web thì không."))
 
     # Claude Code
-    el.append(sub2_header("Claude Code — Danh cho cong viec chuyen sau"))
-    el.append(p("<b>La gi:</b> Phien ban Claude chay <b>trong terminal (cua so dong lenh)</b> cua may tinh — khong phai chat web thong thuong."))
-    headers = ["claude.ai / Desktop", "Claude Code"]
+    el.append(sub2_header("Claude Code — Dành cho công việc chuyên sâu"))
+    el.append(p("<b>Là gì:</b> Phiên bản Claude chạy <b>trong terminal (cửa sổ dòng lệnh)</b> của máy tính — không phải chat web thông thường."))
     rows = [
-        ["Chat qua giao dien web/app", "Chay truc tiep trong may tinh"],
-        ["Claude chi tra loi van ban", "Claude thao tac duoc file that tren may ban"],
-        ["Khong tu chay lenh", "Tu chay lenh, viet code, doc/sua file"],
-        ["Khong nho project qua session", "Nho toan bo codebase/project"],
-        ["Dung tay, tung cau", "Co the chay task dai tu dong"],
+        ["Chat qua giao diện web/app",       "Chạy trực tiếp trong máy tính"],
+        ["Claude chỉ trả lời văn bản",       "Claude <b>thao tác được file thật</b> trên máy bạn"],
+        ["Không tự chạy lệnh",               "Tự chạy lệnh, viết code, đọc/sửa file"],
+        ["Không nhớ project qua session",    "Nhớ toàn bộ codebase/project"],
+        ["Dùng tay, từng câu",               "Có thể chạy task dài tự động"],
     ]
-    w = PAGE_W - 2*MARGIN - 4*mm
-    el.append(make_table(headers, rows, col_widths=[w/2, w/2]))
-    el += bullet([
-        "Doc toan bo thu muc file bao cao → tong hop thanh 1 file duy nhat",
-        "Tu dong tao file Excel tu du lieu ban cung cap → luu thang vao may",
-        "Chay script xu ly 1000 dong CSV ma khong can copy-paste tung phan",
+    el.append(make_table(["claude.ai / Desktop", "Claude Code"], rows,
+                         col_widths=[w/2, w/2]))
+    el += bullets([
+        "Đọc toàn bộ thư mục file báo cáo → tổng hợp thành 1 file duy nhất",
+        "Tự động tạo file Excel từ dữ liệu bạn cung cấp → lưu thẳng vào máy",
+        "Chạy script xử lý 1000 dòng CSV mà không cần copy-paste từng phần",
     ])
 
     # Cowork
-    el.append(sub2_header("Cowork — Moi Truong Lam Viec Day Du"))
-    el.append(p("<b>La gi:</b> Cowork la mot <b>bo cau hinh va mo rong</b> xay tren nen Claude Code, bien Claude tu 'chatbot thong minh' thanh mot <b>tro ly lam viec thuc thu</b> duoc ket noi voi toan bo cong cu van phong."))
-    el.append(callout("Hinh dung don gian: claude.ai = xe may di duoc. Cowork = xe may da duoc lap them GPS, hop chua do, ket noi Bluetooth, camera hanh trinh, tich hop app giao hang — cung mot 'dong co' nhung manh hon nhieu."))
-
-    headers = ["Tinh nang", "claude.ai", "Claude Desktop", "Cowork"]
+    el.append(sub2_header("Cowork — Môi Trường Làm Việc Đầy Đủ"))
+    el.append(p("<b>Là gì:</b> Cowork là một <b>bộ cấu hình và mở rộng</b> xây trên nền Claude Code, biến Claude từ 'chatbot thông minh' thành một <b>trợ lý làm việc thực thụ</b> được kết nối với toàn bộ công cụ văn phòng."))
+    el.append(callout("Hình dung đơn giản: claude.ai = xe máy đi được. Cowork = xe máy đã được lắp thêm GPS, hộp chứa đồ, kết nối Bluetooth, camera hành trình, tích hợp app giao hàng — cùng một 'động cơ' nhưng mạnh hơn nhiều."))
     rows = [
-        ["Chat hoi dap",              "Co", "Co", "Co"],
-        ["Doc/viet file tren may",    "Khong", "Khong", "Co"],
-        ["Ket noi Gmail",             "Khong", "Co the", "Co"],
-        ["Ket noi Google Calendar",   "Khong", "Co the", "Co"],
-        ["Ket noi Google Drive",      "Khong", "Co the", "Co"],
-        ["Memory (nho qua session)",  "Khong", "Khong", "Co"],
-        ["Skills (lenh tat)",         "Khong", "Khong", "Co"],
-        ["Chay task tu dong",         "Khong", "Khong", "Co"],
+        ["Chat hỏi đáp",                "Có",       "Có",       "Có"],
+        ["Đọc/viết file trên máy",      "Không",    "Không",    "Có"],
+        ["Kết nối Gmail",               "Không",    "Có thể",   "Có"],
+        ["Kết nối Google Calendar",     "Không",    "Có thể",   "Có"],
+        ["Kết nối Google Drive",        "Không",    "Có thể",   "Có"],
+        ["Memory (nhớ qua session)",    "Không",    "Không",    "Có"],
+        ["Skills (lệnh tắt)",           "Không",    "Không",    "Có"],
+        ["Chạy task tự động",           "Không",    "Không",    "Có"],
     ]
-    w = PAGE_W - 2*MARGIN - 4*mm
-    el.append(make_table(headers, rows, col_widths=[68*mm, (w-68*mm)/3, (w-68*mm)/3, (w-68*mm)/3]))
+    el.append(make_table(["Tính năng", "claude.ai", "Claude Desktop", "Cowork"], rows,
+                         col_widths=[68*mm, (w-68*mm)/3, (w-68*mm)/3, (w-68*mm)/3]))
 
-    # Memory & Skills
-    el.append(sub2_header("Memory trong Cowork — Claude 'nho' ban"))
-    el.append(p("Khi dung Cowork, Claude co he thong <b>memory file</b> — moi lan lam viec, Claude hoc them ve ban, luu lai: ban la ai, lam gi, can gi / feedback va so thich lam viec / cac du an dang chay / nguon tai lieu tham khao."))
-    el.append(p("→ Lan sau mo lai, Claude <b>khong can ban giai thich lai tu dau</b>."))
+    el.append(sub2_header("Memory trong Cowork — Claude 'nhớ' bạn"))
+    el.append(p("Khi dùng Cowork, Claude có hệ thống <b>memory file</b> — mỗi lần làm việc, Claude học thêm về bạn và lưu lại: bạn là ai, làm gì, cần gì / feedback và sở thích làm việc / các dự án đang chạy / nguồn tài liệu tham khảo."))
+    el.append(p("→ Lần sau mở lại, Claude <b>không cần bạn giải thích lại từ đầu</b>."))
 
-    el.append(sub2_header("Skills trong Cowork — Lenh tat thong minh"))
-    el.append(p("<b>Skills</b> la cac 'lenh chuyen dung' duoc lap trinh san de lam nhung viec phuc tap voi 1 lenh ngan. Go <b>/ten-skill</b> la Claude tu biet can lam gi."))
-    headers = ["Skill", "Lenh", "Lam gi"]
+    el.append(sub2_header("Skills trong Cowork — Lệnh tắt thông minh"))
+    el.append(p("<b>Skills</b> là các 'lệnh chuyên dụng' được lập trình sẵn để làm những việc phức tạp với 1 lệnh ngắn. Gõ <b>/tên-skill</b> là Claude tự biết cần làm gì."))
     rows = [
-        ["xlsx",     "/xlsx",     "Tao/sua file Excel chuyen nghiep"],
-        ["pptx",     "/pptx",     "Tao slide PowerPoint"],
-        ["html",     "/html",     "Tao bao cao HTML dep"],
-        ["pdf",      "/pdf",      "Doc, tao, ghep file PDF"],
-        ["okr",      "/okr",      "Xay OKR theo chuan"],
-        ["schedule", "/schedule", "Dat lich chay task tu dong"],
+        ["xlsx",     "/xlsx",     "Tạo/sửa file Excel chuyên nghiệp"],
+        ["pptx",     "/pptx",     "Tạo slide PowerPoint"],
+        ["html",     "/html",     "Tạo báo cáo HTML đẹp"],
+        ["pdf",      "/pdf",      "Đọc, tạo, ghép file PDF"],
+        ["okr",      "/okr",      "Xây OKR theo chuẩn"],
+        ["schedule", "/schedule", "Đặt lịch chạy task tự động"],
     ]
-    w = PAGE_W - 2*MARGIN - 4*mm
-    el.append(make_table(headers, rows, col_widths=[35*mm, 30*mm, w-65*mm-4*mm]))
+    el.append(make_table(["Skill", "Lệnh", "Làm gì"], rows,
+                         col_widths=[35*mm, 30*mm, w-65*mm-4*mm]))
 
     # Projects vs Cowork
     el.append(sub2_header("Projects / Workspace trong claude.ai"))
-    el.append(p("Ben trong claude.ai, ban co the tao <b>Projects</b> — mot khong gian rieng cho tung mang cong viec. Project cho phep: dat System Prompt co dinh, upload tai lieu nen (SOP, brand guide), tat ca hoi thoai trong Project deu ke thua ngu canh do."))
-
-    headers = ["Tieu chi", "Projects (claude.ai)", "Cowork"]
+    el.append(p("Bên trong claude.ai, bạn có thể tạo <b>Projects</b> — một không gian riêng cho từng mảng công việc. Project cho phép: đặt System Prompt cố định, upload tài liệu nền (SOP, brand guide), tất cả hội thoại trong Project đều kế thừa ngữ cảnh đó."))
     rows = [
-        ["Ban chat",     "Khong gian chat co ngu canh co dinh", "Moi truong lam viec tich hop day du"],
-        ["Memory",       "Trong project do thoi",               "Xuyen suot moi session"],
-        ["Tools",        "Chat + upload file",                  "Ket noi Gmail, Calendar, Drive, tu dong hoa"],
-        ["Skills",       "Khong co",                            "Co san hang chuc skill"],
-        ["Tu dong hoa",  "Khong",                               "Co (schedule, cron)"],
-        ["Thao tac file","Claude doc file ban upload",          "Claude doc/ghi file thang tren may ban"],
-        ["Do phuc tap",  "Don gian, dung ngay",                 "Can setup, nhung manh hon nhieu"],
+        ["Bản chất",     "Không gian chat có ngữ cảnh cố định",  "Môi trường làm việc tích hợp đầy đủ"],
+        ["Memory",       "Trong project đó thôi",                "Xuyên suốt mọi session"],
+        ["Tools",        "Chat + upload file",                   "Kết nối Gmail, Calendar, Drive, tự động hóa"],
+        ["Skills",       "Không có",                             "Có sẵn hàng chục skill"],
+        ["Tự động hóa",  "Không",                                "Có (schedule, cron)"],
+        ["Thao tác file","Claude đọc file bạn upload",           "Claude đọc/ghi file thẳng trên máy bạn"],
+        ["Độ phức tạp",  "Đơn giản, dùng ngay",                  "Cần setup, nhưng mạnh hơn nhiều"],
     ]
-    w = PAGE_W - 2*MARGIN - 4*mm
-    el.append(make_table(headers, rows, col_widths=[38*mm, (w-38*mm)/2, (w-38*mm)/2]))
-    el.append(callout("Tom lai: Projects la nang cap nho cua claude.ai thuong. Cowork la buoc nhay vot — tu chatbot thanh tro ly lam viec tich hop thuc su."))
+    el.append(make_table(["Tiêu chí", "Projects (claude.ai)", "Cowork"], rows,
+                         col_widths=[38*mm, (w-38*mm)/2, (w-38*mm)/2]))
+    el.append(callout("Tóm lại: Projects là <b>nâng cấp nhỏ</b> của claude.ai thông thường. Cowork là <b>bước nhảy vọt</b> — từ chatbot thành trợ lý làm việc tích hợp thực sự."))
 
-    # Decision guide
-    el.append(sub_header("Chon nen tang nao?"))
+    el.append(sub_header("Chọn nền tảng nào?"))
     el.append(code_block(
-        "Toi moi dung lan dau\n"
+        "Tôi mới dùng lần đầu\n"
         "→ claude.ai (web)\n\n"
-        "Toi dung Claude moi ngay, muon app rieng\n"
+        "Tôi dùng Claude mỗi ngày, muốn app riêng\n"
         "→ Claude Desktop\n\n"
-        "Toi co nhieu mang cong viec, muon luu context\n"
+        "Tôi có nhiều mảng công việc, muốn lưu context\n"
         "→ claude.ai + Projects\n\n"
-        "Toi la developer hoac muon Claude thao tac file truc tiep\n"
+        "Tôi là developer hoặc muốn Claude thao tác file trực tiếp\n"
         "→ Claude Code (CLI)\n\n"
-        "Toi muon Claude ket noi Gmail/Calendar/Drive, nho toi, chay task tu dong\n"
-        "→ Cowork (lien he Khanh de duoc huong dan setup)"
+        "Tôi muốn Claude kết nối Gmail/Calendar/Drive, nhớ tôi, chạy task tự động\n"
+        "→ Cowork (liên hệ Khanh để được hướng dẫn setup)"
     ))
     return el
 
-# ── Section 5 — Bat Dau ───────────────────────────────────────────────────────
+# ── Phần 5 — Bắt đầu ─────────────────────────────────────────────────────────
 def section5():
-    el = [section_header("5", "Bat Dau Dung Claude", "")]
-    el.append(sub_header("Buoc 1 — Tao tai khoan"))
-    el += bullet([
-        "Vao <b>claude.ai</b> (tren trinh duyet bat ky)",
-        "Nhan <b>Sign Up</b>",
-        "Dang ky bang email hoac Google account",
-        "Chon goi <b>Free</b> de bat dau (du dung cho hau het tac vu)",
+    el = [section_header("5", "Bắt Đầu Dùng Claude")]
+    el.append(sub_header("Bước 1 — Tạo tài khoản"))
+    el += bullets([
+        "Vào <b>claude.ai</b> (trên trình duyệt bất kỳ)",
+        "Nhấn <b>Sign Up</b>",
+        "Đăng ký bằng email hoặc Google account",
+        "Chọn gói <b>Free</b> để bắt đầu (đủ dùng cho hầu hết tác vụ)",
     ])
-    el.append(callout("<b>Goi Pro ($20/thang):</b> Dung nhieu hon, model manh hon (Opus), upload file lon hon — can nhac neu dung hang ngay cho cong viec."))
-    el.append(sub_header("Buoc 2 — Giao dien co ban"))
+    el.append(callout("<b>Gói Pro ($20/tháng):</b> Dùng nhiều hơn, model mạnh hơn (Opus), upload file lớn hơn — cân nhắc nếu dùng hàng ngày cho công việc."))
+    el.append(sub_header("Bước 2 — Giao diện cơ bản"))
     el.append(code_block(
         "+------------------------------------------+\n"
         "|  Claude                           [New]  |\n"
         "|------------------------------------------|\n"
-        "| [Danh sach cac cuoc hoi thoai cu]        |\n"
+        "| [Danh sách các cuộc hội thoại cũ]        |\n"
         "|------------------------------------------|\n"
         "|                                          |\n"
-        "|         Khu vuc tro chuyen               |\n"
+        "|         Khu vực trò chuyện               |\n"
         "|                                          |\n"
         "|------------------------------------------|\n"
-        "|  [ Go cau hoi cua ban o day...    ]  [→] |\n"
+        "|  [ Gõ câu hỏi của bạn ở đây...    ] [→] |\n"
         "+------------------------------------------+"
     ))
-    el += bullet([
-        "<b>New conversation:</b> Bat dau hoi thoai moi (Claude quen het lich su cu)",
-        "<b>O go phia duoi:</b> Go yeu cau → Enter hoac nhan nut gui",
-        "<b>Upload file:</b> Dinh kem PDF, Excel, Word, anh de Claude doc va phan tich",
+    el += bullets([
+        "<b>New conversation:</b> Bắt đầu hội thoại mới (Claude quên hết lịch sử cũ)",
+        "<b>Ô gõ phía dưới:</b> Gõ yêu cầu → Enter hoặc nhấn nút gửi",
+        "<b>Upload file:</b> Đính kèm PDF, Excel, Word, ảnh để Claude đọc và phân tích",
     ])
-    el.append(sub_header("Buoc 3 — Thu ngay"))
-    el.append(p("Go thu cau nay de lam quen:"))
+    el.append(sub_header("Bước 3 — Thử ngay"))
     el.append(code_block(
-        "Xin chao! Toi vua moi bat dau dung Claude.\n"
-        "Ban co the gioi thieu ngan gon ban co the\n"
-        "giup gi cho toi trong cong viec van phong khong?"
+        "Xin chào! Tôi vừa mới bắt đầu dùng Claude.\n"
+        "Bạn có thể giới thiệu ngắn gọn bạn có thể\n"
+        "giúp gì cho tôi trong công việc văn phòng không?"
     ))
     return el
 
-# ── Section 6 — Prompt ────────────────────────────────────────────────────────
+# ── Phần 6 — Prompt ───────────────────────────────────────────────────────────
 def section6():
-    el = [section_header("6", "Cach Viet Prompt Hieu Qua", "")]
-    el.append(p("<b>Prompt</b> = Lenh/cau hoi ban gui cho Claude. Viet prompt tot = Claude tra loi dung y hon, tiet kiem thoi gian hon."))
-    el.append(sub_header("Cong thuc COAT (De nho)"))
-    headers = ["Chu", "Y nghia", "Vi du"]
-    rows = [
-        ["<b>C</b>ontext",     "Boi canh la gi",        "Toi la team leader quan ly 5 nguoi..."],
-        ["<b>O</b>bjective",   "Muc tieu muon dat",     "...can viet email tu choi ung vien..."],
-        ["<b>A</b>udience",    "Doi tuong nhan",        "...gui cho ung vien da phong van..."],
-        ["<b>T</b>one/Format", "Giong & dinh dang",     "...lich su, ngan gon duoi 100 tu"],
-    ]
+    el = [section_header("6", "Cách Viết Prompt Hiệu Quả")]
+    el.append(p("<b>Prompt</b> = Lệnh/câu hỏi bạn gửi cho Claude. Viết prompt tốt = Claude trả lời đúng ý hơn, tiết kiệm thời gian hơn."))
+    el.append(sub_header("Công thức COAT (Dễ nhớ)"))
     w = PAGE_W - 2*MARGIN - 4*mm
-    el.append(make_table(headers, rows, col_widths=[22*mm, 45*mm, w-67*mm-4*mm]))
+    rows = [
+        ["<b>C</b>ontext",     "Bối cảnh là gì",      "Tôi là team leader quản lý 5 người..."],
+        ["<b>O</b>bjective",   "Mục tiêu muốn đạt",   "...cần viết email từ chối ứng viên..."],
+        ["<b>A</b>udience",    "Đối tượng nhận",       "...gửi cho ứng viên đã phỏng vấn..."],
+        ["<b>T</b>one/Format", "Giọng &amp; định dạng","...lịch sự, ngắn gọn dưới 100 từ"],
+    ]
+    el.append(make_table(["Chữ", "Ý nghĩa", "Ví dụ"], rows,
+                         col_widths=[22*mm, 44*mm, w-66*mm-4*mm]))
 
-    el.append(sub_header("So sanh Prompt kem vs tot"))
-    # Bad prompt
-    bad_tbl = Table(
-        [[Paragraph("Prompt KEM", ParagraphStyle("bh", fontName="ArialUni",
-                    fontSize=9, textColor=DANGER)),
-          Paragraph("Claude khong biet email ve gi, gui cho ai, muc dich gi", ST["td"])]],
-        colWidths=[35*mm, PAGE_W-2*MARGIN-39*mm],
-    )
+    el.append(sub_header("So sánh Prompt kém vs tốt"))
+    # Bad
+    bad_data = [[
+        Paragraph("Prompt KÉM", ParagraphStyle("bh", fontName="ArialUni",
+                  fontSize=9, textColor=DANGER)),
+        Paragraph("Claude không biết email về gì, gửi cho ai, mục đích gì", ST["td"]),
+    ]]
+    bad_tbl = Table(bad_data, colWidths=[35*mm, w-35*mm])
     bad_tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0,0), (-1,-1), colors.HexColor("#FFF5F5")),
-        ("BOX",           (0,0), (-1,-1), 1,   DANGER),
+        ("BOX",           (0,0), (-1,-1), 1, DANGER),
         ("LINEAFTER",     (0,0), (0,-1), 0.5, DANGER),
         ("TOPPADDING",    (0,0), (-1,-1), 6),
         ("BOTTOMPADDING", (0,0), (-1,-1), 6),
@@ -639,18 +565,19 @@ def section6():
         ("VALIGN",        (0,0), (-1,-1), "MIDDLE"),
         ("ROUNDEDCORNERS",[4]),
     ]))
-    el += [bad_tbl, sp(2)]
-    el.append(code_block("viet email"))
+    el += [bad_tbl, sp(1)]
+    el.append(code_block("viết email"))
 
-    good_tbl = Table(
-        [[Paragraph("Prompt TOT", ParagraphStyle("gh", fontName="ArialUni",
-                    fontSize=9, textColor=SUCCESS)),
-          Paragraph("Day du boi canh, muc tieu, doi tuong, giong van, gioi han do dai", ST["td"])]],
-        colWidths=[35*mm, PAGE_W-2*MARGIN-39*mm],
-    )
+    # Good
+    good_data = [[
+        Paragraph("Prompt TỐT", ParagraphStyle("gh", fontName="ArialUni",
+                  fontSize=9, textColor=SUCCESS)),
+        Paragraph("Đầy đủ bối cảnh, mục tiêu, đối tượng, giọng văn, giới hạn độ dài", ST["td"]),
+    ]]
+    good_tbl = Table(good_data, colWidths=[35*mm, w-35*mm])
     good_tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0,0), (-1,-1), colors.HexColor("#F0FDF4")),
-        ("BOX",           (0,0), (-1,-1), 1,   SUCCESS),
+        ("BOX",           (0,0), (-1,-1), 1, SUCCESS),
         ("LINEAFTER",     (0,0), (0,-1), 0.5, SUCCESS),
         ("TOPPADDING",    (0,0), (-1,-1), 6),
         ("BOTTOMPADDING", (0,0), (-1,-1), 6),
@@ -658,136 +585,135 @@ def section6():
         ("VALIGN",        (0,0), (-1,-1), "MIDDLE"),
         ("ROUNDEDCORNERS",[4]),
     ]))
-    el += [good_tbl, sp(2)]
+    el += [good_tbl, sp(1)]
     el.append(code_block(
-        "Toi dang lam HR tai cong ty logistics. Viet email\n"
-        "tu choi lich su cho ung vien vi tri Operations\n"
-        "Executive sau vong phong van. Ly do: ung vien\n"
-        "thieu kinh nghiem thuc te. Giong van chuyen nghiep,\n"
-        "am ap, khong vuot qua 120 tu. Tieng Viet."
+        "Tôi đang làm HR tại công ty logistics. Viết email\n"
+        "từ chối lịch sự cho ứng viên vị trí Operations\n"
+        "Executive sau vòng phỏng vấn. Lý do: ứng viên\n"
+        "thiếu kinh nghiệm thực tế. Giọng văn chuyên nghiệp,\n"
+        "ấm áp, không vượt quá 120 từ. Tiếng Việt."
     ))
 
-    el.append(sub_header("5 ky thuat prompt pho bien"))
+    el.append(sub_header("5 kỹ thuật prompt phổ biến"))
     techniques = [
         ("1. Giao vai (Role-playing)",
-         "Ban la chuyen gia phan tich du lieu voi 10 nam kinh nghiem.\nHay review bang so lieu nay va chi ra cac diem bat thuong."),
-        ("2. Cho vi du mau",
-         "Tom tat noi dung cuoc hop theo format sau:\n- Quyet dinh: [...]\n- Action item: [Ai] lam [gi] truoc [ngay]\n- Van de con mo: [...]"),
-        ("3. Yeu cau step-by-step",
-         "Giai thich tung buoc cach doc bao cao P&L cho nguoi moi,\nkhong dung thuat ngu ky thuat phuc tap."),
-        ("4. Phe binh & cai thien",
-         "Day la email toi vua draft. Hay chi ra 3 diem yeu\nva de xuat cai thien cu the:\n[paste email vao]"),
-        ("5. Hoi lai khi chua ung",
-         "Cau tra loi truoc qua dai. Rut gon con 5 bullet\npoint chinh, moi cai toi da 1 dong."),
+         "Bạn là chuyên gia phân tích dữ liệu với 10 năm kinh nghiệm.\nHãy review bảng số liệu này và chỉ ra các điểm bất thường."),
+        ("2. Cho ví dụ mẫu",
+         "Tóm tắt nội dung cuộc họp theo format sau:\n- Quyết định: [...]\n- Action item: [Ai] làm [gì] trước [ngày]\n- Vấn đề còn mở: [...]"),
+        ("3. Yêu cầu step-by-step",
+         "Giải thích từng bước cách đọc báo cáo P&L cho người mới,\nkhông dùng thuật ngữ kỹ thuật phức tạp."),
+        ("4. Phê bình & cải thiện",
+         "Đây là email tôi vừa draft. Hãy chỉ ra 3 điểm yếu\nvà đề xuất cải thiện cụ thể:\n[paste email vào]"),
+        ("5. Hỏi lại khi chưa ưng",
+         "Câu trả lời trước quá dài. Rút gọn còn 5 bullet\npoint chính, mỗi cái tối đa 1 dòng."),
     ]
     for title, code in techniques:
         el.append(sub2_header(title))
         el.append(code_block(code))
-
-    el.append(callout("<b>Meo quan trong:</b> Claude nho toan bo hoi thoai trong cung 1 tab. Ban co the noi 'sua lai doan 2', 'them vi du', 'dich sang tieng Anh' ma khong can giai thich lai tu dau."))
+    el.append(callout("<b>Mẹo quan trọng:</b> Claude nhớ toàn bộ hội thoại trong cùng 1 tab. Bạn có thể nói 'sửa lại đoạn 2', 'thêm ví dụ', 'dịch sang tiếng Anh' mà không cần giải thích lại từ đầu."))
     return el
 
-# ── Section 7 — Ap dung cong viec ────────────────────────────────────────────
+# ── Phần 7 — Áp dụng ─────────────────────────────────────────────────────────
 def section7():
-    el = [section_header("7", "Ap Dung Vao Cong Viec", "")]
-
-    el.append(sub_header("7.1 Viet lach & Soan thao"))
-    headers = ["Tac vu", "Prompt mau"]
-    rows = [
-        ["Viet email",           "Viet email [muc dich] gui [ai], giong [chuyen nghiep/than thien], duoi [X] tu"],
-        ["Soan thong bao noi bo","Soan thong bao cho toan team ve [noi dung], format ngan gon duoi 200 tu"],
-        ["Viet JD tuyen dung",   "Viet JD cho vi tri [ten vi tri], yeu cau [ky nang chinh], tai [cong ty/nganh]"],
-        ["Tom tat tai lieu",     "Upload file PDF/Word + 'Tom tat tai lieu nay thanh 5 diem chinh'"],
-    ]
+    el = [section_header("7", "Áp Dụng Vào Công Việc")]
     w = PAGE_W - 2*MARGIN - 4*mm
-    el.append(make_table(headers, rows, col_widths=[45*mm, w-45*mm-4*mm]))
 
-    el.append(sub_header("7.2 Phan tich & Bao cao"))
+    el.append(sub_header("7.1 Viết lách & Soạn thảo"))
     rows = [
-        ["Phan tich so lieu",     "Upload Excel + 'Phan tich xu huong, chi ra top 3 insight quan trong nhat'"],
-        ["Root cause analysis",   "Du lieu: [chi so] giam [X%] trong [khoang thoi gian]. De xuat 5 nguyen nhan tiem an"],
-        ["Tom tat cuoc hop",      "Paste noi dung meeting + 'Tom tat: Quyet dinh / Action item / Van de con mo'"],
-        ["Chuan bi slide",        "Tao outline slide presentation ve [chu de], 10 slides, doi tuong la [ai]"],
+        ["Viết email",            "Viết email [mục đích] gửi [ai], giọng [chuyên nghiệp/thân thiện], dưới [X] từ"],
+        ["Soạn thông báo nội bộ", "Soạn thông báo cho toàn team về [nội dung], format ngắn gọn dưới 200 từ"],
+        ["Viết JD tuyển dụng",    "Viết JD cho vị trí [tên vị trí], yêu cầu [kỹ năng chính], tại [công ty/ngành]"],
+        ["Tóm tắt tài liệu",      "Upload file PDF/Word + 'Tóm tắt tài liệu này thành 5 điểm chính'"],
     ]
-    el.append(make_table(headers, rows, col_widths=[45*mm, w-45*mm-4*mm]))
+    el.append(make_table(["Tác vụ", "Prompt mẫu"], rows, col_widths=[45*mm, w-45*mm]))
 
-    el.append(sub_header("7.3 Nghien cuu & Hoc tap"))
+    el.append(sub_header("7.2 Phân tích & Báo cáo"))
     rows = [
-        ["Giai thich khai niem",  "Giai thich [khai niem] don gian nhu toi chua biet gi ve linh vuc nay"],
-        ["So sanh lua chon",      "So sanh [option A] vs [option B] theo tieu chi: chi phi, thoi gian, rui ro"],
-        ["Brainstorm y tuong",    "Brainstorm 10 cach de [muc tieu]. Sang tao, khong gioi han"],
-        ["Chuan bi cau hoi PV",   "Tao 20 cau hoi phong van cho vi tri [ten vi tri], tap trung vao [ky nang X]"],
+        ["Phân tích số liệu",   "Upload Excel + 'Phân tích xu hướng, chỉ ra top 3 insight quan trọng nhất'"],
+        ["Root cause analysis", "Dữ liệu: [chỉ số] giảm [X%] trong [khoảng thời gian]. Đề xuất 5 nguyên nhân tiềm ẩn"],
+        ["Tóm tắt cuộc họp",    "Paste nội dung meeting + 'Tóm tắt: Quyết định / Action item / Vấn đề còn mở'"],
+        ["Chuẩn bị slide",      "Tạo outline slide về [chủ đề], 10 slides, đối tượng là [ai]"],
     ]
-    el.append(make_table(headers, rows, col_widths=[45*mm, w-45*mm-4*mm]))
+    el.append(make_table(["Tác vụ", "Prompt mẫu"], rows, col_widths=[45*mm, w-45*mm]))
+
+    el.append(sub_header("7.3 Nghiên cứu & Học tập"))
+    rows = [
+        ["Giải thích khái niệm",    "Giải thích [khái niệm] đơn giản như tôi chưa biết gì về lĩnh vực này"],
+        ["So sánh lựa chọn",        "So sánh [option A] vs [option B] theo tiêu chí: chi phí, thời gian, rủi ro"],
+        ["Brainstorm ý tưởng",      "Brainstorm 10 cách để [mục tiêu]. Sáng tạo, không giới hạn"],
+        ["Chuẩn bị câu hỏi PV",     "Tạo 20 câu hỏi phỏng vấn cho vị trí [tên], tập trung vào [kỹ năng X]"],
+    ]
+    el.append(make_table(["Tác vụ", "Prompt mẫu"], rows, col_widths=[45*mm, w-45*mm]))
 
     el.append(sub_header("7.4 Use Cases cho Team Driver Management"))
-    headers = ["Tinh huong", "Cach dung Claude"]
     rows = [
-        ["Soan thong bao chinh sach moi cho tai xe",
-         "Viet thong bao chinh sach [X] bang ngon ngu don gian, tai xe de hieu, duoi 150 chu"],
-        ["Phan tich bao cao AR/FR tuan",
-         "Upload bao cao + 'Tom tat va chi ra khu vuc nao can uu tien can thiep'"],
-        ["Chuan bi noi dung hop team weekly",
-         "Tao agenda hop team ops tuan, dua tren cac van de sau: [list van de]"],
-        ["Viet script training tai xe moi",
-         "Viet script giai thich quy trinh [X] cho tai xe moi, dung ngon ngu don gian, co vi du"],
-        ["Phan tich feedback tai xe",
-         "Paste feedback + 'Phan loai theo chu de, chi ra top 3 van de duoc de cap nhieu nhat'"],
+        ["Soạn thông báo chính sách mới cho tài xế",
+         "Viết thông báo chính sách [X] bằng ngôn ngữ đơn giản, tài xế dễ hiểu, dưới 150 chữ"],
+        ["Phân tích báo cáo AR/FR tuần",
+         "Upload báo cáo + 'Tóm tắt và chỉ ra khu vực nào cần ưu tiên can thiệp'"],
+        ["Chuẩn bị nội dung họp team weekly",
+         "Tạo agenda họp team ops tuần, dựa trên các vấn đề sau: [list vấn đề]"],
+        ["Viết script training tài xế mới",
+         "Viết script giải thích quy trình [X] cho tài xế mới, dùng ngôn ngữ đơn giản, có ví dụ"],
+        ["Phân tích feedback tài xế",
+         "Paste feedback + 'Phân loại theo chủ đề, chỉ ra top 3 vấn đề được đề cập nhiều nhất'"],
     ]
-    el.append(make_table(headers, rows, col_widths=[55*mm, w-55*mm-4*mm]))
+    el.append(make_table(["Tình huống", "Cách dùng Claude"], rows,
+                         col_widths=[55*mm, w-55*mm]))
     return el
 
-# ── Section 8 — Gioi han ─────────────────────────────────────────────────────
+# ── Phần 8 — Giới hạn ────────────────────────────────────────────────────────
 def section8():
-    el = [section_header("8", "Nhung Dieu Claude KHONG Lam Duoc", "")]
-    el.append(sub_header("Claude co the noi sai — va ban can biet dieu nay"))
-    el.append(p('Claude doi khi <b>"hallucinate"</b> (bia ra thong tin nghe co ve dung nhung sai). Dac biet voi:'))
-    el += bullet([
-        "So lieu cu the, thong ke (luon verify)",
-        "Ten nguoi, ngay thang, su kien lich su cu the",
-        "Thong tin phap ly, y te (khong dung thay cho chuyen gia)",
-        "Thong tin moi sau ngay Claude duoc training (knowledge cutoff)",
+    el = [section_header("8", "Những Điều Claude KHÔNG Làm Được")]
+    el.append(sub_header("Claude có thể nói sai — và bạn cần biết điều này"))
+    el.append(p('Claude đôi khi <b>"hallucinate"</b> (bịa ra thông tin nghe có vẻ đúng nhưng sai). Đặc biệt với:'))
+    el += bullets([
+        "Số liệu cụ thể, thống kê (luôn verify)",
+        "Tên người, ngày tháng, sự kiện lịch sử cụ thể",
+        "Thông tin pháp lý, y tế (không dùng thay cho chuyên gia)",
+        "Thông tin mới sau ngày Claude được training (knowledge cutoff)",
     ])
-    el.append(callout("<b>Nguyen tac vang:</b> Claude la <b>assistant thong minh</b>, khong phai <b>nguon su that</b>. Luon verify thong tin quan trong."))
-    el.append(sub_header("Nen vs Khong nen dung Claude"))
-    headers = ["NEN dung Claude", "KHONG dung Claude thay the"]
-    rows = [
-        ["Draft van ban, email, bao cao",       "Quyet dinh chien luoc quan trong (khong verify)"],
-        ["Brainstorm y tuong",                  "So lieu tai chinh chinh xac (phai kiem tra)"],
-        ["Tom tat tai lieu dai",                "Tu van phap ly, y te"],
-        ["Giai thich khai niem",                "Thay the judgement cua con nguoi"],
-        ["Viet code, cong thuc",                "Thong tin real-time (gia co phieu, tin tuc hom nay)"],
-    ]
+    el.append(callout("<b>Nguyên tắc vàng:</b> Claude là <b>assistant thông minh</b>, không phải <b>nguồn sự thật</b>. Luôn verify thông tin quan trọng."))
+    el.append(sub_header("Nên vs Không nên dùng Claude"))
     w = PAGE_W - 2*MARGIN - 4*mm
-    tbl_data = [[Paragraph("NEN dung Claude", ST["th"]),
-                 Paragraph("KHONG dung Claude thay the", ST["th"])]]
-    for r in rows:
-        tbl_data.append([
-            Paragraph(f"✓  {r[0]}", ParagraphStyle("ok", fontName="ArialUni",
-                       fontSize=9, leading=13, textColor=SUCCESS)),
-            Paragraph(f"✗  {r[1]}", ParagraphStyle("no", fontName="ArialUni",
-                       fontSize=9, leading=13, textColor=DANGER)),
+    rows_ok  = ["Draft văn bản, email, báo cáo", "Brainstorm ý tưởng",
+                "Tóm tắt tài liệu dài", "Giải thích khái niệm", "Viết code, công thức"]
+    rows_no  = ["Quyết định chiến lược quan trọng (không verify)",
+                "Số liệu tài chính chính xác (phải kiểm tra)",
+                "Tư vấn pháp lý, y tế",
+                "Thay thế judgement của con người",
+                "Thông tin real-time (giá cổ phiếu, tin tức hôm nay)"]
+    data = [[Paragraph("NÊN dùng Claude", ST["th"]),
+             Paragraph("KHÔNG dùng Claude thay thế", ST["th"])]]
+    for ok, no in zip(rows_ok, rows_no):
+        data.append([
+            Paragraph(f"✓  {ok}",
+                      ParagraphStyle("ok", fontName="ArialUni", fontSize=9,
+                                     leading=13, textColor=SUCCESS)),
+            Paragraph(f"✗  {no}",
+                      ParagraphStyle("no", fontName="ArialUni", fontSize=9,
+                                     leading=13, textColor=DANGER)),
         ])
-    tbl = Table(tbl_data, colWidths=[w/2, w/2])
+    tbl = Table(data, colWidths=[w/2, w/2])
     tbl.setStyle(TableStyle([
-        ("BACKGROUND",    (0, 0), (-1, 0), BLUE),
-        ("ROWBACKGROUNDS",(0, 1), (-1, -1), [WHITE, BG_GRAY]),
-        ("GRID",          (0, 0), (-1, -1), 0.4, BORDER),
-        ("TOPPADDING",    (0, 0), (-1, -1), 5),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-        ("LEFTPADDING",   (0, 0), (-1, -1), 8),
-        ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
+        ("BACKGROUND",    (0,0), (-1,0), BLUE),
+        ("ROWBACKGROUNDS",(0,1), (-1,-1), [WHITE, BG_GRAY]),
+        ("GRID",          (0,0), (-1,-1), 0.4, BORDER),
+        ("TOPPADDING",    (0,0), (-1,-1), 5),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 5),
+        ("LEFTPADDING",   (0,0), (-1,-1), 8),
+        ("VALIGN",        (0,0), (-1,-1), "MIDDLE"),
     ]))
     el += [tbl, sp(3)]
     return el
 
-# ── Section 9 — Bao mat ──────────────────────────────────────────────────────
+# ── Phần 9 — Bảo mật ─────────────────────────────────────────────────────────
 def section9():
-    el = [section_header("9", "Bao Mat & Luu Y Quan Trong", "")]
-
+    el = [section_header("9", "Bảo Mật & Lưu Ý Quan Trọng")]
     warn_tbl = Table(
-        [[Paragraph("TUYET DOI KHONG chia se voi Claude:", ParagraphStyle("wt",
-            fontName="ArialUni", fontSize=10, textColor=colors.HexColor("#7C2D12"))),]],
+        [[Paragraph("TUYỆT ĐỐI KHÔNG chia sẻ với Claude:",
+                    ParagraphStyle("wt", fontName="ArialUni", fontSize=10,
+                                   textColor=colors.HexColor("#7C2D12")))]],
         colWidths=[PAGE_W-2*MARGIN],
     )
     warn_tbl.setStyle(TableStyle([
@@ -799,61 +725,61 @@ def section9():
         ("ROUNDEDCORNERS",[6]),
     ]))
     el += [warn_tbl, sp(1)]
-    el += bullet([
-        "<b>Mat khau, tai khoan ngan hang</b>",
-        "<b>Thong tin ca nhan nhay cam cua tai xe/khach hang</b> (CMND, SDT, dia chi nha)",
-        "<b>Du lieu kinh doanh mat</b> (doanh thu noi bo, chien luoc chua cong bo)",
-        "<b>Hop dong, thoa thuan bao mat</b>",
+    el += bullets([
+        "<b>Mật khẩu, tài khoản ngân hàng</b>",
+        "<b>Thông tin cá nhân nhạy cảm của tài xế/khách hàng</b> (CMND, SĐT, địa chỉ nhà)",
+        "<b>Dữ liệu kinh doanh mật</b> (doanh thu nội bộ, chiến lược chưa công bố)",
+        "<b>Hợp đồng, thỏa thuận bảo mật</b>",
     ])
-    el.append(sub_header("Tai sao?"))
-    el.append(p("Khi ban go noi dung vao claude.ai, du lieu do duoc gui len server cua Anthropic. Mac du Anthropic co chinh sach bao mat tot, nhung <b>best practice</b> la khong dua thong tin nhay cam len bat ky nen tang AI cloud nao."))
-    el.append(sub_header("Tips an toan khi dung cho cong viec"))
+    el.append(sub_header("Tại sao?"))
+    el.append(p("Khi bạn gõ nội dung vào claude.ai, dữ liệu đó được gửi lên server của Anthropic. Mặc dù Anthropic có chính sách bảo mật tốt, nhưng <b>best practice</b> là không đưa thông tin nhạy cảm lên bất kỳ nền tảng AI cloud nào."))
+    el.append(sub_header("Tips an toàn khi dùng cho công việc"))
     el.append(code_block(
-        "SAI: 'Phan tich du lieu tai xe cua Ahamove:\n"
-        "       Nguyen Van A - SDT 0901234567 - AR 45%...'\n\n"
-        "DUNG: 'Phan tich du lieu tai xe an danh:\n"
-        "        Tai xe X - AR 45%, tai xe Y - AR 62%...\n"
-        "        Chi ra pattern va de xuat cai thien.'"
+        "SAI: 'Phân tích dữ liệu tài xế của Ahamove:\n"
+        "       Nguyễn Văn A - SĐT 0901234567 - AR 45%...'\n\n"
+        "ĐÚNG: 'Phân tích dữ liệu tài xế ẩn danh:\n"
+        "        Tài xế X - AR 45%, tài xế Y - AR 62%...\n"
+        "        Chỉ ra pattern và đề xuất cải thiện.'"
     ))
-    el.append(callout("<b>Anonymize (an danh hoa) truoc khi hoi</b> — thay ten that bang Tai xe A, B, C hoac dung ID gia."))
+    el.append(callout("<b>Anonymize (ẩn danh hóa) trước khi hỏi</b> — thay tên thật bằng Tài xế A, B, C hoặc dùng ID giả."))
     return el
 
-# ── Section 10 — Tu dien ─────────────────────────────────────────────────────
+# ── Phần 10 — Từ điển ────────────────────────────────────────────────────────
 def section10():
-    el = [section_header("10", "Tu Dien Thuat Ngu", "")]
+    el = [section_header("10", "Từ Điển Thuật Ngữ")]
     terms = [
-        ("AI (Artificial Intelligence)", "Tri tue nhan tao — phan mem co kha nang xu ly ngon ngu va ly luan"),
-        ("LLM (Large Language Model)", "'Mo hinh ngon ngu lon' — loai AI duoc train tren luong van ban khong lo. Claude va ChatGPT deu la LLM"),
-        ("Prompt", "Cau lenh/cau hoi ban gui cho Claude"),
-        ("Context Window", "'Bo nho lam viec' — luong text Claude xu ly duoc trong 1 hoi thoai"),
-        ("Hallucination", "Khi AI tu bia ra thong tin sai nhung trinh bay tu tin nhu that"),
-        ("Training / Training Data", "Qua trinh 'hoc' cua AI — doc hang ty tai lieu de hieu ngon ngu"),
-        ("Knowledge Cutoff", "Ngay Claude ngung duoc cap nhat kien thuc moi (sau do khong biet tin tuc moi)"),
-        ("Model", "Phien ban AI cu the. Claude co: Haiku (nhanh/nhe), Sonnet (can bang), Opus (manh nhat)"),
-        ("Token", "Don vi do van ban cua AI. Gioi han context window tinh bang token"),
-        ("Agent", "Claude duoc trang bi them tools (tim kiem web, doc file, chay code) de tu thuc hien tac vu phuc tap"),
-        ("API", "Cach ket noi Claude vao phan mem/app khac (danh cho developer)"),
-        ("Claude Code", "Phien ban Claude chay trong terminal/IDE, co the doc/ghi file that tren may tinh"),
-        ("Claude Desktop", "App cai dat tren may Mac/Windows, giao dien nhu claude.ai nhung ho tro ket noi MCP"),
-        ("Cowork", "Moi truong lam viec day du xay tren Claude Code — co Memory, Skills, ket noi Gmail/Calendar/Drive"),
-        ("Projects (Workspace)", "Khong gian lam viec trong claude.ai — luu system prompt va tai lieu nen de dung lai nhieu lan"),
-        ("MCP (Model Context Protocol)", "Chuan ket noi cho phep Claude 'voi tay' sang app khac: Google Workspace, Notion, Slack..."),
-        ("Skills", "Lenh tat chuyen dung trong Cowork — go /ten-skill de Claude thuc hien task phuc tap theo quy trinh dinh san"),
-        ("Memory", "He thong luu tru thong tin qua nhieu session trong Cowork — Claude nho ban la ai, so thich, du an dang chay"),
-        ("Anthropic", "Cong ty tao ra Claude, thanh lap 2021 tai My, tap trung vao AI an toan"),
-        ("System Prompt", "Lenh nen duoc cai san de dinh hinh cach Claude phan hoi (ban thuong khong thay)"),
+        ("AI (Artificial Intelligence)",    "Trí tuệ nhân tạo — phần mềm có khả năng xử lý ngôn ngữ và lý luận"),
+        ("LLM (Large Language Model)",      "'Mô hình ngôn ngữ lớn' — loại AI được train trên lượng văn bản khổng lồ. Claude và ChatGPT đều là LLM"),
+        ("Prompt",                          "Câu lệnh/câu hỏi bạn gửi cho Claude"),
+        ("Context Window",                  "'Bộ nhớ làm việc' — lượng text Claude xử lý được trong 1 hội thoại"),
+        ("Hallucination",                   "Khi AI tự bịa ra thông tin sai nhưng trình bày tự tin như thật"),
+        ("Training / Training Data",        "Quá trình 'học' của AI — đọc hàng tỷ tài liệu để hiểu ngôn ngữ"),
+        ("Knowledge Cutoff",                "Ngày Claude ngừng được cập nhật kiến thức mới (sau đó không biết tin tức mới)"),
+        ("Model",                           "Phiên bản AI cụ thể. Claude có: Haiku (nhanh/nhẹ), Sonnet (cân bằng), Opus (mạnh nhất)"),
+        ("Token",                           "Đơn vị đo văn bản của AI. Giới hạn context window tính bằng token"),
+        ("Agent",                           "Claude được trang bị thêm tools (tìm kiếm web, đọc file, chạy code) để tự thực hiện tác vụ phức tạp"),
+        ("API",                             "Cách kết nối Claude vào phần mềm/app khác (dành cho developer)"),
+        ("Claude Code",                     "Phiên bản Claude chạy trong terminal/IDE, có thể đọc/ghi file thật trên máy tính"),
+        ("Claude Desktop",                  "App cài đặt trên máy Mac/Windows, giao diện như claude.ai nhưng hỗ trợ kết nối MCP"),
+        ("Cowork",                          "Môi trường làm việc đầy đủ xây trên Claude Code — có Memory, Skills, kết nối Gmail/Calendar/Drive"),
+        ("Projects (Workspace)",            "Không gian làm việc trong claude.ai — lưu system prompt và tài liệu nền để dùng lại nhiều lần"),
+        ("MCP (Model Context Protocol)",    "Chuẩn kết nối cho phép Claude 'với tay' sang app khác: Google Workspace, Notion, Slack..."),
+        ("Skills",                          "Lệnh tắt chuyên dụng trong Cowork — gõ /tên-skill để Claude thực hiện task phức tạp theo quy trình định sẵn"),
+        ("Memory",                          "Hệ thống lưu trữ thông tin qua nhiều session trong Cowork — Claude nhớ bạn là ai, sở thích, dự án đang chạy"),
+        ("Anthropic",                       "Công ty tạo ra Claude, thành lập 2021 tại Mỹ, tập trung vào AI an toàn"),
+        ("System Prompt",                   "Lệnh nền được cài sẵn để định hình cách Claude phản hồi (bạn thường không thấy)"),
     ]
-    headers = ["Thuat ngu", "Giai thich don gian"]
-    rows = [[t, d] for t, d in terms]
     w = PAGE_W - 2*MARGIN - 4*mm
-    el.append(make_table(headers, rows, col_widths=[60*mm, w-60*mm-4*mm]))
+    el.append(make_table(["Thuật ngữ", "Giải thích đơn giản"],
+                         [[t, d] for t, d in terms],
+                         col_widths=[58*mm, w-58*mm]))
     return el
 
-# ── Closing page ──────────────────────────────────────────────────────────────
+# ── Trang kết ─────────────────────────────────────────────────────────────────
 def closing_page():
     el = [sp(10)]
     tbl = Table(
-        [[Paragraph("Bat Dau Ngay Hom Nay", ParagraphStyle("ct2",
+        [[Paragraph("Bắt Đầu Ngay Hôm Nay!", ParagraphStyle("ct2",
             fontName="ArialUni", fontSize=18, leading=24,
             textColor=WHITE, alignment=TA_CENTER))]],
         colWidths=[PAGE_W - 2*MARGIN],
@@ -866,23 +792,21 @@ def closing_page():
     ]))
     el += [tbl, sp(6)]
 
-    checklist_items = [
-        "Tao tai khoan tai claude.ai",
-        "Gui 1 cau hoi bat ky de lam quen giao dien",
-        "Thu upload 1 file PDF/Word va hoi Claude tom tat",
-        "Thu viet 1 email theo COAT formula",
-        "Hoi Claude 1 dieu ban dang thac mac trong cong viec",
+    cl_items = [
+        "Tạo tài khoản tại claude.ai",
+        "Gửi 1 câu hỏi bất kỳ để làm quen giao diện",
+        "Thử upload 1 file PDF/Word và hỏi Claude tóm tắt",
+        "Thử viết 1 email theo công thức COAT",
+        "Hỏi Claude 1 điều bạn đang thắc mắc trong công việc",
     ]
-    cl_data = [[
-        Paragraph("CHECKLIST 15 PHUT DAU TIEN", ParagraphStyle("clh",
-            fontName="ArialUni", fontSize=11, textColor=BLUE)),
-    ]]
-    for item in checklist_items:
-        cl_data.append([
-            Paragraph(f"[ ]  {item}", ParagraphStyle("cli",
-                fontName="ArialUni", fontSize=10, leading=18,
-                textColor=TEXT_DARK, leftIndent=8)),
-        ])
+    cl_data = [[Paragraph("CHECKLIST 15 PHÚT ĐẦU TIÊN",
+                          ParagraphStyle("clh", fontName="ArialUni", fontSize=11,
+                                         textColor=BLUE))]]
+    for item in cl_items:
+        cl_data.append([Paragraph(f"[ ]  {item}",
+                                  ParagraphStyle("cli", fontName="ArialUni",
+                                                 fontSize=10, leading=18,
+                                                 textColor=TEXT_DARK, leftIndent=8))])
     cl_tbl = Table(cl_data, colWidths=[PAGE_W - 2*MARGIN - 4*mm])
     cl_tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0,0), (-1,-1), BG_GRAY),
@@ -894,56 +818,45 @@ def closing_page():
         ("LINEBELOW",     (0,0), (0,0), 0.5, BORDER),
     ]))
     el += [cl_tbl, sp(6)]
-
-    el.append(callout("Cau hoi co dap an ro rang, khong nhay cam → Hoi Claude truoc\nCau hoi can judgement, context noi bo → Hoi dong nghiep/quan ly\nCau hoi quan trong → Claude draft truoc, dong nghiep review sau"))
+    el.append(callout(
+        "Câu hỏi có đáp án rõ ràng, không nhạy cảm → Hỏi Claude trước\n"
+        "Câu hỏi cần judgement, context nội bộ → Hỏi đồng nghiệp/quản lý\n"
+        "Câu hỏi quan trọng → Claude draft trước, đồng nghiệp review sau"
+    ))
     el += [sp(6), hr(ORANGE, 1.5), sp(3)]
-    el.append(p("Tai lieu nay duoc soan boi Driver Management Team — Ahamove  |  2026-05-04", "footer"))
-    el.append(p("Cau hoi hoac gop y: lien he Khanh — khanhlp@ahamove.com", "footer"))
+    el.append(p("Tài liệu được soạn bởi Driver Management Team — Ahamove  |  2026-05-04", "footer"))
+    el.append(p("Câu hỏi hoặc góp ý: liên hệ Khanh — khanhlp@ahamove.com", "footer"))
     return el
 
-# ── Build PDF ─────────────────────────────────────────────────────────────────
+# ── Build ─────────────────────────────────────────────────────────────────────
 def build():
-    out_path = os.path.join(
-        os.path.dirname(__file__),
-        "2026-05-claude-guide-for-team.pdf"
-    )
+    out_path = os.path.join(os.path.dirname(__file__),
+                            "2026-05-claude-guide-for-team.pdf")
     doc = SimpleDocTemplate(
-        out_path,
-        pagesize=A4,
+        out_path, pagesize=A4,
         leftMargin=MARGIN, rightMargin=MARGIN,
         topMargin=14*mm, bottomMargin=14*mm,
-        title="Claude AI — Huong Dan Toan Dien Cho Team",
+        title="Claude AI — Hướng Dẫn Toàn Diện Cho Team",
         author="Ahamove Driver Management Team",
         subject="Claude AI Guide",
     )
-
     story = []
     story += cover_page()
     story += toc()
-    story += section1()
-    story += [PageBreak()]
-    story += section2()
-    story += [PageBreak()]
-    story += section3()
-    story += [PageBreak()]
-    story += section4()
-    story += [PageBreak()]
+    story += section1();  story += [PageBreak()]
+    story += section2();  story += [PageBreak()]
+    story += section3();  story += [PageBreak()]
+    story += section4();  story += [PageBreak()]
     story += section5()
-    story += section6()
-    story += [PageBreak()]
-    story += section7()
-    story += [PageBreak()]
+    story += section6();  story += [PageBreak()]
+    story += section7();  story += [PageBreak()]
     story += section8()
-    story += section9()
-    story += [PageBreak()]
-    story += section10()
-    story += [PageBreak()]
+    story += section9();  story += [PageBreak()]
+    story += section10(); story += [PageBreak()]
     story += closing_page()
 
-    template = PageTemplate()
-    doc.build(story, onFirstPage=lambda c, d: None, onLaterPages=template)
-    print(f"PDF saved: {out_path}")
-    return out_path
+    doc.build(story, onFirstPage=lambda c, d: None, onLaterPages=page_template)
+    print(f"✓ PDF saved: {out_path}")
 
 if __name__ == "__main__":
     build()
