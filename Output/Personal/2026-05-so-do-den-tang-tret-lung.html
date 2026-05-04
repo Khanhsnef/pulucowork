@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sơ Đồ Bố Trí Đèn — Tầng Trệt & Lửng</title>
+<title>Sơ Đồ Bố Trí Đèn — Ray 8m & Ray 6m</title>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,534 +11,542 @@
     font-family: 'Lexend', sans-serif;
     background: #080F1D;
     color: #E2E8F0;
-    padding: 32px 24px;
-    min-height: 100vh;
+    padding: 28px 20px;
   }
   h1 {
     text-align: center;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 800;
     color: #FF7F32;
-    letter-spacing: -0.5px;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
-  .subtitle {
-    text-align: center;
-    font-size: 0.75rem;
-    color: #64748B;
-    margin-bottom: 32px;
-  }
+  .subtitle { text-align: center; font-size: 0.72rem; color: #475569; margin-bottom: 28px; }
 
-  .floor-section {
-    background: #0F1A2E;
+  .card {
+    background: #0D1829;
     border: 1px solid #1E3A5F;
     border-radius: 20px;
-    padding: 24px;
-    margin-bottom: 28px;
+    padding: 22px 20px 18px;
+    margin-bottom: 24px;
   }
-  .floor-title {
-    font-size: 1rem;
+  .card-title {
+    font-size: 0.95rem;
     font-weight: 700;
-    color: #FF7F32;
     margin-bottom: 4px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
-  .floor-title span.badge {
-    font-size: 0.65rem;
-    font-weight: 600;
-    background: #1E3A5F;
-    color: #7DD3FC;
-    padding: 2px 8px;
-    border-radius: 999px;
-  }
-  .floor-desc {
-    font-size: 0.72rem;
-    color: #64748B;
-    margin-bottom: 18px;
-  }
+  .card-sub { font-size: 0.7rem; color: #475569; margin-bottom: 16px; }
 
-  /* SVG Floor plan wrapper */
-  .plan-wrap {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
+  .plan-scroll { overflow-x: auto; }
 
-  /* Legend */
+  /* legend */
   .legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px 20px;
-    margin-top: 16px;
+    gap: 8px 18px;
+    margin-top: 14px;
   }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 0.7rem;
-    color: #94A3B8;
-  }
-  .legend-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .legend-rect {
-    width: 22px;
-    height: 10px;
-    border-radius: 3px;
-    flex-shrink: 0;
-  }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.68rem; color: #94A3B8; }
+  .ld { width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; }
+  .lr { width: 20px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+  .lsq { width: 13px; height: 13px; border-radius: 2px; flex-shrink: 0; }
 
-  /* Summary table */
-  .summary {
-    background: #0F1A2E;
-    border: 1px solid #1E3A5F;
-    border-radius: 20px;
-    padding: 20px 24px;
-    margin-bottom: 28px;
-  }
-  .summary h2 {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #7DD3FC;
-    margin-bottom: 12px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.72rem;
-  }
-  th {
-    background: #1E3A5F;
-    color: #7DD3FC;
-    padding: 8px 12px;
-    text-align: left;
-    font-weight: 600;
-  }
-  td {
-    padding: 8px 12px;
-    border-bottom: 1px solid #1E3A5F;
-    color: #CBD5E1;
-    vertical-align: top;
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #1A2E48; }
-  .tag {
-    display: inline-block;
-    padding: 1px 7px;
-    border-radius: 999px;
-    font-size: 0.65rem;
-    font-weight: 600;
-  }
-  .tag-tret { background: #164E63; color: #67E8F9; }
-  .tag-lung { background: #3B1F63; color: #C4B5FD; }
-  .note-box {
+  /* summary table */
+  .tbl-wrap { margin-top: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+  th { background: #1A2E48; color: #7DD3FC; padding: 7px 10px; text-align: left; font-weight: 600; }
+  td { padding: 7px 10px; border-bottom: 1px solid #1A2E48; color: #CBD5E1; }
+  tr:last-child td { border: none; }
+  .tag { display: inline-block; padding: 1px 6px; border-radius: 999px; font-size: 0.62rem; font-weight: 700; }
+  .t8 { background: #0C3050; color: #38BDF8; }
+  .t6 { background: #1F1050; color: #A78BFA; }
+
+  .note {
     background: #1A2E48;
     border-left: 3px solid #FF7F32;
-    border-radius: 0 12px 12px 0;
-    padding: 12px 16px;
-    font-size: 0.72rem;
+    border-radius: 0 10px 10px 0;
+    padding: 10px 14px;
+    font-size: 0.7rem;
     color: #94A3B8;
-    margin-top: 16px;
-    line-height: 1.7;
+    line-height: 1.75;
+    margin-top: 14px;
   }
-  .note-box strong { color: #FF7F32; }
+  .note strong { color: #FF7F32; }
 </style>
 </head>
 <body>
 
-<h1>Sơ Đồ Bố Trí Đèn</h1>
-<p class="subtitle">Mặt bằng 8000mm — Bỏ góc cắt 1500×1500 | Tầng Trệt & Lửng</p>
+<h1>Bố Trí Đèn Theo Dãy Ray LED</h1>
+<p class="subtitle">Ray 8m (Tầng Trệt) &amp; Ray 6m (Tầng Lửng) — Bỏ góc cắt 1500×1500</p>
 
-<!-- ===================== TẦNG TRỆT ===================== -->
-<div class="floor-section">
-  <div class="floor-title">Tầng Trệt <span class="badge">6 đèn</span></div>
-  <div class="floor-desc">RNM 26B 12W × 2 &nbsp;|&nbsp; RNM 26D 15W × 4 &nbsp;|&nbsp; RNM 26A 18W × 2</div>
-
-  <div class="plan-wrap">
-  <svg viewBox="0 0 820 320" width="820" height="320" xmlns="http://www.w3.org/2000/svg">
+<!-- ===================== MẶT BẰNG TỔNG ===================== -->
+<div class="card">
+  <div class="card-title" style="color:#94A3B8;">Mặt Bằng Tổng Quan <span style="font-size:0.65rem;background:#1A2E48;color:#64748B;padding:2px 8px;border-radius:999px;font-weight:400;">Top-down view</span></div>
+  <div class="card-sub">Tỷ lệ: 1m = 80px &nbsp;|&nbsp; Tổng chiều ngang: 8000mm</div>
+  <div class="plan-scroll">
+  <svg viewBox="0 0 720 280" width="720" height="280" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <!-- LED Grid pattern -->
-      <pattern id="ledGrid" x="0" y="0" width="18" height="18" patternUnits="userSpaceOnUse">
-        <rect width="18" height="18" fill="#0A1F3D"/>
-        <rect x="3" y="3" width="5" height="5" fill="#38BDF8" opacity="0.35" rx="1"/>
-        <rect x="10" y="3" width="5" height="5" fill="#38BDF8" opacity="0.35" rx="1"/>
-        <rect x="3" y="10" width="5" height="5" fill="#38BDF8" opacity="0.35" rx="1"/>
-        <rect x="10" y="10" width="5" height="5" fill="#38BDF8" opacity="0.35" rx="1"/>
+      <pattern id="ledG" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+        <rect width="16" height="16" fill="#071428"/>
+        <rect x="2" y="2" width="5" height="5" fill="#38BDF8" opacity="0.3" rx="1"/>
+        <rect x="9" y="2" width="5" height="5" fill="#38BDF8" opacity="0.3" rx="1"/>
+        <rect x="2" y="9" width="5" height="5" fill="#38BDF8" opacity="0.3" rx="1"/>
+        <rect x="9" y="9" width="5" height="5" fill="#38BDF8" opacity="0.3" rx="1"/>
       </pattern>
-      <!-- Glow filter -->
-      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="glowSoft" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
-        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
+      <filter id="gA"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="gB"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     </defs>
 
-    <!-- ── Outer wall ── -->
-    <rect x="10" y="10" width="800" height="300" fill="none" stroke="#2D4A6A" stroke-width="3" rx="4"/>
+    <!-- Room outer wall -->
+    <rect x="10" y="10" width="700" height="250" fill="none" stroke="#1E3A5F" stroke-width="2.5" rx="3"/>
 
-    <!-- ── WC + Staircase zone (left ~180px) ── -->
-    <rect x="10" y="10" width="180" height="300" fill="#0A1828" stroke="#2D4A6A" stroke-width="1.5"/>
-    <!-- Stair lines -->
-    <line x1="10" y1="10" x2="190" y2="10" stroke="#3A5A7A" stroke-width="1"/>
-    <line x1="10" y1="55" x2="190" y2="55" stroke="#3A5A7A" stroke-width="0.8" stroke-dasharray="4,3"/>
-    <line x1="10" y1="100" x2="190" y2="100" stroke="#3A5A7A" stroke-width="0.8" stroke-dasharray="4,3"/>
-    <line x1="10" y1="145" x2="190" y2="145" stroke="#3A5A7A" stroke-width="0.8" stroke-dasharray="4,3"/>
-    <line x1="10" y1="190" x2="190" y2="190" stroke="#3A5A7A" stroke-width="0.8" stroke-dasharray="4,3"/>
-    <text x="100" y="220" text-anchor="middle" font-family="Lexend" font-size="10" fill="#4A7FA5">Cầu</text>
-    <text x="100" y="234" text-anchor="middle" font-family="Lexend" font-size="10" fill="#4A7FA5">Thang</text>
-    <!-- WC box -->
-    <rect x="25" y="230" width="150" height="65" fill="#0D2035" stroke="#2D4A6A" stroke-width="1.5" rx="3"/>
-    <text x="100" y="267" text-anchor="middle" font-family="Lexend" font-size="11" fill="#4A7FA5">WC 02</text>
+    <!-- Stairs/WC zone (left 2m = 160px) -->
+    <rect x="10" y="10" width="160" height="250" fill="#0A1528" stroke="#162840" stroke-width="1.5"/>
+    <!-- stair steps -->
+    <line x1="10" y1="50"  x2="170" y2="50"  stroke="#1E3A5F" stroke-width="1" stroke-dasharray="4,3"/>
+    <line x1="10" y1="90"  x2="170" y2="90"  stroke="#1E3A5F" stroke-width="1" stroke-dasharray="4,3"/>
+    <line x1="10" y1="130" x2="170" y2="130" stroke="#1E3A5F" stroke-width="1" stroke-dasharray="4,3"/>
+    <line x1="10" y1="170" x2="170" y2="170" stroke="#1E3A5F" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="90" y="195" text-anchor="middle" font-family="Lexend" font-size="9" fill="#2D4A6A">Cầu thang</text>
+    <rect x="20" y="210" width="140" height="40" fill="#0D1F38" stroke="#1E3A5F" stroke-width="1" rx="2"/>
+    <text x="90" y="234" text-anchor="middle" font-family="Lexend" font-size="9" fill="#2D4A6A">WC 02</text>
 
-    <!-- ── Corridor zone (180–230px) ── -->
-    <rect x="190" y="10" width="60" height="300" fill="#0B1A2E" stroke="#1E3A5F" stroke-width="1"/>
-    <text x="220" y="165" text-anchor="middle" font-family="Lexend" font-size="8" fill="#2D4A6A" writing-mode="tb">HÀNH LANG</text>
+    <!-- Ô thông tầng spans (right 6m = 480px, from x=170 to x=710 but clipped at 710) -->
+    <!-- Nhịp A: 170–390 (2.75m) -->
+    <rect x="170" y="10" width="220" height="250" fill="url(#ledG)" stroke="#38BDF8" stroke-width="1.2" opacity="0.85"/>
+    <line x1="170" y1="10" x2="390" y2="260" stroke="#38BDF8" stroke-width="0.7" opacity="0.2"/>
+    <line x1="390" y1="10" x2="170" y2="260" stroke="#38BDF8" stroke-width="0.7" opacity="0.2"/>
+    <!-- Nhịp B: 395–710 (3.25m) -->
+    <rect x="395" y="10" width="315" height="250" fill="url(#ledG)" stroke="#38BDF8" stroke-width="1.2" opacity="0.85"/>
+    <line x1="395" y1="10" x2="710" y2="260" stroke="#38BDF8" stroke-width="0.7" opacity="0.2"/>
+    <line x1="710" y1="10" x2="395" y2="260" stroke="#38BDF8" stroke-width="0.7" opacity="0.2"/>
+    <!-- Divider pillar -->
+    <rect x="388" y="10" width="6" height="250" fill="#1A2E48"/>
 
-    <!-- ── Main area (230–620px) ~8000mm representation ── -->
-    <rect x="250" y="10" width="560" height="300" fill="#091626" stroke="#1E3A5F" stroke-width="1.5"/>
+    <!-- Label ô thông -->
+    <text x="440" y="132" text-anchor="middle" font-family="Lexend" font-size="9" fill="#38BDF8" font-weight="600" opacity="0.7">Ô THÔNG TẦNG</text>
+    <text x="440" y="146" text-anchor="middle" font-family="Lexend" font-size="8" fill="#38BDF8" opacity="0.45">Lưới LED (2 nhịp)</text>
+    <text x="440" y="158" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#38BDF8" opacity="0.35">6000mm</text>
 
-    <!-- ── Ô thông tầng — LED grid (right 2/3 of main area: 400–800) ── -->
-    <!-- Span A -->
-    <rect x="410" y="25" width="190" height="270" fill="url(#ledGrid)" stroke="#38BDF8" stroke-width="1.5" opacity="0.9"/>
-    <!-- X mark -->
-    <line x1="410" y1="25" x2="600" y2="295" stroke="#38BDF8" stroke-width="0.8" opacity="0.3"/>
-    <line x1="600" y1="25" x2="410" y2="295" stroke="#38BDF8" stroke-width="0.8" opacity="0.3"/>
-    <!-- Span B -->
-    <rect x="610" y="25" width="185" height="270" fill="url(#ledGrid)" stroke="#38BDF8" stroke-width="1.5" opacity="0.9"/>
-    <line x1="610" y1="25" x2="795" y2="295" stroke="#38BDF8" stroke-width="0.8" opacity="0.3"/>
-    <line x1="795" y1="25" x2="610" y2="295" stroke="#38BDF8" stroke-width="0.8" opacity="0.3"/>
-    <!-- Void label -->
-    <text x="600" y="168" text-anchor="middle" font-family="Lexend" font-size="9" fill="#38BDF8" font-weight="600" opacity="0.7">Ô THÔNG TẦNG</text>
-    <text x="600" y="182" text-anchor="middle" font-family="Lexend" font-size="8" fill="#38BDF8" opacity="0.5">Lưới LED</text>
+    <!-- ═══════ RAY 8m (Trệt) — y = 80 (upper in room) ═══════ -->
+    <!-- Rail line: x=10 to x=710, full 8m -->
+    <line x1="10" y1="75" x2="710" y2="75" stroke="#FF7F32" stroke-width="2.5" stroke-dasharray="0"/>
+    <text x="12" y="67" font-family="Lexend" font-size="8" fill="#FF7F32" font-weight="700">RAY 8m — TRỆT</text>
+    <!-- m tick marks -->
+    <line x1="90"  y1="72" x2="90"  y2="78" stroke="#FF7F32" stroke-width="1"/>
+    <line x1="170" y1="72" x2="170" y2="78" stroke="#FF7F32" stroke-width="1"/>
+    <line x1="250" y1="72" x2="250" y2="78" stroke="#FF7F32" stroke-width="1"/>
+    <line x1="330" y1="72" x2="330" y2="78" stroke="#FF7F32" stroke-width="1"/>
+    <line x1="410" y1="72" x2="410" y2="78" stroke="#FF7F32" stroke-width="1"/>
+    <line x1="490" y1="72" x2="490" y2="78" stroke="#FF7F32" stroke-width="1"/>
+    <line x1="570" y1="72" x2="570" y2="78" stroke="#FF7F32" stroke-width="1"/>
+    <line x1="650" y1="72" x2="650" y2="78" stroke="#FF7F32" stroke-width="1"/>
 
-    <!-- Divider between span A and B -->
-    <rect x="602" y="10" width="6" height="300" fill="#1E3A5F"/>
+    <!-- Lights on Ray 8m -->
+    <!-- 26B-12W @ 0.7m = x=73 -->
+    <circle cx="73" cy="75" r="9" fill="#10B981" opacity="0.9" filter="url(#gB)"/>
+    <circle cx="73" cy="75" r="4" fill="#6EE7B7"/>
+    <text x="73" y="61" text-anchor="middle" font-family="Lexend" font-size="7" fill="#10B981" font-weight="700">26B</text>
+    <text x="73" y="70" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#10B981">12W</text>
 
-    <!-- ── Dimension line ── -->
-    <line x1="250" y1="308" x2="810" y2="308" stroke="#2D4A6A" stroke-width="1" marker-start="url(#arr)" marker-end="url(#arr)"/>
-    <text x="530" y="318" text-anchor="middle" font-family="Lexend" font-size="9" fill="#4A7FA5">8000 mm</text>
-
-    <!-- ===== ĐÈNS TẦNG TRỆT ===== -->
-
-    <!-- RNM 26A-18W (1): Nửa trái trục dài — dạng thanh dài -->
-    <rect x="262" y="152" width="120" height="12" rx="6" fill="#F59E0B" opacity="0.85" filter="url(#glow)"/>
-    <text x="322" y="148" text-anchor="middle" font-family="Lexend" font-size="8" fill="#F59E0B" font-weight="600">26A-18W</text>
-    <!-- glow halo -->
-    <ellipse cx="322" cy="158" rx="65" ry="22" fill="#F59E0B" opacity="0.07"/>
-
-    <!-- RNM 26A-18W (2): Nửa phải khu làm việc -->
-    <rect x="262" y="136" width="120" height="12" rx="6" fill="#F59E0B" opacity="0.85" filter="url(#glow)"/>
-    <text x="322" y="132" text-anchor="middle" font-family="Lexend" font-size="8" fill="#F59E0B" font-weight="600">26A-18W</text>
-    <ellipse cx="322" cy="142" rx="65" ry="22" fill="#F59E0B" opacity="0.07"/>
-
-    <!-- RNM 26B-12W (1): Hành lang cạnh WC -->
-    <circle cx="219" cy="90" r="10" fill="#10B981" opacity="0.9" filter="url(#glowSoft)"/>
-    <circle cx="219" cy="90" r="5" fill="#6EE7B7"/>
-    <ellipse cx="219" cy="90" rx="30" ry="30" fill="#10B981" opacity="0.07"/>
-    <text x="219" y="76" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#10B981" font-weight="600">26B-12W</text>
-
-    <!-- RNM 26B-12W (2): Khu trung tâm phía trước ô thông tầng -->
-    <circle cx="330" cy="90" r="10" fill="#10B981" opacity="0.9" filter="url(#glowSoft)"/>
-    <circle cx="330" cy="90" r="5" fill="#6EE7B7"/>
-    <ellipse cx="330" cy="90" rx="30" ry="30" fill="#10B981" opacity="0.07"/>
-    <text x="330" y="76" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#10B981" font-weight="600">26B-12W</text>
-
-    <!-- RNM 26D-15W (1): Đầu trái ô thông tầng -->
-    <g transform="translate(408,160)">
-      <circle r="10" fill="#EF4444" opacity="0.9" filter="url(#glow)"/>
-      <circle r="4" fill="#FCA5A5"/>
-      <!-- Rotation arrows -->
-      <path d="M-8,-5 A9,9 0 0,1 8,-5" stroke="#FCA5A5" stroke-width="1.5" fill="none"/>
-      <polygon points="8,-5 5,-9 11,-7" fill="#FCA5A5"/>
-      <ellipse rx="25" ry="25" fill="#EF4444" opacity="0.07"/>
+    <!-- 26D-15W @ 1.5m = x=130+10=140 -->
+    <g transform="translate(140,75)">
+      <circle r="9" fill="#EF4444" opacity="0.9" filter="url(#gA)"/>
+      <circle r="3.5" fill="#FCA5A5"/>
+      <path d="M-6,-3 A7,7 0 0,1 6,-3" stroke="#FCA5A5" stroke-width="1.2" fill="none"/>
+      <polygon points="6,-3 4,-7 8,-5" fill="#FCA5A5"/>
     </g>
-    <text x="408" y="145" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#EF4444" font-weight="600">26D-15W</text>
+    <text x="140" y="61" text-anchor="middle" font-family="Lexend" font-size="7" fill="#EF4444" font-weight="700">26D</text>
+    <text x="140" y="70" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#EF4444">15W</text>
 
-    <!-- RNM 26D-15W (2): Đầu phải ô thông tầng -->
-    <g transform="translate(797,160)">
-      <circle r="10" fill="#EF4444" opacity="0.9" filter="url(#glow)"/>
-      <circle r="4" fill="#FCA5A5"/>
-      <path d="M-8,-5 A9,9 0 0,1 8,-5" stroke="#FCA5A5" stroke-width="1.5" fill="none"/>
-      <polygon points="8,-5 5,-9 11,-7" fill="#FCA5A5"/>
-      <ellipse rx="25" ry="25" fill="#EF4444" opacity="0.07"/>
+    <!-- 26D-15W @ 2.0m = x=170 (BÊN TRÁI Ô THÔNG) -->
+    <g transform="translate(170,75)">
+      <circle r="9" fill="#EF4444" opacity="0.9" filter="url(#gA)"/>
+      <circle r="3.5" fill="#FCA5A5"/>
+      <path d="M-6,-3 A7,7 0 0,1 6,-3" stroke="#FCA5A5" stroke-width="1.2" fill="none"/>
+      <polygon points="6,-3 4,-7 8,-5" fill="#FCA5A5"/>
     </g>
-    <text x="797" y="145" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#EF4444" font-weight="600">26D-15W</text>
+    <text x="170" y="61" text-anchor="middle" font-family="Lexend" font-size="7" fill="#EF4444" font-weight="700">26D ←</text>
+    <text x="170" y="70" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#EF4444">Bên ô.thông</text>
 
-    <!-- RNM 26D-15W (3): Rọi tường trái -->
-    <g transform="translate(300,250)">
-      <circle r="10" fill="#EF4444" opacity="0.9" filter="url(#glow)"/>
-      <circle r="4" fill="#FCA5A5"/>
-      <path d="M-8,-5 A9,9 0 0,1 8,-5" stroke="#FCA5A5" stroke-width="1.5" fill="none"/>
-      <polygon points="8,-5 5,-9 11,-7" fill="#FCA5A5"/>
-      <ellipse rx="25" ry="25" fill="#EF4444" opacity="0.07"/>
+    <!-- 26A-18W @ 3.0m center = x=250, strip 1m = 40px each side -->
+    <rect x="210" y="70" width="80" height="10" rx="5" fill="#F59E0B" opacity="0.9" filter="url(#gA)"/>
+    <text x="250" y="61" text-anchor="middle" font-family="Lexend" font-size="7" fill="#F59E0B" font-weight="700">26A-18W</text>
+
+    <!-- 26B-12W @ 4.5m = x=450+10=370+50=450 → x=370 -->
+    <circle cx="370" cy="75" r="9" fill="#10B981" opacity="0.9" filter="url(#gB)"/>
+    <circle cx="370" cy="75" r="4" fill="#6EE7B7"/>
+    <text x="370" y="61" text-anchor="middle" font-family="Lexend" font-size="7" fill="#10B981" font-weight="700">26B</text>
+    <text x="370" y="70" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#10B981">12W</text>
+
+    <!-- 26A-18W @ 6.0m = x=570, strip 80px -->
+    <rect x="530" y="70" width="80" height="10" rx="5" fill="#F59E0B" opacity="0.9" filter="url(#gA)"/>
+    <text x="570" y="61" text-anchor="middle" font-family="Lexend" font-size="7" fill="#F59E0B" font-weight="700">26A-18W</text>
+
+    <!-- 26D-15W @ 7.0m = x=640 -->
+    <g transform="translate(640,75)">
+      <circle r="9" fill="#EF4444" opacity="0.9" filter="url(#gA)"/>
+      <circle r="3.5" fill="#FCA5A5"/>
+      <path d="M-6,-3 A7,7 0 0,1 6,-3" stroke="#FCA5A5" stroke-width="1.2" fill="none"/>
+      <polygon points="6,-3 4,-7 8,-5" fill="#FCA5A5"/>
     </g>
-    <text x="300" y="235" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#EF4444" font-weight="600">26D-15W</text>
+    <text x="640" y="61" text-anchor="middle" font-family="Lexend" font-size="7" fill="#EF4444" font-weight="700">26D</text>
+    <text x="640" y="70" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#EF4444">15W</text>
 
-    <!-- RNM 26D-15W (4): Rọi tường phải -->
-    <g transform="translate(370,250)">
-      <circle r="10" fill="#EF4444" opacity="0.9" filter="url(#glow)"/>
-      <circle r="4" fill="#FCA5A5"/>
-      <path d="M-8,-5 A9,9 0 0,1 8,-5" stroke="#FCA5A5" stroke-width="1.5" fill="none"/>
-      <polygon points="8,-5 5,-9 11,-7" fill="#FCA5A5"/>
-      <ellipse rx="25" ry="25" fill="#EF4444" opacity="0.07"/>
+    <!-- 26D-15W @ 8.0m = x=710 (BÊN PHẢI Ô THÔNG) -->
+    <g transform="translate(710,75)">
+      <circle r="9" fill="#EF4444" opacity="0.9" filter="url(#gA)"/>
+      <circle r="3.5" fill="#FCA5A5"/>
+      <path d="M-6,-3 A7,7 0 0,1 6,-3" stroke="#FCA5A5" stroke-width="1.2" fill="none"/>
+      <polygon points="6,-3 4,-7 8,-5" fill="#FCA5A5"/>
     </g>
-    <text x="370" y="235" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#EF4444" font-weight="600">26D-15W</text>
+    <text x="710" y="61" text-anchor="middle" font-family="Lexend" font-size="7" fill="#EF4444" font-weight="700">→ 26D</text>
+    <text x="710" y="70" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#EF4444">Bên ô.thông</text>
 
-    <!-- Zone labels -->
-    <text x="100" y="22" text-anchor="middle" font-family="Lexend" font-size="9" fill="#2D4A6A">CẦU THANG + WC</text>
-    <text x="310" y="22" text-anchor="middle" font-family="Lexend" font-size="9" fill="#2D4A6A">KHU THÔNG THƯỜNG</text>
+    <!-- ═══════ RAY 6m (Lửng) — y = 195 (lower in room) ═══════ -->
+    <!-- Rail: x=170 to x=650 = 6m = 480px -->
+    <line x1="170" y1="195" x2="710" y2="195" stroke="#A78BFA" stroke-width="2.5"/>
+    <text x="172" y="188" font-family="Lexend" font-size="8" fill="#A78BFA" font-weight="700">RAY 6m — LỬNG</text>
+    <!-- m ticks from 2m to 8m absolute = 0m to 6m relative -->
+    <line x1="250" y1="192" x2="250" y2="198" stroke="#A78BFA" stroke-width="1"/>
+    <line x1="330" y1="192" x2="330" y2="198" stroke="#A78BFA" stroke-width="1"/>
+    <line x1="410" y1="192" x2="410" y2="198" stroke="#A78BFA" stroke-width="1"/>
+    <line x1="490" y1="192" x2="490" y2="198" stroke="#A78BFA" stroke-width="1"/>
+    <line x1="570" y1="192" x2="570" y2="198" stroke="#A78BFA" stroke-width="1"/>
+    <line x1="650" y1="192" x2="650" y2="198" stroke="#A78BFA" stroke-width="1"/>
+
+    <!-- Lights on Ray 6m -->
+    <!-- 26D-8W @ 0.3m (rel) = abs 2.3m = x=194 -->
+    <g transform="translate(204,195)">
+      <circle r="8" fill="#8B5CF6" opacity="0.9" filter="url(#gA)"/>
+      <circle r="3" fill="#DDD6FE"/>
+      <path d="M-5,-3 A6,6 0 0,1 5,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="5,-3 3,-6 7,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="204" y="208" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#8B5CF6">26D-8W</text>
+
+    <!-- 26B-18W @ 1.0m (rel) = x=250 -->
+    <circle cx="250" cy="195" r="9" fill="#06B6D4" opacity="0.9" filter="url(#gB)"/>
+    <circle cx="250" cy="195" r="4" fill="#A5F3FC"/>
+    <text x="250" y="208" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#06B6D4">26B-18W</text>
+
+    <!-- 26D-8W @ 2.0m (rel) = x=330 -->
+    <g transform="translate(330,195)">
+      <circle r="8" fill="#8B5CF6" opacity="0.9" filter="url(#gA)"/>
+      <circle r="3" fill="#DDD6FE"/>
+      <path d="M-5,-3 A6,6 0 0,1 5,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="5,-3 3,-6 7,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="330" y="208" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#8B5CF6">26D-8W</text>
+
+    <!-- 26D-8W @ 3.0m (rel) = x=410 -->
+    <g transform="translate(410,195)">
+      <circle r="8" fill="#8B5CF6" opacity="0.9" filter="url(#gA)"/>
+      <circle r="3" fill="#DDD6FE"/>
+      <path d="M-5,-3 A6,6 0 0,1 5,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="5,-3 3,-6 7,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="410" y="208" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#8B5CF6">26D-8W</text>
+
+    <!-- 26B-18W @ 3.8m (rel) = x=474 -->
+    <circle cx="474" cy="195" r="9" fill="#06B6D4" opacity="0.9" filter="url(#gB)"/>
+    <circle cx="474" cy="195" r="4" fill="#A5F3FC"/>
+    <text x="474" y="208" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#06B6D4">26B-18W</text>
+
+    <!-- 26D-8W @ 4.8m (rel) = x=554 -->
+    <g transform="translate(554,195)">
+      <circle r="8" fill="#8B5CF6" opacity="0.9" filter="url(#gA)"/>
+      <circle r="3" fill="#DDD6FE"/>
+      <path d="M-5,-3 A6,6 0 0,1 5,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="5,-3 3,-6 7,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="554" y="208" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#8B5CF6">26D-8W</text>
+
+    <!-- 26D-8W @ 5.5m (rel) = x=610 -->
+    <g transform="translate(624,195)">
+      <circle r="8" fill="#8B5CF6" opacity="0.9" filter="url(#gA)"/>
+      <circle r="3" fill="#DDD6FE"/>
+      <path d="M-5,-3 A6,6 0 0,1 5,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="5,-3 3,-6 7,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="624" y="208" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#8B5CF6">26D-8W</text>
+
+    <!-- 26D-8W @ 6.0m (rel) = x=650 (cuối ray) -->
+    <g transform="translate(694,195)">
+      <circle r="8" fill="#8B5CF6" opacity="0.9" filter="url(#gA)"/>
+      <circle r="3" fill="#DDD6FE"/>
+      <path d="M-5,-3 A6,6 0 0,1 5,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="5,-3 3,-6 7,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="694" y="208" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#8B5CF6">26D-8W</text>
+
+    <!-- Scale bar at bottom -->
+    <line x1="10" y1="270" x2="90" y2="270" stroke="#2D4A6A" stroke-width="1.5"/>
+    <line x1="10" y1="266" x2="10" y2="274" stroke="#2D4A6A" stroke-width="1.5"/>
+    <line x1="90" y1="266" x2="90" y2="274" stroke="#2D4A6A" stroke-width="1.5"/>
+    <text x="50" y="280" text-anchor="middle" font-family="Lexend" font-size="8" fill="#2D4A6A">1 m</text>
+
+    <!-- Dimension 8m -->
+    <text x="360" y="270" text-anchor="middle" font-family="Lexend" font-size="8" fill="#FF7F32" opacity="0.6">← 8000mm →</text>
+    <!-- Dimension 6m void -->
+    <text x="440" y="20" text-anchor="middle" font-family="Lexend" font-size="8" fill="#38BDF8" opacity="0.5">← Ô thông 6000mm →</text>
   </svg>
   </div>
-
   <div class="legend">
-    <div class="legend-item">
-      <div class="legend-dot" style="background:#10B981;"></div>
-      RNM 26B-12W — Mắt LED chiếu tỏa
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background:#EF4444;"></div>
-      RNM 26D-15W — Rọi xoay
-    </div>
-    <div class="legend-item">
-      <div class="legend-rect" style="background:#F59E0B;"></div>
-      RNM 26A-18W — Tản quang dài
-    </div>
-    <div class="legend-item">
-      <div class="legend-rect" style="background:#38BDF8; opacity:0.6;"></div>
-      Lưới LED ô thông tầng
-    </div>
+    <div class="legend-item"><div class="ld" style="background:#FF7F32;"></div> Ray 8m — Tầng Trệt</div>
+    <div class="legend-item"><div class="ld" style="background:#A78BFA;"></div> Ray 6m — Tầng Lửng</div>
+    <div class="legend-item"><div class="ld" style="background:#10B981;"></div> 26B (Mắt LED tỏa)</div>
+    <div class="legend-item"><div class="ld" style="background:#06B6D4;"></div> 26B 18W — Lửng</div>
+    <div class="legend-item"><div class="ld" style="background:#EF4444;"></div> 26D 15W (Rọi xoay — Trệt)</div>
+    <div class="legend-item"><div class="ld" style="background:#8B5CF6;"></div> 26D 8W (Rọi xoay — Lửng)</div>
+    <div class="legend-item"><div class="lr" style="background:#F59E0B;"></div> 26A 18W (Tản quang dài)</div>
+    <div class="legend-item"><div class="lr" style="background:#38BDF8;opacity:0.5;"></div> Lưới LED ô thông tầng</div>
   </div>
 </div>
 
-<!-- ===================== TẦNG LỬNG ===================== -->
-<div class="floor-section">
-  <div class="floor-title">Tầng Lửng <span class="badge" style="background:#2D1F4E;color:#C4B5FD;">6 đèn</span></div>
-  <div class="floor-desc">RNM 26B 18W × 2 &nbsp;|&nbsp; RNM 26D 8W × 6</div>
-
-  <div class="plan-wrap">
-  <svg viewBox="0 0 820 300" width="820" height="300" xmlns="http://www.w3.org/2000/svg">
+<!-- ===================== RAY UNROLL 8m ===================== -->
+<div class="card">
+  <div class="card-title" style="color:#FF7F32;">Ray 8m — Tầng Trệt <span style="font-size:0.65rem;background:#1A2E48;color:#64748B;padding:2px 8px;border-radius:999px;font-weight:400;">Trải thẳng ray</span></div>
+  <div class="card-sub">8 vị trí đèn &nbsp;|&nbsp; Tỷ lệ: 1m = 80px</div>
+  <div class="plan-scroll">
+  <svg viewBox="0 0 720 140" width="720" height="140" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <pattern id="ledGrid2" x="0" y="0" width="18" height="18" patternUnits="userSpaceOnUse">
-        <rect width="18" height="18" fill="#0A1F3D"/>
-        <rect x="3" y="3" width="5" height="5" fill="#38BDF8" opacity="0.35" rx="1"/>
-        <rect x="10" y="3" width="5" height="5" fill="#38BDF8" opacity="0.35" rx="1"/>
-        <rect x="3" y="10" width="5" height="5" fill="#38BDF8" opacity="0.35" rx="1"/>
-        <rect x="10" y="10" width="5" height="5" fill="#38BDF8" opacity="0.35" rx="1"/>
-      </pattern>
-      <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="4" result="cb"/>
-        <feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="glow2s" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="6" result="cb"/>
-        <feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
+      <filter id="gR"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="gRs"><feGaussianBlur stdDeviation="5.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     </defs>
 
-    <!-- Outer wall -->
-    <rect x="10" y="10" width="800" height="270" fill="none" stroke="#3A2D6A" stroke-width="3" rx="4"/>
+    <!-- Rail -->
+    <rect x="10" y="68" width="700" height="6" rx="3" fill="#FF7F32" opacity="0.3"/>
+    <line x1="10" y1="71" x2="710" y2="71" stroke="#FF7F32" stroke-width="2"/>
 
-    <!-- WC+Stair zone -->
-    <rect x="10" y="10" width="180" height="270" fill="#100A28" stroke="#3A2D6A" stroke-width="1.5"/>
-    <line x1="10" y1="55" x2="190" y2="55" stroke="#3A2D6A" stroke-width="0.8" stroke-dasharray="4,3"/>
-    <line x1="10" y1="100" x2="190" y2="100" stroke="#3A2D6A" stroke-width="0.8" stroke-dasharray="4,3"/>
-    <line x1="10" y1="145" x2="190" y2="145" stroke="#3A2D6A" stroke-width="0.8" stroke-dasharray="4,3"/>
-    <line x1="10" y1="190" x2="190" y2="190" stroke="#3A2D6A" stroke-width="0.8" stroke-dasharray="4,3"/>
-    <text x="100" y="240" text-anchor="middle" font-family="Lexend" font-size="10" fill="#4A3A7A">Cầu Thang</text>
+    <!-- Void zone highlight -->
+    <rect x="170" y="50" width="540" height="42" rx="4" fill="#071428" opacity="0.6" stroke="#38BDF8" stroke-width="0.8" stroke-dasharray="5,4"/>
+    <text x="440" y="100" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#38BDF8" opacity="0.5">——— Ô thông tầng (LED grid) ———</text>
 
-    <!-- Corridor -->
-    <rect x="190" y="10" width="60" height="270" fill="#0C0B20" stroke="#2A1F50" stroke-width="1"/>
+    <!-- Meter labels -->
+    <text x="10"  y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">0m</text>
+    <text x="90"  y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">1m</text>
+    <text x="170" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">2m</text>
+    <text x="250" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">3m</text>
+    <text x="330" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">4m</text>
+    <text x="410" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">5m</text>
+    <text x="490" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">6m</text>
+    <text x="570" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">7m</text>
+    <text x="650" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">8m</text>
+    <!-- tick -->
+    <line x1="10"  y1="107" x2="10"  y2="112" stroke="#2D4A6A" stroke-width="1"/>
+    <line x1="90"  y1="107" x2="90"  y2="112" stroke="#2D4A6A" stroke-width="1"/>
+    <line x1="170" y1="107" x2="170" y2="112" stroke="#2D4A6A" stroke-width="1"/>
+    <line x1="250" y1="107" x2="250" y2="112" stroke="#2D4A6A" stroke-width="1"/>
+    <line x1="330" y1="107" x2="330" y2="112" stroke="#2D4A6A" stroke-width="1"/>
+    <line x1="410" y1="107" x2="410" y2="112" stroke="#2D4A6A" stroke-width="1"/>
+    <line x1="490" y1="107" x2="490" y2="112" stroke="#2D4A6A" stroke-width="1"/>
+    <line x1="570" y1="107" x2="570" y2="112" stroke="#2D4A6A" stroke-width="1"/>
+    <line x1="650" y1="107" x2="650" y2="112" stroke="#2D4A6A" stroke-width="1"/>
+    <line x1="710" y1="107" x2="710" y2="112" stroke="#2D4A6A" stroke-width="1"/>
 
-    <!-- Main zone -->
-    <rect x="250" y="10" width="560" height="270" fill="#09101F" stroke="#2A1F50" stroke-width="1.5"/>
+    <!-- ① 26B-12W @ 0.7m = x=66 -->
+    <circle cx="66" cy="71" r="10" fill="#10B981" opacity="0.9" filter="url(#gRs)"/>
+    <circle cx="66" cy="71" r="4.5" fill="#6EE7B7"/>
+    <text x="66" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#10B981" font-weight="700">① 26B-12W</text>
 
-    <!-- Lan can ô thông tầng -->
-    <rect x="410" y="10" width="5" height="270" fill="#3A2D6A"/>
-    <rect x="600" y="10" width="6" height="270" fill="#3A2D6A"/>
-    <rect x="795" y="10" width="5" height="270" fill="#3A2D6A"/>
-    <!-- Ô thông pattern (nhìn từ lửng xuống) -->
-    <rect x="415" y="10" width="185" height="270" fill="url(#ledGrid2)" opacity="0.5"/>
-    <rect x="606" y="10" width="189" height="270" fill="url(#ledGrid2)" opacity="0.5"/>
-    <text x="600" y="148" text-anchor="middle" font-family="Lexend" font-size="8" fill="#38BDF8" opacity="0.5">Ô thông (nhìn xuống)</text>
-
-    <!-- Lan can line -->
-    <line x1="250" y1="25" x2="410" y2="25" stroke="#4A3A7A" stroke-width="2" stroke-dasharray="8,4"/>
-    <text x="330" y="18" text-anchor="middle" font-family="Lexend" font-size="8" fill="#4A3A7A">lan can</text>
-
-    <!-- ===== ĐÈNS TẦNG LỬNG ===== -->
-
-    <!-- RNM 26B-18W (1): Trục ngang khu sinh hoạt — điểm 1 -->
-    <circle cx="300" cy="90" r="11" fill="#10B981" opacity="0.9" filter="url(#glow2s)"/>
-    <circle cx="300" cy="90" r="5" fill="#6EE7B7"/>
-    <ellipse cx="300" cy="90" rx="35" ry="35" fill="#10B981" opacity="0.07"/>
-    <text x="300" y="75" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#10B981" font-weight="600">26B-18W</text>
-
-    <!-- RNM 26B-18W (2): Điểm 2 đối xứng -->
-    <circle cx="390" cy="90" r="11" fill="#10B981" opacity="0.9" filter="url(#glow2s)"/>
-    <circle cx="390" cy="90" r="5" fill="#6EE7B7"/>
-    <ellipse cx="390" cy="90" rx="35" ry="35" fill="#10B981" opacity="0.07"/>
-    <text x="390" y="75" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#10B981" font-weight="600">26B-18W</text>
-
-    <!-- RNM 26D-8W (1)+(2): 2 cái dọc lan can ô thông tầng -->
-    <g transform="translate(410,80)">
-      <circle r="8" fill="#A855F7" opacity="0.9" filter="url(#glow2)"/>
-      <circle r="3.5" fill="#E9D5FF"/>
-      <path d="M-6,-4 A7,7 0 0,1 6,-4" stroke="#E9D5FF" stroke-width="1.3" fill="none"/>
-      <polygon points="6,-4 4,-7 8,-5" fill="#E9D5FF"/>
-      <ellipse rx="22" ry="22" fill="#A855F7" opacity="0.07"/>
+    <!-- ② 26D-15W @ 1.5m = x=130 -->
+    <g transform="translate(130,71)">
+      <circle r="10" fill="#EF4444" opacity="0.9" filter="url(#gR)"/>
+      <circle r="4" fill="#FCA5A5"/>
+      <path d="M-7,-4 A8,8 0 0,1 7,-4" stroke="#FCA5A5" stroke-width="1.3" fill="none"/>
+      <polygon points="7,-4 5,-8 9,-6" fill="#FCA5A5"/>
     </g>
-    <text x="410" y="65" text-anchor="middle" font-family="Lexend" font-size="7" fill="#A855F7" font-weight="600">26D-8W</text>
+    <text x="130" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#EF4444" font-weight="700">② 26D-15W</text>
 
-    <g transform="translate(410,200)">
-      <circle r="8" fill="#A855F7" opacity="0.9" filter="url(#glow2)"/>
-      <circle r="3.5" fill="#E9D5FF"/>
-      <path d="M-6,-4 A7,7 0 0,1 6,-4" stroke="#E9D5FF" stroke-width="1.3" fill="none"/>
-      <polygon points="6,-4 4,-7 8,-5" fill="#E9D5FF"/>
-      <ellipse rx="22" ry="22" fill="#A855F7" opacity="0.07"/>
+    <!-- ③ 26D-15W @ 2.0m = x=170 (Bên TRÁI ô thông) -->
+    <g transform="translate(170,71)">
+      <circle r="10" fill="#EF4444" opacity="0.9" filter="url(#gR)"/>
+      <circle r="4" fill="#FCA5A5"/>
+      <path d="M-7,-4 A8,8 0 0,1 7,-4" stroke="#FCA5A5" stroke-width="1.3" fill="none"/>
+      <polygon points="7,-4 5,-8 9,-6" fill="#FCA5A5"/>
     </g>
-    <text x="410" y="185" text-anchor="middle" font-family="Lexend" font-size="7" fill="#A855F7" font-weight="600">26D-8W</text>
+    <text x="170" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#EF4444" font-weight="700">③ 26D-15W</text>
+    <text x="170" y="48" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#F97316">bên trái</text>
 
-    <!-- RNM 26D-8W (3)+(4): 2 tường đầu hồi -->
-    <g transform="translate(260,160)">
-      <circle r="8" fill="#A855F7" opacity="0.9" filter="url(#glow2)"/>
-      <circle r="3.5" fill="#E9D5FF"/>
-      <path d="M-6,-4 A7,7 0 0,1 6,-4" stroke="#E9D5FF" stroke-width="1.3" fill="none"/>
-      <polygon points="6,-4 4,-7 8,-5" fill="#E9D5FF"/>
-      <ellipse rx="22" ry="22" fill="#A855F7" opacity="0.07"/>
+    <!-- ④ 26A-18W @ 3.0m center, 1m strip = x=210 to 290 -->
+    <rect x="210" y="65" width="80" height="12" rx="6" fill="#F59E0B" opacity="0.9" filter="url(#gR)"/>
+    <text x="250" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#F59E0B" font-weight="700">④ 26A-18W</text>
+
+    <!-- ⑤ 26B-12W @ 4.5m = x=370 -->
+    <circle cx="370" cy="71" r="10" fill="#10B981" opacity="0.9" filter="url(#gRs)"/>
+    <circle cx="370" cy="71" r="4.5" fill="#6EE7B7"/>
+    <text x="370" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#10B981" font-weight="700">⑤ 26B-12W</text>
+
+    <!-- ⑥ 26A-18W @ 6.0m, strip x=530 to 610 -->
+    <rect x="530" y="65" width="80" height="12" rx="6" fill="#F59E0B" opacity="0.9" filter="url(#gR)"/>
+    <text x="570" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#F59E0B" font-weight="700">⑥ 26A-18W</text>
+
+    <!-- ⑦ 26D-15W @ 7.0m = x=630 wait 7m = 570+80=... 7m=630px... wait scale is 80px/m so 7m=560px+10=570 -->
+    <!-- Actually: 0m=x10, 1m=x90, 7m = 10+7*80=570 -->
+    <g transform="translate(578,71)">
+      <circle r="10" fill="#EF4444" opacity="0.9" filter="url(#gR)"/>
+      <circle r="4" fill="#FCA5A5"/>
+      <path d="M-7,-4 A8,8 0 0,1 7,-4" stroke="#FCA5A5" stroke-width="1.3" fill="none"/>
+      <polygon points="7,-4 5,-8 9,-6" fill="#FCA5A5"/>
     </g>
-    <text x="260" y="145" text-anchor="middle" font-family="Lexend" font-size="7" fill="#A855F7" font-weight="600">26D-8W</text>
+    <text x="615" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#EF4444" font-weight="700">⑦ 26D-15W</text>
 
-    <g transform="translate(370,160)">
-      <circle r="8" fill="#A855F7" opacity="0.9" filter="url(#glow2)"/>
-      <circle r="3.5" fill="#E9D5FF"/>
-      <path d="M-6,-4 A7,7 0 0,1 6,-4" stroke="#E9D5FF" stroke-width="1.3" fill="none"/>
-      <polygon points="6,-4 4,-7 8,-5" fill="#E9D5FF"/>
-      <ellipse rx="22" ry="22" fill="#A855F7" opacity="0.07"/>
+    <!-- ⑧ 26D-15W @ 8.0m = x=710 (Bên PHẢI ô thông) -->
+    <g transform="translate(710,71)">
+      <circle r="10" fill="#EF4444" opacity="0.9" filter="url(#gR)"/>
+      <circle r="4" fill="#FCA5A5"/>
+      <path d="M-7,-4 A8,8 0 0,1 7,-4" stroke="#FCA5A5" stroke-width="1.3" fill="none"/>
+      <polygon points="7,-4 5,-8 9,-6" fill="#FCA5A5"/>
     </g>
-    <text x="370" y="145" text-anchor="middle" font-family="Lexend" font-size="7" fill="#A855F7" font-weight="600">26D-8W</text>
-
-    <!-- RNM 26D-8W (5)+(6): 2 cái flexible theo nội thất -->
-    <g transform="translate(260,250)">
-      <circle r="8" fill="#A855F7" opacity="0.9" filter="url(#glow2)"/>
-      <circle r="3.5" fill="#E9D5FF"/>
-      <path d="M-6,-4 A7,7 0 0,1 6,-4" stroke="#E9D5FF" stroke-width="1.3" fill="none"/>
-      <polygon points="6,-4 4,-7 8,-5" fill="#E9D5FF"/>
-      <ellipse rx="22" ry="22" fill="#A855F7" opacity="0.07"/>
-    </g>
-    <text x="260" y="235" text-anchor="middle" font-family="Lexend" font-size="7" fill="#A855F7" font-weight="600">26D-8W ✦</text>
-
-    <g transform="translate(370,250)">
-      <circle r="8" fill="#A855F7" opacity="0.9" filter="url(#glow2)"/>
-      <circle r="3.5" fill="#E9D5FF"/>
-      <path d="M-6,-4 A7,7 0 0,1 6,-4" stroke="#E9D5FF" stroke-width="1.3" fill="none"/>
-      <polygon points="6,-4 4,-7 8,-5" fill="#E9D5FF"/>
-      <ellipse rx="22" ry="22" fill="#A855F7" opacity="0.07"/>
-    </g>
-    <text x="370" y="235" text-anchor="middle" font-family="Lexend" font-size="7" fill="#A855F7" font-weight="600">26D-8W ✦</text>
-
-    <!-- Zone labels -->
-    <text x="100" y="22" text-anchor="middle" font-family="Lexend" font-size="9" fill="#3A2D6A">CẦU THANG</text>
-    <text x="330" y="22" text-anchor="middle" font-family="Lexend" font-size="9" fill="#3A2D6A">KHU SINH HOẠT LỬNG</text>
-    <text x="600" y="22" text-anchor="middle" font-family="Lexend" font-size="9" fill="#2D4A6A">Ô THÔNG (nhìn từ trên)</text>
-
-    <!-- Flexible note -->
-    <text x="315" y="272" text-anchor="middle" font-family="Lexend" font-size="7" fill="#6B5AA0">✦ Vị trí flexible — điều chỉnh theo nội thất thực tế</text>
+    <text x="710" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#EF4444" font-weight="700">⑧ 26D-15W</text>
+    <text x="710" y="48" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#F97316">bên phải</text>
   </svg>
-  </div>
-
-  <div class="legend">
-    <div class="legend-item">
-      <div class="legend-dot" style="background:#10B981;"></div>
-      RNM 26B-18W — Mắt LED chiếu tỏa
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background:#A855F7;"></div>
-      RNM 26D-8W — Rọi xoay (nhỏ)
-    </div>
-    <div class="legend-item">
-      <div class="legend-rect" style="background:#38BDF8; opacity:0.4;"></div>
-      Lưới LED ô thông tầng (nhìn từ trên)
-    </div>
   </div>
 </div>
 
-<!-- ===================== BẢNG TỔNG HỢP ===================== -->
-<div class="summary">
-  <h2>Bảng Tổng Hợp Phân Bổ Đèn</h2>
+<!-- ===================== RAY UNROLL 6m ===================== -->
+<div class="card">
+  <div class="card-title" style="color:#A78BFA;">Ray 6m — Tầng Lửng <span style="font-size:0.65rem;background:#1A2E48;color:#64748B;padding:2px 8px;border-radius:999px;font-weight:400;">Trải thẳng ray</span></div>
+  <div class="card-sub">8 vị trí đèn &nbsp;|&nbsp; Tỷ lệ: 1m = 90px &nbsp;|&nbsp; Ray nằm hoàn toàn trong vùng ô thông tầng (2m→8m)</div>
+  <div class="plan-scroll">
+  <svg viewBox="0 0 580 140" width="580" height="140" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="g6"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="g6s"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+
+    <!-- Rail -->
+    <rect x="10" y="68" width="560" height="6" rx="3" fill="#A78BFA" opacity="0.3"/>
+    <line x1="10" y1="71" x2="570" y2="71" stroke="#A78BFA" stroke-width="2"/>
+
+    <!-- Meter labels (0→6m rel) -->
+    <text x="10"  y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">0m</text>
+    <text x="100" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">1m</text>
+    <text x="190" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">2m</text>
+    <text x="280" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">3m</text>
+    <text x="370" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">4m</text>
+    <text x="460" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">5m</text>
+    <text x="570" y="115" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#475569">6m</text>
+    <line x1="10"  y1="107" x2="10"  y2="112" stroke="#3A2D6A" stroke-width="1"/>
+    <line x1="100" y1="107" x2="100" y2="112" stroke="#3A2D6A" stroke-width="1"/>
+    <line x1="190" y1="107" x2="190" y2="112" stroke="#3A2D6A" stroke-width="1"/>
+    <line x1="280" y1="107" x2="280" y2="112" stroke="#3A2D6A" stroke-width="1"/>
+    <line x1="370" y1="107" x2="370" y2="112" stroke="#3A2D6A" stroke-width="1"/>
+    <line x1="460" y1="107" x2="460" y2="112" stroke="#3A2D6A" stroke-width="1"/>
+    <line x1="570" y1="107" x2="570" y2="112" stroke="#3A2D6A" stroke-width="1"/>
+
+    <!-- Absolute position label -->
+    <text x="10"  y="127" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#2D1F60">(abs 2m)</text>
+    <text x="570" y="127" text-anchor="middle" font-family="Lexend" font-size="6.5" fill="#2D1F60">(abs 8m)</text>
+
+    <!-- ① 26D-8W @ rel 0.3m = x=37 -->
+    <g transform="translate(37,71)">
+      <circle r="9" fill="#8B5CF6" opacity="0.9" filter="url(#g6)"/>
+      <circle r="3.5" fill="#DDD6FE"/>
+      <path d="M-6,-3 A7,7 0 0,1 6,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="6,-3 4,-6 8,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="37" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#8B5CF6" font-weight="700">① 26D-8W</text>
+
+    <!-- ② 26B-18W @ rel 1.0m = x=100 -->
+    <circle cx="100" cy="71" r="10" fill="#06B6D4" opacity="0.9" filter="url(#g6s)"/>
+    <circle cx="100" cy="71" r="4.5" fill="#A5F3FC"/>
+    <text x="100" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#06B6D4" font-weight="700">② 26B-18W</text>
+
+    <!-- ③ 26D-8W @ rel 2.0m = x=190 -->
+    <g transform="translate(190,71)">
+      <circle r="9" fill="#8B5CF6" opacity="0.9" filter="url(#g6)"/>
+      <circle r="3.5" fill="#DDD6FE"/>
+      <path d="M-6,-3 A7,7 0 0,1 6,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="6,-3 4,-6 8,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="190" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#8B5CF6" font-weight="700">③ 26D-8W</text>
+
+    <!-- ④ 26D-8W @ rel 3.0m = x=280 -->
+    <g transform="translate(280,71)">
+      <circle r="9" fill="#8B5CF6" opacity="0.9" filter="url(#g6)"/>
+      <circle r="3.5" fill="#DDD6FE"/>
+      <path d="M-6,-3 A7,7 0 0,1 6,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="6,-3 4,-6 8,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="280" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#8B5CF6" font-weight="700">④ 26D-8W</text>
+
+    <!-- ⑤ 26B-18W @ rel 3.8m = x=352 -->
+    <circle cx="352" cy="71" r="10" fill="#06B6D4" opacity="0.9" filter="url(#g6s)"/>
+    <circle cx="352" cy="71" r="4.5" fill="#A5F3FC"/>
+    <text x="352" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#06B6D4" font-weight="700">⑤ 26B-18W</text>
+
+    <!-- ⑥ 26D-8W @ rel 4.5m = x=415 -->
+    <g transform="translate(415,71)">
+      <circle r="9" fill="#8B5CF6" opacity="0.9" filter="url(#g6)"/>
+      <circle r="3.5" fill="#DDD6FE"/>
+      <path d="M-6,-3 A7,7 0 0,1 6,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="6,-3 4,-6 8,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="415" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#8B5CF6" font-weight="700">⑥ 26D-8W</text>
+
+    <!-- ⑦ 26D-8W @ rel 5.3m = x=487 -->
+    <g transform="translate(487,71)">
+      <circle r="9" fill="#8B5CF6" opacity="0.9" filter="url(#g6)"/>
+      <circle r="3.5" fill="#DDD6FE"/>
+      <path d="M-6,-3 A7,7 0 0,1 6,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="6,-3 4,-6 8,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="487" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#8B5CF6" font-weight="700">⑦ 26D-8W</text>
+
+    <!-- ⑧ 26D-8W @ rel 5.9m = x=541 -->
+    <g transform="translate(551,71)">
+      <circle r="9" fill="#8B5CF6" opacity="0.9" filter="url(#g6)"/>
+      <circle r="3.5" fill="#DDD6FE"/>
+      <path d="M-6,-3 A7,7 0 0,1 6,-3" stroke="#DDD6FE" stroke-width="1.2" fill="none"/>
+      <polygon points="6,-3 4,-6 8,-4" fill="#DDD6FE"/>
+    </g>
+    <text x="551" y="57" text-anchor="middle" font-family="Lexend" font-size="7.5" fill="#8B5CF6" font-weight="700">⑧ 26D-8W</text>
+  </svg>
+  </div>
+</div>
+
+<!-- ===================== BẢNG VỊ TRÍ ===================== -->
+<div class="card" style="border-color:#1E3A5F;">
+  <div class="card-title" style="color:#94A3B8;font-size:0.85rem;">Bảng Vị Trí Chi Tiết</div>
+  <div class="tbl-wrap">
   <table>
     <thead>
-      <tr>
-        <th>Mã đèn</th>
-        <th>Công suất</th>
-        <th>Tầng</th>
-        <th>Số lượng</th>
-        <th>Vị trí</th>
-      </tr>
+      <tr><th>#</th><th>Ray</th><th>Vị trí (m)</th><th>Mã đèn</th><th>Ghi chú</th></tr>
     </thead>
     <tbody>
-      <tr>
-        <td><strong style="color:#10B981">RNM 26B</strong><br/><span style="font-size:0.65rem;color:#64748B">Mắt LED — Tỏa</span></td>
-        <td>12W</td>
-        <td><span class="tag tag-tret">Trệt</span></td>
-        <td style="font-weight:700;color:#E2E8F0">2</td>
-        <td>① Hành lang cạnh WC 02<br/>② Điểm giữa trước ô thông tầng</td>
-      </tr>
-      <tr>
-        <td><strong style="color:#10B981">RNM 26B</strong><br/><span style="font-size:0.65rem;color:#64748B">Mắt LED — Tỏa</span></td>
-        <td>18W</td>
-        <td><span class="tag tag-lung">Lửng</span></td>
-        <td style="font-weight:700;color:#E2E8F0">2</td>
-        <td>Đối xứng 2 điểm trên trục ngang khu sinh hoạt</td>
-      </tr>
-      <tr>
-        <td><strong style="color:#EF4444">RNM 26D</strong><br/><span style="font-size:0.65rem;color:#64748B">Chiếu điểm — Xoay</span></td>
-        <td>15W</td>
-        <td><span class="tag tag-tret">Trệt</span></td>
-        <td style="font-weight:700;color:#E2E8F0">4</td>
-        <td>① ② Đầu trái + phải ô thông tầng<br/>③ ④ Rọi tường/vật trưng bày 2 bên</td>
-      </tr>
-      <tr>
-        <td><strong style="color:#A855F7">RNM 26D</strong><br/><span style="font-size:0.65rem;color:#64748B">Chiếu điểm — Xoay</span></td>
-        <td>8W</td>
-        <td><span class="tag tag-lung">Lửng</span></td>
-        <td style="font-weight:700;color:#E2E8F0">6</td>
-        <td>① ② Dọc lan can ô thông (trang trí/chiếu xuống)<br/>③ ④ 2 tường đầu hồi<br/>⑤ ⑥ Flexible theo nội thất</td>
-      </tr>
-      <tr>
-        <td><strong style="color:#F59E0B">RNM 26A</strong><br/><span style="font-size:0.65rem;color:#64748B">Tản quang dài</span></td>
-        <td>18W</td>
-        <td><span class="tag tag-tret">Trệt</span></td>
-        <td style="font-weight:700;color:#E2E8F0">2</td>
-        <td>Dọc trục 8000mm — song song, ánh sáng nền đồng đều</td>
-      </tr>
-      <tr>
-        <td colspan="3" style="text-align:right;color:#64748B;font-size:0.68rem;padding-top:10px;">Tổng cộng</td>
-        <td style="font-weight:800;font-size:1rem;color:#FF7F32;padding-top:10px;">14</td>
-        <td style="padding-top:10px;color:#64748B;font-size:0.68rem;">+ Lưới LED ô thông tầng (riêng)</td>
-      </tr>
+      <tr><td>①</td><td><span class="tag t8">8m Trệt</span></td><td>0.7m</td><td style="color:#10B981;font-weight:600">RNM 26B-12W</td><td>Khu cầu thang / WC</td></tr>
+      <tr><td>②</td><td><span class="tag t8">8m Trệt</span></td><td>1.5m</td><td style="color:#EF4444;font-weight:600">RNM 26D-15W</td><td>Rọi khu entrance / lối vào</td></tr>
+      <tr><td>③</td><td><span class="tag t8">8m Trệt</span></td><td>2.0m</td><td style="color:#EF4444;font-weight:600">RNM 26D-15W</td><td><strong style="color:#F97316">Bên TRÁI ô thông tầng ★</strong></td></tr>
+      <tr><td>④</td><td><span class="tag t8">8m Trệt</span></td><td>3.0m (dải 1m)</td><td style="color:#F59E0B;font-weight:600">RNM 26A-18W</td><td>Tản quang nền nửa trái void</td></tr>
+      <tr><td>⑤</td><td><span class="tag t8">8m Trệt</span></td><td>4.5m</td><td style="color:#10B981;font-weight:600">RNM 26B-12W</td><td>Mắt LED giữa ô thông</td></tr>
+      <tr><td>⑥</td><td><span class="tag t8">8m Trệt</span></td><td>6.0m (dải 1m)</td><td style="color:#F59E0B;font-weight:600">RNM 26A-18W</td><td>Tản quang nền nửa phải void</td></tr>
+      <tr><td>⑦</td><td><span class="tag t8">8m Trệt</span></td><td>7.0m</td><td style="color:#EF4444;font-weight:600">RNM 26D-15W</td><td>Rọi điểm nội thất phía phải</td></tr>
+      <tr><td>⑧</td><td><span class="tag t8">8m Trệt</span></td><td>8.0m</td><td style="color:#EF4444;font-weight:600">RNM 26D-15W</td><td><strong style="color:#F97316">Bên PHẢI ô thông tầng ★</strong></td></tr>
+      <tr><td>①</td><td><span class="tag t6">6m Lửng</span></td><td>0.3m (abs 2.3m)</td><td style="color:#8B5CF6;font-weight:600">RNM 26D-8W</td><td>Rọi cạnh lan can trái</td></tr>
+      <tr><td>②</td><td><span class="tag t6">6m Lửng</span></td><td>1.0m (abs 3.0m)</td><td style="color:#06B6D4;font-weight:600">RNM 26B-18W</td><td>Mắt LED nền lửng trái</td></tr>
+      <tr><td>③</td><td><span class="tag t6">6m Lửng</span></td><td>2.0m (abs 4.0m)</td><td style="color:#8B5CF6;font-weight:600">RNM 26D-8W</td><td>Rọi điểm trang trí</td></tr>
+      <tr><td>④</td><td><span class="tag t6">6m Lửng</span></td><td>3.0m (abs 5.0m)</td><td style="color:#8B5CF6;font-weight:600">RNM 26D-8W</td><td>Giữa lửng</td></tr>
+      <tr><td>⑤</td><td><span class="tag t6">6m Lửng</span></td><td>3.8m (abs 5.8m)</td><td style="color:#06B6D4;font-weight:600">RNM 26B-18W</td><td>Mắt LED nền lửng phải</td></tr>
+      <tr><td>⑥</td><td><span class="tag t6">6m Lửng</span></td><td>4.5m (abs 6.5m)</td><td style="color:#8B5CF6;font-weight:600">RNM 26D-8W</td><td>Rọi khu nội thất</td></tr>
+      <tr><td>⑦</td><td><span class="tag t6">6m Lửng</span></td><td>5.3m (abs 7.3m)</td><td style="color:#8B5CF6;font-weight:600">RNM 26D-8W</td><td>Rọi điểm cuối phải</td></tr>
+      <tr><td>⑧</td><td><span class="tag t6">6m Lửng</span></td><td>5.9m (abs 7.9m)</td><td style="color:#8B5CF6;font-weight:600">RNM 26D-8W</td><td>Cạnh lan can phải</td></tr>
     </tbody>
   </table>
+  </div>
 
-  <div class="note-box">
-    <strong>Lưu ý kỹ thuật:</strong><br/>
-    — <strong>RNM 26A</strong> gắn âm trần dọc trục, song song nhau — tạo ánh sáng nền đều, tránh tối vùng giữa.<br/>
-    — <strong>RNM 26D 15W</strong> ở đầu ô thông tầng nên chỉnh góc ~30° để rọi vào viền/khung, tránh chói với lưới LED.<br/>
-    — <strong>RNM 26D 8W ⑤⑥</strong> tầng lửng: giữ vị trí linh hoạt, xác định chính xác sau khi bố trí nội thất.<br/>
-    — Khuyến nghị lưới LED ô thông tầng có <strong>dimmer độc lập</strong> với mạch đèn chiếu sáng chính.
+  <div class="note">
+    <strong>★ 2 Đèn bên ô thông tầng:</strong> 26D-15W tại 2.0m + 8.0m trên Ray 8m — góc rọi chỉnh 25–35° hướng vào trong void.<br/>
+    <strong>26A-18W:</strong> Dạng thanh dài (1m/thanh) gắn âm hoặc nổi trên ray — chiếu tản nền đều cho không gian giữa void.<br/>
+    <strong>Ray 6m Lửng:</strong> Bắt đầu từ vị trí tuyệt đối 2m (điểm kết thúc khu cầu thang), kết thúc tại 8m (tường cuối).<br/>
+    <strong>Vị trí tuyệt đối</strong> = tính từ tường trái của không gian 8000mm.
   </div>
 </div>
 
-<p style="text-align:center;font-size:0.65rem;color:#2D4A6A;margin-top:8px;">
-  Smart Home Project — Lê Phương Khanh | 2026-05-04
-</p>
+<p style="text-align:center;font-size:0.62rem;color:#1E3A5F;margin-top:6px;">Smart Home Project — Lê Phương Khanh | 2026-05-04</p>
 
 </body>
 </html>
