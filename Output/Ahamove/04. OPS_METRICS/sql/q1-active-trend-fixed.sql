@@ -10,8 +10,9 @@
 -- Output grain: city × order_date × month × week × segment
 -- ============================================================
 
+{{snippet: @yenhm GBQ.date_trunc}}
+
 WITH standard AS (
-  {{snippet: @yenhm GBQ.date_trunc}}
   {{snippet: @vinhnp1 standard_online_fulltime_driver}}
   -- Assumed output columns: (time TIMESTAMP, standard_hour FLOAT)
 ),

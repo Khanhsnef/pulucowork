@@ -23,7 +23,7 @@ driver_fct AS (
     s.city_id
   FROM ahamove_archive_ops.fct_supplier_performance p
   LEFT JOIN ahamove_supplier_raw.supplier_raw s ON p.supplier_id = s.id
-  WHERE JSON_EXTRACT_SCALAR(p.extra, '$.vehicle_type') IN ('MOTORBIKE', 'EV-BIKE')
+  WHERE COALESCE(s.vehicle_type, 'MOTORBIKE') = 'MOTORBIKE'
     AND COALESCE(s.email,    'a') NOT LIKE '%ahamove_ka_lazada%'
     AND COALESCE(s.services, 'a') NOT LIKE '%VNM-WH-DELIVERY%'
     AND COALESCE(s.services, 'a') NOT LIKE '%VNM-WH-VENDOR%'
