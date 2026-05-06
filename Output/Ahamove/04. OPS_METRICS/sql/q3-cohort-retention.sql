@@ -1,153 +1,141 @@
 -- ============================================================
--- QUERY 3: Cohort Retention Analysis
--- Mục đích: Tính retention rate M+1, M+2, ... M+12 theo NIM cohort
--- Input: Chạy sau khi có output từ Query 2 (hoặc dùng CTE chung)
--- Output: cohort_month × city_id × months_after → retention_rate
+-- QUERY 3A: Cohort Retention — NIM cohort → retention M+1...M+12
+-- Source: driver_performance_monthly (đã có segment per driver per month)
+--         + fct_supplier_performance (để lấy fct_month = NIM cohort)
+-- Output: cohort_month × city_id × months_after → retention_pct
 -- ============================================================
--- Cách đọc kết quả:
---   cohort_month = tháng NIM (tháng đầu active)
---   months_after = 0 (tháng NIM), 1 (tháng NLM), 2, 3...
---   cohort_size  = số driver NIM trong tháng đó
---   retained     = số còn active (có online hours) tại months_after
---   retention_pct = retained / cohort_size * 100
+-- Cách đọc:
+--   months_after = 0 → tháng NIM (100% by definition)
+--   months_after = 1 → tháng NLM (% còn active)
+--   months_after = 2 → tháng đầu tiên FT/PT
+--   months_after = N → retention M+N
 -- ============================================================
 
-WITH standard AS (
-  {{snippet: @yenhm GBQ.date_trunc}}
-  {{snippet: @vinhnp1 standard_online_fulltime_driver}}
-),
+{{snippet: @yenhm GBQ.date_trunc}}
 
--- Online hours toàn range (mở rộng để cover đủ M+12)
-online_all AS (
-  SELECT
-    datetrunc_mock(TIMESTAMP(r.period, 'Asia/Saigon'), 'month') AS period_month,
-    r.supplier_id,
-    datetrunc_mock(s.first_complete_time, 'month')              AS first_complete_month,
-    r.city_id,
-    SUM(r.online_hours)                                         AS online_hours
-  FROM ahamove_archive.ops_suppliers_online_hours r
-  LEFT JOIN `aha-move`.ahamove_supplier_raw.supplier_raw s ON r.supplier_id = s.id
-  WHERE r.period >= DATE_TRUNC(DATE({{start_date}}), MONTH)
-    AND r.period <  DATE_ADD(DATE_TRUNC(DATE({{end_date}}), MONTH), INTERVAL 1 MONTH)
-    AND COALESCE(s.vehicle_type, 'MOTORBIKE') = 'MOTORBIKE'
+WITH
+
+-- Lấy fct_month (tháng đầu hoàn thành đơn = NIM cohort) cho từng driver
+driver_fct AS (
+  SELECT DISTINCT
+    p.supplier_id,
+    DATE_TRUNC(DATE(s.first_complete_time, 'Asia/Saigon'), MONTH) AS fct_month,
+    s.city_id
+  FROM ahamove_archive_ops.fct_supplier_performance p
+  LEFT JOIN ahamove_supplier_raw.supplier_raw s ON p.supplier_id = s.id
+  WHERE JSON_EXTRACT_SCALAR(p.extra, '$.vehicle_type') IN ('MOTORBIKE', 'EV-BIKE')
     AND COALESCE(s.email,    'a') NOT LIKE '%ahamove_ka_lazada%'
     AND COALESCE(s.services, 'a') NOT LIKE '%VNM-WH-DELIVERY%'
-    AND s.tags NOT LIKE '%SALESFORCE%'
-  GROUP BY 1, 2, 3, 4
+    AND COALESCE(s.services, 'a') NOT LIKE '%VNM-WH-VENDOR%'
+    AND COALESCE(s.tags,     'a') NOT LIKE '%SALESFORCE%'
+    AND s.partitioned_create_time >= '2010-01-01'
 ),
 
--- NIM cohort: drivers có first_complete_month trong range
+-- NIM cohort: drivers có fct_month trong range phân tích
 nim_cohorts AS (
-  SELECT DISTINCT
-    first_complete_month   AS cohort_month,
+  SELECT
     supplier_id,
-    city_id
-  FROM online_all
-  WHERE period_month = first_complete_month           -- Tháng đầu tiên active = NIM
-    AND first_complete_month >= DATE_TRUNC(DATE({{start_date}}), MONTH)
-    AND first_complete_month <= DATE_TRUNC(DATE({{end_date}}),   MONTH)
+    city_id,
+    fct_month AS cohort_month
+  FROM driver_fct
+  WHERE fct_month >= DATE_TRUNC(DATE(TIMESTAMP({{start_date}})), MONTH)
+    AND fct_month <= DATE_TRUNC(DATE(TIMESTAMP({{end_date}})),   MONTH)
+    AND city_id IN ('HAN', 'SGN')   -- bỏ comment nếu muốn cả EXP
 ),
 
--- Lag steps: M+0 → M+12
+-- Các tháng driver có active trong driver_performance_monthly
+-- (bảng này có row khi driver active = có stp_complete > 0 trong tháng)
+active_months AS (
+  SELECT
+    supplier_id,
+    period   -- đã là monthly grain
+  FROM ahamove_archive_ops.driver_performance_monthly
+  WHERE period >= DATE_TRUNC(DATE(TIMESTAMP({{start_date}})), MONTH)
+    AND period <= DATE_ADD(
+          DATE_TRUNC(DATE(TIMESTAMP({{end_date}})), MONTH),
+          INTERVAL 12 MONTH   -- mở rộng để catch M+12
+        )
+),
+
+-- Lag steps M+0 → M+12
 lag_steps AS (
   SELECT lag_n
   FROM UNNEST(GENERATE_ARRAY(0, 12)) AS lag_n
 ),
 
--- Cross join cohort × lag → kiểm tra còn active không
-cohort_retention AS (
+-- Cross join: với mỗi cohort driver × mỗi lag → kiểm tra còn active không
+cohort_check AS (
   SELECT
     c.cohort_month,
     c.city_id,
-    l.lag_n                                  AS months_after,
+    l.lag_n                                                    AS months_after,
+    DATE_ADD(c.cohort_month, INTERVAL l.lag_n MONTH)          AS check_month,
     c.supplier_id,
-    -- Tháng cần kiểm tra active
-    DATE_ADD(c.cohort_month, INTERVAL l.lag_n MONTH) AS check_month,
-    -- Có online hours tháng đó không?
-    CASE WHEN o.online_hours IS NOT NULL THEN 1 ELSE 0 END AS is_active
+    CASE WHEN a.supplier_id IS NOT NULL THEN 1 ELSE 0 END     AS is_active
   FROM nim_cohorts c
   CROSS JOIN lag_steps l
-  LEFT JOIN online_all o
-    ON  o.supplier_id   = c.supplier_id
-    AND o.city_id       = c.city_id
-    AND o.period_month  = DATE_ADD(c.cohort_month, INTERVAL l.lag_n MONTH)
-  -- Chỉ giữ check_month không vượt quá end_date
+  LEFT JOIN active_months a
+    ON  a.supplier_id = c.supplier_id
+    AND a.period      = DATE_ADD(c.cohort_month, INTERVAL l.lag_n MONTH)
+  -- Chỉ giữ check_month không vượt quá end_date + 12 tháng
   WHERE DATE_ADD(c.cohort_month, INTERVAL l.lag_n MONTH)
-          <= DATE_TRUNC(DATE({{end_date}}), MONTH)
+          <= DATE_ADD(DATE_TRUNC(DATE(TIMESTAMP({{end_date}})), MONTH), INTERVAL 12 MONTH)
 )
 
 -- ============================================================
--- OUTPUT: Retention rate per cohort × city × months_after
+-- OUTPUT A: Retention rate tổng hợp
 -- ============================================================
 SELECT
   cohort_month,
   city_id,
   months_after,
   check_month,
-  COUNT(DISTINCT supplier_id)                                      AS cohort_size,
-  COUNT(DISTINCT CASE WHEN is_active = 1 THEN supplier_id END)    AS retained,
+  COUNT(DISTINCT supplier_id)                                  AS cohort_size,
+  COUNT(DISTINCT CASE WHEN is_active = 1 THEN supplier_id END) AS retained,
   ROUND(
-    COUNT(DISTINCT CASE WHEN is_active = 1 THEN supplier_id END)
-    * 100.0
+    COUNT(DISTINCT CASE WHEN is_active = 1 THEN supplier_id END) * 100.0
     / NULLIF(COUNT(DISTINCT supplier_id), 0),
     1
-  )                                                                AS retention_pct,
-
-  -- Breakdown: trong số còn active, bao nhiêu là FT vs PT (M+2 trở đi)
-  -- Cần join thêm online_hours để tính segment tại check_month
-  -- → Xem query 3b bên dưới nếu cần
-
-FROM cohort_retention
+  )                                                            AS retention_pct
+FROM cohort_check
 GROUP BY 1, 2, 3, 4
 ORDER BY city_id, cohort_month, months_after
 
 
 -- ============================================================
--- QUERY 3B: Graduation Quality — NIM cohort → FT / PT tại M+2
--- Chạy riêng để biết: trong số NIM còn sống M+2,
---                     bao nhiêu trở thành FT vs PT?
+-- QUERY 3B: Graduation Quality — NIM → FT/PT/Churn tại M+2
+-- Bỏ comment query này và chạy riêng khi cần
+-- ⚠️ Cần verify giá trị của driver_life_time trước khi dùng
 -- ============================================================
 /*
-WITH standard AS (
-  {{snippet: @yenhm GBQ.date_trunc}}
-  {{snippet: @vinhnp1 standard_online_fulltime_driver}}
-),
+WITH nim_cohorts AS ( ... ),  -- giống trên
 
-online_all AS ( ... ),  -- giống trên
-
-nim_cohorts AS ( ... ), -- giống trên
-
--- Online hours tại M+2 (tháng thứ 3 của cohort)
-online_at_m2 AS (
+graduation AS (
   SELECT
     c.cohort_month,
-    c.supplier_id,
     c.city_id,
-    o.online_hours,
-    CASE
-      WHEN o.online_hours IS NULL THEN 'churned'
-      WHEN o.online_hours >= st.standard_hour THEN 'FT'
-      ELSE 'PT'
-    END AS segment_at_m2
+    c.supplier_id,
+    m.driver_life_time  AS segment_at_m2,   -- ⚠️ verify values: 'FT'/'PT'/NULL?
+    m.ft_segment                             -- ⚠️ verify values
   FROM nim_cohorts c
-  LEFT JOIN online_all o
-    ON  o.supplier_id  = c.supplier_id
-    AND o.city_id      = c.city_id
-    AND o.period_month = DATE_ADD(c.cohort_month, INTERVAL 2 MONTH)
-  LEFT JOIN standard st
-    ON st.time = DATE_ADD(c.cohort_month, INTERVAL 2 MONTH)
+  LEFT JOIN ahamove_archive_ops.driver_performance_monthly m
+    ON  m.supplier_id = c.supplier_id
+    AND m.period      = DATE_ADD(c.cohort_month, INTERVAL 2 MONTH)
 )
 
 SELECT
   cohort_month,
   city_id,
-  COUNT(DISTINCT supplier_id)                                              AS cohort_size,
-  COUNT(DISTINCT CASE WHEN segment_at_m2 = 'FT'      THEN supplier_id END) AS graduated_ft,
-  COUNT(DISTINCT CASE WHEN segment_at_m2 = 'PT'      THEN supplier_id END) AS graduated_pt,
-  COUNT(DISTINCT CASE WHEN segment_at_m2 = 'churned' THEN supplier_id END) AS churned_at_m2,
-  ROUND(COUNT(DISTINCT CASE WHEN segment_at_m2 = 'FT' THEN supplier_id END) * 100.0 / NULLIF(COUNT(DISTINCT supplier_id),0), 1) AS ft_graduation_pct,
-  ROUND(COUNT(DISTINCT CASE WHEN segment_at_m2 = 'PT' THEN supplier_id END) * 100.0 / NULLIF(COUNT(DISTINCT supplier_id),0), 1) AS pt_graduation_pct
-FROM online_at_m2
+  COUNT(DISTINCT supplier_id)                                        AS cohort_size,
+  COUNT(DISTINCT CASE WHEN segment_at_m2 IS NOT NULL THEN supplier_id END) AS survived_m2,
+  COUNT(DISTINCT CASE WHEN ft_segment = 'FT'         THEN supplier_id END) AS graduated_ft,
+  COUNT(DISTINCT CASE WHEN ft_segment = 'PT'         THEN supplier_id END) AS graduated_pt,
+  COUNT(DISTINCT CASE WHEN segment_at_m2 IS NULL     THEN supplier_id END) AS churned_m2,
+  ROUND(COUNT(DISTINCT CASE WHEN ft_segment = 'FT' THEN supplier_id END) * 100.0
+        / NULLIF(COUNT(DISTINCT supplier_id), 0), 1)                AS ft_graduation_pct,
+  ROUND(COUNT(DISTINCT CASE WHEN segment_at_m2 IS NULL THEN supplier_id END) * 100.0
+        / NULLIF(COUNT(DISTINCT supplier_id), 0), 1)                AS churn_rate_m2_pct
+FROM graduation
 GROUP BY 1, 2
 ORDER BY city_id, cohort_month
 */

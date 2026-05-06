@@ -1,152 +1,164 @@
 -- ============================================================
 -- QUERY 2: Driver Monthly Activity — Driver-level grain
--- Mục đích: Lấy supplier_id × month để làm retention analysis,
---           segment transition matrix, EPH, individual tracking
--- Output: 1 row = 1 driver × 1 tháng (bao gồm tháng inactive)
--- Chạy: {{start_date}} = tháng đầu range, {{end_date}} = tháng cuối range
+-- Source chính: ahamove_archive_ops.fct_supplier_performance
+--               + ahamove_archive_ops.driver_performance_monthly
+-- Thêm so với query gốc:
+--   + supplier_id trong output
+--   + driver_life_time (segment), fct_month (NIM cohort)
+--   + order_income, reward_income, EPH
+--   + Bỏ GROUP BY city để giữ driver-level
+-- Output: 1 row = 1 driver × 1 tháng (chỉ active drivers)
+-- Dùng cho: EPH analysis, cohort prep, segment performance
 -- ============================================================
 
-WITH standard AS (
-  {{snippet: @yenhm GBQ.date_trunc}}
-  {{snippet: @vinhnp1 standard_online_fulltime_driver}}
-),
+{{snippet: @yenhm GBQ.date_trunc}}
 
--- Date spine: tất cả các tháng trong range cần phân tích
-month_spine AS (
-  SELECT month_start
-  FROM UNNEST(
-    GENERATE_DATE_ARRAY(
-      DATE_TRUNC(DATE({{start_date}}), MONTH),
-      DATE_TRUNC(DATE({{end_date}}),   MONTH),
-      INTERVAL 1 MONTH
-    )
-  ) AS month_start
-),
-
--- Online hours cho toàn bộ range + 1 tháng trước (để classify segment tháng đầu)
-online_all AS (
+WITH ranking_monthly AS (
   SELECT
-    datetrunc_mock(TIMESTAMP(r.period, 'Asia/Saigon'), 'month') AS period_month,
-    r.supplier_id,
-    s.first_complete_time,
-    datetrunc_mock(s.first_complete_time, 'month')              AS first_complete_month,
-    r.city_id,
-    SUM(r.online_hours)                                         AS online_hours
-  FROM ahamove_archive.ops_suppliers_online_hours r
-  LEFT JOIN `aha-move`.ahamove_supplier_raw.supplier_raw s ON r.supplier_id = s.id
-  WHERE r.period >= DATE_SUB(DATE_TRUNC(DATE({{start_date}}), MONTH), INTERVAL 1 MONTH)
-    AND r.period <  DATE_ADD(DATE_TRUNC(DATE({{end_date}}), MONTH), INTERVAL 1 MONTH)
-    AND COALESCE(s.vehicle_type, 'MOTORBIKE') = 'MOTORBIKE'
+    period,
+    city_id,
+    supplier_id,
+    driver_life_time,
+    ft_segment,
+    next_driver_life_time,
+    next_ft_segment
+  FROM ahamove_archive_ops.driver_performance_monthly
+  WHERE period >= DATE_SUB(DATE(TIMESTAMP({{start_date}}), 'Asia/Saigon'), INTERVAL 1 MONTH)
+    AND period <= DATE(TIMESTAMP({{end_date}}), 'Asia/Saigon')
+    -- NOTE: gốc lấy 2 tháng trước, rút xuống 1 tháng trước vì
+    --       chỉ cần classify tháng hiện tại
+),
+
+cancel_poc AS (
+  SELECT
+    supplier_id,
+    datetrunc_mock(TIMESTAMP(order_date, 'Asia/Saigon'), 'month') AS period,
+    COUNT(CASE
+      WHEN cancel_comment LIKE '%for supplier%'
+        OR cancel_comment LIKE '%Driver ask%'
+        OR cancel_comment LIKE '%by Driver%'
+        OR cancel_comment LIKE '%by Supplier%'
+        OR cancel_comment LIKE '%by supplier%'
+        OR cancel_by = 'supplier'
+      THEN order_id END)                                          AS driver_cancel,
+    COUNT(CASE
+      WHEN reason_type = 'poc'
+       AND (cancel_comment LIKE '%for supplier%'
+         OR cancel_comment LIKE '%Driver ask%'
+         OR cancel_comment LIKE '%by Driver%'
+         OR cancel_comment LIKE '%by Supplier%'
+         OR cancel_comment LIKE '%by supplier%'
+         OR cancel_by = 'supplier')
+      THEN order_id END)                                          AS cancel_poc
+  FROM ahamove_archive_ops.fact_cancellation_detail
+  WHERE order_date >= DATE(TIMESTAMP({{start_date}}), 'Asia/Saigon')
+    AND order_date <= DATE(TIMESTAMP({{end_date}}),   'Asia/Saigon')
+    AND supplier_id IS NOT NULL
+  GROUP BY 1, 2
+),
+
+-- Performance hàng tháng per driver (dùng 'month' thay vì {{timeview}})
+driver_perf_monthly AS (
+  SELECT
+    datetrunc_mock(TIMESTAMP(p.period, 'Asia/Saigon'), 'month') AS period,
+    p.supplier_id,
+    DATE_TRUNC(DATE(s.first_complete_time, 'Asia/Saigon'), MONTH) AS fct_month,
+    SUM(p.stp_complete)                                          AS stp_complete,
+    SUM(p.reward_income_pit1_5)                                  AS reward_income,
+    SUM(p.order_income)                                          AS order_income,
+    SUM(p.accept_order)                                          AS accept_order,
+    SUM(p.cancel_order)                                          AS cancel_order,
+    SUM(p.noti_accept + p.noti_assign)                           AS accept_noti,
+    SUM(p.noti_assign + p.noti_accept + p.noti_dismiss
+        + p.noti_timeout + p.noti_not_updated)                   AS total_noti,
+    SUM(p.rating_5star + p.rating_4star + p.rating_3star
+        + p.rating_2star + p.rating_1star)                       AS rating_order,
+    SUM(p.rating_5star*5 + p.rating_4star*4 + p.rating_3star*3
+        + p.rating_2star*2 + p.rating_1star)                     AS rating_star,
+    SUM(p.rating_4star + p.rating_3star + p.rating_2star
+        + p.rating_1star)                                        AS bad_rating_order
+  FROM ahamove_archive_ops.fct_supplier_performance p
+  LEFT JOIN ahamove_supplier_raw.supplier_raw s ON p.supplier_id = s.id
+  WHERE p.period >= DATE(TIMESTAMP({{start_date}}), 'Asia/Saigon')
+    AND p.period <= DATE(TIMESTAMP({{end_date}}),   'Asia/Saigon')
+    AND JSON_EXTRACT_SCALAR(p.extra, '$.vehicle_type') IN ('MOTORBIKE', 'EV-BIKE')
     AND COALESCE(s.email,    'a') NOT LIKE '%ahamove_ka_lazada%'
     AND COALESCE(s.services, 'a') NOT LIKE '%VNM-WH-DELIVERY%'
-    AND s.tags NOT LIKE '%SALESFORCE%'
-  GROUP BY 1, 2, 3, 4, 5
-),
-
--- Completed stoppoints per driver per month (từ raw_performance)
-stops_by_month AS (
-  SELECT
-    r.supplier_id,
-    LEFT(r.service_id, 3)                                          AS city_id,
-    datetrunc_mock(TIMESTAMP(r.order_date, 'Asia/Saigon'), 'month') AS period_month,
-    COUNT(DISTINCT r.stop_id)                                       AS completed_stops,
-    COUNT(DISTINCT r.order_id)                                      AS completed_orders
-  FROM ahamove_raw.raw_performance r
-  WHERE r.order_date >= DATE({{start_date}})
-    AND r.order_date <  DATE_ADD(DATE_TRUNC(DATE({{end_date}}), MONTH), INTERVAL 1 MONTH)
-    AND r.status = 'COMPLETED'
-    AND LEFT(r.service_id, 3) != 'VNM'
-    {{snippet: @vinhnp1 condition_kpi}}
+    AND COALESCE(s.services, 'a') NOT LIKE '%VNM-WH-VENDOR%'
+    AND COALESCE(s.tags,     'a') NOT LIKE '%SALESFORCE%'
+    AND s.partitioned_create_time >= '2010-01-01'
   GROUP BY 1, 2, 3
 ),
 
--- Segment mỗi driver × mỗi tháng dựa trên online hours tháng TRƯỚC
--- Logic nhất quán với query gốc:
---   NIM    = first_complete_month = period_month (tháng đầu tiên)
---   NLM    = first_complete_month = period_month - 1 (họ là NIM tháng trước)
---   FT     = active tháng trước, online >= standard
---   PT     = active tháng trước, online < standard
---   Return = active tháng N-2, inactive tháng N-1, active tháng N
---   (inactive hoàn toàn = không có row trong kết quả)
-driver_segments AS (
+online_monthly AS (
   SELECT
-    cur.period_month,
-    cur.supplier_id,
-    cur.city_id,
-    cur.online_hours                         AS cur_online_hours,
-    COALESCE(prev.online_hours, 0)           AS prev_online_hours,
-    cur.first_complete_month,
-    CASE
-      WHEN cur.first_complete_month = cur.period_month
-        THEN 'NIM'
-      WHEN cur.first_complete_month
-             = DATE_SUB(cur.period_month, INTERVAL 1 MONTH)
-        THEN 'NLM'
-      WHEN prev.online_hours IS NOT NULL
-       AND prev.online_hours >= st.standard_hour
-        THEN 'FT'
-      WHEN prev.online_hours IS NOT NULL
-       AND prev.online_hours < st.standard_hour
-        THEN 'PT'
-      -- Return: đã từng active (first_complete_month < period_month),
-      --         inactive tháng N-1 (prev.online_hours IS NULL), nay quay lại
-      --         Không giới hạn số tháng inactive — churn ≥1 tháng bất kỳ đều là Return
-      WHEN prev.online_hours IS NULL
-       AND cur.first_complete_month < cur.period_month
-        THEN 'Return'
-    END AS segment
-  FROM online_all cur
-  -- Tháng trước (N-1)
-  LEFT JOIN online_all prev
-    ON  prev.supplier_id    = cur.supplier_id
-    AND prev.city_id        = cur.city_id
-    AND prev.period_month   = DATE_SUB(cur.period_month, INTERVAL 1 MONTH)
-  LEFT JOIN standard st ON st.time = cur.period_month
-  -- Chỉ lấy các tháng trong range cần phân tích (bỏ tháng N-1 dùng để classify)
-  WHERE cur.period_month >= DATE_TRUNC(DATE({{start_date}}), MONTH)
-    AND cur.period_month <= DATE_TRUNC(DATE({{end_date}}),   MONTH)
+    datetrunc_mock(TIMESTAMP(period, 'Asia/Saigon'), 'month') AS period,
+    supplier_id,
+    SUM(online_hours)                                          AS online_hours
+  FROM ahamove_archive.ops_suppliers_online_hours
+  WHERE period >= DATE(TIMESTAMP({{start_date}}), 'Asia/Saigon')
+    AND period <= DATE(TIMESTAMP({{end_date}}),   'Asia/Saigon')
+  GROUP BY 1, 2
 )
 
 -- ============================================================
--- OUTPUT: 1 row = 1 driver × 1 tháng
--- Dùng để:
---   - Cohort retention (group by first_complete_month)
---   - Segment transition (self-join với lag 1 tháng)
---   - EPH (cần thêm earnings khi có)
---   - Productivity: avg_stops_per_online_hour
+-- OUTPUT: Driver-level × tháng
 -- ============================================================
 SELECT
-  ds.period_month,
-  ds.supplier_id,
-  ds.city_id,
-  ds.segment,
-  ds.first_complete_month,                 -- NIM cohort identifier
-  ds.cur_online_hours        AS online_hours,
-  ds.prev_online_hours,                    -- Để phân tích downgrade trend
+  d.period,
+  COALESCE(
+    m.city_id,
+    CASE WHEN sp.city_id IN ('HAN','SGN') THEN sp.city_id ELSE 'EXP' END
+  )                                                            AS city_id,
+  d.supplier_id,
 
-  -- Stoppoints & orders (từ raw_performance)
-  COALESCE(sp.completed_stops,  0)         AS completed_stops,
-  COALESCE(sp.completed_orders, 0)         AS completed_orders,
+  -- Segment (từ driver_performance_monthly — đã classify sẵn)
+  -- ⚠️ Khanh verify: driver_life_time có giá trị NIM/NLM/FT/PT/Return không?
+  m.driver_life_time                                           AS segment,
+  m.ft_segment,
+  m.next_driver_life_time                                      AS next_segment,   -- dùng cho transition matrix
+  d.fct_month,                                                                    -- NIM cohort identifier
 
-  -- Productivity: stops per online hour
-  CASE
-    WHEN ds.cur_online_hours > 0
-    THEN ROUND(COALESCE(sp.completed_stops, 0) / ds.cur_online_hours, 2)
-    ELSE NULL
-  END                                      AS stops_per_hour,
+  -- Performance
+  d.stp_complete,
+  d.order_income,
+  d.reward_income,
+  d.order_income + d.reward_income                             AS gross_income,
 
-  -- Flag hữu ích cho transition analysis
-  CASE WHEN ds.cur_online_hours >= 150 THEN 1 ELSE 0 END AS is_ft_eligible,
+  -- Online & productivity
+  o.online_hours,
+  ROUND(SAFE_DIVIDE(d.stp_complete,  o.online_hours), 2)      AS stp_per_hour,
+  ROUND(SAFE_DIVIDE(d.order_income,  o.online_hours), 0)      AS order_income_per_hour,  -- EPH organic
+  ROUND(SAFE_DIVIDE(d.order_income + d.reward_income,
+                    o.online_hours), 0)                        AS gross_income_per_hour,  -- EPH total
+  ROUND(SAFE_DIVIDE(d.reward_income,
+                    NULLIF(d.order_income + d.reward_income, 0)),
+        3)                                                     AS incentive_ratio,        -- IDI
 
-  1                                        AS is_active  -- Tất cả row này đều active
+  -- Acceptance & cancel
+  d.accept_order,
+  d.cancel_order,
+  COALESCE(cp.cancel_poc, 0)                                   AS cancel_poc,
+  COALESCE(SAFE_DIVIDE(d.accept_noti, d.total_noti), 1)       AS ar,
+  COALESCE(SAFE_DIVIDE(d.cancel_order, d.accept_order), 0)    AS cr,
+  COALESCE(SAFE_DIVIDE(d.cancel_order - 0.5 * COALESCE(cp.cancel_poc, 0),
+                       d.accept_order), 0)                     AS cr_kpi,
 
-FROM driver_segments ds
-LEFT JOIN stops_by_month sp
-  ON  sp.supplier_id  = ds.supplier_id
-  AND sp.city_id      = ds.city_id
-  AND sp.period_month = ds.period_month
+  -- Rating
+  d.rating_order,
+  COALESCE(SAFE_DIVIDE(d.rating_star, d.rating_order), 5)     AS rating,
+  d.bad_rating_order,
 
--- Loại long_inactive nếu không cần phân tích nhóm này
--- WHERE ds.segment != 'Return'  -- bỏ comment nếu muốn loại Return khỏi output
+  -- Quality flags (để filter nhanh)
+  CASE WHEN COALESCE(SAFE_DIVIDE(d.accept_noti, d.total_noti), 1) >= 0.8  THEN 1 ELSE 0 END AS is_hard_driver,
+  CASE WHEN COALESCE(SAFE_DIVIDE(d.cancel_order, d.accept_order), 0) <= 0.1 THEN 1 ELSE 0 END AS is_lcd_driver,
+  CASE WHEN COALESCE(SAFE_DIVIDE(d.rating_star,  d.rating_order), 5) >= 4.9 THEN 1 ELSE 0 END AS is_gdr_driver
 
-ORDER BY ds.supplier_id, ds.city_id, ds.period_month
+FROM driver_perf_monthly d
+LEFT JOIN online_monthly  o  ON o.supplier_id = d.supplier_id AND o.period = d.period
+LEFT JOIN ranking_monthly m  ON m.supplier_id = d.supplier_id AND m.period = DATE_TRUNC(d.period, MONTH)
+LEFT JOIN cancel_poc      cp ON cp.supplier_id = d.supplier_id AND cp.period = d.period
+LEFT JOIN ahamove_raw.raw_supplier_profile sp ON sp.id = d.supplier_id
+
+WHERE d.stp_complete > 0   -- chỉ active drivers (có hoàn thành đơn)
+ORDER BY d.supplier_id, d.period
