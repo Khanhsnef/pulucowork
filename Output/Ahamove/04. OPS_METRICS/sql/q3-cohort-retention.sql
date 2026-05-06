@@ -19,7 +19,7 @@ WITH
 driver_fct AS (
   SELECT DISTINCT
     p.supplier_id,
-    DATE_TRUNC(DATE(s.first_complete_time, 'Asia/Saigon'), MONTH) AS fct_month,
+    datetrunc_mock(s.first_complete_time, 'month')               AS fct_month,
     s.city_id
   FROM ahamove_archive_ops.fct_supplier_performance p
   LEFT JOIN ahamove_supplier_raw.supplier_raw s ON p.supplier_id = s.id
@@ -38,8 +38,8 @@ nim_cohorts AS (
     city_id,
     fct_month AS cohort_month
   FROM driver_fct
-  WHERE fct_month >= DATE_TRUNC(DATE(TIMESTAMP({{start_date}})), MONTH)
-    AND fct_month <= DATE_TRUNC(DATE(TIMESTAMP({{end_date}})),   MONTH)
+  WHERE fct_month >= DATE_TRUNC(DATE(TIMESTAMP({{start_date}}), 'Asia/Saigon'), MONTH)
+    AND fct_month <= DATE_TRUNC(DATE(TIMESTAMP({{end_date}}), 'Asia/Saigon'), MONTH)
     AND city_id IN ('HAN', 'SGN')   -- bỏ comment nếu muốn cả EXP
 ),
 
@@ -50,9 +50,9 @@ active_months AS (
     supplier_id,
     period   -- đã là monthly grain
   FROM ahamove_archive_ops.driver_performance_monthly
-  WHERE period >= DATE_TRUNC(DATE(TIMESTAMP({{start_date}})), MONTH)
+  WHERE period >= DATE_TRUNC(DATE(TIMESTAMP({{start_date}}), 'Asia/Saigon'), MONTH)
     AND period <= DATE_ADD(
-          DATE_TRUNC(DATE(TIMESTAMP({{end_date}})), MONTH),
+          DATE_TRUNC(DATE(TIMESTAMP({{end_date}}), 'Asia/Saigon'), MONTH),
           INTERVAL 12 MONTH   -- mở rộng để catch M+12
         )
 ),
@@ -79,7 +79,7 @@ cohort_check AS (
     AND a.period      = DATE_ADD(c.cohort_month, INTERVAL l.lag_n MONTH)
   -- Chỉ giữ check_month không vượt quá end_date + 12 tháng
   WHERE DATE_ADD(c.cohort_month, INTERVAL l.lag_n MONTH)
-          <= DATE_ADD(DATE_TRUNC(DATE(TIMESTAMP({{end_date}})), MONTH), INTERVAL 12 MONTH)
+          <= DATE_ADD(DATE_TRUNC(DATE(TIMESTAMP({{end_date}}), 'Asia/Saigon'), MONTH), INTERVAL 12 MONTH)
 )
 
 -- ============================================================

@@ -27,8 +27,8 @@ transition_raw AS (
     COALESCE(m.next_driver_life_time, 'Churn')   AS to_segment,
     COALESCE(m.next_ft_segment, 'Churn')         AS to_ft_segment
   FROM ahamove_archive_ops.driver_performance_monthly m
-  WHERE m.period >= DATE_TRUNC(DATE(TIMESTAMP({{start_date}})), MONTH)
-    AND m.period <= DATE_TRUNC(DATE(TIMESTAMP({{end_date}})),   MONTH)
+  WHERE m.period >= DATE_TRUNC(DATE(TIMESTAMP({{start_date}}), 'Asia/Saigon'), MONTH)
+    AND m.period <= DATE_TRUNC(DATE(TIMESTAMP({{end_date}}), 'Asia/Saigon'), MONTH)
     AND m.city_id IN ('HAN', 'SGN')   -- bỏ comment nếu muốn EXP
 )
 

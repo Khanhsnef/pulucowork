@@ -62,7 +62,7 @@ driver_perf_monthly AS (
   SELECT
     datetrunc_mock(TIMESTAMP(p.period, 'Asia/Saigon'), 'month') AS period,
     p.supplier_id,
-    DATE_TRUNC(DATE(s.first_complete_time, 'Asia/Saigon'), MONTH) AS fct_month,
+    datetrunc_mock(s.first_complete_time, 'month')               AS fct_month,
     SUM(p.stp_complete)                                          AS stp_complete,
     SUM(p.reward_income_pit1_5)                                  AS reward_income,
     SUM(p.order_income)                                          AS order_income,
@@ -156,7 +156,9 @@ SELECT
 
 FROM driver_perf_monthly d
 LEFT JOIN online_monthly  o  ON o.supplier_id = d.supplier_id AND o.period = d.period
-LEFT JOIN ranking_monthly m  ON m.supplier_id = d.supplier_id AND m.period = DATE_TRUNC(d.period, MONTH)
+LEFT JOIN ranking_monthly m  ON m.supplier_id = d.supplier_id
+                             AND m.period = DATE_TRUNC(DATE(d.period, 'Asia/Saigon'), MONTH)
+                             -- d.period là TIMESTAMP → convert DATE trước khi so sánh với m.period (DATE)
 LEFT JOIN cancel_poc      cp ON cp.supplier_id = d.supplier_id AND cp.period = d.period
 LEFT JOIN ahamove_raw.raw_supplier_profile sp ON sp.id = d.supplier_id
 
