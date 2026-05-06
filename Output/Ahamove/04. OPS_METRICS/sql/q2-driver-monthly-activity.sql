@@ -88,12 +88,12 @@ driver_segments AS (
       WHEN prev.online_hours IS NOT NULL
        AND prev.online_hours < st.standard_hour
         THEN 'PT'
-      -- Return: không có online tháng N-1, nhưng có online tháng N-2
+      -- Return: đã từng active (first_complete_month < period_month),
+      --         inactive tháng N-1 (prev.online_hours IS NULL), nay quay lại
+      --         Không giới hạn số tháng inactive — churn ≥1 tháng bất kỳ đều là Return
       WHEN prev.online_hours IS NULL
-       AND prev2.supplier_id IS NOT NULL
+       AND cur.first_complete_month < cur.period_month
         THEN 'Return'
-      -- Long inactive: inactive > 1 tháng, không phải Return chính thức
-      ELSE 'long_inactive'
     END AS segment
   FROM online_all cur
   -- Tháng trước (N-1)
@@ -101,15 +101,6 @@ driver_segments AS (
     ON  prev.supplier_id    = cur.supplier_id
     AND prev.city_id        = cur.city_id
     AND prev.period_month   = DATE_SUB(cur.period_month, INTERVAL 1 MONTH)
-  -- Tháng N-2 (để xác định Return)
-  LEFT JOIN (
-    SELECT DISTINCT supplier_id, city_id,
-           datetrunc_mock(TIMESTAMP(period, 'Asia/Saigon'), 'month') AS period_month
-    FROM ahamove_archive.ops_suppliers_online_hours
-  ) prev2
-    ON  prev2.supplier_id  = cur.supplier_id
-    AND prev2.city_id      = cur.city_id
-    AND prev2.period_month = DATE_SUB(cur.period_month, INTERVAL 2 MONTH)
   LEFT JOIN standard st ON st.time = cur.period_month
   -- Chỉ lấy các tháng trong range cần phân tích (bỏ tháng N-1 dùng để classify)
   WHERE cur.period_month >= DATE_TRUNC(DATE({{start_date}}), MONTH)
@@ -156,6 +147,6 @@ LEFT JOIN stops_by_month sp
   AND sp.period_month = ds.period_month
 
 -- Loại long_inactive nếu không cần phân tích nhóm này
-WHERE ds.segment != 'long_inactive'
+-- WHERE ds.segment != 'Return'  -- bỏ comment nếu muốn loại Return khỏi output
 
 ORDER BY ds.supplier_id, ds.city_id, ds.period_month
