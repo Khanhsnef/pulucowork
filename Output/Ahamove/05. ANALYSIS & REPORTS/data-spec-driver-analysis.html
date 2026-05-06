@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Data Spec — Driver Deep Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#0E4174;--orange:#FF7F32;--success:#10B981;--danger:#EF4444;--warn:#F59E0B;--purple:#8B5CF6;
+  --gray-50:#F9FAFB;--gray-100:#F3F4F6;--gray-200:#E5E7EB;--gray-400:#9CA3AF;--gray-600:#4B5563;--gray-800:#1F2937;
+}
+body{font-family:'Lexend',sans-serif;background:var(--gray-50);color:var(--gray-800);font-size:13px;line-height:1.5;}
+.header{background:var(--blue);padding:26px 40px;color:white;display:flex;align-items:flex-end;justify-content:space-between;}
+.header h1{font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.header p{font-size:11px;color:rgba(255,255,255,0.6);margin-top:3px;}
+.badge{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:3px 12px;font-size:11px;color:rgba(255,255,255,0.85);}
+.badge.orange{background:var(--orange);border-color:var(--orange);color:white;}
+
+.container{max-width:1100px;margin:0 auto;padding:28px 28px 56px;}
+.section-title{font-size:10.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--gray-400);margin-bottom:12px;margin-top:36px;}
+
+/* WHY BOX */
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.why-card{background:white;border-radius:14px;padding:16px;border:1.5px solid var(--gray-100);}
+.why-card::before{content:'';display:block;width:32px;height:3px;border-radius:2px;margin-bottom:10px;}
+.wc-1::before{background:var(--orange);}
+.wc-2::before{background:var(--purple);}
+.wc-3::before{background:var(--danger);}
+.wc-4::before{background:var(--success);}
+.why-label{font-size:11px;font-weight:700;color:var(--gray-800);margin-bottom:5px;}
+.why-body{font-size:10.5px;color:var(--gray-600);line-height:1.6;}
+.why-body strong{color:var(--gray-800);}
+
+/* TABLE SPECS */
+.table-card{background:white;border-radius:16px;border:1px solid var(--gray-100);overflow:hidden;margin-bottom:16px;}
+.table-header{padding:16px 20px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;}
+.table-name{font-size:14px;font-weight:800;color:var(--blue);}
+.table-desc{font-size:11px;color:var(--gray-400);margin-top:2px;}
+.table-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.tb-must{background:#FEF3C7;color:#92400E;}
+.tb-nice{background:#E0E7FF;color:#3730A3;}
+
+table.spec{width:100%;border-collapse:collapse;font-size:11.5px;}
+table.spec th{padding:9px 16px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--gray-400);background:var(--gray-50);text-align:left;border-bottom:1px solid var(--gray-100);}
+table.spec td{padding:9px 16px;border-bottom:1px solid var(--gray-100);vertical-align:top;}
+table.spec tr:last-child td{border-bottom:none;}
+table.spec .field{font-weight:700;color:var(--blue);font-family:monospace;font-size:12px;}
+table.spec .type{color:var(--gray-400);font-size:10px;font-family:monospace;}
+table.spec .example{color:var(--success);font-family:monospace;font-size:10.5px;}
+table.spec .enables{color:var(--gray-600);font-size:10.5px;line-height:1.5;}
+.must-tag{font-size:9px;font-weight:700;background:#FEF3C7;color:#92400E;padding:1px 6px;border-radius:10px;margin-left:4px;}
+.nice-tag{font-size:9px;font-weight:700;background:#E0E7FF;color:#3730A3;padding:1px 6px;border-radius:10px;margin-left:4px;}
+
+/* ANALYSIS MATRIX */
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.analysis-card{background:white;border-radius:14px;padding:18px;border:1.5px solid var(--gray-100);}
+.an-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.an-icon{font-size:20px;}
+.an-title{font-size:13px;font-weight:700;color:var(--gray-800);}
+.an-subtitle{font-size:10px;color:var(--gray-400);}
+.an-body{font-size:11px;color:var(--gray-600);line-height:1.65;}
+.an-body strong{color:var(--gray-800);}
+.an-sql{background:var(--gray-50);border:1px solid var(--gray-100);border-radius:8px;padding:10px 12px;font-family:monospace;font-size:10px;color:var(--blue);margin-top:10px;line-height:1.6;}
+.an-needs{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.an-need{font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--gray-100);color:var(--gray-600);}
+
+/* SAMPLE DATA */
+.sample-wrap{background:white;border-radius:16px;border:1px solid var(--gray-100);overflow:hidden;}
+.sample-header{padding:14px 20px;border-bottom:1px solid var(--gray-100);font-size:13px;font-weight:700;color:var(--blue);display:flex;justify-content:space-between;align-items:center;}
+.sample-note{font-size:10px;color:var(--gray-400);}
+table.sample{width:100%;border-collapse:collapse;font-size:10px;font-family:monospace;}
+table.sample th{padding:7px 12px;background:var(--gray-50);border-bottom:1px solid var(--gray-100);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--gray-400);white-space:nowrap;}
+table.sample td{padding:6px 12px;border-bottom:1px solid var(--gray-100);color:var(--gray-800);white-space:nowrap;}
+table.sample tr:last-child td{border-bottom:none;}
+table.sample .hl{color:var(--orange);font-weight:700;}
+table.sample .seg{font-weight:700;}
+
+/* RETENTION FORMULA */
+.formula-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.formula-card{background:white;border-radius:14px;padding:16px;border:1.5px solid var(--gray-100);}
+.formula-title{font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px;}
+.formula-box{background:var(--gray-50);border-radius:8px;padding:10px;font-family:monospace;font-size:10.5px;color:var(--gray-800);line-height:1.7;}
+.formula-note{font-size:10px;color:var(--gray-600);margin-top:8px;line-height:1.5;}
+
+.footer{margin-top:40px;padding:14px 0;border-top:1px solid var(--gray-200);font-size:10px;color:var(--gray-400);display:flex;justify-content:space-between;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Data Specification — Driver Deep Analysis & Retention</h1>
+    <p>Cấu trúc dữ liệu cần thiết để phân tích chuyên sâu · Ahamove Driver Management</p>
+  </div>
+  <div style="text-align:right;display:flex;flex-direction:column;gap:5px;">
+    <span class="badge orange">2 Tables · Driver-level · Monthly grain</span>
+    <span class="badge">Prepared by Claude · 2026-05-06</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- WHY WE NEED THIS -->
+  <div class="section-title">Tại sao cần data driver-level?</div>
+  <div class="why-grid">
+    <div class="why-card wc-1">
+      <div class="why-label">Hiện tại: Aggregate only</div>
+      <div class="why-body">Chỉ biết <strong>tổng FT tháng này giảm 300</strong> — không biết 300 đó là FT churn thực sự hay FT downgrade xuống PT vì giờ hoạt động giảm xuống dưới 150h.</div>
+    </div>
+    <div class="why-card wc-2">
+      <div class="why-label">Cần: Cohort Retention</div>
+      <div class="why-body">Theo dõi <strong>từng driver_id</strong> qua nhiều tháng → tính tỷ lệ còn active M+1, M+2, M+3... theo từng NIM cohort. Hiện tại không làm được.</div>
+    </div>
+    <div class="why-card wc-3">
+      <div class="why-label">Cần: Segment Transition</div>
+      <div class="why-body">Biết driver A tháng 1 là <strong>FT → tháng 2 thành PT hay Inactive?</strong> Đây là key để phân biệt downgrade vs churn — action khác nhau hoàn toàn.</div>
+    </div>
+    <div class="why-card wc-4">
+      <div class="why-label">Cần: Earnings Breakdown</div>
+      <div class="why-body">Phân biệt <strong>organic earnings vs incentive</strong> để biết Return driver quay lại vì platform thực sự tốt hay chỉ vì campaign — tránh đốt budget vô ích.</div>
+    </div>
+  </div>
+
+  <!-- TABLE 1 -->
+  <div class="section-title" style="margin-top:36px;">Table 1 — driver_monthly_activity <span style="color:var(--orange);font-size:11px;font-weight:700;">(BẮT BUỘC)</span></div>
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <div class="table-name">driver_monthly_activity</div>
+        <div class="table-desc">1 row = 1 driver × 1 tháng. Bao gồm cả tháng inactive (is_active = 0) để tính retention.</div>
+      </div>
+      <span class="table-badge tb-must">Primary Key: driver_id + period</span>
+    </div>
+    <table class="spec">
+      <thead>
+        <tr><th style="width:200px">Field</th><th style="width:90px">Type</th><th style="width:160px">Example</th><th>Dùng để phân tích gì</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="field">driver_id</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">STRING</span></td>
+          <td><span class="example">"DRV00001"</span></td>
+          <td class="enables">Key để track từng driver qua nhiều tháng. Không có field này thì không làm được bất kỳ cohort analysis nào.</td>
+        </tr>
+        <tr>
+          <td><span class="field">city_id</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">STRING</span></td>
+          <td><span class="example">"HAN"</span></td>
+          <td class="enables">Phân tích riêng HAN vs SGN.</td>
+        </tr>
+        <tr>
+          <td><span class="field">period</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">DATE</span></td>
+          <td><span class="example">"2025-01-01"</span></td>
+          <td class="enables">Grain tháng — mỗi row là 1 tháng của 1 driver.</td>
+        </tr>
+        <tr>
+          <td><span class="field">is_active</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">INT (0/1)</span></td>
+          <td><span class="example">1</span></td>
+          <td class="enables"><strong>Quan trọng nhất cho retention.</strong> Phải có cả row inactive (=0) để biết driver nào đã rời. Nếu chỉ có row active thì không tính được churn.</td>
+        </tr>
+        <tr>
+          <td><span class="field">segment</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">STRING</span></td>
+          <td><span class="example">"FT" / "PT" / "NIM" / "NLM" / "Return"</span></td>
+          <td class="enables">Segment của driver trong tháng đó. Tính segment transition matrix: FT→PT, PT→Inactive, NLM→FT, v.v.</td>
+        </tr>
+        <tr>
+          <td><span class="field">active_hours</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">FLOAT</span></td>
+          <td><span class="example">156.5</span></td>
+          <td class="enables"><strong>Giải quyết câu hỏi FT churn vs downgrade.</strong> Nếu driver từng là FT (>150h) mà tháng sau active_hours = 80h → downgrade sang PT. Nếu is_active=0 → churn thực sự.</td>
+        </tr>
+        <tr>
+          <td><span class="field">completed_orders</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">INT</span></td>
+          <td><span class="example">342</span></td>
+          <td class="enables">Volume đơn hoàn thành. Tính EPO (earnings per order), productivity per hour.</td>
+        </tr>
+        <tr>
+          <td><span class="field">completed_stoppoints</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">INT</span></td>
+          <td><span class="example">487</span></td>
+          <td class="enables">Đã có trong data aggregate. Verify vs data hiện tại.</td>
+        </tr>
+        <tr>
+          <td><span class="field">gross_earnings</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">INT (VND)</span></td>
+          <td><span class="example">4500000</span></td>
+          <td class="enables">Tổng thu nhập. Tính EPH (earnings per hour) — metric quan trọng nhất để hiểu vì sao driver rời.</td>
+        </tr>
+        <tr>
+          <td><span class="field">incentive_earned</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">INT (VND)</span></td>
+          <td><span class="example">800000</span></td>
+          <td class="enables"><strong>Phân biệt organic vs incentive-driven.</strong> Return driver có incentive_earned cao → họ quay lại vì campaign. organic_earnings = gross - incentive.</td>
+        </tr>
+        <tr>
+          <td><span class="field">service_type_primary</span> <span class="nice-tag">NICE</span></td>
+          <td><span class="type">STRING</span></td>
+          <td><span class="example">"1H"</span></td>
+          <td class="enables">Service chính driver làm nhiều nhất. Phân tích FT/PT breakdown theo service.</td>
+        </tr>
+        <tr>
+          <td><span class="field">online_days</span> <span class="nice-tag">NICE</span></td>
+          <td><span class="type">INT</span></td>
+          <td><span class="example">22</span></td>
+          <td class="enables">Số ngày online trong tháng. Phân biệt driver online 30 ngày × 5h vs 15 ngày × 10h.</td>
+        </tr>
+        <tr>
+          <td><span class="field">acceptance_rate</span> <span class="nice-tag">NICE</span></td>
+          <td><span class="type">FLOAT (%)</span></td>
+          <td><span class="example">87.3</span></td>
+          <td class="enables">Tỷ lệ nhận đơn. FT giảm AR → dấu hiệu chán nản trước khi churn.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TABLE 2 -->
+  <div class="section-title">Table 2 — driver_master <span style="color:var(--orange);font-size:11px;font-weight:700;">(BẮT BUỘC)</span></div>
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <div class="table-name">driver_master</div>
+        <div class="table-desc">1 row = 1 driver. Thông tin static — dùng để xác định NIM cohort và nguồn tuyển dụng.</div>
+      </div>
+      <span class="table-badge tb-must">Primary Key: driver_id</span>
+    </div>
+    <table class="spec">
+      <thead>
+        <tr><th style="width:200px">Field</th><th style="width:90px">Type</th><th style="width:160px">Example</th><th>Dùng để phân tích gì</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="field">driver_id</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">STRING</span></td>
+          <td><span class="example">"DRV00001"</span></td>
+          <td class="enables">Join key với driver_monthly_activity.</td>
+        </tr>
+        <tr>
+          <td><span class="field">city_id</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">STRING</span></td>
+          <td><span class="example">"HAN"</span></td>
+          <td class="enables">Thành phố đăng ký.</td>
+        </tr>
+        <tr>
+          <td><span class="field">first_active_month</span> <span class="must-tag">MUST</span></td>
+          <td><span class="type">DATE</span></td>
+          <td><span class="example">"2025-01-01"</span></td>
+          <td class="enables"><strong>Xác định NIM cohort.</strong> Đây là tháng driver được tính là NIM. Mọi cohort retention chart đều group theo field này.</td>
+        </tr>
+        <tr>
+          <td><span class="field">registration_date</span> <span class="nice-tag">NICE</span></td>
+          <td><span class="type">DATE</span></td>
+          <td><span class="example">"2024-12-28"</span></td>
+          <td class="enables">Tính activation lag: đăng ký → lần đầu active. Activation lag dài = onboarding friction.</td>
+        </tr>
+        <tr>
+          <td><span class="field">acquisition_channel</span> <span class="nice-tag">NICE</span></td>
+          <td><span class="type">STRING</span></td>
+          <td><span class="example">"organic" / "referral" / "campaign_fb"</span></td>
+          <td class="enables">So sánh retention theo kênh tuyển dụng. Driver từ referral có retain tốt hơn campaign không? → Optimize acquisition budget.</td>
+        </tr>
+        <tr>
+          <td><span class="field">vehicle_type</span> <span class="nice-tag">NICE</span></td>
+          <td><span class="type">STRING</span></td>
+          <td><span class="example">"motorbike" / "EV"</span></td>
+          <td class="enables">Nếu có EV driver → track riêng theo chiến lược 2026 EV transition.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- RETENTION FORMULAS -->
+  <div class="section-title">Công thức Retention — với data trên sẽ tính được</div>
+  <div class="formula-grid">
+
+    <div class="formula-card">
+      <div class="formula-title">1. Cohort Retention Rate (M+N)</div>
+      <div class="formula-box">
+        -- NIM cohort Jan-2025:<br>
+        cohort = drivers WHERE<br>
+        &nbsp;&nbsp;first_active_month = '2025-01'<br><br>
+        M+1 retention =<br>
+        &nbsp;&nbsp;COUNT(active in Feb-25)<br>
+        &nbsp;&nbsp;÷ COUNT(cohort) × 100<br><br>
+        M+2 retention =<br>
+        &nbsp;&nbsp;COUNT(active in Mar-25)<br>
+        &nbsp;&nbsp;÷ COUNT(cohort) × 100
+      </div>
+      <div class="formula-note">→ Vẽ được retention curve cho mỗi NIM cohort. So sánh Jan-25 vs Jun-25 vs Jan-26 cohort để thấy chất lượng tuyển mới đang tốt lên hay xấu đi.</div>
+    </div>
+
+    <div class="formula-card">
+      <div class="formula-title">2. FT Churn vs Downgrade</div>
+      <div class="formula-box">
+        -- Driver từng là FT tháng N:<br>
+        prev_FT = segment[N] = 'FT'<br><br>
+        Tháng N+1:<br>
+        → is_active=0 → <strong>CHURN</strong><br>
+        → is_active=1<br>
+        &nbsp;&nbsp;AND active_hours &lt; 150 → <strong>DOWNGRADE</strong><br>
+        &nbsp;&nbsp;AND active_hours ≥ 150 → <strong>RETAIN FT</strong>
+      </div>
+      <div class="formula-note">→ Biết được bao nhiêu % FT giảm là do churn thực (cần win-back) vs downgrade (cần giữ giờ online).</div>
+    </div>
+
+    <div class="formula-card">
+      <div class="formula-title">3. NIM Cohort Graduation Quality</div>
+      <div class="formula-box">
+        -- Trong số NIM còn sống M+2:<br>
+        graduated_FT =<br>
+        &nbsp;&nbsp;COUNT WHERE segment[M+2]='FT'<br>
+        &nbsp;&nbsp;÷ COUNT(cohort) × 100<br><br>
+        graduated_PT =<br>
+        &nbsp;&nbsp;COUNT WHERE segment[M+2]='PT'<br>
+        &nbsp;&nbsp;÷ COUNT(cohort) × 100
+      </div>
+      <div class="formula-note">→ Thay vì chỉ biết "NIM→NLM 81%", biết được bao nhiêu % trở thành FT (chất lượng cao) và bao nhiêu % chỉ là PT.</div>
+    </div>
+
+    <div class="formula-card">
+      <div class="formula-title">4. Return Driver Quality</div>
+      <div class="formula-box">
+        -- Phân loại Return theo gốc:<br>
+        Return FROM FT:<br>
+        &nbsp;&nbsp;prev_segment = 'FT'<br>
+        &nbsp;&nbsp;→ có thể win-back về FT<br><br>
+        Return FROM PT:<br>
+        &nbsp;&nbsp;prev_segment = 'PT'<br>
+        &nbsp;&nbsp;→ kỳ vọng thấp hơn<br><br>
+        Compare EPH sau khi return
+      </div>
+      <div class="formula-note">→ Biết Return-ex-FT có EPH cao hơn Return-ex-PT không → ưu tiên activate đúng nhóm.</div>
+    </div>
+
+    <div class="formula-card">
+      <div class="formula-title">5. Incentive Dependency Index</div>
+      <div class="formula-box">
+        IDI = incentive_earned<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;÷ gross_earnings × 100<br><br>
+        -- So sánh theo segment:<br>
+        FT IDI vs PT IDI vs Return IDI<br><br>
+        -- Monitor over time:<br>
+        IDI tăng → platform<br>
+        phụ thuộc incentive hơn
+      </div>
+      <div class="formula-note">→ Return driver có IDI cao → họ quay lại vì campaign, không phải vì platform tốt → cắt incentive sẽ churn lại.</div>
+    </div>
+
+    <div class="formula-card">
+      <div class="formula-title">6. Segment Transition Matrix</div>
+      <div class="formula-box">
+        -- Mỗi cặp (segment[N], segment[N+1]):<br><br>
+        FT → FT: retain rate<br>
+        FT → PT: downgrade rate<br>
+        FT → inactive: hard churn<br>
+        PT → FT: upgrade rate<br>
+        PT → inactive: soft churn<br>
+        inactive → Return: reactivation
+      </div>
+      <div class="formula-note">→ Ma trận chuyển hạng đầy đủ → thấy điểm rò rỉ lớn nhất ở đâu trong lifecycle.</div>
+    </div>
+
+  </div>
+
+  <!-- SAMPLE DATA -->
+  <div class="section-title" style="margin-top:28px;">Ví dụ — Cấu trúc Table 1 (driver_monthly_activity)</div>
+  <div class="sample-wrap">
+    <div class="sample-header">
+      <span>Illustrative sample — 3 drivers × 4 months (bao gồm tháng inactive)</span>
+      <span class="sample-note">Highlight cam = field bắt buộc để tính retention</span>
+    </div>
+    <div style="overflow-x:auto;">
+    <table class="sample">
+      <thead>
+        <tr>
+          <th>driver_id</th><th>city_id</th><th>period</th>
+          <th style="color:var(--orange)">is_active</th>
+          <th style="color:var(--orange)">segment</th>
+          <th style="color:var(--orange)">active_hours</th>
+          <th>completed_orders</th><th>stoppoints</th>
+          <th>gross_earnings</th><th>incentive_earned</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- DRV001: NIM→NLM→FT→FT (good driver) -->
+        <tr><td>DRV00001</td><td>HAN</td><td>2025-01</td><td class="hl">1</td><td class="seg" style="color:#10B981">NIM</td><td class="hl">72.3</td><td>180</td><td>260</td><td>1,800,000</td><td>450,000</td></tr>
+        <tr><td>DRV00001</td><td>HAN</td><td>2025-02</td><td class="hl">1</td><td class="seg" style="color:#8B5CF6">NLM</td><td class="hl">130.5</td><td>340</td><td>490</td><td>3,500,000</td><td>600,000</td></tr>
+        <tr><td>DRV00001</td><td>HAN</td><td>2025-03</td><td class="hl">1</td><td class="seg" style="color:#FF7F32">FT</td><td class="hl">168.2</td><td>480</td><td>700</td><td>5,200,000</td><td>700,000</td></tr>
+        <tr><td>DRV00001</td><td>HAN</td><td>2025-04</td><td class="hl">1</td><td class="seg" style="color:#FF7F32">FT</td><td class="hl">171.0</td><td>500</td><td>720</td><td>5,400,000</td><td>650,000</td></tr>
+        <!-- DRV002: NIM→NLM→PT→Inactive→Return (downgrade+churn) -->
+        <tr style="background:#FFFBF0"><td>DRV00002</td><td>HAN</td><td>2025-01</td><td class="hl">1</td><td class="seg" style="color:#10B981">NIM</td><td class="hl">68.0</td><td>150</td><td>210</td><td>1,500,000</td><td>380,000</td></tr>
+        <tr style="background:#FFFBF0"><td>DRV00002</td><td>HAN</td><td>2025-02</td><td class="hl">1</td><td class="seg" style="color:#8B5CF6">NLM</td><td class="hl">95.4</td><td>200</td><td>280</td><td>2,200,000</td><td>500,000</td></tr>
+        <tr style="background:#FFFBF0"><td>DRV00002</td><td>HAN</td><td>2025-03</td><td class="hl">1</td><td class="seg" style="color:#0E4174">PT</td><td class="hl">88.7</td><td>180</td><td>250</td><td>1,900,000</td><td>800,000</td></tr>
+        <tr style="background:#FFF0F0"><td>DRV00002</td><td>HAN</td><td>2025-04</td><td class="hl" style="color:var(--danger)">0</td><td class="seg" style="color:var(--gray-400)">—</td><td class="hl" style="color:var(--danger)">0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <!-- DRV003: NIM→Inactive→Return (early churn) -->
+        <tr style="background:#F0FFF4"><td>DRV00003</td><td>SGN</td><td>2025-01</td><td class="hl">1</td><td class="seg" style="color:#10B981">NIM</td><td class="hl">40.5</td><td>90</td><td>130</td><td>900,000</td><td>350,000</td></tr>
+        <tr style="background:#FFF0F0"><td>DRV00003</td><td>SGN</td><td>2025-02</td><td class="hl" style="color:var(--danger)">0</td><td class="seg" style="color:var(--gray-400)">—</td><td class="hl" style="color:var(--danger)">0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr style="background:#F0FFF4"><td>DRV00003</td><td>SGN</td><td>2025-03</td><td class="hl">1</td><td class="seg" style="color:#EF4444">Return</td><td class="hl">28.3</td><td>60</td><td>85</td><td>600,000</td><td>420,000</td></tr>
+        <tr style="background:#FFF0F0"><td>DRV00003</td><td>SGN</td><td>2025-04</td><td class="hl" style="color:var(--danger)">0</td><td class="seg" style="color:var(--gray-400)">—</td><td class="hl" style="color:var(--danger)">0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div style="padding:12px 16px;background:var(--gray-50);border-top:1px solid var(--gray-100);font-size:10px;color:var(--gray-600);">
+      💡 <strong>DRV00001</strong>: NIM Jan → NLM Feb → FT Mar+ (tốt) &nbsp;·&nbsp;
+      <strong>DRV00002</strong>: NIM → NLM → PT → Churn (IDI cao tháng 3 = incentive-driven, dễ churn khi hết campaign) &nbsp;·&nbsp;
+      <strong>DRV00003</strong>: NIM → Churn ngay → Return (incentive_earned tháng Return rất cao so earnings → chỉ quay lại vì campaign)
+    </div>
+  </div>
+
+  <!-- ANALYSIS MATRIX -->
+  <div class="section-title" style="margin-top:36px;">Với 2 tables này, tôi phân tích được</div>
+  <div class="analysis-grid">
+
+    <div class="analysis-card">
+      <div class="an-header">
+        <div class="an-icon">📊</div>
+        <div><div class="an-title">Cohort Retention Curve</div><div class="an-subtitle">% còn active M+1, M+2, ... M+12 theo NIM cohort</div></div>
+      </div>
+      <div class="an-body">So sánh cohort Jan-25 vs Jun-25 vs Dec-25 vs Jan-26. Thấy được cohort nào drop nhanh nhất và tại giai đoạn nào (M+1? M+3?).<br><br><strong>Câu hỏi trả lời được:</strong> Chất lượng tuyển mới có cải thiện theo thời gian không?</div>
+      <div class="an-needs"><span class="an-need">driver_id</span><span class="an-need">first_active_month</span><span class="an-need">is_active</span><span class="an-need">period</span></div>
+    </div>
+
+    <div class="analysis-card">
+      <div class="an-header">
+        <div class="an-icon">🔄</div>
+        <div><div class="an-title">Segment Transition Matrix</div><div class="an-subtitle">Flow driver giữa các segments tháng N → N+1</div></div>
+      </div>
+      <div class="an-body">Bao nhiêu % FT → PT, PT → Inactive, Return → Churn lại. Tìm điểm rò rỉ lớn nhất. <br><br><strong>Câu hỏi trả lời được:</strong> FT giảm vì churn hay vì downgrade? Tỷ lệ bao nhiêu?</div>
+      <div class="an-needs"><span class="an-need">driver_id</span><span class="an-need">segment</span><span class="an-need">active_hours</span><span class="an-need">period</span></div>
+    </div>
+
+    <div class="analysis-card">
+      <div class="an-header">
+        <div class="an-icon">💰</div>
+        <div><div class="an-title">Incentive Dependency Analysis</div><div class="an-subtitle">IDI = incentive / gross earnings theo segment</div></div>
+      </div>
+      <div class="an-body">Return driver có IDI > 50% → phụ thuộc incentive. Tắt incentive → churn ngay. So sánh IDI FT vs PT → biết nhóm nào cần incentive thực sự vs đang "incentive wash".<br><br><strong>Câu hỏi trả lời được:</strong> Incentive budget đang tạo loyalty hay chỉ mua engagement tạm thời?</div>
+      <div class="an-needs"><span class="an-need">gross_earnings</span><span class="an-need">incentive_earned</span><span class="an-need">segment</span></div>
+    </div>
+
+    <div class="analysis-card">
+      <div class="an-header">
+        <div class="an-icon">⏱</div>
+        <div><div class="an-title">EPH Trend per Segment</div><div class="an-subtitle">Earnings per Hour = gross_earnings ÷ active_hours</div></div>
+      </div>
+      <div class="an-body">Track EPH theo tháng cho từng segment. Nếu EPH FT giảm → driver đang phải chạy nhiều giờ hơn nhưng kiếm ít đi → dễ churn hơn.<br><br><strong>Câu hỏi trả lời được:</strong> Thu nhập thực của FT có đủ cạnh tranh với Grab/Be không?</div>
+      <div class="an-needs"><span class="an-need">gross_earnings</span><span class="an-need">active_hours</span><span class="an-need">segment</span><span class="an-need">period</span></div>
+    </div>
+
+    <div class="analysis-card">
+      <div class="an-header">
+        <div class="an-icon">🎯</div>
+        <div><div class="an-title">NIM Graduation Quality</div><div class="an-subtitle">% NIM → FT vs PT vs Churn tại M+2</div></div>
+      </div>
+      <div class="an-body">Hiện tại chỉ biết NIM→NLM = 81%. Với driver-level data, biết thêm: trong 81% còn lại tháng 2, tháng 3 có bao nhiêu % trở thành FT vs PT.<br><br><strong>Câu hỏi trả lời được:</strong> Tuyển nhiều NIM nhưng bao nhiêu % thực sự trở thành FT có giá trị cao?</div>
+      <div class="an-needs"><span class="an-need">driver_id</span><span class="an-need">first_active_month</span><span class="an-need">segment</span></div>
+    </div>
+
+    <div class="analysis-card">
+      <div class="an-header">
+        <div class="an-icon">📍</div>
+        <div><div class="an-title">Acquisition Channel ROI</div><div class="an-subtitle">Retention × LTV theo kênh tuyển dụng</div></div>
+      </div>
+      <div class="an-body">Driver từ referral có M+6 retention 70% vs campaign_fb 40%? Tính LTV (lifetime earnings contribution) theo channel → allocate recruitment budget đúng chỗ.<br><br><strong>Câu hỏi trả lời được:</strong> Nên đầu tư tuyển dụng vào kênh nào để ROI cao nhất?</div>
+      <div class="an-needs"><span class="an-need">acquisition_channel</span><span class="an-need">driver_id</span><span class="an-need">is_active</span><span class="an-need">gross_earnings</span></div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span>Driver Management · Lê Phương Khanh · Ahamove 2026</span>
+    <span>Data spec v1.0 · 2 tables · driver-level monthly grain · Cần từ Data/Engineering team</span>
+  </div>
+
+</div>
+</body>
+</html>
