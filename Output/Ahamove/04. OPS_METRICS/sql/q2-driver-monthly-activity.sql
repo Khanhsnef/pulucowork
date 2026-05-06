@@ -157,8 +157,8 @@ SELECT
 FROM driver_perf_monthly d
 LEFT JOIN online_monthly  o  ON o.supplier_id = d.supplier_id AND o.period = d.period
 LEFT JOIN ranking_monthly m  ON m.supplier_id = d.supplier_id
-                             AND m.period = DATE_TRUNC(DATE(d.period, 'Asia/Saigon'), MONTH)
-                             -- d.period là TIMESTAMP → convert DATE trước khi so sánh với m.period (DATE)
+                             AND m.period = DATE_TRUNC(d.period, MONTH)
+                             -- d.period là DATE (datetrunc_mock returns DATE) → dùng trực tiếp
 LEFT JOIN cancel_poc      cp ON cp.supplier_id = d.supplier_id AND cp.period = d.period
 LEFT JOIN ahamove_raw.raw_supplier_profile sp ON sp.id = d.supplier_id
 

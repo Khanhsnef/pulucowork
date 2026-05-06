@@ -79,21 +79,31 @@ all_segments AS (
 perf AS (
   SELECT
     r.supplier_id,
-    LEFT(r.service_id, 3)                          AS city_id,
+    r.city_id,
     r.order_date,
     r.stop_id,
     r.service_id,
-    RIGHT(r.service_id, LENGTH(r.service_id) - 4)  AS service_short,
+    r.service_short,
     COALESCE(s.segment, 'Return')                  AS segment
-  FROM ahamove_raw.raw_performance r
+  FROM (
+    SELECT
+      supplier_id,
+      LEFT(service_id, 3)                          AS city_id,
+      order_date,
+      stop_id,
+      service_id,
+      RIGHT(service_id, LENGTH(service_id) - 4)    AS service_short,
+      status
+    FROM ahamove_raw.raw_performance
+  ) r
   LEFT JOIN all_segments s
     ON  s.supplier_id = r.supplier_id
-    AND s.city_id     = LEFT(r.service_id, 3)
+    AND s.city_id     = r.city_id
   WHERE r.order_date >= DATE(TIMESTAMP({{start_date}}), 'Asia/Saigon')
     AND r.order_date <  DATE(TIMESTAMP({{end_date}}),   'Asia/Saigon')
     {{snippet: @vinhnp1 condition_kpi}}
     AND r.status = 'COMPLETED'
-    AND LEFT(r.service_id, 3) != 'VNM'
+    AND r.city_id != 'VNM'
 )
 
 SELECT
