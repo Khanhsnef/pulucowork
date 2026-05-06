@@ -23,7 +23,7 @@ online_prev_month AS (
     datetrunc_mock(TIMESTAMP(r.period, 'Asia/Saigon'), 'month') AS period,
     r.supplier_id,
     datetrunc_mock(s.first_complete_time, 'month')              AS first_complete_month,
-    r.city_id,
+    s.city_id,
     SUM(r.online_hours)                                         AS online_hours
   FROM ahamove_archive.ops_suppliers_online_hours r
   LEFT JOIN `aha-move`.ahamove_supplier_raw.supplier_raw s ON r.supplier_id = s.id
