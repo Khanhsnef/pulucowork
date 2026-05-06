@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Driver Segment Trend — Ahamove</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #0E4174;
+    --blue-light: #1a5fa8;
+    --orange: #FF7F32;
+    --success: #10B981;
+    --danger: #EF4444;
+    --warn: #F59E0B;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-400: #9CA3AF;
+    --gray-600: #4B5563;
+    --gray-800: #1F2937;
+    --white: #FFFFFF;
+  }
+
+  body {
+    font-family: 'Lexend', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--blue);
+    padding: 28px 40px 24px;
+    color: white;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .header-left h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .header-left p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 4px;
+    font-weight: 400;
+  }
+  .header-badge {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+  }
+  .badge.orange { background: var(--orange); border-color: var(--orange); color: white; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1180px; margin: 0 auto; padding: 28px 28px 48px; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
+
+  /* ── RISK CARDS ── */
+  .risk-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .risk-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1.5px solid var(--gray-100);
+    position: relative;
+    overflow: hidden;
+  }
+  .risk-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .risk-card.critical::before { background: var(--danger); }
+  .risk-card.high::before { background: var(--orange); }
+  .risk-card.watch::before { background: var(--warn); }
+  .risk-card.stable::before { background: var(--success); }
+  .risk-card.anomaly::before { background: #8B5CF6; }
+
+  .risk-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .risk-label.critical { color: var(--danger); }
+  .risk-label.high { color: var(--orange); }
+  .risk-label.watch { color: var(--warn); }
+  .risk-label.stable { color: var(--success); }
+  .risk-label.anomaly { color: #8B5CF6; }
+
+  .risk-seg { font-size: 20px; font-weight: 800; color: var(--blue); letter-spacing: -0.5px; }
+  .risk-name { font-size: 11px; color: var(--gray-400); font-weight: 400; margin-bottom: 10px; }
+
+  .risk-metrics { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+  .risk-row { display: flex; justify-content: space-between; align-items: center; }
+  .risk-row .city { font-size: 10px; font-weight: 600; color: var(--gray-400); }
+  .risk-row .vals { display: flex; gap: 6px; }
+  .chip {
+    font-size: 10px; font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 20px;
+  }
+  .chip.red { background: #FEE2E2; color: var(--danger); }
+  .chip.green { background: #D1FAE5; color: var(--success); }
+  .chip.orange { background: #FEF3C7; color: #D97706; }
+  .chip.purple { background: #EDE9FE; color: #7C3AED; }
+  .chip.gray { background: var(--gray-100); color: var(--gray-600); }
+
+  .risk-signal {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--gray-100);
+    font-size: 10px;
+    color: var(--gray-600);
+    line-height: 1.5;
+  }
+
+  /* ── TREND CHARTS ── */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .chart-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--gray-100);
+  }
+  .chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .chart-title { font-size: 14px; font-weight: 700; color: var(--blue); }
+  .chart-sub { font-size: 11px; color: var(--gray-400); font-weight: 400; }
+  .legend {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--gray-600); font-weight: 500; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  svg.trend { width: 100%; overflow: visible; }
+
+  /* ── HEATMAP ── */
+  .heatmap-wrap {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--gray-100);
+    overflow: hidden;
+  }
+  .heatmap-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  table.heatmap {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  table.heatmap th {
+    padding: 8px 10px;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    background: var(--gray-50);
+    text-align: center;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  table.heatmap th:first-child { text-align: left; }
+  table.heatmap td {
+    padding: 7px 10px;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 1px solid var(--gray-100);
+    white-space: nowrap;
+  }
+  table.heatmap td:first-child { text-align: left; font-weight: 500; color: var(--gray-600); }
+  table.heatmap tr:last-child td { border-bottom: none; }
+  .city-divider { background: var(--gray-50) !important; font-weight: 700 !important; color: var(--blue) !important; font-size: 10px !important; letter-spacing: 0.8px; text-transform: uppercase; }
+
+  /* ── PROD SECTION ── */
+  .prod-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .prod-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--gray-100);
+  }
+  .bar-chart { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; }
+  .bar-label { font-size: 11px; font-weight: 600; width: 50px; color: var(--gray-600); }
+  .bar-track { flex: 1; height: 18px; background: var(--gray-100); border-radius: 4px; overflow: hidden; display: flex; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; display: flex; align-items: center; padding-left: 6px; }
+  .bar-val { font-size: 10px; font-weight: 700; color: white; white-space: nowrap; }
+
+  /* ── INSIGHTS ── */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .insight-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 18px;
+    border: 1.5px solid var(--gray-100);
+  }
+  .insight-card.red { border-color: #FECACA; background: #FFF5F5; }
+  .insight-card.orange { border-color: #FDE68A; background: #FFFBEB; }
+  .insight-card.purple { border-color: #DDD6FE; background: #F5F3FF; }
+
+  .insight-icon { font-size: 20px; margin-bottom: 8px; }
+  .insight-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--gray-800); }
+  .insight-body { font-size: 11px; color: var(--gray-600); line-height: 1.6; }
+  .insight-body strong { color: var(--gray-800); }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 40px;
+    padding: 16px 0;
+    border-top: 1px solid var(--gray-200);
+    font-size: 10px;
+    color: var(--gray-400);
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>Active Driver Segment Trend</h1>
+    <p>Phân tích xu hướng & Risk Assessment — Jan 2025 → Apr 2026 · HAN & SGN</p>
+  </div>
+  <div class="header-badge">
+    <span class="badge orange">2 Cities · 5 Segments · 16 Months</span>
+    <span class="badge">Source: active trend.xlsx · Updated 2026-05-06</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- RISK SNAPSHOT -->
+  <div class="section-title">Risk Snapshot — Apr 2026</div>
+  <div class="risk-grid">
+
+    <!-- FT -->
+    <div class="risk-card high">
+      <div class="risk-label high">⚠ HIGH RISK</div>
+      <div class="risk-seg">FT</div>
+      <div class="risk-name">Full-time Drivers</div>
+      <div class="risk-metrics">
+        <div class="risk-row">
+          <span class="city">HAN</span>
+          <div class="vals">
+            <span class="chip gray">1,307</span>
+            <span class="chip red">MoM −34.9%</span>
+            <span class="chip red">YoY −25.7%</span>
+          </div>
+        </div>
+        <div class="risk-row">
+          <span class="city">SGN</span>
+          <div class="vals">
+            <span class="chip gray">2,866</span>
+            <span class="chip red">MoM −18.6%</span>
+            <span class="chip red">YoY −17.6%</span>
+          </div>
+        </div>
+      </div>
+      <div class="risk-signal">Giảm liên tục 16 tháng. Share giảm từ 14.8% → 8.8% (HAN). Tốc độ giảm tháng 4 là mức cao nhất trong 1 năm.</div>
+    </div>
+
+    <!-- Return -->
+    <div class="risk-card critical">
+      <div class="risk-label critical">🔴 CRITICAL</div>
+      <div class="risk-seg">Return</div>
+      <div class="risk-name">Returning Drivers</div>
+      <div class="risk-metrics">
+        <div class="risk-row">
+          <span class="city">HAN</span>
+          <div class="vals">
+            <span class="chip gray">1,242</span>
+            <span class="chip red">MoM −42.3%</span>
+          </div>
+        </div>
+        <div class="risk-row">
+          <span class="city">SGN</span>
+          <div class="vals">
+            <span class="chip gray">1,074</span>
+            <span class="chip red">MoM −36.6%</span>
+          </div>
+        </div>
+      </div>
+      <div class="risk-signal">Drop mạnh nhất trong tháng 4. Pattern dao động biên độ rộng suốt năm — nhóm kém ổn định nhất, khó dự báo.</div>
+    </div>
+
+    <!-- NIM -->
+    <div class="risk-card watch">
+      <div class="risk-label watch">👁 WATCH</div>
+      <div class="risk-seg">NIM</div>
+      <div class="risk-name">New / Inactive More</div>
+      <div class="risk-metrics">
+        <div class="risk-row">
+          <span class="city">HAN</span>
+          <div class="vals">
+            <span class="chip gray">1,813</span>
+            <span class="chip red">MoM −28.9%</span>
+            <span class="chip green">YoY +61.2%</span>
+          </div>
+        </div>
+        <div class="risk-row">
+          <span class="city">SGN</span>
+          <div class="vals">
+            <span class="chip gray">1,585</span>
+            <span class="chip red">MoM −30.5%</span>
+            <span class="chip green">YoY +59.0%</span>
+          </div>
+        </div>
+      </div>
+      <div class="risk-signal">Volatility cực cao: Feb −60% → Mar +218% → Apr −30%. Gợi ý: incentive hoặc tier migration thay vì organic growth/churn.</div>
+    </div>
+
+    <!-- PT -->
+    <div class="risk-card stable">
+      <div class="risk-label stable">✓ STABLE</div>
+      <div class="risk-seg">PT</div>
+      <div class="risk-name">Part-time Drivers</div>
+      <div class="risk-metrics">
+        <div class="risk-row">
+          <span class="city">HAN</span>
+          <div class="vals">
+            <span class="chip gray">8,493</span>
+            <span class="chip orange">MoM −7.6%</span>
+            <span class="chip green">YoY +2.2%</span>
+          </div>
+        </div>
+        <div class="risk-row">
+          <span class="city">SGN</span>
+          <div class="vals">
+            <span class="chip gray">7,531</span>
+            <span class="chip green">MoM +6.2%</span>
+            <span class="chip gray">YoY −0.9%</span>
+          </div>
+        </div>
+      </div>
+      <div class="risk-signal">Segment lớn nhất (~55%). HAN có dấu hiệu giảm nhẹ tháng 4. Cần theo dõi vì ảnh hưởng tuyệt đối lớn nhất.</div>
+    </div>
+
+    <!-- NLM -->
+    <div class="risk-card anomaly">
+      <div class="risk-label anomaly">⚡ ANOMALY</div>
+      <div class="risk-seg">NLM</div>
+      <div class="risk-name">Near-lapsed More</div>
+      <div class="risk-metrics">
+        <div class="risk-row">
+          <span class="city">HAN</span>
+          <div class="vals">
+            <span class="chip gray">1,991</span>
+            <span class="chip purple">MoM +170.9%</span>
+            <span class="chip green">YoY +40.5%</span>
+          </div>
+        </div>
+        <div class="risk-row">
+          <span class="city">SGN</span>
+          <div class="vals">
+            <span class="chip gray">1,654</span>
+            <span class="chip purple">MoM +147.6%</span>
+            <span class="chip green">YoY +92.1%</span>
+          </div>
+        </div>
+      </div>
+      <div class="risk-signal">Tăng đột biến +148–171% sau khi Mar chỉ có 668–735. Cần xác nhận: có chính sách nào tác động tháng 3→4 không?</div>
+    </div>
+
+  </div>
+
+  <!-- TREND CHARTS -->
+  <div class="section-title" style="margin-top: 36px;">Trend 16 Tháng — Active Driver (unique, theo 1.ALL)</div>
+  <div class="chart-grid">
+
+    <!-- HAN TREND -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">HAN — Hà Nội</div>
+          <div class="chart-sub">Số tài xế active duy nhất mỗi tháng</div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#0E4174"></div>PT</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FF7F32"></div>FT</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>NIM</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div>NLM</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Return</div>
+        </div>
+      </div>
+      <svg class="trend" id="hanTrend" viewBox="0 0 560 180" height="180"></svg>
+    </div>
+
+    <!-- SGN TREND -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">SGN — TP.HCM</div>
+          <div class="chart-sub">Số tài xế active duy nhất mỗi tháng</div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#0E4174"></div>PT</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FF7F32"></div>FT</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>NIM</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div>NLM</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Return</div>
+        </div>
+      </div>
+      <svg class="trend" id="sgnTrend" viewBox="0 0 560 180" height="180"></svg>
+    </div>
+
+    <!-- HAN COMPOSITION -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">HAN — Tỷ trọng Segment (%)</div>
+          <div class="chart-sub">Sự dịch chuyển cơ cấu theo tháng</div>
+        </div>
+      </div>
+      <svg class="trend" id="hanComp" viewBox="0 0 560 180" height="180"></svg>
+    </div>
+
+    <!-- SGN COMPOSITION -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">SGN — Tỷ trọng Segment (%)</div>
+          <div class="chart-sub">Sự dịch chuyển cơ cấu theo tháng</div>
+        </div>
+      </div>
+      <svg class="trend" id="sgnComp" viewBox="0 0 560 180" height="180"></svg>
+    </div>
+
+  </div>
+
+  <!-- MOM HEATMAP -->
+  <div class="section-title" style="margin-top: 36px;">MoM% Heatmap — Biến động theo tháng</div>
+  <div class="heatmap-wrap">
+    <div class="heatmap-header">
+      <span>Month-over-Month Change (%) theo Segment</span>
+      <div style="display:flex;gap:10px;font-size:10px;font-weight:600;">
+        <span style="color:var(--danger)">■ Giảm mạnh (&lt;−15%)</span>
+        <span style="color:var(--orange)">■ Giảm nhẹ</span>
+        <span style="color:var(--gray-400)">■ Flat</span>
+        <span style="color:var(--success)">■ Tăng nhẹ</span>
+        <span style="color:#0E4174">■ Tăng mạnh (&gt;+15%)</span>
+      </div>
+    </div>
+    <table class="heatmap" id="momTable"></table>
+  </div>
+
+  <!-- PROD / STOPPOINTS -->
+  <div class="section-title" style="margin-top: 36px;">Avg Stoppoints Completed (prod) — 6 Tháng Gần Nhất</div>
+  <div class="prod-grid">
+    <div class="prod-card">
+      <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:4px;">HAN</div>
+      <div style="font-size:11px;color:var(--gray-400);">Trung bình stoppoints hoàn thành / tài xế · tháng</div>
+      <div class="bar-chart" id="hanProd"></div>
+    </div>
+    <div class="prod-card">
+      <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:4px;">SGN</div>
+      <div style="font-size:11px;color:var(--gray-400);">Trung bình stoppoints hoàn thành / tài xế · tháng</div>
+      <div class="bar-chart" id="sgnProd"></div>
+    </div>
+  </div>
+
+  <!-- KEY INSIGHTS -->
+  <div class="section-title" style="margin-top: 36px;">Key Insights & Hypotheses</div>
+  <div class="insight-grid">
+
+    <div class="insight-card red">
+      <div class="insight-icon">📉</div>
+      <div class="insight-title">FT: Sụt giảm cấu trúc dài hạn</div>
+      <div class="insight-body">
+        FT share HAN giảm từ <strong>14.8% → 8.8%</strong> trong 16 tháng. Tháng 4/2026 là mức thấp nhất YTD với 1,307 driver (−34.9% MoM). SGN cũng giảm đều từ 3,968 → 2,866 (−27.8% so Jan 2025).<br><br>
+        <strong>Hypothesis:</strong> FT driver đang bị pull sang nền tảng khác (Grab/Be) có EPH hoặc income ổn định hơn. Cần track thu nhập FT so cạnh tranh.
+      </div>
+    </div>
+
+    <div class="insight-card red">
+      <div class="insight-icon">⚠️</div>
+      <div class="insight-title">Return: Nhóm không ổn định nhất</div>
+      <div class="insight-body">
+        Biên độ dao động cao nhất: Mar 2026 +46.7% → Apr −42.3%. Prod thấp (~32 stoppoints HAN, ~37 SGN) — thấp thứ 2 chỉ sau NIM.<br><br>
+        <strong>Hypothesis:</strong> Return driver quay lại nhưng không duy trì được — có thể do incentive ngắn hạn. Cần xem trigger nào đưa họ quay lại tháng 3 và tại sao tháng 4 lại rời.
+      </div>
+    </div>
+
+    <div class="insight-card orange">
+      <div class="insight-icon">⚡</div>
+      <div class="insight-title">NIM & NLM: Dấu hiệu Tier Migration</div>
+      <div class="insight-body">
+        Feb 2026: NIM −60%, NLM −26% → Mar: NIM +218%, NLM −48% → Apr: NIM −29%, NLM +170%. Pattern đối nghịch nhau gợi ý <strong>driver đang chuyển hạng</strong> giữa 2 segment này thay vì churn thực.<br><br>
+        <strong>Action:</strong> Kiểm tra log tier migration tháng 2-4/2026. Nếu đúng là migration, số active tổng không thay đổi — chỉ báo cáo bị phân tán.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span>Driver Management Team · Lê Phương Khanh · Ahamove</span>
+    <span>Data: active trend.xlsx · Period Jan 2025–Apr 2026 · Base = service_type 1.ALL (unique drivers)</span>
+  </div>
+</div>
+
+<script>
+const months = ['Jan-25','Feb-25','Mar-25','Apr-25','May-25','Jun-25','Jul-25','Aug-25','Sep-25','Oct-25','Nov-25','Dec-25','Jan-26','Feb-26','Mar-26','Apr-26'];
+
+const data = {
+  HAN: {
+    PT:     [8334,6670,8253,8311,8074,7819,7882,7544,8053,8825,9541,10013,10122,10350,9191,8493],
+    FT:     [2176,2859,1471,1759,2018,1765,1601,1692,1681,1658,1584,1419,1729,1643,2007,1307],
+    NIM:    [1172,1502,1778,1125,1986,2086,2236,1788,2117,1768,2031,2299,1878,875,2550,1813],
+    NLM:    [1775,883,1284,1417,926,1587,1593,1839,1513,1788,1471,1730,1818,1461,735,1991],
+    Return: [1245,1108,1804,1229,1275,1182,1332,1278,1617,1619,1560,1743,1786,1467,2152,1242]
+  },
+  SGN: {
+    PT:     [8075,6871,8245,7596,7234,7308,7549,6978,7004,7084,7028,7309,7192,7165,7091,7531],
+    FT:     [3968,4541,3133,3479,3498,3163,2852,3185,2956,2880,2906,2815,3267,3346,3520,2866],
+    NIM:    [645,1205,1159,997,1417,1480,1415,1071,1176,1416,1612,2679,1908,793,2281,1585],
+    NLM:    [995,461,943,861,734,1083,1061,1081,830,930,1098,1313,1976,1349,668,1654],
+    Return: [928,1414,1372,973,1213,1132,1117,1028,1049,1054,1034,1220,1066,910,1695,1074]
+  }
+};
+
+const segColors = {
+  PT: '#0E4174', FT: '#FF7F32', NIM: '#10B981', NLM: '#8B5CF6', Return: '#EF4444'
+};
+const segments = ['PT','FT','NIM','NLM','Return'];
+
+// ── SVG LINE CHART ──
+function drawLineChart(svgId, cityData, showAll=true) {
+  const svg = document.getElementById(svgId);
+  const W = 560, H = 160, padL = 36, padR = 10, padT = 10, padB = 24;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+  const n = months.length;
+
+  // Determine min/max across all segments
+  let allVals = [];
+  segments.forEach(s => allVals = allVals.concat(cityData[s]));
+  const maxV = Math.max(...allVals);
+  const minV = Math.min(0, Math.min(...allVals));
+
+  const xScale = i => padL + (i / (n-1)) * chartW;
+  const yScale = v => padT + chartH - ((v - minV) / (maxV - minV)) * chartH;
+
+  let html = '';
+
+  // Grid lines
+  [0, 0.25, 0.5, 0.75, 1].forEach(t => {
+    const y = padT + chartH * (1-t);
+    const val = Math.round(minV + t*(maxV-minV));
+    html += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#F3F4F6" stroke-width="1"/>`;
+    html += `<text x="${padL-4}" y="${y+3}" font-size="8" fill="#9CA3AF" text-anchor="end" font-family="Lexend">${val>=1000?Math.round(val/100)/10+'K':val}</text>`;
+  });
+
+  // X axis labels (every 2)
+  months.forEach((m, i) => {
+    if (i % 2 === 0) {
+      html += `<text x="${xScale(i)}" y="${H-4}" font-size="7.5" fill="#9CA3AF" text-anchor="middle" font-family="Lexend">${m}</text>`;
+    }
+  });
+
+  // Lines per segment
+  segments.forEach(seg => {
+    const vals = cityData[seg];
+    const pts = vals.map((v,i) => `${xScale(i).toFixed(1)},${yScale(v).toFixed(1)}`).join(' ');
+    html += `<polyline points="${pts}" fill="none" stroke="${segColors[seg]}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>`;
+    // Last dot
+    const lx = xScale(n-1), ly = yScale(vals[n-1]);
+    html += `<circle cx="${lx}" cy="${ly}" r="3" fill="${segColors[seg]}"/>`;
+  });
+
+  svg.innerHTML = html;
+}
+
+// ── COMPOSITION CHART ──
+function drawCompChart(svgId, cityData) {
+  const svg = document.getElementById(svgId);
+  const W = 560, H = 160, padL = 36, padR = 10, padT = 10, padB = 24;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+  const n = months.length;
+
+  let html = '';
+
+  // Grid
+  [0,25,50,75,100].forEach(t => {
+    const y = padT + chartH * (1 - t/100);
+    html += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#F3F4F6" stroke-width="1"/>`;
+    html += `<text x="${padL-4}" y="${y+3}" font-size="8" fill="#9CA3AF" text-anchor="end" font-family="Lexend">${t}%</text>`;
+  });
+
+  // X axis
+  months.forEach((m, i) => {
+    if (i % 2 === 0) {
+      html += `<text x="${padL + (i/(n-1))*chartW}" y="${H-4}" font-size="7.5" fill="#9CA3AF" text-anchor="middle" font-family="Lexend">${m}</text>`;
+    }
+  });
+
+  // Stacked area
+  const totals = months.map((_,i) => segments.reduce((s,seg) => s + cityData[seg][i], 0));
+
+  // Draw each segment as band (simplified: just % lines)
+  segments.forEach(seg => {
+    const pcts = months.map((_,i) => cityData[seg][i] / totals[i] * 100);
+    const pts = pcts.map((v,i) => `${(padL + (i/(n-1))*chartW).toFixed(1)},${(padT + chartH*(1-v/100)).toFixed(1)}`).join(' ');
+    html += `<polyline points="${pts}" fill="none" stroke="${segColors[seg]}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>`;
+    const lx = padL + chartW, ly = padT + chartH*(1-pcts[n-1]/100);
+    html += `<circle cx="${lx}" cy="${ly}" r="3" fill="${segColors[seg]}"/>`;
+    html += `<text x="${lx+5}" y="${ly+3}" font-size="7.5" fill="${segColors[seg]}" font-family="Lexend" font-weight="600">${pcts[n-1].toFixed(0)}%</text>`;
+  });
+
+  svg.innerHTML = html;
+}
+
+// ── MOM HEATMAP ──
+function momColor(v) {
+  if (v === null) return 'background:#F9FAFB;color:#9CA3AF';
+  if (v < -15) return 'background:#FEE2E2;color:#DC2626';
+  if (v < -5)  return 'background:#FEF3C7;color:#D97706';
+  if (v < 5)   return 'background:#F9FAFB;color:#6B7280';
+  if (v < 15)  return 'background:#D1FAE5;color:#059669';
+  if (v < 50)  return 'background:#BFDBFE;color:#1D4ED8';
+  return 'background:#EDE9FE;color:#7C3AED';
+}
+
+function buildMomTable() {
+  const table = document.getElementById('momTable');
+  const cities = ['HAN','SGN'];
+
+  let html = '<thead><tr><th>Period</th>';
+  segments.forEach(s => html += `<th>${s}</th>`);
+  html += '<th>Total</th></tr></thead><tbody>';
+
+  cities.forEach(city => {
+    html += `<tr><td colspan="${segments.length+2}" class="city-divider" style="padding:6px 10px;">${city === 'HAN' ? '📍 HÀ NỘI' : '📍 TP.HỒ CHÍ MINH'}</td></tr>`;
+
+    const totals = months.map((_,i) => segments.reduce((s,seg)=>s+data[city][seg][i],0));
+
+    months.forEach((m, i) => {
+      html += `<tr>`;
+      html += `<td style="font-weight:600;color:var(--gray-800);padding-left:16px;">${m}</td>`;
+      segments.forEach(seg => {
+        const vals = data[city][seg];
+        const mom = i === 0 ? null : (vals[i]-vals[i-1])/vals[i-1]*100;
+        const style = momColor(mom);
+        const txt = mom === null ? '—' : (mom > 0 ? '+' : '') + mom.toFixed(1) + '%';
+        html += `<td style="${style};font-weight:700;font-size:10.5px;">${txt}</td>`;
+      });
+      const totalMom = i === 0 ? null : (totals[i]-totals[i-1])/totals[i-1]*100;
+      const tStyle = momColor(totalMom);
+      const tTxt = totalMom === null ? '—' : (totalMom>0?'+':'')+totalMom.toFixed(1)+'%';
+      html += `<td style="${tStyle};font-weight:700;font-size:10.5px;">${tTxt}</td>`;
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
+// ── PROD BAR CHART ──
+const prodData = {
+  HAN: {
+    months: ['Nov-25','Dec-25','Jan-26','Feb-26','Mar-26','Apr-26'],
+    FT:     [299.2, 354.2, 328.8, 232.7, 278.0, 321.5],
+    NIM:    [53.8,  57.9,  57.7,  34.4,  54.9,  51.1],
+    NLM:    [88.2,  89.7,  77.9,  62.0,  81.2,  68.6],
+    PT:     [81.2,  91.6,  85.2,  64.7,  78.8,  84.0],
+    Return: [38.8,  38.8,  37.1,  25.5,  35.3,  32.3]
+  },
+  SGN: {
+    months: ['Nov-25','Dec-25','Jan-26','Feb-26','Mar-26','Apr-26'],
+    FT:     [277.0, 310.9, 297.9, 215.2, 261.5, 298.3],
+    NIM:    [51.4,  48.1,  51.1,  39.6,  57.7,  59.2],
+    NLM:    [107.2, 101.1, 89.8,  77.3, 110.6,  93.8],
+    PT:     [94.3,  99.2,  93.4,  72.4,  89.6,  91.0],
+    Return: [35.9,  48.2,  45.3,  32.0,  47.9,  37.1]
+  }
+};
+
+function drawProdBars(containerId, city) {
+  const container = document.getElementById(containerId);
+  const pd = prodData[city];
+  const maxVal = 360;
+
+  let html = '';
+  // For each segment, show Apr 26 bar with comparison
+  segments.forEach(seg => {
+    const vals = pd[seg];
+    const apr = vals[vals.length-1];
+    const prev = vals[vals.length-2];
+    const diff = apr - prev;
+    const diffStr = (diff>=0?'+':'')+diff.toFixed(1);
+    const diffColor = diff >= 0 ? 'var(--success)' : 'var(--danger)';
+    const pct = (apr / maxVal * 100).toFixed(1);
+    const color = segColors[seg];
+
+    html += `
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
+          <span style="font-size:10px;font-weight:700;color:${color};">${seg}</span>
+          <span style="font-size:10px;font-weight:600;color:var(--gray-600);">${apr} <span style="color:${diffColor};font-size:9px;">(${diffStr} vs Mar)</span></span>
+        </div>
+        <div style="height:12px;background:var(--gray-100);border-radius:6px;overflow:hidden;">
+          <div style="height:100%;width:${pct}%;background:${color};border-radius:6px;opacity:0.85;"></div>
+        </div>
+      </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+// ── RENDER ALL ──
+drawLineChart('hanTrend', data.HAN);
+drawLineChart('sgnTrend', data.SGN);
+drawCompChart('hanComp', data.HAN);
+drawCompChart('sgnComp', data.SGN);
+buildMomTable();
+drawProdBars('hanProd', 'HAN');
+drawProdBars('sgnProd', 'SGN');
+</script>
+
+</body>
+</html>
