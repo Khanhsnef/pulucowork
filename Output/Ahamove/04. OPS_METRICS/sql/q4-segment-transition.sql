@@ -75,24 +75,22 @@ ORDER BY period, city_id, from_segment, driver_count DESC
 -- OUTPUT C (chạy riêng): FT churn vs downgrade — câu hỏi cốt lõi
 -- Điều kiện: from_segment = 'FT' (hoặc ft_segment = 'FT')
 -- ============================================================
-/*
+-- driver_life_time dùng 'OLD' (không phân biệt FT/PT) → phải dùng ft_segment/next_ft_segment
 SELECT
   period,
   city_id,
-  COUNT(DISTINCT CASE WHEN to_segment = 'FT'    THEN supplier_id END) AS retained_ft,
-  COUNT(DISTINCT CASE WHEN to_segment = 'PT'    THEN supplier_id END) AS downgraded_to_pt,
-  COUNT(DISTINCT CASE WHEN to_segment = 'Churn' THEN supplier_id END) AS churned,
-  COUNT(DISTINCT CASE WHEN to_segment = 'Return'THEN supplier_id END) AS went_return,
-  COUNT(DISTINCT supplier_id)                                          AS total_ft,
+  COUNT(DISTINCT CASE WHEN to_ft_segment = 'FT'    THEN supplier_id END) AS retained_ft,
+  COUNT(DISTINCT CASE WHEN to_ft_segment = 'PT'    THEN supplier_id END) AS downgraded_to_pt,
+  COUNT(DISTINCT CASE WHEN to_ft_segment = 'Churn' THEN supplier_id END) AS churned,
+  COUNT(DISTINCT CASE WHEN to_segment    = 'Return'THEN supplier_id END) AS went_return,
+  COUNT(DISTINCT supplier_id)                                             AS total_ft,
 
-  ROUND(COUNT(DISTINCT CASE WHEN to_segment = 'PT'    THEN supplier_id END) * 100.0
+  ROUND(COUNT(DISTINCT CASE WHEN to_ft_segment = 'PT'    THEN supplier_id END) * 100.0
         / NULLIF(COUNT(DISTINCT supplier_id), 0), 1) AS downgrade_pct,
-  ROUND(COUNT(DISTINCT CASE WHEN to_segment = 'Churn' THEN supplier_id END) * 100.0
+  ROUND(COUNT(DISTINCT CASE WHEN to_ft_segment = 'Churn' THEN supplier_id END) * 100.0
         / NULLIF(COUNT(DISTINCT supplier_id), 0), 1) AS churn_pct
 
 FROM transition_raw
-WHERE from_segment = 'FT'   -- ⚠️ thay bằng giá trị đúng của driver_life_time
-   OR from_ft_segment = 'FT'
+WHERE from_ft_segment = 'FT'
 GROUP BY 1, 2
 ORDER BY period, city_id
-*/
