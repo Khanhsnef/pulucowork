@@ -88,12 +88,20 @@ perf AS (
   FROM (
     SELECT
       supplier_id,
+      user_id,
       LEFT(service_id, 3)                          AS city_id,
       order_date,
       stop_id,
       service_id,
       RIGHT(service_id, LENGTH(service_id) - 4)    AS service_short,
-      status
+      status,
+      cancel_time,
+      order_time,
+      payment_method,
+      payment_time,
+      partner,
+      cancel_comment,
+      cancel_by_user
     FROM ahamove_raw.raw_performance
   ) r
   LEFT JOIN all_segments s
