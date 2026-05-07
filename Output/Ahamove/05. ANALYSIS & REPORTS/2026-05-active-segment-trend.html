@@ -433,9 +433,78 @@ table.conv tr:last-child td { border-bottom: none; }
 
   </div>
 
+  <!-- COHORT RETENTION MATRIX -->
+  <div class="section-title" style="margin-top:36px;">NIM Cohort Retention Matrix</div>
+  <div style="font-size:10px;color:var(--gray-400);margin-bottom:12px;">% drivers còn active sau N tháng kể từ tháng NIM · <span style="background:#FEF3C7;color:#92400E;padding:1px 6px;border-radius:4px;font-weight:600;">*</span> = data tháng 5/2026 chưa đầy đủ (query ngày 6/5)</div>
+  <div class="chart-grid-2" style="margin-bottom:16px;">
+    <div class="heatmap-wrap"><div class="heatmap-header"><span>📍 HÀ NỘI</span></div><table class="hmap" id="retHAN"></table></div>
+    <div class="heatmap-wrap"><div class="heatmap-header"><span>📍 TP.HỒ CHÍ MINH</span></div><table class="hmap" id="retSGN"></table></div>
+  </div>
+
+  <!-- FT TRANSITION TREND -->
+  <div class="section-title" style="margin-top:28px;">FT Driver Transition — Downgrade là nguyên nhân chính mất FT</div>
+  <div class="chart-grid-2">
+    <div class="chart-card">
+      <div class="chart-title">HÀ NỘI — % FT Downgrade → PT mỗi tháng</div>
+      <div class="chart-sub">Tháng 4/2026 bị loại (data artifact — May chưa đủ)</div>
+      <div class="legend" style="margin-top:8px;">
+        <div class="leg-item"><div class="leg-dot" style="background:#10B981"></div>Retain FT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#F59E0B"></div>Downgrade → PT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#EF4444"></div>Churn hẳn</div>
+      </div>
+      <svg class="trend" id="ftHAN" viewBox="0 0 560 160" style="margin-top:4px;"></svg>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">TP.HỒ CHÍ MINH — % FT Downgrade → PT mỗi tháng</div>
+      <div class="chart-sub">Tháng 4/2026 bị loại (data artifact — May chưa đủ)</div>
+      <div class="legend" style="margin-top:8px;">
+        <div class="leg-item"><div class="leg-dot" style="background:#10B981"></div>Retain FT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#F59E0B"></div>Downgrade → PT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#EF4444"></div>Churn hẳn</div>
+      </div>
+      <svg class="trend" id="ftSGN" viewBox="0 0 560 160" style="margin-top:4px;"></svg>
+    </div>
+  </div>
+
+  <!-- APRIL CAUSES -->
+  <div class="section-title" style="margin-top:28px;">Phân Tích — Tháng 4 & Xu Hướng Cohort 2026</div>
+  <div class="insight-grid">
+    <div class="ins orange">
+      <div class="ins-icon">📅</div>
+      <div class="ins-title">Apr-26 M+1 thấp = Data Artifact, không phải thực</div>
+      <div class="ins-body">
+        M+1 Apr-26 <strong>47.8% HAN / 51.6% SGN</strong> trông bất thường nhưng query chạy ngày 6/5 — chỉ capture <strong>6 ngày đầu tháng 5</strong>. Driver active từ 7/5 trở đi chưa được tính. Con số thực khi tháng 5 kết thúc sẽ phục hồi về ~78–81% HAN và ~72–75% SGN.<br><br>
+        <strong>Tương tự:</strong> Mar-26 M+2 = 30.6%, Feb-26 M+3 = 28.9% — đều là May-26 partial. Bỏ qua các ô có dấu * khi ra quyết định.
+      </div>
+    </div>
+    <div class="ins red">
+      <div class="ins-icon">📉</div>
+      <div class="ins-title">Cohort 2026 Q1 yếu hơn Mid-2025 rõ rệt</div>
+      <div class="ins-body">
+        M+3 HAN của cohort <strong>Jul–Nov 2025: 48–56%</strong>. Cohort 2026 đã rụng về <strong>Jan-26: 35.8% / Feb-26: 28.9%</strong> — thấp hơn 12–20pp.<br><br>
+        <strong>3 nguyên nhân khả dĩ:</strong><br>
+        (1) <strong>Feb-26 shock</strong>: downgrade FT HAN tăng vọt 51.2%, lan ra toàn bộ cohort đang active tháng đó<br>
+        (2) <strong>Chất lượng NIM thay đổi</strong>: Dec-25/Jan-26 có NIM lớn (2,299–2,552 HAN) có thể do campaign thu hút driver cơ hội<br>
+        (3) <strong>Cạnh tranh</strong>: Grab/Be tăng promo đầu năm 2026 kéo giờ online sang platform khác
+      </div>
+    </div>
+    <div class="ins blue">
+      <div class="ins-icon">🎯</div>
+      <div class="ins-title">Jul–Oct 2025 làm đúng điều gì? — Lever cần tái tạo</div>
+      <div class="ins-body">
+        Cohort Jul–Oct 2025 có M+3 cao nhất toàn timeline — <strong>48–56% HAN, 42–44% SGN</strong>, vượt trội 12–16pp so với Q1/Q2 2025 và Q1 2026.<br><br>
+        <strong>Điểm khác biệt cần điều tra:</strong><br>
+        · Có campaign onboarding NLM đặc biệt trong tháng 9–11/2025?<br>
+        · EPH / incentive tháng đó có cao hơn bình thường?<br>
+        · Điều kiện thị trường (demand cao) giúp driver kiếm đủ để ở lại?<br><br>
+        Nếu xác định được trigger → đây là playbook để apply lại Q3/Q4 2026.
+      </div>
+    </div>
+  </div>
+
   <div class="footer">
     <span>Driver Management · Lê Phương Khanh · Ahamove 2026</span>
-    <span>active trend.xlsx · 1.ALL unique drivers · NIM→NLM lag 1 tháng xác nhận</span>
+    <span>active trend.xlsx + Q3 Cohort Retention + Q4 FT Transition · 2026-05-06</span>
   </div>
 
 </div>
