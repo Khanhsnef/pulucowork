@@ -1,8 +1,26 @@
-# Slide Templates
+# Templates
 
-3 theme CSS chuẩn cho HTML slides Ahamove. Mỗi file có preview component + toàn bộ CSS variables sẵn sàng copy.
+CSS chuẩn cho HTML outputs Ahamove — slides và analytics reports. Mỗi file có preview component sẵn sàng copy.
 
-## Themes
+## Analytics Report Template (mới)
+
+| File | Theme | Dùng khi |
+|------|-------|----------|
+| [analytics-report.html](analytics-report.html) | Light · bg-gray-50 · Lexend + Space Mono | Báo cáo phân tích data dài, deep dive, dashboard cuộn được |
+
+**Components có sẵn** (Ctrl+F theo số `[1]`–`[15]`):
+- `[3]` Section block với số thứ tự (01, 02...)
+- `[4]` KPI strip 4 metrics + delta badge
+- `[7]` Insight box: `.ok` / `.warn` / `.danger` / `.blue`
+- `[8]` Data table + badge hệ màu chuẩn
+- `[9]` Progress bar (horizontal, 4 màu)
+- `[10]` SVG line chart (không cần thư viện)
+- `[11]` SVG bar chart ngang
+- `[12]` Heatmap table (JS color mapping)
+- `[13]` Correlation bar
+- `[14]` Grid 2/3/4 col responsive
+
+## Slide Themes
 
 | File | Nền | Vibe | Dùng khi |
 |------|-----|------|----------|

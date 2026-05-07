@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics Report Template — Ahamove</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  ANALYTICS REPORT TEMPLATE — Ahamove Driver Management      ║
+  ║  Dùng cho: báo cáo phân tích data, deep dive, dashboard     ║
+  ║  Theme: Light (bg-gray-50 / white cards)                    ║
+  ║  Font: Lexend (body) + Space Mono (số liệu)                 ║
+  ║  Charts: SVG / HTML thuần — KHÔNG dùng thư viện ngoài       ║
+  ╚══════════════════════════════════════════════════════════════╝
+
+  COMPONENT INDEX (Ctrl+F để tìm nhanh):
+  [1] CSS VARIABLES & BASE
+  [2] HEADER — tiêu đề trang
+  [3] SECTION BLOCK — số thứ tự + tiêu đề section
+  [4] KPI STRIP — 4 metrics ngang
+  [5] METRIC CHIP — chip số nhỏ
+  [6] CARD — white card container
+  [7] INSIGHT BOX — ok / warn / danger / info
+  [8] TABLE — bảng dữ liệu + badge
+  [9] PROGRESS BAR — horizontal bar
+  [10] SVG LINE CHART — trend line
+  [11] SVG BAR CHART — vertical bars
+  [12] SVG HEATMAP — color grid
+  [13] CORRELATION BAR — diverging / directional
+  [14] GRID LAYOUTS — 2 / 3 / 4 col
+  [15] FOOTER
+
+  CÁCH DÙNG:
+  1. Copy toàn bộ <style> block vào <head> của report HTML mới
+  2. Copy HTML components cần dùng từ preview section bên dưới
+  3. Dùng section numbers (01, 02...) cho mỗi phần
+-->
+<style>
+/* ═══════════════════════════════════════════════
+   [1] CSS VARIABLES & BASE
+═══════════════════════════════════════════════ */
+:root {
+  /* Brand */
+  --blue:        #0E4174;
+  --blue-light:  #1a5fa8;
+  --blue-pale:   #EFF6FF;
+  --orange:      #FF7F32;
+  --orange-pale: #FFF4ED;
+
+  /* Semantic */
+  --success:     #10B981;
+  --success-pale:#ECFDF5;
+  --danger:      #EF4444;
+  --danger-pale: #FEF2F2;
+  --warn:        #F59E0B;
+  --warn-pale:   #FFFBEB;
+  --info:        #3B82F6;
+  --info-pale:   #EFF6FF;
+  --purple:      #8B5CF6;
+  --purple-pale: #F5F3FF;
+
+  /* Neutral */
+  --gray-50:  #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --white:    #FFFFFF;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Lexend', sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-800);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.mono {
+  font-family: 'Space Mono', monospace;
+}
+
+/* ═══════════════════════════════════════════════
+   [2] HEADER
+═══════════════════════════════════════════════ */
+.report-header {
+  background: var(--blue);
+  padding: 28px 40px 24px;
+  color: white;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.report-header h1 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.report-header .subtitle {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  margin-top: 5px;
+}
+.report-header .meta {
+  text-align: right;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+.header-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.header-badge.outline {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.85);
+}
+.header-badge.orange {
+  background: var(--orange);
+  color: white;
+}
+
+/* accent bar dưới header */
+.header-accent {
+  height: 3px;
+  background: linear-gradient(90deg, var(--orange) 0%, rgba(255,127,50,0.3) 60%, transparent 100%);
+}
+
+/* ═══════════════════════════════════════════════
+   [3] SECTION BLOCK
+═══════════════════════════════════════════════ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 32px 64px;
+}
+
+.section {
+  margin-bottom: 48px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--gray-200);
+}
+.section-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--blue);
+  background: var(--blue-pale);
+  border: 1px solid rgba(14,65,116,0.15);
+  border-radius: 4px;
+  padding: 2px 8px;
+  letter-spacing: 0.5px;
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray-800);
+}
+.section-title span {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--gray-400);
+  margin-left: 8px;
+}
+
+/* ═══════════════════════════════════════════════
+   [4] KPI STRIP
+═══════════════════════════════════════════════ */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 16px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 0 0 16px 16px;
+}
+.kpi-blue::after   { background: var(--blue); }
+.kpi-orange::after { background: var(--orange); }
+.kpi-green::after  { background: var(--success); }
+.kpi-red::after    { background: var(--danger); }
+.kpi-purple::after { background: var(--purple); }
+
+.kpi-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gray-800);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.kpi-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  margin-top: 6px;
+}
+.delta-up     { background: var(--success-pale); color: var(--success); }
+.delta-down   { background: var(--danger-pale);  color: var(--danger); }
+.delta-flat   { background: var(--gray-100);     color: var(--gray-500); }
+.delta-warn   { background: var(--warn-pale);    color: var(--warn); }
+
+/* ═══════════════════════════════════════════════
+   [5] METRIC CHIP (inline, nhỏ hơn KPI card)
+═══════════════════════════════════════════════ */
+.metric-chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.metric-chip {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 10px;
+  padding: 10px 16px;
+  flex: 1;
+  min-width: 120px;
+}
+.chip-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+.chip-label {
+  font-size: 10px;
+  color: var(--gray-400);
+  margin-top: 3px;
+}
+
+/* ═══════════════════════════════════════════════
+   [6] CARD
+═══════════════════════════════════════════════ */
+.card {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 4px;
+}
+.card-sub {
+  font-size: 10.5px;
+  color: var(--gray-400);
+  margin-bottom: 14px;
+}
+
+/* Card với border màu trên đầu */
+.card-top-blue   { border-top: 3px solid var(--blue); }
+.card-top-orange { border-top: 3px solid var(--orange); }
+.card-top-green  { border-top: 3px solid var(--success); }
+.card-top-red    { border-top: 3px solid var(--danger); }
+
+/* ═══════════════════════════════════════════════
+   [7] INSIGHT BOX
+═══════════════════════════════════════════════ */
+.insight {
+  border-left: 3px solid var(--info);
+  background: var(--info-pale);
+  border-radius: 0 10px 10px 0;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.insight.ok     { border-left-color: var(--success); background: var(--success-pale); }
+.insight.warn   { border-left-color: var(--warn);    background: var(--warn-pale); }
+.insight.danger { border-left-color: var(--danger);  background: var(--danger-pale); }
+.insight.blue   { border-left-color: var(--blue);    background: var(--blue-pale); }
+.insight.orange { border-left-color: var(--orange);  background: var(--orange-pale); }
+.insight.purple { border-left-color: var(--purple);  background: var(--purple-pale); }
+
+.insight strong { font-weight: 700; color: var(--gray-800); }
+.insight p      { margin-top: 4px; font-size: 12px; color: var(--gray-600); }
+
+/* ═══════════════════════════════════════════════
+   [8] TABLE
+═══════════════════════════════════════════════ */
+.table-wrap {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.table-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.table-header .title { font-size: 13px; font-weight: 700; color: var(--blue); }
+.table-header .note  { font-size: 10.5px; color: var(--gray-400); }
+
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+table.data th {
+  padding: 9px 14px;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-400);
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-100);
+  text-align: left;
+  white-space: nowrap;
+}
+table.data th.right { text-align: right; }
+table.data td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+}
+table.data tr:last-child td { border-bottom: none; }
+table.data td.right { text-align: right; }
+table.data td.mono  { font-family: 'Space Mono', monospace; font-size: 11px; }
+table.data .row-group td {
+  background: var(--gray-50);
+  font-weight: 700;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-500);
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.badge-red    { background: #FEE2E2; color: #B91C1C; }
+.badge-orange { background: #FEF3C7; color: #B45309; }
+.badge-green  { background: #D1FAE5; color: #065F46; }
+.badge-blue   { background: #DBEAFE; color: #1D4ED8; }
+.badge-purple { background: #EDE9FE; color: #6D28D9; }
+.badge-gray   { background: var(--gray-100); color: var(--gray-600); }
+
+/* ═══════════════════════════════════════════════
+   [9] PROGRESS BAR
+═══════════════════════════════════════════════ */
+.prog-row {
+  margin-bottom: 10px;
+}
+.prog-label-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 11.5px;
+}
+.prog-name { font-weight: 600; color: var(--gray-700); }
+.prog-val  { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--gray-600); }
+
+.prog-track {
+  height: 8px;
+  background: var(--gray-100);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+.prog-blue   .prog-fill { background: var(--blue); }
+.prog-orange .prog-fill { background: var(--orange); }
+.prog-green  .prog-fill { background: var(--success); }
+.prog-red    .prog-fill { background: var(--danger); }
+
+/* ═══════════════════════════════════════════════
+   [10] SVG LINE CHART
+   Wrapper: .svg-chart-wrap — set height, responsive
+═══════════════════════════════════════════════ */
+.svg-chart-wrap {
+  width: 100%;
+  overflow: visible;
+  margin: 12px 0 4px;
+}
+.chart-legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--gray-500);
+}
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-line {
+  width: 20px; height: 2px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   [11] SVG BAR CHART (inline, không thư viện)
+═══════════════════════════════════════════════ */
+/* Dùng inline SVG với <rect> và <text>, xem demo bên dưới */
+
+/* ═══════════════════════════════════════════════
+   [12] SVG HEATMAP
+═══════════════════════════════════════════════ */
+.heatmap-wrap { overflow-x: auto; }
+table.hmap {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+table.hmap th {
+  padding: 6px 10px;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-400);
+  background: var(--gray-50);
+  text-align: center;
+  border-bottom: 1px solid var(--gray-100);
+  white-space: nowrap;
+}
+table.hmap th.left { text-align: left; }
+table.hmap td {
+  padding: 6px 10px;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--gray-100);
+  white-space: nowrap;
+}
+table.hmap td.row-label {
+  text-align: left;
+  font-family: 'Lexend', sans-serif;
+  font-weight: 500;
+  color: var(--gray-500);
+  font-size: 11px;
+}
+/* JS sẽ set inline background-color + color cho từng cell */
+
+/* ═══════════════════════════════════════════════
+   [13] CORRELATION BAR
+═══════════════════════════════════════════════ */
+.corr-section { margin-bottom: 6px; }
+.corr-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+.corr-label {
+  font-size: 11.5px;
+  color: var(--gray-600);
+  width: 160px;
+  flex-shrink: 0;
+}
+.corr-track {
+  flex: 1;
+  background: var(--gray-100);
+  border-radius: 4px;
+  height: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.corr-fill {
+  height: 100%;
+  border-radius: 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
+.corr-fill-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════
+   [14] GRID LAYOUTS
+═══════════════════════════════════════════════ */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr;       gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr;   gap: 14px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+.grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+.grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 14px; }
+
+.mb-4  { margin-bottom: 16px; }
+.mb-6  { margin-bottom: 24px; }
+.mb-10 { margin-bottom: 40px; }
+
+@media (max-width: 900px) {
+  .grid-2, .grid-3, .grid-4, .grid-2-1, .grid-1-2 {
+    grid-template-columns: 1fr;
+  }
+  .kpi-strip { grid-template-columns: 1fr 1fr; }
+}
+
+/* ═══════════════════════════════════════════════
+   [15] FOOTER
+═══════════════════════════════════════════════ */
+.report-footer {
+  margin-top: 48px;
+  padding: 14px 0 6px;
+  border-top: 1px solid var(--gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10.5px;
+  color: var(--gray-400);
+}
+.report-footer strong { color: var(--gray-500); }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     PREVIEW / DEMO — Xóa phần này khi dùng thật
+═══════════════════════════════════════ -->
+
+<!-- [2] HEADER -->
+<div class="report-header">
+  <div>
+    <h1>Tiêu đề Báo cáo</h1>
+    <div class="subtitle">Mô tả ngắn · Phạm vi dữ liệu · Thành phố · Thời gian</div>
+  </div>
+  <div class="meta">
+    <span class="header-badge orange">Tag nổi bật</span>
+    <span class="header-badge outline">Nguồn dữ liệu · 2026-05-07</span>
+  </div>
+</div>
+<div class="header-accent"></div>
+
+<div class="container">
+
+<!-- [3] SECTION HEADER -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <span class="section-title">Tổng quan chỉ số <span>· 39 tháng quan sát</span></span>
+  </div>
+
+  <!-- [4] KPI STRIP -->
+  <div class="kpi-strip mb-6">
+    <div class="kpi-card kpi-blue">
+      <div class="kpi-label">Retention Rate TB</div>
+      <div class="kpi-value mono">79.7%</div>
+      <div class="kpi-delta delta-flat">39 tháng</div>
+    </div>
+    <div class="kpi-card kpi-red">
+      <div class="kpi-label">Thấp nhất · T3/2026</div>
+      <div class="kpi-value mono">74.8%</div>
+      <div class="kpi-delta delta-down">▼ -4.9pp vs TB</div>
+    </div>
+    <div class="kpi-card kpi-green">
+      <div class="kpi-label">Cao nhất · T2/2025</div>
+      <div class="kpi-value mono">84.5%</div>
+      <div class="kpi-delta delta-up">▲ +4.8pp vs TB</div>
+    </div>
+    <div class="kpi-card kpi-orange">
+      <div class="kpi-label">EXP thấp nhất · T1/2026</div>
+      <div class="kpi-value mono">66.8%</div>
+      <div class="kpi-delta delta-warn">⚠ Điểm nguy hiểm</div>
+    </div>
+  </div>
+
+  <!-- [7] INSIGHT BOX -->
+  <div class="insight ok">
+    <strong>✓ SGN duy trì tốt nhất</strong> — ổn định quanh 80–84%, ít biến động mùa vụ. Đây là benchmark để đặt mục tiêu.
+  </div>
+  <div class="insight warn">
+    <strong>⚠ EXP đang phân kỳ rõ rệt</strong> — Từ Q3/2025, EXP tụt lại phía sau; khoảng cách với SGN mở rộng lên ~6–8pp. Cần audit ngay.
+  </div>
+  <div class="insight danger">
+    <strong>🔴 HAN T1/2025 và T3/2026 đều dưới 71%</strong> — Bất thường theo mùa, chưa có can thiệp đặc biệt.
+  </div>
+  <div class="insight blue">
+    <strong>ℹ Pattern "hiệu ứng Tết"</strong> — Tháng 1 sụt → Tháng 2 hồi phục → Tháng 3 dip lại. Cấu trúc lặp lại cả 3 năm.
+  </div>
+</div>
+
+<!-- SECTION 2: SVG LINE CHART -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <span class="section-title">Xu hướng theo thời gian</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Retention Rate tổng thể · 2023–2026</div>
+    <div class="card-sub">Đường nét đứt = baseline 80%</div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-line" style="background:#0E4174"></div> Retention Rate</div>
+      <div class="legend-item"><div class="legend-line" style="background:#9CA3AF; opacity:.6; border-top:1px dashed #9CA3AF; height:0; margin-top:1px"></div> Baseline 80%</div>
+    </div>
+    <!-- SVG Line Chart — thay data points trong polyline points="" -->
+    <div class="svg-chart-wrap">
+      <svg viewBox="0 0 900 200" width="100%" style="overflow:visible;">
+        <!-- Grid lines Y -->
+        <line x1="50" y1="20"  x2="880" y2="20"  stroke="#E5E7EB" stroke-width="1"/>
+        <line x1="50" y1="60"  x2="880" y2="60"  stroke="#E5E7EB" stroke-width="1"/>
+        <line x1="50" y1="100" x2="880" y2="100" stroke="#E5E7EB" stroke-width="1"/>
+        <line x1="50" y1="140" x2="880" y2="140" stroke="#E5E7EB" stroke-width="1"/>
+        <line x1="50" y1="180" x2="880" y2="180" stroke="#E5E7EB" stroke-width="1"/>
+
+        <!-- Y Labels (75% → 85%) -->
+        <text x="44" y="24"  text-anchor="end" font-family="Space Mono" font-size="9" fill="#9CA3AF">85%</text>
+        <text x="44" y="64"  text-anchor="end" font-family="Space Mono" font-size="9" fill="#9CA3AF">83%</text>
+        <text x="44" y="104" text-anchor="end" font-family="Space Mono" font-size="9" fill="#9CA3AF">81%</text>
+        <text x="44" y="144" text-anchor="end" font-family="Space Mono" font-size="9" fill="#9CA3AF">79%</text>
+        <text x="44" y="184" text-anchor="end" font-family="Space Mono" font-size="9" fill="#9CA3AF">77%</text>
+
+        <!-- Baseline 80% = y=100 -->
+        <line x1="50" y1="100" x2="880" y2="100" stroke="#D1D5DB" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- Area fill (dùng polygon, thêm điểm đầu/cuối xuống bottom) -->
+        <polygon
+          points="50,100 80,97 110,110 140,98 170,109 200,97 230,107 260,106 290,84 320,79 350,88 380,82 410,128 440,85 470,107 500,100 530,119 560,85 590,77 620,99 650,89 680,82 710,104 740,83 770,82 800,104 830,118 860,100 880,126
+          880,180 50,180"
+          fill="rgba(14,65,116,0.06)" stroke="none"/>
+
+        <!-- Line -->
+        <polyline
+          fill="none" stroke="#0E4174" stroke-width="2" stroke-linejoin="round"
+          points="50,100 80,97 110,110 140,98 170,109 200,97 230,107 260,106 290,84 320,79 350,88 380,82 410,128 440,85 470,107 500,100 530,119 560,85 590,77 620,99 650,89 680,82 710,104 740,83 770,82 800,104 830,118 860,100 880,126"/>
+
+        <!-- Dots cho điểm đáng chú ý -->
+        <circle cx="410" cy="128" r="4" fill="#EF4444" stroke="white" stroke-width="1.5"/>
+        <text x="410" y="145" text-anchor="middle" font-family="Space Mono" font-size="8.5" fill="#EF4444">T1/25</text>
+        <circle cx="560" cy="85" r="4" fill="#10B981" stroke="white" stroke-width="1.5"/>
+        <text x="560" y="74" text-anchor="middle" font-family="Space Mono" font-size="8.5" fill="#10B981">T2/25</text>
+        <circle cx="880" cy="126" r="4" fill="#EF4444" stroke="white" stroke-width="1.5"/>
+        <text x="880" y="143" text-anchor="middle" font-family="Space Mono" font-size="8.5" fill="#EF4444">T3/26</text>
+
+        <!-- X Labels (chọn mốc quan trọng) -->
+        <text x="50"  y="198" text-anchor="middle" font-family="Lexend" font-size="9" fill="#9CA3AF">T1/23</text>
+        <text x="380" y="198" text-anchor="middle" font-family="Lexend" font-size="9" fill="#9CA3AF">T1/24</text>
+        <text x="560" y="198" text-anchor="middle" font-family="Lexend" font-size="9" fill="#9CA3AF">T1/25</text>
+        <text x="800" y="198" text-anchor="middle" font-family="Lexend" font-size="9" fill="#9CA3AF">T1/26</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: MULTI-LINE SVG + GRID -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <span class="section-title">Phân tích theo Khu vực</span>
+  </div>
+
+  <!-- 3 metric chips trước chart -->
+  <div class="metric-chips mb-4">
+    <div class="metric-chip">
+      <div class="chip-value mono" style="color:var(--blue)">81.6%</div>
+      <div class="chip-label">SGN · Retention TB</div>
+    </div>
+    <div class="metric-chip">
+      <div class="chip-value mono" style="color:var(--purple)">79.7%</div>
+      <div class="chip-label">HAN · Retention TB</div>
+    </div>
+    <div class="metric-chip">
+      <div class="chip-value mono" style="color:var(--orange)">76.7%</div>
+      <div class="chip-label">EXP · Retention TB</div>
+    </div>
+    <div class="metric-chip">
+      <div class="chip-value mono" style="color:var(--danger)">66.8%</div>
+      <div class="chip-label">EXP · Thấp nhất T1/2026</div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb-4">
+    <!-- Multi-line SVG chart -->
+    <div class="card">
+      <div class="card-title">Retention Rate theo Khu vực</div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#0E4174"></div>SGN</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div>HAN</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#FF7F32"></div>EXP</div>
+      </div>
+      <div class="svg-chart-wrap">
+        <svg viewBox="0 0 420 180" width="100%" style="overflow:visible">
+          <line x1="0" y1="0"   x2="420" y2="0"   stroke="#F3F4F6" stroke-width="1"/>
+          <line x1="0" y1="45"  x2="420" y2="45"  stroke="#F3F4F6" stroke-width="1"/>
+          <line x1="0" y1="90"  x2="420" y2="90"  stroke="#F3F4F6" stroke-width="1"/>
+          <line x1="0" y1="135" x2="420" y2="135" stroke="#F3F4F6" stroke-width="1"/>
+          <line x1="0" y1="175" x2="420" y2="175" stroke="#F3F4F6" stroke-width="1"/>
+          <!-- SGN line -->
+          <polyline fill="none" stroke="#0E4174" stroke-width="1.8"
+            points="0,54 30,62 60,72 90,56 120,60 150,50 180,58 210,50 240,38 270,46 300,50 330,48 360,68 390,38 420,55"/>
+          <!-- HAN line -->
+          <polyline fill="none" stroke="#8B5CF6" stroke-width="1.8"
+            points="0,68 30,58 60,72 90,60 120,64 150,62 180,60 210,56 240,48 270,62 300,60 330,60 360,120 390,44 420,110"/>
+          <!-- EXP line -->
+          <polyline fill="none" stroke="#FF7F32" stroke-width="1.8"
+            points="0,82 30,88 60,86 90,72 120,78 150,82 180,76 210,74 240,72 270,80 300,78 330,56 360,140 390,74 420,78"/>
+          <!-- Annotation EXP low point -->
+          <circle cx="360" cy="140" r="3.5" fill="#EF4444" stroke="white" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Progress bars (correlation / comparison) -->
+    <div class="card">
+      <div class="card-title">Tương quan Income → Retention</div>
+      <div class="card-sub">Hệ số Pearson theo khu vực</div>
+      <div class="corr-row">
+        <div class="corr-label">SGN · Income/driver</div>
+        <div class="corr-track">
+          <div class="corr-fill" style="width:94%; background:rgba(14,65,116,0.12); border:1px solid rgba(14,65,116,0.2);">
+            <span class="corr-fill-val" style="color:#0E4174">0.799</span>
+          </div>
+        </div>
+      </div>
+      <div class="corr-row">
+        <div class="corr-label">HAN · Income/driver</div>
+        <div class="corr-track">
+          <div class="corr-fill" style="width:92%; background:rgba(139,92,246,0.1); border:1px solid rgba(139,92,246,0.2);">
+            <span class="corr-fill-val" style="color:#8B5CF6">0.783</span>
+          </div>
+        </div>
+      </div>
+      <div class="corr-row">
+        <div class="corr-label">EXP · Income/driver</div>
+        <div class="corr-track">
+          <div class="corr-fill" style="width:48%; background:rgba(255,127,50,0.1); border:1px solid rgba(255,127,50,0.25);">
+            <span class="corr-fill-val" style="color:#FF7F32">0.406</span>
+          </div>
+        </div>
+      </div>
+      <div class="corr-row">
+        <div class="corr-label">SGN · Hours/driver</div>
+        <div class="corr-track">
+          <div class="corr-fill" style="width:97%; background:rgba(14,65,116,0.12); border:1px solid rgba(14,65,116,0.2);">
+            <span class="corr-fill-val" style="color:#0E4174">0.820</span>
+          </div>
+        </div>
+      </div>
+      <div class="corr-row">
+        <div class="corr-label">EXP · Hours/driver</div>
+        <div class="corr-track">
+          <div class="corr-fill" style="width:47%; background:rgba(255,127,50,0.1); border:1px solid rgba(255,127,50,0.25);">
+            <span class="corr-fill-val" style="color:#FF7F32">0.401</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: TABLE + BADGES -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <span class="section-title">Ma trận Vấn đề & Impact</span>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-header">
+      <span class="title">Vấn đề tồn đọng theo mức độ nghiêm trọng</span>
+      <span class="note">Cập nhật T3/2026</span>
+    </div>
+    <table class="data">
+      <thead>
+        <tr>
+          <th>Vấn đề</th>
+          <th>Segment</th>
+          <th class="right">Mức độ</th>
+          <th>Impact ước tính</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <strong>EXP sụt giảm kéo dài</strong><br>
+            <span style="font-size:11px;color:var(--gray-400)">Từ Q3/2025, chưa phục hồi</span>
+          </td>
+          <td>EXP · PT · NIM · 18–27t</td>
+          <td class="right"><span class="badge badge-red">NGHIÊM TRỌNG</span></td>
+          <td class="mono" style="font-size:11px">~400–600 TX/tháng</td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Cú sốc Tháng 1 tái diễn</strong><br>
+            <span style="font-size:11px;color:var(--gray-400)">Mỗi năm, đặc biệt NIM & PT</span>
+          </td>
+          <td>Toàn hệ thống</td>
+          <td class="right"><span class="badge badge-orange">CAO</span></td>
+          <td class="mono" style="font-size:11px">~1,500–2,000 TX/năm</td>
+        </tr>
+        <tr>
+          <td>
+            <strong>NIM → FT conversion thấp</strong><br>
+            <span style="font-size:11px;color:var(--gray-400)">~1/4 NIM không quay lại T2</span>
+          </td>
+          <td>NIM toàn hệ thống</td>
+          <td class="right"><span class="badge badge-orange">CAO</span></td>
+          <td class="mono" style="font-size:11px">CAC bị lãng phí</td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Nhóm trẻ 18–22 retention cực thấp</strong><br>
+            <span style="font-size:11px;color:var(--gray-400)">TB ~74%, Jan/25 xuống 61%</span>
+          </td>
+          <td>18–22t · NIM · EXP</td>
+          <td class="right"><span class="badge badge-orange">CAO</span></td>
+          <td class="mono" style="font-size:11px">Tài xế trẻ thất thoát sớm</td>
+        </tr>
+        <tr>
+          <td>
+            <strong>HAN suy yếu 2025–2026</strong><br>
+            <span style="font-size:11px;color:var(--gray-400)">T3/2026 chỉ 70.8%</span>
+          </td>
+          <td>HAN · PT · 18–27t</td>
+          <td class="right"><span class="badge badge-gray">THEO DÕI</span></td>
+          <td class="mono" style="font-size:11px">Cần audit cạnh tranh</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 5: SVG BAR CHART + PROGRESS BARS -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <span class="section-title">Phân tích theo Nhóm tuổi</span>
+  </div>
+
+  <div class="grid-2">
+    <!-- Horizontal Bar Chart (SVG) -->
+    <div class="card">
+      <div class="card-title">Retention Rate TB theo Nhóm tuổi</div>
+      <div class="card-sub">Trung bình toàn kỳ 2023–2026</div>
+      <svg viewBox="0 0 360 160" width="100%" style="margin-top:10px">
+        <!-- 18-22: 74.1% -->
+        <text x="44" y="22" text-anchor="end" font-family="Lexend" font-size="10" fill="#374151" font-weight="600">18–22</text>
+        <rect x="50" y="10" width="222" height="16" rx="4" fill="rgba(239,68,68,0.15)" stroke="#EF4444" stroke-width="1"/>
+        <text x="278" y="22" font-family="Space Mono" font-size="9.5" fill="#EF4444" font-weight="700">74.1%</text>
+
+        <!-- 23-27: 76.2% -->
+        <text x="44" y="52" text-anchor="end" font-family="Lexend" font-size="10" fill="#374151" font-weight="600">23–27</text>
+        <rect x="50" y="40" width="228" height="16" rx="4" fill="rgba(245,158,11,0.12)" stroke="#F59E0B" stroke-width="1"/>
+        <text x="284" y="52" font-family="Space Mono" font-size="9.5" fill="#F59E0B" font-weight="700">76.2%</text>
+
+        <!-- 28-32: 80.0% -->
+        <text x="44" y="82" text-anchor="end" font-family="Lexend" font-size="10" fill="#374151" font-weight="600">28–32</text>
+        <rect x="50" y="70" width="240" height="16" rx="4" fill="rgba(14,65,116,0.1)" stroke="#0E4174" stroke-width="1"/>
+        <text x="296" y="82" font-family="Space Mono" font-size="9.5" fill="#0E4174" font-weight="700">80.0%</text>
+
+        <!-- 33-37: 82.5% -->
+        <text x="44" y="112" text-anchor="end" font-family="Lexend" font-size="10" fill="#374151" font-weight="600">33–37</text>
+        <rect x="50" y="100" width="248" height="16" rx="4" fill="rgba(139,92,246,0.1)" stroke="#8B5CF6" stroke-width="1"/>
+        <text x="304" y="112" font-family="Space Mono" font-size="9.5" fill="#8B5CF6" font-weight="700">82.5%</text>
+
+        <!-- 38+: 86.2% -->
+        <text x="44" y="142" text-anchor="end" font-family="Lexend" font-size="10" fill="#374151" font-weight="600">38+</text>
+        <rect x="50" y="130" width="258" height="16" rx="4" fill="rgba(16,185,129,0.12)" stroke="#10B981" stroke-width="1"/>
+        <text x="314" y="142" font-family="Space Mono" font-size="9.5" fill="#10B981" font-weight="700">86.2%</text>
+      </svg>
+    </div>
+
+    <!-- Progress bars kiểu khác -->
+    <div class="card">
+      <div class="card-title">Segment FT / NIM / PT</div>
+      <div class="card-sub">Retention Rate trung bình toàn kỳ</div>
+
+      <div class="prog-row prog-green">
+        <div class="prog-label-row">
+          <span class="prog-name">FT · Fulltime</span>
+          <span class="prog-val">97.3%</span>
+        </div>
+        <div class="prog-track">
+          <div class="prog-fill" style="width:97.3%"></div>
+        </div>
+      </div>
+
+      <div class="prog-row prog-orange" style="margin-top:14px">
+        <div class="prog-label-row">
+          <span class="prog-name">NIM · New in Month</span>
+          <span class="prog-val">77.9%</span>
+        </div>
+        <div class="prog-track">
+          <div class="prog-fill" style="width:77.9%"></div>
+        </div>
+      </div>
+
+      <div class="prog-row prog-red" style="margin-top:14px">
+        <div class="prog-label-row">
+          <span class="prog-name">PT · Parttime</span>
+          <span class="prog-val">75.8%</span>
+        </div>
+        <div class="prog-track">
+          <div class="prog-fill" style="width:75.8%"></div>
+        </div>
+      </div>
+
+      <div class="insight warn" style="margin-top:16px;margin-bottom:0">
+        <strong>⚠ Gap FT vs PT = ~21pp</strong> — Mỗi NIM/PT convert thành FT là 1 tài xế "miễn dịch" biến động.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: HEATMAP -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <span class="section-title">Heatmap Mùa vụ</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Retention Rate theo Tháng × Năm</div>
+    <div class="card-sub">Màu đỏ = thấp · Màu xanh = cao · Baseline = 80%</div>
+    <div class="heatmap-wrap" style="margin-top:12px">
+      <table class="hmap" id="heatmap"></table>
+    </div>
+  </div>
+</div>
+
+<!-- [15] FOOTER -->
+<div class="report-footer">
+  <span><strong>Ahamove</strong> · Driver Management Team</span>
+  <span>2026-05-07 · khanhlp@ahamove.com</span>
+</div>
+
+</div><!-- end container -->
+
+<!-- Heatmap script — pattern có thể tái dùng -->
+<script>
+const heatData = {
+  '2023': { 1:80.3, 2:80.6, 3:78.4, 4:80.3, 5:79.1, 6:80.3, 7:79.2, 8:79.4, 9:81.5, 10:82.1, 11:81.2, 12:81.6 },
+  '2024': { 1:77.4, 2:81.5, 3:78.8, 4:79.6, 5:80.0, 6:80.8, 7:81.8, 8:80.4, 9:83.6, 10:80.2, 11:80.5, 12:80.1 },
+  '2025': { 1:76.2, 2:84.5, 3:79.2, 4:80.9, 5:79.9, 6:78.6, 7:77.7, 8:79.7, 9:82.2, 10:81.0, 11:81.8, 12:79.7 },
+  '2026': { 1:76.5, 2:78.8, 3:74.8 }
+};
+
+function rrToColor(v) {
+  if (!v) return { bg: '#F9FAFB', text: '#9CA3AF' };
+  const min = 74, max = 85;
+  const t = Math.max(0, Math.min(1, (v - min) / (max - min)));
+  const r = Math.round(239 - t * (239 - 16));
+  const g = Math.round(68  + t * (185 - 68));
+  const b = Math.round(68  + t * (129 - 68));
+  const bright = t > 0.55;
+  return {
+    bg: `rgba(${r},${g},${b},0.18)`,
+    border: `rgba(${r},${g},${b},0.4)`,
+    text: `rgb(${Math.round(r*0.6)},${Math.round(g*0.6)},${Math.round(b*0.6)})`
+  };
+}
+
+const months = [1,2,3,4,5,6,7,8,9,10,11,12];
+const years  = ['2023','2024','2025','2026'];
+let html = '<thead><tr><th class="left">Năm</th>';
+months.forEach(m => { html += `<th>T${m}</th>`; });
+html += '</tr></thead><tbody>';
+years.forEach(y => {
+  html += `<tr><td class="row-label">${y}</td>`;
+  months.forEach(m => {
+    const v = heatData[y] && heatData[y][m];
+    if (!v) { html += `<td style="color:#E5E7EB">—</td>`; return; }
+    const c = rrToColor(v);
+    const bold = (v > 83 || v < 77) ? 'font-weight:700' : '';
+    html += `<td style="background:${c.bg};color:${c.text};border:1px solid ${c.border};${bold}">${v.toFixed(1)}%</td>`;
+  });
+  html += '</tr>';
+});
+html += '</tbody>';
+document.getElementById('heatmap').innerHTML = html;
+</script>
+
+</body>
+</html>
