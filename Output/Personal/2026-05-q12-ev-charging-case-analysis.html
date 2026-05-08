@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phân Tích Đầu Tư Trạm Sạc EV — Hẻm 43 Trần Thị Năm, Q12</title>
+<title>Trạm Dịch Vụ EV Tích Hợp — Fast Charging + Car Wash + Café · Q12</title>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -17,9 +17,10 @@
 
   .hero { background:linear-gradient(135deg,#0E4174 0%,#1a3f6b 60%,#0d2d4f 100%); color:white; padding:48px 32px 40px; position:relative; overflow:hidden; }
   .hero::before { content:''; position:absolute; right:-60px; top:-60px; width:300px; height:300px; border-radius:50%; background:rgba(255,127,50,0.12); }
+  .hero::after { content:''; position:absolute; right:80px; bottom:-80px; width:200px; height:200px; border-radius:50%; background:rgba(255,127,50,0.07); }
   .hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(255,127,50,0.2); border:1px solid rgba(255,127,50,0.4); border-radius:999px; padding:6px 16px; margin-bottom:20px; font-size:12px; font-weight:600; color:#FFB380; letter-spacing:.05em; }
-  .hero h1 { font-size:28px; font-weight:800; letter-spacing:-.03em; line-height:1.2; margin-bottom:10px; }
-  .hero-sub { font-size:14px; color:rgba(255,255,255,.75); max-width:580px; margin-bottom:28px; }
+  .hero h1 { font-size:30px; font-weight:800; letter-spacing:-.03em; line-height:1.2; margin-bottom:10px; }
+  .hero-sub { font-size:14px; color:rgba(255,255,255,.75); max-width:600px; margin-bottom:28px; }
   .hero-stats { display:flex; gap:32px; flex-wrap:wrap; }
   .hero-stat-num { font-size:26px; font-weight:800; color:var(--orange); letter-spacing:-.03em; }
   .hero-stat-label { font-size:11px; color:rgba(255,255,255,.6); font-weight:400; margin-top:2px; }
@@ -44,7 +45,7 @@
   .metric { background:var(--white); border-radius:1.5rem; border:1px solid var(--gray-100); padding:18px 22px; }
   .metric-val { font-size:26px; font-weight:800; letter-spacing:-.03em; }
   .metric-label { font-size:11px; color:var(--gray-400); margin-top:3px; }
-  .metric-sub { font-size:11px; color:var(--gray-400); margin-top:1px; }
+  .metric-sub { font-size:11px; color:var(--gray-600); margin-top:4px; line-height:1.5; }
 
   .table-wrap { border-radius:1.5rem; overflow:hidden; border:1px solid var(--gray-100); }
   table { width:100%; border-collapse:collapse; background:var(--white); }
@@ -57,13 +58,13 @@
   .td-g { color:var(--green); font-weight:600; }
   .td-r { color:var(--red); font-weight:600; }
   .td-o { color:var(--orange); font-weight:600; }
+  .td-right { text-align:right; }
 
   .badge { display:inline-flex; align-items:center; border-radius:999px; padding:3px 10px; font-size:11px; font-weight:600; }
   .bg { background:#D1FAE5; color:#065F46; }
   .br { background:#FEE2E2; color:#991B1B; }
   .bo { background:#FEF3C7; color:#92400E; }
   .bb { background:#DBEAFE; color:#1E40AF; }
-  .bgy { background:var(--gray-100); color:var(--gray-600); }
 
   .insight { background:var(--blue); color:white; border-radius:1.5rem; padding:22px 26px; margin:14px 0; }
   .insight-title { font-size:14px; font-weight:700; margin-bottom:6px; }
@@ -77,31 +78,6 @@
   .good-t { font-size:12px; font-weight:700; color:#166534; margin-bottom:3px; }
   .good-b { font-size:12px; color:#14532D; }
 
-  /* LAYOUT SVG area */
-  .layout-box { background:var(--white); border-radius:1.5rem; border:1px solid var(--gray-100); padding:24px; }
-  .layout-grid {
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    grid-template-rows:repeat(5,1fr);
-    gap:6px; width:100%; aspect-ratio:1;
-    max-width:420px; margin:0 auto;
-  }
-  .zone {
-    border-radius:.75rem; display:flex; flex-direction:column;
-    align-items:center; justify-content:center; padding:6px;
-    text-align:center; font-size:10px; font-weight:600; line-height:1.3;
-  }
-  .z-swap { background:#DBEAFE; color:#1E40AF; border:2px solid #93C5FD; }
-  .z-moto { background:#D1FAE5; color:#065F46; border:2px solid #6EE7B7; }
-  .z-ac { background:#FEF3C7; color:#92400E; border:2px solid #FCD34D; }
-  .z-dc { background:#FFE4E6; color:#9F1239; border:2px solid #FCA5A5; }
-  .z-solar { background:#F3F4F6; color:#374151; border:2px dashed #9CA3AF; }
-  .z-kiosk { background:#EDE9FE; color:#5B21B6; border:2px solid #C4B5FD; }
-  .z-bess { background:#FFF7ED; color:#92400E; border:2px solid #FDBA74; }
-  .z-road { background:#1F2937; color:white; border-radius:0; font-size:9px; }
-  .z-gate { background:var(--orange); color:white; font-size:9px; border-radius:.5rem; }
-  .z-aisle { background:#F9FAFB; color:var(--gray-400); border:1px dashed var(--gray-200); font-size:9px; }
-
   /* PHASE ROADMAP */
   .phase { display:flex; gap:16px; margin-bottom:12px; }
   .phase-num { width:36px; height:36px; border-radius:50%; background:var(--blue); color:white; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -109,13 +85,6 @@
   .phase-title { font-size:14px; font-weight:700; color:var(--blue); }
   .phase-period { font-size:11px; color:var(--orange); font-weight:600; }
   .phase-body { font-size:12px; color:var(--gray-600); margin-top:4px; }
-
-  /* FINANCIAL BARS */
-  .fin-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
-  .fin-label { font-size:12px; font-weight:500; width:60px; flex-shrink:0; }
-  .fin-track { flex:1; background:var(--gray-100); border-radius:999px; height:12px; overflow:hidden; }
-  .fin-fill { height:100%; border-radius:999px; }
-  .fin-val { font-size:12px; font-weight:700; width:100px; text-align:right; flex-shrink:0; }
 
   /* RISK */
   .risk-row { display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--gray-100); }
@@ -130,19 +99,25 @@
 
   /* CAPEX breakdown bar */
   .cb-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
-  .cb-label { font-size:11px; width:200px; flex-shrink:0; }
+  .cb-label { font-size:11px; width:210px; flex-shrink:0; }
   .cb-bar-wrap { flex:1; background:var(--gray-100); border-radius:999px; height:10px; overflow:hidden; }
   .cb-bar { height:100%; border-radius:999px; }
-  .cb-val { font-size:11px; font-weight:700; width:80px; text-align:right; }
+  .cb-val { font-size:11px; font-weight:700; width:90px; text-align:right; }
+
+  /* FINANCIAL SCENARIO */
+  .scenario-card { border-radius:1.5rem; padding:20px 22px; border:2px solid; }
+  .sc-bear { background:#FFF7ED; border-color:#FED7AA; }
+  .sc-base { background:#EFF6FF; border-color:#93C5FD; }
+  .sc-bull { background:#F0FDF4; border-color:#86EFAC; }
 
   .divider { height:1px; background:var(--gray-100); margin:32px 0; }
 
-  /* SPECIAL: Ahamove synergy box */
-  .synergy-box { background:linear-gradient(135deg,#0E4174,#FF7F32); border-radius:1.5rem; padding:24px 28px; color:white; }
-  .synergy-title { font-size:16px; font-weight:800; margin-bottom:8px; }
-  .synergy-body { font-size:13px; opacity:.9; line-height:1.7; }
-  .synergy-stat { font-size:28px; font-weight:800; margin-top:16px; }
-  .synergy-stat-label { font-size:12px; opacity:.75; }
+  /* Revenue stream bars */
+  .rev-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .rev-label { font-size:12px; font-weight:500; width:160px; flex-shrink:0; }
+  .rev-track { flex:1; background:var(--gray-100); border-radius:999px; height:14px; overflow:hidden; }
+  .rev-fill { height:100%; border-radius:999px; }
+  .rev-val { font-size:12px; font-weight:700; width:110px; text-align:right; flex-shrink:0; }
 
   footer { background:var(--blue); color:rgba(255,255,255,.7); text-align:center; padding:20px; font-size:12px; margin-top:40px; }
 </style>
@@ -151,26 +126,25 @@
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge">📍 CASE STUDY · HẺM 43 TRẦN THỊ NĂM · QUẬN 12 · HCMC</div>
-  <h1>Phân Tích Đầu Tư<br>Trạm Sạc EV + Solar</h1>
-  <p class="hero-sub">Tư vấn chuyên sâu cho khu đất 400m² sở hữu · Vốn 4 tỷ VND · Mô hình kinh doanh chính · Q12 HCMC</p>
+  <div class="hero-badge">📍 CASE STUDY · HẺM 43 TRẦN THỊ NĂM · QUẬN 12 · HCMC · MÔ HÌNH TÍCH HỢP</div>
+  <h1>Trạm Dịch Vụ EV Tích Hợp<br>Fast Charging · Rửa Xe · Café & Nghỉ Ngơi</h1>
+  <p class="hero-sub">Xe hơi điện làm trụ cột doanh thu chính · Kết hợp Swap Pin (xe máy) + Car Wash + Kiosk Café · 400m² sở hữu · Quận 12 HCMC</p>
   <div class="hero-stats">
-    <div class="hero-stat"><div class="hero-stat-num">3.5B VND</div><div class="hero-stat-label">Vốn triển khai đề xuất</div></div>
-    <div class="hero-stat"><div class="hero-stat-num">~6 năm</div><div class="hero-stat-label">Hoàn vốn ước tính</div></div>
-    <div class="hero-stat"><div class="hero-stat-num">15–18%</div><div class="hero-stat-label">IRR dự phóng</div></div>
-    <div class="hero-stat"><div class="hero-stat-num">50M+/tháng</div><div class="hero-stat-label">Cashflow từ năm thứ 3</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">2.5B VND</div><div class="hero-stat-label">CAPEX đề xuất</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">~2–2.5 năm</div><div class="hero-stat-label">Hoàn vốn (base case)</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">30–40%</div><div class="hero-stat-label">IRR 5 năm dự phóng</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">120–140M/tháng</div><div class="hero-stat-label">EBITDA từ năm thứ 2</div></div>
   </div>
 </div>
 
 <!-- NAV -->
 <nav class="nav">
   <a href="#verdict">Đánh Giá</a>
-  <a href="#constraints">Phân Tích Địa Điểm</a>
-  <a href="#model">Mô Hình Đề Xuất</a>
+  <a href="#model">Mô Hình Kinh Doanh</a>
   <a href="#layout">Layout 400m²</a>
   <a href="#capex">CAPEX Chi Tiết</a>
   <a href="#financial">Dự Phóng Tài Chính</a>
-  <a href="#ahamove">Đòn Bẩy Ahamove</a>
+  <a href="#elec">Điện & Solar</a>
   <a href="#roadmap">Lộ Trình</a>
   <a href="#risks">Rủi Ro</a>
 </nav>
@@ -180,105 +154,36 @@
 <!-- ===== VERDICT ===== -->
 <div class="section" id="verdict">
   <div class="section-title">Verdict Tổng Thể</div>
-  <p class="section-sub">Đánh giá nhanh 5 yếu tố quyết định</p>
+  <p class="section-sub">Mô hình tích hợp — Xe hơi DC Fast Charging là anchor, Car Wash + Café tạo dwell time, Swap Pin phục vụ xe máy</p>
 
   <div class="grid4" style="margin-bottom:16px">
     <div class="metric">
-      <div class="metric-val" style="color:var(--green)">✓ TỐT</div>
-      <div class="metric-label">Sở hữu đất — Lợi thế #1</div>
-      <div class="metric-sub">Không tốn 15–40M/tháng tiền thuê. Đây là khác biệt sống còn vs đối thủ.</div>
+      <div class="metric-val" style="color:var(--green)">✓ ANCHOR</div>
+      <div class="metric-label">DC Fast Car Charging</div>
+      <div class="metric-sub">3 trụ DC 60–120kW. Doanh thu 100–160M/tháng từ năm 2. Margin cao: 4,800–6,000đ/kWh sau điện.</div>
     </div>
     <div class="metric">
-      <div class="metric-val" style="color:var(--orange)">⚡ GIẢI ĐƯỢC</div>
-      <div class="metric-label">Hẻm 6m — Thiết kế 2 cổng</div>
-      <div class="metric-sub">20m mặt tiền → Entry trái + Exit phải → xe hơi vào được. Tập trung xe máy.</div>
+      <div class="metric-val" style="color:var(--blue)">↑ UPSELL</div>
+      <div class="metric-label">Car Wash — Captive Audience</div>
+      <div class="metric-sub">Xe sạc 30–90 phút → chủ xe đang chờ → 100% conversion nếu tiện lợi. 30–40M/tháng.</div>
     </div>
     <div class="metric">
-      <div class="metric-val" style="color:var(--orange)">⏳ 2–3 THÁNG</div>
-      <div class="metric-label">Chưa có điện 3 pha</div>
-      <div class="metric-sub">Chi phí đấu nối cơ bản: 10–80M. Timeline ổn — song song với xây dựng.</div>
+      <div class="metric-val" style="color:var(--orange)">☕ DWELL</div>
+      <div class="metric-label">Kiosk Café + Rest</div>
+      <div class="metric-sub">Tăng thời gian ở lại, tăng trải nghiệm. 30–60M/tháng khi đã có lưu lượng xe. Tài xế giao hàng EV nghỉ ngơi.</div>
     </div>
     <div class="metric">
-      <div class="metric-val" style="color:var(--green)">✓ PHÙ HỢP</div>
-      <div class="metric-label">Q12 — Dân số 644K, 2 đại lý VF</div>
-      <div class="metric-sub">VinFast đã mở 2 đại lý tại Q12 → EV demand đủ lớn để đầu tư.</div>
+      <div class="metric-val" style="color:var(--green)">✓ BASELINE</div>
+      <div class="metric-label">Swap Pin xe máy (2 tủ)</div>
+      <div class="metric-sub">V-Green đảm bảo ≥63M/năm. Tự động 24/7, zero nhân sự. Phụ trợ ổn định không rủi ro.</div>
     </div>
   </div>
 
   <div class="insight">
-    <div class="insight-title">💡 Nhận Định Chiến Lược</div>
+    <div class="insight-title">💡 Thesis Đầu Tư — Tại Sao Mô Hình Này Thắng Ở Hẻm 6m</div>
     <div class="insight-body">
-      Đây là địa điểm <strong>KHẢ THI nhưng không phải best-case</strong>. Hẻm 6m giới hạn ô tô điện (throughput thấp, destination-only) nhưng <strong>hoàn toàn phù hợp cho xe máy điện</strong> — và Q12 là khu dân cư với 3,000–8,000 xe máy điện VinFast đang lưu hành. Lợi thế không thể copy được: <strong>đất sở hữu = OPEX thấp nhất thị trường</strong>. Mô hình tối ưu là Xe Máy-First (V-Green Swap + AC Moto) kết hợp Solar canopy + AC/DC ô tô cỡ nhỏ. <strong>Đòn bẩy quan trọng nhất: biến nơi này thành điểm neo cho tài xế Ahamove EV tại Q12</strong> — đây là captive demand có sẵn mà không đối thủ nào có.
+      Hẻm 6m tưởng là điểm yếu nhưng lại là <strong>lợi thế định vị</strong>: xe hơi vào hẻm là xe đang ở nhà/đang có việc gần đó → <strong>destination charging</strong> (30–90 phút), không cần throughput cao như trạm highway. Trong 90 phút đó, chủ xe <strong>rửa xe luôn</strong> và <strong>ngồi uống cà phê</strong> → 3 doanh thu từ 1 lần ghé. Đất sở hữu = không tốn 15–40M/tháng tiền mặt bằng → OPEX cạnh tranh nhất thị trường. <strong>Kết hợp với Swap Pin phục vụ shipper/dân cư xe máy</strong> → 4 luồng doanh thu, 1 địa điểm.
     </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ===== CONSTRAINTS ===== -->
-<div class="section" id="constraints">
-  <div class="section-title">Phân Tích Chi Tiết Địa Điểm</div>
-  <p class="section-sub">Hẻm 43 Trần Thị Năm, Quận 12 — Điểm mạnh, điểm yếu, giải pháp</p>
-
-  <div class="grid2" style="margin-bottom:16px">
-    <div class="card">
-      <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:12px">✅ Điểm Mạnh</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="padding:10px 12px;background:#F0FDF4;border-radius:.75rem;border-left:3px solid var(--green)">
-          <div style="font-size:12px;font-weight:700">Đất sở hữu — Lợi thế tuyệt đối</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:2px">Không tốn 15–40M/tháng tiền thuê. Đối thủ không copy được. OPEX thấp nhất thị trường.</div>
-        </div>
-        <div style="padding:10px 12px;background:#F0FDF4;border-radius:.75rem;border-left:3px solid var(--green)">
-          <div style="font-size:12px;font-weight:700">Solar yield tốt — HCMC 4.7h peak/ngày</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:2px">LCOE solar ~594đ/kWh vs EVN ~2,200đ. 400m² = lên đến 35–40 kWp trên mái che.</div>
-        </div>
-        <div style="padding:10px 12px;background:#F0FDF4;border-radius:.75rem;border-left:3px solid var(--green)">
-          <div style="font-size:12px;font-weight:700">Q12 — Khu dân cư dense + 2 đại lý VinFast</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:2px">644,000 dân, tầm trung, VinFast có 2 đại lý xe máy điện tại Q12 → nhu cầu charge có thật.</div>
-        </div>
-        <div style="padding:10px 12px;background:#F0FDF4;border-radius:.75rem;border-left:3px solid var(--green)">
-          <div style="font-size:12px;font-weight:700">20m mặt tiền hẻm — Giải được bài toán xe hơi</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:2px">Thiết kế 2 cổng (Entry 4m + Exit 4m) → xe hơi nhỏ vào-ra một chiều, không cần quay đầu.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:12px">⚠️ Điểm Yếu & Giải Pháp</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="padding:10px 12px;background:#FFF7ED;border-radius:.75rem;border-left:3px solid var(--orange)">
-          <div style="font-size:12px;font-weight:700">Hẻm 6m → Xe hơi throughput thấp</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:2px"><strong>Thực tế:</strong> Tối đa ~20–30 xe hơi/ngày. <strong>Giải pháp:</strong> Định vị destination charging (bệnh viện, chợ, làm việc ~2h). KHÔNG cạnh tranh throughput với V-Green main road.</div>
-        </div>
-        <div style="padding:10px 12px;background:#FFF7ED;border-radius:.75rem;border-left:3px solid var(--orange)">
-          <div style="font-size:12px;font-weight:700">Hẻm → Shipper swap ít ghé vào</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:2px">Shipper cần swap on-route, không vào hẻm. <strong>Giải pháp:</strong> Target dân cư (commuters) + Ahamove driver được chỉ định đến.</div>
-        </div>
-        <div style="padding:10px 12px;background:#FFF7ED;border-radius:.75rem;border-left:3px solid var(--orange)">
-          <div style="font-size:12px;font-weight:700">Chưa có điện 3 pha</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:2px"><strong>Chi phí:</strong> 10–80M tùy khoảng cách trạm biến áp. <strong>Timeline:</strong> 3–7 ngày sau khi nộp hồ sơ. Song song với xây dựng → không delay tiến độ.</div>
-        </div>
-        <div style="padding:10px 12px;background:#FFF7ED;border-radius:.75rem;border-left:3px solid var(--orange)">
-          <div style="font-size:12px;font-weight:700">Visibility thấp — trong hẻm, không mặt phố</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:2px"><strong>Giải pháp:</strong> Bảng hiệu lớn đầu hẻm + Google Maps + V-Green app map + Ahamove app. Marketing community Q12.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Yếu tố</th><th>Thực tế</th><th>Impact</th><th>Giải pháp</th></tr></thead>
-      <tbody>
-        <tr><td class="td-b">Hẻm 6m + xe máy điện</td><td class="td-g">Hoàn toàn ổn</td><td class="td-g">Cao (+)</td><td>Đây là segment chính → ưu tiên moto</td></tr>
-        <tr><td class="td-b">Hẻm 6m + ô tô nhỏ (Vios, City)</td><td class="td-o">Vào được, chật</td><td class="td-o">Trung bình</td><td>2 cổng 1 chiều, tối đa 3 bay ô tô</td></tr>
-        <tr><td class="td-b">Hẻm 6m + SUV, MPV</td><td class="td-r">Không khả thi</td><td class="td-r">Bỏ qua</td><td>Không target segment này</td></tr>
-        <tr><td class="td-b">400m² sở hữu + Q12</td><td class="td-g">Lợi thế dài hạn</td><td class="td-g">Rất cao (+)</td><td>Zero land cost, tự do thiết kế</td></tr>
-        <tr><td class="td-b">Solar 35–40 kWp trên mái</td><td class="td-g">Khả thi cao</td><td class="td-g">Cao (+)</td><td>Cắt 60–70% chi phí điện ban ngày</td></tr>
-        <tr><td class="td-b">Chưa có 3 pha</td><td class="td-o">Cần đăng ký EVN</td><td class="td-o">Trung bình</td><td>Nộp hồ sơ ngay tuần đầu, song song PCCC</td></tr>
-        <tr><td class="td-b">Q12 EV density</td><td class="td-o">3,000–8,000 xe VF (ước tính)</td><td class="td-g">Đủ để kinh doanh</td><td>Validate bằng đếm xe thực tế trong hẻm</td></tr>
-      </tbody>
-    </table>
   </div>
 </div>
 
@@ -286,51 +191,127 @@
 
 <!-- ===== MODEL ===== -->
 <div class="section" id="model">
-  <div class="section-title">Mô Hình Kinh Doanh Đề Xuất</div>
-  <p class="section-sub">Hybrid: Xe Máy First + Solar Canopy + V-Green Swap + AC/DC Car (Multi-brand)</p>
+  <div class="section-title">4 Luồng Doanh Thu</div>
+  <p class="section-sub">Mô hình Destination Charging Station — Xe hơi fast charging là neo, 3 dịch vụ còn lại bán chéo</p>
 
-  <div class="grid3" style="margin-bottom:16px">
+  <div class="grid2" style="margin-bottom:20px">
+
+    <!-- Stream 1 -->
     <div class="card" style="border:2px solid var(--blue)">
-      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:8px">🔋 Trụ cột 1 — V-Green Battery Swap</div>
-      <div style="font-size:24px;font-weight:800;color:var(--green)">≥126M/năm</div>
-      <div style="font-size:11px;color:var(--gray-400);margin-bottom:10px">4 tủ × 31.5M guaranteed · không rủi ro</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">⚡</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--blue)">DC Fast Charging — Xe Hơi (Trụ Cột Chính)</div>
+          <div style="font-size:11px;color:var(--gray-400)">2 trụ 60kW + 1 trụ 120kW · CCS2/CHAdeMO</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div style="background:var(--gray-50);border-radius:.75rem;padding:10px 12px">
+          <div style="font-size:20px;font-weight:800;color:var(--blue)">7,000đ</div>
+          <div style="font-size:10px;color:var(--gray-400)">giá/kWh (đề xuất)</div>
+        </div>
+        <div style="background:var(--gray-50);border-radius:.75rem;padding:10px 12px">
+          <div style="font-size:20px;font-weight:800;color:var(--green)">~5,000đ</div>
+          <div style="font-size:10px;color:var(--gray-400)">margin/kWh (sau điện EVN)</div>
+        </div>
+      </div>
       <ul style="list-style:none;font-size:11px;color:var(--gray-600);line-height:2">
-        <li>→ 4 tủ × 210M = 840M đầu tư</li>
-        <li>→ V-Green đảm bảo ≥15%/năm, 5 năm</li>
-        <li>→ Phục vụ dân cư Q12, không cần shipper</li>
-        <li>→ Tự động 24/7, zero nhân sự cho swap</li>
-        <li>→ Upside nếu &gt;8.4 swaps/tủ/ngày</li>
+        <li>→ Mỗi session xe hơi: avg 25–30 kWh · thời gian 35–60 phút</li>
+        <li>→ Doanh thu/session: 175–210K VND</li>
+        <li>→ Target: 8 sessions/trụ/ngày (base) | 12 sessions (bull)</li>
+        <li>→ Brand target: VinFast VF3/VF5/VF6 · Hyundai Ioniq · Kia EV</li>
+        <li>→ Chuẩn multi-protocol: không bị lock vào 1 thương hiệu</li>
       </ul>
     </div>
+
+    <!-- Stream 2 -->
+    <div class="card" style="border:2px solid #0EA5E9">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="width:44px;height:44px;border-radius:50%;background:#0EA5E9;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🚿</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#0369A1">Car Wash — Rửa Xe (Cross-Sell Chính)</div>
+          <div style="font-size:11px;color:var(--gray-400)">Captive audience: khách đang chờ sạc</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div style="background:#F0F9FF;border-radius:.75rem;padding:10px 12px">
+          <div style="font-size:20px;font-weight:800;color:#0369A1">80–150K</div>
+          <div style="font-size:10px;color:var(--gray-400)">ngoại thất/xe</div>
+        </div>
+        <div style="background:#F0F9FF;border-radius:.75rem;padding:10px 12px">
+          <div style="font-size:20px;font-weight:800;color:#0369A1">150–300K</div>
+          <div style="font-size:10px;color:var(--gray-400)">ngoại + nội thất</div>
+        </div>
+      </div>
+      <ul style="list-style:none;font-size:11px;color:var(--gray-600);line-height:2">
+        <li>→ Setup: 2 bay rửa thủ công + máy phun áp suất cao + hút bụi</li>
+        <li>→ Khách sạc xe đang ngồi chờ → conversion rate &gt;40%</li>
+        <li>→ Target: 12–15 xe rửa/ngày = 1–1.5M/ngày</li>
+        <li>→ Nhân công: 1 thợ rửa chuyên (8–10M/tháng)</li>
+        <li>→ Upsell: dán film, khử mùi, vệ sinh điều hòa</li>
+      </ul>
+    </div>
+
+    <!-- Stream 3 -->
     <div class="card" style="border:2px solid var(--orange)">
-      <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:8px">⚡ Trụ cột 2 — AC/DC Charging Độc lập</div>
-      <div style="font-size:24px;font-weight:800;color:var(--orange)">6,000–8,500đ</div>
-      <div style="font-size:11px;color:var(--gray-400);margin-bottom:10px">giá/kWh (vs V-Green franchise 750đ/kWh)</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--orange);color:white;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">☕</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#C2410C">Kiosk Café + Rest Area (Dwell Enhancement)</div>
+          <div style="font-size:11px;color:var(--gray-400)">Điểm nghỉ tài xế EV · Café + đồ ăn nhanh</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div style="background:#FFF7ED;border-radius:.75rem;padding:10px 12px">
+          <div style="font-size:20px;font-weight:800;color:#C2410C">25–40m²</div>
+          <div style="font-size:10px;color:var(--gray-400)">diện tích kiosk</div>
+        </div>
+        <div style="background:#FFF7ED;border-radius:.75rem;padding:10px 12px">
+          <div style="font-size:20px;font-weight:800;color:#C2410C">1–2M</div>
+          <div style="font-size:10px;color:var(--gray-400)">doanh thu/ngày mục tiêu</div>
+        </div>
+      </div>
       <ul style="list-style:none;font-size:11px;color:var(--gray-600);line-height:2">
-        <li>→ 6 AC moto (7.4kW) + 3 AC car (22kW) + 1 DC (30kW)</li>
-        <li>→ Multi-brand: VinFast + Honda EV + mọi xe</li>
-        <li>→ Margin cao: 3,800–6,300đ/kWh sau điện</li>
-        <li>→ Xe máy: 3,500đ/kWh · Ô tô AC: 6,000đ/kWh · DC: 8,000đ/kWh</li>
-        <li>→ Year 2: add thêm 1 DC 60kW từ 500M reserve</li>
+        <li>→ Menu: cà phê pha sẵn, nước đóng chai, bánh mì, snack</li>
+        <li>→ Ghế ngồi + wifi + điện cắm laptop/điện thoại</li>
+        <li>→ Phục vụ cả tài xế giao hàng EV dừng nghỉ trong ca</li>
+        <li>→ Có thể nhượng quyền cho bên thứ 3 (Phúc Long, Highlands mini)</li>
+        <li>→ Revenue bổ sung: toilet thu phí (2K/lần), tủ sạc điện thoại</li>
       </ul>
     </div>
+
+    <!-- Stream 4 -->
     <div class="card" style="border:2px solid var(--green)">
-      <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:8px">☀️ Trụ cột 3 — Solar + BESS</div>
-      <div style="font-size:24px;font-weight:800;color:var(--green)">~110M/năm</div>
-      <div style="font-size:11px;color:var(--gray-400);margin-bottom:10px">tiết kiệm điện thực tế (vs mua EVN)</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--green);color:white;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🔋</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#065F46">V-Green Battery Swap — Xe Máy (Nền Tảng Ổn Định)</div>
+          <div style="font-size:11px;color:var(--gray-400)">2 tủ × 11 pin · Guaranteed 15%/năm · Tự động 24/7</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div style="background:#F0FDF4;border-radius:.75rem;padding:10px 12px">
+          <div style="font-size:20px;font-weight:800;color:#065F46">≥63M</div>
+          <div style="font-size:10px;color:var(--gray-400)">revenue/năm đảm bảo</div>
+        </div>
+        <div style="background:#F0FDF4;border-radius:.75rem;padding:10px 12px">
+          <div style="font-size:20px;font-weight:800;color:#065F46">420M</div>
+          <div style="font-size:10px;color:var(--gray-400)">đầu tư (2 tủ × 210M)</div>
+        </div>
+      </div>
       <ul style="list-style:none;font-size:11px;color:var(--gray-600);line-height:2">
-        <li>→ 30 kWp solar trên mái che toàn bộ 350m²</li>
-        <li>→ BESS 100 kWh bridge gap solar vs EV peak</li>
-        <li>→ Solar sinh điện 9h–17h, BESS xả 17:30–22:30</li>
-        <li>→ EVN off-peak (22h–4h): 1,565đ/kWh sạc BESS</li>
-        <li>→ LCOE thực tế: ~594đ/kWh (vs EVN avg 2,200đ)</li>
+        <li>→ V-Green trả tối thiểu 15%/năm = 31.5M/tủ/năm</li>
+        <li>→ Upside nếu &gt;8.4 swaps/tủ/ngày (dân cư Q12 đang tăng EV)</li>
+        <li>→ Không cần nhân sự — kiosk staff hỗ trợ nếu cần</li>
+        <li>→ Phục vụ shipper Ahamove EV — captive demand từ Khanh</li>
+        <li>→ Năm 2: xem xét thêm 1 tủ thứ 3 từ reserve budget</li>
       </ul>
     </div>
   </div>
 
   <div class="good">
-    <div class="good-t">🎯 Tại sao KHÔNG chọn V-Green DC Franchise cho xe ô tô?</div>
-    <div class="good-b">V-Green trả 750đ/kWh cho đối tác DC franchise. Nếu tự vận hành độc lập, thu 6,000–8,000đ/kWh → <strong>gấp 8–10 lần doanh thu/kWh</strong>. Với hẻm 6m (throughput ô tô thấp), margin cao mới bù được volume thấp. Đây là lý do dứt khoát không franchise DC car charging với V-Green.</div>
+    <div class="good-t">🎯 Logic Destination Charging — Tại Sao Hẻm 6m Không Phải Bất Lợi Với Xe Hơi</div>
+    <div class="good-b">V-Green / Evgo trạm mặt đường cần throughput nhanh (15–20 phút/xe). Trạm trong hẻm dân cư lại phù hợp với <strong>destination charging</strong>: chủ xe đến sạc 45–90 phút trong khi rửa xe + uống cà phê → <strong>3 doanh thu/1 lần ghé</strong>. Với xe hơi nhỏ VF3/VF5 (pin 35–42 kWh), sạc từ 20% lên 80% với trụ 60kW mất khoảng 40–50 phút — đủ thời gian cho car wash + cafe. Đây là lý do các trạm "destination charging" tại Âu Mỹ thường đặt tại siêu thị, nhà hàng — không phải highway.</div>
   </div>
 </div>
 
@@ -339,97 +320,136 @@
 <!-- ===== LAYOUT ===== -->
 <div class="section" id="layout">
   <div class="section-title">Layout Thiết Kế 400m² (20×20m)</div>
-  <p class="section-sub">Phương án mặt bằng tối ưu — 1 chiều vào/ra, tối đa hóa capacity</p>
+  <p class="section-sub">Xe hơi làm trọng tâm · Luồng 1 chiều vào/ra · Kết hợp 4 dịch vụ trong cùng mặt bằng</p>
 
   <div class="grid2">
-    <div class="layout-box">
-      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:16px;text-align:center">Sơ đồ mặt bằng (20m × 20m)</div>
+    <!-- Visual Layout -->
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:16px;text-align:center">Sơ Đồ Mặt Bằng — 20m × 20m</div>
 
-      <!-- Visual layout table -->
       <div style="border:2px solid var(--gray-200);border-radius:1rem;overflow:hidden;font-size:11px">
-        <!-- Hẻm road -->
-        <div style="background:#1F2937;color:white;text-align:center;padding:8px;font-size:11px;font-weight:600;letter-spacing:.05em">HẺM 6M — TRẦN THỊ NĂM</div>
-        <!-- Gates row -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;padding:2px;background:var(--gray-100)">
-          <div style="background:#FF7F32;color:white;border-radius:.5rem;padding:8px;text-align:center;font-size:11px;font-weight:700">🚪 VÀO<br><span style="font-size:9px;opacity:.8">Entry 4m</span></div>
-          <div style="background:#F9FAFB;border:1px dashed var(--gray-300);border-radius:.5rem;padding:8px;text-align:center;font-size:10px;color:var(--gray-400)">Tường/<br>Bảng hiệu</div>
-          <div style="background:#10B981;color:white;border-radius:.5rem;padding:8px;text-align:center;font-size:11px;font-weight:700">🚪 RA<br><span style="font-size:9px;opacity:.8">Exit 4m</span></div>
+        <!-- Road -->
+        <div style="background:#1F2937;color:white;text-align:center;padding:8px;font-size:11px;font-weight:600;letter-spacing:.05em">HẺM 6M — TRẦN THỊ NĂM (MẶT TIỀN 20m)</div>
+
+        <!-- Gates -->
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:2px;padding:4px 4px 2px;background:var(--gray-100)">
+          <div style="background:#FF7F32;color:white;border-radius:.5rem;padding:8px;text-align:center;font-size:11px;font-weight:700">🚪 VÀO<br><span style="font-size:9px;opacity:.8">Entry 4m — Trái</span></div>
+          <div style="background:#F3F4F6;border:1px dashed #D1D5DB;border-radius:.5rem;padding:8px 16px;text-align:center;font-size:10px;color:var(--gray-400)">Tường<br>Bảng hiệu LED</div>
+          <div style="background:#10B981;color:white;border-radius:.5rem;padding:8px;text-align:center;font-size:11px;font-weight:700">🚪 RA<br><span style="font-size:9px;opacity:.8">Exit 4m — Phải</span></div>
         </div>
-        <!-- Zone A - Front aisle -->
-        <div style="background:#F9FAFB;padding:10px;text-align:center;font-size:10px;color:var(--gray-500);border-top:1px solid var(--gray-100)">
-          ← ĐƯỜNG NỘI BỘ 6m (xe vào/ra) →
+
+        <!-- Aisle -->
+        <div style="background:#F9FAFB;padding:8px;text-align:center;font-size:10px;color:var(--gray-500);border-top:1px solid var(--gray-100)">
+          ← ĐƯỜNG NỘI BỘ 1 CHIỀU (4–5m) · Xe vào/ra thuận chiều →
         </div>
-        <!-- Zone B - Charging zones -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:10px;background:white;border-top:1px solid var(--gray-100)">
-          <div style="background:#DBEAFE;border:2px solid #93C5FD;border-radius:.75rem;padding:12px;text-align:center">
-            <div style="font-size:18px">🔋</div>
-            <div style="font-size:10px;font-weight:700;color:#1E40AF">V-Green SWAP</div>
-            <div style="font-size:9px;color:#3B82F6">4 tủ × 11 pins</div>
-            <div style="font-size:9px;color:#6B7280">~36m²</div>
+
+        <!-- Zone B: Car charging + Swap + Car wash -->
+        <div style="display:grid;grid-template-columns:3fr 2fr;gap:6px;padding:8px;background:white;border-top:1px solid var(--gray-100)">
+          <!-- Left: Car charging bays -->
+          <div>
+            <div style="font-size:9px;font-weight:600;color:var(--gray-400);margin-bottom:4px;text-align:center">KHU SẠC XE HƠI (~120m²)</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+              <div style="background:#EFF6FF;border:2px solid #93C5FD;border-radius:.75rem;padding:10px 6px;text-align:center">
+                <div style="font-size:16px">⚡</div>
+                <div style="font-size:9px;font-weight:700;color:#1E40AF">DC 120kW</div>
+                <div style="font-size:8px;color:#6B7280">Bay 1</div>
+              </div>
+              <div style="background:#EFF6FF;border:2px solid #93C5FD;border-radius:.75rem;padding:10px 6px;text-align:center">
+                <div style="font-size:16px">⚡</div>
+                <div style="font-size:9px;font-weight:700;color:#1E40AF">DC 60kW</div>
+                <div style="font-size:8px;color:#6B7280">Bay 2</div>
+              </div>
+              <div style="background:#EFF6FF;border:2px solid #93C5FD;border-radius:.75rem;padding:10px 6px;text-align:center">
+                <div style="font-size:16px">⚡</div>
+                <div style="font-size:9px;font-weight:700;color:#1E40AF">DC 60kW</div>
+                <div style="font-size:8px;color:#6B7280">Bay 3</div>
+              </div>
+            </div>
           </div>
-          <div style="background:#D1FAE5;border:2px solid #6EE7B7;border-radius:.75rem;padding:12px;text-align:center">
-            <div style="font-size:18px">🛵</div>
-            <div style="font-size:10px;font-weight:700;color:#065F46">AC MOTO</div>
-            <div style="font-size:9px;color:#10B981">6 trụ 7.4kW</div>
-            <div style="font-size:9px;color:#6B7280">~40m²</div>
-          </div>
-          <div style="background:#EDE9FE;border:2px solid #C4B5FD;border-radius:.75rem;padding:12px;text-align:center">
-            <div style="font-size:18px">☕</div>
-            <div style="font-size:10px;font-weight:700;color:#5B21B6">KIOSK</div>
-            <div style="font-size:9px;color:#7C3AED">Nước + snack</div>
-            <div style="font-size:9px;color:#6B7280">~24m²</div>
-          </div>
-        </div>
-        <!-- Zone C - Car charging -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:10px;background:white;border-top:1px solid var(--gray-100)">
-          <div style="background:#FEF3C7;border:2px solid #FCD34D;border-radius:.75rem;padding:12px;text-align:center">
-            <div style="font-size:18px">🚗</div>
-            <div style="font-size:10px;font-weight:700;color:#92400E">AC CAR × 3</div>
-            <div style="font-size:9px;color:#D97706">22kW/trụ</div>
-            <div style="font-size:9px;color:#6B7280">~75m²</div>
-          </div>
-          <div style="background:#FFE4E6;border:2px solid #FCA5A5;border-radius:.75rem;padding:12px;text-align:center">
-            <div style="font-size:18px">⚡</div>
-            <div style="font-size:10px;font-weight:700;color:#9F1239">DC FAST × 1</div>
-            <div style="font-size:9px;color:#EF4444">30kW DC</div>
-            <div style="font-size:9px;color:#6B7280">~25m²</div>
-          </div>
-          <div style="background:#FFF7ED;border:2px solid #FDBA74;border-radius:.75rem;padding:12px;text-align:center">
-            <div style="font-size:18px">🔌</div>
-            <div style="font-size:10px;font-weight:700;color:#C2410C">BESS + ĐIỆN</div>
-            <div style="font-size:9px;color:#EA580C">100kWh BESS</div>
-            <div style="font-size:9px;color:#6B7280">~20m²</div>
+          <!-- Right: Car wash + Swap -->
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="background:#F0F9FF;border:2px solid #7DD3FC;border-radius:.75rem;padding:10px;text-align:center;flex:1">
+              <div style="font-size:16px">🚿</div>
+              <div style="font-size:9px;font-weight:700;color:#0369A1">CAR WASH</div>
+              <div style="font-size:8px;color:#6B7280">2 bay (~50m²)</div>
+            </div>
+            <div style="background:#D1FAE5;border:2px solid #6EE7B7;border-radius:.75rem;padding:10px;text-align:center">
+              <div style="font-size:16px">🔋</div>
+              <div style="font-size:9px;font-weight:700;color:#065F46">SWAP × 2</div>
+              <div style="font-size:8px;color:#6B7280">~20m²</div>
+            </div>
           </div>
         </div>
+
+        <!-- Zone C: Back — Kiosk + Rest + BESS -->
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;padding:8px;background:white;border-top:1px solid var(--gray-100)">
+          <div style="background:#FFF7ED;border:2px solid #FDBA74;border-radius:.75rem;padding:12px">
+            <div style="font-size:16px;margin-bottom:4px">☕</div>
+            <div style="font-size:9px;font-weight:700;color:#C2410C">KIOSK CAFÉ + REST AREA (~40m²)</div>
+            <div style="font-size:8px;color:#6B7280;margin-top:2px">Quầy café · Ghế ngồi A/C · WiFi · Toilet · Tủ sạc điện thoại</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="background:#F9FAFB;border:1px dashed #D1D5DB;border-radius:.75rem;padding:8px;text-align:center;flex:1">
+              <div style="font-size:13px">🔌</div>
+              <div style="font-size:8px;font-weight:600;color:var(--gray-600)">BESS+SOLAR</div>
+              <div style="font-size:8px;color:#9CA3AF">20m²</div>
+            </div>
+            <div style="background:#F9FAFB;border:1px dashed #D1D5DB;border-radius:.75rem;padding:8px;text-align:center">
+              <div style="font-size:13px">🛠️</div>
+              <div style="font-size:8px;font-weight:600;color:var(--gray-600)">KHO + SL</div>
+              <div style="font-size:8px;color:#9CA3AF">10m²</div>
+            </div>
+          </div>
+        </div>
+
         <!-- Solar canopy note -->
-        <div style="background:linear-gradient(90deg,#FFF7ED,#FEF3C7);padding:10px;text-align:center;border-top:1px solid var(--gray-100)">
-          <span style="font-size:11px;font-weight:600;color:#92400E">☀️ Solar Canopy 30 kWp phủ toàn bộ (trừ khu BESS)</span>
+        <div style="background:#F0FDF4;padding:7px;text-align:center;font-size:9px;color:#166534;font-weight:600;border-top:1px solid #BBF7D0">
+          ☀️ MÁI SOLAR CANOPY 20–25 kWp phủ toàn bộ · Giảm 40–50% hóa đơn điện
         </div>
       </div>
     </div>
 
+    <!-- Zone breakdown table -->
     <div class="card">
-      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:16px">📐 Chi Tiết Phân Vùng</div>
+      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:14px">Phân Bổ Diện Tích</div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Vùng</th><th>Diện tích</th><th>Thiết bị</th></tr></thead>
+          <thead><tr><th>Khu Vực</th><th>Diện Tích</th><th>Chức Năng</th></tr></thead>
           <tbody>
-            <tr><td class="td-b">Đường nội bộ + cổng</td><td>~80m²</td><td>2 cổng 4m, aisle 6m width</td></tr>
-            <tr><td class="td-b">V-Green Swap Zone</td><td>~36m²</td><td>4 tủ swap 11 pins, mái che</td></tr>
-            <tr><td class="td-b">AC Moto Zone</td><td>~40m²</td><td>6 trụ 7.4kW + 10 chỗ đỗ xe máy</td></tr>
-            <tr><td class="td-b">AC Car Zone</td><td>~75m²</td><td>3 bay ô tô × 22kW AC</td></tr>
-            <tr><td class="td-b">DC Fast Zone</td><td>~25m²</td><td>1 bay DC 30kW (mở rộng Y2)</td></tr>
-            <tr><td class="td-b">Kiosk + chờ</td><td>~24m²</td><td>Nước, snack, ghế chờ, WiFi</td></tr>
-            <tr><td class="td-b">BESS + Điện</td><td>~20m²</td><td>BESS 100kWh, tủ điện, inverter</td></tr>
-            <tr><td class="td-b" style="border-top:2px solid var(--orange)">Mái Solar phủ</td><td><strong>~320m²</strong></td><td>30 kWp panels trên khung thép</td></tr>
+            <tr><td class="td-b">Đường nội bộ + cổng</td><td>80m²</td><td>Luồng xe 1 chiều, đủ rộng cho SUV nhỏ</td></tr>
+            <tr><td class="td-b">3 Bay DC Car Charging</td><td>120m²</td><td>Mỗi bay 2.8m × 5m + 25m² xoay đầu xe</td></tr>
+            <tr><td class="td-b">Car Wash (2 bay)</td><td>50m²</td><td>Rửa ngoại thất + hút bụi nội thất</td></tr>
+            <tr><td class="td-b">V-Green Swap × 2</td><td>20m²</td><td>Kề kiosk để staff hỗ trợ khi cần</td></tr>
+            <tr><td class="td-b">Kiosk Café + Rest</td><td>40m²</td><td>Quầy + 8–10 chỗ ngồi + toilet + wifi</td></tr>
+            <tr><td class="td-b">BESS + Điện + Kho</td><td>30m²</td><td>Phòng kỹ thuật cách nhiệt, khóa</td></tr>
+            <tr><td style="font-weight:700">Tổng cộng</td><td style="font-weight:700;color:var(--blue)">340m²</td><td style="color:var(--gray-400)">+ 60m² buffer/xanh cây</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="warn" style="margin-top:12px">
-        <div class="warn-t">⚠️ Lưu ý thiết kế quan trọng</div>
-        <div class="warn-b">Hẻm 6m → xe hơi chỉ đi 1 chiều qua plot 20m. Cổng VÀO bên trái, cổng RA bên phải. Aisle nội bộ tối thiểu 6m width. Kiểm tra với kiến trúc sư xác nhận turning radius trước khi xây.</div>
+
+      <div style="margin-top:16px">
+        <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px">Luồng Khách Lý Tưởng (Customer Journey)</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="background:#EFF6FF;border-radius:.75rem;padding:10px 12px;border-left:3px solid var(--blue)">
+            <div style="font-size:11px;font-weight:700;color:var(--blue)">① Xe vào — Quét QR / App → Cắm sạc DC (35–60 phút)</div>
+          </div>
+          <div style="background:#F0F9FF;border-radius:.75rem;padding:10px 12px;border-left:3px solid #0EA5E9">
+            <div style="font-size:11px;font-weight:700;color:#0369A1">② Staff đề xuất rửa xe → Khách đồng ý (thời gian sạc đủ dài)</div>
+          </div>
+          <div style="background:#FFF7ED;border-radius:.75rem;padding:10px 12px;border-left:3px solid var(--orange)">
+            <div style="font-size:11px;font-weight:700;color:#C2410C">③ Khách vào Kiosk: cà phê + snack + ngồi điều hòa chờ</div>
+          </div>
+          <div style="background:#F0FDF4;border-radius:.75rem;padding:10px 12px;border-left:3px solid var(--green)">
+            <div style="font-size:11px;font-weight:700;color:#065F46">④ Nhận thông báo sạc xong → Trả tiền 1 app → Ra về</div>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+
+  <div class="warn" style="margin-top:12px">
+    <div class="warn-t">⚠️ Hẻm 6m — Xe nào vào được?</div>
+    <div class="warn-b"><strong>Vào được (target segment):</strong> Sedan B-C (VF5, VF6, City, Vios, Elantra) · Crossover nhỏ (VF7, CX-30) — rộng ~1.8m, vào hẻm 6m thoải mái với 2 cổng 1 chiều.&nbsp;&nbsp;<strong>Khó / tránh:</strong> SUV 7 chỗ (Fortuner, Innova) — rộng 1.85–1.95m, vẫn lọt hẻm nhưng chật hơn.&nbsp;&nbsp;<strong>Không target:</strong> Bán tải, xe tải, bus. → Định vị truyền thông rõ: "Dành cho xe điện cỡ A–C".</div>
   </div>
 </div>
 
@@ -437,61 +457,132 @@
 
 <!-- ===== CAPEX ===== -->
 <div class="section" id="capex">
-  <div class="section-title">CAPEX Chi Tiết — Phân Bổ 3.5 Tỷ VND</div>
-  <p class="section-sub">Giữ lại 500M reserve · Không tính chi phí đất (sở hữu)</p>
+  <div class="section-title">CAPEX Chi Tiết</div>
+  <p class="section-sub">Tổng vốn 2.5B · Còn 1.5B reserve từ ngân sách 4B · Không vay nợ giai đoạn 1</p>
 
   <div class="grid2">
     <div class="card">
-      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:16px">Phân bổ vốn từng hạng mục</div>
+      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:16px">Phân Bổ CAPEX</div>
 
-      <div class="cb-row"><span class="cb-label">🔋 V-Green swap (4 tủ × 210M)</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:24%;background:var(--blue)"></div></div><span class="cb-val" style="color:var(--blue)">840M (24%)</span></div>
-      <div class="cb-row"><span class="cb-label">☀️ Solar panel 30kWp</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:8%;background:var(--orange)"></div></div><span class="cb-val" style="color:var(--orange)">270M (8%)</span></div>
-      <div class="cb-row"><span class="cb-label">🏗️ Mái che thép + lắp đặt</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:9%;background:var(--orange)"></div></div><span class="cb-val" style="color:var(--orange)">300M (9%)</span></div>
-      <div class="cb-row"><span class="cb-label">🔋 BESS 100 kWh LiFePO4</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:16%;background:var(--green)"></div></div><span class="cb-val" style="color:var(--green)">550M (16%)</span></div>
-      <div class="cb-row"><span class="cb-label">⚡ AC 22kW car (3 units)</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:7%;background:#6366F1"></div></div><span class="cb-val" style="color:#6366F1">240M (7%)</span></div>
-      <div class="cb-row"><span class="cb-label">⚡ AC 7.4kW moto (6 units)</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:4%;background:#6366F1"></div></div><span class="cb-val" style="color:#6366F1">150M (4%)</span></div>
-      <div class="cb-row"><span class="cb-label">⚡ DC 30kW fast (1 unit)</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:6%;background:#6366F1"></div></div><span class="cb-val" style="color:#6366F1">200M (6%)</span></div>
-      <div class="cb-row"><span class="cb-label">🏗️ Civil works (nền+thoát nước)</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:6%;background:var(--gray-400)"></div></div><span class="cb-val" style="color:var(--gray-600)">200M (6%)</span></div>
-      <div class="cb-row"><span class="cb-label">🔌 EVN 3 pha + hệ thống điện</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:5%;background:var(--gray-400)"></div></div><span class="cb-val" style="color:var(--gray-600)">150M (4%)</span></div>
-      <div class="cb-row"><span class="cb-label">☕ Kiosk nhỏ</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:2%;background:var(--gray-400)"></div></div><span class="cb-val" style="color:var(--gray-600)">80M (2%)</span></div>
-      <div class="cb-row"><span class="cb-label">📋 PCCC + Giấy phép + Tư vấn</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:2%;background:var(--gray-400)"></div></div><span class="cb-val" style="color:var(--gray-600)">80M (2%)</span></div>
-      <div class="cb-row"><span class="cb-label">💻 Platform OCPP + phần mềm</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:1%;background:var(--gray-400)"></div></div><span class="cb-val" style="color:var(--gray-600)">30M (1%)</span></div>
-      <div class="cb-row"><span class="cb-label">💵 Working capital (3 tháng OPEX)</span><div class="cb-bar-wrap"><div class="cb-bar" style="width:4%;background:var(--gray-400)"></div></div><span class="cb-val" style="color:var(--gray-600)">150M (4%)</span></div>
-
-      <div style="margin-top:16px;padding:14px;background:var(--blue);border-radius:1rem;color:white;display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:14px;font-weight:700">TỔNG CAPEX</span>
-        <span style="font-size:20px;font-weight:800">3,240M (~3.25B)</span>
+      <div class="cb-row">
+        <div class="cb-label">DC Fast Charger × 3 trụ</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:22%;background:var(--blue)"></div></div>
+        <div class="cb-val" style="color:var(--blue)">550M (22%)</div>
       </div>
-      <div style="margin-top:8px;padding:10px 14px;background:#F0FDF4;border-radius:.75rem;display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:12px;font-weight:600;color:var(--green)">Reserve Buffer (4B - 3.25B)</span>
-        <span style="font-size:16px;font-weight:800;color:var(--green)">~750M</span>
+      <div class="cb-row">
+        <div class="cb-label">V-Green Swap × 2 tủ</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:17%;background:#3B82F6"></div></div>
+        <div class="cb-val" style="color:#3B82F6">420M (17%)</div>
+      </div>
+      <div class="cb-row">
+        <div class="cb-label">Hạ tầng xây dựng + nền</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:14%;background:var(--gray-400)"></div></div>
+        <div class="cb-val" style="color:var(--gray-600)">350M (14%)</div>
+      </div>
+      <div class="cb-row">
+        <div class="cb-label">Solar 20kWp + Inverter</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:12%;background:var(--green)"></div></div>
+        <div class="cb-val" style="color:var(--green)">300M (12%)</div>
+      </div>
+      <div class="cb-row">
+        <div class="cb-label">Hệ thống điện 3 pha 250A</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:6%;background:#F59E0B"></div></div>
+        <div class="cb-val" style="color:#92400E">150M (6%)</div>
+      </div>
+      <div class="cb-row">
+        <div class="cb-label">Car Wash setup (2 bay)</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:6%;background:#0EA5E9"></div></div>
+        <div class="cb-val" style="color:#0369A1">150M (6%)</div>
+      </div>
+      <div class="cb-row">
+        <div class="cb-label">BESS 50 kWh (LFP)</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:6%;background:#10B981"></div></div>
+        <div class="cb-val" style="color:var(--green)">150M (6%)</div>
+      </div>
+      <div class="cb-row">
+        <div class="cb-label">Kiosk Café build-out</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:5%;background:var(--orange)"></div></div>
+        <div class="cb-val" style="color:var(--orange)">130M (5%)</div>
+      </div>
+      <div class="cb-row">
+        <div class="cb-label">Mái solar canopy thép</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:4%;background:#8B5CF6"></div></div>
+        <div class="cb-val" style="color:#7C3AED">100M (4%)</div>
+      </div>
+      <div class="cb-row">
+        <div class="cb-label">Bảng hiệu, camera, POS, app</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:3%;background:var(--gray-400)"></div></div>
+        <div class="cb-val" style="color:var(--gray-600)">80M (3%)</div>
+      </div>
+      <div class="cb-row">
+        <div class="cb-label">Dự phòng 5%</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:5%;background:var(--red)"></div></div>
+        <div class="cb-val" style="color:var(--red)">120M (5%)</div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:2px solid var(--gray-200)">
+        <div style="font-size:14px;font-weight:700;color:var(--blue)">TỔNG CAPEX</div>
+        <div style="font-size:24px;font-weight:800;color:var(--blue)">2,500M VND</div>
       </div>
     </div>
 
     <div class="card">
-      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:16px">OPEX Hàng Tháng (Steady-State)</div>
+      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:16px">Chi Tiết Thiết Bị Chính</div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Khoản chi</th><th>Tháng (VND)</th><th>Năm</th></tr></thead>
+          <thead><tr><th>Hạng Mục</th><th>Spec</th><th>Chi Phí</th></tr></thead>
           <tbody>
-            <tr><td>Điện EVN (net sau solar)</td><td>8–12M</td><td>100–150M</td></tr>
-            <tr><td>Nhân sự (2 PT, 4M/người)</td><td>8M</td><td>96M</td></tr>
-            <tr><td>Bảo trì thiết bị</td><td>5M</td><td>60M</td></tr>
-            <tr><td>Platform OCPP + phần mềm</td><td>3M</td><td>36M</td></tr>
-            <tr><td>Marketing (Google Maps, FB)</td><td>2M</td><td>24M</td></tr>
-            <tr><td>Bảo hiểm + misc</td><td>2M</td><td>24M</td></tr>
-            <tr><td class="td-b">TỔNG OPEX</td><td class="td-b">28–32M</td><td class="td-b">~340M/năm</td></tr>
+            <tr>
+              <td class="td-b">DC Fast Charger 120kW</td>
+              <td>CCS2 + CHAdeMO · 1 trụ 2 gun</td>
+              <td class="td-b td-right">200–250M</td>
+            </tr>
+            <tr>
+              <td class="td-b">DC Fast Charger 60kW × 2</td>
+              <td>Growatt/Autel · CCS2 · 1 gun/trụ</td>
+              <td class="td-b td-right">280–320M</td>
+            </tr>
+            <tr>
+              <td class="td-b">V-Green Swap Cabinet × 2</td>
+              <td>11 pins/tủ · 210M/tủ</td>
+              <td class="td-b td-right">420M</td>
+            </tr>
+            <tr>
+              <td class="td-b">Car Wash (Karcher + hút bụi)</td>
+              <td>2 cây phun áp suất + foam cannon + máy hút bụi công nghiệp</td>
+              <td class="td-b td-right">80–120M</td>
+            </tr>
+            <tr>
+              <td class="td-b">Solar Panel 20kWp</td>
+              <td>Longi/Jinko mono PERC · 15M/kWp</td>
+              <td class="td-b td-right">300M</td>
+            </tr>
+            <tr>
+              <td class="td-b">BESS 50kWh LFP</td>
+              <td>Pylontech / BYD · cycle &gt;6,000</td>
+              <td class="td-b td-right">150M</td>
+            </tr>
+            <tr>
+              <td class="td-b">Tủ điện tổng 250A</td>
+              <td>3 pha 380V · cầu dao chống sét</td>
+              <td class="td-b td-right">50–80M</td>
+            </tr>
+            <tr>
+              <td class="td-b">Dây cáp + kéo điện EVN</td>
+              <td>Tùy khoảng cách trạm biến áp</td>
+              <td class="td-b td-right">70–100M</td>
+            </tr>
           </tbody>
         </table>
       </div>
-      <div style="margin-top:16px">
-        <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px">⚡ Điện EVN chi tiết (sau solar)</div>
-        <div style="font-size:12px;color:var(--gray-600);line-height:1.8;padding:12px;background:var(--gray-50);border-radius:.75rem">
-          Solar 30 kWp phát: <strong>51,405 kWh/năm</strong><br>
-          Tổng tiêu thụ charger (Year 1, 30% util): ~35,000 kWh/năm<br>
-          Solar DƯ (sold back / absorbed): ~16,000 kWh<br>
-          Điện EVN bổ sung (swap + BESS off-peak): ~30,000 kWh × 1,700đ = <strong>51M/năm</strong><br>
-          <span style="color:var(--green);font-weight:600">→ Solar tiết kiệm ~110M/năm vs không có solar</span>
+
+      <div style="margin-top:16px;background:#F0FDF4;border-radius:1rem;padding:14px">
+        <div style="font-size:12px;font-weight:700;color:#166534;margin-bottom:6px">💰 Ngân Sách 4B → Reserve 1.5B</div>
+        <div style="font-size:11px;color:#14532D;line-height:1.8">
+          <strong>2.5B:</strong> CAPEX Phase 1 (toàn bộ setup trên)<br>
+          <strong>+300M:</strong> Working capital 6 tháng đầu (điện, lương, vật tư)<br>
+          <strong>+500M:</strong> Dự phòng mở rộng năm 2 (thêm DC charger hoặc swap tủ thứ 3)<br>
+          <strong>+700M:</strong> Buffer an toàn / cơ hội phát sinh
         </div>
       </div>
     </div>
@@ -502,128 +593,225 @@
 
 <!-- ===== FINANCIAL ===== -->
 <div class="section" id="financial">
-  <div class="section-title">Dự Phóng Tài Chính 5 Năm</div>
-  <p class="section-sub">3 kịch bản · Conservative / Base / Optimistic</p>
+  <div class="section-title">Dự Phóng Tài Chính — 3 Kịch Bản</div>
+  <p class="section-sub">Biến số cốt lõi: số sessions DC charging/trụ/ngày · Car wash conversion rate</p>
 
-  <div class="table-wrap" style="margin-bottom:16px">
+  <!-- Revenue breakdown year 2 base -->
+  <div class="card" style="margin-bottom:20px">
+    <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:14px">Doanh Thu / Tháng — Base Case (Năm 2)</div>
+
+    <div class="rev-row">
+      <div class="rev-label">DC Car Charging</div>
+      <div class="rev-track"><div class="rev-fill" style="width:58%;background:var(--blue)"></div></div>
+      <div class="rev-val" style="color:var(--blue)">126M/tháng</div>
+    </div>
+    <div style="font-size:10px;color:var(--gray-400);margin:-6px 0 12px 172px">3 trụ × 8 sessions × 25kWh × 7,000đ × 30 ngày</div>
+
+    <div class="rev-row">
+      <div class="rev-label">Kiosk Café</div>
+      <div class="rev-track"><div class="rev-fill" style="width:21%;background:var(--orange)"></div></div>
+      <div class="rev-val" style="color:var(--orange)">45M/tháng</div>
+    </div>
+    <div style="font-size:10px;color:var(--gray-400);margin:-6px 0 12px 172px">1.5M/ngày × 30 ngày (ramp up sau 3 tháng)</div>
+
+    <div class="rev-row">
+      <div class="rev-label">Car Wash</div>
+      <div class="rev-track"><div class="rev-fill" style="width:17%;background:#0EA5E9)"></div></div>
+      <div class="rev-val" style="color:#0369A1">36M/tháng</div>
+    </div>
+    <div style="font-size:10px;color:var(--gray-400);margin:-6px 0 12px 172px">12 xe/ngày × avg 100K × 30 ngày</div>
+
+    <div class="rev-row">
+      <div class="rev-label">V-Green Swap (2 tủ)</div>
+      <div class="rev-track"><div class="rev-fill" style="width:3%;background:var(--green)"></div></div>
+      <div class="rev-val" style="color:var(--green)">5.25M/tháng</div>
+    </div>
+    <div style="font-size:10px;color:var(--gray-400);margin:-6px 0 12px 172px">Guaranteed 63M/năm (baseline, không tính upside)</div>
+
+    <div class="rev-row">
+      <div class="rev-label">Tiết kiệm điện Solar</div>
+      <div class="rev-track"><div class="rev-fill" style="width:2%;background:#84CC16)"></div></div>
+      <div class="rev-val" style="color:#65A30D">5M/tháng</div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:2px solid var(--gray-100)">
+      <div>
+        <div style="font-size:13px;font-weight:700">Tổng Doanh Thu (Base Year 2)</div>
+        <div style="font-size:11px;color:var(--gray-400)">Trước khi trừ chi phí vận hành</div>
+      </div>
+      <div style="font-size:28px;font-weight:800;color:var(--blue)">217M/tháng</div>
+    </div>
+  </div>
+
+  <!-- OPEX -->
+  <div class="card" style="margin-bottom:20px">
+    <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:14px">Chi Phí Vận Hành / Tháng (OPEX)</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Khoản Mục</th><th>Năm 1</th><th>Năm 2</th><th>Năm 3+</th><th>Ghi Chú</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="td-b">Điện EVN (net of solar)</td>
+            <td class="td-o">30M</td>
+            <td class="td-o">45M</td>
+            <td class="td-o">50M</td>
+            <td>Tăng theo volume sạc · Solar offset ~20–25%</td>
+          </tr>
+          <tr>
+            <td class="td-b">Nhân sự (3 người)</td>
+            <td>25M</td>
+            <td>28M</td>
+            <td>30M</td>
+            <td>1 quản lý + 1 thợ rửa + 1 phục vụ kiosk</td>
+          </tr>
+          <tr>
+            <td class="td-b">Vật tư rửa xe + kiosk</td>
+            <td>8M</td>
+            <td>10M</td>
+            <td>12M</td>
+            <td>Xà phòng, nước, nguyên liệu café</td>
+          </tr>
+          <tr>
+            <td class="td-b">Bảo dưỡng thiết bị</td>
+            <td>5M</td>
+            <td>8M</td>
+            <td>10M</td>
+            <td>Bảo hành charger năm 1–3 (giảm cost)</td>
+          </tr>
+          <tr>
+            <td class="td-b">Marketing + misc</td>
+            <td>8M</td>
+            <td>5M</td>
+            <td>5M</td>
+            <td>Google Ads, Zalo OA, bảng hiệu đầu hẻm</td>
+          </tr>
+          <tr style="background:#F9FAFB">
+            <td style="font-weight:700">Tổng OPEX</td>
+            <td class="td-o" style="font-weight:700">76M</td>
+            <td class="td-o" style="font-weight:700">96M</td>
+            <td class="td-o" style="font-weight:700">107M</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3 Scenarios -->
+  <div class="grid3" style="margin-bottom:20px">
+    <div class="scenario-card sc-bear">
+      <div style="font-size:11px;font-weight:700;color:#92400E;margin-bottom:6px">🐻 BEAR CASE</div>
+      <div style="font-size:12px;font-weight:600;color:#78350F;margin-bottom:10px">4 sessions/trụ/ngày · 8 xe rửa/ngày</div>
+      <div style="border-bottom:1px solid #FED7AA;padding-bottom:10px;margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>DC Charging</span><span style="font-weight:700">63M</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Car Wash</span><span style="font-weight:700">24M</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Kiosk Café</span><span style="font-weight:700">25M</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px"><span>Swap + Solar</span><span style="font-weight:700">10M</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px"><span>Doanh thu</span><span>122M</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px"><span>OPEX</span><span>80M</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:800;color:#92400E;margin-top:8px"><span>EBITDA</span><span>42M/tháng</span></div>
+      <div style="font-size:11px;color:#78350F;margin-top:8px">Hoàn vốn: ~50 tháng (4.2 năm)</div>
+    </div>
+
+    <div class="scenario-card sc-base">
+      <div style="font-size:11px;font-weight:700;color:#1E40AF;margin-bottom:6px">📊 BASE CASE</div>
+      <div style="font-size:12px;font-weight:600;color:#1E3A8A;margin-bottom:10px">8 sessions/trụ/ngày · 12 xe rửa/ngày</div>
+      <div style="border-bottom:1px solid #93C5FD;padding-bottom:10px;margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>DC Charging</span><span style="font-weight:700">126M</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Car Wash</span><span style="font-weight:700">36M</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Kiosk Café</span><span style="font-weight:700">45M</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px"><span>Swap + Solar</span><span style="font-weight:700">10M</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px"><span>Doanh thu</span><span>217M</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px"><span>OPEX</span><span>96M</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:800;color:#1E40AF;margin-top:8px"><span>EBITDA</span><span>121M/tháng</span></div>
+      <div style="font-size:11px;color:#1E3A8A;margin-top:8px">Hoàn vốn: ~21 tháng (1.75 năm)</div>
+    </div>
+
+    <div class="scenario-card sc-bull">
+      <div style="font-size:11px;font-weight:700;color:#166534;margin-bottom:6px">🚀 BULL CASE</div>
+      <div style="font-size:12px;font-weight:600;color:#14532D;margin-bottom:10px">12 sessions/trụ/ngày · 20 xe rửa/ngày</div>
+      <div style="border-bottom:1px solid #86EFAC;padding-bottom:10px;margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>DC Charging</span><span style="font-weight:700">189M</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Car Wash</span><span style="font-weight:700">60M</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Kiosk Café</span><span style="font-weight:700">65M</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px"><span>Swap + Solar</span><span style="font-weight:700">14M</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px"><span>Doanh thu</span><span>328M</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px"><span>OPEX</span><span>110M</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:800;color:#166534;margin-top:8px"><span>EBITDA</span><span>218M/tháng</span></div>
+      <div style="font-size:11px;color:#14532D;margin-top:8px">Hoàn vốn: ~11.5 tháng (&lt;1 năm)</div>
+    </div>
+  </div>
+
+  <!-- 5-year cashflow table -->
+  <div class="table-wrap">
     <table>
-      <thead>
-        <tr>
-          <th>Doanh thu (VND/năm)</th>
-          <th>Year 1 (25% util)</th>
-          <th>Year 2 (40% util)</th>
-          <th>Year 3 (55% util)</th>
-          <th>Year 4+ (65% util)</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Năm</th><th>Doanh Thu</th><th>OPEX</th><th>EBITDA</th><th>Tích Lũy</th><th>Trạng Thái</th></tr></thead>
       <tbody>
-        <tr><td class="td-b">V-Green Swap (4 tủ, guaranteed)</td><td class="td-g">126M</td><td class="td-g">150M</td><td class="td-g">190M</td><td class="td-g">220M</td></tr>
-        <tr><td class="td-b">AC Moto charging (6 trụ, 3,500đ/kWh)</td><td>57M</td><td>95M</td><td>115M</td><td>130M</td></tr>
-        <tr><td class="td-b">AC Car charging (3 trụ, 6,000đ/kWh)</td><td>197M</td><td>328M</td><td>394M</td><td>460M</td></tr>
-        <tr><td class="td-b">DC Fast charging (1 trụ, 8,000đ/kWh)</td><td>73M</td><td>110M</td><td>146M</td><td>175M</td></tr>
-        <tr><td class="td-b">Solar tiết kiệm (net vs EVN)</td><td>110M</td><td>110M</td><td>113M</td><td>113M</td></tr>
-        <tr><td class="td-b">Kiosk + dịch vụ phụ</td><td>24M</td><td>48M</td><td>60M</td><td>72M</td></tr>
-        <tr style="background:#EFF6FF"><td class="td-b" style="color:var(--blue)">TỔNG DOANH THU</td><td class="td-b" style="font-size:14px">587M</td><td class="td-b" style="font-size:14px">841M</td><td class="td-b" style="font-size:14px">1,018M</td><td class="td-b" style="font-size:14px">1,170M</td></tr>
-        <tr><td>OPEX (tổng)</td><td>-340M</td><td>-370M</td><td>-400M</td><td>-420M</td></tr>
-        <tr style="background:#F0FDF4"><td class="td-b" style="color:var(--green)">EBITDA</td><td class="td-g" style="font-size:14px">247M</td><td class="td-g" style="font-size:14px">471M</td><td class="td-g" style="font-size:14px">618M</td><td class="td-g" style="font-size:14px">750M</td></tr>
-        <tr><td>Khấu hao (3.25B/15 năm)</td><td>-217M</td><td>-217M</td><td>-217M</td><td>-217M</td></tr>
-        <tr style="background:#F0FDF4"><td class="td-b" style="color:var(--blue)">Net Profit trước thuế</td><td class="td-o">30M</td><td class="td-g">254M</td><td class="td-g">401M</td><td class="td-g">533M</td></tr>
-        <tr><td class="td-b">Tích lũy EBITDA (cumulative)</td><td>247M</td><td>718M</td><td>1,336M</td><td>2,086M</td></tr>
+        <tr><td class="td-b">Năm 0 (Setup)</td><td>0</td><td>0</td><td style="color:var(--red);font-weight:700">-2,500M</td><td class="td-r">-2,500M</td><td><span class="badge br">Đầu tư</span></td></tr>
+        <tr><td class="td-b">Năm 1 (Ramp-up)</td><td>1,560M</td><td>912M</td><td class="td-o">648M</td><td class="td-r">-1,852M</td><td><span class="badge bo">Ramp-up</span></td></tr>
+        <tr><td class="td-b">Năm 2 (Base)</td><td>2,604M</td><td>1,152M</td><td class="td-b">1,452M</td><td class="td-r">-400M</td><td><span class="badge bb">Gần hòa vốn</span></td></tr>
+        <tr><td class="td-b">Năm 3 (Mature)</td><td>3,264M</td><td>1,284M</td><td class="td-g">1,980M</td><td class="td-g">+1,580M</td><td><span class="badge bg">Hoàn vốn</span></td></tr>
+        <tr><td class="td-b">Năm 4</td><td>3,500M</td><td>1,320M</td><td class="td-g">2,180M</td><td class="td-g">+3,760M</td><td><span class="badge bg">Lãi ổn định</span></td></tr>
+        <tr><td class="td-b">Năm 5</td><td>3,700M</td><td>1,350M</td><td class="td-g">2,350M</td><td class="td-g">+6,110M</td><td><span class="badge bg">IRR ~35%</span></td></tr>
       </tbody>
     </table>
   </div>
 
-  <div class="grid3">
-    <div class="metric" style="border:2px solid var(--red)">
-      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px">😐 Kịch bản Xấu (15% util)</div>
-      <div class="metric-val" style="color:var(--red)">~9–10 năm</div>
-      <div class="metric-label">Hoàn vốn</div>
-      <div class="metric-sub">EBITDA Y1: ~130M · IRR ~10%</div>
-      <div class="metric-sub" style="margin-top:6px;color:var(--orange)">Trigger: swap demand thấp + ô tô không vào hẻm</div>
-    </div>
-    <div class="metric" style="border:2px solid var(--blue)">
-      <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:6px">✅ Kịch bản Cơ bản (25–55%)</div>
-      <div class="metric-val" style="color:var(--blue)">~6 năm</div>
-      <div class="metric-label">Hoàn vốn</div>
-      <div class="metric-sub">EBITDA Y3: ~618M · IRR ~15–18%</div>
-      <div class="metric-sub" style="margin-top:6px;color:var(--green)">Realistic với Q12 dân cư + dần tăng demand</div>
-    </div>
-    <div class="metric" style="border:2px solid var(--green)">
-      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:6px">🚀 Kịch bản Tốt (+Ahamove hub)</div>
-      <div class="metric-val" style="color:var(--green)">~4 năm</div>
-      <div class="metric-label">Hoàn vốn</div>
-      <div class="metric-sub">EBITDA Y2: ~850M+ · IRR ~25%+</div>
-      <div class="metric-sub" style="margin-top:6px;color:var(--green)">Nếu 50+ tài xế Ahamove EV làm điểm neo</div>
-    </div>
+  <div class="good" style="margin-top:12px">
+    <div class="good-t">📈 Breakeven thực tế: ~Quý 3 Năm 2 (Tháng 20–24)</div>
+    <div class="good-b">Năm 1 sẽ ramp chậm: tháng 1–3 (xây dựng), tháng 4–6 (khai trương, marketing), tháng 7–12 (đạt 60–70% công suất). Base case breakeven đạt tháng 20–22 kể từ ngày bắt đầu đầu tư. Năm 3 trở đi: cashflow &gt;160M/tháng sau OPEX → có thể mở trạm thứ 2 từ cashflow nội bộ.</div>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<!-- ===== AHAMOVE ===== -->
-<div class="section" id="ahamove">
-  <div class="section-title">Đòn Bẩy Chiến Lược — Ahamove EV Driver Hub</div>
-  <p class="section-sub">Lợi thế không thể copy — biến Q12 thành mini-hub cho đội tài xế EV</p>
+<!-- ===== ĐIỆN & SOLAR ===== -->
+<div class="section" id="elec">
+  <div class="section-title">Điện & Solar — Quản Lý Chi Phí Điện</div>
+  <p class="section-sub">Điện là cost center lớn nhất (40–50M/tháng) · Solar giảm 20–25% hóa đơn</p>
 
-  <div class="synergy-box" style="margin-bottom:20px">
-    <div class="synergy-title">🔑 Insight quan trọng nhất trong toàn bộ phân tích</div>
-    <div class="synergy-body">
-      Bạn đang quản lý đội tài xế Ahamove tại TP.HCM. VinFast 2025: 406,000 xe máy điện, nhiều tài xế giao hàng đang chuyển sang EV. Nếu bạn chỉ định <strong>50–100 tài xế Ahamove EV tại khu vực Q12 làm điểm sạc/swap chính thức</strong>, bạn sẽ có <strong>captive demand ngay từ ngày 1</strong> — không cần chờ 6–12 tháng xây dựng khách hàng tự nhiên.
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:20px">
-      <div>
-        <div class="synergy-stat">50 tài xế</div>
-        <div class="synergy-stat-label">swap 2x/ngày × 9,000đ = 900,000đ/ngày</div>
-      </div>
-      <div>
-        <div class="synergy-stat">27M/tháng</div>
-        <div class="synergy-stat-label">chỉ từ Ahamove drivers · ngoài guaranteed swap</div>
-      </div>
-      <div>
-        <div class="synergy-stat">+324M/năm</div>
-        <div class="synergy-stat-label">incremental revenue vs không có Ahamove</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid2">
+  <div class="grid3">
     <div class="card">
-      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px">Cách triển khai Ahamove Hub</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="padding:10px;background:var(--gray-50);border-radius:.75rem;border-left:3px solid var(--blue)">
-          <div style="font-size:12px;font-weight:600">Bước 1 — Đăng ký điểm sạc trên app Ahamove</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:3px">Thêm địa điểm vào hệ thống Ahamove driver app → tài xế EV thấy khi tìm điểm sạc gần nhất</div>
-        </div>
-        <div style="padding:10px;background:var(--gray-50);border-radius:.75rem;border-left:3px solid var(--orange)">
-          <div style="font-size:12px;font-weight:600">Bước 2 — Ưu đãi tài xế Ahamove</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:3px">Chiết khấu 10–15% cho tài xế app Ahamove (QR code riêng). Tạo loyalty trong đội.</div>
-        </div>
-        <div style="padding:10px;background:var(--gray-50);border-radius:.75rem;border-left:3px solid var(--green)">
-          <div style="font-size:12px;font-weight:600">Bước 3 — Phòng nghỉ ngắn + tiện ích</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:3px">Kiosk + WiFi + chỗ ngồi chờ → tài xế giao hàng cần chỗ nghỉ giữa ca. Tăng thời gian lưu trú = tăng doanh thu.</div>
-        </div>
-        <div style="padding:10px;background:var(--gray-50);border-radius:.75rem;border-left:3px solid var(--blue)">
-          <div style="font-size:12px;font-weight:600">Bước 4 — Tích hợp EV onboarding</div>
-          <div style="font-size:11px;color:var(--gray-600);margin-top:3px">Khi tài xế mới chuyển sang xe máy điện, địa chỉ này là "hub quy chuẩn" họ được giới thiệu đến.</div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px">Impact tài chính nếu có Ahamove hub</div>
+      <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">Nhu Cầu Điện Ước Tính</div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Scenario</th><th>Tài xế/ngày</th><th>Rev thêm/tháng</th><th>Rev thêm/năm</th></tr></thead>
+          <thead><tr><th>Nguồn tiêu thụ</th><th>kWh/ngày</th></tr></thead>
           <tbody>
-            <tr><td>Không có Ahamove</td><td class="td-o">5–8 (organic)</td><td class="td-o">1–2M</td><td class="td-o">18–24M</td></tr>
-            <tr><td>30 tài xế Ahamove EV</td><td class="td-g">30 daily</td><td class="td-g">16M</td><td class="td-g">195M</td></tr>
-            <tr><td>50 tài xế Ahamove EV</td><td class="td-g">50 daily</td><td class="td-g">27M</td><td class="td-g">324M</td></tr>
-            <tr><td>100 tài xế Ahamove EV</td><td class="td-g">100 daily</td><td class="td-g">54M</td><td class="td-g">648M</td></tr>
+            <tr><td>3 DC charger (avg 8 sessions × 25kWh)</td><td class="td-b">600</td></tr>
+            <tr><td>Car wash (máy bơm, hút bụi)</td><td class="td-b">20</td></tr>
+            <tr><td>Kiosk (điều hòa, tủ lạnh)</td><td class="td-b">25</td></tr>
+            <tr><td>Chiếu sáng, camera, POS</td><td class="td-b">10</td></tr>
+            <tr><td style="font-weight:700">Tổng tiêu thụ</td><td style="font-weight:700;color:var(--blue)">655 kWh</td></tr>
           </tbody>
         </table>
       </div>
-      <div style="margin-top:12px;padding:12px;background:#FFF7ED;border-radius:.75rem">
-        <div style="font-size:11px;color:#92400E;font-weight:600">💡 Với 50 tài xế Ahamove EV điều hướng đến:</div>
-        <div style="font-size:12px;color:#78350F;margin-top:4px">EBITDA Year 1 tăng từ <strong>247M → 571M</strong>. Hoàn vốn từ <strong>6 năm → 3.5 năm</strong>. IRR từ <strong>15% → 28%</strong>.</div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:10px">Solar Offset (20 kWp)</div>
+      <div style="font-size:11px;color:var(--gray-600);line-height:2">
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--gray-100)"><span>Phát điện/ngày (HCMC 4.7h peak)</span><span style="font-weight:700;color:var(--green)">94 kWh</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--gray-100)"><span>% nhu cầu được offset</span><span style="font-weight:700;color:var(--green)">~14%</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--gray-100)"><span>Tiết kiệm/tháng (1,606đ/kWh chênh lệch)</span><span style="font-weight:700;color:var(--green)">~4.5M</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--gray-100)"><span>BESS xả peak giảm EVN peak rate</span><span style="font-weight:700;color:var(--green)">~2M thêm</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0"><span>Tổng tiết kiệm/tháng (solar + BESS)</span><span style="font-weight:700;color:var(--green)">~6–7M</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:10px">Chiến Lược Mua Điện EVN</div>
+      <div style="font-size:11px;color:var(--gray-600);line-height:1.9">
+        <div style="background:#FFF7ED;border-radius:.75rem;padding:8px 10px;margin-bottom:8px">
+          <div style="font-weight:700;color:#C2410C">Off-peak (22h–4h): 1,565đ/kWh</div>
+          <div>Sạc BESS đêm → xả ban ngày giờ cao điểm. Tiết kiệm 500–700đ/kWh so với mua peak.</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:.75rem;padding:8px 10px">
+          <div style="font-weight:700;color:#1E40AF">Giá điện kinh doanh trung bình: ~2,200–2,500đ/kWh</div>
+          <div>Margin DC charging 7,000đ - 2,300đ = <strong>4,700đ/kWh</strong> → margin 67%.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -634,76 +822,46 @@
 <!-- ===== ROADMAP ===== -->
 <div class="section" id="roadmap">
   <div class="section-title">Lộ Trình Triển Khai</div>
-  <p class="section-sub">9 tháng từ quyết định đến vận hành — song song các task</p>
+  <p class="section-sub">4 giai đoạn · 18 tháng từ kickoff đến vận hành ổn định</p>
 
   <div class="card">
     <div class="phase">
       <div class="phase-num">1</div>
       <div class="phase-content">
-        <div class="phase-title">Chuẩn bị pháp lý & hạ tầng điện</div>
-        <div class="phase-period">Tháng 1–2 | Song song các task</div>
+        <div class="phase-title">Chuẩn Bị Pháp Lý & Hạ Tầng</div>
+        <div class="phase-period">Tháng 1–3</div>
         <div class="phase-body">
-          ① Nộp hồ sơ đăng ký kinh doanh (Sở KH&ĐT, 3–7 ngày) · Mã ngành theo QĐ 36/2025<br>
-          ② Nộp hồ sơ xin điện 3 pha tại Chi nhánh Điện lực Q12 (~10–80M VND)<br>
-          ③ Xin xác nhận quy hoạch đất (Sở Xây dựng / UBND phường)<br>
-          ④ Thuê đơn vị tư vấn thiết kế PCCC có chứng chỉ<br>
-          ⑤ Khảo sát kỹ thuật: khoảng cách trạm biến áp EVN, soil condition
+          Nộp hồ sơ đăng ký điện 3 pha 250A với EVN ngay tuần đầu (song song mọi việc khác). Xin phép xây dựng / PCCC. Đặt cọc V-Green (thường mất 4–8 tuần). Thiết kế kiến trúc + bản vẽ điện · Đấu thầu thi công. Mua solar panel và charger (lead time từ nhà cung cấp Trung Quốc 6–8 tuần).
         </div>
       </div>
     </div>
     <div class="phase">
       <div class="phase-num">2</div>
       <div class="phase-content">
-        <div class="phase-title">Thiết kế & đặt thiết bị</div>
-        <div class="phase-period">Tháng 2–3</div>
+        <div class="phase-title">Xây Dựng & Lắp Đặt</div>
+        <div class="phase-period">Tháng 3–6</div>
         <div class="phase-body">
-          ① Hoàn thiện thiết kế kiến trúc (layout 2 cổng, mái che solar, hệ thống thoát nước)<br>
-          ② Ký hợp đồng franchise V-Green (4 tủ swap · 840M VND)<br>
-          ③ Đặt mua thiết bị charger: AC 22kW × 3 + AC 7.4kW × 6 + DC 30kW × 1<br>
-          ④ Đặt solar panels 30 kWp + BESS 100 kWh + inverter<br>
-          ⑤ Nộp hồ sơ thẩm duyệt thiết kế PCCC (Cảnh sát PCCC)
+          Thi công nền + thoát nước (trọng tâm: nền phải chịu tải 2.5 tấn/m²). Lắp mái solar canopy thép (làm mái che đồng thời). Kéo cáp điện 3 pha, lắp tủ điện tổng. Lắp DC charger + V-Green swap tủ. Xây kiosk café. Lắp car wash setup (2 bay). Kiểm tra, thử nghiệm toàn hệ thống.
         </div>
       </div>
     </div>
     <div class="phase">
       <div class="phase-num">3</div>
       <div class="phase-content">
-        <div class="phase-title">Thi công xây dựng</div>
-        <div class="phase-period">Tháng 3–6</div>
+        <div class="phase-title">Khai Trương & Ramp-up</div>
+        <div class="phase-period">Tháng 6–12</div>
         <div class="phase-body">
-          ① San nền, hệ thống thoát nước, cổng vào/ra, hàng rào<br>
-          ② Dựng khung thép mái che (350m²) · Lắp solar panels<br>
-          ③ Thi công hệ thống điện nội bộ: tủ điện, BESS room, đi dây<br>
-          ④ Lắp đặt charger AC/DC · Kết nối BESS + Solar inverter<br>
-          ⑤ Thi công kiosk nhỏ · Lắp đặt camera, ánh sáng, WiFi
+          Soft launch tháng 6: mời dân cư hẻm + khách VinFast gần đó. Tháng 7–8: quảng bá Google Maps, Zalo OA, các group xe điện HCMC. Kết hợp với Ahamove: báo driver EV Q12 điểm swap + sạc. Chạy chương trình ưu đãi: "Sạc đầy tặng 1 ly cà phê". Tháng 10–12: đo lượng sessions/trụ, conversion rửa xe, doanh thu kiosk → điều chỉnh giá và quy trình.
         </div>
       </div>
     </div>
     <div class="phase">
       <div class="phase-num">4</div>
       <div class="phase-content">
-        <div class="phase-title">Nghiệm thu & cấp phép vận hành</div>
-        <div class="phase-period">Tháng 7–8</div>
+        <div class="phase-title">Tối Ưu & Mở Rộng</div>
+        <div class="phase-period">Tháng 12–18+</div>
         <div class="phase-body">
-          ① Nghiệm thu PCCC (Cảnh sát PCCC — phạt 80–100M nếu bỏ qua)<br>
-          ② Kiểm định công tơ điện (STAMEQ — bắt buộc theo TT 03/2024)<br>
-          ③ Nghiệm thu hệ thống điện an toàn<br>
-          ④ Ký hợp đồng điện thương mại với EVN · Kích hoạt công tơ 3 pha riêng<br>
-          ⑤ Cài đặt platform OCPP · Test toàn bộ charger 1–2 tuần
-        </div>
-      </div>
-    </div>
-    <div class="phase" style="margin-bottom:0">
-      <div class="phase-num" style="background:var(--orange)">5</div>
-      <div class="phase-content">
-        <div class="phase-title">Soft open → Grand open</div>
-        <div class="phase-period">Tháng 8–9</div>
-        <div class="phase-body">
-          ① Soft open: mời 20–30 tài xế Ahamove EV dùng thử miễn phí 1 tuần · Ghi nhận feedback<br>
-          ② Đăng ký địa điểm trên Google Maps + V-Green app + Ahamove driver app<br>
-          ③ Grand open: banner đầu hẻm, Facebook local ads nhắm Q12<br>
-          ④ Chương trình loyalty: card đổi pin thứ 10 miễn phí<br>
-          ⑤ <strong>Monitor weekly: sessions/port/day</strong> → nếu &gt;4 tháng 3 thì xét mở rộng DC Y2
+          Đánh giá: nếu session rate &gt;8/trụ/ngày → đầu tư thêm 1 DC charger nhanh hơn. Nếu swap demand tốt → thêm tủ V-Green thứ 3. Nếu kiosk ổn định &gt;1.5M/ngày → xem xét nhượng quyền Phúc Long/Highlands mini. Năm 3: dùng cashflow mở trạm thứ 2 tại địa điểm khác với kinh nghiệm vận hành sẵn có.
         </div>
       </div>
     </div>
@@ -714,52 +872,96 @@
 
 <!-- ===== RISKS ===== -->
 <div class="section" id="risks">
-  <div class="section-title">Ma Trận Rủi Ro Đặc Thù Địa Điểm Này</div>
-  <p class="section-sub">Rủi ro xếp theo mức độ tác động đến ROI</p>
+  <div class="section-title">Phân Tích Rủi Ro</div>
+  <p class="section-sub">6 rủi ro chính · Mỗi rủi ro có biện pháp kiểm soát cụ thể</p>
 
   <div class="grid2">
     <div class="card">
-      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:12px">🔴 Rủi ro cần quản lý chủ động</div>
       <div class="risk-row">
         <div class="risk-dot r-hi"></div>
-        <div><div class="risk-title">Demand thấp do hẻm (không ai biết)</div><div class="risk-desc">Thiếu visibility trên đường lớn → utilization không lên được 30% trong Y1.</div><div class="risk-mit">→ Validate TRƯỚC khi build: đếm xe EV trong bán kính 500m trong 2 tuần. V-Green guaranteed swap là safety net. Ahamove hub là anchor demand.</div></div>
+        <div>
+          <div class="risk-title">Throughput xe hơi thấp hơn dự phóng</div>
+          <div class="risk-desc">Hẻm 6m → khó tiếp cận với khách lần đầu. Nếu chỉ đạt 4 sessions/trụ/ngày, EBITDA còn ~42M/tháng (bear case).</div>
+          <div class="risk-mit">→ Biện pháp: Bảng LED lớn đầu hẻm + Google Maps + Zalo Ads. Ưu đãi 3 tháng khai trương. Kết hợp app Ahamove dẫn driver EV đến. Nếu year 1 dưới 5 sessions → điều chỉnh giá xuống 6,500đ/kWh để tăng traffic.</div>
+        </div>
       </div>
       <div class="risk-row">
         <div class="risk-dot r-hi"></div>
-        <div><div class="risk-title">EVN không nâng được công suất khu vực</div><div class="risk-desc">Nếu hạ tầng điện Q12 khu vực yếu → không đủ kVA cho DC charger.</div><div class="risk-mit">→ Khảo sát sớm với Chi nhánh Điện lực Q12. Start với 75 kVA (AC-only) → tăng sau khi EVN confirm.</div></div>
-      </div>
-      <div class="risk-row" style="border-bottom:none">
-        <div class="risk-dot r-md"></div>
-        <div><div class="risk-title">BESS + Solar mất nhiều tháng nhập khẩu</div><div class="risk-desc">Lead time thiết bị Trung Quốc: 8–12 tuần. Delay BESS = chậm mở cửa.</div><div class="risk-mit">→ Đặt hàng sớm nhất có thể (tháng 2–3). Có thể mở AC-only trước, BESS bổ sung sau.</div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div style="font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:12px">🟡 Rủi ro kiểm soát được</div>
-      <div class="risk-row">
-        <div class="risk-dot r-md"></div>
-        <div><div class="risk-title">V-Green swap demand thấp hơn dự kiến</div><div class="risk-desc">Khu dân cư Q12 nếu xe máy điện còn ít → swaps thấp, V-Green vẫn pay guaranteed.</div><div class="risk-mit">→ Guaranteed 15%/năm bảo vệ. Rủi ro vốn swap (840M) có floor return an toàn.</div></div>
+        <div>
+          <div class="risk-title">Cạnh tranh từ V-Green / Evgo mở trạm gần đó</div>
+          <div class="risk-desc">Nếu V-Green mở trạm 150kW cách 500m, khách sẽ chọn sạc nhanh hơn trên mặt đường lớn.</div>
+          <div class="risk-mit">→ Biện pháp: Lợi thế destination = kết hợp rửa xe + café. Khách car wash là loyalty cao — một khi quen sẽ quay lại. V-Green trạm mặt đường không có car wash.</div>
+        </div>
       </div>
       <div class="risk-row">
         <div class="risk-dot r-md"></div>
-        <div><div class="risk-title">PCCC phức tạp hơn dự kiến</div><div class="risk-desc">Trạm sạc trong khu dân cư, PCCC địa phương có thể yêu cầu thêm.</div><div class="risk-mit">→ Thuê tư vấn PCCC có kinh nghiệm Q12 ngay từ đầu. Budget 80M đã có dự phòng.</div></div>
-      </div>
-      <div class="risk-row" style="border-bottom:none">
-        <div class="risk-dot r-lo"></div>
-        <div><div class="risk-title">Solar không đạt yield dự kiến</div><div class="risk-desc">Ô nhiễm không khí, bóng che → giảm 10–15% yield.</div><div class="risk-mit">→ Đã tính conservative 30 kWp (vs max 40 kWp). Buffer đủ an toàn.</div></div>
+        <div>
+          <div class="risk-title">Chi phí điện EVN tăng mạnh</div>
+          <div class="risk-desc">Nếu giá điện kinh doanh lên 3,000đ/kWh (tăng 36%), margin DC charging giảm từ 4,700đ xuống 4,000đ/kWh → EBITDA giảm ~15–20M/tháng.</div>
+          <div class="risk-mit">→ Biện pháp: BESS off-peak arbitrage + Solar expansion (thêm 10kWp ở năm 2 từ reserve). Điều chỉnh giá sạc lên 7,500đ/kWh nếu thị trường cho phép.</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="warn" style="margin-top:16px">
-    <div class="warn-t">⚠️ Điều quan trọng nhất cần làm TRƯỚC khi ký bất kỳ hợp đồng nào</div>
-    <div class="warn-b"><strong>Validation bước 0:</strong> Ra đường Trần Thị Năm trong 3 ngày, đếm số xe máy điện và ô tô điện đi qua trong bán kính 500m. Nói chuyện với 10–20 hộ dân trong hẻm về nhu cầu sạc EV. Đây là 3 ngày quyết định có nên đầu tư hay không — không tốn tiền, không tốn thời gian.</div>
+    <div class="card">
+      <div class="risk-row">
+        <div class="risk-dot r-md"></div>
+        <div>
+          <div class="risk-title">Hẻm xuống cấp hoặc quy hoạch thay đổi</div>
+          <div class="risk-desc">Nếu UBND Q12 mở rộng đường hoặc quy hoạch tác động đến mặt tiền, có thể ảnh hưởng đến lưu lượng.</div>
+          <div class="risk-mit">→ Biện pháp: Đất sở hữu = được đền bù nếu giải tỏa. Nghiên cứu quy hoạch Q12 trước khi đầu tư. CAPEX thấp (2.5B) → hạn chế rủi ro bất khả kháng.</div>
+        </div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-dot r-md"></div>
+        <div>
+          <div class="risk-title">Charger hỏng hóc, downtime cao</div>
+          <div class="risk-desc">Charger DC brand mới (Trung Quốc) có thể có tỷ lệ hỏng hóc 10–15% trong 2 năm đầu. 1 trụ down = mất 42M/tháng doanh thu.</div>
+          <div class="risk-mit">→ Biện pháp: Chọn brand có warranty 3 năm + service center tại HCMC (Growatt, Sungrow). Mua từ distributor VN có kỹ thuật viên tại chỗ. Hợp đồng SLA &lt;24h sửa chữa.</div>
+        </div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-dot r-lo"></div>
+        <div>
+          <div class="risk-title">Kiosk café không đủ demand</div>
+          <div class="risk-desc">Hẻm dân cư, nếu traffic xe thấp, kiosk chỉ đạt 500K–1M/ngày thay vì 1.5–2M.</div>
+          <div class="risk-mit">→ Biện pháp: Đây là dịch vụ bổ trợ, không phải anchor. Ngay cả 500K/ngày = 15M/tháng cũng vẫn dương. Nếu không hiệu quả: cho thuê mặt bằng kiosk (15–20M/tháng tiền thuê).</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-</div><!-- /container -->
+<div class="divider"></div>
+
+<!-- Final Summary -->
+<div class="section">
+  <div style="background:linear-gradient(135deg,#0E4174,#1a5a9e);border-radius:2rem;padding:28px 32px;color:white">
+    <div style="font-size:18px;font-weight:800;margin-bottom:12px;letter-spacing:-.02em">Tóm Tắt Quyết Định Đầu Tư</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:20px">
+      <div>
+        <div style="font-size:28px;font-weight:800;color:#FF7F32">2.5B VND</div>
+        <div style="font-size:11px;opacity:.7">CAPEX Phase 1 · Còn 1.5B reserve</div>
+      </div>
+      <div>
+        <div style="font-size:28px;font-weight:800;color:#34D399">~21 tháng</div>
+        <div style="font-size:11px;opacity:.7">Hoàn vốn (Base Case)</div>
+      </div>
+      <div>
+        <div style="font-size:28px;font-weight:800;color:#60A5FA">30–40%</div>
+        <div style="font-size:11px;opacity:.7">IRR 5 năm</div>
+      </div>
+    </div>
+    <div style="font-size:13px;opacity:.9;line-height:1.8;border-top:1px solid rgba(255,255,255,.15);padding-top:16px">
+      <strong>Mô hình này khả thi vì:</strong> (1) Destination charging phù hợp hẻm 6m — xe dừng lâu = cross-sell cao. (2) Car wash là upsell tự nhiên khi khách đang chờ sạc. (3) Kiosk giữ khách ở lại, cải thiện trải nghiệm. (4) V-Green Swap = doanh thu nền guaranteed, không rủi ro. (5) Đất sở hữu = zero land cost = OPEX thấp nhất thị trường. (6) Reserve 1.5B đủ cho working capital + mở rộng năm 2.
+    </div>
+  </div>
+</div>
+
+</div><!-- end container -->
 
 <footer>
-  Phân tích tư vấn đầu tư · Hẻm 43 Trần Thị Năm, Q12, HCMC · Vốn 4 tỷ VND · Đất 400m² sở hữu · Compiled 2026-05-08 · Dựa trên dữ liệu thực tế VN 2025–2026
+  Phân Tích Đầu Tư Trạm Dịch Vụ EV Tích Hợp · Hẻm 43 Trần Thị Năm, Quận 12 · Cập nhật 2026-05-08
 </footer>
 
 </body>
