@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Training — Presenter Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0E4174;
+    --orange: #FF7F32;
+    --green: #10B981;
+    --red: #EF4444;
+    --purple: #8B5CF6;
+    --yellow: #F59E0B;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Lexend', sans-serif;
+    background: var(--bg);
+    color: #1e293b;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* STICKY HEADER */
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--blue);
+    color: white;
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(14,65,116,0.3);
+  }
+  .sticky-header .title { font-weight: 700; font-size: 16px; letter-spacing: -0.3px; }
+  .sticky-header .subtitle { font-size: 13px; opacity: 0.7; }
+  .timer-total {
+    background: rgba(255,255,255,0.15);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    height: 4px;
+    background: rgba(255,127,50,0.3);
+    position: sticky;
+    top: 52px;
+    z-index: 99;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--orange);
+    width: 0%;
+    transition: width 0.3s;
+  }
+
+  /* LAYOUT */
+  .container { max-width: 900px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* SECTION BLOCK */
+  .section-block {
+    background: var(--card);
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .section-block:hover { box-shadow: 0 4px 24px rgba(14,65,116,0.08); }
+  .section-block.active { box-shadow: 0 4px 24px rgba(255,127,50,0.25); border-color: var(--orange); }
+
+  .section-header {
+    padding: 20px 28px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-number {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-number.done { background: var(--green); }
+  .section-number.current { background: var(--orange); }
+
+  .section-title-wrap { flex: 1; }
+  .section-title { font-weight: 700; font-size: 17px; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .section-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .badge-time { background: #f1f5f9; color: var(--muted); }
+  .badge-demo { background: #fff4ed; color: var(--orange); border: 1px solid #fed7aa; }
+  .badge-explain { background: #eff6ff; color: var(--blue); border: 1px solid #bfdbfe; }
+  .badge-example { background: #f0fdf4; color: var(--green); border: 1px solid #bbf7d0; }
+  .badge-interact { background: #fffbeb; color: var(--yellow); border: 1px solid #fde68a; }
+  .badge-qa { background: #f5f3ff; color: var(--purple); border: 1px solid #ddd6fe; }
+  .badge-warning { background: #fef2f2; color: var(--red); border: 1px solid #fecaca; }
+
+  /* CHEVRON */
+  .chevron {
+    font-size: 18px; color: var(--muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    margin-top: 8px;
+  }
+  .section-block.open .chevron { transform: rotate(180deg); }
+
+  /* SECTION BODY */
+  .section-body { display: none; padding: 0 28px 24px; border-top: 1px solid var(--border); margin-top: 16px; }
+  .section-block.open .section-body { display: block; }
+
+  /* CONTENT BLOCKS */
+  .content-block {
+    margin-top: 20px;
+    border-left: 3px solid var(--border);
+    padding-left: 16px;
+  }
+  .content-block.demo { border-left-color: var(--orange); }
+  .content-block.explain { border-left-color: var(--blue); }
+  .content-block.example { border-left-color: var(--green); }
+  .content-block.interact { border-left-color: var(--yellow); }
+  .content-block.qa { border-left-color: var(--purple); }
+  .content-block.warning { border-left-color: var(--red); }
+
+  .content-block-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+  }
+  .content-block-title { font-weight: 700; font-size: 14px; }
+
+  /* SCRIPT */
+  .script {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #334155;
+    margin-top: 10px;
+    border: 1px solid var(--border);
+  }
+  .script p { margin-bottom: 8px; }
+  .script p:last-child { margin-bottom: 0; }
+  .script strong { color: var(--blue); }
+  .script .highlight { background: #fff3cd; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+
+  /* DEMO STEPS */
+  .demo-steps { list-style: none; margin-top: 10px; }
+  .demo-steps li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 12px; border-radius: 10px;
+    margin-bottom: 6px; background: #fff8f4;
+    border: 1px solid #fed7aa; font-size: 14px;
+  }
+  .demo-steps li .step-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--orange); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+
+  /* EXAMPLE BOX */
+  .example-box {
+    background: #f0fdf4; border: 1px solid #bbf7d0;
+    border-radius: 12px; padding: 14px 16px; margin-top: 10px;
+    font-size: 13px;
+  }
+  .example-box .label { font-weight: 700; color: var(--green); margin-bottom: 6px; font-size: 12px; text-transform: uppercase; }
+  .example-box .bad { color: var(--red); font-size: 13px; }
+  .example-box .good { color: #15803d; font-size: 13px; }
+  .example-box pre { background: white; border-radius: 8px; padding: 10px 12px; font-family: 'Courier New', monospace; font-size: 12px; white-space: pre-wrap; margin-top: 6px; border: 1px solid var(--border); }
+
+  /* Q&A BOX */
+  .qa-box { background: #f5f3ff; border-radius: 12px; padding: 14px 16px; margin-top: 10px; }
+  .qa-box .qa-item { display: flex; gap: 10px; margin-bottom: 10px; font-size: 14px; }
+  .qa-box .q { color: var(--purple); font-weight: 700; flex-shrink: 0; }
+  .qa-box .a { color: #374151; }
+
+  /* TALK POINT LIST */
+  .talk-points { list-style: none; margin-top: 10px; }
+  .talk-points li {
+    padding: 6px 0; font-size: 14px; display: flex; gap: 8px; align-items: flex-start;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .talk-points li:last-child { border-bottom: none; }
+  .talk-points li::before { content: "→"; color: var(--blue); font-weight: 700; flex-shrink: 0; }
+
+  /* PROGRESS CHECKLIST */
+  .progress-checklist { display: flex; gap: 8px; flex-wrap: wrap; margin: 24px 0 8px; }
+  .progress-item {
+    padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    background: #f1f5f9; color: var(--muted); border: 2px solid transparent;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .progress-item.done { background: #f0fdf4; color: var(--green); border-color: var(--green); }
+  .progress-item.current { background: #fff4ed; color: var(--orange); border-color: var(--orange); }
+
+  /* DIVIDER */
+  .section-divider {
+    text-align: center; padding: 8px 0 16px;
+    font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* COVER */
+  .cover-card {
+    background: linear-gradient(135deg, var(--blue) 0%, #1a5fa8 100%);
+    border-radius: 28px; padding: 40px; color: white; margin-bottom: 24px;
+    text-align: center;
+  }
+  .cover-card .pre { font-size: 12px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .cover-card h1 { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .cover-card .desc { font-size: 15px; opacity: 0.8; margin-bottom: 24px; }
+  .cover-stats { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .cover-stat { background: rgba(255,255,255,0.15); border-radius: 16px; padding: 12px 20px; }
+  .cover-stat .val { font-size: 24px; font-weight: 900; }
+  .cover-stat .lbl { font-size: 11px; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* PRINT */
+  @media print {
+    .sticky-header, .progress-bar { display: none; }
+    .section-body { display: block !important; }
+    .section-block { break-inside: avoid; box-shadow: none !important; border: 1px solid #ccc; }
+    body { font-size: 12px; }
+  }
+
+  /* DONE OVERLAY */
+  .done-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(16,185,129,0.95);
+    z-index: 999; align-items: center; justify-content: center; flex-direction: column;
+    color: white; text-align: center;
+  }
+  .done-overlay.show { display: flex; }
+  .done-overlay h2 { font-size: 36px; font-weight: 900; margin-bottom: 12px; }
+  .done-overlay p { font-size: 18px; opacity: 0.9; margin-bottom: 24px; }
+  .done-overlay button { background: white; color: var(--green); border: none; padding: 12px 28px; border-radius: 999px; font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="sticky-header">
+  <div>
+    <div class="title">🎤 Claude Training — Presenter Guide</div>
+    <div class="subtitle" id="current-section-label">Driver Management Team · Ahamove</div>
+  </div>
+  <div class="timer-total">⏱ ~75 phút</div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+<div class="container">
+
+  <!-- COVER -->
+  <div class="cover-card">
+    <div class="pre">Speaker Notes · In Ra Trước Khi Trình Bày</div>
+    <h1>Claude AI — Training cho Team</h1>
+    <div class="desc">Từ người chưa biết gì → Hiểu cơ bản → Áp dụng được ngay</div>
+    <div class="cover-stats">
+      <div class="cover-stat"><div class="val">75'</div><div class="lbl">Tổng thời gian</div></div>
+      <div class="cover-stat"><div class="val">7</div><div class="lbl">Phần trình bày</div></div>
+      <div class="cover-stat"><div class="val">8+</div><div class="lbl">Demo thực tế</div></div>
+      <div class="cover-stat"><div class="val">3</div><div class="lbl">Cấp độ: Cơ bản → Pro</div></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS TRACKER -->
+  <div class="progress-checklist" id="progress-tracker">
+    <div class="progress-item current" onclick="markDone(0)" data-idx="0">0. Mở đầu</div>
+    <div class="progress-item" onclick="markDone(1)" data-idx="1">1. AI là gì</div>
+    <div class="progress-item" onclick="markDone(2)" data-idx="2">2. Claude là ai</div>
+    <div class="progress-item" onclick="markDone(3)" data-idx="3">3. Nền tảng</div>
+    <div class="progress-item" onclick="markDone(4)" data-idx="4">4. Bắt đầu dùng</div>
+    <div class="progress-item" onclick="markDone(5)" data-idx="5">5. Prompt</div>
+    <div class="progress-item" onclick="markDone(6)" data-idx="6">6. Cowork (nâng cao)</div>
+    <div class="progress-item" onclick="markDone(7)" data-idx="7">7. Q&A / Wrap-up</div>
+  </div>
+
+  <!-- ───────── PHẦN 0: MỞ ĐẦU ───────── -->
+  <div class="section-block open" id="block-0">
+    <div class="section-header" onclick="toggleBlock('block-0')">
+      <div class="section-number current">0</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Mở đầu & Giới thiệu</div>
+        <div class="section-meta">
+          <span class="badge badge-time">⏱ 5 phút</span>
+          <span class="badge badge-interact">⚡ Tương tác</span>
+        </div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="section-body">
+
+      <div class="content-block explain">
+        <div class="content-block-header">
+          <span class="badge badge-explain">💬 Nói</span>
+          <span class="content-block-title">Script mở đầu</span>
+        </div>
+        <div class="script">
+          <p>Xin chào mọi người. Hôm nay mình sẽ dành khoảng <strong>75 phút</strong> để chia sẻ về Claude — công cụ AI mà mình đang dùng hằng ngày trong công việc.</p>
+          <p>Mình biết nhiều bạn chưa từng dùng AI, hoặc thử rồi nhưng chưa thấy có ích gì mấy. Mình hoàn toàn hiểu cảm giác đó — và đó chính xác là lý do mình muốn chia sẻ buổi này.</p>
+          <p>Mục tiêu của hôm nay không phải là mọi người trở thành chuyên gia. Mục tiêu là: <strong>sau buổi này, ít nhất 1 việc trong công việc hằng ngày của bạn làm nhanh hơn nhờ Claude.</strong></p>
+        </div>
+      </div>
+
+      <div class="content-block interact">
+        <div class="content-block-header">
+          <span class="badge badge-interact">⚡ Tương tác</span>
+          <span class="content-block-title">Khảo sát nhanh — giơ tay</span>
+        </div>
+        <div class="script">
+          <p>Trước khi bắt đầu, mình muốn hỏi nhanh:</p>
+          <p>👉 <strong>"Ai đã từng dùng ChatGPT hoặc Claude rồi?"</strong> — giơ tay</p>
+          <p>👉 <strong>"Ai thấy nó thực sự hữu ích?"</strong> — tiếp tục giữ tay</p>
+          <p>👉 <strong>"Ai chưa dùng lần nào?"</strong> — giơ tay</p>
+        </div>
+        <div class="script" style="margin-top:8px; background:#fffbeb; border-color: #fde68a;">
+          <p>💡 <strong>Tuỳ kết quả:</strong> Nếu nhiều người đã dùng → có thể đi nhanh hơn phần cơ bản. Nếu đa số chưa dùng → dành thêm thời gian cho phần 1-2.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───────── PHẦN 1: AI LÀ GÌ ───────── -->
+  <div class="section-block" id="block-1">
+    <div class="section-header" onclick="toggleBlock('block-1')">
+      <div class="section-number">1</div>
+      <div class="section-title-wrap">
+        <div class="section-title">AI là gì? — Giải thích không cần kỹ thuật</div>
+        <div class="section-meta">
+          <span class="badge badge-time">⏱ 10 phút</span>
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="badge badge-interact">⚡ Tương tác</span>
+        </div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="section-body">
+
+      <div class="content-block explain">
+        <div class="content-block-header">
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="content-block-title">Analogy: Nhân viên đọc hết internet</span>
+        </div>
+        <div class="script">
+          <p>AI — hay cụ thể là Claude — <strong>không phải robot như trong phim</strong>. Hãy nghĩ đơn giản như thế này:</p>
+          <p>Tưởng tượng có một nhân viên đã đọc gần như toàn bộ internet — sách, báo, Wikipedia, diễn đàn, tài liệu khoa học — trong suốt vài năm. Từ đó, họ học được cách trả lời câu hỏi, viết văn bản, phân tích số liệu.</p>
+          <p>Điểm khác biệt so với phần mềm thông thường: bạn <strong>không cần bấm đúng nút</strong>. Bạn chỉ cần nói bình thường, nó hiểu.</p>
+        </div>
+      </div>
+
+      <div class="content-block interact">
+        <div class="content-block-header">
+          <span class="badge badge-interact">⚡ Tương tác</span>
+          <span class="content-block-title">Phá vỡ quan niệm sai — Hỏi thẳng khán giả</span>
+        </div>
+        <div class="script">
+          <p>Hỏi: <strong>"Bạn nghĩ AI có ý thức không? Nó có cảm xúc không?"</strong></p>
+          <p>Nghe câu trả lời, rồi giải thích: <em>"Không — AI không có ý thức. Nó xử lý văn bản theo xác suất thống kê. Nó không 'hiểu' theo nghĩa con người. Nhưng kết quả tạo ra lại rất hữu ích."</em></p>
+          <p>Hỏi: <strong>"AI sẽ thay thế con người không?"</strong></p>
+          <p>Trả lời: <em>"AI thay thế tác vụ, không thay thế tư duy. Người biết dùng AI sẽ làm được nhiều hơn người không biết — đó là rủi ro thực sự."</em></p>
+        </div>
+      </div>
+
+      <div class="content-block explain">
+        <div class="content-block-header">
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="content-block-title">Khái niệm Context Window — "Bộ nhớ làm việc"</span>
+        </div>
+        <div class="script">
+          <p>Một khái niệm quan trọng cần hiểu ngay: <strong>Context Window</strong>.</p>
+          <p>Hãy nghĩ như một cuộn giấy — trong 1 cuộc trò chuyện, Claude nhìn thấy toàn bộ những gì bạn đã nói từ đầu đến giờ. Nó trả lời dựa trên TẤT CẢ đó.</p>
+          <p>Nhưng khi bạn đóng tab và mở conversation mới → <strong>Claude quên hết</strong>. Trang giấy trắng mới. Đây là điều hay gây nhầm lẫn nhất với người mới.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───────── PHẦN 2: CLAUDE LÀ AI ───────── -->
+  <div class="section-block" id="block-2">
+    <div class="section-header" onclick="toggleBlock('block-2')">
+      <div class="section-number">2</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Claude là ai? Các model & so sánh</div>
+        <div class="section-meta">
+          <span class="badge badge-time">⏱ 8 phút</span>
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="badge badge-demo">🖥️ Demo</span>
+        </div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="section-body">
+
+      <div class="content-block explain">
+        <div class="content-block-header">
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="content-block-title">Anthropic & Claude — Nguồn gốc</span>
+        </div>
+        <div class="script">
+          <p>Claude được tạo ra bởi <strong>Anthropic</strong> — công ty AI thành lập 2021 tại Mỹ. Anthropic tách ra từ OpenAI (công ty tạo ChatGPT) với triết lý: tạo AI giúp ích cho con người mà không gây hại.</p>
+          <p>Hiện tại có 3 "phiên bản" Claude — gọi là model:</p>
+          <ul style="margin: 8px 0 0 16px; font-size: 14px; line-height: 1.8;">
+            <li><strong>Haiku</strong> — nhanh, nhẹ, phù hợp tác vụ đơn giản</li>
+            <li><strong>Sonnet</strong> — cân bằng, dùng hằng ngày (mặc định)</li>
+            <li><strong>Opus</strong> — mạnh nhất, dùng cho phân tích phức tạp</li>
+          </ul>
+          <p style="margin-top: 8px;">Gói <strong>Free</strong> dùng được Sonnet. Gói <strong>Pro ($20/tháng)</strong> mở khóa Opus và dùng nhiều hơn.</p>
+        </div>
+      </div>
+
+      <div class="content-block demo">
+        <div class="content-block-header">
+          <span class="badge badge-demo">🖥️ Demo</span>
+          <span class="content-block-title">Mở claude.ai — Lần đầu tiên</span>
+        </div>
+        <ul class="demo-steps">
+          <li><span class="step-num">1</span>Mở trình duyệt → gõ <strong>claude.ai</strong> → Enter</li>
+          <li><span class="step-num">2</span>Chỉ cho mọi người thấy giao diện: sidebar trái (lịch sử), ô chat chính, nút upload file</li>
+          <li><span class="step-num">3</span>Gõ thử: <em>"Xin chào! Mình là Khanh, làm quản lý tài xế giao hàng. Bạn có thể giúp gì cho mình không?"</em></li>
+          <li><span class="step-num">4</span>Để Claude trả lời → comment: <em>"Thấy không? Nó hiểu bối cảnh, không cần code hay kỹ thuật gì."</em></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───────── PHẦN 3: CÁC NỀN TẢNG ───────── -->
+  <div class="section-block" id="block-3">
+    <div class="section-header" onclick="toggleBlock('block-3')">
+      <div class="section-number">3</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Nền tảng — Dùng Claude ở đâu?</div>
+        <div class="section-meta">
+          <span class="badge badge-time">⏱ 8 phút</span>
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="badge badge-demo">🖥️ Demo</span>
+        </div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="section-body">
+
+      <div class="content-block explain">
+        <div class="content-block-header">
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="content-block-title">4 cách dùng Claude — Cây quyết định</span>
+        </div>
+        <div class="script">
+          <p>Claude không chỉ có một cách dùng. Tùy nhu cầu sẽ có cách phù hợp:</p>
+          <ul style="margin: 8px 0 0 16px; font-size: 14px; line-height: 2;">
+            <li><strong>claude.ai (web)</strong> — Mới dùng lần đầu → bắt đầu từ đây</li>
+            <li><strong>Claude Desktop</strong> — App riêng cho máy tính, dùng hằng ngày</li>
+            <li><strong>Claude Code</strong> — Thao tác file, chạy script — dành cho người kỹ thuật</li>
+            <li><strong>Cowork</strong> — Bộ đầy đủ: nhớ bạn, kết nối Gmail/Calendar, Skills → mình đang dùng cái này</li>
+          </ul>
+          <p style="margin-top:8px;">Hôm nay mọi người sẽ bắt đầu với <strong>claude.ai</strong>. Sau khi quen, ai muốn dùng nâng cao hơn, mình sẽ hỗ trợ setup.</p>
+        </div>
+      </div>
+
+      <div class="content-block demo">
+        <div class="content-block-header">
+          <span class="badge badge-demo">🖥️ Demo</span>
+          <span class="content-block-title">Projects trong claude.ai — Lưu context tái sử dụng</span>
+        </div>
+        <ul class="demo-steps">
+          <li><span class="step-num">1</span>Trong claude.ai → nhấn <strong>"Projects"</strong> ở sidebar trái</li>
+          <li><span class="step-num">2</span>Tạo Project mới → đặt tên: <em>"Driver Ops"</em></li>
+          <li><span class="step-num">3</span>Thêm System Prompt: <em>"Bạn là trợ lý vận hành tài xế. Luôn trả lời tiếng Việt, ngắn gọn, có format rõ ràng."</em></li>
+          <li><span class="step-num">4</span>Upload 1 file SOP mẫu → hỏi Claude về nội dung file đó</li>
+          <li><span class="step-num">5</span>Giải thích: <em>"Từ giờ mọi câu hỏi trong Project này, Claude tự dùng SOP này — không cần paste lại mỗi lần."</em></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───────── PHẦN 4: BẮT ĐẦU DÙNG ───────── -->
+  <div class="section-block" id="block-4">
+    <div class="section-header" onclick="toggleBlock('block-4')">
+      <div class="section-number">4</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Bắt đầu dùng — Thực hành cùng nhau</div>
+        <div class="section-meta">
+          <span class="badge badge-time">⏱ 10 phút</span>
+          <span class="badge badge-demo">🖥️ Demo</span>
+          <span class="badge badge-interact">⚡ Thực hành</span>
+        </div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="section-body">
+
+      <div class="content-block interact">
+        <div class="content-block-header">
+          <span class="badge badge-interact">⚡ Thực hành cùng</span>
+          <span class="content-block-title">Ai chưa có tài khoản → tạo ngay</span>
+        </div>
+        <div class="script">
+          <p>Bây giờ mình muốn mọi người làm theo cùng lúc:</p>
+          <p>👉 Mở điện thoại hoặc laptop → vào <strong>claude.ai</strong> → Sign Up → dùng Google account cho nhanh.</p>
+          <p>Ai có rồi thì chờ 2 phút. Ai chưa → tạo ngay bây giờ.</p>
+        </div>
+        <ul class="demo-steps">
+          <li><span class="step-num">1</span>Mở <strong>claude.ai</strong> trên điện thoại/laptop</li>
+          <li><span class="step-num">2</span>Sign Up → Continue with Google → chọn email công ty</li>
+          <li><span class="step-num">3</span>Chọn gói <strong>Free</strong> → Get started</li>
+          <li><span class="step-num">4</span>Khi vào được → giơ tay / báo cho mình biết</li>
+        </ul>
+      </div>
+
+      <div class="content-block demo">
+        <div class="content-block-header">
+          <span class="badge badge-demo">🖥️ Demo</span>
+          <span class="content-block-title">Upload file + phân tích — Thực tế nhất</span>
+        </div>
+        <div class="script">
+          <p>Một trong những tính năng mình dùng nhiều nhất: <strong>upload file để Claude đọc và phân tích.</strong></p>
+        </div>
+        <ul class="demo-steps">
+          <li><span class="step-num">1</span>Chuẩn bị sẵn: 1 file Excel hoặc PDF báo cáo (có thể dùng báo cáo AR/FR tuần bất kỳ)</li>
+          <li><span class="step-num">2</span>Nhấn icon 📎 → upload file lên</li>
+          <li><span class="step-num">3</span>Gõ: <em>"Đọc file này và tóm tắt 5 điểm quan trọng nhất cho tôi"</em></li>
+          <li><span class="step-num">4</span>Chờ Claude trả lời → chỉ cho mọi người thấy kết quả</li>
+          <li><span class="step-num">5</span>Comment: <em>"Thay vì đọc 20 trang, mình có tóm tắt trong 10 giây."</em></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───────── PHẦN 5: PROMPT ───────── -->
+  <div class="section-block" id="block-5">
+    <div class="section-header" onclick="toggleBlock('block-5')">
+      <div class="section-number">5</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Cách viết Prompt — Bí quyết ra lệnh hiệu quả</div>
+        <div class="section-meta">
+          <span class="badge badge-time">⏱ 15 phút</span>
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="badge badge-example">📝 Ví dụ</span>
+          <span class="badge badge-interact">⚡ Thực hành</span>
+        </div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="section-body">
+
+      <div class="content-block explain">
+        <div class="content-block-header">
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="content-block-title">Công thức COAT — 4 thành phần của prompt tốt</span>
+        </div>
+        <div class="script">
+          <p>Claude mạnh đến đâu cũng phụ thuộc vào cách bạn nói chuyện với nó. Có 1 công thức đơn giản mình hay dùng: <strong>COAT</strong>.</p>
+          <p>C = Context (Bối cảnh). O = Objective (Mục tiêu). A = Audience (Đối tượng). T = Tone/Format (Giọng & định dạng).</p>
+          <p>Không cần nhớ thuộc lòng — chỉ cần hỏi bản thân: <em>"Tôi đang ở đâu, muốn gì, gửi cho ai, theo format nào?"</em></p>
+        </div>
+      </div>
+
+      <div class="content-block example">
+        <div class="content-block-header">
+          <span class="badge badge-example">📝 Ví dụ</span>
+          <span class="content-block-title">So sánh trực tiếp: Prompt kém vs Prompt tốt</span>
+        </div>
+        <div class="example-box">
+          <div class="label">❌ Prompt kém</div>
+          <pre>viết email</pre>
+          <div class="label" style="margin-top: 12px;">✅ Prompt tốt (COAT)</div>
+          <pre>Tôi đang quản lý đội 50 tài xế giao hàng tại TP.HCM.
+Viết email thông báo thay đổi chính sách bonus tháng 6:
+- Bonus tăng 10% nếu AR ≥ 90%
+- Trừ tiền nếu hủy đơn quá 3 lần/tuần
+Đối tượng: tài xế, đọc trên điện thoại.
+Ngôn ngữ: đơn giản, thân thiện, dưới 120 từ.</pre>
+        </div>
+        <div class="script" style="margin-top: 10px;">
+          <p>Demo LIVE: Gõ prompt kém → Claude trả lời mơ hồ. Gõ prompt tốt → kết quả đúng ngay lần đầu.</p>
+          <p>Điểm mấu chốt: <strong>Claude không đọc được suy nghĩ của bạn</strong>. Bạn cho nó càng nhiều bối cảnh, kết quả càng tốt.</p>
+        </div>
+      </div>
+
+      <div class="content-block interact">
+        <div class="content-block-header">
+          <span class="badge badge-interact">⚡ Thực hành</span>
+          <span class="content-block-title">Bài tập 5 phút — Mỗi người viết 1 prompt</span>
+        </div>
+        <div class="script">
+          <p>Bây giờ mọi người thử viết 1 prompt cho công việc thực tế của mình.</p>
+          <p>Gợi ý nếu ai không biết bắt đầu từ đâu:</p>
+        </div>
+        <ul class="talk-points">
+          <li>"Viết email hỏi thăm tài xế vừa bị khiếu nại, giọng thân thiện, không phán xét"</li>
+          <li>"Tóm tắt cuộc họp team sáng nay theo format: Quyết định / Action item / Vấn đề còn mở"</li>
+          <li>"Tạo checklist onboarding cho tài xế mới, 10 bước, ngôn ngữ đơn giản"</li>
+          <li>"Viết thông báo lịch nghỉ lễ 30/4 cho đội tài xế, ngắn gọn dưới 80 chữ"</li>
+        </ul>
+        <div class="script" style="margin-top:8px; background: #fffbeb; border-color: #fde68a;">
+          <p>💡 Sau 3 phút: hỏi 1-2 người chia sẻ prompt họ vừa viết và kết quả Claude trả lời. Cả nhóm cùng xem và nhận xét.</p>
+        </div>
+      </div>
+
+      <div class="content-block explain">
+        <div class="content-block-header">
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="content-block-title">Kỹ thuật tiếp nối — Claude nhớ trong cùng 1 tab</span>
+        </div>
+        <div class="script">
+          <p>Một điểm hay nhiều người bỏ qua: trong cùng 1 conversation, bạn có thể <strong>tiếp tục sửa</strong> mà không cần giải thích lại từ đầu.</p>
+          <p>Demo: sau khi Claude viết email → gõ tiếp: <em>"Rút gọn còn 80 chữ"</em> → <em>"Thêm 1 emoji vào cuối"</em> → <em>"Dịch sang tiếng Anh"</em></p>
+          <p>Đây là cách làm việc tự nhiên nhất với Claude — iterative, như nói chuyện với người.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───────── PHẦN 6: COWORK ───────── -->
+  <div class="section-block" id="block-6">
+    <div class="section-header" onclick="toggleBlock('block-6')">
+      <div class="section-number">6</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Cowork — Claude nhớ bạn, kết nối mọi thứ (Nâng cao)</div>
+        <div class="section-meta">
+          <span class="badge badge-time">⏱ 12 phút</span>
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="badge badge-demo">🖥️ Demo</span>
+          <span class="badge badge-warning">⚠️ Cần setup</span>
+        </div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="section-body">
+
+      <div class="content-block explain">
+        <div class="content-block-header">
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="content-block-title">Cowork là gì — Giải thích bằng analogy</span>
+        </div>
+        <div class="script">
+          <p>Phần này dành cho ai muốn đi sâu hơn. Không bắt buộc mọi người setup ngay hôm nay.</p>
+          <p>Hãy so sánh: <strong>claude.ai</strong> như xe máy đi được. <strong>Cowork</strong> như xe máy đã được lắp thêm GPS, hộp chứa đồ, kết nối Bluetooth, camera hành trình — cùng một động cơ nhưng mạnh hơn nhiều.</p>
+          <p>Điểm khác biệt lớn nhất: Claude trong Cowork <strong>nhớ bạn</strong>. Nó biết bạn là ai, bạn làm gì, bạn thích format nào — không cần giải thích lại mỗi lần mở session mới.</p>
+        </div>
+      </div>
+
+      <div class="content-block explain">
+        <div class="content-block-header">
+          <span class="badge badge-explain">💬 Giải thích</span>
+          <span class="content-block-title">3 file quan trọng nhất — CLAUDE.md, MEMORY.md, memory files</span>
+        </div>
+        <div class="script">
+          <p>Cowork hoạt động dựa trên 3 loại file Markdown mà Claude đọc khi bắt đầu session:</p>
+        </div>
+        <ul class="talk-points">
+          <li><strong>CLAUDE.md</strong> — "Hợp đồng ngầm": bạn là ai, công ty bạn làm gì, quy tắc Claude cần tuân theo. Đây là file quan trọng nhất.</li>
+          <li><strong>memory/MEMORY.md</strong> — Index danh sách tất cả memory files. Claude đọc cái này để biết cần load gì.</li>
+          <li><strong>memory/*.md</strong> — Các file chi tiết: profile của bạn, rules làm việc, feedback Claude học được, context dự án đang chạy.</li>
+        </ul>
+        <div class="script" style="margin-top: 8px;">
+          <p>Nhờ các file này, mỗi lần mở Cowork → Claude <em>đã biết</em> bạn cần gì mà không cần giải thích lại.</p>
+        </div>
+      </div>
+
+      <div class="content-block demo">
+        <div class="content-block-header">
+          <span class="badge badge-demo">🖥️ Demo</span>
+          <span class="content-block-title">Show live: Trình tự Cowork hoạt động</span>
+        </div>
+        <div class="script">
+          <p>Mình sẽ demo trực tiếp Cowork đang chạy. Để ý xem Claude làm gì khi nhận 1 lệnh:</p>
+        </div>
+        <ul class="demo-steps">
+          <li><span class="step-num">1</span>Mở Cowork → gõ: <em>"Tạo template email nhắc nhở tài xế AR thấp tuần này"</em></li>
+          <li><span class="step-num">2</span>Chỉ cho mọi người thấy: Claude tự biết format, tone, ngôn ngữ mà <strong>không cần nhắc</strong></li>
+          <li><span class="step-num">3</span>Chỉ file output được tạo trong thư mục đúng → không cần copy-paste thủ công</li>
+          <li><span class="step-num">4</span>Demo thêm: gõ skill <strong>/xlsx</strong> hoặc <strong>/md</strong> để tạo file chuyên dụng</li>
+        </ul>
+        <div class="script" style="margin-top: 8px; background: #fffbeb; border-color: #fde68a;">
+          <p>💡 <strong>Key message:</strong> "Đây là lý do mình dùng Cowork thay vì claude.ai — nó biết mình cần gì mà không cần hỏi lại."</p>
+        </div>
+      </div>
+
+      <div class="content-block warning">
+        <div class="content-block-header">
+          <span class="badge badge-warning">⚠️ Quan trọng</span>
+          <span class="content-block-title">Setup Cowork — Cần thời gian, liên hệ Khanh</span>
+        </div>
+        <div class="script">
+          <p>Cowork cần được setup ban đầu — cài Claude Code, tạo CLAUDE.md, cấu hình memory. Không phức tạp nhưng cần 30-60 phút setup lần đầu.</p>
+          <p>Ai muốn setup → gặp mình sau buổi này hoặc nhắn tin, mình sẽ hỗ trợ trực tiếp.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───────── PHẦN 7: Q&A & WRAP-UP ───────── -->
+  <div class="section-block" id="block-7">
+    <div class="section-header" onclick="toggleBlock('block-7')">
+      <div class="section-number">7</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Q&A, Giới hạn & Wrap-up</div>
+        <div class="section-meta">
+          <span class="badge badge-time">⏱ 7 phút</span>
+          <span class="badge badge-qa">❓ Q&A</span>
+          <span class="badge badge-explain">💬 Tóm tắt</span>
+        </div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="section-body">
+
+      <div class="content-block explain">
+        <div class="content-block-header">
+          <span class="badge badge-explain">💬 Nhớ nói</span>
+          <span class="content-block-title">3 điều Claude KHÔNG làm được — Phải nói trước</span>
+        </div>
+        <ul class="talk-points">
+          <li><strong>Có thể nói sai</strong> — Claude đôi khi "hallucinate" (bịa thông tin nghe có vẻ đúng). Luôn verify số liệu quan trọng.</li>
+          <li><strong>Không biết tin tức mới</strong> — Kiến thức của Claude có ngày cắt. Không biết chuyện xảy ra tuần trước.</li>
+          <li><strong>Không thay thế judgment</strong> — Dùng Claude để draft, brainstorm — quyết định quan trọng vẫn phải do con người.</li>
+        </ul>
+      </div>
+
+      <div class="content-block warning">
+        <div class="content-block-header">
+          <span class="badge badge-warning">⚠️ Bảo mật</span>
+          <span class="content-block-title">Không bao giờ paste thông tin này lên cloud</span>
+        </div>
+        <ul class="talk-points">
+          <li>Tên + SĐT + CMND của tài xế/khách hàng thật</li>
+          <li>Mật khẩu, tài khoản ngân hàng</li>
+          <li>Dữ liệu doanh thu nội bộ, chiến lược chưa công bố</li>
+        </ul>
+        <div class="script" style="margin-top: 8px;">
+          <p>Cách xử lý đúng: <strong>anonymize</strong> trước — thay Nguyễn Văn A bằng "Tài xế X", thay số thật bằng số giả.</p>
+        </div>
+      </div>
+
+      <div class="content-block qa">
+        <div class="content-block-header">
+          <span class="badge badge-qa">❓ Q&A</span>
+          <span class="content-block-title">Câu hỏi thường gặp — Chuẩn bị sẵn</span>
+        </div>
+        <div class="qa-box">
+          <div class="qa-item"><span class="q">Q:</span><span class="a"><strong>"Claude có nói tiếng Việt tốt không?"</strong><br>A: Rất tốt. Claude hiểu văn phong tự nhiên, biệt ngữ nghề nghiệp, và trả lời tiếng Việt chuẩn.</span></div>
+          <div class="qa-item"><span class="q">Q:</span><span class="a"><strong>"Dùng Free có đủ không?"</strong><br>A: Đủ để bắt đầu và dùng hằng ngày. Chỉ cần Pro nếu cần dùng Opus cho phân tích phức tạp hoặc volume cao.</span></div>
+          <div class="qa-item"><span class="q">Q:</span><span class="a"><strong>"Có lo data bị lộ không?"</strong><br>A: Dữ liệu gửi lên cloud Anthropic. Với thông tin nhạy cảm → anonymize trước. Với data nội bộ quan trọng → cân nhắc dùng Claude Code local.</span></div>
+          <div class="qa-item"><span class="q">Q:</span><span class="a"><strong>"Anthropic có đọc chat của mình không?"</strong><br>A: Theo policy Anthropic, họ có thể dùng data để cải thiện model (có thể opt-out trong settings). Vì vậy không paste thông tin nhạy cảm.</span></div>
+          <div class="qa-item"><span class="q">Q:</span><span class="a"><strong>"Cowork khác Copilot của Microsoft không?"</strong><br>A: Copilot tích hợp sâu vào Office 365. Cowork là môi trường tùy chỉnh xây trên Claude — mạnh hơn nhiều về tự động hóa và memory.</span></div>
+        </div>
+      </div>
+
+      <div class="content-block explain">
+        <div class="content-block-header">
+          <span class="badge badge-explain">💬 Kết</span>
+          <span class="content-block-title">Script kết thúc — 3 hành động ngay hôm nay</span>
+        </div>
+        <div class="script">
+          <p>Trước khi kết thúc, mình muốn mọi người cam kết <strong>3 hành động cụ thể trong 24 giờ tới:</strong></p>
+          <p>1️⃣ <strong>Tạo tài khoản claude.ai</strong> nếu chưa có — chỉ mất 2 phút.</p>
+          <p>2️⃣ <strong>Dùng Claude cho 1 việc thực tế</strong> hôm nay — viết email, tóm tắt tài liệu, chuẩn bị agenda họp.</p>
+          <p>3️⃣ <strong>Nhắn mình</strong> nếu muốn setup Cowork hoặc có câu hỏi gì.</p>
+          <p style="margin-top: 12px;">Cảm ơn mọi người đã tham gia. Tool thì mình đã giới thiệu — còn phần áp dụng thì tuỳ mọi người thôi. <strong>Người biết dùng AI sẽ làm được nhiều hơn — bắt đầu từ hôm nay.</strong></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div style="background: white; border-radius: 20px; border: 1px solid var(--border); padding: 20px 24px; margin-top: 8px;">
+    <div style="font-weight: 700; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Chú thích badge</div>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <span class="badge badge-demo">🖥️ Demo — Thao tác màn hình trực tiếp</span>
+      <span class="badge badge-explain">💬 Giải thích — Nói theo script</span>
+      <span class="badge badge-example">📝 Ví dụ — Show case cụ thể</span>
+      <span class="badge badge-interact">⚡ Tương tác — Yêu cầu khán giả làm</span>
+      <span class="badge badge-qa">❓ Q&A — Câu hỏi dự kiến</span>
+      <span class="badge badge-warning">⚠️ Quan trọng — Nhắc nhở đặc biệt</span>
+    </div>
+  </div>
+
+  <div style="text-align: center; color: var(--muted); font-size: 13px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);">
+    Driver Management Team · Ahamove · 2026-05-08<br>
+    In tài liệu này trước khi trình bày · Ctrl+P hoặc Cmd+P
+  </div>
+
+</div>
+
+<!-- DONE OVERLAY -->
+<div class="done-overlay" id="done-overlay">
+  <h2>🎉 Hoàn thành!</h2>
+  <p>Bạn đã trình bày xong toàn bộ 7 phần.</p>
+  <button onclick="document.getElementById('done-overlay').classList.remove('show')">Đóng</button>
+</div>
+
+<script>
+  const totalBlocks = 8;
+  let doneItems = new Set();
+
+  function toggleBlock(id) {
+    const block = document.getElementById(id);
+    block.classList.toggle('open');
+  }
+
+  function markDone(idx) {
+    const items = document.querySelectorAll('.progress-item');
+    if (doneItems.has(idx)) {
+      doneItems.delete(idx);
+      items[idx].classList.remove('done', 'current');
+    } else {
+      doneItems.add(idx);
+      items[idx].classList.remove('current');
+      items[idx].classList.add('done');
+      // highlight next
+      if (idx + 1 < items.length) {
+        items[idx + 1].classList.add('current');
+      }
+      // update block number style
+      const blockNum = document.querySelector(`#block-${idx} .section-number`);
+      if (blockNum) {
+        blockNum.classList.remove('current');
+        blockNum.classList.add('done');
+      }
+      // activate next block number
+      const nextBlockNum = document.querySelector(`#block-${idx+1} .section-number`);
+      if (nextBlockNum) nextBlockNum.classList.add('current');
+    }
+
+    // update progress bar
+    const pct = (doneItems.size / totalBlocks) * 100;
+    document.getElementById('progress-fill').style.width = pct + '%';
+
+    // update label
+    const labels = ['Mở đầu','AI là gì','Claude là ai','Nền tảng','Bắt đầu dùng','Prompt','Cowork','Q&A'];
+    const next = [...Array(totalBlocks).keys()].find(i => !doneItems.has(i));
+    document.getElementById('current-section-label').textContent =
+      next !== undefined ? `Đang ở: Phần ${next} — ${labels[next]}` : 'Tất cả hoàn thành!';
+
+    if (doneItems.size === totalBlocks) {
+      setTimeout(() => document.getElementById('done-overlay').classList.add('show'), 400);
+    }
+  }
+
+  // Auto-open first block
+  document.getElementById('block-0').classList.add('open');
+</script>
+
+</body>
+</html>
