@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EV Charging Expert — Knowledge Base 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0E4174;
+    --blue-light: #1a5a9e;
+    --orange: #FF7F32;
+    --green: #10B981;
+    --red: #EF4444;
+    --yellow: #F59E0B;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-400: #9CA3AF;
+    --gray-600: #4B5563;
+    --gray-800: #1F2937;
+    --white: #FFFFFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Lexend', sans-serif; background: var(--gray-50); color: var(--gray-800); font-size: 14px; line-height: 1.6; }
+
+  /* HEADER */
+  .hero {
+    background: linear-gradient(135deg, var(--blue) 0%, #1a3f6b 60%, #0d2d4f 100%);
+    color: white; padding: 48px 32px 40px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; right: -60px; top: -60px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: rgba(255,127,50,0.12);
+  }
+  .hero::after {
+    content: ''; position: absolute; right: 80px; bottom: -80px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,127,50,0.2); border: 1px solid rgba(255,127,50,0.4);
+    border-radius: 999px; padding: 6px 16px; margin-bottom: 20px;
+    font-size: 12px; font-weight: 600; color: #FFB380; letter-spacing: 0.05em;
+  }
+  .hero h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 12px; }
+  .hero-sub { font-size: 15px; color: rgba(255,255,255,0.75); max-width: 600px; margin-bottom: 28px; }
+  .hero-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+  .hero-stat { text-align: left; }
+  .hero-stat-num { font-size: 26px; font-weight: 800; color: var(--orange); letter-spacing: -0.03em; }
+  .hero-stat-label { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 400; margin-top: 2px; }
+
+  /* NAV */
+  .nav {
+    background: var(--white); border-bottom: 1px solid var(--gray-200);
+    padding: 0 32px; display: flex; gap: 4px; overflow-x: auto;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav a {
+    padding: 14px 16px; font-size: 13px; font-weight: 500; color: var(--gray-600);
+    text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav a:hover { color: var(--blue); border-bottom-color: var(--blue); }
+
+  /* LAYOUT */
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px; }
+  .section { margin-bottom: 40px; }
+  .section-title {
+    font-size: 20px; font-weight: 700; color: var(--blue); margin-bottom: 4px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::before {
+    content: ''; width: 4px; height: 24px; background: var(--orange);
+    border-radius: 2px; display: block;
+  }
+  .section-sub { font-size: 13px; color: var(--gray-400); margin-bottom: 20px; }
+
+  /* CARDS */
+  .card {
+    background: var(--white); border-radius: 1.5rem; border: 1px solid var(--gray-100);
+    padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .card-grid { display: grid; gap: 16px; }
+  .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  @media(max-width:900px) { .card-grid-3,.card-grid-4 { grid-template-columns: repeat(2,1fr); } }
+  @media(max-width:600px) { .card-grid-2,.card-grid-3,.card-grid-4 { grid-template-columns: 1fr; } }
+
+  /* METRIC CARDS */
+  .metric-card {
+    background: var(--white); border-radius: 1.5rem; border: 1px solid var(--gray-100);
+    padding: 20px 24px; text-align: center;
+  }
+  .metric-val { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; }
+  .metric-label { font-size: 12px; color: var(--gray-400); margin-top: 4px; font-weight: 400; }
+  .metric-sub { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+
+  /* TABLE */
+  .table-wrap { border-radius: 1.5rem; overflow: hidden; border: 1px solid var(--gray-100); }
+  table { width: 100%; border-collapse: collapse; background: var(--white); }
+  thead { background: var(--blue); color: white; }
+  th { padding: 12px 16px; font-size: 12px; font-weight: 600; text-align: left; letter-spacing: 0.04em; }
+  td { padding: 11px 16px; font-size: 13px; border-bottom: 1px solid var(--gray-100); }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: var(--gray-50); }
+  .td-strong { font-weight: 700; color: var(--blue); }
+  .td-green { color: var(--green); font-weight: 600; }
+  .td-red { color: var(--red); font-weight: 600; }
+  .td-orange { color: var(--orange); font-weight: 600; }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex; align-items: center; border-radius: 999px;
+    padding: 3px 10px; font-size: 11px; font-weight: 600;
+  }
+  .badge-green { background: #D1FAE5; color: #065F46; }
+  .badge-red { background: #FEE2E2; color: #991B1B; }
+  .badge-orange { background: #FEF3C7; color: #92400E; }
+  .badge-blue { background: #DBEAFE; color: #1E40AF; }
+  .badge-gray { background: var(--gray-100); color: var(--gray-600); }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    display: flex; align-items: stretch; gap: 0; border-radius: 1.5rem; overflow: hidden;
+    border: 1px solid var(--gray-100);
+  }
+  .flow-step {
+    flex: 1; padding: 20px 16px; background: var(--white); text-align: center;
+    border-right: 1px solid var(--gray-100); position: relative;
+  }
+  .flow-step:last-child { border-right: none; }
+  .flow-step-num {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--blue); color: white;
+    font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 10px;
+  }
+  .flow-step-title { font-size: 12px; font-weight: 600; color: var(--blue); margin-bottom: 4px; }
+  .flow-step-sub { font-size: 11px; color: var(--gray-400); }
+  .flow-arrow {
+    width: 0; height: 0; border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent; border-left: 16px solid var(--orange);
+    align-self: center; flex-shrink: 0; position: relative; z-index: 1; margin: 0 -1px;
+  }
+
+  /* MODEL COMPARISON */
+  .model-card {
+    background: var(--white); border-radius: 1.5rem; border: 2px solid var(--gray-100);
+    padding: 24px; position: relative; overflow: hidden;
+  }
+  .model-card.featured { border-color: var(--orange); }
+  .model-card.featured::before {
+    content: '★ KHUYẾN NGHỊ'; position: absolute; top: 14px; right: -28px;
+    background: var(--orange); color: white; font-size: 10px; font-weight: 700;
+    padding: 4px 36px; transform: rotate(35deg); letter-spacing: 0.05em;
+  }
+  .model-title { font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+  .model-irr { font-size: 32px; font-weight: 800; color: var(--green); letter-spacing: -0.03em; }
+  .model-payback { font-size: 13px; color: var(--gray-600); margin-bottom: 16px; }
+  .model-list { list-style: none; }
+  .model-list li { font-size: 12px; padding: 4px 0; display: flex; gap: 8px; align-items: flex-start; }
+  .model-list li::before { content: '→'; color: var(--orange); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* SOLAR DIAGRAM */
+  .solar-flow {
+    display: grid; grid-template-columns: 1fr 40px 1fr 40px 1fr;
+    align-items: center; gap: 8px; margin: 16px 0;
+  }
+  .solar-node {
+    background: var(--white); border: 1px solid var(--gray-200); border-radius: 1rem;
+    padding: 14px; text-align: center;
+  }
+  .solar-node-icon { font-size: 24px; margin-bottom: 4px; }
+  .solar-node-title { font-size: 11px; font-weight: 600; color: var(--blue); }
+  .solar-node-val { font-size: 12px; color: var(--gray-600); }
+  .solar-arrow { text-align: center; font-size: 20px; color: var(--orange); font-weight: 700; }
+
+  /* RISK MATRIX */
+  .risk-item {
+    display: flex; gap: 12px; align-items: flex-start; padding: 12px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .risk-item:last-child { border-bottom: none; }
+  .risk-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .risk-high { background: var(--red); }
+  .risk-med { background: var(--yellow); }
+  .risk-low { background: var(--green); }
+  .risk-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .risk-desc { font-size: 12px; color: var(--gray-600); }
+  .risk-mitigation { font-size: 11px; color: var(--green); font-weight: 500; margin-top: 3px; }
+
+  /* REGION COMPARE */
+  .region-bar {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+  }
+  .region-label { font-size: 12px; font-weight: 500; width: 120px; flex-shrink: 0; }
+  .region-track { flex: 1; background: var(--gray-100); border-radius: 999px; height: 10px; overflow: hidden; }
+  .region-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blue), var(--orange)); }
+  .region-val { font-size: 12px; font-weight: 700; color: var(--blue); width: 80px; text-align: right; }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%);
+    border: 1px solid #BFDBFE; border-radius: 1.5rem; padding: 28px;
+  }
+  .question-item {
+    display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start;
+  }
+  .question-num {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--blue); color: white;
+    font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .question-text { font-size: 14px; color: var(--gray-800); }
+  .question-hint { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+  /* PERMIT TIMELINE */
+  .permit-timeline { position: relative; padding-left: 28px; }
+  .permit-timeline::before {
+    content: ''; position: absolute; left: 10px; top: 8px; bottom: 8px;
+    width: 2px; background: var(--gray-200);
+  }
+  .permit-item { position: relative; margin-bottom: 16px; }
+  .permit-dot {
+    position: absolute; left: -22px; top: 4px;
+    width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--blue);
+    background: var(--white);
+  }
+  .permit-week { font-size: 11px; color: var(--orange); font-weight: 600; margin-bottom: 2px; }
+  .permit-title { font-size: 13px; font-weight: 600; color: var(--blue); }
+  .permit-body { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+
+  /* INSIGHT BOX */
+  .insight {
+    background: var(--blue); color: white; border-radius: 1.5rem; padding: 24px 28px;
+    margin: 16px 0;
+  }
+  .insight-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .insight-body { font-size: 13px; opacity: 0.85; line-height: 1.7; }
+
+  .warn-box {
+    background: #FFF7ED; border: 1px solid #FED7AA; border-radius: 1rem; padding: 16px 20px; margin: 12px 0;
+  }
+  .warn-title { font-size: 13px; font-weight: 700; color: #92400E; margin-bottom: 4px; }
+  .warn-body { font-size: 12px; color: #78350F; }
+
+  .divider { height: 1px; background: var(--gray-100); margin: 32px 0; }
+  footer { background: var(--blue); color: rgba(255,255,255,0.7); text-align: center; padding: 20px; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">⚡ EV CHARGING EXPERT · VIETNAM 2026</div>
+  <h1>Chuyên Gia Đầu Tư<br>Trạm Sạc Xe Điện + Solar</h1>
+  <p class="hero-sub">Knowledge base tổng hợp từ nghiên cứu thực tế thị trường Việt Nam 2025–2026 · VinFast/V-Green ecosystem · Solar integration · Pháp lý đầy đủ · Financial modeling</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">4 Mô hình</div>
+      <div class="hero-stat-label">Kinh doanh đã phân tích</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">28–38%</div>
+      <div class="hero-stat-label">IRR độc lập (không V-Green)</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">594 đ/kWh</div>
+      <div class="hero-stat-label">LCOE solar vs 2,200 đ EVN</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">2–3 tháng</div>
+      <div class="hero-stat-label">Timeline cấp phép</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#market">Thị Trường</a>
+  <a href="#models">Mô Hình KD</a>
+  <a href="#capex">CAPEX & Tài Chính</a>
+  <a href="#solar">Solar Integration</a>
+  <a href="#legal">Pháp Lý</a>
+  <a href="#risks">Rủi Ro</a>
+  <a href="#regions">Vùng Địa Lý</a>
+  <a href="#questions">Tư Vấn</a>
+</nav>
+
+<div class="container">
+
+  <!-- ======= MARKET OVERVIEW ======= -->
+  <div class="section" id="market">
+    <div class="section-title">Tổng Quan Thị Trường EV Việt Nam 2026</div>
+    <p class="section-sub">Bối cảnh tăng trưởng & cơ hội đầu tư hạ tầng sạc</p>
+
+    <div class="card-grid card-grid-4" style="margin-bottom:16px">
+      <div class="metric-card">
+        <div class="metric-val" style="color:var(--blue)">175,099</div>
+        <div class="metric-label">Xe ô tô điện VinFast giao 2025</div>
+        <div class="metric-sub">+101% YoY · 20% market share</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" style="color:var(--orange)">406,453</div>
+        <div class="metric-label">Xe máy điện VinFast 2025</div>
+        <div class="metric-sub">+473% YoY · 800K+ xe tích lũy</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" style="color:var(--green)">150,000</div>
+        <div class="metric-label">Charging ports V-Green hiện tại</div>
+        <div class="metric-sub">Mục tiêu 500K ports đến 2028</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" style="color:var(--red)">3,858đ</div>
+        <div class="metric-label">Giá sạc V-Green/kWh</div>
+        <div class="metric-sub">Miễn phí đến 07/2025 → rủi ro cạnh tranh</div>
+      </div>
+    </div>
+
+    <div class="insight">
+      <div class="insight-title">💡 Cơ hội cốt lõi</div>
+      <div class="insight-body">Đội xe EV tích lũy ~800,000 phương tiện cuối 2025, tăng gấp đôi mỗi năm. V-Green kiểm soát >95% thị phần trụ sạc nhưng chủ yếu phục vụ xe VinFast. Cơ hội lớn nhất nằm ở: (1) Multi-brand charging độc lập IRR cao hơn, (2) Vị trí chiến lược mà V-Green chưa phủ, (3) Solar integration giúp margin vượt trội, (4) Battery swap xe máy điện với guaranteed return từ V-Green.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======= BUSINESS MODELS ======= -->
+  <div class="section" id="models">
+    <div class="section-title">4 Mô Hình Kinh Doanh</div>
+    <p class="section-sub">So sánh toàn diện — vốn, rủi ro, lợi nhuận, mức độ kiểm soát</p>
+
+    <div class="card-grid card-grid-2" style="margin-bottom:20px">
+
+      <!-- Model 1 -->
+      <div class="model-card">
+        <div class="model-title">🏪 Mô hình A: V-Green Franchise — Battery Swap</div>
+        <div class="model-irr">≥15%/năm</div>
+        <div class="model-payback">Guaranteed · Hoàn vốn ~2.5 năm · Vốn 210M VND</div>
+        <ul class="model-list">
+          <li>Tự động hoàn toàn — không cần nhân viên</li>
+          <li>V-Green đảm bảo ≥15%/năm trong 5 năm đầu</li>
+          <li>210M VND/tủ · 11 pin · tương thích xe máy VinFast</li>
+          <li>Thu nhập: 9,000–10,250 VND/lần đổi pin</li>
+          <li>Rủi ro thấp nhất — phù hợp vị trí &lt;100m²</li>
+          <li>Phụ thuộc xe máy VinFast (406K+ xe 2025)</li>
+        </ul>
+      </div>
+
+      <!-- Model 2 -->
+      <div class="model-card">
+        <div class="model-title">🔌 Mô hình B: V-Green Franchise — DC Car Charging</div>
+        <div class="model-irr">~19.7%</div>
+        <div class="model-payback">Không guaranteed · Hoàn vốn 2–10 năm · Vốn 700M–2.5B VND</div>
+        <ul class="model-list">
+          <li>V-Green trả 750 VND/kWh cố định cho đối tác</li>
+          <li>V-Green phụ trách toàn bộ O&M, marketing</li>
+          <li>Cam kết 10 năm · V-Green đền bù nếu vi phạm</li>
+          <li>DC 120kW: ~700–750M VND/unit</li>
+          <li>Break-even phụ thuộc hoàn toàn vào traffic EV khu vực</li>
+          <li>Chỉ hiệu quả ở vị trí >30 xe/ngày</li>
+        </ul>
+      </div>
+
+      <!-- Model 3 -->
+      <div class="model-card featured">
+        <div class="model-title">⚡ Mô hình C: Độc lập Multi-brand + Solar</div>
+        <div class="model-irr">28–38%</div>
+        <div class="model-payback">IRR cao nhất · Hoàn vốn 2–3.5 năm · Vốn 500M–5B VND</div>
+        <ul class="model-list">
+          <li>Thu 5,000–8,500 VND/kWh vs 750 VND của V-Green franchise</li>
+          <li>Multi-brand: phục vụ mọi xe EV (không chỉ VinFast)</li>
+          <li>Solar giảm chi phí điện xuống ~594 VND/kWh (LCOE)</li>
+          <li>BESS bridge gap solar 9h–17h vs EV peak 17:30–22:30</li>
+          <li>Tự chủ định giá — không phụ thuộc V-Green</li>
+          <li>Cần O&M capability hoặc outsource</li>
+        </ul>
+      </div>
+
+      <!-- Model 4 -->
+      <div class="model-card">
+        <div class="model-title">🏢 Mô hình D: B2B White-label (Cung cấp cho chủ nhà)</div>
+        <div class="model-irr">20–28%</div>
+        <div class="model-payback">Asset-light · Hoàn vốn 3–5 năm · Vốn thấp</div>
+        <ul class="model-list">
+          <li>Cung cấp trạm sạc cho chung cư, văn phòng, trung tâm TM</li>
+          <li>Thu phí cài đặt + phí dịch vụ/tháng + share doanh thu</li>
+          <li>Mô hình Build-Lease-Operate: chủ nhà trả tiền phần cứng</li>
+          <li>Scale nhanh vì không cần mua đất</li>
+          <li>Phù hợp khi có network quan hệ với BĐS</li>
+          <li>Margin thấp hơn mô hình C nhưng rủi ro vốn thấp hơn</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Tiêu chí</th><th>A: Swap V-Green</th><th>B: DC V-Green</th><th>C: Độc lập + Solar</th><th>D: B2B White-label</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Vốn tối thiểu</td><td class="td-green">210M VND</td><td class="td-orange">700M–2.5B</td><td class="td-orange">500M–5B</td><td class="td-green">Thấp (capital-light)</td></tr>
+          <tr><td>IRR</td><td class="td-green">≥15% (cam kết)</td><td class="td-orange">~19.7%</td><td class="td-green">28–38%</td><td class="td-orange">20–28%</td></tr>
+          <tr><td>Hoàn vốn</td><td class="td-green">~2.5 năm</td><td class="td-orange">2–10 năm</td><td class="td-green">2–3.5 năm</td><td class="td-orange">3–5 năm</td></tr>
+          <tr><td>Rủi ro</td><td class="td-green">Thấp</td><td class="td-red">Cao (location-dependent)</td><td class="td-orange">Trung bình</td><td class="td-green">Thấp–Trung bình</td></tr>
+          <tr><td>Kiểm soát</td><td class="td-red">Thấp</td><td class="td-red">Rất thấp</td><td class="td-green">Cao</td><td class="td-orange">Trung bình</td></tr>
+          <tr><td>Phụ thuộc VinFast</td><td class="td-red">100%</td><td class="td-red">100%</td><td class="td-green">0%</td><td class="td-green">0%</td></tr>
+          <tr><td>Solar compatible</td><td class="td-red">Không</td><td class="td-red">Hạn chế</td><td class="td-green">Tối ưu</td><td class="td-orange">Có thể</td></tr>
+          <tr><td>Diện tích tối thiểu</td><td class="td-green">&lt;20m²</td><td class="td-orange">50–200m²</td><td class="td-orange">100–500m²</td><td class="td-green">Linh hoạt</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======= CAPEX & FINANCIAL ======= -->
+  <div class="section" id="capex">
+    <div class="section-title">CAPEX & Mô Hình Tài Chính</div>
+    <p class="section-sub">Chi phí đầu tư, vận hành, breakeven — số liệu thực tế Vietnam 2025</p>
+
+    <div class="card-grid card-grid-3" style="margin-bottom:20px">
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px">Type 1 — Nhỏ (AC Urban)</div>
+        <div style="font-size:24px;font-weight:800;color:var(--orange)">~500M–650M</div>
+        <div style="font-size:12px;color:var(--gray-400);margin-bottom:12px">3×22kW AC + hạ tầng</div>
+        <div style="font-size:12px;color:var(--gray-600);line-height:1.8">
+          Hardware: ~$19K–25K ($3K–8K/trụ)<br>
+          Hạ tầng điện: 100–150M VND<br>
+          PCCC + giấy phép: 30–50M VND<br>
+          Lắp đặt: 50–80M VND
+        </div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-100)">
+          <span class="badge badge-green">IRR ~28%</span>
+          <span class="badge badge-blue" style="margin-left:6px">Payback 3–3.5 năm</span>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px">Type 2 — Hỗn Hợp (AC+DC)</div>
+        <div style="font-size:24px;font-weight:800;color:var(--orange)">~1.2B–1.8B</div>
+        <div style="font-size:12px;color:var(--gray-400);margin-bottom:12px">3×22kW AC + 1×50kW DC</div>
+        <div style="font-size:12px;color:var(--gray-600);line-height:1.8">
+          Hardware: ~$40K–55K<br>
+          DC 50kW charger: $3.5K–6K (China supply)<br>
+          Hạ tầng 3 pha: 150–200M VND<br>
+          Tổng all-in: ~1.2–1.8B VND
+        </div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-100)">
+          <span class="badge badge-green">IRR ~32%</span>
+          <span class="badge badge-blue" style="margin-left:6px">Payback ~3 năm</span>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px">Type 3 — DC Hub</div>
+        <div style="font-size:24px;font-weight:800;color:var(--orange)">~4B–8B</div>
+        <div style="font-size:12px;color:var(--gray-400);margin-bottom:12px">6×120–180kW DC fast charger</div>
+        <div style="font-size:12px;color:var(--gray-600);line-height:1.8">
+          Hardware: $150K–220K<br>
+          120kW DC unit: ~$8K–15K<br>
+          Cần 10+ sessions/DC/day để có lãi<br>
+          Phù hợp: cao tốc, KCN, bãi xe lớn
+        </div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-100)">
+          <span class="badge badge-green">IRR ~38%</span>
+          <span class="badge badge-blue" style="margin-left:6px">Payback ~2 năm</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-bottom:16px">
+      <table>
+        <thead><tr><th>OPEX Item</th><th>Type 1 (3 AC)</th><th>Type 2 (AC+DC)</th><th>Type 3 (DC Hub)</th></tr></thead>
+        <tbody>
+          <tr><td>Tiền điện EVN (off-peak)</td><td>1,565–2,200đ/kWh</td><td>1,565–2,200đ/kWh</td><td>~1,800đ avg (TOD contract)</td></tr>
+          <tr><td>Thuê đất (TP HCM)</td><td>5–15M/tháng (20–50m²)</td><td>15–40M/tháng (50–150m²)</td><td>40–120M/tháng (200–500m²)</td></tr>
+          <tr><td>Bảo trì (outsource)</td><td>~3–5M/tháng</td><td>5–10M/tháng</td><td>15–30M/tháng</td></tr>
+          <tr><td>Platform/phần mềm</td><td>1–2M/tháng</td><td>1–3M/tháng</td><td>3–8M/tháng</td></tr>
+          <tr><td>Nhân sự (part-time)</td><td>0–5M/tháng</td><td>5–10M/tháng</td><td>15–25M/tháng</td></tr>
+          <tr><td class="td-strong">TỔNG OPEX/tháng</td><td class="td-strong">9–27M</td><td class="td-strong">26–63M</td><td class="td-strong">73–183M</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Giá điện EVN 2025</th><th>Khung giờ</th><th>Giá hạ áp (VND/kWh)</th><th>Strategy</th></tr></thead>
+        <tbody>
+          <tr><td>Thấp điểm (off-peak)</td><td>22h–4h</td><td class="td-green">1,565–1,653</td><td>Sạc dự trữ BESS ban đêm</td></tr>
+          <tr><td>Bình thường</td><td>4h–9:30, 11:30–17h, 20h–22h</td><td>2,100–2,400</td><td>Dùng solar self-consumption</td></tr>
+          <tr><td>Cao điểm (peak)</td><td>9:30–11:30 & 17–20h (T2–T7)</td><td class="td-red">3,835–4,298</td><td>Dùng BESS, tránh mua lưới</td></tr>
+          <tr><td>Giá điện dư bán lại</td><td>—</td><td class="td-red">671</td><td>⚠️ KHÔNG nên thiết kế bán lưới</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="warn-box">
+      <div class="warn-title">⚠️ Breakeven Utilization</div>
+      <div class="warn-body">Cần tối thiểu 4–6 sessions/port/day để EBITDA dương. Thực tế hiện tại nhiều điểm &lt;1 session/port/day → <strong>location selection là yếu tố quyết định sống còn</strong>. Đất là #1 cost driver tại HCMC ($15–40/m²/tháng).</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======= SOLAR INTEGRATION ======= -->
+  <div class="section" id="solar">
+    <div class="section-title">Solar Integration — Tối Ưu Chi Phí Điện</div>
+    <p class="section-sub">Thiết kế hệ thống solar + BESS cho trạm sạc EV — số liệu Việt Nam 2025</p>
+
+    <div class="card-grid card-grid-4" style="margin-bottom:20px">
+      <div class="metric-card">
+        <div class="metric-val" style="color:var(--orange)">8.5–10M</div>
+        <div class="metric-label">VND/kWp solar on-grid</div>
+        <div class="metric-sub">Thương mại >300kWp ~8.5M</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" style="color:var(--green)">594đ</div>
+        <div class="metric-label">LCOE solar HCMC</div>
+        <div class="metric-sub">vs EVN bình quân ~2,200đ/kWh</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" style="color:var(--blue)">3–5 năm</div>
+        <div class="metric-label">Payback solar on-grid</div>
+        <div class="metric-sub">HCMC 100kWp điển hình</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" style="color:var(--red)">67%</div>
+        <div class="metric-label">Mismatch solar vs EV peak</div>
+        <div class="metric-sub">Solar 9h–17h · EV peak 17:30–22:30</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:16px">⚡ Sơ đồ tích hợp Solar + BESS + EV Charging</div>
+      <div class="solar-flow">
+        <div class="solar-node">
+          <div class="solar-node-icon">☀️</div>
+          <div class="solar-node-title">Solar PV</div>
+          <div class="solar-node-val">9:00–17:00<br>LCOE 594đ/kWh</div>
+        </div>
+        <div class="solar-arrow">→</div>
+        <div class="solar-node" style="background:linear-gradient(135deg,#EFF6FF,#FFF7ED)">
+          <div class="solar-node-icon">🔋</div>
+          <div class="solar-node-title">BESS Storage</div>
+          <div class="solar-node-val">Charge ban ngày<br>Discharge 17:30–22:30</div>
+        </div>
+        <div class="solar-arrow">→</div>
+        <div class="solar-node">
+          <div class="solar-node-icon">⚡</div>
+          <div class="solar-node-title">EV Chargers</div>
+          <div class="solar-node-val">Peak 17:30–22:30<br>Off-peak EVN dự phòng</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--gray-600);margin-top:12px;padding:12px;background:var(--gray-50);border-radius:0.75rem">
+        <strong>Vấn đề cốt lõi cần giải:</strong> Solar sinh điện 9h–17h nhưng EV demand peak 17:30–22:30 (TOD mới Apr 2026). Chỉ 20–30% overlap tự nhiên. BESS là cầu nối bắt buộc cho tối ưu chi phí thực sự. Mua điện EVN off-peak (22h–4h) = 1,565đ/kWh để sạc BESS là chiến lược tốt nhất khi không đủ solar.
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-bottom:16px">
+      <table>
+        <thead><tr><th>Kịch bản</th><th>Cấu hình</th><th>Tiết kiệm điện</th><th>Payback</th><th>Phù hợp</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="td-strong">Solar on-grid thuần</td>
+            <td>100 kWp PV, không BESS</td>
+            <td class="td-green">30–40% chi phí điện ban ngày</td>
+            <td>3–5 năm</td>
+            <td>Nơi có mái rộng, charging ban ngày</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Solar + BESS nhỏ</td>
+            <td>120 kWp PV + 100 kWh BESS</td>
+            <td class="td-green">50–65% tổng chi phí điện</td>
+            <td>5.2 năm</td>
+            <td>Urban station, bridge peak gap</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Solar + BESS lớn</td>
+            <td>200 kWp PV + 300 kWh BESS</td>
+            <td class="td-green">70–80% tổng chi phí điện</td>
+            <td>5.5–6 năm</td>
+            <td>DC Hub, cao tốc</td>
+          </tr>
+          <tr>
+            <td class="td-strong">BESS peak shaving (không solar)</td>
+            <td>Chỉ BESS, sạc off-peak EVN</td>
+            <td class="td-orange">~40% vs mua peak rate</td>
+            <td>~5.3 năm</td>
+            <td>Không có mái / đất chật</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px">☀️ Bức xạ mặt trời theo vùng (Peak Sun Hours/ngày)</div>
+      <div class="region-bar"><span class="region-label">Hà Nội / Bắc Bộ</span><div class="region-track"><div class="region-fill" style="width:63%"></div></div><span class="region-val">3.4–3.8h</span></div>
+      <div class="region-bar"><span class="region-label">Đà Nẵng</span><div class="region-track"><div class="region-fill" style="width:82%"></div></div><span class="region-val">4.5–5.0h</span></div>
+      <div class="region-bar"><span class="region-label">HCMC / ĐNB</span><div class="region-track"><div class="region-fill" style="width:87%"></div></div><span class="region-val">4.7h avg</span></div>
+      <div class="region-bar"><span class="region-label">ĐBSCL / T.Nguyên</span><div class="region-track"><div class="region-fill" style="width:95%"></div></div><span class="region-val">4.8–5.5h</span></div>
+      <div style="font-size:12px;color:var(--gray-400);margin-top:8px">→ ROI solar tại HCMC/ĐBSCL cao hơn Hà Nội ~30–40% cùng cấu hình</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======= LEGAL ======= -->
+  <div class="section" id="legal">
+    <div class="section-title">Khung Pháp Lý & Quy Trình Cấp Phép</div>
+    <p class="section-sub">Cập nhật đến Q2/2026 — timeline thực tế 2–3 tháng cho trường hợp thuận lợi</p>
+
+    <div class="card-grid card-grid-2" style="margin-bottom:20px">
+      <div class="card">
+        <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:16px">📋 Timeline Xin Phép (8 bước)</div>
+        <div class="permit-timeline">
+          <div class="permit-item"><div class="permit-dot"></div><div class="permit-week">Tuần 1–2</div><div class="permit-title">Đăng ký kinh doanh</div><div class="permit-body">Sở KH&ĐT · Mã ngành theo QĐ 36/2025 · 3–7 ngày</div></div>
+          <div class="permit-item"><div class="permit-dot"></div><div class="permit-week">Tuần 1–2</div><div class="permit-title">Xác nhận quy hoạch đất</div><div class="permit-body">Sở XD/UBND · Kiểm tra quy hoạch 1/500 · 5–10 ngày</div></div>
+          <div class="permit-item"><div class="permit-dot"></div><div class="permit-week">Tuần 2–6</div><div class="permit-title">Giấy phép xây dựng</div><div class="permit-body">Sở Xây dựng · 15–30 ngày · Miễn nếu không sửa kết cấu</div></div>
+          <div class="permit-item"><div class="permit-dot"></div><div class="permit-week">Tuần 3–7</div><div class="permit-title">Thẩm duyệt PCCC</div><div class="permit-body">Cảnh sát PCCC · Nghị định 105/2025 · Phạt 80–100M nếu vi phạm</div></div>
+          <div class="permit-item"><div class="permit-dot"></div><div class="permit-week">Tuần 5–8</div><div class="permit-title">Hợp đồng điện EVN</div><div class="permit-body">Đăng ký điện thương mại · Công tơ riêng bắt buộc</div></div>
+          <div class="permit-item"><div class="permit-dot"></div><div class="permit-week">Tuần 6–9</div><div class="permit-title">Chứng nhận hợp quy thiết bị</div><div class="permit-body">Dấu CR · Hiệu lực 3 năm · Kiểm định công tơ TT 03/2024</div></div>
+          <div class="permit-item"><div class="permit-dot"></div><div class="permit-week">Tuần 8–11</div><div class="permit-title">Lắp đặt + Nghiệm thu</div><div class="permit-body">Nghiệm thu PCCC + Điện an toàn trước khi vận hành</div></div>
+          <div class="permit-item"><div class="permit-dot"></div><div class="permit-week">Tuần 11–13</div><div class="permit-title">Vận hành thử & Khai thác</div><div class="permit-body">1–2 tuần test → Chính thức open</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:16px">⚖️ Pháp Lý Quan Trọng Cần Biết</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="padding:12px;background:var(--gray-50);border-radius:0.75rem;border-left:3px solid var(--green)">
+            <div style="font-size:12px;font-weight:700;color:var(--green)">✅ Decree 57/2025 (03/03/2025)</div>
+            <div style="font-size:12px;color:var(--gray-600);margin-top:4px">Dịch vụ sạc ≠ bán điện → không cần giấy phép bán lẻ điện. Được định giá dịch vụ tự do. Được ký DPPA mua điện tái tạo trực tiếp.</div>
+          </div>
+          <div style="padding:12px;background:var(--gray-50);border-radius:0.75rem;border-left:3px solid var(--blue)">
+            <div style="font-size:12px;font-weight:700;color:var(--blue)">📋 TT 60/2025/TT-BCT (12/2025)</div>
+            <div style="font-size:12px;color:var(--gray-600);margin-top:4px">Giá điện riêng cho trạm sạc thương mại. Bắt buộc công tơ riêng. Off-peak 22h–4h: 1,565–1,653đ/kWh.</div>
+          </div>
+          <div style="padding:12px;background:var(--gray-50);border-radius:0.75rem;border-left:3px solid var(--orange)">
+            <div style="font-size:12px;font-weight:700;color:var(--orange)">🏗️ Loại đất phù hợp</div>
+            <div style="font-size:12px;color:var(--gray-600);margin-top:4px">DHT (hạ tầng KT), TMD (TM-DV), DGT (giao thông) → Phù hợp nhất. Đất nông nghiệp: chuyển đổi mục đích mất 6–12 tháng → tránh.</div>
+          </div>
+          <div style="padding:12px;background:var(--gray-50);border-radius:0.75rem;border-left:3px solid var(--green)">
+            <div style="font-size:12px;font-weight:700;color:var(--green)">💰 Ưu đãi thuế hiện hành</div>
+            <div style="font-size:12px;color:var(--gray-600);margin-top:4px">CIT 10%/15 năm (năng lượng sạch). Miễn thuế nhập khẩu thiết bị (tài sản cố định). Tiền thuê đất giảm 50%/5–10 năm. Lệ phí trước bạ xe EV miễn đến 02/2027.</div>
+          </div>
+          <div style="padding:12px;background:#FFF7ED;border-radius:0.75rem;border-left:3px solid var(--red)">
+            <div style="font-size:12px;font-weight:700;color:var(--red)">⚠️ Rủi ro pháp lý chính</div>
+            <div style="font-size:12px;color:var(--gray-600);margin-top:4px">QCVN vừa hiệu lực 06/2025 — một số hướng dẫn chưa đồng bộ. Diễn giải PCCC tùy địa phương. Chưa có ưu đãi giá điện chính thức cho trạm sạc công cộng.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======= RISKS ======= -->
+  <div class="section" id="risks">
+    <div class="section-title">Ma Trận Rủi Ro & Biện Pháp Giảm Thiểu</div>
+    <p class="section-sub">Xếp hạng theo mức độ ảnh hưởng đến ROI</p>
+
+    <div class="card-grid card-grid-2">
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:12px">🔴 Rủi ro Cao</div>
+        <div class="risk-item">
+          <div class="risk-dot risk-high"></div>
+          <div><div class="risk-title">Location Selection — Utilization thấp</div><div class="risk-desc">Cần 4–6 sessions/port/day. Nhiều điểm hiện tại &lt;1 session. Đây là kill factor #1.</div><div class="risk-mitigation">→ Chọn vị trí: KDC mật độ xe VinFast cao, gần tuyến đường đông, cạnh siêu thị/văn phòng</div></div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot risk-high"></div>
+          <div><div class="risk-title">Chi phí đất đô thị lõi quá cao</div><div class="risk-desc">HCMC $15–40/m²/tháng → có thể lớn hơn cả CAPEX equipment sau 3–5 năm.</div><div class="risk-mitigation">→ Ưu tiên mô hình B2B (thuê mặt sàn chung cư/TTTM), hoặc vùng ven + ngoại ô</div></div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot risk-high"></div>
+          <div><div class="risk-title">V-Green subsidize làm méo thị trường</div><div class="risk-desc">VinFast miễn phí sạc đến 07/2025 → giảm 30–40% doanh thu đối thủ. Rủi ro gia hạn.</div><div class="risk-mitigation">→ Tập trung multi-brand, địa điểm không có V-Green, dịch vụ premium (nhanh hơn, tiện hơn)</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:var(--yellow);margin-bottom:12px">🟡 Rủi ro Trung Bình & Thấp</div>
+        <div class="risk-item">
+          <div class="risk-dot risk-med"></div>
+          <div><div class="risk-title">Biến động giá điện EVN</div><div class="risk-desc">Giá điện tăng tác động trực tiếp biên lợi nhuận.</div><div class="risk-mitigation">→ Solar + BESS giảm phụ thuộc EVN. DPPA mua thẳng từ NLTT.</div></div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot risk-med"></div>
+          <div><div class="risk-title">Thiết bị hỏng hóc, bảo trì</div><div class="risk-desc">DC charger phức tạp hơn AC nhiều. Thời gian ngừng hoạt động = mất doanh thu.</div><div class="risk-mitigation">→ Chọn brand có service center VN (BYD, ABB, Autel). Hợp đồng maintenance SLA &lt;4h.</div></div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot risk-low"></div>
+          <div><div class="risk-title">Pháp lý thay đổi</div><div class="risk-desc">Framework đang hoàn thiện — một số điều chỉnh có thể trong 2026–2027.</div><div class="risk-mitigation">→ Tư vấn pháp lý chuyên ngành. Theo dõi sát Bộ Công Thương / BCT updates.</div></div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot risk-low"></div>
+          <div><div class="risk-title">Cạnh tranh gia tăng</div><div class="risk-desc">Petrolimex, EVN, EBOOST đang mở rộng dù hiện tại nhỏ.</div><div class="risk-mitigation">→ Location moat, service quality, loyalty program.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======= REGIONS ======= -->
+  <div class="section" id="regions">
+    <div class="section-title">Phân Tích Theo Vùng Địa Lý</div>
+    <p class="section-sub">Tiềm năng EV charging khác nhau rõ rệt theo vị trí</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Vùng / Tỉnh</th><th>EV Density</th><th>Solar Yield</th><th>Giá đất</th><th>Cạnh tranh</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="td-strong">HCMC nội thành</td>
+            <td class="td-green">Rất cao</td>
+            <td class="td-green">4.7h/ngày</td>
+            <td class="td-red">$15–40/m²/th</td>
+            <td class="td-red">Rất cao (V-Green)</td>
+            <td><span class="badge badge-orange">Tốt — Khó vào</span></td>
+          </tr>
+          <tr>
+            <td class="td-strong">HCMC vùng ven (Q.9, Bình Dương)</td>
+            <td class="td-green">Cao, tăng nhanh</td>
+            <td class="td-green">4.7h/ngày</td>
+            <td class="td-green">$3–8/m²/th</td>
+            <td class="td-green">Thấp</td>
+            <td><span class="badge badge-green">★★★ Tốt nhất</span></td>
+          </tr>
+          <tr>
+            <td class="td-strong">Hà Nội nội đô</td>
+            <td class="td-green">Cao</td>
+            <td class="td-red">3.4–3.8h/ngày</td>
+            <td class="td-red">Cao</td>
+            <td class="td-red">Cao</td>
+            <td><span class="badge badge-orange">Trung bình</span></td>
+          </tr>
+          <tr>
+            <td class="td-strong">Đà Nẵng</td>
+            <td class="td-orange">Trung bình</td>
+            <td class="td-green">4.5–5.0h/ngày</td>
+            <td class="td-green">Hợp lý</td>
+            <td class="td-green">Thấp</td>
+            <td><span class="badge badge-green">★★ Tiềm năng</span></td>
+          </tr>
+          <tr>
+            <td class="td-strong">Cao tốc HCM–Hà Nội</td>
+            <td class="td-green">Tăng nhanh</td>
+            <td class="td-green">4.5–5.0h</td>
+            <td class="td-green">Thấp</td>
+            <td class="td-green">Rất thấp</td>
+            <td><span class="badge badge-green">★★★ DC Hub ideal</span></td>
+          </tr>
+          <tr>
+            <td class="td-strong">Tỉnh ĐBSCL</td>
+            <td class="td-red">Thấp hiện tại</td>
+            <td class="td-green">4.8–5.5h/ngày</td>
+            <td class="td-green">Rất rẻ</td>
+            <td class="td-green">Gần như 0</td>
+            <td><span class="badge badge-blue">Dài hạn</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======= QUESTIONS ======= -->
+  <div class="section" id="questions">
+    <div class="section-title">Thông Tin Cần Từ Nhà Đầu Tư</div>
+    <p class="section-sub">Để tư vấn mô hình tối ưu — vui lòng cung cấp các thông tin sau</p>
+
+    <div class="question-card">
+      <div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:20px">📋 7 câu hỏi quan trọng — input để ra phương án cụ thể</div>
+
+      <div class="question-item">
+        <div class="question-num">1</div>
+        <div><div class="question-text"><strong>Vốn đầu tư dự kiến?</strong></div><div class="question-hint">Tổng ngân sách sẵn có (có thể bao gồm cả vay ngân hàng). Ví dụ: 500M / 1B / 3B VND?</div></div>
+      </div>
+      <div class="question-item">
+        <div class="question-num">2</div>
+        <div><div class="question-text"><strong>Diện tích đất và hiện trạng?</strong></div><div class="question-hint">m² · Đất trống hay đã có công trình? Có mái nhà để lắp solar không? Chiều cao mái?</div></div>
+      </div>
+      <div class="question-item">
+        <div class="question-num">3</div>
+        <div><div class="question-text"><strong>Vị trí cụ thể (địa chỉ / khu vực)?</strong></div><div class="question-hint">Tỉnh/thành, quận/huyện, loại đường (quốc lộ/tỉnh lộ/nội khu). Gần khu dân cư / KCN / cao tốc?</div></div>
+      </div>
+      <div class="question-item">
+        <div class="question-num">4</div>
+        <div><div class="question-text"><strong>Loại đất và pháp lý?</strong></div><div class="question-hint">Sở hữu hay thuê? Loại mục đích sử dụng đất hiện tại (DHT/TMD/đất ở/nông nghiệp)?</div></div>
+      </div>
+      <div class="question-item">
+        <div class="question-num">5</div>
+        <div><div class="question-text"><strong>Mục tiêu đầu tư?</strong></div><div class="question-hint">Thu nhập thụ động (passive income) hay vận hành kinh doanh chính? Thời hạn hoàn vốn mong muốn?</div></div>
+      </div>
+      <div class="question-item">
+        <div class="question-num">6</div>
+        <div><div class="question-text"><strong>Nguồn điện hiện tại?</strong></div><div class="question-hint">Đã có đường điện 3 pha chưa? Dung lượng điện hiện tại (kVA)? Khoảng cách tới trạm biến áp EVN?</div></div>
+      </div>
+      <div class="question-item" style="margin-bottom:0">
+        <div class="question-num">7</div>
+        <div><div class="question-text"><strong>Traffic khu vực & mật độ xe EV hiện tại?</strong></div><div class="question-hint">Số xe qua lại/ngày (ước tính). Có biết tỷ lệ xe VinFast trong khu vực không?</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  EV Charging Expert Knowledge Base · Compiled May 2026 · Sources: V-Green, EVN, Tilleke & Gibbins, DFDL Legal, IEA, HOMER Energy · For investment advisory purposes
+</footer>
+
+</body>
+</html>

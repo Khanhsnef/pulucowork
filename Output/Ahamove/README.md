@@ -66,7 +66,8 @@ Output/Ahamove/
 | `2026-Q2-DM-OKR-assignment.xlsx` | 07. TEAM_MGMT | OKR assignment cho từng member |
 | `dm-weekly-review-template.pptx` | 07. TEAM_MGMT | Template weekly review DM team |
 | `2026-05-claude-guide-for-team.md` | 07. TEAM_MGMT | Hướng dẫn Claude AI toàn diện cho team (dành cho người chưa biết gì) |
+| `2026-05-ev-charging-financial-model.html` | 01. STRATEGY | Financial model EV charging station VN: CAPEX/OPEX/IRR/NPV 3 station types, 4 business models, EVN tariff 2025 |
 
 ---
 
-*Last updated: 2026-05-04*
+*Last updated: 2026-05-07*
