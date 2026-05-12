@@ -7,469 +7,49 @@
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Lexend', sans-serif; background: #0f172a; padding: 40px 20px; }
-.wrap { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+body { font-family: 'Lexend', sans-serif; background: #f0f4f8; padding: 40px 20px; }
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
 
-/* ── common card ── */
-.card {
-  background: #1e293b; border-radius: 24px;
-  padding: 36px 40px;
-  border: 1px solid #334155;
-}
-.card-title {
-  font-size: 1rem; font-weight: 800; color: #f1f5f9;
-  margin-bottom: 4px; letter-spacing: -.3px;
-}
-.card-sub { font-size: .75rem; color: #64748b; margin-bottom: 28px; }
+/* ─── card ─── */
+.card { background: #fff; border-radius: 24px; padding: 36px 40px; border: 1.5px solid #e2e8f0; box-shadow: 0 2px 8px rgba(14,65,116,.06); }
+.card-tag { font-size: .62rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #94a3b8; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.card-tag::before { content:''; display:block; width:18px; height:2px; background:#e2e8f0; }
+.card-title { font-size: 1.1rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; letter-spacing: -.4px; }
+.card-sub { font-size: .78rem; color: #64748b; margin-bottom: 28px; line-height: 1.6; }
 
-/* ── labels ── */
-.label {
-  font-size: .62rem; font-weight: 700; letter-spacing: 1.2px;
-  text-transform: uppercase; padding: 3px 10px; border-radius: 99px;
-}
-.lbl-orange { background: #FF7F32; color: #fff; }
-.lbl-blue   { background: #0E4174; color: #fff; }
-.lbl-purple { background: #5b21b6; color: #fff; }
-.lbl-teal   { background: #0f766e; color: #fff; }
-.lbl-green  { background: #15803d; color: #fff; }
-.lbl-red    { background: #991b1b; color: #fff; }
-
-
-/* ══════════════════════════════
-   DIAGRAM 1 — BIG PICTURE
-══════════════════════════════ */
-.bigpic {
-  display: grid;
-  grid-template-columns: 1fr 180px 1fr;
-  grid-template-rows: auto auto auto;
-  gap: 0;
-  align-items: center;
-}
-.bp-col { display: flex; flex-direction: column; gap: 12px; }
-.bp-spoke {
-  border-radius: 14px; padding: 14px 16px;
-  border: 1.5px solid; display: flex; align-items: flex-start; gap: 10px;
-}
-.bp-spoke-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
-.bp-spoke-title { font-size: .78rem; font-weight: 700; margin-bottom: 2px; }
-.bp-spoke-desc  { font-size: .68rem; line-height: 1.5; }
-
-/* left spokes */
-.bps-reads   { background: #1e3a5f; border-color: #2563eb; }
-.bps-reads   .bp-spoke-title { color: #93c5fd; }
-.bps-reads   .bp-spoke-desc  { color: #60a5fa; }
-.bps-memory  { background: #451a03; border-color: #c2410c; }
-.bps-memory  .bp-spoke-title { color: #fdba74; }
-.bps-memory  .bp-spoke-desc  { color: #fb923c; }
-.bps-mcp     { background: #164e63; border-color: #0e7490; }
-.bps-mcp     .bp-spoke-title { color: #67e8f9; }
-.bps-mcp     .bp-spoke-desc  { color: #22d3ee; }
-
-/* right spokes */
-.bps-output  { background: #14532d; border-color: #16a34a; }
-.bps-output  .bp-spoke-title { color: #86efac; }
-.bps-output  .bp-spoke-desc  { color: #4ade80; }
-.bps-skills  { background: #2e1065; border-color: #7c3aed; }
-.bps-skills  .bp-spoke-title { color: #c4b5fd; }
-.bps-skills  .bp-spoke-desc  { color: #a78bfa; }
-.bps-agents  { background: #4a1d96; border-color: #7c3aed; }
-.bps-agents  .bp-spoke-title { color: #ddd6fe; }
-.bps-agents  .bp-spoke-desc  { color: #c4b5fd; }
-
-/* center node */
-.bp-center {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  padding: 0 10px;
-}
-.bp-core {
-  width: 140px; height: 140px; border-radius: 50%;
-  background: linear-gradient(135deg, #FF7F32, #0E4174);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 4px;
-  box-shadow: 0 0 0 8px rgba(255,127,50,.15), 0 0 0 16px rgba(14,65,116,.1);
-}
-.bp-core-icon { font-size: 2.2rem; }
-.bp-core-title { font-size: .72rem; font-weight: 800; color: #fff; letter-spacing: .5px; text-align: center; }
-.bp-core-sub   { font-size: .6rem; color: rgba(255,255,255,.7); text-align: center; }
-
-/* connector lines left */
-.bp-conn-left, .bp-conn-right {
-  display: flex; flex-direction: column; justify-content: space-around;
-  height: 100%; padding: 20px 0;
-}
-.conn-line {
-  height: 2px; background: linear-gradient(90deg, #334155, #475569);
-  position: relative; flex: 1; max-height: 2px; margin: 20px 0;
-}
-.conn-line::after {
-  content: '';
-  position: absolute; right: -1px; top: -4px;
-  border: 5px solid transparent; border-left-color: #475569;
-}
-.conn-line-r {
-  height: 2px; background: linear-gradient(270deg, #334155, #475569);
-  position: relative; flex: 1; max-height: 2px; margin: 20px 0;
-}
-.conn-line-r::after {
-  content: '';
-  position: absolute; left: -1px; top: -4px;
-  border: 5px solid transparent; border-right-color: #475569;
-}
-
-
-/* ══════════════════════════════
-   DIAGRAM 2 — LAYER CAKE
-══════════════════════════════ */
-.layers { display: flex; flex-direction: column; gap: 0; position: relative; }
-.layer {
-  border-radius: 16px; padding: 16px 22px;
-  border: 2px solid;
-  display: flex; align-items: center; gap: 16px;
-  position: relative; transition: transform .15s;
+/* ─── term chip ─── */
+.term {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px;
+  padding: 1px 7px; font-size: .68rem; font-weight: 700; color: #92400e;
   cursor: default;
-  margin: 3px 0;
 }
-.layer:hover { transform: translateX(4px); }
-.layer-scope {
-  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-  font-size: .64rem; font-weight: 700; color: #94a3b8;
-  text-align: right; line-height: 1.4;
-}
-.layer-icon { font-size: 1.6rem; flex-shrink: 0; }
-.layer-name { font-size: .9rem; font-weight: 800; margin-bottom: 3px; }
-.layer-path { font-family: 'Space Mono', monospace; font-size: .65rem; font-weight: 700; margin-bottom: 6px; }
-.layer-items { display: flex; flex-wrap: wrap; gap: 5px; }
-.layer-tag {
-  font-size: .66rem; font-weight: 600; padding: 2px 8px; border-radius: 6px;
-}
+.term-def { font-weight: 400; color: #78350f; }
 
-.ly-chat    { background: #1a0533; border-color: #6d28d9; }
-.ly-chat    .layer-name { color: #c4b5fd; }
-.ly-chat    .layer-path { color: #7c3aed; }
-.ly-chat    .layer-tag  { background: #2e1065; color: #c4b5fd; }
+/* ─── glossary box ─── */
+.glossary { background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 14px; padding: 16px 20px; margin-top: 20px; }
+.glossary-title { font-size: .66rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #92400e; margin-bottom: 10px; }
+.glossary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.g-item { display: flex; gap: 8px; align-items: flex-start; }
+.g-key { font-size: .7rem; font-weight: 800; color: #0E4174; flex-shrink: 0; min-width: 80px; }
+.g-val { font-size: .7rem; color: #44403c; line-height: 1.5; }
 
-.ly-global  { background: #0c2340; border-color: #2563eb; }
-.ly-global  .layer-name { color: #93c5fd; }
-.ly-global  .layer-path { color: #3b82f6; }
-.ly-global  .layer-tag  { background: #1e3a5f; color: #93c5fd; }
+/* ─── section divider ─── */
+.divider { display: flex; align-items: center; gap: 10px; margin: 20px 0; }
+.divider-line { flex: 1; height: 1px; background: #e2e8f0; }
+.divider-label { font-size: .62rem; color: #94a3b8; font-weight: 700; letter-spacing: 1px; white-space: nowrap; }
 
-.ly-project { background: #052e16; border-color: #16a34a; }
-.ly-project .layer-name { color: #86efac; }
-.ly-project .layer-path { color: #22c55e; }
-.ly-project .layer-tag  { background: #14532d; color: #86efac; }
-
-.ly-local   { background: #1c1003; border-color: #b45309; }
-.ly-local   .layer-name { color: #fcd34d; }
-.ly-local   .layer-path { color: #d97706; }
-.ly-local   .layer-tag  { background: #451a03; color: #fcd34d; }
-
-.priority-arrow {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 4px; margin-top: 16px;
-}
-.priority-bar {
-  width: 100%; height: 8px; border-radius: 99px;
-  background: linear-gradient(90deg, #6d28d9, #2563eb, #16a34a, #b45309);
-  position: relative;
-}
-.priority-label {
-  display: flex; justify-content: space-between; width: 100%;
-  font-size: .62rem; color: #64748b; font-weight: 600;
-}
-
-
-/* ══════════════════════════════
-   DIAGRAM 3 — SESSION FLOW
-══════════════════════════════ */
-.flow { display: flex; flex-direction: column; align-items: center; gap: 0; }
-.flow-step {
-  display: flex; align-items: center; gap: 14px;
-  width: 100%; padding: 12px 18px;
-  border-radius: 12px; border: 1.5px solid;
-}
-.flow-num {
-  width: 30px; height: 30px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .72rem; font-weight: 800; flex-shrink: 0;
-  font-family: 'Space Mono', monospace;
-}
-.flow-content { flex: 1; }
-.flow-title { font-size: .82rem; font-weight: 700; margin-bottom: 2px; }
-.flow-desc  { font-size: .7rem; line-height: 1.5; }
-.flow-file  {
-  font-family: 'Space Mono', monospace; font-size: .64rem;
-  padding: 2px 7px; border-radius: 5px; margin-top: 4px; display: inline-block;
-}
-.flow-arrow-down {
-  width: 2px; height: 20px;
-  margin: 2px auto;
-  background: #334155;
-  position: relative;
-}
-.flow-arrow-down::after {
-  content: '';
-  position: absolute; bottom: -6px; left: -5px;
-  border: 6px solid transparent; border-top-color: #334155;
-}
-.flow-branch {
-  display: grid; grid-template-columns: 1fr 20px 1fr; gap: 0;
-  width: 100%; align-items: start;
-}
-.flow-branch-line {
-  height: 20px; border: 2px solid #334155;
-  border-bottom: none; border-radius: 4px 4px 0 0;
-  margin-top: 0;
-}
-.flow-branch-mid { display: flex; justify-content: center; }
-
-.fs-1 { background: #1c1003; border-color: #b45309; }
-.fs-1 .flow-num { background: #b45309; color: #fff; }
-.fs-1 .flow-title { color: #fcd34d; }
-.fs-1 .flow-desc  { color: #d97706; }
-.fs-1 .flow-file  { background: #451a03; color: #fcd34d; }
-
-.fs-2 { background: #0c2340; border-color: #2563eb; }
-.fs-2 .flow-num { background: #2563eb; color: #fff; }
-.fs-2 .flow-title { color: #93c5fd; }
-.fs-2 .flow-desc  { color: #60a5fa; }
-.fs-2 .flow-file  { background: #1e3a5f; color: #93c5fd; }
-
-.fs-3 { background: #052e16; border-color: #16a34a; }
-.fs-3 .flow-num { background: #16a34a; color: #fff; }
-.fs-3 .flow-title { color: #86efac; }
-.fs-3 .flow-desc  { color: #4ade80; }
-.fs-3 .flow-file  { background: #14532d; color: #86efac; }
-
-.fs-4 { background: #4a1d96; border-color: #7c3aed; }
-.fs-4 .flow-num { background: #7c3aed; color: #fff; }
-.fs-4 .flow-title { color: #ddd6fe; }
-.fs-4 .flow-desc  { color: #c4b5fd; }
-.fs-4 .flow-file  { background: #2e1065; color: #ddd6fe; }
-
-.fs-5 { background: #451a03; border-color: #c2410c; }
-.fs-5 .flow-num { background: #c2410c; color: #fff; }
-.fs-5 .flow-title { color: #fdba74; }
-.fs-5 .flow-desc  { color: #fb923c; }
-.fs-5 .flow-file  { background: #1c1003; color: #fdba74; }
-
-.fs-ready { background: linear-gradient(135deg,#052e16,#0c2340); border-color: #22c55e; }
-.fs-ready .flow-num { background: #22c55e; color: #052e16; }
-.fs-ready .flow-title { color: #86efac; }
-.fs-ready .flow-desc  { color: #4ade80; }
-
-.fs-branch-yes { background: #052e16; border-color: #16a34a; border-style: dashed; }
-.fs-branch-yes .flow-title { color: #86efac; font-size: .74rem; }
-.fs-branch-yes .flow-desc  { color: #4ade80; font-size: .67rem; }
-
-.fs-branch-no { background: #1a0533; border-color: #6d28d9; border-style: dashed; }
-.fs-branch-no .flow-title { color: #c4b5fd; font-size: .74rem; }
-.fs-branch-no .flow-desc  { color: #a78bfa; font-size: .67rem; }
-
-.fs-decision { background: #1c1003; border-color: #b45309; border-style: dashed; }
-.fs-decision .flow-num { background: #b45309; color: #fff; }
-.fs-decision .flow-title { color: #fcd34d; }
-.fs-decision .flow-desc  { color: #d97706; }
-
-
-/* ══════════════════════════════
-   DIAGRAM 4 — SKILLS vs AGENTS
-══════════════════════════════ */
-.sa-grid { display: grid; grid-template-columns: 1fr 40px 1fr; gap: 0; align-items: start; }
-.sa-col { display: flex; flex-direction: column; gap: 10px; }
-.sa-header {
-  border-radius: 14px 14px 0 0; padding: 20px;
-  border: 2px solid; border-bottom: none;
-  text-align: center;
-}
-.sa-header-icon { font-size: 2rem; margin-bottom: 6px; }
-.sa-header-title { font-size: 1rem; font-weight: 800; margin-bottom: 4px; }
-.sa-header-sub { font-size: .72rem; opacity: .8; }
-
-.sa-body {
-  border: 2px solid; border-top: none;
-  border-radius: 0 0 14px 14px; padding: 18px;
-  display: flex; flex-direction: column; gap: 10px;
-}
-.sa-row { display: flex; gap: 10px; align-items: flex-start; }
-.sa-row-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
-.sa-row-label { font-size: .7rem; font-weight: 700; margin-bottom: 2px; }
-.sa-row-val   { font-size: .71rem; line-height: 1.5; }
-
-.sa-skill .sa-header { background: #052e16; border-color: #16a34a; }
-.sa-skill .sa-header-title { color: #86efac; }
-.sa-skill .sa-header-sub   { color: #4ade80; }
-.sa-skill .sa-body { background: #0a1f14; border-color: #16a34a; }
-.sa-skill .sa-row-label { color: #86efac; }
-.sa-skill .sa-row-val   { color: #4ade80; }
-
-.sa-agent .sa-header { background: #2e1065; border-color: #7c3aed; }
-.sa-agent .sa-header-title { color: #ddd6fe; }
-.sa-agent .sa-header-sub   { color: #c4b5fd; }
-.sa-agent .sa-body { background: #1a0d3d; border-color: #7c3aed; }
-.sa-agent .sa-row-label { color: #ddd6fe; }
-.sa-agent .sa-row-val   { color: #c4b5fd; }
-
-.sa-vs {
-  display: flex; align-items: center; justify-content: center;
-  padding-top: 60px;
-}
-.vs-circle {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: #334155; border: 2px solid #475569;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .7rem; font-weight: 800; color: #94a3b8;
-}
-
-/* flow inside skill/agent */
-.mini-flow { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 8px; }
-.mf-box {
-  width: 100%; padding: 7px 12px; border-radius: 8px;
-  font-size: .68rem; font-weight: 600; text-align: center;
-}
-.mf-arrow { font-size: .8rem; color: #475569; }
-
-.sa-skill .mf-box-you  { background: #1e3a5f; color: #93c5fd; }
-.sa-skill .mf-box-proc { background: #14532d; color: #86efac; }
-.sa-skill .mf-box-out  { background: #14532d; color: #4ade80; border: 1px solid #16a34a; }
-.sa-skill .mf-box-ctx  { background: #0a1f14; color: #64748b; border: 1px dashed #334155; font-size: .62rem; }
-
-.sa-agent .mf-box-you  { background: #1e3a5f; color: #93c5fd; }
-.sa-agent .mf-box-proc { background: #2e1065; color: #c4b5fd; }
-.sa-agent .mf-box-out  { background: #2e1065; color: #ddd6fe; border: 1px solid #7c3aed; }
-.sa-agent .mf-box-sep  { background: #1a0d3d; color: #64748b; border: 1px dashed #4c1d95; font-size: .62rem; }
-
-/* decision pills */
-.sa-when {
-  margin-top: 20px;
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.sw-card { border-radius: 12px; padding: 14px 16px; border: 1.5px solid; }
-.sw-title { font-size: .74rem; font-weight: 800; margin-bottom: 8px; }
-.sw-items { display: flex; flex-direction: column; gap: 5px; }
-.sw-item  { font-size: .7rem; display: flex; gap: 6px; line-height: 1.4; }
-.sw-item::before { content: '✓'; flex-shrink: 0; font-weight: 700; }
-.sw-skill { background: #0a1f14; border-color: #16a34a; }
-.sw-skill .sw-title { color: #86efac; }
-.sw-skill .sw-item  { color: #4ade80; }
-.sw-skill .sw-item::before { color: #86efac; }
-.sw-agent { background: #1a0d3d; border-color: #7c3aed; }
-.sw-agent .sw-title { color: #ddd6fe; }
-.sw-agent .sw-item  { color: #c4b5fd; }
-.sw-agent .sw-item::before { color: #ddd6fe; }
-
-
-/* ══════════════════════════════
-   DIAGRAM 5 — ROLE MAP
-══════════════════════════════ */
-.role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.role-card { border-radius: 16px; border: 2px solid; overflow: hidden; }
-.role-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
-.role-header-icon { font-size: 1.8rem; }
-.role-header-title { font-size: .9rem; font-weight: 800; }
-.role-header-sub   { font-size: .7rem; opacity: .8; margin-top: 2px; }
-.role-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
-.role-section-label { font-size: .6rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
-.role-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-.role-tag { font-size: .67rem; font-weight: 600; padding: 3px 9px; border-radius: 7px; }
-
-.rc-ops .role-header { background: #0c2340; }
-.rc-ops .role-header-title { color: #93c5fd; }
-.rc-ops .role-header-sub   { color: #60a5fa; }
-.rc-ops { border-color: #2563eb; background: #0a1a2e; }
-.rc-ops .role-section-label { color: #475569; }
-.rc-ops .rt-context { background: #1e3a5f; color: #93c5fd; }
-.rc-ops .rt-agent   { background: #2e1065; color: #c4b5fd; }
-.rc-ops .rt-skill   { background: #14532d; color: #86efac; }
-.rc-ops .rt-mcp     { background: #164e63; color: #67e8f9; }
-
-.rc-content .role-header { background: #2e1065; }
-.rc-content .role-header-title { color: #ddd6fe; }
-.rc-content .role-header-sub   { color: #c4b5fd; }
-.rc-content { border-color: #7c3aed; background: #1a0d3d; }
-.rc-content .role-section-label { color: #475569; }
-.rc-content .rt-context { background: #2e1065; color: #c4b5fd; }
-.rc-content .rt-agent   { background: #4a1d96; color: #ddd6fe; }
-.rc-content .rt-skill   { background: #14532d; color: #86efac; }
-.rc-content .rt-mcp     { background: #164e63; color: #67e8f9; }
-
-/* equation arrows */
-.role-eq {
-  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-  padding: 10px 14px; border-radius: 10px;
-  font-size: .72rem; font-weight: 700;
-}
-.eq-plus  { color: #475569; font-size: 1rem; }
-.eq-arrow { color: #475569; font-size: .9rem; }
-.eq-result { font-size: .76rem; font-weight: 800; }
-.rc-ops .role-eq     { background: #0c2340; color: #93c5fd; }
-.rc-ops .eq-result   { color: #86efac; }
-.rc-content .role-eq   { background: #2e1065; color: #c4b5fd; }
-.rc-content .eq-result { color: #86efac; }
-
-
-/* ══════════════════════════════
-   DIAGRAM 6 — WRITE DECISION
-══════════════════════════════ */
-.decision-tree {
-  display: flex; flex-direction: column; align-items: center; gap: 0;
-}
-.dt-node {
-  padding: 12px 24px; border-radius: 12px;
-  font-size: .78rem; font-weight: 700;
-  border: 2px solid; text-align: center;
-  min-width: 220px;
-}
-.dt-diamond {
-  padding: 14px 28px; border-radius: 12px;
-  font-size: .75rem; font-weight: 700;
-  border: 2px dashed; text-align: center;
-  min-width: 240px; position: relative;
-}
-.dt-arrow {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 2px; padding: 4px 0; position: relative;
-}
-.dt-line { width: 2px; height: 18px; background: #334155; }
-.dt-tip  {
-  width: 0; height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 8px solid #334155;
-}
-.dt-label { font-size: .64rem; font-weight: 700; color: #94a3b8; }
-
-/* branch row */
-.dt-branch-row {
-  display: grid; grid-template-columns: 1fr 20px 1fr;
-  width: 100%; gap: 0; align-items: start;
-}
-.dt-branch-arm {
-  display: flex; align-items: flex-start; gap: 0;
-}
-.dt-branch-line-h { height: 2px; background: #334155; flex: 1; margin-top: 20px; }
-.dt-branch-line-v { width: 2px; height: 20px; background: #334155; margin: 0 auto; }
-
-.dt-start    { background: #1c1003; border-color: #FF7F32; color: #fdba74; }
-.dt-q1       { background: #1a0533; border-color: #7c3aed; color: #c4b5fd; }
-.dt-q2       { background: #0c2340; border-color: #2563eb; color: #93c5fd; }
-.dt-q3       { background: #1c1003; border-color: #b45309; color: #fcd34d; }
-.dt-out-global  { background: #0c2340; border-color: #2563eb; color: #93c5fd; }
-.dt-out-project { background: #052e16; border-color: #16a34a; color: #86efac; }
-.dt-out-local   { background: #1c1003; border-color: #b45309; color: #fcd34d; }
-.dt-out-special { background: #2e1065; border-color: #7c3aed; color: #ddd6fe; }
-
-/* wide branch for special cases */
-.dt-special-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; width: 100%; }
+/* ─── two col ─── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
 
 /* ══════════════════════════════
    TITLE CARD
 ══════════════════════════════ */
 .title-card {
-  background: linear-gradient(135deg, #0E4174 0%, #1a1a2e 100%);
+  background: linear-gradient(135deg, #0E4174 0%, #1a3a6b 100%);
   border-radius: 24px; padding: 36px 40px;
-  border: 1px solid #2563eb;
+  border: none;
   display: flex; align-items: center; gap: 24px;
 }
 .title-logo {
@@ -477,22 +57,369 @@ body { font-family: 'Lexend', sans-serif; background: #0f172a; padding: 40px 20p
   border-radius: 18px; display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.title-logo svg { width: 38px; height: 38px; }
-.title-text h1 { font-size: 1.5rem; font-weight: 900; color: #f1f5f9; letter-spacing: -.5px; margin-bottom: 6px; }
-.title-text p  { font-size: .82rem; color: #94a3b8; line-height: 1.6; }
+.title-logo svg { width: 36px; height: 36px; }
+.title-text h1 { font-size: 1.5rem; font-weight: 900; color: #fff; letter-spacing: -.5px; margin-bottom: 6px; }
+.title-text p { font-size: .82rem; color: rgba(255,255,255,.75); line-height: 1.6; }
+.title-meta { display: flex; gap: 8px; margin-top: 14px; }
+.title-pill { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.2); border-radius: 99px; padding: 4px 12px; font-size: .68rem; color: rgba(255,255,255,.85); font-weight: 600; }
 
-.diagram-num {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: .62rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
-  color: #64748b; margin-bottom: 6px;
-}
-.diagram-num::before {
-  content: '';
-  display: block; width: 20px; height: 2px; background: #334155;
-}
 
-/* two-col layout */
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+/* ══════════════════════════════
+   DIAGRAM 1 — BIG PICTURE
+   Hub + spokes, nền sáng
+══════════════════════════════ */
+.hub-wrap { display: grid; grid-template-columns: 1fr 160px 1fr; gap: 16px; align-items: center; }
+.hub-col { display: flex; flex-direction: column; gap: 10px; }
+.spoke {
+  background: #f8fafc; border: 1.5px solid #e2e8f0;
+  border-radius: 14px; padding: 12px 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+  transition: box-shadow .15s;
+}
+.spoke:hover { box-shadow: 0 4px 16px rgba(14,65,116,.1); }
+.spoke-icon { font-size: 1.3rem; flex-shrink: 0; }
+.spoke-title { font-size: .76rem; font-weight: 700; color: #0f172a; margin-bottom: 2px; }
+.spoke-sub { font-size: .67rem; color: #64748b; line-height: 1.5; }
+.spoke-tag { display: inline-block; margin-top: 4px; font-size: .6rem; font-weight: 700; padding: 2px 7px; border-radius: 5px; }
+
+.spoke-blue   { border-color: #bfdbfe; }
+.spoke-blue   .spoke-title { color: #1e40af; }
+.spoke-blue   .spoke-tag { background: #dbeafe; color: #1e40af; }
+
+.spoke-orange { border-color: #fed7aa; }
+.spoke-orange .spoke-title { color: #c2410c; }
+.spoke-orange .spoke-tag { background: #ffedd5; color: #c2410c; }
+
+.spoke-teal   { border-color: #99f6e4; }
+.spoke-teal   .spoke-title { color: #0f766e; }
+.spoke-teal   .spoke-tag { background: #ccfbf1; color: #0f766e; }
+
+.spoke-green  { border-color: #bbf7d0; }
+.spoke-green  .spoke-title { color: #15803d; }
+.spoke-green  .spoke-tag { background: #dcfce7; color: #15803d; }
+
+.spoke-purple { border-color: #ddd6fe; }
+.spoke-purple .spoke-title { color: #6d28d9; }
+.spoke-purple .spoke-tag { background: #ede9fe; color: #6d28d9; }
+
+.spoke-red    { border-color: #fecaca; }
+.spoke-red    .spoke-title { color: #991b1b; }
+.spoke-red    .spoke-tag { background: #fee2e2; color: #991b1b; }
+
+.hub-center {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.hub-core {
+  width: 120px; height: 120px; border-radius: 50%;
+  background: linear-gradient(135deg, #FF7F32, #0E4174);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; box-shadow: 0 0 0 8px rgba(14,65,116,.08), 0 0 0 16px rgba(255,127,50,.06);
+}
+.hub-core-icon { font-size: 2rem; }
+.hub-core-title { font-size: .7rem; font-weight: 900; color: #fff; letter-spacing: .5px; text-align: center; }
+.hub-core-sub { font-size: .58rem; color: rgba(255,255,255,.75); text-align: center; }
+
+/* connector */
+.hub-conn { display: flex; flex-direction: column; justify-content: space-around; align-items: center; height: 100%; gap: 8px; }
+.hub-line { width: 100%; height: 1px; background: linear-gradient(90deg,#e2e8f0,#cbd5e1); position: relative; }
+.hub-line::after { content:''; position:absolute; right:-5px; top:-4px; border:5px solid transparent; border-left-color:#cbd5e1; }
+.hub-line-r { width: 100%; height: 1px; background: linear-gradient(270deg,#e2e8f0,#cbd5e1); position: relative; }
+.hub-line-r::after { content:''; position:absolute; left:-5px; top:-4px; border:5px solid transparent; border-right-color:#cbd5e1; }
+
+/* flow bar */
+.flow-bar { display: grid; grid-template-columns: 1fr 50px 1fr; gap: 0; align-items: center; margin-top: 24px; }
+.flow-bar-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px; text-align: center; }
+.flow-bar-icon { font-size: 1.2rem; margin-bottom: 4px; }
+.flow-bar-title { font-size: .72rem; font-weight: 700; color: #0f172a; margin-bottom: 2px; }
+.flow-bar-sub { font-size: .64rem; color: #64748b; line-height: 1.5; }
+.flow-bar-arrow { text-align: center; }
+
+
+/* ══════════════════════════════
+   DIAGRAM 2 — LAYERS
+══════════════════════════════ */
+.layers { display: flex; flex-direction: column; gap: 0; }
+.layer-wrap { position: relative; }
+.layer-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; border-radius: 12px;
+  border: 1.5px solid;
+}
+.layer-badge {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .72rem; font-weight: 800; color: #fff;
+}
+.layer-icon { font-size: 1.2rem; flex-shrink: 0; }
+.layer-main { flex: 1; }
+.layer-name { font-size: .82rem; font-weight: 800; margin-bottom: 2px; }
+.layer-path { font-family: 'Space Mono', monospace; font-size: .6rem; margin-bottom: 5px; }
+.layer-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.layer-tag { font-size: .63rem; font-weight: 600; padding: 2px 7px; border-radius: 5px; }
+.layer-priority { font-size: .62rem; font-weight: 800; text-align: right; flex-shrink: 0; line-height: 1.4; }
+
+.ly-local   { background: #fffbeb; border-color: #fbbf24; }
+.ly-local   .layer-badge { background: #d97706; }
+.ly-local   .layer-name  { color: #92400e; }
+.ly-local   .layer-path  { color: #d97706; }
+.ly-local   .layer-tag   { background: #fef3c7; color: #92400e; }
+.ly-local   .layer-priority { color: #d97706; }
+
+.ly-project { background: #f0fdf4; border-color: #4ade80; }
+.ly-project .layer-badge { background: #16a34a; }
+.ly-project .layer-name  { color: #14532d; }
+.ly-project .layer-path  { color: #16a34a; }
+.ly-project .layer-tag   { background: #dcfce7; color: #14532d; }
+.ly-project .layer-priority { color: #16a34a; }
+
+.ly-global  { background: #eff6ff; border-color: #60a5fa; }
+.ly-global  .layer-badge { background: #2563eb; }
+.ly-global  .layer-name  { color: #1e3a8a; }
+.ly-global  .layer-path  { color: #2563eb; }
+.ly-global  .layer-tag   { background: #dbeafe; color: #1e3a8a; }
+.ly-global  .layer-priority { color: #2563eb; }
+
+.ly-chat    { background: #faf5ff; border-color: #c4b5fd; }
+.ly-chat    .layer-badge { background: #7c3aed; }
+.ly-chat    .layer-name  { color: #4c1d95; }
+.ly-chat    .layer-path  { color: #7c3aed; }
+.ly-chat    .layer-tag   { background: #ede9fe; color: #4c1d95; }
+.ly-chat    .layer-priority { color: #7c3aed; }
+
+.layer-connector {
+  display: flex; align-items: center; gap: 8px; padding: 6px 16px;
+}
+.lc-line { flex: 1; height: 1px; background: #e2e8f0; }
+.lc-label { font-size: .6rem; color: #94a3b8; font-weight: 600; white-space: nowrap; }
+
+.priority-visual { margin-top: 16px; background: #f8fafc; border-radius: 10px; padding: 10px 14px; border: 1px solid #e2e8f0; }
+.pv-label { display: flex; justify-content: space-between; font-size: .62rem; font-weight: 700; color: #64748b; margin-bottom: 6px; }
+.pv-bar { height: 8px; border-radius: 99px; background: linear-gradient(90deg, #d97706, #16a34a, #2563eb, #7c3aed); }
+
+
+/* ══════════════════════════════
+   DIAGRAM 3 — SESSION FLOW
+══════════════════════════════ */
+.session-steps { display: flex; flex-direction: column; gap: 0; }
+.sess-step {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px; border-radius: 12px; border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+}
+.sess-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .72rem; font-weight: 800; flex-shrink: 0;
+  font-family: 'Space Mono', monospace; color: #fff;
+}
+.sess-content { flex: 1; }
+.sess-title { font-size: .8rem; font-weight: 700; margin-bottom: 2px; }
+.sess-desc { font-size: .69rem; color: #64748b; line-height: 1.5; }
+.sess-file { font-family: 'Space Mono', monospace; font-size: .61rem; padding: 2px 7px; border-radius: 5px; margin-top: 4px; display: inline-block; }
+
+.sess-arrow { width: 2px; height: 16px; background: #e2e8f0; margin: 2px 0 2px 22px; position: relative; }
+.sess-arrow::after { content:''; position:absolute; bottom:-5px; left:-4px; border:5px solid transparent; border-top-color:#e2e8f0; }
+
+.ss-1 { border-color: #fbbf24; background: #fffbeb; }
+.ss-1 .sess-num { background: #d97706; }
+.ss-1 .sess-title { color: #92400e; }
+.ss-1 .sess-file { background: #fef3c7; color: #92400e; }
+
+.ss-2 { border-color: #60a5fa; background: #eff6ff; }
+.ss-2 .sess-num { background: #2563eb; }
+.ss-2 .sess-title { color: #1e3a8a; }
+.ss-2 .sess-file { background: #dbeafe; color: #1e3a8a; }
+
+.ss-3 { border-color: #4ade80; background: #f0fdf4; }
+.ss-3 .sess-num { background: #16a34a; }
+.ss-3 .sess-title { color: #14532d; }
+.ss-3 .sess-file { background: #dcfce7; color: #14532d; }
+
+.ss-4 { border-color: #c4b5fd; background: #faf5ff; }
+.ss-4 .sess-num { background: #7c3aed; }
+.ss-4 .sess-title { color: #4c1d95; }
+.ss-4 .sess-file { background: #ede9fe; color: #4c1d95; }
+
+.ss-5 { border-color: #fdba74; background: #fff7ed; }
+.ss-5 .sess-num { background: #ea580c; }
+.ss-5 .sess-title { color: #7c2d12; }
+.ss-5 .sess-file { background: #ffedd5; color: #7c2d12; }
+
+.ss-ready { border-color: #34d399; background: linear-gradient(90deg,#f0fdf4,#eff6ff); }
+.ss-ready .sess-num { background: #10b981; }
+.ss-ready .sess-title { color: #065f46; }
+
+.ondemand-box { margin-top: 14px; background: #f8fafc; border-radius: 10px; padding: 10px 14px; border: 1.5px dashed #cbd5e1; }
+.od-label { font-size: .63rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 6px; }
+.od-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.od-pill { font-size: .67rem; font-weight: 600; padding: 4px 10px; border-radius: 7px; }
+
+
+/* ══════════════════════════════
+   DIAGRAM 4 — SKILLS vs AGENTS
+══════════════════════════════ */
+.sa-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1.5px solid #e2e8f0; border-radius: 16px; overflow: hidden; }
+.sa-col-inner { display: flex; flex-direction: column; }
+.sa-head { padding: 20px 24px; display: flex; align-items: center; gap: 12px; }
+.sa-head-icon { font-size: 1.8rem; }
+.sa-head-title { font-size: 1rem; font-weight: 800; }
+.sa-head-sub { font-size: .7rem; opacity: .85; margin-top: 2px; }
+.sa-body-inner { padding: 20px 24px; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+
+.sa-skill .sa-head { background: #f0fdf4; border-bottom: 1.5px solid #bbf7d0; }
+.sa-skill .sa-head-title { color: #14532d; }
+.sa-skill .sa-head-sub { color: #16a34a; }
+.sa-skill .sa-body-inner { background: #fff; border-right: 1px solid #e2e8f0; }
+
+.sa-agent .sa-head { background: #faf5ff; border-bottom: 1.5px solid #ddd6fe; }
+.sa-agent .sa-head-title { color: #4c1d95; }
+.sa-agent .sa-head-sub { color: #7c3aed; }
+.sa-agent .sa-body-inner { background: #fff; }
+
+/* mini flow */
+.mini-flow { display: flex; flex-direction: column; gap: 0; }
+.mf-box { padding: 8px 12px; border-radius: 8px; font-size: .69rem; font-weight: 600; text-align: center; }
+.mf-sep { display: flex; justify-content: center; padding: 2px; }
+.mf-sep-icon { font-size: .75rem; color: #94a3b8; }
+
+.sa-skill .mf-you  { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+.sa-skill .mf-ctx  { background: #f8fafc; color: #94a3b8; border: 1px dashed #e2e8f0; font-size: .62rem; }
+.sa-skill .mf-proc { background: #f0fdf4; color: #14532d; border: 1px solid #bbf7d0; }
+.sa-skill .mf-out  { background: #dcfce7; color: #14532d; border: 1.5px solid #4ade80; font-weight: 700; }
+
+.sa-agent .mf-you  { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+.sa-agent .mf-sep-box { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; font-size: .62rem; }
+.sa-agent .mf-proc { background: #faf5ff; color: #4c1d95; border: 1px solid #ddd6fe; }
+.sa-agent .mf-out  { background: #ede9fe; color: #4c1d95; border: 1.5px solid #c4b5fd; font-weight: 700; }
+
+/* prop rows */
+.sa-prop { display: flex; gap: 10px; align-items: flex-start; }
+.sa-prop-icon { font-size: .95rem; flex-shrink: 0; margin-top: 1px; }
+.sa-prop-label { font-size: .68rem; font-weight: 700; color: #0f172a; margin-bottom: 2px; }
+.sa-prop-val { font-size: .68rem; color: #64748b; line-height: 1.5; }
+
+/* when to use */
+.when-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.when-card { border-radius: 12px; padding: 14px 16px; border: 1.5px solid; }
+.when-title { font-size: .72rem; font-weight: 800; margin-bottom: 8px; }
+.when-item { font-size: .69rem; display: flex; gap: 6px; align-items: flex-start; line-height: 1.5; margin-bottom: 4px; }
+.when-item::before { content: '✓'; flex-shrink: 0; font-weight: 800; }
+
+.wc-skill { background: #f0fdf4; border-color: #4ade80; }
+.wc-skill .when-title { color: #15803d; }
+.wc-skill .when-item { color: #166534; }
+.wc-skill .when-item::before { color: #16a34a; }
+
+.wc-agent { background: #faf5ff; border-color: #c4b5fd; }
+.wc-agent .when-title { color: #5b21b6; }
+.wc-agent .when-item { color: #4c1d95; }
+.wc-agent .when-item::before { color: #7c3aed; }
+
+/* analogy */
+.analogy-row { display: grid; grid-template-columns: 1fr 30px 1fr; gap: 0; margin-top: 12px; align-items: center; }
+.analogy-box { border-radius: 12px; padding: 14px 16px; border: 1.5px solid #e2e8f0; background: #f8fafc; text-align: center; }
+.analogy-emoji { font-size: 1.6rem; margin-bottom: 4px; }
+.analogy-name { font-size: .73rem; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+.analogy-desc { font-size: .67rem; color: #64748b; line-height: 1.5; }
+.analogy-eq { text-align: center; font-size: 1.1rem; color: #cbd5e1; font-weight: 700; }
+
+
+/* ══════════════════════════════
+   DIAGRAM 5 — ROLE MAP
+══════════════════════════════ */
+.role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.role-card { border-radius: 16px; border: 1.5px solid; overflow: hidden; }
+.role-head { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+.role-head-icon { font-size: 1.6rem; }
+.role-head-title { font-size: .88rem; font-weight: 800; }
+.role-head-sub { font-size: .68rem; opacity: .85; margin-top: 2px; }
+.role-body { padding: 16px 20px; background: #fff; display: flex; flex-direction: column; gap: 12px; }
+.role-section-lbl { font-size: .6rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #94a3b8; margin-bottom: 4px; }
+.role-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.role-tag { font-size: .67rem; font-weight: 600; padding: 3px 9px; border-radius: 7px; }
+.role-eq { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; padding: 8px 12px; border-radius: 8px; font-size: .7rem; font-weight: 700; margin-top: 4px; }
+.eq-plus { color: #94a3b8; }
+.eq-arrow { color: #94a3b8; }
+.eq-result { font-size: .72rem; font-weight: 800; }
+
+.rc-ops { border-color: #60a5fa; }
+.rc-ops .role-head { background: #eff6ff; }
+.rc-ops .role-head-title { color: #1e3a8a; }
+.rc-ops .role-head-sub { color: #3b82f6; }
+.rc-ops .rt-ctx { background: #dbeafe; color: #1e40af; }
+.rc-ops .rt-agent { background: #ede9fe; color: #5b21b6; }
+.rc-ops .rt-skill { background: #dcfce7; color: #14532d; }
+.rc-ops .rt-mcp { background: #ccfbf1; color: #0f766e; }
+.rc-ops .role-eq { background: #f0f9ff; color: #0369a1; }
+.rc-ops .eq-result { color: #15803d; }
+
+.rc-content { border-color: #c4b5fd; }
+.rc-content .role-head { background: #faf5ff; }
+.rc-content .role-head-title { color: #4c1d95; }
+.rc-content .role-head-sub { color: #7c3aed; }
+.rc-content .rt-ctx { background: #ede9fe; color: #5b21b6; }
+.rc-content .rt-agent { background: #fae8ff; color: #86198f; }
+.rc-content .rt-skill { background: #dcfce7; color: #14532d; }
+.rc-content .rt-mcp { background: #ccfbf1; color: #0f766e; }
+.rc-content .role-eq { background: #faf5ff; color: #6d28d9; }
+.rc-content .eq-result { color: #15803d; }
+
+.insight-box { background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 14px; padding: 14px 18px; margin-top: 16px; font-size: .76rem; color: #78350f; line-height: 1.7; }
+
+
+/* ══════════════════════════════
+   DIAGRAM 6 — WRITE DECISION
+══════════════════════════════ */
+.dt-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+
+/* decision tree */
+.dtree { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.dt-node {
+  padding: 10px 20px; border-radius: 10px; border: 1.5px solid;
+  font-size: .76rem; font-weight: 700; text-align: center; width: 100%;
+}
+.dt-diamond {
+  padding: 12px 20px; border-radius: 10px; border: 2px dashed;
+  font-size: .74rem; font-weight: 700; text-align: center; width: 100%;
+}
+.dt-arrow-v { width: 2px; height: 16px; background: #e2e8f0; margin: 0 auto; position: relative; }
+.dt-arrow-v::after { content:''; position:absolute; bottom:-5px; left:-4px; border:5px solid transparent; border-top-color:#e2e8f0; }
+.dt-branch { display: grid; grid-template-columns: 1fr 2px 1fr; width: 100%; margin-top: 0; }
+.dt-branch-col { display: flex; flex-direction: column; align-items: center; }
+.dt-branch-h { height: 16px; border-top: 1.5px solid #e2e8f0; width: 100%; }
+.dt-branch-v { width: 2px; height: 14px; background: #e2e8f0; }
+.dt-branch-tip { width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:6px solid #e2e8f0; }
+.dt-branch-label { font-size: .6rem; font-weight: 700; margin: 4px 0; }
+.dt-branch-center { background: #e2e8f0; }
+
+.dt-start    { background: #fff7ed; border-color: #FF7F32; color: #92400e; }
+.dt-q        { background: #f5f3ff; border-color: #a78bfa; color: #4c1d95; }
+.dt-global   { background: #eff6ff; border-color: #60a5fa; color: #1e3a8a; }
+.dt-project  { background: #f0fdf4; border-color: #4ade80; color: #14532d; }
+.dt-local    { background: #fffbeb; border-color: #fbbf24; color: #92400e; }
+
+.dt-yes { color: #16a34a; }
+.dt-no  { color: #dc2626; }
+
+/* quick ref */
+.qref { display: flex; flex-direction: column; gap: 8px; }
+.qref-item { border-radius: 10px; padding: 10px 14px; border: 1.5px solid; }
+.qref-title { font-size: .68rem; font-weight: 800; margin-bottom: 4px; }
+.qref-desc { font-size: .67rem; line-height: 1.6; }
+.qref-global  { background: #eff6ff; border-color: #93c5fd; }
+.qref-global  .qref-title { color: #1e40af; }
+.qref-global  .qref-desc { color: #3b82f6; }
+.qref-project { background: #f0fdf4; border-color: #86efac; }
+.qref-project .qref-title { color: #15803d; }
+.qref-project .qref-desc { color: #16a34a; }
+.qref-local   { background: #fffbeb; border-color: #fde68a; }
+.qref-local   .qref-title { color: #92400e; }
+.qref-local   .qref-desc { color: #d97706; }
+
+.path-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; margin-top: 4px; }
+.path-box-title { font-size: .66rem; font-weight: 700; color: #64748b; margin-bottom: 6px; }
+.path-line { font-family: 'Space Mono', monospace; font-size: .63rem; line-height: 2; }
+.path-tip { margin-top: 8px; font-size: .67rem; color: #64748b; background: #fff; padding: 7px 10px; border-radius: 8px; border: 1px solid #e2e8f0; }
 </style>
 </head>
 <body>
@@ -505,7 +432,15 @@ body { font-family: 'Lexend', sans-serif; background: #0f172a; padding: 40px 20p
   </div>
   <div class="title-text">
     <h1>Claude Code — Visual Guide</h1>
-    <p>6 sơ đồ giải thích toàn bộ hệ thống từ Big Picture đến chi tiết vận hành. Đọc từ trên xuống — mỗi diagram trả lời 1 câu hỏi cốt lõi của người mới.</p>
+    <p>6 sơ đồ giải thích toàn bộ hệ thống, kèm giải thích thuật ngữ ngay trong từng diagram.<br>Đọc từ trên xuống — mỗi diagram trả lời 1 câu hỏi cốt lõi.</p>
+    <div class="title-meta">
+      <span class="title-pill">Diagram 01 — Big Picture</span>
+      <span class="title-pill">02 — Layers</span>
+      <span class="title-pill">03 — Session Flow</span>
+      <span class="title-pill">04 — Skills vs Agents</span>
+      <span class="title-pill">05 — Role Map</span>
+      <span class="title-pill">06 — Write Decision</span>
+    </div>
   </div>
 </div>
 
@@ -514,257 +449,328 @@ body { font-family: 'Lexend', sans-serif; background: #0f172a; padding: 40px 20p
      DIAGRAM 1 — BIG PICTURE
 ════════════════════════════════════ -->
 <div class="card">
-  <div class="diagram-num">Diagram 01</div>
+  <div class="card-tag">Diagram 01</div>
   <div class="card-title">Claude Code là gì? — The Big Picture</div>
-  <div class="card-sub">Claude Code là AI assistant có khả năng đọc file, chạy lệnh, gọi công cụ ngoài, và ghi nhớ qua các phiên</div>
+  <div class="card-sub">Claude Code không chỉ là AI chat. Nó kết nối với file, công cụ ngoài, và ghi nhớ xuyên phiên — giống như một nhân viên có văn phòng riêng.</div>
 
-  <div class="bigpic">
-    <!-- LEFT SPOKES -->
-    <div class="bp-col">
-      <div class="bp-spoke bps-reads">
-        <div class="bp-spoke-icon">📖</div>
+  <div class="hub-wrap">
+    <!-- LEFT: INPUT -->
+    <div class="hub-col">
+      <div class="spoke spoke-blue">
+        <div class="spoke-icon">📖</div>
         <div>
-          <div class="bp-spoke-title">Đọc để hiểu context</div>
-          <div class="bp-spoke-desc">CLAUDE.md · AGENTS.md<br>Biết bạn là ai, làm gì, output thế nào</div>
+          <div class="spoke-title">Đọc hướng dẫn</div>
+          <div class="spoke-sub">CLAUDE.md, AGENTS.md<br>→ biết bạn là ai, làm gì, output thế nào</div>
+          <span class="spoke-tag spoke-blue">Context file</span>
         </div>
       </div>
-      <div class="bp-spoke bps-memory">
-        <div class="bp-spoke-icon">💾</div>
+      <div class="spoke spoke-orange">
+        <div class="spoke-icon">💾</div>
         <div>
-          <div class="bp-spoke-title">Ghi nhớ qua phiên</div>
-          <div class="bp-spoke-desc">memory/ files<br>Profile, rules, voice, references</div>
+          <div class="spoke-title">Ghi nhớ qua phiên</div>
+          <div class="spoke-sub">memory/ folder: profile, rules, voice<br>→ không phải nhắc lại mỗi lần</div>
+          <span class="spoke-tag spoke-orange">Memory</span>
         </div>
       </div>
-      <div class="bp-spoke bps-mcp">
-        <div class="bp-spoke-icon">🔌</div>
+      <div class="spoke spoke-teal">
+        <div class="spoke-icon">🔌</div>
         <div>
-          <div class="bp-spoke-title">Kết nối công cụ ngoài</div>
-          <div class="bp-spoke-desc">Gmail · GDrive · GCal<br>NotebookLM · Excalidraw</div>
+          <div class="spoke-title">Kết nối công cụ ngoài</div>
+          <div class="spoke-sub">Gmail, GDrive, GCal, NotebookLM<br>→ đọc email, lưu file, tạo lịch</div>
+          <span class="spoke-tag spoke-teal">MCP Tools</span>
         </div>
       </div>
     </div>
 
     <!-- CENTER -->
-    <div class="bp-center">
-      <div class="bp-core">
-        <div class="bp-core-icon">✳</div>
-        <div class="bp-core-title">CLAUDE CODE</div>
-        <div class="bp-core-sub">AI + Files + Tools</div>
+    <div class="hub-center">
+      <div class="hub-core">
+        <div class="hub-core-icon">✳</div>
+        <div class="hub-core-title">CLAUDE CODE</div>
+        <div class="hub-core-sub">AI + Files + Tools</div>
       </div>
+      <div style="font-size:.6rem;color:#94a3b8;text-align:center;margin-top:4px;">nhận → xử lý → tạo ra</div>
     </div>
 
-    <!-- RIGHT SPOKES -->
-    <div class="bp-col">
-      <div class="bp-spoke bps-output">
-        <div class="bp-spoke-icon">📤</div>
+    <!-- RIGHT: OUTPUT -->
+    <div class="hub-col">
+      <div class="spoke spoke-green">
+        <div class="spoke-icon">📤</div>
         <div>
-          <div class="bp-spoke-title">Tạo ra output</div>
-          <div class="bp-spoke-desc">Excel · Slide · PDF<br>Report · Code · HTML</div>
+          <div class="spoke-title">Tạo ra output</div>
+          <div class="spoke-sub">Excel, Slide, PDF, Report, Code, HTML<br>→ file hoàn chỉnh, sẵn sàng dùng</div>
+          <span class="spoke-tag spoke-green">Output</span>
         </div>
       </div>
-      <div class="bp-spoke bps-skills">
-        <div class="bp-spoke-icon">🧠</div>
+      <div class="spoke spoke-purple">
+        <div class="spoke-icon">🧠</div>
         <div>
-          <div class="bp-spoke-title">Skills — công cụ chuyên dụng</div>
-          <div class="bp-spoke-desc">/xlsx /pdf /pptx /html /okr<br>Gọi theo yêu cầu, không tốn context</div>
+          <div class="spoke-title">Skills — công thức có sẵn</div>
+          <div class="spoke-sub">/xlsx /pdf /pptx /html /okr<br>→ gọi là ra đúng định dạng</div>
+          <span class="spoke-tag spoke-purple">Skills</span>
         </div>
       </div>
-      <div class="bp-spoke bps-agents">
-        <div class="bp-spoke-icon">🤖</div>
+      <div class="spoke spoke-red">
+        <div class="spoke-icon">🤖</div>
         <div>
-          <div class="bp-spoke-title">Agents — chuyên gia tự trị</div>
-          <div class="bp-spoke-desc">sql-analyst · report-writer<br>driver-comms · competitive-intel</div>
+          <div class="spoke-title">Agents — chuyên gia con</div>
+          <div class="spoke-sub">sql-analyst, report-writer, driver-comms<br>→ tự nghiên cứu và báo cáo lại</div>
+          <span class="spoke-tag spoke-red">Agents</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- simple connector visual -->
-  <div style="margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center;">
-    <div style="background:#1e293b;border-radius:12px;padding:14px;border:1px solid #334155;">
-      <div style="font-size:1.2rem;margin-bottom:6px;">💬</div>
-      <div style="font-size:.72rem;font-weight:700;color:#94a3b8;">Bạn chat</div>
-      <div style="font-size:.66rem;color:#475569;margin-top:3px;">Yêu cầu bằng ngôn ngữ tự nhiên</div>
+  <!-- flow bar -->
+  <div class="flow-bar" style="margin-top:24px;">
+    <div class="flow-bar-box">
+      <div class="flow-bar-icon">💬</div>
+      <div class="flow-bar-title">Bạn yêu cầu</div>
+      <div class="flow-bar-sub">Viết bằng tiếng Việt bình thường</div>
     </div>
-    <div style="display:flex;align-items:center;justify-content:center;">
-      <svg width="60" height="20" viewBox="0 0 60 20">
-        <line x1="0" y1="10" x2="50" y2="10" stroke="#475569" stroke-width="2" stroke-dasharray="4,3"/>
-        <polygon points="50,5 60,10 50,15" fill="#475569"/>
-      </svg>
+    <div class="flow-bar-arrow">
+      <svg width="50" height="20" viewBox="0 0 50 20"><line x1="0" y1="10" x2="38" y2="10" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,3"/><polygon points="38,5 48,10 38,15" fill="#cbd5e1"/></svg>
     </div>
-    <div style="background:#1e293b;border-radius:12px;padding:14px;border:1px solid #334155;">
-      <div style="font-size:1.2rem;margin-bottom:6px;">⚙️</div>
-      <div style="font-size:.72rem;font-weight:700;color:#94a3b8;">Claude xử lý</div>
-      <div style="font-size:.66rem;color:#475569;margin-top:3px;">Đọc context → lập kế hoạch → thực thi</div>
+    <div class="flow-bar-box">
+      <div class="flow-bar-icon">⚙️</div>
+      <div class="flow-bar-title">Claude xử lý</div>
+      <div class="flow-bar-sub">Đọc context → Lập kế hoạch → Thực thi</div>
+    </div>
+  </div>
+
+  <!-- glossary -->
+  <div class="glossary">
+    <div class="glossary-title">📖 Giải thích thuật ngữ trong sơ đồ này</div>
+    <div class="glossary-grid">
+      <div class="g-item">
+        <div class="g-key">Context file</div>
+        <div class="g-val">File văn bản hướng dẫn Claude — như "job description" viết sẵn, Claude đọc khi khởi động.</div>
+      </div>
+      <div class="g-item">
+        <div class="g-key">Memory</div>
+        <div class="g-val">Ghi chú tồn tại qua nhiều phiên làm việc. Claude đọc lại mỗi lần mở để nhớ bạn là ai.</div>
+      </div>
+      <div class="g-item">
+        <div class="g-key">MCP Tools</div>
+        <div class="g-val">Model Context Protocol — cầu nối để Claude dùng Gmail, GDrive… Giống plugin cài thêm cho Claude.</div>
+      </div>
+      <div class="g-item">
+        <div class="g-key">Skills</div>
+        <div class="g-val">Công thức xử lý cố định. Gọi /xlsx → Claude biết chính xác cách tạo Excel chuẩn.</div>
+      </div>
+      <div class="g-item">
+        <div class="g-key">Agents</div>
+        <div class="g-val">AI con có chuyên môn riêng. Bạn giao việc → Agent tự nghiên cứu và báo cáo lại — không làm rối luồng chính.</div>
+      </div>
     </div>
   </div>
 </div>
 
 
 <!-- ════════════════════════════════════
-     DIAGRAM 2+3 — TWO COL
+     DIAGRAM 2 + 3 — TWO COL
 ════════════════════════════════════ -->
 <div class="two-col">
 
-  <!-- DIAGRAM 2 — LAYER CAKE -->
+  <!-- DIAGRAM 2 — LAYERS -->
   <div class="card">
-    <div class="diagram-num">Diagram 02</div>
-    <div class="card-title">4 môi trường — ai override ai?</div>
-    <div class="card-sub">Lớp dưới luôn thắng lớp trên. Local > Project > Global > Chat</div>
+    <div class="card-tag">Diagram 02</div>
+    <div class="card-title">4 lớp môi trường</div>
+    <div class="card-sub">Lớp nào ở dưới thì thắng. Bạn luôn có thể override bằng cách viết vào lớp thấp hơn.</div>
 
     <div class="layers">
-      <div class="layer ly-local">
+      <div class="layer-row ly-local">
+        <div class="layer-badge" style="background:#d97706;">1</div>
         <div class="layer-icon">🔐</div>
-        <div style="flex:1">
-          <div class="layer-name">Local</div>
+        <div class="layer-main">
+          <div class="layer-name">Local — Riêng máy này</div>
           <div class="layer-path">CLAUDE.local.md · settings.local.json</div>
-          <div class="layer-items">
-            <span class="layer-tag">Override riêng tư</span>
-            <span class="layer-tag">Không commit git</span>
-            <span class="layer-tag">Chỉ máy này</span>
+          <div class="layer-tags">
+            <span class="layer-tag">Không lên git</span>
+            <span class="layer-tag">API key bí mật</span>
+            <span class="layer-tag">Override cá nhân</span>
           </div>
         </div>
-        <div class="layer-scope">① ƯU TIÊN<br>CAO NHẤT</div>
+        <div class="layer-priority" style="color:#d97706;">🏆 THẮNG<br>tất cả</div>
       </div>
 
-      <div style="display:flex;align-items:center;gap:8px;padding:4px 16px;">
-        <div style="flex:1;height:1px;background:#334155;"></div>
-        <div style="font-size:.62rem;color:#475569;font-weight:700;">thêm project context</div>
-        <div style="flex:1;height:1px;background:#334155;"></div>
+      <div class="layer-connector">
+        <div class="lc-line"></div>
+        <div class="lc-label">↑ override lớp trên</div>
+        <div class="lc-line"></div>
       </div>
 
-      <div class="layer ly-project">
+      <div class="layer-row ly-project">
+        <div class="layer-badge" style="background:#16a34a;">2</div>
         <div class="layer-icon">🏢</div>
-        <div style="flex:1">
-          <div class="layer-name">Project</div>
+        <div class="layer-main">
+          <div class="layer-name">Project — Cả team dùng</div>
           <div class="layer-path">CLAUDE.md · .claude/ · AGENTS.md</div>
-          <div class="layer-items">
-            <span class="layer-tag">Rules Ahamove</span>
+          <div class="layer-tags">
+            <span class="layer-tag">Quy tắc Ahamove</span>
             <span class="layer-tag">9 agents</span>
-            <span class="layer-tag">Hooks auto-sync</span>
+            <span class="layer-tag">Hooks tự động</span>
           </div>
         </div>
-        <div class="layer-scope">② OVERRIDE<br>GLOBAL</div>
+        <div class="layer-priority" style="color:#16a34a;">Thắng<br>global</div>
       </div>
 
-      <div style="display:flex;align-items:center;gap:8px;padding:4px 16px;">
-        <div style="flex:1;height:1px;background:#334155;"></div>
-        <div style="font-size:.62rem;color:#475569;font-weight:700;">thêm global tools</div>
-        <div style="flex:1;height:1px;background:#334155;"></div>
+      <div class="layer-connector">
+        <div class="lc-line"></div>
+        <div class="lc-label">↑ override lớp trên</div>
+        <div class="lc-line"></div>
       </div>
 
-      <div class="layer ly-global">
+      <div class="layer-row ly-global">
+        <div class="layer-badge" style="background:#2563eb;">3</div>
         <div class="layer-icon">🌐</div>
-        <div style="flex:1">
-          <div class="layer-name">Global</div>
+        <div class="layer-main">
+          <div class="layer-name">Global — Mọi project</div>
           <div class="layer-path">~/.claude/ · .mcp.json</div>
-          <div class="layer-items">
+          <div class="layer-tags">
             <span class="layer-tag">14 skills</span>
             <span class="layer-tag">MCP tools</span>
             <span class="layer-tag">Memory</span>
           </div>
         </div>
-        <div class="layer-scope">③ BASE<br>MỌI PROJECT</div>
+        <div class="layer-priority" style="color:#2563eb;">Base<br>chung</div>
       </div>
 
-      <div style="display:flex;align-items:center;gap:8px;padding:4px 16px;">
-        <div style="flex:1;height:1px;background:#334155;"></div>
-        <div style="font-size:.62rem;color:#475569;font-weight:700;">không có file, không có context</div>
-        <div style="flex:1;height:1px;background:#334155;"></div>
+      <div class="layer-connector">
+        <div class="lc-line"></div>
+        <div class="lc-label">không có file → không có context</div>
+        <div class="lc-line"></div>
       </div>
 
-      <div class="layer ly-chat">
+      <div class="layer-row ly-chat">
+        <div class="layer-badge" style="background:#7c3aed;">4</div>
         <div class="layer-icon">💬</div>
-        <div style="flex:1">
-          <div class="layer-name">Chat</div>
-          <div class="layer-path">claude.ai · browser</div>
-          <div class="layer-items">
+        <div class="layer-main">
+          <div class="layer-name">Chat thuần — claude.ai</div>
+          <div class="layer-path">browser / claude.ai</div>
+          <div class="layer-tags">
             <span class="layer-tag">Nhanh</span>
             <span class="layer-tag">Không tools</span>
             <span class="layer-tag">Không memory</span>
           </div>
         </div>
-        <div class="layer-scope">④ ĐƠN GIẢN<br>NHẤT</div>
+        <div class="layer-priority" style="color:#7c3aed;">Ít<br>power</div>
+      </div>
+    </div>
+
+    <div class="priority-visual" style="margin-top:16px;">
+      <div class="pv-label">
+        <span style="color:#d97706;">🔐 Local (mạnh nhất)</span>
+        <span style="color:#7c3aed;">💬 Chat (yếu nhất)</span>
+      </div>
+      <div class="pv-bar"></div>
+    </div>
+
+    <div class="glossary" style="margin-top:14px;">
+      <div class="glossary-title">📖 Giải thích thuật ngữ</div>
+      <div class="glossary-grid">
+        <div class="g-item">
+          <div class="g-key">Override</div>
+          <div class="g-val">Ghi đè, thay thế. Lớp thấp viết khác → thắng lớp cao dù lớp cao có nói gì.</div>
+        </div>
+        <div class="g-item">
+          <div class="g-key">Hooks</div>
+          <div class="g-val">Lệnh tự động chạy khi có sự kiện. Ví dụ: mỗi khi Claude dừng → tự git commit + sync Drive.</div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- DIAGRAM 3 — SESSION FLOW -->
   <div class="card">
-    <div class="diagram-num">Diagram 03</div>
-    <div class="card-title">Session startup — Claude đọc theo thứ tự nào?</div>
-    <div class="card-sub">Mỗi lần mở Claude Code trong Cowork/, đây là 5 bước nạp context</div>
+    <div class="card-tag">Diagram 03</div>
+    <div class="card-title">Claude khởi động theo thứ tự nào?</div>
+    <div class="card-sub">Mỗi lần mở Claude Code trong Cowork/, 5 bước này chạy tự động trước khi bạn gõ chữ đầu tiên.</div>
 
-    <div class="flow">
-      <div class="flow-step fs-1">
-        <div class="flow-num">1</div>
-        <div class="flow-content">
-          <div class="flow-title">Global Settings</div>
-          <div class="flow-desc">Quyền thực thi, effortLevel — base của mọi thứ</div>
-          <span class="flow-file">~/.claude/settings.json</span>
+    <div class="session-steps">
+      <div class="sess-step ss-1">
+        <div class="sess-num">1</div>
+        <div class="sess-content">
+          <div class="sess-title">Đọc Global Settings</div>
+          <div class="sess-desc">Quyền thực thi lệnh gì, mức tự động cao đến đâu — nền tảng của mọi thứ</div>
+          <span class="sess-file" style="background:#fef3c7;color:#92400e;">~/.claude/settings.json</span>
         </div>
       </div>
 
-      <div class="flow-arrow-down"></div>
+      <div class="sess-arrow"></div>
 
-      <div class="flow-step fs-2">
-        <div class="flow-num">2</div>
-        <div class="flow-content">
-          <div class="flow-title">MCP Tools</div>
-          <div class="flow-desc">Đăng ký công cụ ngoài — chưa kết nối, chỉ biết chúng tồn tại</div>
-          <span class="flow-file">~/.claude/.mcp.json</span>
+      <div class="sess-step ss-2">
+        <div class="sess-num">2</div>
+        <div class="sess-content">
+          <div class="sess-title">Đăng ký MCP Tools</div>
+          <div class="sess-desc">Biết Gmail, GDrive… tồn tại — chưa kết nối, chỉ "sẵn sàng nếu cần"</div>
+          <span class="sess-file" style="background:#dbeafe;color:#1e3a8a;">~/.claude/.mcp.json</span>
         </div>
       </div>
 
-      <div class="flow-arrow-down"></div>
+      <div class="sess-arrow"></div>
 
-      <div class="flow-step fs-3">
-        <div class="flow-num">3</div>
-        <div class="flow-content">
-          <div class="flow-title">Project Rules &amp; Persona ⭐</div>
-          <div class="flow-desc">Quan trọng nhất. Override mọi default. Defines WHO you are.</div>
-          <span class="flow-file">CLAUDE.md</span>&nbsp;<span class="flow-file">AGENTS.md</span>
+      <div class="sess-step ss-3">
+        <div class="sess-num">3</div>
+        <div class="sess-content">
+          <div class="sess-title">⭐ Đọc Project Rules — Quan trọng nhất</div>
+          <div class="sess-desc">Ahamove scope, output rules, brand, AI conventions — override mọi default. Định nghĩa "bạn là ai".</div>
+          <span class="sess-file" style="background:#dcfce7;color:#14532d;">CLAUDE.md</span>&nbsp;<span class="sess-file" style="background:#dcfce7;color:#14532d;">AGENTS.md</span>
         </div>
       </div>
 
-      <div class="flow-arrow-down"></div>
+      <div class="sess-arrow"></div>
 
-      <div class="flow-step fs-4">
-        <div class="flow-num">4</div>
-        <div class="flow-content">
-          <div class="flow-title">Project Hooks</div>
-          <div class="flow-desc">Đăng ký automation — Stop hook: git commit + sync Drive</div>
-          <span class="flow-file">.claude/settings.json</span>
+      <div class="sess-step ss-4">
+        <div class="sess-num">4</div>
+        <div class="sess-content">
+          <div class="sess-title">Kích hoạt Hooks tự động</div>
+          <div class="sess-desc">Gắn trigger: mỗi khi Claude ngừng làm việc → chạy git commit + sync Google Drive</div>
+          <span class="sess-file" style="background:#ede9fe;color:#4c1d95;">.claude/settings.json</span>
         </div>
       </div>
 
-      <div class="flow-arrow-down"></div>
+      <div class="sess-arrow"></div>
 
-      <div class="flow-step fs-5">
-        <div class="flow-num">5</div>
-        <div class="flow-content">
-          <div class="flow-title">Memory</div>
-          <div class="flow-desc">Đọc index → chọn lọc files liên quan → nạp vào context</div>
-          <span class="flow-file">MEMORY.md → user_profile · user_rules · …</span>
+      <div class="sess-step ss-5">
+        <div class="sess-num">5</div>
+        <div class="sess-content">
+          <div class="sess-title">Nạp Memory</div>
+          <div class="sess-desc">Đọc MEMORY.md index → chọn file liên quan → load vào bộ nhớ làm việc</div>
+          <span class="sess-file" style="background:#ffedd5;color:#7c2d12;">MEMORY.md → user_profile · user_rules…</span>
         </div>
       </div>
 
-      <div class="flow-arrow-down"></div>
+      <div class="sess-arrow"></div>
 
-      <div class="flow-step fs-ready">
-        <div class="flow-num" style="font-size:.8rem;">✓</div>
-        <div class="flow-content">
-          <div class="flow-title">Claude sẵn sàng — context đầy đủ</div>
-          <div class="flow-desc">Biết bạn là ai · Có tools · Nhớ quy tắc · Hooks chờ sự kiện</div>
+      <div class="sess-step ss-ready">
+        <div class="sess-num" style="font-size:.85rem;">✓</div>
+        <div class="sess-content">
+          <div class="sess-title">Claude sẵn sàng với đầy đủ context</div>
+          <div class="sess-desc">Biết bạn là Khanh · Hiểu Ahamove ops · Có tools · Nhớ quy tắc · Hooks đang chờ</div>
         </div>
       </div>
+    </div>
 
-      <div style="margin-top:14px;width:100%;padding:10px 14px;background:#0c2340;border-radius:10px;border:1px solid #1e3a5f;">
-        <div style="font-size:.66rem;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">On-demand (khi bạn dùng)</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <span style="background:#2e1065;color:#c4b5fd;padding:3px 10px;border-radius:7px;font-size:.67rem;font-weight:600;">/skill → load SKILL.md</span>
-          <span style="background:#4a1d96;color:#ddd6fe;padding:3px 10px;border-radius:7px;font-size:.67rem;font-weight:600;">Agent → context window riêng</span>
-          <span style="background:#164e63;color:#67e8f9;padding:3px 10px;border-radius:7px;font-size:.67rem;font-weight:600;">MCP → kết nối lần đầu gọi</span>
+    <div class="ondemand-box">
+      <div class="od-label">Nạp thêm khi bạn dùng (on-demand)</div>
+      <div class="od-pills">
+        <span class="od-pill" style="background:#ede9fe;color:#5b21b6;">/skill → load thêm SKILL.md</span>
+        <span class="od-pill" style="background:#faf5ff;color:#6d28d9;">Agent → tạo cửa sổ riêng</span>
+        <span class="od-pill" style="background:#ccfbf1;color:#0f766e;">MCP → kết nối lần đầu gọi</span>
+      </div>
+    </div>
+
+    <div class="glossary" style="margin-top:14px;">
+      <div class="glossary-title">📖 Giải thích thuật ngữ</div>
+      <div class="glossary-grid">
+        <div class="g-item">
+          <div class="g-key">Context</div>
+          <div class="g-val">Bộ nhớ làm việc tạm thời trong 1 phiên. Giống RAM — nhiều thứ quá thì chậm, xóa phiên là mất.</div>
+        </div>
+        <div class="g-item">
+          <div class="g-key">Load / Nạp</div>
+          <div class="g-val">Đưa nội dung file vào bộ nhớ làm việc (context) để Claude "biết" và dùng được trong cuộc trò chuyện.</div>
         </div>
       </div>
     </div>
@@ -776,131 +782,130 @@ body { font-family: 'Lexend', sans-serif; background: #0f172a; padding: 40px 20p
      DIAGRAM 4 — SKILLS vs AGENTS
 ════════════════════════════════════ -->
 <div class="card">
-  <div class="diagram-num">Diagram 04</div>
-  <div class="card-title">Skills vs Agents — cùng mở rộng Claude, nhưng hoạt động hoàn toàn khác</div>
-  <div class="card-sub">Quy tắc 5 giây: biết rõ OUTPUT là gì → Skill. Cần AI phán đoán nhiều bước → Agent</div>
+  <div class="card-tag">Diagram 04</div>
+  <div class="card-title">Skills vs Agents — cùng mở rộng Claude nhưng hoạt động khác nhau</div>
+  <div class="card-sub">Quy tắc 5 giây: biết rõ OUTPUT là gì → dùng Skill. Cần Claude tự suy nghĩ nhiều bước → dùng Agent.</div>
 
-  <div class="sa-grid">
-    <!-- SKILL -->
-    <div class="sa-col sa-skill">
-      <div class="sa-header">
-        <div class="sa-header-icon">🧠</div>
-        <div class="sa-header-title">SKILL</div>
-        <div class="sa-header-sub">Công cụ chuyên dụng · Gọi theo yêu cầu</div>
+  <div class="sa-compare">
+    <div class="sa-col-inner sa-skill">
+      <div class="sa-head">
+        <div class="sa-head-icon">🧠</div>
+        <div>
+          <div class="sa-head-title">SKILL — Công thức có sẵn</div>
+          <div class="sa-head-sub">Gọi bằng /tên-skill hoặc Claude tự nhận ra</div>
+        </div>
       </div>
-      <div class="sa-body">
+      <div class="sa-body-inner">
         <div class="mini-flow">
-          <div class="mf-box mf-box-you">📥 Bạn: "/xlsx + data CPO tháng 5"</div>
-          <div class="mf-arrow">↓</div>
-          <div class="mf-box mf-box-ctx">SKILL.md nạp vào context hiện tại</div>
-          <div class="mf-arrow">↓</div>
-          <div class="mf-box mf-box-proc">Thực thi quy trình cố định có sẵn</div>
-          <div class="mf-arrow">↓</div>
-          <div class="mf-box mf-box-out">📤 Output: file Excel hoàn chỉnh</div>
+          <div class="mf-box mf-you">📥 Bạn: "/xlsx + data CPO tháng 5"</div>
+          <div class="mf-sep"><span class="mf-sep-icon">↓</span></div>
+          <div class="mf-box mf-ctx">SKILL.md được nạp vào cùng cửa sổ với bạn</div>
+          <div class="mf-sep"><span class="mf-sep-icon">↓</span></div>
+          <div class="mf-box mf-proc">Thực thi quy trình cố định, không cần phán đoán</div>
+          <div class="mf-sep"><span class="mf-sep-icon">↓</span></div>
+          <div class="mf-box mf-out">📤 File Excel hoàn chỉnh, đúng chuẩn</div>
         </div>
-        <div class="sa-row" style="margin-top:8px;">
-          <div class="sa-row-icon">📍</div>
+        <div class="sa-prop">
+          <div class="sa-prop-icon">📍</div>
           <div>
-            <div class="sa-row-label">Chạy ở đâu</div>
-            <div class="sa-row-val">Cùng cửa sổ với bạn — load rồi giải phóng</div>
+            <div class="sa-prop-label">Chạy ở đâu</div>
+            <div class="sa-prop-val">Cùng cửa sổ với bạn — nạp rồi giải phóng, không làm nặng</div>
           </div>
         </div>
-        <div class="sa-row">
-          <div class="sa-row-icon">📁</div>
+        <div class="sa-prop">
+          <div class="sa-prop-icon">⚡</div>
           <div>
-            <div class="sa-row-label">Lưu ở đâu</div>
-            <div class="sa-row-val">~/.claude/skills/[name]/SKILL.md</div>
-          </div>
-        </div>
-        <div class="sa-row">
-          <div class="sa-row-icon">⚡</div>
-          <div>
-            <div class="sa-row-label">Kích hoạt</div>
-            <div class="sa-row-val">/tên-skill hoặc Claude tự nhận ra</div>
+            <div class="sa-prop-label">Khi nào dùng</div>
+            <div class="sa-prop-val">Output là file cụ thể, quy trình lặp đi lặp lại, muốn nhất quán</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- VS -->
-    <div class="sa-vs"><div class="vs-circle">VS</div></div>
-
-    <!-- AGENT -->
-    <div class="sa-col sa-agent">
-      <div class="sa-header">
-        <div class="sa-header-icon">🤖</div>
-        <div class="sa-header-title">AGENT</div>
-        <div class="sa-header-sub">Chuyên gia tự trị · Ủy thác tác vụ phức tạp</div>
+    <div class="sa-col-inner sa-agent">
+      <div class="sa-head">
+        <div class="sa-head-icon">🤖</div>
+        <div>
+          <div class="sa-head-title">AGENT — Chuyên gia tự trị</div>
+          <div class="sa-head-sub">Ủy thác rồi chờ — Agent tự lo toàn bộ</div>
+        </div>
       </div>
-      <div class="sa-body">
+      <div class="sa-body-inner">
         <div class="mini-flow">
-          <div class="mf-box mf-box-you">📥 Bạn: "Tại sao AR tuần này thấp?"</div>
-          <div class="mf-arrow">↓</div>
-          <div class="mf-box mf-box-sep">🪟 Cửa sổ context RIÊNG — không ảnh hưởng bạn</div>
-          <div class="mf-arrow">↓</div>
-          <div class="mf-box mf-box-proc">Tự lập kế hoạch → query DB → phân tích → viết báo cáo</div>
-          <div class="mf-arrow">↓</div>
-          <div class="mf-box mf-box-out">📤 Kết quả: phân tích + nguyên nhân + action</div>
+          <div class="mf-box mf-you">📥 Bạn: "Tại sao AR tuần này thấp?"</div>
+          <div class="mf-sep"><span class="mf-sep-icon">↓</span></div>
+          <div class="mf-box mf-sep-box">🪟 Cửa sổ làm việc RIÊNG — không ảnh hưởng bạn</div>
+          <div class="mf-sep"><span class="mf-sep-icon">↓</span></div>
+          <div class="mf-box mf-proc">Tự lập kế hoạch → query DB → phân tích → viết báo cáo</div>
+          <div class="mf-sep"><span class="mf-sep-icon">↓</span></div>
+          <div class="mf-box mf-out">📤 Phân tích + Nguyên nhân gốc + Action items</div>
         </div>
-        <div class="sa-row" style="margin-top:8px;">
-          <div class="sa-row-icon">📍</div>
+        <div class="sa-prop">
+          <div class="sa-prop-icon">📍</div>
           <div>
-            <div class="sa-row-label">Chạy ở đâu</div>
-            <div class="sa-row-val">Cửa sổ context RIÊNG — không làm nặng luồng chính</div>
+            <div class="sa-prop-label">Chạy ở đâu</div>
+            <div class="sa-prop-val">Cửa sổ context riêng biệt — không làm nặng luồng chính của bạn</div>
           </div>
         </div>
-        <div class="sa-row">
-          <div class="sa-row-icon">📁</div>
+        <div class="sa-prop">
+          <div class="sa-prop-icon">⚡</div>
           <div>
-            <div class="sa-row-label">Lưu ở đâu</div>
-            <div class="sa-row-val">.claude/agents/[name].md (project hoặc global)</div>
-          </div>
-        </div>
-        <div class="sa-row">
-          <div class="sa-row-icon">⚡</div>
-          <div>
-            <div class="sa-row-label">Kích hoạt</div>
-            <div class="sa-row-val">Claude tự spawn hoặc bạn dùng Task trong UI</div>
+            <div class="sa-prop-label">Khi nào dùng</div>
+            <div class="sa-prop-val">Nhiều bước phụ thuộc nhau, cần domain knowledge, muốn Claude tự quyết định</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- WHEN TO USE -->
-  <div class="sa-when">
-    <div class="sw-card sw-skill">
-      <div class="sw-title">🧠 Dùng SKILL khi…</div>
-      <div class="sw-items">
-        <div class="sw-item">Output là file cụ thể (Excel, PDF, Slide…)</div>
-        <div class="sw-item">Quy trình cố định, lặp đi lặp lại</div>
-        <div class="sw-item">Không cần phán đoán, chỉ thực thi</div>
-        <div class="sw-item">Muốn kết quả nhanh và nhất quán</div>
-      </div>
+  <!-- when to use -->
+  <div class="when-row">
+    <div class="when-card wc-skill">
+      <div class="when-title">🧠 Dùng SKILL khi…</div>
+      <div class="when-item">Output là file cụ thể (Excel, PDF, Slide…)</div>
+      <div class="when-item">Quy trình cố định, lặp đi lặp lại</div>
+      <div class="when-item">Không cần phán đoán, chỉ cần thực thi nhanh</div>
+      <div class="when-item">Muốn kết quả nhất quán mỗi lần gọi</div>
     </div>
-    <div class="sw-card sw-agent">
-      <div class="sw-title">🤖 Dùng AGENT khi…</div>
-      <div class="sw-items">
-        <div class="sw-item">Nhiều bước phụ thuộc nhau</div>
-        <div class="sw-item">Cần domain knowledge chuyên sâu (SQL, comms…)</div>
-        <div class="sw-item">Muốn Claude tự quyết định cách làm</div>
-        <div class="sw-item">Tác vụ phức tạp sẽ làm nặng context chính</div>
-      </div>
+    <div class="when-card wc-agent">
+      <div class="when-title">🤖 Dùng AGENT khi…</div>
+      <div class="when-item">Nhiều bước phụ thuộc nhau, khó định trước</div>
+      <div class="when-item">Cần chuyên môn sâu (SQL, phân tích, viết comms…)</div>
+      <div class="when-item">Muốn Claude tự quyết định cách tiếp cận</div>
+      <div class="when-item">Tác vụ phức tạp, tránh làm nặng luồng chính</div>
     </div>
   </div>
 
-  <!-- ANALOGY ROW -->
-  <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:0;margin-top:14px;align-items:center;">
-    <div style="background:#0a1f14;border-radius:12px;padding:14px 16px;border:1px solid #14532d;text-align:center;">
-      <div style="font-size:1.6rem;margin-bottom:6px;">🖨️</div>
-      <div style="font-size:.74rem;font-weight:700;color:#86efac;margin-bottom:4px;">Máy photocopy</div>
-      <div style="font-size:.68rem;color:#4ade80;line-height:1.5;">Đưa tài liệu vào → in ra đúng format. Không cần quyết định.</div>
+  <!-- analogy -->
+  <div class="analogy-row">
+    <div class="analogy-box">
+      <div class="analogy-emoji">🖨️</div>
+      <div class="analogy-name">Skill ≈ Máy in</div>
+      <div class="analogy-desc">Đưa tài liệu vào → in ra đúng format. Không cần tự nghĩ gì.</div>
     </div>
-    <div style="text-align:center;font-size:.72rem;color:#475569;font-weight:700;">≈</div>
-    <div style="background:#1a0d3d;border-radius:12px;padding:14px 16px;border:1px solid #2e1065;text-align:center;">
-      <div style="font-size:1.6rem;margin-bottom:6px;">🧑‍💼</div>
-      <div style="font-size:.74rem;font-weight:700;color:#c4b5fd;margin-bottom:4px;">Nhân viên phân tích</div>
-      <div style="font-size:.68rem;color:#a78bfa;line-height:1.5;">Giao bài toán → tự tìm data → phân tích → báo cáo kết quả.</div>
+    <div class="analogy-eq">≈</div>
+    <div class="analogy-box">
+      <div class="analogy-emoji">🧑‍💼</div>
+      <div class="analogy-name">Agent ≈ Nhân viên phân tích</div>
+      <div class="analogy-desc">Giao bài toán → tự tìm data → phân tích → báo cáo kết quả.</div>
+    </div>
+  </div>
+
+  <div class="glossary" style="margin-top:16px;">
+    <div class="glossary-title">📖 Giải thích thuật ngữ</div>
+    <div class="glossary-grid">
+      <div class="g-item">
+        <div class="g-key">Context window</div>
+        <div class="g-val">Giới hạn thông tin Claude giữ được trong 1 lúc — như ổ đĩa nhỏ. Agent riêng = không chiếm chỗ của bạn.</div>
+      </div>
+      <div class="g-item">
+        <div class="g-key">Spawn</div>
+        <div class="g-val">Claude "đẻ ra" một Agent con để làm việc song song, riêng biệt với luồng trò chuyện chính.</div>
+      </div>
+      <div class="g-item">
+        <div class="g-key">Domain knowledge</div>
+        <div class="g-val">Kiến thức chuyên sâu về 1 lĩnh vực. Agent sql-analyst biết SQL + Ahamove DB schema; bạn không cần giải thích lại.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -910,32 +915,31 @@ body { font-family: 'Lexend', sans-serif; background: #0f172a; padding: 40px 20p
      DIAGRAM 5 — ROLE MAP
 ════════════════════════════════════ -->
 <div class="card">
-  <div class="diagram-num">Diagram 05</div>
-  <div class="card-title">Vai trò = Context — Claude đọc gì phụ thuộc vào bạn làm ở đâu</div>
-  <div class="card-sub">Cùng Claude Code, cùng máy — nhưng folder khác nhau → context khác nhau → hành vi khác nhau</div>
+  <div class="card-tag">Diagram 05</div>
+  <div class="card-title">Claude "đóng vai" theo folder bạn mở</div>
+  <div class="card-sub">Cùng một Claude, cùng một máy — nhưng mở trong folder khác nhau → đọc CLAUDE.md khác nhau → hành xử khác nhau. Claude không tự biết bạn là ai — nó chỉ đọc file.</div>
 
   <div class="role-grid">
-
     <div class="role-card rc-ops">
-      <div class="role-header">
-        <div class="role-header-icon">🏍️</div>
+      <div class="role-head">
+        <div class="role-head-icon">🏍️</div>
         <div>
-          <div class="role-header-title">Ops Leader — Ahamove</div>
-          <div class="role-header-sub">Mở Claude Code trong Cowork/</div>
+          <div class="role-head-title">Ops Leader — Ahamove</div>
+          <div class="role-head-sub">Mở Claude Code trong thư mục Cowork/</div>
         </div>
       </div>
       <div class="role-body">
         <div>
-          <div class="role-section-label">📥 Context tự động nạp</div>
+          <div class="role-section-lbl">📥 Context tự động nạp</div>
           <div class="role-tags">
-            <span class="role-tag rt-context">Ahamove Bike scope</span>
-            <span class="role-tag rt-context">AR/FR/CPO/EPH</span>
-            <span class="role-tag rt-context">Grab/Be/XanhSM</span>
-            <span class="role-tag rt-context">Brief→SQL→Pyramid</span>
+            <span class="role-tag rt-ctx">Ahamove Bike scope</span>
+            <span class="role-tag rt-ctx">AR / FR / CPO / EPH</span>
+            <span class="role-tag rt-ctx">Grab / Be / XanhSM</span>
+            <span class="role-tag rt-ctx">Brief → SQL → Pyramid</span>
           </div>
         </div>
         <div>
-          <div class="role-section-label">🤖 Agents có sẵn</div>
+          <div class="role-section-lbl">🤖 Agents sẵn sàng</div>
           <div class="role-tags">
             <span class="role-tag rt-agent">sql-analyst</span>
             <span class="role-tag rt-agent">report-writer</span>
@@ -945,16 +949,16 @@ body { font-family: 'Lexend', sans-serif; background: #0f172a; padding: 40px 20p
           </div>
         </div>
         <div>
-          <div class="role-section-label">🧠 Skills hay dùng</div>
+          <div class="role-section-lbl">🧠 Skills hay dùng</div>
           <div class="role-tags">
             <span class="role-tag rt-skill">/xlsx CPO model</span>
             <span class="role-tag rt-skill">/html dashboard</span>
-            <span class="role-tag rt-skill">/okr team OKR</span>
+            <span class="role-tag rt-skill">/okr OKR team</span>
             <span class="role-tag rt-skill">/pptx deck</span>
           </div>
         </div>
         <div>
-          <div class="role-section-label">🔌 MCP tools</div>
+          <div class="role-section-lbl">🔌 MCP tools</div>
           <div class="role-tags">
             <span class="role-tag rt-mcp">Gmail</span>
             <span class="role-tag rt-mcp">GDrive</span>
@@ -973,34 +977,34 @@ body { font-family: 'Lexend', sans-serif; background: #0f172a; padding: 40px 20p
     </div>
 
     <div class="role-card rc-content">
-      <div class="role-header">
-        <div class="role-header-icon">✍️</div>
+      <div class="role-head">
+        <div class="role-head-icon">✍️</div>
         <div>
-          <div class="role-header-title">Content Creator</div>
-          <div class="role-header-sub">Mở Claude Code trong Creative/</div>
+          <div class="role-head-title">Content Creator</div>
+          <div class="role-head-sub">Mở Claude Code trong thư mục Creative/</div>
         </div>
       </div>
       <div class="role-body">
         <div>
-          <div class="role-section-label">📥 Context tự động nạp</div>
+          <div class="role-section-lbl">📥 Context tự động nạp</div>
           <div class="role-tags">
-            <span class="role-tag rt-context">Creative/CLAUDE.md (ưu tiên)</span>
-            <span class="role-tag rt-context">Cowork/CLAUDE.md (kế thừa)</span>
-            <span class="role-tag rt-context">Brand voice</span>
-            <span class="role-tag rt-context" style="background:#4c1d95;color:#e9d5ff;">⚠ cần tạo: content memory</span>
+            <span class="role-tag rt-ctx">Creative/CLAUDE.md (ưu tiên)</span>
+            <span class="role-tag rt-ctx">Cowork/CLAUDE.md (kế thừa)</span>
+            <span class="role-tag rt-ctx">Brand voice</span>
+            <span class="role-tag" style="background:#fae8ff;color:#86198f;border:1px dashed #e879f9;">⚠ cần tạo: content memory</span>
           </div>
         </div>
         <div>
-          <div class="role-section-label">🤖 Agents phù hợp</div>
+          <div class="role-section-lbl">🤖 Agents phù hợp</div>
           <div class="role-tags">
             <span class="role-tag rt-agent">content-writer</span>
             <span class="role-tag rt-agent">landing-page-builder</span>
             <span class="role-tag rt-agent">event-planner</span>
-            <span class="role-tag rt-agent" style="background:#4c1d95;opacity:.6;">+ nên tạo social-media</span>
+            <span class="role-tag" style="background:#faf5ff;color:#a78bfa;opacity:.7;">+ nên tạo: social-media</span>
           </div>
         </div>
         <div>
-          <div class="role-section-label">🧠 Skills hay dùng</div>
+          <div class="role-section-lbl">🧠 Skills hay dùng</div>
           <div class="role-tags">
             <span class="role-tag rt-skill">/html landing page</span>
             <span class="role-tag rt-skill">/pptx social deck</span>
@@ -1009,12 +1013,12 @@ body { font-family: 'Lexend', sans-serif; background: #0f172a; padding: 40px 20p
           </div>
         </div>
         <div>
-          <div class="role-section-label">🔌 MCP tools</div>
+          <div class="role-section-lbl">🔌 MCP tools</div>
           <div class="role-tags">
             <span class="role-tag rt-mcp">GDrive</span>
             <span class="role-tag rt-mcp">Gmail</span>
             <span class="role-tag rt-mcp">Excalidraw</span>
-            <span class="role-tag rt-mcp" style="background:#164e63;opacity:.6;">+ nên thêm Canva</span>
+            <span class="role-tag" style="background:#ccfbf1;color:#065f46;opacity:.7;">+ nên thêm: Canva</span>
           </div>
         </div>
         <div class="role-eq">
@@ -1027,8 +1031,8 @@ body { font-family: 'Lexend', sans-serif; background: #0f172a; padding: 40px 20p
     </div>
   </div>
 
-  <div style="margin-top:16px;background:#1a0d3d;border-radius:14px;padding:16px 20px;border:1.5px solid #4c1d95;font-size:.76rem;color:#c4b5fd;line-height:1.7;">
-    <strong style="color:#ddd6fe;">💡 Insight:</strong> Claude không tự biết bạn đang "đóng vai" gì. Nó chỉ đọc file.
+  <div class="insight-box">
+    <strong>💡 Insight quan trọng:</strong> Claude không tự biết bạn đang "đóng vai" gì. Nó chỉ đọc file.
     Muốn Claude hiểu đúng vai trò → viết <strong>CLAUDE.md</strong> đúng chỗ, tạo <strong>agents</strong> phù hợp domain, build <strong>memory</strong> đúng context.
     <strong>Role = Files bạn đặt đúng chỗ.</strong>
   </div>
@@ -1039,121 +1043,120 @@ body { font-family: 'Lexend', sans-serif; background: #0f172a; padding: 40px 20p
      DIAGRAM 6 — WHERE DOES CLAUDE WRITE
 ════════════════════════════════════ -->
 <div class="card">
-  <div class="diagram-num">Diagram 06</div>
-  <div class="card-title">Claude viết vào đâu? — Decision tree</div>
-  <div class="card-sub">Khi bạn nhờ Claude "thêm", "nhớ", "tạo" — đây là logic quyết định file đích</div>
+  <div class="card-tag">Diagram 06</div>
+  <div class="card-title">Claude viết vào đâu? — Sơ đồ quyết định</div>
+  <div class="card-sub">Khi bạn nhờ Claude "thêm rule", "nhớ điều này", "tạo skill" — đây là logic Claude dùng để chọn file đích.</div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;">
-
+  <div class="dt-layout">
     <!-- LEFT: decision tree -->
-    <div class="decision-tree">
+    <div class="dtree">
 
-      <div class="dt-node dt-start" style="width:100%;text-align:center;">
-        🗣️ Bạn yêu cầu Claude làm gì đó
-      </div>
+      <div class="dt-node dt-start">🗣️ Bạn yêu cầu Claude làm gì đó</div>
+      <div class="dt-arrow-v"></div>
 
-      <div class="dt-arrow"><div class="dt-line"></div><div class="dt-tip"></div></div>
+      <div class="dt-diamond dt-q">❓ Là Memory, Skill, hoặc MCP không?<br><span style="font-size:.65rem;font-weight:400;opacity:.8;">"hãy nhớ…" / "/cài skill…" / "thêm MCP…"</span></div>
 
-      <div class="dt-diamond dt-q1" style="width:100%;text-align:center;">
-        ❓ Có phải Memory, Skill, hoặc MCP?
-      </div>
-
-      <!-- Branch: YES → ALWAYS GLOBAL -->
-      <div style="display:grid;grid-template-columns:1fr 2px 1fr;width:100%;margin-top:0;">
-        <div style="display:flex;flex-direction:column;align-items:flex-end;padding-right:0;">
-          <div style="display:flex;align-items:center;gap:0;width:100%;">
-            <div style="flex:1;height:2px;background:#334155;margin-top:20px;"></div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:center;padding-right:calc(50% - 1px);width:100%;">
-            <div style="font-size:.6rem;color:#4ade80;font-weight:700;margin-bottom:4px;text-align:center;">CÓ</div>
-            <div style="width:2px;height:14px;background:#334155;"></div>
-            <div style="width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #334155;"></div>
-          </div>
-          <div class="dt-node dt-out-special" style="width:100%;font-size:.72rem;text-align:center;padding:10px;">
+      <div class="dt-branch">
+        <!-- YES side -->
+        <div class="dt-branch-col">
+          <div class="dt-branch-h" style="border-right:none;border-top-right-radius:0;"></div>
+          <div class="dt-branch-v"></div>
+          <div class="dt-branch-tip"></div>
+          <div class="dt-branch-label dt-yes">CÓ ✓</div>
+          <div class="dt-node dt-global" style="font-size:.73rem;padding:10px;">
             🌐 LUÔN → Global<br>
-            <span style="font-size:.62rem;opacity:.8;">~/.claude/projects/.../memory/<br>~/.claude/skills/<br>~/.claude/.mcp.json</span>
+            <span style="font-family:'Space Mono',monospace;font-size:.6rem;opacity:.8;">~/.claude/projects/.../memory/<br>~/.claude/skills/<br>~/.claude/.mcp.json</span>
           </div>
         </div>
-
-        <div style="background:#334155;"></div>
-
-        <!-- NO branch -->
-        <div style="display:flex;flex-direction:column;align-items:flex-start;padding-left:0;">
-          <div style="display:flex;align-items:center;gap:0;width:100%;">
-            <div style="flex:1;height:2px;background:#334155;margin-top:20px;"></div>
+        <div class="dt-branch-center"></div>
+        <!-- NO side -->
+        <div class="dt-branch-col">
+          <div class="dt-branch-h" style="border-left:none;border-top-left-radius:0;"></div>
+          <div class="dt-branch-v"></div>
+          <div class="dt-branch-tip"></div>
+          <div class="dt-branch-label dt-no">KHÔNG ✗</div>
+          <div class="dt-diamond dt-q" style="font-size:.7rem;padding:10px;">
+            ❓ Bạn nói "riêng tư" hoặc "đừng commit"?
           </div>
-          <div style="display:flex;flex-direction:column;align-items:center;padding-left:calc(50% - 1px);width:100%;">
-            <div style="font-size:.6rem;color:#fbbf24;font-weight:700;margin-bottom:4px;text-align:center;">KHÔNG</div>
-            <div style="width:2px;height:14px;background:#334155;"></div>
-            <div style="width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #334155;"></div>
-          </div>
-          <!-- next question -->
-          <div style="width:100%;">
-            <div class="dt-diamond dt-q3" style="width:100%;text-align:center;font-size:.72rem;padding:10px 14px;">
-              ❓ Bạn nói "đừng commit" hoặc "riêng tư"?
+          <!-- nested branch -->
+          <div class="dt-branch" style="margin-top:0;">
+            <div class="dt-branch-col">
+              <div class="dt-branch-h" style="border-right:none;border-top-right-radius:0;"></div>
+              <div class="dt-branch-v"></div>
+              <div class="dt-branch-tip"></div>
+              <div class="dt-branch-label dt-yes">CÓ</div>
+              <div class="dt-node dt-local" style="font-size:.7rem;padding:8px;text-align:center;">🔐 LOCAL<br>CLAUDE.local.md</div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 2px 1fr;width:100%;margin-top:0;">
-              <div style="display:flex;flex-direction:column;align-items:center;">
-                <div style="font-size:.6rem;color:#4ade80;font-weight:700;margin:4px;">CÓ ↓</div>
-                <div class="dt-node dt-out-local" style="width:100%;font-size:.68rem;text-align:center;padding:8px;">
-                  🔐 LOCAL<br>CLAUDE.local.md
-                </div>
-              </div>
-              <div style="background:#334155;margin:0 0;"></div>
-              <div style="display:flex;flex-direction:column;align-items:center;">
-                <div style="font-size:.6rem;color:#fbbf24;font-weight:700;margin:4px;">KHÔNG ↓</div>
-                <div class="dt-node dt-out-project" style="width:100%;font-size:.68rem;text-align:center;padding:8px;">
-                  🏢 PROJECT<br>.claude/settings.json<br>CLAUDE.md<br>agents/
-                </div>
-              </div>
+            <div class="dt-branch-center"></div>
+            <div class="dt-branch-col">
+              <div class="dt-branch-h" style="border-left:none;border-top-left-radius:0;"></div>
+              <div class="dt-branch-v"></div>
+              <div class="dt-branch-tip"></div>
+              <div class="dt-branch-label dt-no">KHÔNG</div>
+              <div class="dt-node dt-project" style="font-size:.7rem;padding:8px;text-align:center;">🏢 PROJECT<br>.claude/ · CLAUDE.md</div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
 
-    <!-- RIGHT: cheat sheet -->
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="font-size:.64rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b;margin-bottom:4px;">Quick Reference</div>
+    <!-- RIGHT: quick ref -->
+    <div class="qref">
+      <div style="font-size:.64rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;margin-bottom:2px;">Quick Reference — Ghi vào đâu?</div>
 
-      <div style="background:#0c2340;border-radius:10px;padding:10px 14px;border:1px solid #1e3a5f;">
-        <div style="font-size:.68rem;font-weight:700;color:#93c5fd;margin-bottom:5px;">🌐 Luôn → Global</div>
-        <div style="font-size:.67rem;color:#60a5fa;line-height:1.6;">Memory "hãy nhớ…" · Cài skill /xlsx · Thêm MCP server · "cho tất cả project"</div>
+      <div class="qref-item qref-global">
+        <div class="qref-title">🌐 LUÔN → Global (~/.claude/)</div>
+        <div class="qref-desc">"Hãy nhớ rằng…" · Cài skill /xlsx · Thêm MCP server · "Cho tất cả project"</div>
       </div>
 
-      <div style="background:#052e16;border-radius:10px;padding:10px 14px;border:1px solid #14532d;">
-        <div style="font-size:.68rem;font-weight:700;color:#86efac;margin-bottom:5px;">🏢 Mặc định → Project</div>
-        <div style="font-size:.67rem;color:#4ade80;line-height:1.6;">Sửa CLAUDE.md · Thêm permission · Tạo agent · Hook Stop · Không nói gì thêm</div>
+      <div class="qref-item qref-project">
+        <div class="qref-title">🏢 Mặc định → Project (.claude/)</div>
+        <div class="qref-desc">Sửa CLAUDE.md · Thêm permission · Tạo agent · Cài hook Stop · Không nói gì thêm</div>
       </div>
 
-      <div style="background:#1c1003;border-radius:10px;padding:10px 14px;border:1px solid #451a03;">
-        <div style="font-size:.68rem;font-weight:700;color:#fcd34d;margin-bottom:5px;">🔐 → Local</div>
-        <div style="font-size:.67rem;color:#d97706;line-height:1.6;">"đừng commit" · "riêng tư" · "local only" · "chỉ máy này" · API keys</div>
+      <div class="qref-item qref-local">
+        <div class="qref-title">🔐 → Local (*.local.*)</div>
+        <div class="qref-desc">"đừng commit" · "riêng tư" · "local only" · "chỉ máy này" · API keys</div>
       </div>
 
-      <div style="background:#1e293b;border-radius:10px;padding:12px 14px;border:1px solid #334155;margin-top:6px;">
-        <div style="font-size:.68rem;font-weight:700;color:#94a3b8;margin-bottom:8px;">Làm sao nhận biết Claude viết vào đâu?</div>
-        <div style="font-family:'Space Mono',monospace;font-size:.63rem;line-height:2;color:#64748b;">
-          <span style="color:#93c5fd;">/Users/you/.claude/…</span> → Global<br>
-          <span style="color:#86efac;">Cowork/.claude/…</span> → Project<br>
-          <span style="color:#fcd34d;">*.local.md / *.local.json</span> → Local<br>
-          <span style="color:#fb923c;">/Users/you/.claude/projects/…</span> → Memory
+      <div class="path-box">
+        <div class="path-box-title">Nhận biết Claude viết vào đâu — xem đường dẫn file:</div>
+        <div class="path-line">
+          <span style="color:#2563eb;">/Users/you/.claude/…</span> → Global<br>
+          <span style="color:#16a34a;">Cowork/.claude/…</span> → Project<br>
+          <span style="color:#d97706;">*.local.md / *.local.json</span> → Local<br>
+          <span style="color:#ea580c;">/Users/you/.claude/projects/…</span> → Memory
         </div>
-        <div style="margin-top:10px;font-size:.68rem;color:#475569;padding:8px 10px;background:#0f172a;border-radius:8px;">
-          💡 Không chắc? Hỏi thẳng: <em style="color:#94a3b8;">"Bạn vừa sửa file nào?"</em>
-        </div>
+        <div class="path-tip">💡 Không chắc? Hỏi thẳng: <em>"Bạn vừa sửa file nào?"</em></div>
       </div>
     </div>
+  </div>
 
+  <div class="glossary" style="margin-top:20px;">
+    <div class="glossary-title">📖 Giải thích thuật ngữ</div>
+    <div class="glossary-grid">
+      <div class="g-item">
+        <div class="g-key">Git / Commit</div>
+        <div class="g-val">Git = hệ thống lưu lịch sử thay đổi file. Commit = lưu một checkpoint. "Không commit" = file chỉ tồn tại trên máy bạn, không chia sẻ.</div>
+      </div>
+      <div class="g-item">
+        <div class="g-key">Permission</div>
+        <div class="g-val">Danh sách lệnh Claude được phép tự chạy mà không hỏi bạn. Ví dụ: allow npm run build.</div>
+      </div>
+      <div class="g-item">
+        <div class="g-key">Global vs Project</div>
+        <div class="g-val">Global = áp dụng cho mọi dự án trên máy bạn. Project = chỉ áp dụng trong folder Cowork/ này thôi.</div>
+      </div>
+    </div>
   </div>
 </div>
 
+
 <!-- Footer -->
-<div style="text-align:center;padding:20px 0;font-size:.72rem;color:#334155;">
-  Visual Guide · Đọc chi tiết tại <span style="color:#475569;font-family:'Space Mono',monospace;">claude-folder-structure.html</span>
+<div style="text-align:center;padding:20px 0 10px;font-size:.72rem;color:#94a3b8;">
+  Visual Guide · Claude Code · Ahamove Driver Management · 2026
 </div>
 
-</div><!-- /wrap -->
+</div>
 </body>
 </html>
