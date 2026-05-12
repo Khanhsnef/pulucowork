@@ -21,188 +21,146 @@
     border-radius: 2rem;
     padding: 40px 44px 48px;
     width: 100%;
-    max-width: 860px;
+    max-width: 900px;
     box-shadow: 0 4px 32px rgba(14,65,116,0.10);
-  }
-
-  /* ── HEADER ── */
-  .header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 10px;
-  }
-  .logo {
-    width: 52px; height: 52px;
-    background: #FF7F32;
-    border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .logo svg { width: 32px; height: 32px; }
-  .header-text h1 {
-    font-size: 1.55rem; font-weight: 800;
-    color: #0E4174; letter-spacing: -0.5px;
-  }
-  .header-text p {
-    font-size: 0.85rem; color: #64748b; font-weight: 400; margin-top: 2px;
-  }
-  .divider {
-    border: none; border-top: 2px solid #f1f5f9;
-    margin: 20px 0 24px;
-  }
-
-  /* ── SECTION LABELS ── */
-  .section-label {
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px;
-    text-transform: uppercase; padding: 4px 12px;
-    border-radius: 99px; display: inline-flex; align-items: center;
-    gap: 6px; margin-bottom: 16px; margin-top: 8px;
-  }
-  .section-label.global { background: #eff6ff; color: #3b82f6; }
-  .section-label.project { background: #f0fdf4; color: #16a34a; }
-  .section-label-dot { width: 7px; height: 7px; border-radius: 50%; }
-  .section-label.global .section-label-dot { background: #3b82f6; }
-  .section-label.project .section-label-dot { background: #16a34a; }
-
-  /* ── TREE ROWS ── */
-  .tree { display: flex; flex-direction: column; gap: 5px; }
-  .row {
-    display: grid;
-    grid-template-columns: 290px 1fr;
-    align-items: center;
-    gap: 0;
-    min-height: 40px;
-  }
-  .row:hover { background: #f8fafc; border-radius: 12px; }
-
-  /* Left: path */
-  .path-cell {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    padding: 6px 8px;
     position: relative;
   }
-  .indent { display: flex; align-items: stretch; }
-  .indent-space { width: 20px; flex-shrink: 0; position: relative; }
-  .indent-space.vline::before {
-    content: '';
-    position: absolute;
-    left: 9px; top: 0; bottom: 0;
-    border-left: 2px dashed #cbd5e1;
-  }
-  .indent-space.corner::after {
-    content: '';
-    position: absolute;
-    left: 9px; top: 50%; width: 11px;
-    border-top: 2px dashed #cbd5e1;
-  }
 
-  .icon {
-    width: 26px; height: 26px; border-radius: 7px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; flex-shrink: 0; margin-right: 8px;
+  /* HEADER */
+  .header { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
+  .logo {
+    width: 52px; height: 52px; background: #FF7F32;
+    border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .icon-folder-green  { background: #d1fae5; }
-  .icon-folder-blue   { background: #dbeafe; }
-  .icon-folder-purple { background: #ede9fe; }
-  .icon-folder-orange { background: #ffedd5; }
-  .icon-folder-teal   { background: #ccfbf1; }
-  .icon-file-white    { background: #f1f5f9; border: 1px solid #e2e8f0; }
-  .icon-file-yellow   { background: #fef9c3; }
-  .icon-file-red      { background: #fee2e2; }
-  .icon-file-blue     { background: #dbeafe; }
+  .logo svg { width: 32px; height: 32px; }
+  .header-text h1 { font-size: 1.55rem; font-weight: 800; color: #0E4174; letter-spacing: -0.5px; }
+  .header-text p  { font-size: 0.85rem; color: #64748b; margin-top: 2px; }
+  .divider { border: none; border-top: 2px solid #f1f5f9; margin: 20px 0 24px; }
 
-  .path-name {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.8rem; font-weight: 700;
-    color: #1e293b;
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 4px 12px; border-radius: 99px;
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-bottom: 10px; margin-top: 14px;
   }
-  .path-name.is-folder { color: #0E4174; }
-  .path-name.is-root   { font-size: 0.9rem; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .lbl-project { background: #f0fdf4; color: #16a34a; }
+  .lbl-project .dot { background: #16a34a; }
+  .lbl-global  { background: #eff6ff; color: #2563eb; }
+  .lbl-global  .dot { background: #2563eb; }
 
-  /* Arrow */
-  .arrow-cell {
+  /* TREE */
+  .tree { display: flex; flex-direction: column; }
+
+  /* ROW */
+  .row {
+    display: grid;
+    grid-template-columns: 310px 1fr;
+    align-items: center;
+    min-height: 36px;
+    border-radius: 10px;
+  }
+  .row:hover { background: #f8fafc; }
+
+  /* PATH CELL */
+  .pc {
     display: flex; align-items: center;
-    padding-left: 4px;
+    padding: 4px 6px 4px 0;
+    gap: 0;
   }
-  .arrow-line {
-    flex: 1;
-    border-top: 2px dashed #94a3b8;
-    margin: 0 12px 0 4px;
-    max-width: 60px;
-  }
+  /* indent segments */
+  .i { display: inline-flex; width: 18px; flex-shrink: 0; position: relative; align-self: stretch; }
+  .i.v::before  { content:''; position:absolute; left:8px; top:0; bottom:0; border-left:2px dashed #cbd5e1; }
+  .i.c::before  { content:''; position:absolute; left:8px; top:0; bottom:50%; border-left:2px dashed #cbd5e1; }
+  .i.c::after   { content:''; position:absolute; left:8px; top:50%; width:10px; border-top:2px dashed #cbd5e1; }
+  .i.t::before  { content:''; position:absolute; left:8px; top:0; bottom:0; border-left:2px dashed #cbd5e1; }
+  .i.t::after   { content:''; position:absolute; left:8px; top:50%; width:10px; border-top:2px dashed #cbd5e1; }
 
-  /* Right: badge */
-  .badge {
-    font-size: 0.78rem; font-weight: 600;
-    padding: 5px 14px; border-radius: 99px;
+  /* icon */
+  .ico {
+    width: 24px; height: 24px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; flex-shrink: 0; margin-right: 7px;
+  }
+  .ico-fg   { background:#d1fae5; }
+  .ico-fb   { background:#dbeafe; }
+  .ico-fp   { background:#ede9fe; }
+  .ico-ft   { background:#ccfbf1; }
+  .ico-fo   { background:#ffedd5; }
+  .ico-fy   { background:#fef9c3; }
+  .ico-fgr  { background:#f1f5f9; border:1px solid #e2e8f0; }
+  .ico-fr   { background:#fee2e2; }
+  .ico-fpi  { background:#fce7f3; }
+
+  /* name */
+  .nm {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.77rem; font-weight: 700; color: #1e293b;
     white-space: nowrap;
-    line-height: 1.3;
   }
-  .badge-green   { background: #d1fae5; color: #065f46; }
-  .badge-blue    { background: #dbeafe; color: #1e40af; }
-  .badge-purple  { background: #ede9fe; color: #5b21b6; }
-  .badge-orange  { background: #ffedd5; color: #9a3412; }
-  .badge-teal    { background: #ccfbf1; color: #0f766e; }
-  .badge-gray    { background: #f1f5f9; color: #475569; }
-  .badge-yellow  { background: #fef9c3; color: #854d0e; }
-  .badge-red     { background: #fee2e2; color: #991b1b; }
+  .nm.folder { color: #0E4174; }
+  .nm.root   { font-size: 0.85rem; }
+  .nm.dim    { font-weight: 400; color: #64748b; font-size: 0.72rem; }
 
-  /* Footer star note */
+  /* ARROW + BADGE */
+  .ac { display: flex; align-items: center; padding-left: 2px; }
+  .arr {
+    flex-shrink: 0;
+    width: 44px;
+    border-top: 2px dashed #94a3b8;
+    margin: 0 10px 0 2px;
+  }
+  .badge {
+    font-size: 0.75rem; font-weight: 600;
+    padding: 4px 12px; border-radius: 99px;
+    white-space: nowrap; line-height: 1.3;
+  }
+  /* badge colors */
+  .b-green  { background:#d1fae5; color:#065f46; }
+  .b-blue   { background:#dbeafe; color:#1e40af; }
+  .b-purple { background:#ede9fe; color:#5b21b6; }
+  .b-teal   { background:#ccfbf1; color:#0f766e; }
+  .b-orange { background:#ffedd5; color:#9a3412; }
+  .b-yellow { background:#fef9c3; color:#854d0e; }
+  .b-gray   { background:#f1f5f9; color:#475569; }
+  .b-red    { background:#fee2e2; color:#991b1b; }
+  .b-pink   { background:#fce7f3; color:#9d174d; }
+
+  /* SPACER */
+  .sp { height: 6px; }
+  .sp-sm { height: 3px; }
+
+  /* FOOTER */
   .footer {
-    margin-top: 28px;
-    padding: 14px 20px;
-    background: #fffbeb;
-    border-radius: 14px;
+    margin-top: 28px; padding: 14px 20px;
+    background: #fffbeb; border-radius: 14px;
     border: 1px solid #fde68a;
-    font-size: 0.8rem;
-    color: #92400e;
-    display: flex; align-items: flex-start; gap: 10px;
-    line-height: 1.6;
+    font-size: 0.78rem; color: #92400e;
+    display: flex; align-items: flex-start; gap: 10px; line-height: 1.7;
   }
   .footer-star { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
 
   /* pixel deco */
-  .pixel-corner {
-    position: absolute;
-    right: 44px; top: 40px;
-    display: grid;
-    grid-template-columns: repeat(5,10px);
-    gap: 2px;
+  .px-deco {
+    position: absolute; right: 44px; top: 40px;
+    display: grid; grid-template-columns: repeat(5,9px); gap: 2px;
   }
-  .px { width: 10px; height: 10px; border-radius: 2px; }
-  .card { position: relative; }
+  .px { width: 9px; height: 9px; border-radius: 2px; }
 </style>
 </head>
 <body>
 <div class="card">
 
-  <!-- Pixel deco -->
-  <div class="pixel-corner">
-    <div class="px" style="background:#0E4174;opacity:.8"></div>
-    <div class="px" style="background:#0E4174;opacity:.5"></div>
-    <div class="px" style="background:transparent"></div>
-    <div class="px" style="background:#FF7F32;opacity:.6"></div>
-    <div class="px" style="background:#FF7F32;opacity:.9"></div>
-    <div class="px" style="background:transparent"></div>
-    <div class="px" style="background:#0E4174;opacity:.3"></div>
-    <div class="px" style="background:#FF7F32;opacity:.4"></div>
-    <div class="px" style="background:#0E4174;opacity:.7"></div>
-    <div class="px" style="background:transparent"></div>
-    <div class="px" style="background:#FF7F32;opacity:.5"></div>
-    <div class="px" style="background:transparent"></div>
-    <div class="px" style="background:#0E4174;opacity:.9"></div>
-    <div class="px" style="background:#FF7F32;opacity:.3"></div>
-    <div class="px" style="background:#0E4174;opacity:.4"></div>
+  <div class="px-deco">
+    <div class="px" style="background:#0E4174;opacity:.8"></div><div class="px" style="background:#0E4174;opacity:.4"></div><div class="px" style="background:transparent"></div><div class="px" style="background:#FF7F32;opacity:.5"></div><div class="px" style="background:#FF7F32;opacity:.9"></div>
+    <div class="px" style="background:transparent"></div><div class="px" style="background:#0E4174;opacity:.3"></div><div class="px" style="background:#FF7F32;opacity:.4"></div><div class="px" style="background:#0E4174;opacity:.7"></div><div class="px" style="background:transparent"></div>
+    <div class="px" style="background:#FF7F32;opacity:.5"></div><div class="px" style="background:transparent"></div><div class="px" style="background:#0E4174;opacity:.9"></div><div class="px" style="background:#FF7F32;opacity:.3"></div><div class="px" style="background:#0E4174;opacity:.4"></div>
   </div>
 
   <div class="header">
     <div class="logo">
-      <!-- Anthropic-style asterisk -->
-      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16 4v24M4 16h24M7.5 7.5l17 17M24.5 7.5l-17 17" stroke="white" stroke-width="3" stroke-linecap="round"/>
-      </svg>
+      <svg viewBox="0 0 32 32" fill="none"><path d="M16 4v24M4 16h24M7.5 7.5l17 17M24.5 7.5l-17 17" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>
     </div>
     <div class="header-text">
       <h1>.claude/ folder, đầy đủ cấu trúc</h1>
@@ -213,197 +171,365 @@
 
   <div class="tree">
 
-    <!-- ═══════════════ PROJECT LEVEL ═══════════════ -->
-    <div class="section-label project">
-      <span class="section-label-dot"></span>
-      Project Level — Desktop/Cowork/
-    </div>
+    <!-- ══════════ PROJECT LEVEL ══════════ -->
+    <div class="section-label lbl-project"><span class="dot"></span>Project Level — Desktop/Cowork/</div>
 
-    <!-- Cowork/ root -->
+    <!-- Cowork/ -->
     <div class="row">
-      <div class="path-cell">
-        <div class="indent"></div>
-        <div class="icon icon-folder-green">📁</div>
-        <span class="path-name is-folder is-root">Cowork/</span>
+      <div class="pc">
+        <div class="ico ico-fg">📁</div>
+        <span class="nm folder root">Cowork/</span>
       </div>
-      <div class="arrow-cell">
-        <div class="arrow-line"></div>
-        <span class="badge badge-green">Thư mục gốc dự án chính</span>
-      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-green">Thư mục gốc dự án chính</span></div>
     </div>
 
     <!-- CLAUDE.md -->
     <div class="row">
-      <div class="path-cell">
-        <div class="indent">
-          <div class="indent-space vline"></div>
-        </div>
-        <div class="icon icon-file-yellow">📄</div>
-        <span class="path-name">CLAUDE.md</span>
+      <div class="pc">
+        <div class="i v"></div>
+        <div class="ico ico-fy">📄</div>
+        <span class="nm">CLAUDE.md</span>
       </div>
-      <div class="arrow-cell">
-        <div class="arrow-line"></div>
-        <span class="badge badge-yellow">Quy tắc dự án: ngữ cảnh Ahamove, output rules, brand</span>
-      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-yellow">Quy tắc dự án: ngữ cảnh Ahamove, output rules, brand colors</span></div>
     </div>
 
     <!-- .claude/ project -->
     <div class="row">
-      <div class="path-cell">
-        <div class="indent">
-          <div class="indent-space vline"></div>
-        </div>
-        <div class="icon icon-folder-blue">📂</div>
-        <span class="path-name is-folder">.claude/</span>
+      <div class="pc">
+        <div class="i c"></div>
+        <div class="ico ico-fb">📂</div>
+        <span class="nm folder">.claude/</span>
       </div>
-      <div class="arrow-cell">
-        <div class="arrow-line"></div>
-        <span class="badge badge-blue">Nơi Claude Code ưu tiên đọc trước (project scope)</span>
-      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-blue">Cấu hình cấp project — ưu tiên hơn global</span></div>
     </div>
 
     <!-- settings.json project -->
     <div class="row">
-      <div class="path-cell">
-        <div class="indent">
-          <div class="indent-space vline"></div>
-          <div class="indent-space vline corner"></div>
-        </div>
-        <div class="icon icon-file-red">⚙️</div>
-        <span class="path-name">settings.json</span>
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div>
+        <div class="ico ico-fr">⚙️</div>
+        <span class="nm">settings.json</span>
       </div>
-      <div class="arrow-cell">
-        <div class="arrow-line"></div>
-        <span class="badge badge-red">Hook Stop: tự động sync lên GitHub &amp; Google Drive</span>
+      <div class="ac"><div class="arr"></div><span class="badge b-red">Hook Stop → tự động git commit &amp; sync Google Drive</span></div>
+    </div>
+
+    <!-- scheduled_tasks.lock -->
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div>
+        <div class="ico ico-fgr">🔒</div>
+        <span class="nm">scheduled_tasks.lock</span>
       </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Trạng thái lock của scheduled tasks đang chạy</span></div>
     </div>
 
     <!-- agents/ project -->
     <div class="row">
-      <div class="path-cell">
-        <div class="indent">
-          <div class="indent-space vline"></div>
-          <div class="indent-space corner"></div>
-        </div>
-        <div class="icon icon-folder-purple">🤖</div>
-        <span class="path-name is-folder">agents/</span>
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div>
+        <div class="ico ico-fp">🤖</div>
+        <span class="nm folder">agents/</span>
       </div>
-      <div class="arrow-cell">
-        <div class="arrow-line"></div>
-        <span class="badge badge-purple">10 sub-agents chuyên biệt cho Ahamove Ops</span>
-      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-purple">10 sub-agents chuyên biệt — cửa sổ ngữ cảnh riêng</span></div>
     </div>
 
-    <!-- agents list sub-items -->
-    <div class="row" style="opacity:.75">
-      <div class="path-cell" style="padding-left:8px">
-        <div class="indent">
-          <div class="indent-space vline"></div>
-          <div class="indent-space"></div>
-          <div class="indent-space"></div>
-        </div>
-        <span style="font-size:0.72rem;color:#64748b;font-family:'Space Mono',monospace;">
-          sql-analyst · report-writer · driver-comms · competitive-intel<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;weekly-review · meeting-prep · event-planner · content-writer · landing-page · home-design
-        </span>
-      </div>
-      <div class="arrow-cell"></div>
-    </div>
-
-    <div style="height:8px"></div>
-
-    <!-- ═══════════════ GLOBAL LEVEL ═══════════════ -->
-    <div class="section-label global">
-      <span class="section-label-dot"></span>
-      Global Level — ~/.claude/
-    </div>
-
-    <!-- ~/.claude root -->
+    <!-- agent files -->
     <div class="row">
-      <div class="path-cell">
-        <div class="indent"></div>
-        <div class="icon icon-folder-blue">📂</div>
-        <span class="path-name is-folder is-root">~/.claude/</span>
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div><div class="i t"></div>
+        <span class="nm dim">sql-analyst.md</span>
       </div>
-      <div class="arrow-cell">
-        <div class="arrow-line"></div>
-        <span class="badge badge-blue">Cấu hình toàn cục — áp dụng cho mọi project</span>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Phân tích data, viết SQL — Ahamove DB schema</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div><div class="i t"></div>
+        <span class="nm dim">report-writer.md</span>
       </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Báo cáo ops, root-cause analysis, daily/weekly</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div><div class="i t"></div>
+        <span class="nm dim">driver-comms.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Soạn thông báo gửi tài xế (Zalo, app push)</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div><div class="i t"></div>
+        <span class="nm dim">competitive-intel.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Theo dõi biến động Grab / Be / XanhSM</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div><div class="i t"></div>
+        <span class="nm dim">weekly-review.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Tổng kết tuần Driver Ops — AR, FR, CPO, SLA</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div><div class="i t"></div>
+        <span class="nm dim">meeting-prep.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Chuẩn bị nội dung họp, agenda, talking points</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div><div class="i t"></div>
+        <span class="nm dim">event-planner.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Lên kế hoạch sự kiện cộng đồng tài xế</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div><div class="i t"></div>
+        <span class="nm dim">content-writer.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Nội dung truyền thông nội bộ &amp; tài xế</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div><div class="i t"></div>
+        <span class="nm dim">landing-page-builder.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Trang tuyển dụng tài xế, form đăng ký</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i v"></div><div class="i c"></div>
+        <span class="nm dim">home-design.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Thiết kế nội thất — dự án cá nhân</span></div>
+    </div>
+
+    <!-- memory/ -->
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i c"></div>
+        <div class="ico ico-fo">💾</div>
+        <span class="nm folder">projects/…/memory/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-orange">Bộ nhớ liên phiên — tự động load mỗi cuộc trò chuyện</span></div>
+    </div>
+
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i"></div><div class="i t"></div>
+        <span class="nm dim">MEMORY.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Index tổng hợp — danh sách toàn bộ memory files</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i"></div><div class="i t"></div>
+        <span class="nm dim">user_profile.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Profile Khanh: vai trò, mục tiêu, KPIs theo dõi hàng ngày</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i"></div><div class="i t"></div>
+        <span class="nm dim">user_rules.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Rules làm việc: brief → confirm → SQL → Pyramid</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i"></div><div class="i t"></div>
+        <span class="nm dim">user_voice.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Giọng văn, format (bảng &gt; bullet), từ vựng chuyên ngành</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i"></div><div class="i t"></div>
+        <span class="nm dim">agent_lark_persona.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Persona Enterprise AI + cấu trúc chuẩn Lark Docs 3 phần</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i"></div><div class="i t"></div>
+        <span class="nm dim">feedback_visualization.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Quy tắc chart: SVG → React → HTML, brand colors</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i"></div><div class="i c"></div>
+        <span class="nm dim">reference_slide_themes.md</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">4 slide templates: dark / navy / light + analytics-report.html</span></div>
+    </div>
+
+    <div class="sp"></div>
+
+    <!-- ══════════ GLOBAL LEVEL ══════════ -->
+    <div class="section-label lbl-global"><span class="dot"></span>Global Level — ~/.claude/</div>
+
+    <!-- ~/.claude -->
+    <div class="row">
+      <div class="pc">
+        <div class="ico ico-fb">📂</div>
+        <span class="nm folder root">~/.claude/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-blue">Cấu hình toàn cục — áp dụng cho mọi project</span></div>
     </div>
 
     <!-- .mcp.json -->
     <div class="row">
-      <div class="path-cell">
-        <div class="indent">
-          <div class="indent-space vline"></div>
-        </div>
-        <div class="icon icon-file-blue">🔌</div>
-        <span class="path-name">.mcp.json</span>
+      <div class="pc">
+        <div class="i v"></div>
+        <div class="ico ico-fb">🔌</div>
+        <span class="nm">.mcp.json</span>
       </div>
-      <div class="arrow-cell">
-        <div class="arrow-line"></div>
-        <span class="badge badge-blue">MCP servers: NotebookLM · Gmail · GCal · GDrive · Excalidraw</span>
-      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-blue">MCP servers: NotebookLM · Gmail · GCal · GDrive · Excalidraw</span></div>
     </div>
 
     <!-- settings.json global -->
     <div class="row">
-      <div class="path-cell">
-        <div class="indent">
-          <div class="indent-space vline"></div>
-        </div>
-        <div class="icon icon-file-red">⚙️</div>
-        <span class="path-name">settings.json</span>
+      <div class="pc">
+        <div class="i v"></div>
+        <div class="ico ico-fr">⚙️</div>
+        <span class="nm">settings.json</span>
       </div>
-      <div class="arrow-cell">
-        <div class="arrow-line"></div>
-        <span class="badge badge-gray">Cấu hình toàn cục: effortLevel (tốc độ xử lý)</span>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Cấu hình toàn cục: effortLevel (tốc độ xử lý)</span></div>
+    </div>
+
+    <!-- mcp-needs-auth-cache.json -->
+    <div class="row">
+      <div class="pc">
+        <div class="i v"></div>
+        <div class="ico ico-fgr">📋</div>
+        <span class="nm">mcp-needs-auth-cache.json</span>
       </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Cache trạng thái xác thực các MCP server</span></div>
+    </div>
+
+    <!-- policy-limits.json -->
+    <div class="row">
+      <div class="pc">
+        <div class="i v"></div>
+        <div class="ico ico-fgr">🛡️</div>
+        <span class="nm">policy-limits.json</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Giới hạn chính sách Claude Code (tự sinh)</span></div>
     </div>
 
     <!-- agents/ global -->
     <div class="row">
-      <div class="path-cell">
-        <div class="indent">
-          <div class="indent-space vline"></div>
-        </div>
-        <div class="icon icon-folder-purple">🤖</div>
-        <span class="path-name is-folder">agents/</span>
+      <div class="pc">
+        <div class="i v"></div>
+        <div class="ico ico-fp">🤖</div>
+        <span class="nm folder">agents/</span>
       </div>
-      <div class="arrow-cell">
-        <div class="arrow-line"></div>
-        <span class="badge badge-purple">Sub-agent dùng chung mọi project: code-reviewer</span>
+      <div class="ac"><div class="arr"></div><span class="badge b-purple">Sub-agent dùng chung mọi project</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i v"></div><div class="i c"></div>
+        <span class="nm dim">code-reviewer.md</span>
       </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Review code, diff, tóm tắt thay đổi, security check</span></div>
     </div>
 
     <!-- skills/ -->
     <div class="row">
-      <div class="path-cell">
-        <div class="indent">
-          <div class="indent-space vline"></div>
-        </div>
-        <div class="icon icon-folder-teal">🧠</div>
-        <span class="path-name is-folder">skills/</span>
+      <div class="pc">
+        <div class="i c"></div>
+        <div class="ico ico-ft">🧠</div>
+        <span class="nm folder">skills/</span>
       </div>
-      <div class="arrow-cell">
-        <div class="arrow-line"></div>
-        <span class="badge badge-teal">16 skills: xlsx · pdf · pptx · html · plan · okr · schedule…</span>
-      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-teal">16 skills — nạp động khi cần, mỗi skill có SKILL.md + assets</span></div>
     </div>
 
-    <!-- projects/.../memory/ -->
+    <!-- skill items -->
     <div class="row">
-      <div class="path-cell">
-        <div class="indent">
-          <div class="indent-space corner"></div>
-        </div>
-        <div class="icon icon-folder-orange">💾</div>
-        <span class="path-name is-folder">projects/…/memory/</span>
+      <div class="pc">
+        <div class="i"></div><div class="i t"></div>
+        <span class="nm dim">xlsx/ &amp; xlsx-a/</span>
       </div>
-      <div class="arrow-cell">
-        <div class="arrow-line"></div>
-        <span class="badge badge-orange">Bộ nhớ liên phiên: profile · rules · voice · references</span>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Bảng tính Excel: standard + advanced financial models</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i t"></div>
+        <span class="nm dim">pptx/ &amp; pptx-a/</span>
       </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Slide PowerPoint: standard + advanced (brands, cookbook)</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i t"></div>
+        <span class="nm dim">pdf/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Xử lý PDF: extract, merge, split, OCR, fill forms</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i t"></div>
+        <span class="nm dim">html/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Report HTML chuẩn McKinsey + Pyramid Principle</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i t"></div>
+        <span class="nm dim">docx/ &amp; md/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Tài liệu Word và Markdown chuyên nghiệp</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i t"></div>
+        <span class="nm dim">plan/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Task planning nhiều bước: task_plan.md + findings.md</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i t"></div>
+        <span class="nm dim">okr/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Xây dựng OKR theo BSC — Committed &amp; Aspirational</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i t"></div>
+        <span class="nm dim">llm-wiki/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Knowledge base cá nhân kiểu Karpathy LLM Wiki</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i t"></div>
+        <span class="nm dim">schedule/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Đặt lịch tác vụ tự động: cron, one-time, recurring</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i t"></div>
+        <span class="nm dim">skill-creator/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Tạo, sửa, đánh giá hiệu suất skills mới</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i t"></div>
+        <span class="nm dim">home-design/ &amp; workspace/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Thiết kế nội thất: skill + workspace iteration</span></div>
+    </div>
+    <div class="row">
+      <div class="pc">
+        <div class="i"></div><div class="i c"></div>
+        <span class="nm dim">setup-cowork/</span>
+      </div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Cài đặt &amp; onboarding môi trường Cowork mới</span></div>
     </div>
 
   </div><!-- /tree -->
@@ -411,10 +537,10 @@
   <div class="footer">
     <span class="footer-star">★</span>
     <span>
-      <strong>CLAUDE.md</strong> là quan trọng nhất — đọc đầu tiên, override mọi default.
-      &nbsp;|&nbsp; <strong>Hooks</strong> chạy tự động theo sự kiện (Stop → sync Git &amp; Drive).
-      &nbsp;|&nbsp; <strong>Agents</strong> chạy cửa sổ ngữ cảnh riêng, không ảnh hưởng luồng chính.
-      &nbsp;|&nbsp; <strong>Skills</strong> được nạp động khi cần, không tốn context khi không dùng.
+      <strong>CLAUDE.md</strong> — đọc đầu tiên, override mọi default. &nbsp;|&nbsp;
+      <strong>Hooks</strong> — chạy tự động theo sự kiện, không cần nhắc. &nbsp;|&nbsp;
+      <strong>Agents</strong> — cửa sổ ngữ cảnh riêng, không làm nặng luồng chính. &nbsp;|&nbsp;
+      <strong>Memory</strong> — load tự động mỗi phiên, Claude nhớ mà không cần nhắc lại.
     </span>
   </div>
 
