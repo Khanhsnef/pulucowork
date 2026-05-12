@@ -950,6 +950,198 @@
 
 </div><!-- /env card -->
 
+
+<!-- ═══════════════════════════════════════════════
+     CARD 4 — WHEN DOES CLAUDE WRITE WHERE?
+═══════════════════════════════════════════════ -->
+<div class="env-card" id="decision">
+  <h2>Claude quyết định viết vào đâu — và làm sao nhận biết?</h2>
+  <p class="subtitle">Câu hỏi thực tế: tôi nhờ Claude "thêm permission", "nhớ điều này", "tạo agent" — nó sẽ sửa file nào?</p>
+
+  <!-- ── RULE 0: The golden rule ── -->
+  <div style="background:#0E4174;border-radius:16px;padding:20px 24px;margin-bottom:28px;display:flex;gap:16px;align-items:flex-start;">
+    <div style="font-size:1.6rem;flex-shrink:0;">🧭</div>
+    <div>
+      <div style="font-size:.92rem;font-weight:800;color:#fff;margin-bottom:6px;">Quy tắc vàng: Claude viết vào nơi file ĐÃ TỒN TẠI gần nhất</div>
+      <div style="font-size:.78rem;color:#93c5fd;line-height:1.7;">
+        Nếu <code style="background:rgba(255,255,255,.15);padding:1px 6px;border-radius:5px;color:#fff;">Cowork/.claude/settings.json</code> tồn tại → Claude sửa file đó. &nbsp;|&nbsp;
+        Nếu không có → Leo lên <code style="background:rgba(255,255,255,.15);padding:1px 6px;border-radius:5px;color:#fff;">~/.claude/settings.json</code>. &nbsp;|&nbsp;
+        Ngoại lệ duy nhất: <strong style="color:#fbbf24;">Memory luôn ghi vào global</strong>, Skills luôn nằm ở global.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DECISION TABLE ── -->
+  <div class="matrix-title">Khi bạn nói… → Claude làm gì và viết vào đâu</div>
+  <table class="matrix" style="margin-bottom:28px;">
+    <thead>
+      <tr>
+        <th style="width:30%">Bạn yêu cầu</th>
+        <th style="width:28%">Claude viết vào file</th>
+        <th style="width:14%" class="center">Môi trường</th>
+        <th>Lý do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>"Thêm permission cho npm"</td>
+        <td><code style="font-size:.68rem;">.claude/settings.json</code></td>
+        <td class="center"><span class="pill c-project" style="padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:700;">Project</span></td>
+        <td>Project settings.json tồn tại → viết vào đó</td>
+      </tr>
+      <tr>
+        <td>"Nhớ điều này cho các lần sau"</td>
+        <td><code style="font-size:.68rem;">~/.claude/projects/…/memory/</code></td>
+        <td class="center"><span class="pill c-global" style="padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:700;">Global</span></td>
+        <td>Memory <strong>luôn</strong> ghi vào global, dù đang ở project</td>
+      </tr>
+      <tr>
+        <td>"Sửa CLAUDE.md, thêm rule này"</td>
+        <td><code style="font-size:.68rem;">Cowork/CLAUDE.md</code></td>
+        <td class="center"><span class="pill c-project" style="padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:700;">Project</span></td>
+        <td>CLAUDE.md trong thư mục hiện tại là mặc định</td>
+      </tr>
+      <tr>
+        <td>"Tạo agent sql-analyst"</td>
+        <td><code style="font-size:.68rem;">.claude/agents/sql-analyst.md</code></td>
+        <td class="center"><span class="pill c-project" style="padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:700;">Project</span></td>
+        <td>Đang trong project → agent vào project agents/</td>
+      </tr>
+      <tr>
+        <td>"Thêm MCP server Notion"</td>
+        <td><code style="font-size:.68rem;">~/.claude/.mcp.json</code></td>
+        <td class="center"><span class="pill c-global" style="padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:700;">Global</span></td>
+        <td>MCP <strong>luôn</strong> global — dùng được mọi project</td>
+      </tr>
+      <tr>
+        <td>"Cài skill /okr"</td>
+        <td><code style="font-size:.68rem;">~/.claude/skills/okr/</code></td>
+        <td class="center"><span class="pill c-global" style="padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:700;">Global</span></td>
+        <td>Skills <strong>luôn</strong> global — gọi được từ mọi nơi</td>
+      </tr>
+      <tr>
+        <td>"Tạo agent cho TẤT CẢ project"</td>
+        <td><code style="font-size:.68rem;">~/.claude/agents/name.md</code></td>
+        <td class="center"><span class="pill c-global" style="padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:700;">Global</span></td>
+        <td>Từ khoá "tất cả / mọi project / globally" → global</td>
+      </tr>
+      <tr>
+        <td>"Thêm note này, đừng commit"</td>
+        <td><code style="font-size:.68rem;">CLAUDE.local.md</code></td>
+        <td class="center"><span class="pill c-local" style="padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:700;">Local</span></td>
+        <td>Từ khoá "đừng commit / riêng tư / local only"</td>
+      </tr>
+      <tr>
+        <td>"Thêm hook Stop tự động"</td>
+        <td><code style="font-size:.68rem;">.claude/settings.json</code></td>
+        <td class="center"><span class="pill c-project" style="padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:700;">Project</span></td>
+        <td>Hook thường gắn với project workflow</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── HOW TO RECOGNIZE ── -->
+  <div class="matrix-title">Làm sao nhận biết Claude đang sửa file nào?</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;">
+
+    <div style="background:#f8fafc;border-radius:16px;padding:20px;border:1.5px solid #e2e8f0;">
+      <div style="font-size:.8rem;font-weight:800;color:#0E4174;margin-bottom:12px;">👁 Nhìn vào tool call trong UI</div>
+      <div style="font-size:.76rem;color:#475569;line-height:1.8;margin-bottom:10px;">Mỗi khi Claude đọc hoặc viết file, UI hiển thị tên tool và đường dẫn. Đây là cách chính xác nhất:</div>
+      <div style="background:#1e293b;border-radius:10px;padding:12px 14px;font-family:'Space Mono',monospace;font-size:.68rem;line-height:1.9;">
+        <div><span style="color:#86efac;">Write</span> <span style="color:#fbbf24;">/Users/…/.claude/settings.json</span> <span style="color:#94a3b8;">← Global</span></div>
+        <div><span style="color:#86efac;">Edit</span> <span style="color:#93c5fd;">Cowork/.claude/settings.json</span> <span style="color:#94a3b8;">← Project</span></div>
+        <div><span style="color:#86efac;">Write</span> <span style="color:#fde68a;">Cowork/CLAUDE.local.md</span> <span style="color:#94a3b8;">← Local</span></div>
+        <div><span style="color:#86efac;">Write</span> <span style="color:#fbbf24;">/Users/…/memory/user_x.md</span> <span style="color:#94a3b8;">← Global memory</span></div>
+      </div>
+    </div>
+
+    <div style="background:#f8fafc;border-radius:16px;padding:20px;border:1.5px solid #e2e8f0;">
+      <div style="font-size:.8rem;font-weight:800;color:#0E4174;margin-bottom:12px;">🔍 Đọc prefix đường dẫn</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="pill c-global" style="padding:3px 10px;border-radius:99px;font-size:.68rem;font-weight:700;flex-shrink:0;">Global</span>
+          <span style="font-family:'Space Mono',monospace;font-size:.68rem;color:#475569;">/Users/[you]/.claude/…</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="pill c-project" style="padding:3px 10px;border-radius:99px;font-size:.68rem;font-weight:700;flex-shrink:0;">Project</span>
+          <span style="font-family:'Space Mono',monospace;font-size:.68rem;color:#475569;">Cowork/.claude/… hoặc Cowork/CLAUDE.md</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="pill c-local" style="padding:3px 10px;border-radius:99px;font-size:.68rem;font-weight:700;flex-shrink:0;">Local</span>
+          <span style="font-family:'Space Mono',monospace;font-size:.68rem;color:#475569;">*.local.md hoặc *.local.json</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="pill" style="background:#f1f5f9;color:#475569;padding:3px 10px;border-radius:99px;font-size:.68rem;font-weight:700;flex-shrink:0;">Memory</span>
+          <span style="font-family:'Space Mono',monospace;font-size:.68rem;color:#475569;">/Users/[you]/.claude/projects/…/memory/</span>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:10px 12px;background:#fffbeb;border-radius:10px;border:1px solid #fde68a;font-size:.73rem;color:#92400e;line-height:1.5;">
+        <strong>Tip:</strong> Nếu không chắc, hỏi thẳng Claude: <em>"Bạn vừa sửa file nào?"</em> — Claude sẽ báo chính xác đường dẫn.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── SIGNAL WORDS ── -->
+  <div class="matrix-title">Từ khoá điều hướng Claude viết đúng chỗ</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+
+    <div style="border-radius:14px;padding:16px;background:#eff6ff;border:1.5px solid #bfdbfe;">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#1d4ed8;margin-bottom:10px;">🌐 Để ghi vào Global</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="font-size:.76rem;color:#1e40af;background:#dbeafe;padding:4px 10px;border-radius:8px;font-family:'Space Mono',monospace;">"globally" / "mọi project"</div>
+        <div style="font-size:.76rem;color:#1e40af;background:#dbeafe;padding:4px 10px;border-radius:8px;font-family:'Space Mono',monospace;">"cho tất cả" / "dùng chung"</div>
+        <div style="font-size:.76rem;color:#1e40af;background:#dbeafe;padding:4px 10px;border-radius:8px;font-family:'Space Mono',monospace;">"vào ~/.claude/"</div>
+        <div style="font-size:.74rem;color:#475569;margin-top:4px;line-height:1.5;">Ví dụ: <em>"Tạo agent code-reviewer dùng cho tất cả project"</em></div>
+      </div>
+    </div>
+
+    <div style="border-radius:14px;padding:16px;background:#f0fdf4;border:1.5px solid #86efac;">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#15803d;margin-bottom:10px;">🏢 Để ghi vào Project</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="font-size:.76rem;color:#065f46;background:#d1fae5;padding:4px 10px;border-radius:8px;font-family:'Space Mono',monospace;">"cho dự án này" / "ở đây"</div>
+        <div style="font-size:.76rem;color:#065f46;background:#d1fae5;padding:4px 10px;border-radius:8px;font-family:'Space Mono',monospace;">"vào CLAUDE.md" / "project"</div>
+        <div style="font-size:.76rem;color:#065f46;background:#d1fae5;padding:4px 10px;border-radius:8px;font-family:'Space Mono',monospace;">(không nói gì = mặc định project)</div>
+        <div style="font-size:.74rem;color:#475569;margin-top:4px;line-height:1.5;">Ví dụ: <em>"Thêm rule này vào CLAUDE.md"</em> hoặc không nói gì thêm</div>
+      </div>
+    </div>
+
+    <div style="border-radius:14px;padding:16px;background:#fffbeb;border:1.5px solid #fde68a;">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#b45309;margin-bottom:10px;">🔐 Để ghi vào Local</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="font-size:.76rem;color:#854d0e;background:#fef9c3;padding:4px 10px;border-radius:8px;font-family:'Space Mono',monospace;">"đừng commit" / "riêng tư"</div>
+        <div style="font-size:.76rem;color:#854d0e;background:#fef9c3;padding:4px 10px;border-radius:8px;font-family:'Space Mono',monospace;">"local only" / "chỉ máy này"</div>
+        <div style="font-size:.76rem;color:#854d0e;background:#fef9c3;padding:4px 10px;border-radius:8px;font-family:'Space Mono',monospace;">"vào CLAUDE.local.md"</div>
+        <div style="font-size:.74rem;color:#475569;margin-top:4px;line-height:1.5;">Ví dụ: <em>"Nhớ API key này nhưng đừng commit lên git"</em></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── ALWAYS GLOBAL exceptions ── -->
+  <div style="margin-top:20px;background:#fdf4ff;border-radius:14px;padding:16px 20px;border:1.5px solid #e9d5ff;">
+    <div style="font-size:.78rem;font-weight:800;color:#7e22ce;margin-bottom:10px;">⚠ 3 thứ LUÔN viết vào Global — dù bạn đang ở project nào</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      <div style="font-size:.75rem;color:#6b21a8;line-height:1.6;">
+        <strong>Memory</strong><br>
+        Ghi vào <code style="font-size:.67rem;background:rgba(124,58,237,.1);padding:1px 5px;border-radius:4px;">~/.claude/projects/[p]/memory/</code><br>
+        Lý do: memory cần persist qua tất cả phiên kể cả khi không ở project folder
+      </div>
+      <div style="font-size:.75rem;color:#6b21a8;line-height:1.6;">
+        <strong>Skills</strong><br>
+        Ghi vào <code style="font-size:.67rem;background:rgba(124,58,237,.1);padding:1px 5px;border-radius:4px;">~/.claude/skills/</code><br>
+        Lý do: skill cần gọi được từ mọi project, mọi folder
+      </div>
+      <div style="font-size:.75rem;color:#6b21a8;line-height:1.6;">
+        <strong>MCP servers</strong><br>
+        Ghi vào <code style="font-size:.67rem;background:rgba(124,58,237,.1);padding:1px 5px;border-radius:4px;">~/.claude/.mcp.json</code><br>
+        Lý do: tool như Gmail, GDrive không cần cài lại mỗi project
+      </div>
+    </div>
+  </div>
+
+</div><!-- /decision card -->
+
 </div><!-- /wrap -->
 </body>
 </html>
