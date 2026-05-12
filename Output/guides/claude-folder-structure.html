@@ -179,6 +179,75 @@
   /* pixel deco */
   .px-deco{position:absolute;right:44px;top:40px;display:grid;grid-template-columns:repeat(5,9px);gap:2px;}
   .px{width:9px;height:9px;border-radius:2px;}
+
+  /* ═══════════════════════════════════════
+     ENVIRONMENTS CARD
+  ═══════════════════════════════════════ */
+  .env-card{background:#fff;border-radius:2rem;padding:40px 44px 48px;box-shadow:0 4px 28px rgba(14,65,116,0.09);}
+  .env-card h2{font-size:1.2rem;font-weight:800;color:#0E4174;margin-bottom:6px;}
+  .env-card .subtitle{font-size:.83rem;color:#64748b;margin-bottom:28px;}
+
+  /* env grid */
+  .env-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px;}
+  .env{border-radius:18px;padding:20px;border:2px solid;display:flex;flex-direction:column;gap:10px;}
+  .env-icon{font-size:1.8rem;line-height:1;}
+  .env-name{font-size:.92rem;font-weight:800;letter-spacing:-.3px;}
+  .env-where{font-family:'Space Mono',monospace;font-size:.65rem;font-weight:700;
+    padding:3px 8px;border-radius:6px;display:inline-block;margin-top:2px;}
+  .env-scope{font-size:.74rem;color:#475569;line-height:1.5;padding-top:6px;border-top:1px solid;}
+
+  .env-rows{display:flex;flex-direction:column;gap:5px;}
+  .env-row{display:flex;align-items:flex-start;gap:7px;font-size:.73rem;line-height:1.45;}
+  .env-key{font-weight:700;white-space:nowrap;flex-shrink:0;}
+  .env-val{color:#475569;}
+  .pill{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:99px;white-space:nowrap;}
+
+  /* env colors */
+  .env-chat   {background:#fdf4ff;border-color:#e9d5ff;}
+  .env-chat   .env-name{color:#7e22ce;} .env-chat .env-where{background:#ede9fe;color:#5b21b6;}
+  .env-chat   .env-scope{border-color:#e9d5ff;color:#6b21a8;}
+  .env-global {background:#eff6ff;border-color:#bfdbfe;}
+  .env-global .env-name{color:#1d4ed8;} .env-global .env-where{background:#dbeafe;color:#1e40af;}
+  .env-global .env-scope{border-color:#bfdbfe;color:#1e40af;}
+  .env-project{background:#f0fdf4;border-color:#86efac;}
+  .env-project .env-name{color:#15803d;} .env-project .env-where{background:#d1fae5;color:#065f46;}
+  .env-project .env-scope{border-color:#86efac;color:#166534;}
+  .env-local  {background:#fffbeb;border-color:#fde68a;}
+  .env-local  .env-name{color:#b45309;} .env-local  .env-where{background:#fef9c3;color:#854d0e;}
+  .env-local  .env-scope{border-color:#fde68a;color:#92400e;}
+
+  .pill-yes  {background:#d1fae5;color:#065f46;}
+  .pill-no   {background:#fee2e2;color:#991b1b;}
+  .pill-warn {background:#fef9c3;color:#854d0e;}
+
+  /* comparison matrix */
+  .matrix-title{font-size:.67rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#94a3b8;margin-bottom:14px;}
+  .matrix{width:100%;border-collapse:collapse;font-size:.76rem;}
+  .matrix th{padding:8px 12px;font-weight:700;font-size:.68rem;letter-spacing:.5px;text-transform:uppercase;
+    color:#94a3b8;background:#f8fafc;text-align:left;border-bottom:2px solid #f1f5f9;}
+  .matrix th:first-child{border-radius:10px 0 0 0;} .matrix th:last-child{border-radius:0 10px 0 0;}
+  .matrix td{padding:10px 12px;border-bottom:1px solid #f1f5f9;color:#334155;vertical-align:top;}
+  .matrix tr:last-child td{border-bottom:none;}
+  .matrix tr:hover td{background:#f8fafc;}
+  .matrix td:first-child{font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;color:#0E4174;}
+  .matrix .center{text-align:center;}
+  .c-chat   {color:#7e22ce;background:#fdf4ff;}
+  .c-global {color:#1d4ed8;background:#eff6ff;}
+  .c-project{color:#15803d;background:#f0fdf4;}
+  .c-local  {color:#b45309;background:#fffbeb;}
+  .matrix th.c-chat,.matrix th.c-global,.matrix th.c-project,.matrix th.c-local{padding:10px 14px;}
+
+  /* when-to-use */
+  .when-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px;}
+  .when-card{border-radius:14px;padding:14px;border:1.5px solid;}
+  .when-label{font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+  .when-items{display:flex;flex-direction:column;gap:5px;}
+  .when-item{font-size:.73rem;color:#475569;display:flex;gap:6px;align-items:flex-start;line-height:1.45;}
+  .when-item::before{content:'→';color:#94a3b8;flex-shrink:0;font-size:.7rem;margin-top:1px;}
+  .wc-chat   {background:#fdf4ff;border-color:#ddd6fe;} .wc-chat    .when-label{color:#7e22ce;}
+  .wc-global {background:#eff6ff;border-color:#bfdbfe;} .wc-global  .when-label{color:#1d4ed8;}
+  .wc-project{background:#f0fdf4;border-color:#86efac;} .wc-project .when-label{color:#15803d;}
+  .wc-local  {background:#fffbeb;border-color:#fde68a;} .wc-local   .when-label{color:#b45309;}
 </style>
 </head>
 <body>
@@ -673,6 +742,213 @@
   </div>
 
 </div><!-- /flow card -->
+
+
+<!-- ═══════════════════════════════════════════════
+     CARD 3 — ENVIRONMENTS
+═══════════════════════════════════════════════ -->
+<div class="env-card">
+  <h2>Môi trường làm việc — Chat, Global, Project, Local khác nhau thế nào?</h2>
+  <p class="subtitle">4 lớp cấu hình, mỗi lớp có phạm vi và mục đích riêng biệt — hiểu đúng để setup đúng chỗ</p>
+
+  <!-- ── 4 ENV CARDS ── -->
+  <div class="env-grid">
+
+    <!-- CHAT -->
+    <div class="env env-chat">
+      <div class="env-icon">💬</div>
+      <div class="env-name">Chat</div>
+      <div class="env-where">claude.ai / app</div>
+      <div class="env-scope">Chỉ trong 1 tab/phiên trên trình duyệt hoặc ứng dụng. Không có file system.</div>
+      <div class="env-rows">
+        <div class="env-row"><span class="env-key">Lưu ở:</span><span class="env-val">Server Anthropic, không có file local</span></div>
+        <div class="env-row"><span class="env-key">Git:</span><span class="pill pill-no">❌ Không</span></div>
+        <div class="env-row"><span class="env-key">CLAUDE.md:</span><span class="pill pill-no">❌ Không đọc</span></div>
+        <div class="env-row"><span class="env-key">Memory:</span><span class="pill pill-warn">⚠ Projects only</span></div>
+        <div class="env-row"><span class="env-key">Tools/MCP:</span><span class="pill pill-no">❌ Không có</span></div>
+        <div class="env-row"><span class="env-key">Hooks:</span><span class="pill pill-no">❌ Không có</span></div>
+        <div class="env-row" style="margin-top:6px;"><span class="env-key" style="color:#7e22ce;">✓ Pros:</span><span class="env-val">Nhanh, không setup, dùng được mọi thiết bị</span></div>
+        <div class="env-row"><span class="env-key" style="color:#dc2626;">✗ Cons:</span><span class="env-val">Không đọc file, không tự động hóa, context mất sau tab</span></div>
+      </div>
+    </div>
+
+    <!-- GLOBAL -->
+    <div class="env env-global">
+      <div class="env-icon">🌐</div>
+      <div class="env-name">Global</div>
+      <div class="env-where">~/.claude/</div>
+      <div class="env-scope">Áp dụng cho MỌI phiên Claude Code trên máy này, bất kể đang ở folder nào.</div>
+      <div class="env-rows">
+        <div class="env-row"><span class="env-key">Lưu ở:</span><span class="env-val">~/.claude/ (home folder)</span></div>
+        <div class="env-row"><span class="env-key">Git:</span><span class="pill pill-no">❌ Không commit</span></div>
+        <div class="env-row"><span class="env-key">CLAUDE.md:</span><span class="pill pill-no">❌ Không có</span></div>
+        <div class="env-row"><span class="env-key">Memory:</span><span class="pill pill-yes">✅ projects/</span></div>
+        <div class="env-row"><span class="env-key">Tools/MCP:</span><span class="pill pill-yes">✅ .mcp.json</span></div>
+        <div class="env-row"><span class="env-key">Hooks:</span><span class="pill pill-yes">✅ settings.json</span></div>
+        <div class="env-row" style="margin-top:6px;"><span class="env-key" style="color:#1d4ed8;">✓ Pros:</span><span class="env-val">Setup 1 lần, skills &amp; tools dùng mọi project</span></div>
+        <div class="env-row"><span class="env-key" style="color:#dc2626;">✗ Cons:</span><span class="env-val">Không share qua git, mất khi đổi máy nếu không backup</span></div>
+      </div>
+    </div>
+
+    <!-- PROJECT -->
+    <div class="env env-project">
+      <div class="env-icon">🏢</div>
+      <div class="env-name">Project</div>
+      <div class="env-where">Cowork/.claude/</div>
+      <div class="env-scope">Chỉ áp dụng khi Claude Code chạy trong thư mục Cowork/ hoặc sub-folder của nó.</div>
+      <div class="env-rows">
+        <div class="env-row"><span class="env-key">Lưu ở:</span><span class="env-val">Cowork/.claude/ + CLAUDE.md</span></div>
+        <div class="env-row"><span class="env-key">Git:</span><span class="pill pill-yes">✅ Committed &amp; synced</span></div>
+        <div class="env-row"><span class="env-key">CLAUDE.md:</span><span class="pill pill-yes">✅ Override global</span></div>
+        <div class="env-row"><span class="env-key">Memory:</span><span class="pill pill-yes">✅ Riêng cho project</span></div>
+        <div class="env-row"><span class="env-key">Tools/MCP:</span><span class="pill pill-yes">✅ Kế thừa global</span></div>
+        <div class="env-row"><span class="env-key">Hooks:</span><span class="pill pill-yes">✅ Auto-sync Git+Drive</span></div>
+        <div class="env-row" style="margin-top:6px;"><span class="env-key" style="color:#15803d;">✓ Pros:</span><span class="env-val">Context-specific, sync qua Drive, agents chuyên biệt</span></div>
+        <div class="env-row"><span class="env-key" style="color:#dc2626;">✗ Cons:</span><span class="env-val">Phải setup riêng mỗi project, chỉ dùng trong 1 folder</span></div>
+      </div>
+    </div>
+
+    <!-- LOCAL -->
+    <div class="env env-local">
+      <div class="env-icon">🔐</div>
+      <div class="env-name">Local</div>
+      <div class="env-where">*.local.* (gitignored)</div>
+      <div class="env-scope">Override cá nhân trên máy này, KHÔNG commit lên git. Bí mật với team và Drive.</div>
+      <div class="env-rows">
+        <div class="env-row"><span class="env-key">Lưu ở:</span><span class="env-val">CLAUDE.local.md, settings.local.json</span></div>
+        <div class="env-row"><span class="env-key">Git:</span><span class="pill pill-no">❌ .gitignore</span></div>
+        <div class="env-row"><span class="env-key">CLAUDE.md:</span><span class="pill pill-yes">✅ Cộng thêm vào project</span></div>
+        <div class="env-row"><span class="env-key">Memory:</span><span class="pill pill-no">❌ Không</span></div>
+        <div class="env-row"><span class="env-key">Tools/MCP:</span><span class="pill pill-warn">⚠ Override được</span></div>
+        <div class="env-row"><span class="env-key">Hooks:</span><span class="pill pill-warn">⚠ Override được</span></div>
+        <div class="env-row" style="margin-top:6px;"><span class="env-key" style="color:#b45309;">✓ Pros:</span><span class="env-val">Giữ thông tin nhạy cảm, override mà không ảnh hưởng team</span></div>
+        <div class="env-row"><span class="env-key" style="color:#dc2626;">✗ Cons:</span><span class="env-val">Mất khi đổi máy, dễ quên là đang có override</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── COMPARISON MATRIX ── -->
+  <div class="matrix-title">So sánh nhanh — tính năng theo môi trường</div>
+  <table class="matrix">
+    <thead>
+      <tr>
+        <th>Tính năng</th>
+        <th class="c-chat center">💬 Chat</th>
+        <th class="c-global center">🌐 Global</th>
+        <th class="c-project center">🏢 Project</th>
+        <th class="c-local center">🔐 Local</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Đọc file &amp; terminal</td>
+        <td class="center"><span class="pill pill-no">❌</span></td>
+        <td class="center"><span class="pill pill-yes">✅</span></td>
+        <td class="center"><span class="pill pill-yes">✅</span></td>
+        <td class="center"><span class="pill pill-yes">✅</span></td>
+      </tr>
+      <tr>
+        <td>CLAUDE.md (quy tắc project)</td>
+        <td class="center"><span class="pill pill-no">❌</span></td>
+        <td class="center"><span class="pill pill-no">❌</span></td>
+        <td class="center"><span class="pill pill-yes">✅ Chính</span></td>
+        <td class="center"><span class="pill pill-yes">✅ Cộng thêm</span></td>
+      </tr>
+      <tr>
+        <td>Skills (/xlsx, /pdf…)</td>
+        <td class="center"><span class="pill pill-no">❌</span></td>
+        <td class="center"><span class="pill pill-yes">✅ Dùng mọi nơi</span></td>
+        <td class="center"><span class="pill pill-yes">✅ Kế thừa</span></td>
+        <td class="center"><span class="pill pill-yes">✅ Kế thừa</span></td>
+      </tr>
+      <tr>
+        <td>MCP tools (Gmail, GDrive…)</td>
+        <td class="center"><span class="pill pill-no">❌</span></td>
+        <td class="center"><span class="pill pill-yes">✅ .mcp.json</span></td>
+        <td class="center"><span class="pill pill-yes">✅ Kế thừa</span></td>
+        <td class="center"><span class="pill pill-warn">⚠ Có thể override</span></td>
+      </tr>
+      <tr>
+        <td>Agents chuyên biệt</td>
+        <td class="center"><span class="pill pill-no">❌</span></td>
+        <td class="center"><span class="pill pill-warn">⚠ Global agents</span></td>
+        <td class="center"><span class="pill pill-yes">✅ 9 agents Ahamove</span></td>
+        <td class="center"><span class="pill pill-no">❌</span></td>
+      </tr>
+      <tr>
+        <td>Memory (nhớ qua phiên)</td>
+        <td class="center"><span class="pill pill-warn">⚠ Projects only</span></td>
+        <td class="center"><span class="pill pill-yes">✅ Lưu tại đây</span></td>
+        <td class="center"><span class="pill pill-yes">✅ Đọc từ global</span></td>
+        <td class="center"><span class="pill pill-no">❌</span></td>
+      </tr>
+      <tr>
+        <td>Hooks (automation)</td>
+        <td class="center"><span class="pill pill-no">❌</span></td>
+        <td class="center"><span class="pill pill-yes">✅ Global hooks</span></td>
+        <td class="center"><span class="pill pill-yes">✅ Auto-sync</span></td>
+        <td class="center"><span class="pill pill-warn">⚠ Override được</span></td>
+      </tr>
+      <tr>
+        <td>Commit lên git / share team</td>
+        <td class="center"><span class="pill pill-no">❌</span></td>
+        <td class="center"><span class="pill pill-no">❌</span></td>
+        <td class="center"><span class="pill pill-yes">✅</span></td>
+        <td class="center"><span class="pill pill-no">❌ gitignored</span></td>
+      </tr>
+      <tr>
+        <td>Thứ tự ưu tiên (cao → thấp)</td>
+        <td class="center" style="color:#94a3b8">N/A</td>
+        <td class="center"><span style="font-weight:700;color:#1d4ed8">④ Base</span></td>
+        <td class="center"><span style="font-weight:700;color:#15803d">② Override global</span></td>
+        <td class="center"><span style="font-weight:700;color:#b45309">① Cao nhất</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── WHEN TO USE ── -->
+  <div class="matrix-title" style="margin-top:28px;">Dùng môi trường nào trong tình huống nào?</div>
+  <div class="when-grid">
+    <div class="when-card wc-chat">
+      <div class="when-label">💬 Dùng Chat khi…</div>
+      <div class="when-items">
+        <div class="when-item">Hỏi nhanh, không cần file</div>
+        <div class="when-item">Brainstorm ý tưởng tự do</div>
+        <div class="when-item">Đang dùng điện thoại</div>
+        <div class="when-item">Không cần nhớ context dài hạn</div>
+      </div>
+    </div>
+    <div class="when-card wc-global">
+      <div class="when-label">🌐 Setup Global khi…</div>
+      <div class="when-items">
+        <div class="when-item">Cài skill dùng mọi project (xlsx, pdf…)</div>
+        <div class="when-item">Đăng ký MCP tool mới</div>
+        <div class="when-item">Muốn memory hoạt động mọi nơi</div>
+        <div class="when-item">Base settings không thay đổi</div>
+      </div>
+    </div>
+    <div class="when-card wc-project">
+      <div class="when-label">🏢 Setup Project khi…</div>
+      <div class="when-items">
+        <div class="when-item">Làm việc Ahamove hàng ngày</div>
+        <div class="when-item">Cần agents chuyên biệt theo domain</div>
+        <div class="when-item">Muốn hooks tự động (sync, commit)</div>
+        <div class="when-item">Cần CLAUDE.md định hình context</div>
+      </div>
+    </div>
+    <div class="when-card wc-local">
+      <div class="when-label">🔐 Dùng Local khi…</div>
+      <div class="when-items">
+        <div class="when-item">Có API key / token cá nhân</div>
+        <div class="when-item">Muốn ghi note nhạy cảm không commit</div>
+        <div class="when-item">Test thay đổi trước khi commit project</div>
+        <div class="when-item">Override rule của team cho máy mình</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /env card -->
 
 </div><!-- /wrap -->
 </body>
