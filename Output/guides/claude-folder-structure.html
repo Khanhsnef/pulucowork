@@ -10,118 +10,184 @@
   body {
     font-family: 'Lexend', sans-serif;
     background: #f1f5f9;
-    min-height: 100vh;
     display: flex; align-items: flex-start; justify-content: center;
     padding: 40px 20px;
   }
+  .wrap { width: 100%; max-width: 940px; display: flex; flex-direction: column; gap: 24px; }
+
+  /* ── CARD BASE ── */
   .card {
     background: #fff; border-radius: 2rem;
-    padding: 40px 44px 52px; width: 100%; max-width: 920px;
-    box-shadow: 0 4px 32px rgba(14,65,116,0.10);
+    padding: 40px 44px 48px;
+    box-shadow: 0 4px 28px rgba(14,65,116,0.09);
     position: relative;
   }
 
-  /* HEADER */
+  /* ── HEADER ── */
   .header { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
-  .logo {
-    width: 52px; height: 52px; background: #FF7F32;
-    border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .logo svg { width: 32px; height: 32px; }
-  .header-text h1 { font-size: 1.55rem; font-weight: 800; color: #0E4174; letter-spacing: -0.5px; }
-  .header-text p  { font-size: 0.85rem; color: #64748b; margin-top: 2px; }
-  hr.div { border: none; border-top: 2px solid #f1f5f9; margin: 20px 0 24px; }
+  .logo { width:52px;height:52px;background:#FF7F32;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .logo svg { width:32px;height:32px; }
+  .header-text h1 { font-size:1.5rem;font-weight:800;color:#0E4174;letter-spacing:-0.5px; }
+  .header-text p  { font-size:0.84rem;color:#64748b;margin-top:2px; }
+  hr.div { border:none;border-top:2px solid #f1f5f9;margin:20px 0 22px; }
 
-  /* SECTION LABEL */
+  /* ── SECTION LABEL ── */
   .section-label {
-    font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px;
-    text-transform: uppercase; padding: 4px 12px; border-radius: 99px;
-    display: inline-flex; align-items: center; gap: 6px;
-    margin-bottom: 10px; margin-top: 18px;
+    font-size:.67rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    padding:4px 12px;border-radius:99px;display:inline-flex;align-items:center;gap:6px;
+    margin-bottom:10px;margin-top:18px;
   }
-  .dot { width: 7px; height: 7px; border-radius: 50%; }
-  .lbl-root    { background: #f0fdf4; color: #16a34a; } .lbl-root .dot    { background: #16a34a; }
-  .lbl-project { background: #eff6ff; color: #2563eb; } .lbl-project .dot { background: #2563eb; }
-  .lbl-global  { background: #f5f3ff; color: #7c3aed; } .lbl-global .dot  { background: #7c3aed; }
-  .lbl-system  { background: #fff7ed; color: #c2410c; } .lbl-system .dot  { background: #c2410c; }
+  .dot{width:7px;height:7px;border-radius:50%;}
+  .lbl-root    {background:#f0fdf4;color:#16a34a;} .lbl-root .dot    {background:#16a34a;}
+  .lbl-project {background:#eff6ff;color:#2563eb;} .lbl-project .dot {background:#2563eb;}
+  .lbl-global  {background:#f5f3ff;color:#7c3aed;} .lbl-global .dot  {background:#7c3aed;}
+  .lbl-system  {background:#fff7ed;color:#c2410c;} .lbl-system .dot  {background:#c2410c;}
 
-  /* TREE */
-  .tree { display: flex; flex-direction: column; }
-  .row {
-    display: grid; grid-template-columns: 300px 1fr;
-    align-items: center; min-height: 34px; border-radius: 9px;
+  /* ── TREE ── */
+  .tree{display:flex;flex-direction:column;}
+  .row{display:grid;grid-template-columns:300px 1fr;align-items:center;min-height:34px;border-radius:9px;}
+  .row:hover{background:#f8fafc;}
+  .pc{display:flex;align-items:center;padding:3px 4px 3px 0;}
+  .i{display:inline-flex;width:17px;flex-shrink:0;position:relative;align-self:stretch;}
+  .i.v::before{content:'';position:absolute;left:7px;top:0;bottom:0;border-left:2px dashed #cbd5e1;}
+  .i.c::before{content:'';position:absolute;left:7px;top:0;bottom:50%;border-left:2px dashed #cbd5e1;}
+  .i.c::after {content:'';position:absolute;left:7px;top:50%;width:10px;border-top:2px dashed #cbd5e1;}
+  .i.t::before{content:'';position:absolute;left:7px;top:0;bottom:0;border-left:2px dashed #cbd5e1;}
+  .i.t::after {content:'';position:absolute;left:7px;top:50%;width:10px;border-top:2px dashed #cbd5e1;}
+  .ico{width:23px;height:23px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-right:7px;}
+  .ico-fg{background:#d1fae5;} .ico-fb{background:#dbeafe;} .ico-fp{background:#ede9fe;}
+  .ico-ft{background:#ccfbf1;} .ico-fo{background:#ffedd5;} .ico-fy{background:#fef9c3;}
+  .ico-fgr{background:#f1f5f9;border:1px solid #e2e8f0;} .ico-fr{background:#fee2e2;}
+  .ico-fpi{background:#fce7f3;} .ico-fsl{background:#f0f9ff;border:1px solid #bae6fd;}
+  .nm{font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;color:#1e293b;white-space:nowrap;}
+  .nm.folder{color:#0E4174;} .nm.root{font-size:.83rem;}
+  .nm.dim{font-weight:400;color:#64748b;font-size:.71rem;}
+  .ac{display:flex;align-items:center;padding-left:2px;}
+  .arr{flex-shrink:0;width:38px;border-top:2px dashed #94a3b8;margin:0 10px 0 2px;}
+  .badge{font-size:.73rem;font-weight:600;padding:3px 11px;border-radius:99px;white-space:nowrap;line-height:1.4;}
+  .b-green {background:#d1fae5;color:#065f46;} .b-blue  {background:#dbeafe;color:#1e40af;}
+  .b-purple{background:#ede9fe;color:#5b21b6;} .b-teal  {background:#ccfbf1;color:#0f766e;}
+  .b-orange{background:#ffedd5;color:#9a3412;} .b-yellow{background:#fef9c3;color:#854d0e;}
+  .b-gray  {background:#f1f5f9;color:#475569;} .b-red   {background:#fee2e2;color:#991b1b;}
+  .b-pink  {background:#fce7f3;color:#9d174d;} .b-sky   {background:#f0f9ff;color:#0369a1;}
+  .b-slate {background:#f8fafc;color:#64748b;border:1px solid #e2e8f0;font-style:italic;}
+  .sp{height:4px;}
+
+  /* ═══════════════════════════════════════
+     FLOW CARD
+  ═══════════════════════════════════════ */
+  .flow-card { background:#fff;border-radius:2rem;padding:40px 44px 48px;box-shadow:0 4px 28px rgba(14,65,116,0.09); }
+  .flow-card h2 { font-size:1.2rem;font-weight:800;color:#0E4174;margin-bottom:6px; }
+  .flow-card .subtitle { font-size:.83rem;color:#64748b;margin-bottom:28px; }
+
+  /* ── Flow timeline ── */
+  .flow-section-title {
+    font-size:.67rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    color:#94a3b8;margin-bottom:14px;margin-top:32px;
   }
-  .row:hover { background: #f8fafc; }
+  .flow-section-title:first-of-type { margin-top:0; }
 
-  /* PATH CELL */
-  .pc { display: flex; align-items: center; padding: 3px 4px 3px 0; }
-  .i  { display: inline-flex; width: 17px; flex-shrink: 0; position: relative; align-self: stretch; }
-  .i.v::before  { content:''; position:absolute; left:7px; top:0; bottom:0; border-left:2px dashed #cbd5e1; }
-  .i.c::before  { content:''; position:absolute; left:7px; top:0; bottom:50%; border-left:2px dashed #cbd5e1; }
-  .i.c::after   { content:''; position:absolute; left:7px; top:50%; width:10px; border-top:2px dashed #cbd5e1; }
-  .i.t::before  { content:''; position:absolute; left:7px; top:0; bottom:0; border-left:2px dashed #cbd5e1; }
-  .i.t::after   { content:''; position:absolute; left:7px; top:50%; width:10px; border-top:2px dashed #cbd5e1; }
-
-  .ico {
-    width: 23px; height: 23px; border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; flex-shrink: 0; margin-right: 7px;
+  .timeline { display:flex;flex-direction:column;gap:0; }
+  .tl-row { display:flex;align-items:stretch;gap:0; }
+  .tl-left {
+    display:flex;flex-direction:column;align-items:center;
+    width:36px;flex-shrink:0;
   }
-  .ico-fg { background:#d1fae5; } .ico-fb { background:#dbeafe; }
-  .ico-fp { background:#ede9fe; } .ico-ft { background:#ccfbf1; }
-  .ico-fo { background:#ffedd5; } .ico-fy { background:#fef9c3; }
-  .ico-fgr{ background:#f1f5f9; border:1px solid #e2e8f0; }
-  .ico-fr { background:#fee2e2; } .ico-fpi{ background:#fce7f3; }
-  .ico-fsl{ background:#f0f9ff; border:1px solid #bae6fd; }
-
-  .nm { font-family:'Space Mono',monospace; font-size:0.75rem; font-weight:700; color:#1e293b; white-space:nowrap; }
-  .nm.folder { color:#0E4174; }
-  .nm.root   { font-size:0.83rem; }
-  .nm.dim    { font-weight:400; color:#64748b; font-size:0.71rem; }
-  .nm.sys    { font-weight:400; color:#94a3b8; font-size:0.69rem; font-style:italic; }
-
-  /* ARROW + BADGE */
-  .ac { display:flex; align-items:center; padding-left:2px; }
-  .arr { flex-shrink:0; width:38px; border-top:2px dashed #94a3b8; margin:0 10px 0 2px; }
-  .badge {
-    font-size:0.73rem; font-weight:600;
-    padding:3px 11px; border-radius:99px;
-    white-space:nowrap; line-height:1.4;
+  .tl-num {
+    width:28px;height:28px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.72rem;font-weight:800;flex-shrink:0;
+    font-family:'Space Mono',monospace;
   }
-  .b-green  { background:#d1fae5; color:#065f46; }
-  .b-blue   { background:#dbeafe; color:#1e40af; }
-  .b-purple { background:#ede9fe; color:#5b21b6; }
-  .b-teal   { background:#ccfbf1; color:#0f766e; }
-  .b-orange { background:#ffedd5; color:#9a3412; }
-  .b-yellow { background:#fef9c3; color:#854d0e; }
-  .b-gray   { background:#f1f5f9; color:#475569; }
-  .b-red    { background:#fee2e2; color:#991b1b; }
-  .b-pink   { background:#fce7f3; color:#9d174d; }
-  .b-sky    { background:#f0f9ff; color:#0369a1; }
-  .b-slate  { background:#f8fafc; color:#64748b; border:1px solid #e2e8f0; font-style:italic; }
-
-  .sp { height:4px; }
-
-  /* FOOTER */
-  .footer {
-    margin-top:28px; padding:14px 20px;
-    background:#fffbeb; border-radius:14px; border:1px solid #fde68a;
-    font-size:0.77rem; color:#92400e;
-    display:flex; align-items:flex-start; gap:10px; line-height:1.7;
+  .tl-line { width:2px;flex:1;margin:3px 0; }
+  .tl-body { padding:0 0 18px 14px;flex:1; }
+  .tl-tag {
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:.68rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+    padding:2px 9px;border-radius:99px;margin-bottom:5px;
   }
-  .footer-star { font-size:1.1rem; flex-shrink:0; margin-top:1px; }
+  .tl-title { font-size:.88rem;font-weight:700;color:#0E4174;margin-bottom:3px; }
+  .tl-desc  { font-size:.78rem;color:#64748b;line-height:1.6; }
+  .tl-file  {
+    display:inline-block;font-family:'Space Mono',monospace;
+    font-size:.69rem;font-weight:700;
+    background:#f1f5f9;color:#334155;
+    padding:2px 8px;border-radius:6px;margin-top:4px;
+  }
+
+  /* step colors */
+  .s1 .tl-num{background:#fef9c3;color:#854d0e;} .s1 .tl-line{background:#fde68a;}
+  .s2 .tl-num{background:#dbeafe;color:#1e40af;} .s2 .tl-line{background:#bfdbfe;}
+  .s3 .tl-num{background:#fef9c3;color:#854d0e;} .s3 .tl-line{background:#fde68a;}
+  .s4 .tl-num{background:#fef9c3;color:#854d0e;} .s4 .tl-line{background:#fde68a;}
+  .s5 .tl-num{background:#fee2e2;color:#991b1b;} .s5 .tl-line{background:#fecaca;}
+  .s6 .tl-num{background:#ffedd5;color:#9a3412;} .s6 .tl-line{background:#fed7aa;}  .s6-last .tl-line{background:transparent;}
+
+  .tag-yellow{background:#fef9c3;color:#854d0e;}
+  .tag-blue  {background:#dbeafe;color:#1e40af;}
+  .tag-red   {background:#fee2e2;color:#991b1b;}
+  .tag-orange{background:#ffedd5;color:#9a3412;}
+  .tag-purple{background:#ede9fe;color:#5b21b6;}
+  .tag-teal  {background:#ccfbf1;color:#0f766e;}
+
+  /* ── On-demand grid ── */
+  .ondemand-grid { display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px; }
+  .od-card {
+    border-radius:14px;padding:14px 16px;
+    border:1.5px solid transparent;
+  }
+  .od-trigger {
+    font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700;
+    padding:3px 10px;border-radius:8px;display:inline-block;margin-bottom:8px;
+  }
+  .od-title { font-size:.82rem;font-weight:700;color:#1e293b;margin-bottom:4px; }
+  .od-desc  { font-size:.74rem;color:#64748b;line-height:1.5; }
+  .od-purple{background:#faf5ff;border-color:#ddd6fe;} .od-purple .od-trigger{background:#ede9fe;color:#5b21b6;}
+  .od-teal  {background:#f0fdf9;border-color:#99f6e4;} .od-teal   .od-trigger{background:#ccfbf1;color:#0f766e;}
+  .od-blue  {background:#eff6ff;border-color:#bfdbfe;} .od-blue   .od-trigger{background:#dbeafe;color:#1e40af;}
+
+  /* ── Scenario cards ── */
+  .scenarios { display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px; }
+  .sc {
+    border-radius:16px;padding:18px;border:1.5px solid;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .sc-icon { font-size:1.5rem;margin-bottom:2px; }
+  .sc-title { font-size:.85rem;font-weight:700;color:#1e293b; }
+  .sc-sub   { font-size:.74rem;color:#64748b;line-height:1.5; }
+  .sc-files { display:flex;flex-direction:column;gap:4px;margin-top:4px; }
+  .sc-file  { font-size:.69rem;font-family:'Space Mono',monospace; display:flex;align-items:center;gap:6px; }
+  .sc-dot   { width:6px;height:6px;border-radius:50%;flex-shrink:0; }
+  .sc-a { background:#f0fdf4;border-color:#86efac; } .sc-a .sc-dot{background:#16a34a;}
+  .sc-b { background:#eff6ff;border-color:#93c5fd; } .sc-b .sc-dot{background:#2563eb;}
+  .sc-c { background:#f5f3ff;border-color:#c4b5fd; } .sc-c .sc-dot{background:#7c3aed;}
+
+  /* ── Starter kit ── */
+  .starter { margin-top:32px; }
+  .starter-grid { display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px; }
+  .sk-card { border-radius:14px;padding:16px;border:1.5px dashed; }
+  .sk-header { display:flex;align-items:center;gap:8px;margin-bottom:10px; }
+  .sk-badge { font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:99px;letter-spacing:.5px; }
+  .sk-title { font-size:.8rem;font-weight:700;color:#1e293b; }
+  .sk-items { display:flex;flex-direction:column;gap:5px; }
+  .sk-item  { display:flex;align-items:flex-start;gap:7px;font-size:.74rem;color:#475569;line-height:1.4; }
+  .sk-item .skf { font-family:'Space Mono',monospace;font-size:.67rem;background:#f8fafc;padding:1px 6px;border-radius:5px;color:#334155;flex-shrink:0; }
+  .sk-must  { background:#f0fdf4;border-color:#86efac; } .sk-must .sk-badge{background:#d1fae5;color:#065f46;}
+  .sk-soon  { background:#fffbeb;border-color:#fde68a; } .sk-soon .sk-badge{background:#fef9c3;color:#854d0e;}
+  .sk-auto  { background:#f8fafc;border-color:#e2e8f0; } .sk-auto .sk-badge{background:#f1f5f9;color:#64748b;}
 
   /* pixel deco */
-  .px-deco {
-    position:absolute; right:44px; top:40px;
-    display:grid; grid-template-columns:repeat(5,9px); gap:2px;
-  }
-  .px { width:9px; height:9px; border-radius:2px; }
+  .px-deco{position:absolute;right:44px;top:40px;display:grid;grid-template-columns:repeat(5,9px);gap:2px;}
+  .px{width:9px;height:9px;border-radius:2px;}
 </style>
 </head>
 <body>
-<div class="card">
+<div class="wrap">
 
+<!-- ═══════════════════════════════════════════════
+     CARD 1 — FILE TREE
+═══════════════════════════════════════════════ -->
+<div class="card">
   <div class="px-deco">
     <div class="px" style="background:#0E4174;opacity:.8"></div><div class="px" style="background:#0E4174;opacity:.4"></div><div class="px" style="background:transparent"></div><div class="px" style="background:#FF7F32;opacity:.5"></div><div class="px" style="background:#FF7F32;opacity:.9"></div>
     <div class="px" style="background:transparent"></div><div class="px" style="background:#0E4174;opacity:.3"></div><div class="px" style="background:#FF7F32;opacity:.4"></div><div class="px" style="background:#0E4174;opacity:.7"></div><div class="px" style="background:transparent"></div>
@@ -141,61 +207,49 @@
 
   <div class="tree">
 
-    <!-- ══════════════════════════════════════
-         SECTION 1 — PROJECT ROOT
-    ══════════════════════════════════════ -->
+    <!-- ── SECTION 1: PROJECT ROOT ── -->
     <div class="section-label lbl-root"><span class="dot"></span>Project Root — Desktop/Cowork/</div>
 
     <div class="row">
       <div class="pc"><div class="ico ico-fg">📁</div><span class="nm folder root">Cowork/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-green">Thư mục gốc dự án — git repo + Google Drive sync</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fy">📄</div><span class="nm">CLAUDE.md</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-yellow">Quy tắc dự án: ngữ cảnh Ahamove, output rules, brand</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fy">📄</div><span class="nm">AGENTS.md</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-yellow">Persona Enterprise Strategic AI Decision Architect + Lark Docs template</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fgr">🙈</div><span class="nm">.gitignore</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-gray">Bỏ qua: .DS_Store, ~$ Excel lock, *.gsheet, temp files</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fsl">💻</div><span class="nm">.vscode/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-sky">extensions.json — VS Code extensions khuyến nghị cho dự án</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fg">🎨</div><span class="nm folder">Creative/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-green">Sub-project sáng tạo riêng — có CLAUDE.md &amp; output/ độc lập</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fpi">🙋</div><span class="nm folder">Personal/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-pink">Hồ sơ cá nhân: about-me.md · my-rules.md · my-voice.md</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-pink">about-me.md · my-rules.md · my-voice.md — hồ sơ cá nhân</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fb">🗄️</div><span class="nm folder">Data sources/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-blue">Nguồn dữ liệu thô: Ahamove DB exports, benchmark files</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fgr">⚡</div><span class="nm folder">_scripts/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-gray">sync-pull.sh · sync-push.sh — đồng bộ thủ công khi cần</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-ft">🐍</div><span class="nm">build_formula_dashboard.py</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-teal">Script build dashboard Excel từ công thức tự động</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-ft">🐍</div><span class="nm">upload_to_gsheets.py</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-teal">Script upload data lên Google Sheets qua API</span></div>
@@ -203,30 +257,25 @@
 
     <div class="sp"></div>
 
-    <!-- ══════════════════════════════════════
-         SECTION 2 — PROJECT .claude/
-    ══════════════════════════════════════ -->
+    <!-- ── SECTION 2: PROJECT .claude/ ── -->
     <div class="section-label lbl-project"><span class="dot"></span>Project Config — Cowork/.claude/</div>
 
     <div class="row">
       <div class="pc"><div class="i c"></div><div class="ico ico-fb">📂</div><span class="nm folder">.claude/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-blue">Cấu hình cấp project — ưu tiên hơn global settings</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i"></div><div class="i v"></div><div class="ico ico-fr">⚙️</div><span class="nm">settings.json</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-red">Hook Stop → git commit &amp; rsync sang Google Drive tự động</span></div>
     </div>
-
     <div class="row">
       <div class="pc"><div class="i"></div><div class="i v"></div><div class="ico ico-fgr">🔒</div><span class="nm">scheduled_tasks.lock</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-gray">Lock file trạng thái các scheduled tasks đang chạy</span></div>
     </div>
 
-    <!-- agents/ project -->
     <div class="row">
       <div class="pc"><div class="i"></div><div class="i v"></div><div class="ico ico-fp">🤖</div><span class="nm folder">agents/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-purple">10 sub-agents chuyên biệt Ahamove — context window riêng</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-purple">9 sub-agents chuyên biệt Ahamove — context window riêng</span></div>
     </div>
     <div class="row">
       <div class="pc"><div class="i"></div><div class="i v"></div><div class="i t"></div><span class="nm dim">sql-analyst.md</span></div>
@@ -261,15 +310,10 @@
       <div class="ac"><div class="arr"></div><span class="badge b-gray">Nội dung truyền thông nội bộ &amp; tài xế</span></div>
     </div>
     <div class="row">
-      <div class="pc"><div class="i"></div><div class="i v"></div><div class="i t"></div><span class="nm dim">landing-page-builder.md</span></div>
+      <div class="pc"><div class="i"></div><div class="i v"></div><div class="i c"></div><span class="nm dim">landing-page-builder.md</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-gray">Trang tuyển dụng tài xế, form đăng ký online</span></div>
     </div>
-    <div class="row">
-      <div class="pc"><div class="i"></div><div class="i v"></div><div class="i c"></div><span class="nm dim">home-design.md</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Thiết kế nội thất — dự án cá nhân</span></div>
-    </div>
 
-    <!-- memory/ -->
     <div class="row">
       <div class="pc"><div class="i"></div><div class="i c"></div><div class="ico ico-fo">💾</div><span class="nm folder">projects/…/memory/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-orange">Bộ nhớ liên phiên — load tự động mỗi cuộc trò chuyện</span></div>
@@ -280,7 +324,7 @@
     </div>
     <div class="row">
       <div class="pc"><div class="i"></div><div class="i"></div><div class="i t"></div><span class="nm dim">user_profile.md</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Profile Khanh: vai trò, metrics theo dõi, chiến lược 2026</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Profile: vai trò, metrics theo dõi hàng ngày, chiến lược 2026</span></div>
     </div>
     <div class="row">
       <div class="pc"><div class="i"></div><div class="i"></div><div class="i t"></div><span class="nm dim">user_rules.md</span></div>
@@ -300,22 +344,18 @@
     </div>
     <div class="row">
       <div class="pc"><div class="i"></div><div class="i"></div><div class="i c"></div><span class="nm dim">reference_slide_themes.md</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">4 slide templates: dark/navy/light + analytics-report.html</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">4 slide templates: dark / navy / light + analytics-report.html</span></div>
     </div>
 
     <div class="sp"></div>
 
-    <!-- ══════════════════════════════════════
-         SECTION 3 — GLOBAL ~/.claude/
-    ══════════════════════════════════════ -->
+    <!-- ── SECTION 3: GLOBAL ── -->
     <div class="section-label lbl-global"><span class="dot"></span>Global Config — ~/.claude/</div>
 
     <div class="row">
       <div class="pc"><div class="ico ico-fb">📂</div><span class="nm folder root">~/.claude/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-purple">Cấu hình toàn cục — áp dụng cho mọi project</span></div>
     </div>
-
-    <!-- top-level config files -->
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fb">🔌</div><span class="nm">.mcp.json</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-blue">MCP servers: NotebookLM · Gmail · GCal · GDrive · Excalidraw</span></div>
@@ -333,7 +373,6 @@
       <div class="ac"><div class="arr"></div><span class="badge b-gray">Giới hạn chính sách Claude Code (tự sinh, không sửa tay)</span></div>
     </div>
 
-    <!-- agents/ global -->
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fp">🤖</div><span class="nm folder">agents/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-purple">Sub-agent dùng chung mọi project</span></div>
@@ -343,10 +382,9 @@
       <div class="ac"><div class="arr"></div><span class="badge b-gray">Review code, diff, tóm tắt thay đổi, security check</span></div>
     </div>
 
-    <!-- skills/ -->
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-ft">🧠</div><span class="nm folder">skills/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-teal">16 skills — nạp động khi cần, không tốn context khi không dùng</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-teal">14 skills — nạp động khi cần, không tốn context khi không dùng</span></div>
     </div>
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">xlsx/ &amp; xlsx-a/</span></div>
@@ -357,62 +395,29 @@
       <div class="ac"><div class="arr"></div><span class="badge b-gray">Slide PowerPoint: standard + advanced (brands, cookbook)</span></div>
     </div>
     <div class="row">
-      <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">pdf/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Xử lý PDF: extract, merge, split, OCR, fill forms</span></div>
+      <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">pdf/ · html/ · docx/ · md/</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Tài liệu đa định dạng: PDF, HTML report, Word, Markdown</span></div>
     </div>
     <div class="row">
-      <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">html/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Report HTML McKinsey-style + Pyramid Principle</span></div>
+      <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">plan/ · okr/ · llm-wiki/</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Task planning, OKR theo BSC, Knowledge base cá nhân</span></div>
     </div>
     <div class="row">
-      <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">docx/ &amp; md/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Tài liệu Word và Markdown chuyên nghiệp</span></div>
-    </div>
-    <div class="row">
-      <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">plan/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Task planning nhiều bước: task_plan.md + findings.md</span></div>
-    </div>
-    <div class="row">
-      <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">okr/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Xây dựng OKR theo BSC — Committed &amp; Aspirational KRs</span></div>
-    </div>
-    <div class="row">
-      <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">llm-wiki/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Knowledge base cá nhân kiểu Karpathy LLM Wiki</span></div>
-    </div>
-    <div class="row">
-      <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">schedule/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Đặt lịch tác vụ tự động: cron, one-time, recurring</span></div>
-    </div>
-    <div class="row">
-      <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">skill-creator/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Tạo, sửa, đánh giá hiệu suất skills mới</span></div>
-    </div>
-    <div class="row">
-      <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">home-design/ &amp; workspace/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Thiết kế nội thất: skill + workspace iteration</span></div>
-    </div>
-    <div class="row">
-      <div class="pc"><div class="i v"></div><div class="i c"></div><span class="nm dim">setup-cowork/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Cài đặt &amp; onboarding môi trường Cowork mới</span></div>
+      <div class="pc"><div class="i v"></div><div class="i c"></div><span class="nm dim">schedule/ · skill-creator/ · setup-cowork/</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">Lịch tự động, tạo skill mới, onboarding môi trường</span></div>
     </div>
 
-    <!-- github/ -->
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fgr">🐙</div><span class="nm folder">github/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-gray">Import tracking: agents-imports.json · skills-imports.json</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-gray">agents-imports.json · skills-imports.json — import tracking</span></div>
     </div>
-
-    <!-- plugins/ -->
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fgr">🔧</div><span class="nm folder">plugins/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-gray">install-counts-cache.json — thống kê cài đặt plugins</span></div>
     </div>
-
-    <!-- projects/ -->
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fo">📁</div><span class="nm folder">projects/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-orange">Dữ liệu memory riêng của từng project workspace</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-orange">Memory riêng của từng project workspace</span></div>
     </div>
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="i t"></div><span class="nm dim">…/Cowork/memory/</span></div>
@@ -422,8 +427,6 @@
       <div class="pc"><div class="i v"></div><div class="i c"></div><span class="nm dim">…/AI-Learning/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-gray">Project học AI — context &amp; memory riêng biệt</span></div>
     </div>
-
-    <!-- ide/ -->
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fsl">💻</div><span class="nm folder">ide/</span></div>
       <div class="ac"><div class="arr"></div><span class="badge b-sky">Lock files tiến trình IDE đang kết nối (VS Code)</span></div>
@@ -431,14 +434,12 @@
 
     <div class="sp"></div>
 
-    <!-- ══════════════════════════════════════
-         SECTION 4 — SYSTEM (auto-generated)
-    ══════════════════════════════════════ -->
+    <!-- ── SECTION 4: SYSTEM ── -->
     <div class="section-label lbl-system"><span class="dot"></span>System — Tự sinh bởi Claude Code</div>
 
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fgr">💾</div><span class="nm folder">backups/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-slate">Backup tự động .claude.json config trước mỗi lần cập nhật</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-slate">Backup tự động config trước mỗi lần cập nhật</span></div>
     </div>
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fgr">📦</div><span class="nm folder">cache/</span></div>
@@ -446,11 +447,11 @@
     </div>
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fgr">🕐</div><span class="nm folder">file-history/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-slate">Version history nội bộ của các file đã chỉnh sửa (undo)</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-slate">Version history nội bộ các file đã sửa (hỗ trợ undo)</span></div>
     </div>
     <div class="row">
-      <div class="pc"><div class="i v"></div><div class="ico ico-fgr">🔌</div><span class="nm folder">sessions/ &amp; session-env/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-slate">Dữ liệu phiên làm việc &amp; snapshot môi trường shell</span></div>
+      <div class="pc"><div class="i v"></div><div class="ico ico-fgr">🔌</div><span class="nm folder">sessions/ · session-env/</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-slate">Dữ liệu phiên &amp; snapshot môi trường shell mỗi phiên</span></div>
     </div>
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fgr">🐚</div><span class="nm folder">shell-snapshots/</span></div>
@@ -458,11 +459,11 @@
     </div>
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fgr">📊</div><span class="nm folder">telemetry/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-slate">Dữ liệu telemetry — usage stats gửi Anthropic</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-slate">Usage stats gửi Anthropic</span></div>
     </div>
     <div class="row">
       <div class="pc"><div class="i v"></div><div class="ico ico-fgr">📝</div><span class="nm folder">plans/</span></div>
-      <div class="ac"><div class="arr"></div><span class="badge b-slate">Kế hoạch Plan mode (hiện trống — dùng khi /plan)</span></div>
+      <div class="ac"><div class="arr"></div><span class="badge b-slate">Kế hoạch Plan mode (trống — dùng khi /plan)</span></div>
     </div>
     <div class="row">
       <div class="pc"><div class="i c"></div><div class="ico ico-fgr">🧹</div><span class="nm">.last-cleanup</span></div>
@@ -470,18 +471,209 @@
     </div>
 
   </div><!-- /tree -->
+</div><!-- /card 1 -->
 
-  <div class="footer">
-    <span class="footer-star">★</span>
-    <span>
-      <strong>CLAUDE.md &amp; AGENTS.md</strong> — đọc đầu tiên, định hình toàn bộ hành vi.&nbsp;|&nbsp;
-      <strong>Hooks</strong> — chạy tự động theo sự kiện, không cần nhắc.&nbsp;|&nbsp;
-      <strong>Agents</strong> — context window riêng, không làm nặng luồng chính.&nbsp;|&nbsp;
-      <strong>Memory</strong> — load tự động mỗi phiên, Claude nhớ mà không cần nhắc lại.&nbsp;|&nbsp;
-      <strong>System folders</strong> — tự sinh, không cần quản lý thủ công.
-    </span>
+
+<!-- ═══════════════════════════════════════════════
+     CARD 2 — READING FLOW
+═══════════════════════════════════════════════ -->
+<div class="flow-card">
+  <h2>Flow đọc file — Claude Code load gì, khi nào, theo thứ tự nào?</h2>
+  <p class="subtitle">Mỗi khi bạn mở Claude Code, đây là trình tự chính xác các file được nạp vào context</p>
+
+  <!-- ── A: Session Start ── -->
+  <div class="flow-section-title">A — Tự động khi khởi động phiên (Session Start)</div>
+
+  <div class="timeline">
+
+    <div class="tl-row s1">
+      <div class="tl-left">
+        <div class="tl-num">1</div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-tag tag-yellow">⚙️ Global Settings</div>
+        <div class="tl-title">~/.claude/settings.json</div>
+        <div class="tl-desc">Quyền thực thi, effortLevel, cài đặt model được nạp đầu tiên. Áp dụng cho mọi project, mọi folder. Không có project CLAUDE.md nào ghi đè được file này.</div>
+      </div>
+    </div>
+
+    <div class="tl-row s2">
+      <div class="tl-left">
+        <div class="tl-num">2</div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-tag tag-blue">🔌 MCP Tools</div>
+        <div class="tl-title">~/.claude/.mcp.json</div>
+        <div class="tl-desc">Danh sách MCP servers (NotebookLM, Gmail, GDrive…) được đăng ký. Claude biết công cụ nào tồn tại nhưng <em>chưa kết nối</em> — chỉ kết nối khi bạn dùng lần đầu.</div>
+      </div>
+    </div>
+
+    <div class="tl-row s3">
+      <div class="tl-left">
+        <div class="tl-num">3</div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-tag tag-yellow">📄 Project Rules</div>
+        <div class="tl-title">CLAUDE.md &amp; AGENTS.md <span style="font-weight:400;font-size:.75rem;color:#94a3b8">(project root)</span></div>
+        <div class="tl-desc">File quan trọng nhất. Claude đọc CLAUDE.md của thư mục hiện tại, rồi leo lên các thư mục cha cho đến root. AGENTS.md nạp persona và template chuẩn. Hai file này <strong>override mọi default behavior</strong> của Claude.</div>
+      </div>
+    </div>
+
+    <div class="tl-row s4">
+      <div class="tl-left">
+        <div class="tl-num">4</div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-tag tag-yellow">⚙️ Project Hooks</div>
+        <div class="tl-title">.claude/settings.json <span style="font-weight:400;font-size:.75rem;color:#94a3b8">(project)</span></div>
+        <div class="tl-desc">Hooks được đăng ký: Stop hook sẽ tự động git commit + rsync sang Google Drive mỗi khi Claude kết thúc phản hồi. Project settings ghi đè global settings nếu có conflict.</div>
+      </div>
+    </div>
+
+    <div class="tl-row s5">
+      <div class="tl-left">
+        <div class="tl-num">5</div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-tag tag-orange">💾 Memory Index</div>
+        <div class="tl-title">projects/…/memory/MEMORY.md</div>
+        <div class="tl-desc">Claude đọc MEMORY.md (index) trước, sau đó <em>chọn có chọn lọc</em> các memory files liên quan đến câu hỏi đang xử lý. Không nạp toàn bộ — chỉ nạp những file phù hợp ngữ cảnh.</div>
+        <div><span class="tl-file">user_profile.md</span> <span class="tl-file">user_rules.md</span> <span class="tl-file">user_voice.md</span> <span class="tl-file">…</span></div>
+      </div>
+    </div>
+
+    <div class="tl-row s6 s6-last">
+      <div class="tl-left">
+        <div class="tl-num">✓</div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-tag tag-teal">🟢 Ready</div>
+        <div class="tl-title">Claude Code sẵn sàng</div>
+        <div class="tl-desc">Toàn bộ context đã nạp. Claude đã biết: bạn là ai, làm gì, muốn output thế nào, có công cụ gì, và có hook nào chạy tự động.</div>
+      </div>
+    </div>
+
   </div>
 
-</div>
+  <!-- ── B: On-demand ── -->
+  <div class="flow-section-title">B — Nạp theo yêu cầu (On-demand)</div>
+  <div class="ondemand-grid">
+    <div class="od-card od-purple">
+      <div class="od-trigger">/ skill-name</div>
+      <div class="od-title">Skills</div>
+      <div class="od-desc">Khi gọi /xlsx, /pdf, /pptx… Claude mới đọc <code>skills/[name]/SKILL.md</code>. Không dùng = không tốn context. Skill xong là giải phóng.</div>
+    </div>
+    <div class="od-card od-purple">
+      <div class="od-trigger">Task Agent</div>
+      <div class="od-title">Sub-agents</div>
+      <div class="od-desc">Khi Claude spawn agent (sql-analyst, report-writer…), <code>agents/[name].md</code> trở thành system prompt của agent đó trong <em>cửa sổ context riêng</em> — không ảnh hưởng luồng chính.</div>
+    </div>
+    <div class="od-card od-blue">
+      <div class="od-trigger">First call</div>
+      <div class="od-title">MCP Servers</div>
+      <div class="od-desc">Kết nối MCP (NotebookLM, Gmail…) chỉ mở khi bạn dùng lần đầu trong phiên. Nếu server cần auth, Claude sẽ hỏi bạn xác thực.</div>
+    </div>
+  </div>
+
+  <!-- ── C: Scenarios ── -->
+  <div class="flow-section-title">C — 3 ngữ cảnh sử dụng thực tế</div>
+  <div class="scenarios">
+
+    <div class="sc sc-a">
+      <div class="sc-icon">⚡</div>
+      <div class="sc-title">Hỏi nhanh, không cần project</div>
+      <div class="sc-sub">Mở Claude Code ở bất kỳ folder nào ngoài Cowork. Chỉ global config áp dụng — Claude vẫn thông minh, skills vẫn dùng được.</div>
+      <div class="sc-files">
+        <div class="sc-file"><span class="sc-dot"></span>~/.claude/settings.json</div>
+        <div class="sc-file"><span class="sc-dot"></span>~/.claude/.mcp.json</div>
+        <div class="sc-file"><span class="sc-dot"></span>skills/ (khi gọi)</div>
+        <div class="sc-file" style="color:#94a3b8"><span class="sc-dot" style="background:#cbd5e1"></span>❌ CLAUDE.md (không có)</div>
+        <div class="sc-file" style="color:#94a3b8"><span class="sc-dot" style="background:#cbd5e1"></span>❌ Memory (không có)</div>
+      </div>
+    </div>
+
+    <div class="sc sc-b">
+      <div class="sc-icon">🏢</div>
+      <div class="sc-title">Làm việc trong Cowork/</div>
+      <div class="sc-sub">Full setup. Claude biết ngữ cảnh Ahamove, hooks tự động sync, memory nhớ Khanh là ai. Đây là trường hợp bình thường hàng ngày.</div>
+      <div class="sc-files">
+        <div class="sc-file"><span class="sc-dot"></span>Global settings + MCP</div>
+        <div class="sc-file"><span class="sc-dot"></span>CLAUDE.md + AGENTS.md</div>
+        <div class="sc-file"><span class="sc-dot"></span>Project hooks (auto-sync)</div>
+        <div class="sc-file"><span class="sc-dot"></span>Memory (6 files)</div>
+        <div class="sc-file"><span class="sc-dot"></span>Skills + Agents (khi cần)</div>
+      </div>
+    </div>
+
+    <div class="sc sc-c">
+      <div class="sc-icon">🎨</div>
+      <div class="sc-title">Làm việc trong Creative/</div>
+      <div class="sc-sub">Sub-project độc lập với CLAUDE.md riêng. Claude đọc CLAUDE.md của Creative/ trước, rồi leo lên đọc Cowork/CLAUDE.md. Cả hai đều áp dụng.</div>
+      <div class="sc-files">
+        <div class="sc-file"><span class="sc-dot"></span>Global settings + MCP</div>
+        <div class="sc-file"><span class="sc-dot"></span>Creative/CLAUDE.md (ưu tiên)</div>
+        <div class="sc-file"><span class="sc-dot"></span>Cowork/CLAUDE.md (kế thừa)</div>
+        <div class="sc-file"><span class="sc-dot"></span>Cowork hooks (vẫn chạy)</div>
+        <div class="sc-file"><span class="sc-dot"></span>Memory (vẫn dùng)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── D: Starter kit ── -->
+  <div class="starter">
+    <div class="flow-section-title">D — File nào cần thiết? File nào phát triển sau?</div>
+    <div class="starter-grid">
+
+      <div class="sk-card sk-must">
+        <div class="sk-header">
+          <span class="sk-badge">Bắt buộc ngay</span>
+        </div>
+        <div class="sk-title" style="margin-bottom:10px">Tối thiểu để Claude hoạt động đúng</div>
+        <div class="sk-items">
+          <div class="sk-item"><span class="skf">CLAUDE.md</span> Ai bạn là, context project, output format</div>
+          <div class="sk-item"><span class="skf">.mcp.json</span> Công cụ ngoài: Gmail, GDrive, Notion…</div>
+          <div class="sk-item"><span class="skf">settings.json</span> Ít nhất: effortLevel + 1 hook hữu ích</div>
+        </div>
+      </div>
+
+      <div class="sk-card sk-soon">
+        <div class="sk-header">
+          <span class="sk-badge">Phát triển dần</span>
+        </div>
+        <div class="sk-title" style="margin-bottom:10px">Thêm khi có tác vụ lặp đi lặp lại</div>
+        <div class="sk-items">
+          <div class="sk-item"><span class="skf">agents/</span> Khi một tác vụ cần chuyên môn sâu riêng</div>
+          <div class="sk-item"><span class="skf">AGENTS.md</span> Khi muốn persona nhất quán mọi phiên</div>
+          <div class="sk-item"><span class="skf">memory/</span> Claude tự build — chỉ cần nhắc "hãy nhớ điều này"</div>
+          <div class="sk-item"><span class="skf">skills/</span> Cài qua plugin market khi cần (/xlsx, /pdf…)</div>
+        </div>
+      </div>
+
+      <div class="sk-card sk-auto">
+        <div class="sk-header">
+          <span class="sk-badge">Không cần động tay</span>
+        </div>
+        <div class="sk-title" style="margin-bottom:10px">Claude Code tự quản lý</div>
+        <div class="sk-items">
+          <div class="sk-item"><span class="skf">backups/</span> Tự backup trước mỗi lần cập nhật</div>
+          <div class="sk-item"><span class="skf">file-history/</span> Tự ghi version history file đã sửa</div>
+          <div class="sk-item"><span class="skf">sessions/</span> Tự lưu dữ liệu phiên làm việc</div>
+          <div class="sk-item"><span class="skf">telemetry/</span> Tự gửi usage stats về Anthropic</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /flow card -->
+
+</div><!-- /wrap -->
 </body>
 </html>
