@@ -3384,6 +3384,16 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <label class="form-label">Đối tác biết chương trình qua đâu? <span class="req">*</span></label>
+            <div class="radio-group">
+              <label class="radio-chip"><input type="radio" name="source" value="online" required /> Group Zalo / Facebook / Cộng đồng</label>
+              <label class="radio-chip"><input type="radio" name="source" value="app" /> Thông báo trên ứng dụng</label>
+              <label class="radio-chip"><input type="radio" name="source" value="offline" /> Trực tiếp / tờ rơi</label>
+              <label class="radio-chip"><input type="radio" name="source" value="referral" /> Bạn bè giới thiệu</label>
+            </div>
+          </div>
+
           <button type="submit" class="form-submit">ĐĂNG KÝ ĐỂ ĐƯỢC TƯ VẤN MIỄN PHÍ →</button>
           <p class="form-fine">Bằng cách đăng ký, bạn đồng ý để Ahamove liên hệ tư vấn chương trình xe điện.</p>
         </form>
@@ -3662,7 +3672,8 @@
       const interest = document.querySelector('input[name="interest"]:checked');
       const acc = document.querySelector('input[name="acc_status"]:checked');
       const ev = document.querySelector('input[name="has_ev"]:checked');
-      if (!name || !rawPhone || !area || !interest || !acc || !ev) {
+      const src = document.querySelector('input[name="source"]:checked');
+      if (!name || !rawPhone || !area || !interest || !acc || !ev || !src) {
         showToast('Vui lòng điền đầy đủ các trường bắt buộc (*)', 'warning'); return;
       }
       if (!/^84[0-9]{9}$/.test(phone)) {
@@ -3674,13 +3685,20 @@
       btn.disabled = true;
       btn.textContent = 'ĐANG GỬI...';
 
+      const sourceLabels = {
+        online: 'Zalo/Facebook/Cộng đồng',
+        app: 'Thông báo trên ứng dụng',
+        offline: 'Trực tiếp/Tờ rơi',
+        referral: 'Bạn bè giới thiệu'
+      };
       const payload = {
         name,
         phone,
         area: area.value,
         interest: interest.value,
         acc_status: acc.value,
-        has_ev: ev.value
+        has_ev: ev.value,
+        source: sourceLabels[src.value] || src.value
       };
 
       fetch(SHEET_URL, {
@@ -3834,6 +3852,67 @@ Quy tắc: Xưng "Ahamove/Tui", gọi người dùng là "Bác tài". Trả lờ
       } catch { return 'Hệ thống đang bận. Bác tài điền form để nhân viên gọi lại nhé! 📞'; }
     }
   </script>
+
+<!--
+╔══════════════════════════════════════════════════════════════════════╗
+║  GOOGLE APPS SCRIPT — CẬP NHẬT doPost (dán vào Apps Script Editor) ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+Thay toàn bộ hàm doPost bằng đoạn sau. Thay đổi chính:
+  • Đọc thêm trường payload.source (cột H — "Nguồn biết đến")
+  • Tự động ghi header cột H nếu ô H1 còn trống (không xóa data cũ)
+
+─────────────────────────────────────────────────────────────────────
+
+function doPost(e) {
+  try {
+    var ss     = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet  = ss.getSheetByName('Registrations') || ss.getSheets()[0];
+    var data   = JSON.parse(e.postData.contents);
+
+    // Tự động bổ sung header cột H nếu chưa có
+    var headerRow = sheet.getRange(1, 1, 1, 8).getValues()[0];
+    var defaultHeaders = [
+      'Timestamp', 'Họ tên', 'Số điện thoại',
+      'Khu vực', 'Quan tâm', 'Tài khoản', 'Xe điện',
+      'Nguồn biết đến'
+    ];
+    defaultHeaders.forEach(function(h, i) {
+      if (!headerRow[i]) sheet.getRange(1, i + 1).setValue(h);
+    });
+
+    // Mapping label cho các trường dạng code
+    var areaMap     = { HN: 'Hà Nội', HCM: 'TP. Hồ Chí Minh' };
+    var interestMap = { reward: '① Thưởng từ Ahamove', buy: '② Mua xe ưu đãi', rent: '③ Thuê xe điện', all: 'Tất cả' };
+    var accMap      = { active: 'Đang hoạt động', new: 'Chưa đăng ký', inactive: 'Đã ngừng hoạt động' };
+    var evMap       = { yes: 'Đã có xe điện', no: 'Chưa có xe điện' };
+
+    sheet.appendRow([
+      new Date(),
+      data.name        || '',
+      data.phone       || '',
+      areaMap[data.area]         || data.area        || '',
+      interestMap[data.interest] || data.interest    || '',
+      accMap[data.acc_status]    || data.acc_status  || '',
+      evMap[data.has_ev]         || data.has_ev      || '',
+      data.source      || ''           // đã được map sang tiếng Việt từ frontend
+    ]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: 'ok' }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: 'error', message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+─────────────────────────────────────────────────────────────────────
+Lưu ý: frontend đã map code → tiếng Việt trước khi gửi (xem sourceLabels trong submitForm),
+nên cột H trên Sheet sẽ hiển thị tên đầy đủ, không phải mã code.
+-->
 
 </body>
 
