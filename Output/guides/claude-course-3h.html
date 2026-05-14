@@ -95,6 +95,7 @@
     .m3 .module-header{background:linear-gradient(135deg,#ea580c,#FF7F32)}
     .m4 .module-header{background:linear-gradient(135deg,#7C3AED,#a855f7)}
     .m5 .module-header{background:linear-gradient(135deg,#0a2f57,#0E4174)}
+    .m6 .module-header{background:linear-gradient(135deg,#064e3b,#10B981)}
 
     /* ── LESSON CARDS ── */
     .lesson{border:1.5px solid var(--gray-200);border-radius:.875rem;margin-bottom:1.25rem;overflow:hidden;transition:box-shadow .2s}
@@ -207,25 +208,28 @@
     <a class="nav-item" href="#module5" data-module="5">
       <div class="nav-dot" style="background:#0a2f57"></div>🤖 Claude Code <span class="nav-time">40ph</span>
     </a>
+    <a class="nav-item" href="#module6" data-module="6">
+      <div class="nav-dot" style="background:#10B981"></div>📄 Config Files <span class="nav-time">30ph</span>
+    </a>
   </div>
 </nav>
 
 <!-- HERO -->
 <header class="hero">
   <div class="hero-badge">🎓 Khóa học thực hành · 2026</div>
-  <h1>Làm Chủ Claude AI<br>Trong 3 Giờ</h1>
-  <p class="hero-sub">Từ người chưa biết gì đến sử dụng thành thục Claude AI, Desktop, Projects, Cowork và Claude Code — không cần biết lập trình.</p>
+  <h1>Làm Chủ Claude AI<br>Trong 3.5 Giờ</h1>
+  <p class="hero-sub">Từ người chưa biết gì đến sử dụng thành thục Claude AI, Desktop, Projects, Cowork, Claude Code và cách "lập trình" Claude bằng file cấu hình — không cần biết code.</p>
   <div class="hero-stats">
     <div class="hero-stat">
-      <div class="hero-stat-num">3H</div>
+      <div class="hero-stat-num">3.5H</div>
       <div class="hero-stat-label">Thời lượng</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-num">5</div>
+      <div class="hero-stat-num">6</div>
       <div class="hero-stat-label">Module</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-num">15</div>
+      <div class="hero-stat-num">20</div>
       <div class="hero-stat-label">Bài học</div>
     </div>
     <div class="hero-stat">
@@ -239,6 +243,7 @@
     <span class="hero-mod-tag">Claude Desktop</span>
     <span class="hero-mod-tag">Cowork</span>
     <span class="hero-mod-tag">Claude Code</span>
+    <span class="hero-mod-tag" style="background:rgba(16,185,129,.25);border-color:rgba(16,185,129,.4)">📄 Config Files</span>
   </div>
 </header>
 
@@ -1174,6 +1179,411 @@
       </div>
     </section>
 
+    <!-- ═══════════════════════════════════════════
+         MODULE 6: CONFIGURATION FILES
+    ═══════════════════════════════════════════ -->
+    <section class="module m6 fade-in" id="module6">
+      <div class="module-header">
+        <div class="module-label">Module 6 · 30 phút</div>
+        <div class="module-title">📄 Config Files — Giúp Claude Hiểu Bạn</div>
+        <div class="module-meta">
+          <span>📚 5 bài học</span>
+          <span>🎯 "Lập trình" Claude bằng 4 file văn bản, không cần code</span>
+        </div>
+      </div>
+      <div class="module-body">
+
+        <!-- BÀI 6.1 -->
+        <div class="lesson open" id="lesson6-1">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🧠</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 6.1 — Tại sao cần file cấu hình?</div>
+              <div class="lesson-subtitle">Biến Claude từ người lạ thành đồng nghiệp thân thiết</div>
+            </div>
+            <div class="lesson-time">⏱ 5 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ hiểu</strong>
+              Tại sao 4 file văn bản đơn giản có thể biến Claude thành trợ lý "hiểu bạn" mà không cần giải thích lại mỗi ngày.
+            </div>
+
+            <div class="compare-grid">
+              <div class="compare-card bad">
+                <div class="compare-label">❌ Không có file cấu hình</div>
+                <p style="font-size:.84rem">Mỗi lần chat mới, Claude là người lạ hoàn toàn. Bạn phải giải thích lại: "Tôi làm ở Ahamove, team Driver Management, trả lời tiếng Việt, dùng bảng khi có thể..." — mãi mãi lặp lại.</p>
+              </div>
+              <div class="compare-card good">
+                <div class="compare-label">✅ Có file cấu hình</div>
+                <p style="font-size:.84rem">Claude đọc file → tự hiểu bạn là ai, làm ở đâu, thích gì, không thích gì, văn phong ra sao → làm việc đúng ngay từ câu đầu tiên, không cần nhắc.</p>
+              </div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .6rem">4 file — 4 tầng hiểu biết</p>
+            <div style="position:relative;padding-left:1.5rem;margin:1rem 0">
+              <div style="position:absolute;left:.6rem;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--green),#86efac)"></div>
+              <div style="margin-bottom:.875rem;padding-left:.75rem">
+                <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.25rem">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--green);flex-shrink:0"></div>
+                  <strong style="font-size:.88rem">CLAUDE.md</strong>
+                  <span style="font-size:.75rem;background:#d1fae5;color:#065f46;padding:.1rem .45rem;border-radius:1rem;font-weight:600">Dự án</span>
+                </div>
+                <p style="font-size:.82rem;color:var(--gray-600);padding-left:1.1rem">Bối cảnh dự án, quy tắc làm việc, tools được phép dùng. Claude Code tự đọc mỗi khi mở folder.</p>
+              </div>
+              <div style="margin-bottom:.875rem;padding-left:.75rem">
+                <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.25rem">
+                  <div style="width:10px;height:10px;border-radius:50%;background:#34d399;flex-shrink:0"></div>
+                  <strong style="font-size:.88rem">about-me.md</strong>
+                  <span style="font-size:.75rem;background:#dbeafe;color:#1e40af;padding:.1rem .45rem;border-radius:1rem;font-weight:600">Cá nhân</span>
+                </div>
+                <p style="font-size:.82rem;color:var(--gray-600);padding-left:1.1rem">Bạn là ai, làm gì, chuyên môn ở đâu, mục tiêu khi dùng AI. Giúp Claude hiểu "góc nhìn" của bạn.</p>
+              </div>
+              <div style="margin-bottom:.875rem;padding-left:.75rem">
+                <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.25rem">
+                  <div style="width:10px;height:10px;border-radius:50%;background:#6ee7b7;flex-shrink:0"></div>
+                  <strong style="font-size:.88rem">my-rules.md</strong>
+                  <span style="font-size:.75rem;background:#fef3c7;color:#92400e;padding:.1rem .45rem;border-radius:1rem;font-weight:600">Quy tắc</span>
+                </div>
+                <p style="font-size:.82rem;color:var(--gray-600);padding-left:1.1rem">Những điều Claude phải / không được làm khi làm việc với bạn. Ranh giới rõ ràng.</p>
+              </div>
+              <div style="padding-left:.75rem">
+                <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.25rem">
+                  <div style="width:10px;height:10px;border-radius:50%;background:#a7f3d0;flex-shrink:0"></div>
+                  <strong style="font-size:.88rem">my-voice.md</strong>
+                  <span style="font-size:.75rem;background:#fce7f3;color:#9d174d;padding:.1rem .45rem;border-radius:1rem;font-weight:600">Phong cách</span>
+                </div>
+                <p style="font-size:.82rem;color:var(--gray-600);padding-left:1.1rem">Giọng văn, cách dùng từ, cấu trúc câu. Mỗi output Claude tạo ra nghe giống bạn viết.</p>
+              </div>
+            </div>
+
+            <div class="tip-box">
+              <div class="tip-label">💡 Dùng ở đâu?</div>
+              <strong>Claude Code:</strong> Đặt các file này trong thư mục dự án → Claude Code tự đọc.<br>
+              <strong>Claude Web (Projects):</strong> Upload các file này vào mục "Knowledge" của Project → Claude tham chiếu khi trả lời.
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 6.2 -->
+        <div class="lesson" id="lesson6-2">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">📋</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 6.2 — CLAUDE.md</div>
+              <div class="lesson-subtitle">"Linh hồn" của dự án — file Claude đọc đầu tiên <span class="badge badge-important">Quan trọng</span></div>
+            </div>
+            <div class="lesson-time">⏱ 8 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ có</strong>
+              Một file CLAUDE.md hoàn chỉnh cho dự án của bạn — viết theo template thực tế.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">CLAUDE.md hoạt động thế nào?</p>
+            <ul class="steps-list">
+              <li><div class="step-num">1</div><div class="step-content">Bạn tạo file <code style="background:#1e293b;color:#7dd3fc;padding:.1rem .4rem;border-radius:.25rem;font-family:monospace;font-size:.8rem">CLAUDE.md</code> trong thư mục dự án</div></li>
+              <li><div class="step-num">2</div><div class="step-content">Mỗi khi bạn gõ <code style="background:#1e293b;color:#7dd3fc;padding:.1rem .4rem;border-radius:.25rem;font-family:monospace;font-size:.8rem">claude</code> trong folder đó → Claude tự động đọc file</div></li>
+              <li><div class="step-num">3</div><div class="step-content">Claude "nạp" toàn bộ context trong file vào bộ nhớ → làm việc đúng ngay từ đầu</div></li>
+            </ul>
+
+            <div style="margin:1rem 0">
+              <p style="font-size:.88rem;font-weight:600;margin-bottom:.5rem">Cấu trúc chuẩn của CLAUDE.md</p>
+              <div class="code-block">
+                <div class="code-label">CLAUDE.md — Template đầy đủ</div>
+                <div class="code-line"><span class="code-hl"># CLAUDE.md — Hướng dẫn dự án</span></div>
+                <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 🏢 Bối cảnh & Vai trò</span></div>
+                <div class="code-line">Bạn là trợ lý chiến lược của [Tên bạn], [Chức vụ] tại [Công ty].</div>
+                <div class="code-line">Dự án này: [Mô tả ngắn gọn mục đích folder/project này].</div>
+                <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## ⚙️ Quy tắc làm việc</span></div>
+                <div class="code-line">- Luôn trả lời bằng tiếng Việt, dùng tiếng Anh cho thuật ngữ kỹ thuật</div>
+                <div class="code-line">- Tóm tắt ý chính trước khi đi vào chi tiết (Pyramid Principle)</div>
+                <div class="code-line">- Dùng bảng khi so sánh &gt;2 items, dùng bullet khi liệt kê</div>
+                <div class="code-line">- Không bịa số — nếu không có data, nói rõ "Cần xác nhận thêm"</div>
+                <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 📁 Cấu trúc thư mục</span></div>
+                <div class="code-line">output/        ← Toàn bộ file đầu ra lưu ở đây</div>
+                <div class="code-line">data/          ← File raw data, không sửa trực tiếp</div>
+                <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 🚫 Không được làm</span></div>
+                <div class="code-line">- Không xóa file trong /data mà không hỏi</div>
+                <div class="code-line">- Không dùng số liệu giả để minh họa</div>
+                <div class="code-line">- Không viết lời khuyên chung chung, phải cụ thể</div>
+              </div>
+            </div>
+
+            <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-radius:.875rem;padding:1.25rem;margin:1rem 0">
+              <p style="font-weight:700;color:#065f46;font-size:.85rem;margin-bottom:.75rem">📌 Ví dụ thực tế — CLAUDE.md của Ahamove Driver Team</p>
+              <div class="code-block" style="margin:0">
+                <div class="code-label">CLAUDE.md</div>
+                <div class="code-line"><span class="code-hl"># CLAUDE.md — Driver Management · Ahamove</span></div>
+                <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## Bối cảnh</span></div>
+                <div class="code-line">Trợ lý vận hành cho Lê Phương Khanh, Driver Management Leader.</div>
+                <div class="code-line">Phạm vi: xe máy (Bike Instant), KHÔNG bao gồm xe tải.</div>
+                <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## KPI ưu tiên theo dõi</span></div>
+                <div class="code-line">AR (Acceptance Rate), FR (Fulfillment Rate), CPO, EPH, RPH</div>
+                <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## Output Rules</span></div>
+                <div class="code-line">- Lưu file vào output/Ahamove/ theo cấu trúc có sẵn</div>
+                <div class="code-line">- Tên file: YYYY-MM-topic-type.md (vd: 2026-05-ar-analysis.md)</div>
+                <div class="code-line">- Kết thúc phân tích bằng mục "Khuyến nghị hành động"</div>
+                <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## Đối thủ cạnh tranh (tham chiếu)</span></div>
+                <div class="code-line">Grab Express, Be Delivery, XanhSM, SPX, GHN</div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1rem 0;font-size:.83rem">
+              <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:.625rem;padding:.875rem">
+                <p style="font-weight:700;color:#0369a1;margin-bottom:.4rem">📍 Đặt ở đâu?</p>
+                <p style="color:var(--gray-700)"><strong>Claude Code:</strong> Trong thư mục dự án chính<br><code style="font-family:monospace;font-size:.78rem;background:#1e293b;color:#7dd3fc;padding:.1rem .3rem;border-radius:.2rem">/Desktop/MyProject/CLAUDE.md</code></p>
+                <p style="color:var(--gray-700);margin-top:.5rem"><strong>Global (mọi project):</strong><br><code style="font-family:monospace;font-size:.78rem;background:#1e293b;color:#7dd3fc;padding:.1rem .3rem;border-radius:.2rem">~/.claude/CLAUDE.md</code></p>
+              </div>
+              <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:.625rem;padding:.875rem">
+                <p style="font-weight:700;color:#065f46;margin-bottom:.4rem">⚡ Tạo nhanh với /init</p>
+                <p style="color:var(--gray-700)">Trong Claude Code, gõ <code style="font-family:monospace;font-size:.78rem;background:#1e293b;color:#7dd3fc;padding:.1rem .3rem;border-radius:.2rem">/init</code> → Claude phỏng vấn bạn một số câu hỏi → tự tạo CLAUDE.md phù hợp.<br><br>Sau đó chỉnh sửa thêm theo nhu cầu.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 6.3 -->
+        <div class="lesson" id="lesson6-3">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">👤</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 6.3 — about-me.md</div>
+              <div class="lesson-subtitle">"Hồ sơ cá nhân" để Claude hiểu bạn là ai <span class="badge badge-practice">Thực hành</span></div>
+            </div>
+            <div class="lesson-time">⏱ 6 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ có</strong>
+              File about-me.md cá nhân sẵn sàng upload vào Projects hoặc để Claude Code tham chiếu.
+            </div>
+
+            <p style="font-size:.88rem;color:var(--gray-700);margin-bottom:.875rem">about-me.md trả lời câu hỏi: <em>"Claude cần biết gì về tôi để làm việc tốt nhất?"</em> — vai trò, kiến thức nền, cách suy nghĩ, những gì bạn đã biết để Claude không giải thích thừa.</p>
+
+            <div class="code-block">
+              <div class="code-label">about-me.md — Template + Ví dụ thực tế</div>
+              <div class="code-line"><span class="code-hl"># Về Tôi</span></div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## Vai trò & Tổ chức</span></div>
+              <div class="code-line"><span class="code-str">Tên:</span> Lê Phương Khanh</div>
+              <div class="code-line"><span class="code-str">Chức vụ:</span> Driver Management Leader</div>
+              <div class="code-line"><span class="code-str">Công ty:</span> Ahamove — Nền tảng logistics On-demand #1 Việt Nam</div>
+              <div class="code-line"><span class="code-str">Team:</span> Quản lý ~50,000 tài xế xe máy tại HCM, HN, và các tỉnh</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## Chuyên môn & Kiến thức nền</span></div>
+              <div class="code-line">- Vận hành logistics, supply-demand balancing</div>
+              <div class="code-line">- Phân tích dữ liệu (SQL cơ bản, Excel, dashboard)</div>
+              <div class="code-line">- Driver psychology, incentive design</div>
+              <div class="code-line">- Thị trường: giao hàng nhanh, cạnh tranh với Grab/Be/XanhSM</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## Tôi dùng AI để làm gì?</span></div>
+              <div class="code-line">- Phân tích KPI vận hành hàng tuần (AR, FR, CPO)</div>
+              <div class="code-line">- Soạn thảo chiến lược, thông báo nội bộ, báo cáo lên leadership</div>
+              <div class="code-line">- Nghiên cứu đối thủ và xu hướng thị trường</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## Đừng giải thích những điều tôi đã biết</span></div>
+              <div class="code-line">- Khái niệm cơ bản về logistics và gig economy</div>
+              <div class="code-line">- Cách đọc báo cáo KPI tiêu chuẩn</div>
+              <div class="code-line">- Tình hình thị trường giao hàng Việt Nam hiện tại</div>
+            </div>
+
+            <div class="tip-box" style="margin-top:.875rem">
+              <div class="tip-label">💡 Mẹo viết about-me.md hiệu quả</div>
+              Thêm mục <strong>"Đừng giải thích những điều tôi đã biết"</strong> — đây là bí quyết giúp Claude bỏ qua những lời giải thích thừa và đi thẳng vào vấn đề chuyên sâu hơn.
+            </div>
+
+            <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.75rem;padding:1rem;margin:.75rem 0;font-size:.83rem">
+              <p style="font-weight:700;margin-bottom:.5rem">📌 Cách dùng about-me.md</p>
+              <div style="display:flex;flex-direction:column;gap:.4rem;color:var(--gray-700)">
+                <div><strong>Claude Code:</strong> Để file trong thư mục dự án hoặc đề cập trong CLAUDE.md: <em>"Đọc about-me.md để hiểu ngữ cảnh của tôi."</em></div>
+                <div><strong>Claude Web Projects:</strong> Upload vào mục Knowledge → Claude tự tham chiếu khi bạn chat trong Project.</div>
+                <div><strong>Claude Web thường:</strong> Copy paste nội dung vào đầu conversation nếu cần context đặc biệt.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 6.4 -->
+        <div class="lesson" id="lesson6-4">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">📏</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 6.4 — my-rules.md</div>
+              <div class="lesson-subtitle">Ranh giới rõ ràng — Claude luôn tuân thủ <span class="badge badge-important">Quan trọng</span></div>
+            </div>
+            <div class="lesson-time">⏱ 6 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ có</strong>
+              Bộ quy tắc làm việc cá nhân — Claude không bao giờ vi phạm những điều bạn không muốn.
+            </div>
+
+            <p style="font-size:.88rem;color:var(--gray-700);margin-bottom:.875rem">my-rules.md là file <strong>"hợp đồng làm việc"</strong> giữa bạn và Claude. Một lần viết, áp dụng vĩnh viễn. Không cần nhắc lại mỗi lần chat.</p>
+
+            <div class="code-block">
+              <div class="code-label">my-rules.md — Template đầy đủ với giải thích</div>
+              <div class="code-line"><span class="code-hl"># Quy Tắc Làm Việc Của Tôi</span></div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 🌐 Ngôn ngữ</span></div>
+              <div class="code-line">- Luôn trả lời tiếng Việt, dùng tiếng Anh cho thuật ngữ chuyên ngành</div>
+              <div class="code-line">- Không dịch thuật ngữ: AR, FR, CPO, KPI, SLA, ROI → giữ nguyên</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 📊 Format đầu ra</span></div>
+              <div class="code-line">- Kết luận/khuyến nghị TRƯỚC, chi tiết và lý giải SAU</div>
+              <div class="code-line">- Dùng bảng khi có 3+ items để so sánh</div>
+              <div class="code-line">- Dùng bullet ngắn, tối đa 15 chữ mỗi dòng</div>
+              <div class="code-line">- Không viết đoạn văn dài &gt;3 câu liên tục</div>
+              <div class="code-line">- Độ dài phản hồi: ngắn gọn, đủ ý — không "padding" thừa</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 🚫 Tuyệt đối không</span></div>
+              <div class="code-line">- Không bịa số liệu — nếu không có data, ghi rõ "[Cần xác nhận]"</div>
+              <div class="code-line">- Không đưa ra lời khuyên chung chung kiểu "cần nghiên cứu thêm"</div>
+              <div class="code-line">- Không lặp lại câu hỏi của tôi trước khi trả lời</div>
+              <div class="code-line">- Không viết summary dài ở cuối mỗi response</div>
+              <div class="code-line">- Không hỏi "Bạn có muốn tôi..." — cứ làm đi</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## ✅ Luôn làm</span></div>
+              <div class="code-line">- Khi phân tích: kèm theo "Khuyến nghị hành động" cụ thể</div>
+              <div class="code-line">- Khi bất đồng: nói thẳng lý do, đừng chỉ đồng ý</div>
+              <div class="code-line">- Khi thiếu thông tin: liệt kê rõ cần thêm gì, không đoán mò</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 🔒 Bảo mật dữ liệu</span></div>
+              <div class="code-line">- Không đề xuất chia sẻ dữ liệu nội bộ ra ngoài</div>
+              <div class="code-line">- Khi phân tích data nhạy cảm: chỉ dùng trong phiên này</div>
+            </div>
+
+            <div class="tip-box" style="margin-top:.875rem">
+              <div class="tip-label">💡 Mẹo tạo my-rules.md nhanh</div>
+              Hãy nhớ lại <strong>3 lần gần nhất Claude làm bạn khó chịu:</strong> trả lời tiếng Anh, viết quá dài, lặp lại câu hỏi... Mỗi điều đó thành một dòng "Không được làm". Đó là cách tốt nhất để bắt đầu.
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 6.5 -->
+        <div class="lesson" id="lesson6-5">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🎨</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 6.5 — my-voice.md</div>
+              <div class="lesson-subtitle">Để output của Claude nghe như chính bạn viết <span class="badge badge-tip">Mẹo</span></div>
+            </div>
+            <div class="lesson-time">⏱ 5 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ có</strong>
+              File my-voice.md giúp mọi nội dung Claude viết đều mang phong cách và giọng điệu của bạn — không còn cứng đờ hay xa lạ.
+            </div>
+
+            <p style="font-size:.88rem;color:var(--gray-700);margin-bottom:.875rem">my-voice.md trả lời: <em>"Claude nên viết như thế nào để người đọc nghĩ tôi tự viết?"</em> — tone, từ ngữ ưa thích, cấu trúc câu, những từ cần tránh.</p>
+
+            <div class="code-block">
+              <div class="code-label">my-voice.md — Template đầy đủ</div>
+              <div class="code-line"><span class="code-hl"># Giọng Văn & Phong Cách Viết Của Tôi</span></div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 🎯 Tone tổng thể</span></div>
+              <div class="code-line">- Chuyên nghiệp nhưng không cứng nhắc</div>
+              <div class="code-line">- Thẳng thắn, nói thẳng vào vấn đề</div>
+              <div class="code-line">- Tự tin: đưa ra quan điểm rõ ràng, không lấp lửng</div>
+              <div class="code-line">- Không hoa mỹ — tránh từ ngữ sáo rỗng</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 📝 Cách viết câu</span></div>
+              <div class="code-line">- Câu ngắn, mỗi câu một ý</div>
+              <div class="code-line">- Dùng dấu gạch ngang (—) thay vì dấu phẩy liệt kê</div>
+              <div class="code-line">- Ưa dùng: "vì vậy", "do đó", "cụ thể là", "quan trọng hơn"</div>
+              <div class="code-line">- Tránh: "như đã đề cập", "tóm lại", "nhìn chung"</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 🔤 Từ vựng đặc trưng</span></div>
+              <div class="code-line"><span class="code-comment"># Dùng những từ này (nghe tự nhiên với tôi):</span></div>
+              <div class="code-line">"tài xế" (không phải "driver" hay "shipper")</div>
+              <div class="code-line">"vùng" (không phải "khu vực" hay "zone")</div>
+              <div class="code-line">"đơn" (không phải "order" hay "đơn hàng")</div>
+              <div class="code-line">"tỷ lệ chấp nhận" (AR — giữ nguyên chữ AR trong ngoặc)</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## ✍️ Cấu trúc bài viết</span></div>
+              <div class="code-line">- Mở đầu: Kết luận ngay trong câu đầu tiên</div>
+              <div class="code-line">- Thân bài: 2-3 điểm hỗ trợ, mỗi điểm có số liệu cụ thể</div>
+              <div class="code-line">- Kết: Một câu hành động rõ ràng, không chung chung</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 📊 Khi trình bày số liệu</span></div>
+              <div class="code-line">- Luôn kèm so sánh: "AR tuần này 78% (+3pp vs tuần trước)"</div>
+              <div class="code-line">- Highlight ngay nếu vượt/dưới target</div>
+              <div class="code-line">- Dùng ký hiệu: ↑ tăng, ↓ giảm, → ngang</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment">## 📌 Ví dụ văn phong (để Claude học theo)</span></div>
+              <div class="code-line"><span class="code-str">"AR tuần 19 đạt 76%, thấp hơn target 5pp.</span></div>
+              <div class="code-line"><span class="code-str"> Nguyên nhân chính: thiếu tài xế khu vực Q1 giờ cao điểm.</span></div>
+              <div class="code-line"><span class="code-str"> Đề xuất: bổ sung 200 tài xế Q1, ưu tiên ca 11h-14h."</span></div>
+            </div>
+
+            <div class="compare-grid" style="margin-top:1rem">
+              <div class="compare-card bad">
+                <div class="compare-label">❌ Không có my-voice.md</div>
+                <p style="font-size:.82rem"><em>"Thưa anh/chị, qua phân tích số liệu, chúng tôi nhận thấy rằng tỷ lệ chấp nhận đơn hàng trong tuần vừa qua có xu hướng giảm nhẹ so với kỳ trước, điều này có thể do nhiều yếu tố khách quan..."</em></p>
+              </div>
+              <div class="compare-card good">
+                <div class="compare-label">✅ Có my-voice.md</div>
+                <p style="font-size:.82rem"><em>"AR tuần 19 đạt 76% — thấp hơn target 5pp. Nguyên nhân chính: thiếu tài xế Q1 giờ cao điểm. Đề xuất: bổ sung 200 tài xế Q1, ưu tiên ca 11h–14h."</em></p>
+              </div>
+            </div>
+
+            <div class="success-box" style="margin-top:1rem">
+              <div class="success-label">✅ Cách test my-voice.md</div>
+              Sau khi tạo xong, hãy yêu cầu Claude viết một đoạn báo cáo ngắn. Đọc to lên — nếu nghe như chính bạn đang nói chuyện, file đã hoạt động đúng. Nếu còn cứng, chỉnh thêm ví dụ trong mục "Văn phong mẫu".
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 6.6 - TỔNG HỢP -->
+        <div class="lesson" id="lesson6-6">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🗂️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 6.6 — Setup hoàn chỉnh: Tất cả trong một</div>
+              <div class="lesson-subtitle">Đặt 4 file đúng chỗ — dùng ngay hôm nay <span class="badge badge-practice">Thực hành</span></div>
+            </div>
+            <div class="lesson-time">⏱ 5 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ có</strong>
+              Hệ thống 4 file cấu hình hoàn chỉnh, đặt đúng chỗ, Claude đọc và hiểu ngay.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Cấu trúc thư mục lý tưởng</p>
+            <div class="code-block">
+              <div class="code-label">Cấu trúc file đề xuất</div>
+              <div class="code-line"><span class="code-hl">~/.claude/</span>             <span class="code-comment">← Thư mục global (áp dụng cho mọi project)</span></div>
+              <div class="code-line">├── <span class="code-str">CLAUDE.md</span>           <span class="code-comment">← Rules global (ngôn ngữ, format, quy tắc chung)</span></div>
+              <div class="code-line">├── <span class="code-str">about-me.md</span>         <span class="code-comment">← Hồ sơ cá nhân của bạn</span></div>
+              <div class="code-line">├── <span class="code-str">my-rules.md</span>         <span class="code-comment">← Quy tắc làm việc</span></div>
+              <div class="code-line">└── <span class="code-str">my-voice.md</span>         <span class="code-comment">← Phong cách viết</span></div>
+              <div class="code-line" style="margin-top:.75rem"><span class="code-hl">~/Desktop/MyProject/</span>   <span class="code-comment">← Thư mục dự án cụ thể</span></div>
+              <div class="code-line">└── <span class="code-str">CLAUDE.md</span>           <span class="code-comment">← Rules riêng cho project này (override global)</span></div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .6rem">Cách tham chiếu các file trong CLAUDE.md</p>
+            <div class="code-block">
+              <div class="code-label">CLAUDE.md — Trỏ đến các file khác</div>
+              <div class="code-line"><span class="code-comment">## Đọc thêm để hiểu ngữ cảnh</span></div>
+              <div class="code-line">Xem <span class="code-str">~/.claude/about-me.md</span> để biết tôi là ai.</div>
+              <div class="code-line">Xem <span class="code-str">~/.claude/my-rules.md</span> để biết cách làm việc với tôi.</div>
+              <div class="code-line">Xem <span class="code-str">~/.claude/my-voice.md</span> để biết giọng văn tôi muốn.</div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .6rem">Dùng cho Claude Web Projects</p>
+            <ul class="steps-list">
+              <li><div class="step-num">1</div><div class="step-content">Mở Project trên claude.ai → Nhấn <strong>"Add content"</strong></div></li>
+              <li><div class="step-num">2</div><div class="step-content">Upload cả 4 file: CLAUDE.md, about-me.md, my-rules.md, my-voice.md</div></li>
+              <li><div class="step-num">3</div><div class="step-content">Trong phần Instructions của Project, thêm dòng: <em>"Đọc tất cả file .md đã upload để hiểu cách làm việc với tôi."</em></div></li>
+              <li><div class="step-num">4</div><div class="step-content">Test: Chat thử một câu → Kiểm tra Claude có dùng đúng tiếng Việt, format, và giọng văn bạn muốn không</div></li>
+            </ul>
+
+            <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #10B981;border-radius:.875rem;padding:1.5rem;margin:1rem 0;text-align:center">
+              <div style="font-size:1.5rem;margin-bottom:.5rem">🎉</div>
+              <p style="font-weight:800;color:#064e3b;font-size:1rem;margin-bottom:.5rem">Bạn đã hoàn thành toàn bộ khóa học!</p>
+              <p style="font-size:.85rem;color:#065f46">Bây giờ Claude không chỉ là AI — mà là trợ lý biết <strong>bạn là ai</strong>, làm việc <strong>theo cách của bạn</strong>, viết <strong>bằng giọng của bạn</strong>. Đó là sức mạnh thực sự của người dùng AI nâng cao.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </div><!-- /content -->
 
   <!-- SIDEBAR -->
@@ -1185,6 +1595,7 @@
       <a class="sidebar-link" href="#module3"><span class="sidebar-icon">🖥️</span> Desktop <span class="sidebar-time-badge">35ph</span></a>
       <a class="sidebar-link" href="#module4"><span class="sidebar-icon">⚡</span> Cowork <span class="sidebar-time-badge">30ph</span></a>
       <a class="sidebar-link" href="#module5"><span class="sidebar-icon">🤖</span> Claude Code <span class="sidebar-time-badge">40ph</span></a>
+      <a class="sidebar-link" href="#module6"><span class="sidebar-icon">📄</span> Config Files <span class="sidebar-time-badge">30ph</span></a>
     </div>
 
     <div class="sidebar-card">
@@ -1198,6 +1609,9 @@
       <label class="checklist-item" id="chk7"><input type="checkbox" onchange="checkItem(this)"> Cài Node.js thành công</label>
       <label class="checklist-item" id="chk8"><input type="checkbox" onchange="checkItem(this)"> Chạy Claude Code lần đầu</label>
       <label class="checklist-item" id="chk9"><input type="checkbox" onchange="checkItem(this)"> Tạo CLAUDE.md với /init</label>
+      <label class="checklist-item" id="chk10"><input type="checkbox" onchange="checkItem(this)"> Viết about-me.md cá nhân</label>
+      <label class="checklist-item" id="chk11"><input type="checkbox" onchange="checkItem(this)"> Viết my-rules.md</label>
+      <label class="checklist-item" id="chk12"><input type="checkbox" onchange="checkItem(this)"> Viết my-voice.md + test</label>
     </div>
 
     <div class="sidebar-card" style="background:linear-gradient(135deg,#0E4174,#1a5fa8);color:white;border:none">
@@ -1227,6 +1641,8 @@
         <li>Kết nối Claude với Gmail, Drive, Calendar</li>
         <li>Setup và dùng Cowork với Skills</li>
         <li>Cài và chạy Claude Code thành công</li>
+        <li>Tạo CLAUDE.md, about-me.md, my-rules.md, my-voice.md</li>
+        <li>Claude làm việc đúng style mà không cần nhắc lại</li>
       </ul>
     </div>
 
@@ -1250,7 +1666,7 @@
 
   // Update active nav item based on scroll position
   function updateActiveNav() {
-    const modules = ['module1','module2','module3','module4','module5'];
+    const modules = ['module1','module2','module3','module4','module5','module6'];
     const navItems = document.querySelectorAll('.nav-item');
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
     let current = 0;
