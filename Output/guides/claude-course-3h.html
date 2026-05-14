@@ -1308,97 +1308,112 @@
             <div class="lesson-icon">⚙️</div>
             <div class="lesson-info">
               <div class="lesson-title">⚙️ Setup & Settings — Cowork</div>
-              <div class="lesson-subtitle">Cấu hình settings.json, permissions và hooks <span class="badge badge-important">Setup</span></div>
+              <div class="lesson-subtitle">Cấp quyền cho Claude — không cần biết gì về code <span class="badge badge-important">Setup</span></div>
             </div>
-            <div class="lesson-time">⏱ 12 phút</div>
+            <div class="lesson-time">⏱ 10 phút</div>
             <div class="lesson-chevron">▼</div>
           </div>
           <div class="lesson-body">
             <div class="objective-box">
-              <strong>🎯 Sau bài này bạn sẽ cài xong</strong>
-              File settings.json cho Cowork: permissions, tools được phép, hooks tự động, và MCP servers — Claude Code hoạt động đúng ngay từ lần đầu.
+              <strong>🎯 Sau bài này bạn sẽ hiểu</strong>
+              Cách "cấp thẻ ra vào" cho Claude — quyết định Claude được làm gì tự động, làm gì phải hỏi bạn trước. Không cần biết code hay JSON.
             </div>
 
-            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">📍 File settings.json nằm ở đâu?</p>
-            <div class="code-block" style="margin-bottom:1rem">
-              <div class="code-label">Vị trí file settings</div>
-              <div class="code-line"><span class="code-comment"># Global (áp dụng cho mọi project)</span></div>
-              <div class="code-line"><span class="code-str">~/.claude/settings.json</span></div>
-              <div class="code-line" style="margin-top:.5rem"><span class="code-comment"># Project-level (chỉ áp dụng cho project hiện tại, ưu tiên hơn)</span></div>
-              <div class="code-line"><span class="code-str">.claude/settings.json</span>  <span class="code-comment">← trong thư mục dự án</span></div>
+            <!-- ANALOGY -->
+            <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1.5px solid #93c5fd;border-radius:.875rem;padding:1.25rem;margin-bottom:1.25rem">
+              <p style="font-weight:700;color:#1e40af;margin-bottom:.75rem;font-size:.9rem">🔑 Hãy hiểu như thế này</p>
+              <p style="font-size:.85rem;color:var(--gray-700);line-height:1.7">Tưởng tượng bạn thuê một nhân viên mới (Claude). Bạn cần cho họ biết:<br>
+              ✅ <strong>"Được phép tự làm"</strong> — đọc tài liệu, tạo file báo cáo, tìm kiếm web<br>
+              ❌ <strong>"Phải hỏi tôi trước"</strong> — xóa file, gửi email thay tôi, cài phần mềm<br><br>
+              File <strong>settings.json</strong> chính là tờ giấy ghi danh sách đó. Claude đọc và tuân thủ.</p>
             </div>
 
-            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">1 — Cấu trúc settings.json đầy đủ</p>
+            <!-- CÁCH 1: NHỜ CLAUDE LÀM -->
+            <p style="font-size:.9rem;font-weight:700;color:var(--green);margin-bottom:.5rem">✅ Cách 1 — Dễ nhất: Nhờ Claude tạo file cho bạn</p>
+            <p style="font-size:.84rem;color:var(--gray-700);margin-bottom:.75rem">Bạn không cần biết JSON là gì. Chỉ cần mở Cowork và nói chuyện bình thường:</p>
+            <div style="background:#1e293b;border-radius:.75rem;padding:1.25rem;margin-bottom:1rem">
+              <p style="color:#64748b;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem">Gõ vào Cowork (copy nguyên văn)</p>
+              <p style="color:#86efac;font-size:.88rem;line-height:1.7;font-family:'Lexend',sans-serif">"Hãy tạo file settings cho project này. Tôi muốn Claude được tự đọc file, tự tạo file mới, và tìm kiếm web — nhưng KHÔNG được tự xóa file hay cài phần mềm. Tôi dùng Mac."</p>
+            </div>
+            <div class="success-box">
+              <div class="success-label">✅ Claude sẽ tự làm tất cả</div>
+              Claude tạo đúng file đúng chỗ, bạn không cần hiểu bên trong có gì. Đây là cách dùng AI thông minh nhất — nhờ AI làm thứ bạn không biết làm.
+            </div>
+
+            <hr class="divider">
+
+            <!-- CÁCH 2: COPY-PASTE -->
+            <p style="font-size:.9rem;font-weight:700;color:var(--blue);margin-bottom:.5rem;margin-top:1rem">📋 Cách 2 — Copy-paste template có sẵn</p>
+            <p style="font-size:.84rem;color:var(--gray-700);margin-bottom:.75rem">Nếu muốn tự tạo, copy đoạn dưới đây, paste vào file <strong>settings.json</strong>. Không cần hiểu cú pháp, chỉ cần biết mỗi dòng nghĩa là gì:</p>
+
+            <div style="border:1.5px solid var(--gray-200);border-radius:.875rem;overflow:hidden;margin-bottom:1rem">
+              <div style="background:var(--gray-800);color:white;padding:.75rem 1.25rem;font-size:.8rem;font-weight:600">File: .claude/settings.json (trong thư mục dự án của bạn)</div>
+              <div style="padding:0">
+                <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+                  <thead>
+                    <tr style="background:var(--gray-100)">
+                      <th style="padding:.6rem 1rem;text-align:left;font-weight:600;color:var(--gray-600);width:45%">Dòng lệnh (copy y hệt)</th>
+                      <th style="padding:.6rem 1rem;text-align:left;font-weight:600;color:var(--gray-600)">Nghĩa là gì</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="background:#f0fdf4">
+                      <td style="padding:.6rem 1rem;font-family:monospace;font-size:.78rem;color:#065f46">"Read"</td>
+                      <td style="padding:.6rem 1rem;color:var(--gray-700)">✅ Claude tự đọc file, không hỏi</td>
+                    </tr>
+                    <tr style="background:#f0fdf4">
+                      <td style="padding:.6rem 1rem;font-family:monospace;font-size:.78rem;color:#065f46">"Write"</td>
+                      <td style="padding:.6rem 1rem;color:var(--gray-700)">✅ Claude tự tạo/sửa file, không hỏi</td>
+                    </tr>
+                    <tr style="background:#f0fdf4">
+                      <td style="padding:.6rem 1rem;font-family:monospace;font-size:.78rem;color:#065f46">"WebSearch"</td>
+                      <td style="padding:.6rem 1rem;color:var(--gray-700)">✅ Claude tự tìm kiếm web</td>
+                    </tr>
+                    <tr style="background:#fef2f2">
+                      <td style="padding:.6rem 1rem;font-family:monospace;font-size:.78rem;color:#991b1b">"Bash(rm:*)"</td>
+                      <td style="padding:.6rem 1rem;color:var(--gray-700)">🚫 Chặn: không được xóa file</td>
+                    </tr>
+                    <tr style="background:#fef2f2">
+                      <td style="padding:.6rem 1rem;font-family:monospace;font-size:.78rem;color:#991b1b">"Bash(sudo:*)"</td>
+                      <td style="padding:.6rem 1rem;color:var(--gray-700)">🚫 Chặn: không được cài phần mềm</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             <div class="code-block">
-              <div class="code-label">~/.claude/settings.json — Template hoàn chỉnh</div>
+              <div class="code-label">Copy toàn bộ đoạn này — paste vào file settings.json</div>
               <div class="code-line">{</div>
-              <div class="code-line">  <span class="code-comment">// Cho phép Claude tự dùng các tools này không cần hỏi</span></div>
               <div class="code-line">  <span class="code-str">"permissions"</span>: {</div>
-              <div class="code-line">    <span class="code-str">"allow"</span>: [</div>
-              <div class="code-line">      <span class="code-hl">"Read"</span>,          <span class="code-comment">// Đọc file</span></div>
-              <div class="code-line">      <span class="code-hl">"Write"</span>,         <span class="code-comment">// Ghi file (chỉ trong thư mục dự án)</span></div>
-              <div class="code-line">      <span class="code-hl">"Bash(ls:*)"</span>,    <span class="code-comment">// Xem danh sách file</span></div>
-              <div class="code-line">      <span class="code-hl">"Bash(cat:*)"</span>,   <span class="code-comment">// Đọc nội dung file qua terminal</span></div>
-              <div class="code-line">      <span class="code-hl">"WebSearch"</span>      <span class="code-comment">// Tìm kiếm web</span></div>
-              <div class="code-line">    ],</div>
-              <div class="code-line">    <span class="code-str">"deny"</span>: [</div>
-              <div class="code-line">      <span class="code-hl">"Bash(rm:*)"</span>,    <span class="code-comment">// Chặn xóa file — bảo vệ dữ liệu</span></div>
-              <div class="code-line">      <span class="code-hl">"Bash(sudo:*)"</span>  <span class="code-comment">// Chặn lệnh admin</span></div>
-              <div class="code-line">    ]</div>
-              <div class="code-line">  },</div>
-              <div class="code-line">  <span class="code-comment">// Model mặc định</span></div>
-              <div class="code-line">  <span class="code-str">"model"</span>: <span class="code-hl">"claude-sonnet-4-5"</span>,</div>
-              <div class="code-line">  <span class="code-comment">// Thư mục làm việc an toàn</span></div>
-              <div class="code-line">  <span class="code-str">"env"</span>: {</div>
-              <div class="code-line">    <span class="code-str">"WORKING_DIR"</span>: <span class="code-hl">"/Users/YourName/Desktop/MyProject"</span></div>
+              <div class="code-line">    <span class="code-str">"allow"</span>: [<span class="code-hl">"Read"</span>, <span class="code-hl">"Write"</span>, <span class="code-hl">"WebSearch"</span>],</div>
+              <div class="code-line">    <span class="code-str">"deny"</span>:  [<span class="code-hl">"Bash(rm:*)"</span>, <span class="code-hl">"Bash(sudo:*)"</span>]</div>
               <div class="code-line">  }</div>
               <div class="code-line">}</div>
             </div>
 
-            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">2 — Permissions: Allow vs Deny</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;font-size:.82rem">
-              <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:.625rem;padding:.875rem">
-                <p style="font-weight:700;color:var(--green);margin-bottom:.5rem">✅ Nên Allow (an toàn)</p>
-                <ul style="list-style:none;display:flex;flex-direction:column;gap:.25rem;color:var(--gray-700)">
-                  <li><code style="font-family:monospace;font-size:.78rem">Read</code> — đọc file</li>
-                  <li><code style="font-family:monospace;font-size:.78rem">Write</code> — tạo file mới</li>
-                  <li><code style="font-family:monospace;font-size:.78rem">Bash(ls:*)</code> — xem file</li>
-                  <li><code style="font-family:monospace;font-size:.78rem">WebSearch</code> — tìm web</li>
-                  <li><code style="font-family:monospace;font-size:.78rem">WebFetch</code> — đọc URL</li>
-                </ul>
+            <hr class="divider">
+
+            <!-- KHI NÀO CLAUDE HỎI -->
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Khi nào Claude hỏi bạn, khi nào tự làm?</p>
+            <div style="display:flex;flex-direction:column;gap:.5rem;font-size:.84rem">
+              <div style="display:flex;align-items:center;gap:.875rem;background:#f0fdf4;border-radius:.625rem;padding:.75rem 1rem">
+                <span style="font-size:1.2rem">✅</span>
+                <div><strong>Trong danh sách "được phép"</strong> → Claude tự làm luôn, không hỏi. Nhanh hơn.</div>
               </div>
-              <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:.625rem;padding:.875rem">
-                <p style="font-weight:700;color:var(--red);margin-bottom:.5rem">🚫 Nên Deny (nguy hiểm)</p>
-                <ul style="list-style:none;display:flex;flex-direction:column;gap:.25rem;color:var(--gray-700)">
-                  <li><code style="font-family:monospace;font-size:.78rem">Bash(rm:*)</code> — xóa file</li>
-                  <li><code style="font-family:monospace;font-size:.78rem">Bash(sudo:*)</code> — admin</li>
-                  <li><code style="font-family:monospace;font-size:.78rem">Bash(curl:*)</code> — gọi API</li>
-                  <li><code style="font-family:monospace;font-size:.78rem">Bash(git push:*)</code> — push code</li>
-                </ul>
+              <div style="display:flex;align-items:center;gap:.875rem;background:#fffbeb;border-radius:.625rem;padding:.75rem 1rem">
+                <span style="font-size:1.2rem">❓</span>
+                <div><strong>Không có trong danh sách</strong> → Claude hỏi "Tôi có thể làm X không?" → Bạn nhấn Yes/No.</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:.875rem;background:#fef2f2;border-radius:.625rem;padding:.75rem 1rem">
+                <span style="font-size:1.2rem">🚫</span>
+                <div><strong>Trong danh sách "chặn"</strong> → Claude từ chối làm dù bạn yêu cầu. Bảo vệ tuyệt đối.</div>
               </div>
             </div>
 
-            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">3 — Hooks: Tự động hóa hành động</p>
-            <p style="font-size:.84rem;color:var(--gray-700);margin-bottom:.6rem">Hooks = lệnh tự động chạy trước/sau khi Claude thực hiện tool. Ví dụ: tự backup file trước khi Claude ghi đè.</p>
-            <div class="code-block">
-              <div class="code-label">settings.json — Thêm hooks tự động backup</div>
-              <div class="code-line">{</div>
-              <div class="code-line">  <span class="code-str">"hooks"</span>: {</div>
-              <div class="code-line">    <span class="code-str">"PreToolCall"</span>: [</div>
-              <div class="code-line">      {</div>
-              <div class="code-line">        <span class="code-str">"matcher"</span>: <span class="code-hl">"Write"</span>,   <span class="code-comment">// Chạy trước khi Write</span></div>
-              <div class="code-line">        <span class="code-str">"hooks"</span>: [{</div>
-              <div class="code-line">          <span class="code-str">"type"</span>: <span class="code-hl">"command"</span>,</div>
-              <div class="code-line">          <span class="code-str">"command"</span>: <span class="code-hl">"echo 'Claude đang ghi file: ' $TOOL_INPUT"</span></div>
-              <div class="code-line">        }]</div>
-              <div class="code-line">      }</div>
-              <div class="code-line">    ]</div>
-              <div class="code-line">  }</div>
-              <div class="code-line">}</div>
-            </div>
-            <div class="tip-box" style="margin-top:.5rem">
-              <div class="tip-label">💡 Người mới nên dùng hooks nào?</div>
-              Bắt đầu với <strong>không cần hooks</strong>. Hooks dành cho người đã dùng Claude Code thành thạo và muốn tự động hóa nâng cao. Khi gặp tình huống cụ thể cần tự động hóa, quay lại phần này.
+            <div class="tip-box" style="margin-top:1rem">
+              <div class="tip-label">💡 Lời khuyên cho người mới</div>
+              <strong>Bắt đầu không cần file settings.json.</strong> Cowork hoạt động bình thường — Claude sẽ hỏi bạn trước mỗi hành động. Khi thấy Claude hỏi đi hỏi lại một việc nhàm chán (ví dụ: "Tôi có thể đọc file này không?"), lúc đó mới cần tạo settings.json để bật "tự làm".
             </div>
           </div>
         </div>
