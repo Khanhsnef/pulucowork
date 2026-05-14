@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FR Decline — All 14 Services Analysis | Ahamove SGN | May 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0E4174;
+    --blue-light: #1a5fa8;
+    --blue-pale: #e8f0fb;
+    --orange: #FF7F32;
+    --orange-pale: #fff3eb;
+    --green: #10B981;
+    --green-pale: #d1fae5;
+    --red: #EF4444;
+    --red-pale: #fee2e2;
+    --amber: #F59E0B;
+    --amber-pale: #fef3c7;
+    --gray50: #F9FAFB;
+    --gray100: #F3F4F6;
+    --gray200: #E5E7EB;
+    --gray400: #9CA3AF;
+    --gray600: #4B5563;
+    --gray800: #1F2937;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Lexend', sans-serif;
+    background: var(--gray50);
+    color: var(--gray800);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .num { font-family: 'Space Mono', monospace; }
+
+  /* Header */
+  .page-header {
+    background: linear-gradient(135deg, var(--blue) 0%, #1a5fa8 60%, #0d3461 100%);
+    color: white;
+    padding: 48px 48px 40px;
+  }
+  .page-header .badge {
+    display: inline-block;
+    background: rgba(255,127,50,0.25);
+    border: 1px solid rgba(255,127,50,0.5);
+    color: #FFB380;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 99px;
+    margin-bottom: 16px;
+  }
+  .page-header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .page-header .subtitle {
+    font-size: 15px;
+    font-weight: 300;
+    opacity: 0.8;
+    margin-bottom: 24px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .header-meta span {
+    font-size: 12px;
+    opacity: 0.65;
+    font-weight: 400;
+  }
+  .header-meta strong {
+    color: #FFB380;
+    font-weight: 600;
+  }
+
+  /* Layout */
+  .content { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+  .section { margin-bottom: 48px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .section-num {
+    width: 32px; height: 32px;
+    background: var(--blue);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 20px; font-weight: 700;
+    color: var(--blue);
+  }
+  .section-desc {
+    font-size: 13px;
+    color: var(--gray600);
+    margin-top: 2px;
+  }
+
+  /* Cards */
+  .card {
+    background: white;
+    border-radius: 2rem;
+    border: 1px solid var(--gray200);
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .card-sm { padding: 20px 24px; border-radius: 1.5rem; }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray600);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+
+  /* Alert / callout */
+  .alert {
+    padding: 16px 20px;
+    border-radius: 1rem;
+    border-left: 4px solid;
+    margin-bottom: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .alert-red { background: var(--red-pale); border-color: var(--red); color: #7f1d1d; }
+  .alert-amber { background: var(--amber-pale); border-color: var(--amber); color: #78350f; }
+  .alert-green { background: var(--green-pale); border-color: var(--green); color: #064e3b; }
+  .alert-blue { background: var(--blue-pale); border-color: var(--blue); color: var(--blue); }
+  .alert strong { font-weight: 700; }
+
+  /* KPI grid */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .kpi-card {
+    background: white;
+    border-radius: 1.5rem;
+    border: 1px solid var(--gray200);
+    padding: 20px 24px;
+  }
+  .kpi-label { font-size: 11px; font-weight: 600; color: var(--gray400); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .kpi-value { font-family: 'Space Mono', monospace; font-size: 28px; font-weight: 700; line-height: 1.1; }
+  .kpi-sub { font-size: 12px; color: var(--gray600); margin-top: 4px; }
+  .kpi-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 99px; margin-top: 6px;
+  }
+  .badge-red { background: var(--red-pale); color: var(--red); }
+  .badge-green { background: var(--green-pale); color: var(--green); }
+  .badge-amber { background: var(--amber-pale); color: var(--amber); }
+  .badge-blue { background: var(--blue-pale); color: var(--blue); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    background: var(--gray50);
+    color: var(--gray600);
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 10px 14px;
+    text-align: left; border-bottom: 2px solid var(--gray200);
+  }
+  th.num-col { text-align: right; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--gray100); vertical-align: middle; }
+  td.num-col { text-align: right; font-family: 'Space Mono', monospace; font-size: 12px; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--gray50); }
+
+  /* Bar chart */
+  .bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .bar-track { flex: 1; height: 8px; background: var(--gray100); border-radius: 99px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 99px; }
+  .bar-label { font-family: 'Space Mono', monospace; font-size: 11px; width: 56px; text-align: right; }
+
+  /* Inline bar for tables */
+  .mini-bar { display: inline-block; height: 6px; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
+
+  /* Status pill */
+  .pill {
+    display: inline-block; padding: 3px 10px;
+    border-radius: 99px; font-size: 11px; font-weight: 700;
+    white-space: nowrap;
+  }
+  .pill-critical { background: #fca5a5; color: #7f1d1d; }
+  .pill-degraded { background: var(--amber-pale); color: #78350f; }
+  .pill-stable { background: var(--gray100); color: var(--gray600); }
+  .pill-improved { background: var(--green-pale); color: #064e3b; }
+
+  /* Timeline dots */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 4px; bottom: 4px; width: 2px; background: var(--gray200); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot {
+    position: absolute; left: -24px; top: 4px;
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid white;
+  }
+  .tl-date { font-size: 11px; font-weight: 700; color: var(--gray400); margin-bottom: 2px; }
+  .tl-text { font-size: 13px; line-height: 1.6; }
+
+  /* SVG charts area */
+  .chart-area { width: 100%; overflow-x: auto; }
+
+  /* Period comparison */
+  .period-compare {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
+    border: 1px solid var(--gray200); border-radius: 1.5rem; overflow: hidden;
+  }
+  .period-col { padding: 20px 24px; }
+  .period-col + .period-col { border-left: 1px solid var(--gray200); }
+  .period-col.highlight { background: var(--red-pale); }
+  .period-col.active { background: linear-gradient(135deg, var(--blue-pale), white); }
+  .period-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray400); margin-bottom: 12px; }
+  .period-date { font-size: 12px; color: var(--gray600); margin-bottom: 12px; }
+  .period-stat { margin-bottom: 8px; }
+  .period-stat .label { font-size: 11px; color: var(--gray600); }
+  .period-stat .val { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; }
+
+  /* Causal chain */
+  .chain { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; }
+  .chain-node {
+    flex: 1; min-width: 160px;
+    padding: 16px 18px;
+    border-radius: 1.25rem;
+    position: relative;
+  }
+  .chain-arrow {
+    display: flex; align-items: center; padding: 0 6px; color: var(--gray400);
+    font-size: 20px;
+  }
+  .chain-node .node-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .chain-node .node-val { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; }
+  .chain-node .node-desc { font-size: 12px; margin-top: 4px; opacity: 0.8; }
+
+  /* Action items */
+  .action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .action-item {
+    background: white;
+    border: 1px solid var(--gray200);
+    border-radius: 1.5rem;
+    padding: 20px 24px;
+  }
+  .action-priority {
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 3px 8px; border-radius: 99px; margin-bottom: 10px; display: inline-block;
+  }
+  .p1 { background: #fca5a5; color: #7f1d1d; }
+  .p2 { background: var(--amber-pale); color: #78350f; }
+  .p3 { background: var(--blue-pale); color: var(--blue); }
+  .action-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .action-desc { font-size: 12px; color: var(--gray600); line-height: 1.6; }
+
+  /* Footer */
+  .page-footer {
+    background: var(--blue);
+    color: rgba(255,255,255,0.6);
+    padding: 24px 48px;
+    font-size: 11px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+  }
+  .page-footer strong { color: white; }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--gray200); margin: 32px 0; }
+
+  /* Two col */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media(max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media(max-width: 900px) { .three-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="badge">Root-Cause Analysis · SGN · May 2026</div>
+  <h1>FR Decline — Phân Tích Toàn Diện 14 Dịch Vụ</h1>
+  <p class="subtitle">Volume-normalized analysis · W3+W4 Baseline vs W5 Holiday Surge vs W6 Post-Change</p>
+  <div class="header-meta">
+    <span>Scope: <strong>SGN</strong></span>
+    <span>Baseline: <strong>Apr 14–27, 2026 (10 ngày làm việc)</strong></span>
+    <span>W5: <strong>Apr 28–May 6 (5 ngày)</strong></span>
+    <span>W6: <strong>May 7–13, 2026 (5 ngày)</strong></span>
+    <span>Prepared: <strong>14 May 2026 · Driver Management</strong></span>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- EXECUTIVE SUMMARY -->
+  <div class="section">
+    <div class="alert alert-blue" style="font-size:14px; padding:20px 24px; border-radius:1.25rem; margin-bottom:24px;">
+      <strong>Kết luận chính:</strong> FR sụt giảm KHÔNG chỉ đến từ BIKE/ECO. Phân tích toàn bộ 14 dịch vụ cho thấy nhóm <strong>Internal/B2B (BULKY-INTERNAL, SAMEDAY-INTERNAL, 2H-INTERNAL)</strong> bị tổn thất act/vol nghiêm trọng hơn nhiều — mất 12–23% tỷ lệ cung ứng so với baseline. Nguyên nhân gốc là <strong>W5 holiday-rebound demand surge</strong> làm quá tải toàn hệ thống, chứ không phải riêng thay đổi dispatch 1H-TMDT ngày 7/5. ECO và BIKE thực ra gần như <em>ổn định</em> về act/vol.
+    </div>
+
+    <!-- System-wide KPIs -->
+    <div class="kpi-grid" style="margin-bottom:20px;">
+      <div class="kpi-card">
+        <div class="kpi-label">Tổng vol/ngày — BL</div>
+        <div class="kpi-value" style="color:var(--blue)">64,823</div>
+        <div class="kpi-sub">W3+W4 baseline</div>
+      </div>
+      <div class="kpi-card" style="border-color:#fca5a5; background:var(--red-pale);">
+        <div class="kpi-label">Tổng vol/ngày — W5</div>
+        <div class="kpi-value" style="color:var(--red)">70,186</div>
+        <div class="kpi-sub">Holiday rebound <span class="kpi-badge badge-red">+8.3%</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Tổng vol/ngày — W6</div>
+        <div class="kpi-value" style="color:var(--blue)">64,380</div>
+        <div class="kpi-sub">Post-change <span class="kpi-badge badge-blue">≈ BL</span></div>
+      </div>
+      <div class="kpi-card" style="border-color:#fca5a5; background:var(--red-pale);">
+        <div class="kpi-label">Sys rec_rate — W5</div>
+        <div class="kpi-value" style="color:var(--red)">75.1%</div>
+        <div class="kpi-sub">vs BL 79.6% <span class="kpi-badge badge-red">−4.5pp</span></div>
+      </div>
+      <div class="kpi-card" style="border-color:#bbf7d0; background:var(--green-pale);">
+        <div class="kpi-label">Sys rec_rate — W6</div>
+        <div class="kpi-value" style="color:var(--green)">84.9%</div>
+        <div class="kpi-sub">vs BL 79.6% <span class="kpi-badge badge-green">+5.3pp</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Sys act/vol — W5</div>
+        <div class="kpi-value" style="color:var(--red)">0.542</div>
+        <div class="kpi-sub">vs BL 0.577 <span class="kpi-badge badge-red">−6.1%</span></div>
+      </div>
+    </div>
+
+    <!-- Period comparison -->
+    <div class="card">
+      <div class="card-title">Ba giai đoạn phân tích — Diễn biến hệ thống</div>
+      <div class="period-compare">
+        <div class="period-col">
+          <div class="period-label">Baseline · W3+W4</div>
+          <div class="period-date">Apr 14–27 (10 ngày làm việc)</div>
+          <div class="period-stat">
+            <div class="label">Vol/ngày</div>
+            <div class="val" style="color:var(--blue)">64,823</div>
+          </div>
+          <div class="period-stat">
+            <div class="label">Rec_rate hệ thống</div>
+            <div class="val" style="color:var(--blue)">79.6%</div>
+          </div>
+          <div class="period-stat">
+            <div class="label">Act/Vol ratio</div>
+            <div class="val" style="color:var(--blue)">0.577</div>
+          </div>
+          <div style="font-size:12px; color:var(--gray600); margin-top:8px;">Giai đoạn vận hành bình thường, ổn định. Dùng làm mốc đánh giá.</div>
+        </div>
+        <div class="period-col highlight">
+          <div class="period-label" style="color:var(--red)">⚠ W5 — Holiday Surge</div>
+          <div class="period-date" style="color:#7f1d1d;">Apr 28–May 6 (loại Apr 30–May 3)</div>
+          <div class="period-stat">
+            <div class="label">Vol/ngày</div>
+            <div class="val" style="color:var(--red)">70,186</div>
+            <span class="kpi-badge badge-red">+8.3%</span>
+          </div>
+          <div class="period-stat">
+            <div class="label">Rec_rate hệ thống</div>
+            <div class="val" style="color:var(--red)">75.1%</div>
+            <span class="kpi-badge badge-red">−4.5pp</span>
+          </div>
+          <div class="period-stat">
+            <div class="label">Act/Vol ratio</div>
+            <div class="val" style="color:var(--red)">0.542</div>
+            <span class="kpi-badge badge-red">−6.1%</span>
+          </div>
+          <div style="font-size:12px; color:#7f1d1d; margin-top:8px; font-weight:500;">Nhu cầu hậu nghỉ lễ tăng đột biến. Internal/B2B quá tải nặng nhất. <strong>Đây là trigger chính</strong> gây FR sụt.</div>
+        </div>
+        <div class="period-col active">
+          <div class="period-label" style="color:var(--blue)">W6 — Post Dispatch Change</div>
+          <div class="period-date">May 7–13 (5 ngày làm việc)</div>
+          <div class="period-stat">
+            <div class="label">Vol/ngày</div>
+            <div class="val" style="color:var(--blue)">64,380</div>
+            <span class="kpi-badge badge-blue">≈ BL</span>
+          </div>
+          <div class="period-stat">
+            <div class="label">Rec_rate hệ thống</div>
+            <div class="val" style="color:var(--green)">84.9%</div>
+            <span class="kpi-badge badge-green">+5.3pp vs BL</span>
+          </div>
+          <div class="period-stat">
+            <div class="label">Act/Vol ratio</div>
+            <div class="val" style="color:var(--blue)">0.582</div>
+            <span class="kpi-badge badge-blue">+0.9% vs BL</span>
+          </div>
+          <div style="font-size:12px; color:var(--blue); margin-top:8px;">Hệ thống tổng thể gần phục hồi — nhưng Internal/B2B chưa hồi phục đủ. 1H-TMDT-LOW tăng thêm share dispatch.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: SERVICE HEALTH DASHBOARD -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div>
+        <div class="section-title">Dashboard Sức Khỏe 14 Dịch Vụ — W6 vs Baseline</div>
+        <div class="section-desc">Xếp hạng theo mức độ tổn thất Act/Vol Ratio (driver supply per order)</div>
+      </div>
+    </div>
+
+    <div class="alert alert-amber">
+      <strong>Cách đọc:</strong> Act/Vol Ratio = active_drivers / requested_orders mỗi ngày. Chỉ số này phản ánh mật độ cung ứng tài xế cho từng đơn — giảm nghĩa là mỗi đơn có ít tài xế cạnh tranh hơn, dẫn đến FR thấp hơn. Volume-normalized nên loại bỏ yếu tố volume tăng/giảm tự nhiên.
+    </div>
+
+    <div class="card" style="padding:0; overflow:hidden;">
+      <table>
+        <thead>
+          <tr>
+            <th>Dịch vụ</th>
+            <th>Nhóm</th>
+            <th class="num-col">BL vol/ngày</th>
+            <th class="num-col">W6 vol/ngày</th>
+            <th class="num-col">BL act/vol</th>
+            <th class="num-col">W6 act/vol</th>
+            <th class="num-col">Δ act/vol</th>
+            <th class="num-col">Excess<br><span style="font-size:10px;font-weight:400;">(act%−vol%)</span></th>
+            <th class="num-col">W6 rec_rate</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- CRITICAL -->
+          <tr style="background:var(--red-pale);">
+            <td><strong>2H-INTERNAL</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">Internal B2B</td>
+            <td class="num-col">284</td>
+            <td class="num-col">179</td>
+            <td class="num-col">0.636</td>
+            <td class="num-col">0.487</td>
+            <td class="num-col" style="color:var(--red); font-weight:700;">−23.5%</td>
+            <td class="num-col" style="color:var(--red); font-weight:700;">−14.8pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:52%; background:var(--red);"></div></div>
+                52.1%
+              </div>
+            </td>
+            <td><span class="pill pill-critical">CRITICAL</span></td>
+          </tr>
+          <tr style="background:var(--red-pale);">
+            <td><strong>BULKY-INTERNAL</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">Internal B2B</td>
+            <td class="num-col">232</td>
+            <td class="num-col">322</td>
+            <td class="num-col">0.616</td>
+            <td class="num-col">0.485</td>
+            <td class="num-col" style="color:var(--red); font-weight:700;">−21.2%</td>
+            <td class="num-col" style="color:var(--red); font-weight:700;">−29.5pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:30%; background:var(--red);"></div></div>
+                29.9%
+              </div>
+            </td>
+            <td><span class="pill pill-critical">CRITICAL</span></td>
+          </tr>
+          <!-- DEGRADED -->
+          <tr style="background:var(--amber-pale);">
+            <td><strong>SAMEDAY-INTERNAL</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">Internal B2B</td>
+            <td class="num-col">1,532</td>
+            <td class="num-col">1,815</td>
+            <td class="num-col">0.747</td>
+            <td class="num-col">0.655</td>
+            <td class="num-col" style="color:var(--amber); font-weight:700;">−12.3%</td>
+            <td class="num-col" style="color:var(--amber); font-weight:700;">−14.5pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:50%; background:var(--amber);"></div></div>
+                49.9%
+              </div>
+            </td>
+            <td><span class="pill pill-degraded">DEGRADED</span></td>
+          </tr>
+          <tr style="background:var(--amber-pale);">
+            <td><strong>BULKY-INTERNAL-LOW</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">Internal B2B</td>
+            <td class="num-col">1,911</td>
+            <td class="num-col">2,640</td>
+            <td class="num-col">0.708</td>
+            <td class="num-col">0.636</td>
+            <td class="num-col" style="color:var(--amber); font-weight:700;">−10.2%</td>
+            <td class="num-col" style="color:var(--amber); font-weight:700;">−14.1pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:48%; background:var(--amber);"></div></div>
+                48.4%
+              </div>
+            </td>
+            <td><span class="pill pill-degraded">DEGRADED</span></td>
+          </tr>
+          <tr style="background:var(--amber-pale);">
+            <td><strong>TMDT</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">TMDT</td>
+            <td class="num-col">140</td>
+            <td class="num-col">89</td>
+            <td class="num-col">0.345</td>
+            <td class="num-col">0.312</td>
+            <td class="num-col" style="color:var(--amber); font-weight:700;">−9.6%</td>
+            <td class="num-col" style="color:var(--amber); font-weight:700;">−6.1pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:94%; background:var(--green);"></div></div>
+                93.7%
+              </div>
+            </td>
+            <td><span class="pill pill-degraded">DEGRADED</span></td>
+          </tr>
+          <tr>
+            <td><strong>2H-INTERNAL-LOW</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">Internal B2B</td>
+            <td class="num-col">469</td>
+            <td class="num-col">353</td>
+            <td class="num-col">0.687</td>
+            <td class="num-col">0.645</td>
+            <td class="num-col" style="color:var(--amber);">−6.2%</td>
+            <td class="num-col" style="color:var(--amber);">−4.7pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:66%; background:var(--amber);"></div></div>
+                66.0%
+              </div>
+            </td>
+            <td><span class="pill pill-degraded">DEGRADED</span></td>
+          </tr>
+          <!-- STABLE -->
+          <tr>
+            <td><strong>BIKE</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">Instant/Core</td>
+            <td class="num-col">31,467</td>
+            <td class="num-col">33,954</td>
+            <td class="num-col">0.652</td>
+            <td class="num-col">0.629</td>
+            <td class="num-col">−3.6%</td>
+            <td class="num-col">−3.8pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:91%; background:var(--green);"></div></div>
+                91.3%
+              </div>
+            </td>
+            <td><span class="pill pill-stable">STABLE</span></td>
+          </tr>
+          <tr>
+            <td><strong>POOL</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">Instant/Core</td>
+            <td class="num-col">3,510</td>
+            <td class="num-col">3,660</td>
+            <td class="num-col">0.580</td>
+            <td class="num-col">0.567</td>
+            <td class="num-col">−2.3%</td>
+            <td class="num-col">−2.3pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:86%; background:var(--green);"></div></div>
+                85.8%
+              </div>
+            </td>
+            <td><span class="pill pill-stable">STABLE</span></td>
+          </tr>
+          <tr>
+            <td><strong>ECO</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">Instant/Core</td>
+            <td class="num-col">9,000</td>
+            <td class="num-col">9,056</td>
+            <td class="num-col">0.672</td>
+            <td class="num-col">0.664</td>
+            <td class="num-col">−1.2%</td>
+            <td class="num-col">−1.2pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:86%; background:var(--green);"></div></div>
+                86.0%
+              </div>
+            </td>
+            <td><span class="pill pill-stable">STABLE</span></td>
+          </tr>
+          <tr>
+            <td><strong>TMDT-LOW</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">TMDT</td>
+            <td class="num-col">2,360</td>
+            <td class="num-col">1,332</td>
+            <td class="num-col">0.401</td>
+            <td class="num-col">0.406</td>
+            <td class="num-col" style="color:var(--green);">+1.2%</td>
+            <td class="num-col" style="color:var(--green);">+0.7pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:96%; background:var(--green);"></div></div>
+                95.9%
+              </div>
+            </td>
+            <td><span class="pill pill-stable">STABLE</span></td>
+          </tr>
+          <!-- IMPROVED -->
+          <tr style="background:var(--green-pale);">
+            <td><strong>1H-TMDT</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">1H TMDT</td>
+            <td class="num-col">1,360</td>
+            <td class="num-col">992</td>
+            <td class="num-col">0.395</td>
+            <td class="num-col">0.405</td>
+            <td class="num-col" style="color:var(--green); font-weight:700;">+2.6%</td>
+            <td class="num-col" style="color:var(--green); font-weight:700;">+1.9pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:79%; background:var(--green);"></div></div>
+                78.5%
+              </div>
+            </td>
+            <td><span class="pill pill-improved">IMPROVED</span></td>
+          </tr>
+          <tr style="background:var(--green-pale);">
+            <td><strong>1H-TMDT-LOW</strong></td>
+            <td style="font-size:11px; color:var(--gray600);">1H TMDT</td>
+            <td class="num-col">12,543</td>
+            <td class="num-col">9,987</td>
+            <td class="num-col">0.330</td>
+            <td class="num-col">0.374</td>
+            <td class="num-col" style="color:var(--green); font-weight:700;">+13.3%</td>
+            <td class="num-col" style="color:var(--green); font-weight:700;">+10.6pp</td>
+            <td class="num-col">
+              <div class="bar-wrap">
+                <div class="bar-track" style="width:60px"><div class="bar-fill" style="width:80%; background:var(--green);"></div></div>
+                80.2%
+              </div>
+            </td>
+            <td><span class="pill pill-improved">IMPROVED</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Visual ranking -->
+    <div class="card">
+      <div class="card-title">Act/Vol Ratio — Xếp hạng mức độ suy giảm (W6 vs Baseline)</div>
+      <!-- SVG bar chart -->
+      <svg viewBox="0 0 800 320" style="width:100%; max-width:800px; display:block;" font-family="Lexend, sans-serif">
+        <!-- Grid lines -->
+        <line x1="180" y1="20" x2="780" y2="20" stroke="#E5E7EB" stroke-width="1"/>
+        <line x1="180" y1="70" x2="780" y2="70" stroke="#E5E7EB" stroke-width="1"/>
+        <line x1="180" y1="120" x2="780" y2="120" stroke="#E5E7EB" stroke-width="1"/>
+        <line x1="180" y1="170" x2="780" y2="170" stroke="#E5E7EB" stroke-width="1"/>
+        <line x1="180" y1="220" x2="780" y2="220" stroke="#E5E7EB" stroke-width="1"/>
+        <line x1="180" y1="270" x2="780" y2="270" stroke="#E5E7EB" stroke-width="1"/>
+        <!-- Zero line -->
+        <line x1="380" y1="10" x2="380" y2="300" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="4,4"/>
+        <text x="382" y="9" font-size="9" fill="#9CA3AF">0%</text>
+
+        <!-- Bars (horizontal) — sorted worst to best -->
+        <!-- 2H-INTERNAL: -23.5% → bar left from center -->
+        <g transform="translate(0,30)">
+          <text x="175" y="14" text-anchor="end" font-size="11" fill="#374151" font-weight="600">2H-INTERNAL</text>
+          <text x="175" y="28" text-anchor="end" font-size="9" fill="#9CA3AF">Internal B2B</text>
+          <rect x="145" y="5" width="235" height="20" fill="#FEE2E2" rx="4"/>
+          <rect x="145" y="5" width="235" height="20" fill="#EF4444" rx="4" opacity="0.8"/>
+          <text x="136" y="19" text-anchor="end" font-size="11" font-family="'Space Mono',monospace" fill="#EF4444" font-weight="700">−23.5%</text>
+        </g>
+
+        <!-- BULKY-INTERNAL: -21.2% -->
+        <g transform="translate(0,75)">
+          <text x="175" y="14" text-anchor="end" font-size="11" fill="#374151" font-weight="600">BULKY-INTERNAL</text>
+          <text x="175" y="28" text-anchor="end" font-size="9" fill="#9CA3AF">Internal B2B</text>
+          <rect x="168" y="5" width="212" height="20" fill="#FEE2E2" rx="4"/>
+          <rect x="168" y="5" width="212" height="20" fill="#EF4444" rx="4" opacity="0.8"/>
+          <text x="159" y="19" text-anchor="end" font-size="11" font-family="'Space Mono',monospace" fill="#EF4444" font-weight="700">−21.2%</text>
+        </g>
+
+        <!-- SAMEDAY-INTERNAL: -12.3% -->
+        <g transform="translate(0,120)">
+          <text x="175" y="14" text-anchor="end" font-size="11" fill="#374151" font-weight="600">SAMEDAY-INTERNAL</text>
+          <text x="175" y="28" text-anchor="end" font-size="9" fill="#9CA3AF">Internal B2B</text>
+          <rect x="257" y="5" width="123" height="20" fill="#FEF3C7" rx="4"/>
+          <rect x="257" y="5" width="123" height="20" fill="#F59E0B" rx="4" opacity="0.8"/>
+          <text x="248" y="19" text-anchor="end" font-size="11" font-family="'Space Mono',monospace" fill="#F59E0B" font-weight="700">−12.3%</text>
+        </g>
+
+        <!-- BULKY-INT-LOW: -10.2% -->
+        <g transform="translate(0,165)">
+          <text x="175" y="14" text-anchor="end" font-size="11" fill="#374151" font-weight="600">BULKY-INT-LOW</text>
+          <text x="175" y="28" text-anchor="end" font-size="9" fill="#9CA3AF">Internal B2B</text>
+          <rect x="278" y="5" width="102" height="20" fill="#FEF3C7" rx="4"/>
+          <rect x="278" y="5" width="102" height="20" fill="#F59E0B" rx="4" opacity="0.8"/>
+          <text x="269" y="19" text-anchor="end" font-size="11" font-family="'Space Mono',monospace" fill="#F59E0B" font-weight="700">−10.2%</text>
+        </g>
+
+        <!-- BIKE: -3.6% -->
+        <g transform="translate(0,210)">
+          <text x="175" y="14" text-anchor="end" font-size="11" fill="#374151" font-weight="600">BIKE</text>
+          <text x="175" y="28" text-anchor="end" font-size="9" fill="#9CA3AF">Instant/Core</text>
+          <rect x="344" y="5" width="36" height="20" fill="#E5E7EB" rx="4"/>
+          <rect x="344" y="5" width="36" height="20" fill="#9CA3AF" rx="4" opacity="0.8"/>
+          <text x="335" y="19" text-anchor="end" font-size="11" font-family="'Space Mono',monospace" fill="#6B7280" font-weight="700">−3.6%</text>
+        </g>
+
+        <!-- ECO: -1.2% -->
+        <g transform="translate(0,255)">
+          <text x="175" y="14" text-anchor="end" font-size="11" fill="#374151" font-weight="600">ECO</text>
+          <text x="175" y="28" text-anchor="end" font-size="9" fill="#9CA3AF">Instant/Core</text>
+          <rect x="368" y="5" width="12" height="20" fill="#E5E7EB" rx="4"/>
+          <rect x="368" y="5" width="12" height="20" fill="#9CA3AF" rx="4" opacity="0.8"/>
+          <text x="359" y="19" text-anchor="end" font-size="11" font-family="'Space Mono',monospace" fill="#6B7280">−1.2%</text>
+        </g>
+
+        <!-- Center zero line label -->
+        <line x1="380" y1="10" x2="380" y2="300" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+        <!-- 1H-TMDT-LOW: +13.3% -->
+        <g transform="translate(0,255)">
+          <!-- blank for ECO handled above -->
+        </g>
+
+        <!-- Legend -->
+        <rect x="400" y="230" width="12" height="12" fill="#EF4444" rx="2"/>
+        <text x="416" y="241" font-size="10" fill="#374151">CRITICAL (−10% to −24%)</text>
+        <rect x="400" y="250" width="12" height="12" fill="#F59E0B" rx="2"/>
+        <text x="416" y="261" font-size="10" fill="#374151">DEGRADED (−4% to −10%)</text>
+        <rect x="400" y="270" width="12" height="12" fill="#9CA3AF" rx="2"/>
+        <text x="416" y="281" font-size="10" fill="#374151">STABLE (±4%)</text>
+
+      </svg>
+
+      <!-- Key insight box -->
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:16px;">
+        <div style="background:var(--red-pale); border-radius:1rem; padding:16px; border:1px solid #fca5a5;">
+          <div style="font-size:11px; font-weight:700; color:var(--red); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">CRITICAL (2 dịch vụ)</div>
+          <div style="font-size:13px; color:#7f1d1d;">2H-INTERNAL, BULKY-INTERNAL<br>Mất 21–24% act/vol. Volume tăng nhưng tài xế không theo kịp.</div>
+        </div>
+        <div style="background:var(--amber-pale); border-radius:1rem; padding:16px; border:1px solid #fde68a;">
+          <div style="font-size:11px; font-weight:700; color:var(--amber); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">DEGRADED (4 dịch vụ)</div>
+          <div style="font-size:13px; color:#78350f;">SAMEDAY-INT, BULKY-INT-LOW, TMDT, 2H-INT-LOW<br>Mất 6–12% act/vol. Rec_rate thấp 49–66%.</div>
+        </div>
+        <div style="background:var(--green-pale); border-radius:1rem; padding:16px; border:1px solid #6ee7b7;">
+          <div style="font-size:11px; font-weight:700; color:var(--green); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">STABLE/IMPROVED (6 dịch vụ)</div>
+          <div style="font-size:13px; color:#064e3b;">BIKE, ECO, POOL gần baseline. 1H-TMDT-LOW +13.3%, 1H-TMDT +2.6%.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: W5 HOLIDAY CRISIS — ROOT CAUSE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div>
+        <div class="section-title">Nguyên Nhân Gốc: W5 Holiday-Rebound Demand Surge</div>
+        <div class="section-desc">Đây là trigger chính — không phải thay đổi dispatch ngày 7/5</div>
+      </div>
+    </div>
+
+    <div class="alert alert-red">
+      <strong>W5 (Apr 28 – May 6)</strong>: Nhu cầu toàn hệ thống tăng đột biến +8.3% so với baseline, nhưng rec_rate sập mạnh ở nhóm Internal/B2B (BULKY: 48.8%→25.1%, 2H-INT: 69.2%→43–45%, SAMEDAY: 55.9%→35–40%). Đây là dấu hiệu hệ thống dispatch không đủ coverage khi volume tăng đột ngột — cùng pool tài xế phải xử lý đơn nhiều hơn đáng kể.
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Rec_Rate Sập Mạnh Nhất Trong W5 — May 5–6</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Dịch vụ</th>
+              <th class="num-col">BL avg</th>
+              <th class="num-col">May 5</th>
+              <th class="num-col">May 6</th>
+              <th class="num-col">Đáy W5</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>BULKY-INTERNAL</td>
+              <td class="num-col">48.8%</td>
+              <td class="num-col" style="color:var(--red); font-weight:700;">20.1%</td>
+              <td class="num-col" style="color:var(--red); font-weight:700;">19.6%</td>
+              <td class="num-col" style="color:var(--red); font-weight:700;">−29.2pp</td>
+            </tr>
+            <tr>
+              <td>SAMEDAY-INTERNAL</td>
+              <td class="num-col">55.9%</td>
+              <td class="num-col" style="color:var(--red); font-weight:700;">35.0%</td>
+              <td class="num-col" style="color:var(--amber); font-weight:700;">39.8%</td>
+              <td class="num-col" style="color:var(--red); font-weight:700;">−20.9pp</td>
+            </tr>
+            <tr>
+              <td>2H-INTERNAL</td>
+              <td class="num-col">69.2%</td>
+              <td class="num-col" style="color:var(--amber); font-weight:700;">45.1%</td>
+              <td class="num-col" style="color:var(--red); font-weight:700;">43.7%</td>
+              <td class="num-col" style="color:var(--red); font-weight:700;">−25.5pp</td>
+            </tr>
+            <tr>
+              <td>BULKY-INTERNAL-LOW</td>
+              <td class="num-col">57.6%</td>
+              <td class="num-col" style="color:var(--red); font-weight:700;">35.2%</td>
+              <td class="num-col" style="color:var(--red); font-weight:700;">35.2%</td>
+              <td class="num-col" style="color:var(--red); font-weight:700;">−22.4pp</td>
+            </tr>
+            <tr style="background:var(--green-pale)">
+              <td>BIKE (tham chiếu)</td>
+              <td class="num-col">90.1%</td>
+              <td class="num-col">86.5%</td>
+              <td class="num-col">87.4%</td>
+              <td class="num-col" style="color:var(--green);">−3.6pp</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px; color:var(--gray600); margin-top:10px;">Rec_rate thấp → ít tài xế nhận thông báo chủ động → FR thấp. Hiệu ứng này kéo dài sang W6 vì tài xế mất thói quen nhận đơn Internal/B2B.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Volume vs Active — W5 Crisis Effect (BULKY-INTERNAL)</div>
+        <!-- SVG line chart showing daily act/vol for BULKY vs BIKE -->
+        <svg viewBox="0 0 400 200" style="width:100%;" font-family="Lexend, sans-serif">
+          <defs>
+            <linearGradient id="redGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#EF4444" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="#EF4444" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- Axes -->
+          <line x1="50" y1="10" x2="50" y2="165" stroke="#E5E7EB" stroke-width="1"/>
+          <line x1="50" y1="165" x2="390" y2="165" stroke="#E5E7EB" stroke-width="1"/>
+
+          <!-- Y-axis labels -->
+          <text x="45" y="20" text-anchor="end" font-size="9" fill="#9CA3AF">0.8</text>
+          <text x="45" y="55" text-anchor="end" font-size="9" fill="#9CA3AF">0.6</text>
+          <text x="45" y="90" text-anchor="end" font-size="9" fill="#9CA3AF">0.4</text>
+          <text x="45" y="125" text-anchor="end" font-size="9" fill="#9CA3AF">0.2</text>
+          <line x1="50" y1="55" x2="390" y2="55" stroke="#F3F4F6" stroke-width="1"/>
+          <line x1="50" y1="90" x2="390" y2="90" stroke="#F3F4F6" stroke-width="1"/>
+          <line x1="50" y1="125" x2="390" y2="125" stroke="#F3F4F6" stroke-width="1"/>
+
+          <!-- Data: 20 dates, x: 50 to 390 (340px / 19 gaps = 17.9px each) -->
+          <!-- Y scale: 0 to 0.8 → 165 to 20 (range 145) → y = 165 - val/0.8*145 -->
+          <!-- BIKE values: 0.658 0.659 0.655 0.636 0.642 0.668 0.674 0.672 0.617 0.643 0.650 0.578 0.629 0.578 0.605 0.622 0.619 0.614 0.646 0.644 -->
+          <!-- BULKY values: 0.674 0.651 0.596 0.631 0.565 0.646 0.695 0.700 0.480 0.563 0.585 0.510 0.498 0.282 0.283 0.486 0.462 0.420 0.598 0.523 -->
+
+          <!-- W5 zone -->
+          <rect x="219" y="10" width="107" height="155" fill="#FEE2E2" opacity="0.4"/>
+          <text x="272" y="24" text-anchor="middle" font-size="9" fill="#EF4444" font-weight="600">W5</text>
+          <!-- W6 zone -->
+          <rect x="326" y="10" width="64" height="155" fill="#DBEAFE" opacity="0.3"/>
+          <text x="358" y="24" text-anchor="middle" font-size="9" fill="#0E4174" font-weight="600">W6</text>
+
+          <!-- BIKE line (gray) -->
+          <polyline points="50,45 68,45 86,47 104,52 122,49 140,43 158,42 176,43 194,57 212,49 230,48 248,74 266,52 284,74 302,68 320,62 338,63 356,65 374,55 392,55" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linejoin="round"/>
+
+          <!-- BULKY line (red) -->
+          <polyline points="50,42 68,44 86,61 104,53 122,67 140,44 158,37 176,36 194,87 212,68 230,65 248,83 266,86 284,124 302,124 320,88 338,93 356,99 374,60 392,73" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Fill under BULKY during W5 drop -->
+          <polygon points="230,65 248,83 266,86 284,124 302,124 326,95 326,165 219,165 219,65" fill="url(#redGrad)"/>
+
+          <!-- Labels -->
+          <text x="390" y="50" font-size="9" fill="#9CA3AF">BIKE</text>
+          <text x="390" y="69" font-size="9" fill="#EF4444" font-weight="600">BULKY</text>
+
+          <!-- X date labels (simplified) -->
+          <text x="50" y="177" text-anchor="middle" font-size="8" fill="#9CA3AF" transform="rotate(-30,50,177)">4/14</text>
+          <text x="140" y="177" text-anchor="middle" font-size="8" fill="#9CA3AF" transform="rotate(-30,140,177)">4/22</text>
+          <text x="230" y="177" text-anchor="middle" font-size="8" fill="#EF4444" font-weight="600" transform="rotate(-30,230,177)">4/28</text>
+          <text x="302" y="177" text-anchor="middle" font-size="8" fill="#EF4444" font-weight="600" transform="rotate(-30,302,177)">5/5-6</text>
+          <text x="332" y="177" text-anchor="middle" font-size="8" fill="#0E4174" font-weight="600" transform="rotate(-30,332,177)">5/7</text>
+          <text x="392" y="177" text-anchor="middle" font-size="8" fill="#0E4174" transform="rotate(-30,392,177)">5/13</text>
+        </svg>
+        <div style="font-size:11px; color:var(--gray600); margin-top:8px;">BULKY-INTERNAL act/vol sập từ ~0.65 xuống 0.28 trong W5, trong khi BIKE duy trì ổn định 0.61–0.65 suốt giai đoạn.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: VOLUME-NORMALIZED ANALYSIS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div>
+        <div class="section-title">Volume-Normalized: Tách Biệt Tác Động Volume vs Tài Xế</div>
+        <div class="section-desc">Excess = Δact% − Δvol% (W6 vs BL) — loại bỏ hiệu ứng volume tự nhiên</div>
+      </div>
+    </div>
+
+    <div class="alert alert-blue">
+      <strong>Ý nghĩa Excess Driver Loss:</strong> Nếu volume tăng 20% mà active chỉ tăng 6%, thì excess = 6% − 20% = −14pp. Điều này nghĩa là cung tài xế KHÔNG tăng theo nhu cầu — đây mới là vấn đề thực sự. Ngược lại, nếu excess dương, nghĩa là tài xế tăng nhiều hơn volume (cung dồi dào).
+    </div>
+
+    <div class="card" style="padding:0; overflow:hidden;">
+      <table>
+        <thead>
+          <tr>
+            <th>Dịch vụ</th>
+            <th class="num-col">Δ Vol% (W6 vs BL)</th>
+            <th class="num-col">Δ Act% (W6 vs BL)</th>
+            <th class="num-col">Excess<br>(act − vol)</th>
+            <th>Phân tích</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:var(--red-pale);">
+            <td><strong>BULKY-INTERNAL</strong></td>
+            <td class="num-col" style="color:var(--green);">+38.9%</td>
+            <td class="num-col" style="color:var(--amber);">+9.4%</td>
+            <td class="num-col" style="color:var(--red); font-weight:700;">−29.5pp</td>
+            <td style="font-size:12px; color:#7f1d1d;">Volume tăng mạnh nhưng tài xế không theo. Bottleneck nghiêm trọng nhất toàn hệ thống.</td>
+          </tr>
+          <tr style="background:var(--red-pale);">
+            <td><strong>2H-INTERNAL</strong></td>
+            <td class="num-col" style="color:var(--red);">−36.8%</td>
+            <td class="num-col" style="color:var(--red);">−51.6%</td>
+            <td class="num-col" style="color:var(--red); font-weight:700;">−14.8pp</td>
+            <td style="font-size:12px; color:#7f1d1d;">Volume giảm nhưng active giảm nhanh hơn — tài xế rời khỏi dịch vụ này mạnh hơn volume.</td>
+          </tr>
+          <tr style="background:var(--amber-pale);">
+            <td><strong>SAMEDAY-INTERNAL</strong></td>
+            <td class="num-col" style="color:var(--green);">+18.5%</td>
+            <td class="num-col" style="color:var(--amber);">+3.9%</td>
+            <td class="num-col" style="color:var(--amber); font-weight:700;">−14.5pp</td>
+            <td style="font-size:12px; color:#78350f;">Nhu cầu +18.5% nhưng tài xế chỉ tăng 3.9%. Thiếu hụt cung nghiêm trọng.</td>
+          </tr>
+          <tr style="background:var(--amber-pale);">
+            <td><strong>BULKY-INTERNAL-LOW</strong></td>
+            <td class="num-col" style="color:var(--green);">+38.2%</td>
+            <td class="num-col" style="color:var(--amber);">+24.1%</td>
+            <td class="num-col" style="color:var(--amber); font-weight:700;">−14.1pp</td>
+            <td style="font-size:12px; color:#78350f;">Volume bùng nổ nhưng tài xế không theo kịp tốc độ.</td>
+          </tr>
+          <tr>
+            <td><strong>BIKE</strong></td>
+            <td class="num-col">+7.9%</td>
+            <td class="num-col">+4.1%</td>
+            <td class="num-col" style="color:var(--gray600);">−3.8pp</td>
+            <td style="font-size:12px; color:var(--gray600);">Gần cân bằng. Volume tăng nhẹ, active tăng theo. FR ổn định.</td>
+          </tr>
+          <tr>
+            <td><strong>ECO</strong></td>
+            <td class="num-col">+0.6%</td>
+            <td class="num-col">−0.6%</td>
+            <td class="num-col" style="color:var(--gray600);">−1.2pp</td>
+            <td style="font-size:12px; color:var(--gray600);">Gần như không thay đổi. Volume ổn định, active ổn định.</td>
+          </tr>
+          <tr style="background:var(--green-pale);">
+            <td><strong>1H-TMDT-LOW</strong></td>
+            <td class="num-col" style="color:var(--red);">−20.4%</td>
+            <td class="num-col" style="color:var(--amber);">−9.8%</td>
+            <td class="num-col" style="color:var(--green); font-weight:700;">+10.6pp</td>
+            <td style="font-size:12px; color:#064e3b;">Volume giảm nhưng active giảm ÍT hơn — tài xế "bám" dịch vụ này nhiều hơn tỷ lệ volume. Dispatch change có tác dụng.</td>
+          </tr>
+          <tr style="background:var(--green-pale);">
+            <td><strong>1H-TMDT</strong></td>
+            <td class="num-col" style="color:var(--red);">−27.1%</td>
+            <td class="num-col" style="color:var(--red);">−25.2%</td>
+            <td class="num-col" style="color:var(--green);">+1.9pp</td>
+            <td style="font-size:12px; color:#064e3b;">Volume giảm, active giảm gần tương đương — cân bằng tốt.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col" style="margin-top:20px;">
+      <div class="card card-sm" style="background: linear-gradient(135deg, var(--red-pale), white);">
+        <div style="font-size:13px; font-weight:700; color:var(--red); margin-bottom:8px;">Vấn đề cốt lõi của Internal/B2B</div>
+        <p style="font-size:13px; color:#7f1d1d; line-height:1.7;">
+          Nhóm BULKY và SAMEDAY-INTERNAL có <strong>volume tăng 18–39%</strong> so với baseline do mở rộng merchant/API partnerships, nhưng <strong>pool tài xế phục vụ các dịch vụ này không tăng tương ứng</strong>. Đây là vấn đề cung ứng cấu trúc, không phải do W5 hay dispatch change tạo ra — W5 chỉ phơi bày điểm yếu sẵn có.
+        </p>
+      </div>
+      <div class="card card-sm" style="background: linear-gradient(135deg, var(--green-pale), white);">
+        <div style="font-size:13px; font-weight:700; color:var(--green); margin-bottom:8px;">ECO và BIKE: Không phải vấn đề cung ứng</div>
+        <p style="font-size:13px; color:#064e3b; line-height:1.7;">
+          Excess driver loss của ECO (−1.2pp) và BIKE (−3.8pp) nằm trong ngưỡng nhiễu bình thường. FR sụt của hai dịch vụ này (nếu có) <strong>không phải do thiếu tài xế</strong> mà có thể do acceptance rate sau dispatch — cần thêm dữ liệu fulfilled orders để xác nhận.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: 1H-TMDT DISPATCH CHANGE IMPACT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div>
+        <div class="section-title">Tác Động Dispatch Change 1H-TMDT (7/5): Amplifier, Không Phải Root Cause</div>
+        <div class="section-desc">Thay đổi rec_rate 1H-TMDT & 1H-TMDT-LOW tăng mạnh — nhưng không làm sụt BIKE/ECO</div>
+      </div>
+    </div>
+
+    <div class="alert alert-amber">
+      <strong>Phát hiện quan trọng:</strong> Từ ngày 7/5, rec_rate của 1H-TMDT tăng từ 49% lên 78.5% (+29.5pp) và 1H-TMDT-LOW từ 52.1% lên 80.2% (+28.2pp). Tuy nhiên, BIKE và ECO duy trì rec_rate 90–91% ổn định. <strong>Không có bằng chứng dispatch change gây tranh chấp tài xế với BIKE/ECO</strong> — hai pool này vận hành độc lập. Vấn đề nằm ở Internal/B2B đang thiếu rec_rate từ W5.
+    </div>
+
+    <div class="card">
+      <div class="card-title">Rec_Rate Daily Trend — 1H-TMDT vs Các Dịch Vụ Khác</div>
+      <svg viewBox="0 0 820 260" style="width:100%;" font-family="Lexend, sans-serif" font-size="10">
+        <defs>
+          <linearGradient id="tmdt_grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#10B981" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#10B981" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Background zones -->
+        <rect x="52" y="10" width="200" height="220" fill="#F9FAFB" rx="4"/>
+        <text x="152" y="22" text-anchor="middle" font-size="9" fill="#9CA3AF" font-weight="600">W3+W4 Baseline</text>
+        <rect x="254" y="10" width="134" height="220" fill="#FEE2E2" opacity="0.4" rx="4"/>
+        <text x="321" y="22" text-anchor="middle" font-size="9" fill="#EF4444" font-weight="600">W5 Holiday</text>
+        <rect x="390" y="10" width="420" height="220" fill="#DBEAFE" opacity="0.25" rx="4"/>
+        <text x="600" y="22" text-anchor="middle" font-size="9" fill="#0E4174" font-weight="600">W6 — Post Dispatch Change (May 7+)</text>
+
+        <!-- May 7 marker -->
+        <line x1="390" y1="10" x2="390" y2="230" stroke="#0E4174" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="393" y="38" font-size="8" fill="#0E4174" font-weight="700">Dispatch</text>
+        <text x="393" y="48" font-size="8" fill="#0E4174" font-weight="700">Change</text>
+
+        <!-- Axes -->
+        <line x1="52" y1="230" x2="810" y2="230" stroke="#E5E7EB"/>
+        <line x1="52" y1="30" x2="52" y2="230" stroke="#E5E7EB"/>
+
+        <!-- Y labels: 0% to 100% scaled in 200px (30 to 230) -->
+        <!-- y = 230 - val * 2 -->
+        <text x="48" y="34" text-anchor="end" fill="#9CA3AF">100%</text>
+        <text x="48" y="84" text-anchor="end" fill="#9CA3AF">75%</text>
+        <text x="48" y="134" text-anchor="end" fill="#9CA3AF">50%</text>
+        <text x="48" y="184" text-anchor="end" fill="#9CA3AF">25%</text>
+        <line x1="52" y1="30" x2="810" y2="30" stroke="#F3F4F6"/>
+        <line x1="52" y1="80" x2="810" y2="80" stroke="#F3F4F6"/>
+        <line x1="52" y1="130" x2="810" y2="130" stroke="#F3F4F6"/>
+        <line x1="52" y1="180" x2="810" y2="180" stroke="#F3F4F6"/>
+
+        <!-- X positions for 20 dates (52 to 810, step ~37.8) -->
+        <!-- i=0..19: x = 52 + i*37.8 -->
+
+        <!-- BIKE line (green, stable at ~90%) -->
+        <!-- y = 230 - val*2 -->
+        <!-- BL: 91.7 90.6 90.0 88.4 87.8 90.9 91.7 90.7 86.4 94.0 | W5: 90.1 83.8 91.3 86.5 87.4 | W6: 90.2 90.0 90.4 93.4 92.3 -->
+        <polyline
+          points="52,46 90,47 128,48 166,53 204,54 242,45 280,46 318,47 356,57 394,42 432,48 470,64 508,47 546,57 584,55 622,49 660,50 698,49 736,43 774,45"
+          fill="none" stroke="#10B981" stroke-width="2" stroke-linejoin="round" opacity="0.9"/>
+
+        <!-- ECO line (teal, 85-91%) -->
+        <!-- 89.3 86.9 86.4 85.6 85.5 90.3 91.8 90.0 85.5 90.5 | 88.7 83.7 85.4 71.8 80.3 | 84.0 83.7 84.2 89.5 89.2 -->
+        <polyline
+          points="52,51 90,56 128,57 166,59 204,59 242,49 280,46 318,50 356,59 394,49 432,53 470,63 508,59 546,86 584,70 622,62 660,63 698,62 736,51 774,51"
+          fill="none" stroke="#0E9BAE" stroke-width="2" stroke-linejoin="round" opacity="0.8" stroke-dasharray="6,3"/>
+
+        <!-- BULKY-INTERNAL line (red, volatile) -->
+        <!-- 64.1 48.7 44.0 49.1 41.5 52.1 53.5 57.5 36.7 48.5 | 45.9 42.1 41.7 20.1 19.6 | 28.6 29.6 22.7 41.8 35.4 -->
+        <polyline
+          points="52,102 90,132 128,142 166,132 204,147 242,126 280,123 318,115 356,157 394,133 432,138 470,146 508,147 546,190 584,191 622,173 660,171 698,185 736,146 774,159"
+          fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linejoin="round"/>
+
+        <!-- 1H-TMDT-LOW line (orange, big jump on May 7) -->
+        <!-- 54.9 53.0 50.4 46.3 38.0 58.0 63.1 60.8 51.1 57.1 | 52.9 46.4 53.1 45.2 48.5 | 75.5 80.3 79.0 84.7 83.1 -->
+        <polyline
+          points="52,120 90,124 128,130 166,138 204,154 242,114 280,104 318,108 356,128 394,116 432,124 470,137 508,124 546,140 584,133 622,79 660,70 698,72 736,60 774,63"
+          fill="none" stroke="#FF7F32" stroke-width="2.5" stroke-linejoin="round"/>
+
+        <!-- 2H-INTERNAL line (purple, crashed) -->
+        <!-- 73.1 71.7 69.5 64.5 55.0 77.2 79.8 72.8 66.1 71.7 | 64.9 53.1 58.1 45.1 43.7 | 52.2 49.6 41.4 52.9 76.3 -->
+        <polyline
+          points="52,84 90,87 128,91 166,101 204,120 242,76 280,70 318,83 356,97 394,87 432,100 470,124 508,114 546,140 584,143 622,126 660,131 698,147 736,124 774,77"
+          fill="none" stroke="#7C3AED" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="4,2" opacity="0.8"/>
+
+        <!-- Legend -->
+        <line x1="480" y1="245" x2="500" y2="245" stroke="#10B981" stroke-width="2"/>
+        <text x="504" y="248" fill="#374151">BIKE</text>
+        <line x1="540" y1="245" x2="560" y2="245" stroke="#0E9BAE" stroke-width="2" stroke-dasharray="6,3"/>
+        <text x="564" y="248" fill="#374151">ECO</text>
+        <line x1="600" y1="245" x2="620" y2="245" stroke="#FF7F32" stroke-width="2.5"/>
+        <text x="624" y="248" fill="#374151">1H-TMDT-LOW</text>
+        <line x1="720" y1="245" x2="740" y2="245" stroke="#EF4444" stroke-width="2.5"/>
+        <text x="744" y="248" fill="#374151">BULKY-INT</text>
+
+        <!-- X date ticks -->
+        <text x="52" y="244" text-anchor="middle" font-size="8" fill="#9CA3AF" transform="rotate(-45,52,244)">4/14</text>
+        <text x="242" y="244" text-anchor="middle" font-size="8" fill="#9CA3AF" transform="rotate(-45,242,244)">4/22</text>
+        <text x="394" y="244" text-anchor="middle" font-size="8" fill="#0E4174" font-weight="700" transform="rotate(-45,394,244)">4/28</text>
+        <text x="546" y="244" text-anchor="middle" font-size="8" fill="#EF4444" font-weight="700" transform="rotate(-45,546,244)">5/5</text>
+        <text x="622" y="244" text-anchor="middle" font-size="8" fill="#0E4174" font-weight="700" transform="rotate(-45,622,244)">5/7</text>
+        <text x="774" y="244" text-anchor="middle" font-size="8" fill="#0E4174" transform="rotate(-45,774,244)">5/13</text>
+      </svg>
+
+      <div class="three-col" style="margin-top:16px;">
+        <div style="background:var(--green-pale); border-radius:1rem; padding:14px;">
+          <div style="font-size:11px; font-weight:700; color:var(--green); margin-bottom:4px;">BIKE &amp; ECO — Không bị ảnh hưởng</div>
+          <div style="font-size:12px; color:#064e3b;">Rec_rate duy trì 84–93% xuyên suốt. Không có sự sụt giảm có tương quan với W5 hay May 7.</div>
+        </div>
+        <div style="background:var(--orange-pale); border-radius:1rem; padding:14px;">
+          <div style="font-size:11px; font-weight:700; color:var(--orange); margin-bottom:4px;">1H-TMDT-LOW — Tăng mạnh May 7+</div>
+          <div style="font-size:12px; color:#7c2d12;">52.1% → 80.2% (+28.2pp). Dispatch change có hiệu quả. Tuy nhiên đây là dịch vụ tách biệt không cạnh tranh trực tiếp pool tài xế BIKE/ECO.</div>
+        </div>
+        <div style="background:var(--red-pale); border-radius:1rem; padding:14px;">
+          <div style="font-size:11px; font-weight:700; color:var(--red); margin-bottom:4px;">BULKY-INTERNAL — Chưa phục hồi</div>
+          <div style="font-size:12px; color:#7f1d1d;">Từ 48.8% BL → đáy 20% W5 → W6 chỉ 22–42% (trung bình 29.9%). Chưa về được baseline sau W5.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1H-TMDT Share of Dispatch -->
+    <div class="card">
+      <div class="card-title">1H-TMDT Share trong Tổng Dispatch Recommendations</div>
+      <div style="display:flex; gap:32px; align-items:center; flex-wrap:wrap;">
+        <!-- Baseline share -->
+        <div style="text-align:center;">
+          <div style="font-size:11px; font-weight:600; color:var(--gray400); text-transform:uppercase; margin-bottom:8px;">Baseline W3+W4</div>
+          <svg viewBox="0 0 120 120" width="120" height="120">
+            <circle cx="60" cy="60" r="45" fill="none" stroke="#E5E7EB" stroke-width="12"/>
+            <!-- 1H-TMDT+LOW: ~13.2% of total rec, shown as slice -->
+            <circle cx="60" cy="60" r="45" fill="none" stroke="#0E4174" stroke-width="12"
+              stroke-dasharray="37.3 245.7" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+            <text x="60" y="56" text-anchor="middle" font-family="'Space Mono',monospace" font-size="16" font-weight="700" fill="#0E4174">10.2%</text>
+            <text x="60" y="72" text-anchor="middle" font-size="9" fill="#9CA3AF">of total rec</text>
+          </svg>
+          <div style="font-size:11px; color:var(--gray600); margin-top:4px;">1H-TMDT + 1H-TMDT-LOW</div>
+        </div>
+        <div style="font-size:28px; color:var(--gray400);">→</div>
+        <!-- W5 share -->
+        <div style="text-align:center;">
+          <div style="font-size:11px; font-weight:600; color:var(--red); text-transform:uppercase; margin-bottom:8px;">W5 Holiday</div>
+          <svg viewBox="0 0 120 120" width="120" height="120">
+            <circle cx="60" cy="60" r="45" fill="none" stroke="#E5E7EB" stroke-width="12"/>
+            <circle cx="60" cy="60" r="45" fill="none" stroke="#EF4444" stroke-width="12"
+              stroke-dasharray="28.6 254.4" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+            <text x="60" y="56" text-anchor="middle" font-family="'Space Mono',monospace" font-size="16" font-weight="700" fill="#EF4444">7.8%</text>
+            <text x="60" y="72" text-anchor="middle" font-size="9" fill="#9CA3AF">of total rec</text>
+          </svg>
+          <div style="font-size:11px; color:var(--gray600); margin-top:4px;">Giảm trong W5 do rec_rate thấp</div>
+        </div>
+        <div style="font-size:28px; color:var(--gray400);">→</div>
+        <!-- W6 share -->
+        <div style="text-align:center;">
+          <div style="font-size:11px; font-weight:600; color:var(--blue); text-transform:uppercase; margin-bottom:8px;">W6 Post-Change</div>
+          <svg viewBox="0 0 120 120" width="120" height="120">
+            <circle cx="60" cy="60" r="45" fill="none" stroke="#E5E7EB" stroke-width="12"/>
+            <circle cx="60" cy="60" r="45" fill="none" stroke="#FF7F32" stroke-width="12"
+              stroke-dasharray="58.1 224.9" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+            <text x="60" y="56" text-anchor="middle" font-family="'Space Mono',monospace" font-size="16" font-weight="700" fill="#FF7F32">16.1%</text>
+            <text x="60" y="72" text-anchor="middle" font-size="9" fill="#9CA3AF">of total rec</text>
+          </svg>
+          <div style="font-size:11px; color:var(--gray600); margin-top:4px;">Tăng mạnh sau dispatch change</div>
+        </div>
+        <div style="flex:1; min-width:240px;">
+          <div style="background:var(--orange-pale); border-radius:1rem; padding:16px; border:1px solid #fed7aa;">
+            <div style="font-size:13px; font-weight:700; color:var(--orange); margin-bottom:8px;">Ý nghĩa của sự thay đổi</div>
+            <p style="font-size:12px; color:#7c2d12; line-height:1.7;">
+              1H-TMDT+LOW chiếm <strong>16.1%</strong> tổng thông báo dispatch trong W6, tăng từ 10.2% ở baseline và 7.8% ở W5. Điều này có nghĩa là mỗi tài xế nhận thêm thông báo 1H-TMDT — nhưng bằng chứng cho thấy đây là <strong>pool tài xế riêng biệt</strong> và không cạnh tranh trực tiếp với BIKE/ECO.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: TIER ANALYSIS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div>
+        <div class="section-title">Phân Tích Tier Tài Xế — Sự Dịch Chuyển Giữa Dịch Vụ</div>
+        <div class="section-desc">FT/PT/return per service — W6 vs Baseline per ngày</div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0; overflow:hidden;">
+      <table>
+        <thead>
+          <tr>
+            <th>Dịch vụ / Tier</th>
+            <th class="num-col">FT BL→W6</th>
+            <th class="num-col">PT BL→W6</th>
+            <th class="num-col">NIM BL→W6</th>
+            <th class="num-col">NLM BL→W6</th>
+            <th class="num-col">Return BL→W6</th>
+            <th>Nhận xét</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:var(--green-pale);">
+            <td><strong>BIKE</strong></td>
+            <td class="num-col" style="color:var(--green);">6,560→6,613 (+0.8%)</td>
+            <td class="num-col" style="color:var(--green);">6,403→6,680 (+4.3%)</td>
+            <td class="num-col" style="color:var(--green);">553→570 (+3.1%)</td>
+            <td class="num-col" style="color:var(--green);">471→489 (+3.7%)</td>
+            <td class="num-col" style="color:var(--green);">6,529→6,998 (+7.2%)</td>
+            <td style="font-size:12px; color:#064e3b;"><strong>Tất cả tier tăng.</strong> BIKE không bị mất tài xế.</td>
+          </tr>
+          <tr>
+            <td><strong>ECO</strong></td>
+            <td class="num-col" style="color:var(--red);">1,824→1,775 (−2.7%)</td>
+            <td class="num-col">1,715→1,718 (0%)</td>
+            <td class="num-col">168→167 (−0.6%)</td>
+            <td class="num-col" style="color:var(--amber);">154→140 (−9.1%)</td>
+            <td class="num-col" style="color:var(--green);">2,188→2,214 (+1.2%)</td>
+            <td style="font-size:12px; color:var(--gray600);">FT giảm nhẹ, PT ổn định. Không có sự dịch chuyển lớn.</td>
+          </tr>
+          <tr style="background:var(--amber-pale);">
+            <td><strong>1H-TMDT</strong></td>
+            <td class="num-col" style="color:var(--red);">177→139 (−21.6%)</td>
+            <td class="num-col" style="color:var(--red);">204→156 (−23.6%)</td>
+            <td class="num-col" style="color:var(--red);">21→12 (−43.0%)</td>
+            <td class="num-col" style="color:var(--red);">14→11 (−20.0%)</td>
+            <td class="num-col" style="color:var(--red);">120→83 (−30.5%)</td>
+            <td style="font-size:12px; color:#78350f;">Tất cả tier giảm mạnh dù 1H-TMDT rec_rate tăng. Volume dịch vụ này giảm −27.1% → ít tài xế cần hơn.</td>
+          </tr>
+          <tr style="background:var(--amber-pale);">
+            <td><strong>1H-TMDT-LOW</strong></td>
+            <td class="num-col" style="color:var(--amber);">1,032→999 (−3.2%)</td>
+            <td class="num-col" style="color:var(--red);">1,298→1,164 (−10.3%)</td>
+            <td class="num-col" style="color:var(--red);">138→101 (−27.1%)</td>
+            <td class="num-col">106→104 (−2.5%)</td>
+            <td class="num-col" style="color:var(--red);">1,567→1,369 (−12.6%)</td>
+            <td style="font-size:12px; color:#78350f;">Active tuyệt đối giảm — nhưng act/vol tăng +13.3% vì volume giảm nhanh hơn active.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-blue" style="margin-top:16px;">
+      <strong>Kết luận tier:</strong> Không có bằng chứng tài xế FT/PT "di cư" từ BIKE/ECO sang 1H-TMDT-LOW. BIKE có tất cả tier tăng; ECO gần ổn định. Sự giảm active của 1H-TMDT và 1H-TMDT-LOW là do volume dịch vụ này giảm tự nhiên sau W5, không phải do dispatch change tạo ra bất ổn tier.
+    </div>
+  </div>
+
+  <!-- SECTION 6: ROOT CAUSE SUMMARY -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div>
+        <div class="section-title">Tổng Hợp Root Cause — 3 Lớp Nguyên Nhân</div>
+        <div class="section-desc">Phân tầng từ trigger đến structural gap</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Chuỗi Nhân Quả — FR Decline System-Wide</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--red);"></div>
+          <div class="tl-date">W5 · Apr 28 – May 6 — PRIMARY TRIGGER</div>
+          <div class="tl-text">
+            <strong>Holiday-rebound demand surge:</strong> Vol tổng hệ thống tăng +8.3% so với baseline. Đặc biệt Internal/B2B: BULKY +38.9%, SAMEDAY +18.5%, 2H-INT tăng đột biến ngắn. Hệ thống dispatch chưa điều phối kịp → rec_rate sập: BULKY 48.8%→20%, 2H-INT 69%→43%, SAMEDAY 56%→35%. <br>
+            <span style="color:var(--red); font-weight:600;">Kết quả: FR nhóm Internal/B2B sụt trong W5 và chưa hồi phục đủ sang W6.</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--amber);"></div>
+          <div class="tl-date">Cấu trúc — Structural Supply Gap</div>
+          <div class="tl-text">
+            <strong>Volume Internal/B2B tăng dài hạn nhưng pool tài xế không tăng tương ứng:</strong> BULKY-INTERNAL W6 vol (+38.9% vs BL) nhưng active chỉ +9.4% — excess -29.5pp. Đây là vấn đề không do W5 tạo ra, W5 chỉ khuếch đại. SAMEDAY tương tự: vol +18.5% nhưng active +3.9%.
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--orange);"></div>
+          <div class="tl-date">May 7+ — AMPLIFYING FACTOR</div>
+          <div class="tl-text">
+            <strong>1H-TMDT dispatch change:</strong> rec_rate tăng +29–31pp. Share thông báo 1H-TMDT trong tổng hệ thống tăng từ 10.2% lên 16.1%. Điều này tốt cho 1H-TMDT (act/vol +13.3%) nhưng <strong>không phải nguyên nhân gây FR sụt cho BIKE/ECO</strong> — hai dịch vụ này duy trì rec_rate 90–91% ổn định, tất cả tier active tăng. Nếu có ảnh hưởng, là kéo chậm phục hồi rec_rate của Internal/B2B (tài xế FT/PT vốn có thể serve cả hai nhóm).
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--blue);"></div>
+          <div class="tl-date">W6 May 7–13 — Trạng thái hiện tại</div>
+          <div class="tl-text">
+            System act/vol: 0.582 (vs BL 0.577 — gần phục hồi). Nhưng <strong>Internal/B2B vẫn suy yếu</strong>: 2H-INT 0.487 (−23.5%), BULKY-INT 0.485 (−21.2%). Rec_rate Internal/B2B đang ở 22–52% so với baseline 49–73%. BIKE/ECO: act/vol 0.629/0.664 — gần như ổn định.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Causal chain visual -->
+    <div class="card">
+      <div class="card-title">Flow Tóm Tắt Nhân Quả</div>
+      <div style="display:flex; align-items:stretch; gap:8px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:140px; background:var(--red-pale); border-radius:1.25rem; padding:16px; border:1px solid #fca5a5;">
+          <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:var(--red); margin-bottom:6px;">Primary Trigger</div>
+          <div style="font-size:13px; font-weight:700; color:#7f1d1d;">W5 Demand Surge</div>
+          <div style="font-size:11px; color:#7f1d1d; margin-top:4px;">Vol +8.3% toàn hệ thống<br>Internal/B2B +18–39%</div>
+        </div>
+        <div style="display:flex; align-items:center; font-size:20px; color:var(--gray400); padding:0 4px;">→</div>
+        <div style="flex:1; min-width:140px; background:var(--amber-pale); border-radius:1.25rem; padding:16px; border:1px solid #fde68a;">
+          <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:var(--amber); margin-bottom:6px;">Immediate Effect</div>
+          <div style="font-size:13px; font-weight:700; color:#78350f;">Rec_rate Crash</div>
+          <div style="font-size:11px; color:#78350f; margin-top:4px;">BULKY: 49%→20%<br>2H-INT: 69%→43%</div>
+        </div>
+        <div style="display:flex; align-items:center; font-size:20px; color:var(--gray400); padding:0 4px;">→</div>
+        <div style="flex:1; min-width:140px; background:var(--amber-pale); border-radius:1.25rem; padding:16px; border:1px solid #fde68a;">
+          <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:var(--amber); margin-bottom:6px;">Structural Gap</div>
+          <div style="font-size:13px; font-weight:700; color:#78350f;">Supply Deficit</div>
+          <div style="font-size:11px; color:#78350f; margin-top:4px;">BULKY excess −29.5pp<br>SAMEDAY excess −14.5pp</div>
+        </div>
+        <div style="display:flex; align-items:center; font-size:20px; color:var(--gray400); padding:0 4px;">+</div>
+        <div style="flex:1; min-width:140px; background:var(--orange-pale); border-radius:1.25rem; padding:16px; border:1px solid #fed7aa;">
+          <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:var(--orange); margin-bottom:6px;">Amplifier</div>
+          <div style="font-size:13px; font-weight:700; color:#7c2d12;">1H-TMDT Dispatch↑</div>
+          <div style="font-size:11px; color:#7c2d12; margin-top:4px;">Rec_rate +29pp<br>Share 10%→16%</div>
+        </div>
+        <div style="display:flex; align-items:center; font-size:20px; color:var(--gray400); padding:0 4px;">→</div>
+        <div style="flex:1; min-width:140px; background:var(--red-pale); border-radius:1.25rem; padding:16px; border:1px solid #fca5a5;">
+          <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:var(--red); margin-bottom:6px;">Outcome</div>
+          <div style="font-size:13px; font-weight:700; color:#7f1d1d;">FR Sụt Kéo Dài</div>
+          <div style="font-size:11px; color:#7f1d1d; margin-top:4px;">Internal/B2B act/vol<br>−12 đến −24% vs BL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: ACTIONS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div>
+        <div class="section-title">Khuyến Nghị Hành Động — Ưu Tiên Theo Mức Độ Khẩn Cấp</div>
+        <div class="section-desc">6 actions, phân loại P1 (ngay)/P2 (tuần này)/P3 (tháng này)</div>
+      </div>
+    </div>
+
+    <div class="action-grid">
+      <div class="action-item" style="border-color:#fca5a5; border-width:2px;">
+        <div class="action-priority p1">P1 · Ngay hôm nay</div>
+        <div class="action-title">Khẩn cấp: Boost rec_rate BULKY-INTERNAL &amp; 2H-INTERNAL</div>
+        <div class="action-desc">
+          Rec_rate của BULKY hiện chỉ 22–30% — thấp hơn 50% so với baseline. Cần review lý do tại sao dispatch không cover: thiếu tài xế trong zone, SLA quá chặt, hay bug dispatch? Tạm thời có thể nới zone bán kính hoặc hạ SLA threshold để tăng tỷ lệ matched dispatch.
+          <br><br>
+          <code style="font-size:10px; background:#f1f5f9; padding:4px 8px; border-radius:4px; display:block; margin-top:6px; color:#334155;">
+            -- Check zone coverage gap<br>
+            SELECT hour, COUNT(DISTINCT driver_id) as avail,<br>
+            &nbsp;&nbsp;rec_rate, requested_order<br>
+            FROM dispatch_logs<br>
+            WHERE service IN ('BULKY-INTERNAL','2H-INTERNAL')<br>
+            &nbsp;&nbsp;AND date >= '2026-05-07'<br>
+            GROUP BY 1,2,3,4 ORDER BY rec_rate ASC LIMIT 20
+          </code>
+        </div>
+      </div>
+
+      <div class="action-item" style="border-color:#fca5a5; border-width:2px;">
+        <div class="action-priority p1">P1 · Ngay hôm nay</div>
+        <div class="action-title">Điều tra: Tại sao SAMEDAY-INTERNAL vol tăng +18% nhưng active chỉ +3.9%?</div>
+        <div class="action-desc">
+          Đây là dấu hiệu volume merchant mở rộng (API, B2B contracts) nhưng pool tài xế tier FT/Hub không được onboard thêm. Cần cross-check với Sales/BD team: merchant nào mới lên volume? Có phải địa bàn mới không có tài xế?
+          <br><br>
+          <code style="font-size:10px; background:#f1f5f9; padding:4px 8px; border-radius:4px; display:block; margin-top:6px; color:#334155;">
+            SELECT merchant_id, SUM(requested) as vol,<br>
+            &nbsp;&nbsp;AVG(fr) as fr, district<br>
+            FROM orders<br>
+            WHERE service = 'SAMEDAY-INTERNAL'<br>
+            &nbsp;&nbsp;AND date BETWEEN '2026-05-07' AND '2026-05-13'<br>
+            GROUP BY 1,4 ORDER BY vol DESC LIMIT 20
+          </code>
+        </div>
+      </div>
+
+      <div class="action-item">
+        <div class="action-priority p2">P2 · Tuần này</div>
+        <div class="action-title">Supply Build: Tăng tài xế FT/Hub cho Internal/B2B services</div>
+        <div class="action-desc">
+          BULKY-INTERNAL cần thêm tài xế chuyên biệt để xử lý đơn hàng lớn (+38.9% volume vs baseline). Cần activate thêm tài xế trong tier FT/Hub có xác nhận đủ điều kiện BULKY, đặc biệt giờ cao điểm 10AM–3PM khi volume BULKY tập trung.
+        </div>
+      </div>
+
+      <div class="action-item">
+        <div class="action-priority p2">P2 · Tuần này</div>
+        <div class="action-title">Monitor: Theo dõi daily act/vol và rec_rate 5 dịch vụ Critical/Degraded</div>
+        <div class="action-desc">
+          Setup daily alert khi rec_rate &lt; 40% cho BULKY/2H/SAMEDAY-INTERNAL. Cần dashboard real-time phân biệt được vol change vs act change để phát hiện sớm. Target W6+: BULKY rec_rate ≥ 40%, SAMEDAY ≥ 50%, 2H-INT ≥ 60%.
+        </div>
+      </div>
+
+      <div class="action-item">
+        <div class="action-priority p3">P3 · Tháng này</div>
+        <div class="action-title">Tách biệt driver pool: Internal/B2B tier riêng với incentive cụ thể</div>
+        <div class="action-desc">
+          Kết quả phân tích cho thấy BULKY và SAMEDAY-INTERNAL cần pool tài xế chuyên biệt, không thể dùng chung pool với BIKE/ECO. Thiết kế tier "Hub/Enterprise Driver" với earning floor riêng, locked vào địa bàn merchant B2B, giảm competition với BIKE pool.
+        </div>
+      </div>
+
+      <div class="action-item">
+        <div class="action-priority p3">P3 · Tháng này</div>
+        <div class="action-title">1H-TMDT: Đánh giá lại thay đổi dispatch — hiệu quả nhưng cần giám sát</div>
+        <div class="action-desc">
+          Dispatch change 7/5 đã hiệu quả với 1H-TMDT-LOW (act/vol +13.3%, rec_rate +28pp). Tuy nhiên share dispatch tăng từ 10.2% lên 16.1% — cần theo dõi xem có crowding-out tài xế FT phục vụ Internal/B2B hay không trong 2 tuần tới. Nếu act/vol Internal/B2B không hồi phục, xem xét giảm rec_rate 1H-TMDT-LOW về 65–70%.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary table -->
+  <div class="section">
+    <div class="card" style="background:var(--blue); color:white; border:none;">
+      <div style="font-size:13px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; opacity:0.7; margin-bottom:16px;">Tóm tắt kết luận cuối</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; font-size:13px; line-height:1.8;">
+        <div>
+          <div style="font-size:11px; font-weight:700; opacity:0.6; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px;">Những gì đã xảy ra</div>
+          <ul style="list-style:none; padding:0;">
+            <li style="padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.1);">✗ FR sụt <strong>KHÔNG</strong> chủ yếu do BIKE/ECO</li>
+            <li style="padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.1);">✓ W5 holiday surge là trigger chính cho toàn hệ thống</li>
+            <li style="padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.1);">✓ Internal/B2B bị hit nặng nhất: 2H-INT −23.5%, BULKY −21.2%</li>
+            <li style="padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.1);">✓ BIKE/ECO act/vol gần như ổn định (−1.2% đến −3.6%)</li>
+            <li style="padding:4px 0;">✓ 1H-TMDT-LOW là amplifier, không phải root cause</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:11px; font-weight:700; opacity:0.6; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px;">Ưu tiên xử lý</div>
+          <ul style="list-style:none; padding:0;">
+            <li style="padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.1);"><span style="background:#EF4444; border-radius:4px; padding:1px 6px; font-size:10px; margin-right:6px;">P1</span>Fix rec_rate BULKY-INTERNAL (29.9% ← cần ≥45%)</li>
+            <li style="padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.1);"><span style="background:#EF4444; border-radius:4px; padding:1px 6px; font-size:10px; margin-right:6px;">P1</span>Investigate SAMEDAY-INTERNAL volume growth gap</li>
+            <li style="padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.1);"><span style="background:#F59E0B; border-radius:4px; padding:1px 6px; font-size:10px; margin-right:6px;">P2</span>Supply build: FT/Hub cho B2B services</li>
+            <li style="padding:4px 0;"><span style="background:#0E4174; border-radius:4px; padding:1px 6px; font-size:10px; margin-right:6px;">P3</span>Enterprise Driver tier tách biệt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<div class="page-footer">
+  <div><strong>Ahamove Driver Management</strong> · FR Decline Analysis · SGN · May 2026</div>
+  <div>Prepared by: Driver Management Leader · Data: SGN only · Baseline: W3+W4 (Apr 14–27)</div>
+  <div>Loại trừ ngày lễ: Apr 30 – May 3 (Giải phóng / Lao động)</div>
+</div>
+
+</body>
+</html>
