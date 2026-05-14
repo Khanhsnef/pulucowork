@@ -229,7 +229,7 @@
       <div class="hero-stat-label">Module</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-num">20</div>
+      <div class="hero-stat-num">26</div>
       <div class="hero-stat-label">Bài học</div>
     </div>
     <div class="hero-stat">
@@ -429,6 +429,84 @@
           </div>
         </div>
 
+        <!-- SETUP M1 -->
+        <div class="lesson" id="lesson1-setup">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">⚙️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">⚙️ Setup & Settings — Claude Web</div>
+              <div class="lesson-subtitle">Cấu hình tất cả cài đặt ngay từ đầu để dùng đúng cách <span class="badge badge-important">Setup</span></div>
+            </div>
+            <div class="lesson-time">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ cài xong</strong>
+              Tất cả settings cần thiết cho Claude Web: model, giao diện, Custom Instructions và Memory — dùng ngay không cần chỉnh lại.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">📍 Tìm Settings ở đâu?</p>
+            <div style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:.75rem;padding:1rem;font-size:.84rem;margin-bottom:1rem">
+              Góc dưới trái → nhấn <strong>avatar/tên của bạn</strong> → chọn <strong>"Settings"</strong>. Hoặc nhấn biểu tượng ⚙️ nếu có trên giao diện.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">1 — Chọn Model mặc định</p>
+            <table class="cmd-table">
+              <thead><tr><th>Model</th><th>Khi nào dùng</th><th>Tốc độ</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Claude Haiku</strong></td><td>Câu hỏi nhanh, tóm tắt ngắn, phân loại</td><td>⚡ Nhanh nhất</td></tr>
+                <tr><td><strong>Claude Sonnet</strong> ⭐</td><td>Hầu hết mọi tác vụ — cân bằng tốt nhất</td><td>✅ Tốt nhất</td></tr>
+                <tr><td><strong>Claude Opus</strong></td><td>Phân tích phức tạp, chiến lược, nghiên cứu sâu</td><td>🐢 Chậm hơn</td></tr>
+              </tbody>
+            </table>
+            <div class="tip-box" style="margin:.6rem 0 1rem">
+              <div class="tip-label">💡 Khuyến nghị</div>
+              Dùng <strong>Sonnet làm default</strong>. Khi cần phân tích cực phức tạp mới chuyển Opus. Haiku dùng khi cần trả lời nhiều câu nhanh.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">2 — Giao diện & Ngôn ngữ</p>
+            <ul class="steps-list">
+              <li><div class="step-num">→</div><div class="step-content">Settings → <strong>Appearance</strong>: Chọn Dark mode (bảo vệ mắt khi làm đêm) hoặc Light mode</div></li>
+              <li><div class="step-num">→</div><div class="step-content">Settings → <strong>Language</strong>: Đặt thành <strong>Vietnamese</strong> nếu muốn UI tiếng Việt (không ảnh hưởng ngôn ngữ Claude trả lời)</div></li>
+            </ul>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">3 — Custom Instructions (quan trọng nhất!)</p>
+            <p style="font-size:.84rem;color:var(--gray-700);margin-bottom:.6rem">Custom Instructions = hướng dẫn Claude áp dụng cho <strong>mọi cuộc trò chuyện</strong>, không chỉ một project. Đây là nơi bạn đặt những quy tắc cơ bản nhất.</p>
+            <div style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:.75rem;padding:1rem;margin-bottom:.75rem;font-size:.83rem">
+              <p style="font-weight:700;margin-bottom:.4rem">📍 Vào đâu?</p>
+              Settings → <strong>"Custom Instructions"</strong> (hoặc "Personalization") → 2 ô:
+              <ul style="list-style:none;margin-top:.5rem;display:flex;flex-direction:column;gap:.3rem">
+                <li>• <strong>Ô trên:</strong> "What would you like Claude to know about you?" → Điền về bạn là ai</li>
+                <li>• <strong>Ô dưới:</strong> "How would you like Claude to respond?" → Điền cách Claude nên phản hồi</li>
+              </ul>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Ô 1 — Về tôi (copy và chỉnh theo bạn)</div>
+              <div class="code-line">Tôi là [chức vụ] tại [công ty], làm việc trong lĩnh vực [ngành].</div>
+              <div class="code-line">Chuyên môn: [liệt kê 2-3 điểm]. Tôi đã quen với [thuật ngữ/khái niệm].</div>
+              <div class="code-line">Mục tiêu dùng AI: phân tích data, soạn thảo nội dung, nghiên cứu.</div>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Ô 2 — Cách phản hồi (copy và chỉnh theo bạn)</div>
+              <div class="code-line">Luôn trả lời bằng tiếng Việt. Dùng tiếng Anh cho thuật ngữ chuyên ngành.</div>
+              <div class="code-line">Kết luận trước, chi tiết sau. Dùng bảng khi so sánh nhiều items.</div>
+              <div class="code-line">Không lặp lại câu hỏi. Không viết summary thừa ở cuối.</div>
+              <div class="code-line">Khi thiếu data, ghi rõ "[Cần xác nhận]" thay vì đoán mò.</div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">4 — Memory (Bộ nhớ của Claude)</p>
+            <ul class="steps-list">
+              <li><div class="step-num">→</div><div class="step-content">Settings → <strong>"Memory"</strong>: Bật ON → Claude sẽ tự nhớ thông tin bạn chia sẻ qua các cuộc trò chuyện</div></li>
+              <li><div class="step-num">→</div><div class="step-content">Xem và xóa ký ức: Settings → Memory → "Manage memories" → xóa những gì bạn không muốn Claude nhớ</div></li>
+            </ul>
+            <div class="warning-box" style="margin-top:.5rem">
+              <div class="warn-label">⚠️ Lưu ý</div>
+              Memory lưu thông tin cá nhân bạn chia sẻ. Nếu dùng máy chung hoặc lo ngại privacy, nên tắt Memory.
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -588,6 +666,84 @@
           </div>
         </div>
 
+        <!-- SETUP M2 -->
+        <div class="lesson" id="lesson2-setup">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">⚙️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">⚙️ Setup & Settings — Projects</div>
+              <div class="lesson-subtitle">Cấu hình Project đúng cách để Claude hoạt động như chuyên gia <span class="badge badge-important">Setup</span></div>
+            </div>
+            <div class="lesson-time">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ cài xong</strong>
+              Project settings hoàn chỉnh: tên, instructions chuẩn, knowledge files, model và sharing — sẵn sàng dùng ngay.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">📍 Tìm Project Settings ở đâu?</p>
+            <div style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:.75rem;padding:1rem;font-size:.84rem;margin-bottom:1rem">
+              Sidebar trái → chọn Project → nhấn biểu tượng <strong>⚙️ Settings</strong> hoặc <strong>dấu "..."</strong> cạnh tên project → "Edit project"
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">1 — Project Info (Thông tin cơ bản)</p>
+            <ul class="steps-list">
+              <li><div class="step-num">→</div><div class="step-content"><strong>Name:</strong> Đặt tên rõ, có thể dùng emoji. Ví dụ: "📊 Driver Ops 2026" thay vì "Project 1"</div></li>
+              <li><div class="step-num">→</div><div class="step-content"><strong>Description:</strong> Mô tả ngắn mục đích project — giúp bạn nhớ khi có nhiều projects</div></li>
+              <li><div class="step-num">→</div><div class="step-content"><strong>Default model:</strong> Chọn Sonnet cho hầu hết dùng. Nếu project cần phân tích rất sâu, chọn Opus</div></li>
+            </ul>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">2 — Instructions (Trái tim của Project)</p>
+            <p style="font-size:.84rem;color:var(--gray-700);margin-bottom:.6rem">Instructions là hướng dẫn Claude đọc <strong>trước mỗi lần trả lời</strong> trong project. Viết càng chi tiết, Claude làm việc càng ít phải hỏi lại.</p>
+            <div class="code-block">
+              <div class="code-label">Template Instructions chuẩn — copy & chỉnh</div>
+              <div class="code-line"><span class="code-hl">## Vai trò</span></div>
+              <div class="code-line">Bạn là [mô tả vai trò cụ thể] hỗ trợ [tên tôi] trong project [tên project].</div>
+              <div class="code-line" style="margin-top:.4rem"><span class="code-hl">## Ngữ cảnh</span></div>
+              <div class="code-line">- Công ty/team: [...]</div>
+              <div class="code-line">- Mục tiêu project: [...]</div>
+              <div class="code-line">- Đối tượng output: [report cho leadership / email cho tài xế / ...]</div>
+              <div class="code-line" style="margin-top:.4rem"><span class="code-hl">## Quy tắc Output</span></div>
+              <div class="code-line">- Ngôn ngữ: tiếng Việt, thuật ngữ giữ tiếng Anh</div>
+              <div class="code-line">- Format ưu tiên: bảng &gt; bullet &gt; văn xuôi</div>
+              <div class="code-line">- Luôn có mục "Khuyến nghị" ở cuối phân tích</div>
+              <div class="code-line" style="margin-top:.4rem"><span class="code-hl">## Tài liệu tham chiếu có sẵn</span></div>
+              <div class="code-line">- [tên file 1]: [mô tả nội dung]</div>
+              <div class="code-line">- [tên file 2]: [mô tả nội dung]</div>
+            </div>
+            <div class="tip-box" style="margin:.6rem 0 1rem">
+              <div class="tip-label">💡 Mẹo quan trọng</div>
+              Thêm mục <strong>"Tài liệu tham chiếu có sẵn"</strong> và liệt kê từng file bạn đã upload kèm mô tả. Claude sẽ tự động tham chiếu đúng file thay vì phải nhắc từng lần.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">3 — Knowledge Files (Thư viện tài liệu)</p>
+            <table class="cmd-table">
+              <thead><tr><th>Loại file</th><th>Hỗ trợ</th><th>Ghi chú</th></tr></thead>
+              <tbody>
+                <tr><td>PDF</td><td>✅ Tốt nhất</td><td>Đọc được toàn bộ nội dung, kể cả bảng biểu</td></tr>
+                <tr><td>Word (.docx)</td><td>✅</td><td>Format giữ nguyên</td></tr>
+                <tr><td>Excel (.xlsx)</td><td>⚠️ Hạn chế</td><td>Đọc được text, không tính được công thức</td></tr>
+                <tr><td>TXT / Markdown</td><td>✅ Tốt nhất</td><td>Nhẹ, Claude đọc nhanh nhất</td></tr>
+                <tr><td>Ảnh (PNG/JPG)</td><td>✅</td><td>Claude đọc được text trong ảnh, biểu đồ</td></tr>
+              </tbody>
+            </table>
+            <ul class="steps-list" style="margin-top:.75rem">
+              <li><div class="step-num">→</div><div class="step-content"><strong>Thêm file:</strong> Project Settings → "Knowledge" → "Add content" → Upload file hoặc paste text</div></li>
+              <li><div class="step-num">→</div><div class="step-content"><strong>Giới hạn:</strong> Tổng dung lượng ~200MB/project. Nếu quá nhiều file, tạo project riêng theo chủ đề</div></li>
+              <li><div class="step-num">→</div><div class="step-content"><strong>Cập nhật file:</strong> Xóa file cũ → upload file mới. Claude đọc phiên bản mới nhất ngay</div></li>
+            </ul>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">4 — Sharing Settings (Pro)</p>
+            <ul class="steps-list">
+              <li><div class="step-num">→</div><div class="step-content">Project Settings → <strong>"Sharing"</strong> → "Invite people" → Nhập email đồng nghiệp → Chọn quyền: View hoặc Edit</div></li>
+              <li><div class="step-num">→</div><div class="step-content"><strong>View:</strong> Đồng nghiệp đọc được Instructions + Knowledge, chat được trong project</div></li>
+              <li><div class="step-num">→</div><div class="step-content"><strong>Edit:</strong> Đồng nghiệp chỉnh sửa được Instructions và upload thêm Knowledge</div></li>
+            </ul>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -726,6 +882,98 @@
               <div class="success-label">✅ Kiểm tra thành công</div>
               Claude liệt kê được tên file thực từ Drive của bạn = kết nối thành công! Chúc mừng, bạn vừa mở khóa một sức mạnh hoàn toàn mới.
             </div>
+          </div>
+        </div>
+
+        <!-- SETUP M3 -->
+        <div class="lesson" id="lesson3-setup">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">⚙️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">⚙️ Setup & Settings — Claude Desktop</div>
+              <div class="lesson-subtitle">Cấu hình app, MCP servers và file config JSON <span class="badge badge-important">Setup</span></div>
+            </div>
+            <div class="lesson-time">⏱ 12 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ cài xong</strong>
+              Claude Desktop settings hoàn chỉnh bao gồm cả cách chỉnh file claude_desktop_config.json để thêm MCP servers tùy chỉnh.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">📍 Tìm Settings ở đâu?</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem;font-size:.83rem">
+              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.875rem">
+                <p style="font-weight:700;margin-bottom:.4rem">🍎 Mac</p>
+                Menu bar → <strong>Claude</strong> → <strong>Settings...</strong><br>Hoặc: <code style="font-family:monospace;font-size:.78rem;background:#1e293b;color:#7dd3fc;padding:.1rem .3rem;border-radius:.2rem">Cmd + ,</code>
+              </div>
+              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.875rem">
+                <p style="font-weight:700;margin-bottom:.4rem">🪟 Windows</p>
+                System tray → click chuột phải vào icon Claude → <strong>Settings</strong><br>Hoặc: <code style="font-family:monospace;font-size:.78rem;background:#1e293b;color:#7dd3fc;padding:.1rem .3rem;border-radius:.2rem">Ctrl + ,</code>
+              </div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">1 — General Settings</p>
+            <table class="cmd-table">
+              <thead><tr><th>Setting</th><th>Khuyến nghị</th><th>Lý do</th></tr></thead>
+              <tbody>
+                <tr><td>Launch at startup</td><td>✅ Bật ON</td><td>Claude luôn sẵn sàng khi mở máy</td></tr>
+                <tr><td>Global shortcut</td><td>Cmd/Ctrl+Shift+Space</td><td>Mở Claude từ bất cứ app nào</td></tr>
+                <tr><td>Theme</td><td>Theo sở thích</td><td>Dark dễ nhìn hơn khi làm đêm</td></tr>
+                <tr><td>Font size</td><td>Medium (14-15px)</td><td>Đọc thoải mái không mỏi mắt</td></tr>
+              </tbody>
+            </table>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">2 — File Config MCP: claude_desktop_config.json</p>
+            <p style="font-size:.84rem;color:var(--gray-700);margin-bottom:.6rem">Đây là file text đặc biệt để thêm MCP servers nâng cao (không có trong UI). Không cần biết code — chỉ cần copy-paste đúng template.</p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:.5rem 0 .875rem;font-size:.83rem">
+              <div style="background:#1e293b;border-radius:.5rem;padding:.875rem">
+                <p style="color:#64748b;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem">📍 Vị trí file — Mac</p>
+                <code style="color:#7dd3fc;font-family:monospace;font-size:.78rem;word-break:break-all">~/Library/Application Support/<br>Claude/claude_desktop_config.json</code>
+              </div>
+              <div style="background:#1e293b;border-radius:.5rem;padding:.875rem">
+                <p style="color:#64748b;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem">📍 Vị trí file — Windows</p>
+                <code style="color:#7dd3fc;font-family:monospace;font-size:.78rem;word-break:break-all">%APPDATA%\Claude\<br>claude_desktop_config.json</code>
+              </div>
+            </div>
+
+            <p style="font-size:.84rem;font-weight:600;margin-bottom:.4rem">Cách mở file config:</p>
+            <div class="code-block">
+              <div class="code-label">Terminal — Mở file config (Mac)</div>
+              <div class="code-line"><span class="code-cmd">open ~/Library/Application\ Support/Claude/claude_desktop_config.json</span></div>
+              <div class="code-comment" style="margin-top:.4rem"># File sẽ mở bằng TextEdit hoặc VS Code</div>
+              <div class="code-comment"># Nếu file chưa tồn tại, tạo mới bằng cách paste template dưới</div>
+            </div>
+
+            <div class="code-block">
+              <div class="code-label">claude_desktop_config.json — Cấu trúc chuẩn</div>
+              <div class="code-line">{</div>
+              <div class="code-line">  <span class="code-str">"mcpServers"</span>: {</div>
+              <div class="code-line">    <span class="code-str">"filesystem"</span>: {</div>
+              <div class="code-line">      <span class="code-str">"command"</span>: <span class="code-hl">"npx"</span>,</div>
+              <div class="code-line">      <span class="code-str">"args"</span>: [<span class="code-hl">"-y"</span>, <span class="code-hl">"@modelcontextprotocol/server-filesystem"</span>,</div>
+              <div class="code-line">               <span class="code-hl">"/Users/YourName/Desktop"</span>]  <span class="code-comment">← đổi thành đường dẫn của bạn</span></div>
+              <div class="code-line">    },</div>
+              <div class="code-line">    <span class="code-str">"google-drive"</span>: {</div>
+              <div class="code-line">      <span class="code-str">"command"</span>: <span class="code-hl">"npx"</span>,</div>
+              <div class="code-line">      <span class="code-str">"args"</span>: [<span class="code-hl">"-y"</span>, <span class="code-hl">"@modelcontextprotocol/server-gdrive"</span>]</div>
+              <div class="code-line">    }</div>
+              <div class="code-line">  }</div>
+              <div class="code-line">}</div>
+            </div>
+            <div class="warning-box" style="margin:.5rem 0 .875rem">
+              <div class="warn-label">⚠️ Sau khi chỉnh file config</div>
+              Phải <strong>restart Claude Desktop</strong> để apply thay đổi: Cmd+Q (Mac) hoặc thoát hoàn toàn rồi mở lại. Các MCP server sẽ xuất hiện trong danh sách tools.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">3 — Quản lý Integrations (trong app)</p>
+            <ul class="steps-list">
+              <li><div class="step-num">→</div><div class="step-content">Settings → tab <strong>"Integrations"</strong>: Bật/tắt từng MCP server đã cài. Toggle OFF = tắt tạm, không xóa cấu hình</div></li>
+              <li><div class="step-num">→</div><div class="step-content"><strong>Permissions:</strong> Mỗi server có scope riêng (read-only vs read-write). Ưu tiên chọn <em>read-only</em> cho server bạn chưa chắc chắn</div></li>
+              <li><div class="step-num">→</div><div class="step-content"><strong>Revoke:</strong> Bất cứ lúc nào muốn thu hồi quyền → toggle OFF hoặc xóa khỏi file config → restart app</div></li>
+            </ul>
           </div>
         </div>
 
@@ -898,6 +1146,107 @@
                 </div>
                 <p style="font-size:.78rem;color:var(--gray-600);margin-top:.5rem">→ Claude tự dùng skills /xlsx + /html + Gmail tool</p>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SETUP M4 -->
+        <div class="lesson" id="lesson4-setup">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">⚙️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">⚙️ Setup & Settings — Cowork</div>
+              <div class="lesson-subtitle">Cấu hình settings.json, permissions và hooks <span class="badge badge-important">Setup</span></div>
+            </div>
+            <div class="lesson-time">⏱ 12 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ cài xong</strong>
+              File settings.json cho Cowork: permissions, tools được phép, hooks tự động, và MCP servers — Claude Code hoạt động đúng ngay từ lần đầu.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">📍 File settings.json nằm ở đâu?</p>
+            <div class="code-block" style="margin-bottom:1rem">
+              <div class="code-label">Vị trí file settings</div>
+              <div class="code-line"><span class="code-comment"># Global (áp dụng cho mọi project)</span></div>
+              <div class="code-line"><span class="code-str">~/.claude/settings.json</span></div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-comment"># Project-level (chỉ áp dụng cho project hiện tại, ưu tiên hơn)</span></div>
+              <div class="code-line"><span class="code-str">.claude/settings.json</span>  <span class="code-comment">← trong thư mục dự án</span></div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">1 — Cấu trúc settings.json đầy đủ</p>
+            <div class="code-block">
+              <div class="code-label">~/.claude/settings.json — Template hoàn chỉnh</div>
+              <div class="code-line">{</div>
+              <div class="code-line">  <span class="code-comment">// Cho phép Claude tự dùng các tools này không cần hỏi</span></div>
+              <div class="code-line">  <span class="code-str">"permissions"</span>: {</div>
+              <div class="code-line">    <span class="code-str">"allow"</span>: [</div>
+              <div class="code-line">      <span class="code-hl">"Read"</span>,          <span class="code-comment">// Đọc file</span></div>
+              <div class="code-line">      <span class="code-hl">"Write"</span>,         <span class="code-comment">// Ghi file (chỉ trong thư mục dự án)</span></div>
+              <div class="code-line">      <span class="code-hl">"Bash(ls:*)"</span>,    <span class="code-comment">// Xem danh sách file</span></div>
+              <div class="code-line">      <span class="code-hl">"Bash(cat:*)"</span>,   <span class="code-comment">// Đọc nội dung file qua terminal</span></div>
+              <div class="code-line">      <span class="code-hl">"WebSearch"</span>      <span class="code-comment">// Tìm kiếm web</span></div>
+              <div class="code-line">    ],</div>
+              <div class="code-line">    <span class="code-str">"deny"</span>: [</div>
+              <div class="code-line">      <span class="code-hl">"Bash(rm:*)"</span>,    <span class="code-comment">// Chặn xóa file — bảo vệ dữ liệu</span></div>
+              <div class="code-line">      <span class="code-hl">"Bash(sudo:*)"</span>  <span class="code-comment">// Chặn lệnh admin</span></div>
+              <div class="code-line">    ]</div>
+              <div class="code-line">  },</div>
+              <div class="code-line">  <span class="code-comment">// Model mặc định</span></div>
+              <div class="code-line">  <span class="code-str">"model"</span>: <span class="code-hl">"claude-sonnet-4-5"</span>,</div>
+              <div class="code-line">  <span class="code-comment">// Thư mục làm việc an toàn</span></div>
+              <div class="code-line">  <span class="code-str">"env"</span>: {</div>
+              <div class="code-line">    <span class="code-str">"WORKING_DIR"</span>: <span class="code-hl">"/Users/YourName/Desktop/MyProject"</span></div>
+              <div class="code-line">  }</div>
+              <div class="code-line">}</div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">2 — Permissions: Allow vs Deny</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;font-size:.82rem">
+              <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:.625rem;padding:.875rem">
+                <p style="font-weight:700;color:var(--green);margin-bottom:.5rem">✅ Nên Allow (an toàn)</p>
+                <ul style="list-style:none;display:flex;flex-direction:column;gap:.25rem;color:var(--gray-700)">
+                  <li><code style="font-family:monospace;font-size:.78rem">Read</code> — đọc file</li>
+                  <li><code style="font-family:monospace;font-size:.78rem">Write</code> — tạo file mới</li>
+                  <li><code style="font-family:monospace;font-size:.78rem">Bash(ls:*)</code> — xem file</li>
+                  <li><code style="font-family:monospace;font-size:.78rem">WebSearch</code> — tìm web</li>
+                  <li><code style="font-family:monospace;font-size:.78rem">WebFetch</code> — đọc URL</li>
+                </ul>
+              </div>
+              <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:.625rem;padding:.875rem">
+                <p style="font-weight:700;color:var(--red);margin-bottom:.5rem">🚫 Nên Deny (nguy hiểm)</p>
+                <ul style="list-style:none;display:flex;flex-direction:column;gap:.25rem;color:var(--gray-700)">
+                  <li><code style="font-family:monospace;font-size:.78rem">Bash(rm:*)</code> — xóa file</li>
+                  <li><code style="font-family:monospace;font-size:.78rem">Bash(sudo:*)</code> — admin</li>
+                  <li><code style="font-family:monospace;font-size:.78rem">Bash(curl:*)</code> — gọi API</li>
+                  <li><code style="font-family:monospace;font-size:.78rem">Bash(git push:*)</code> — push code</li>
+                </ul>
+              </div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">3 — Hooks: Tự động hóa hành động</p>
+            <p style="font-size:.84rem;color:var(--gray-700);margin-bottom:.6rem">Hooks = lệnh tự động chạy trước/sau khi Claude thực hiện tool. Ví dụ: tự backup file trước khi Claude ghi đè.</p>
+            <div class="code-block">
+              <div class="code-label">settings.json — Thêm hooks tự động backup</div>
+              <div class="code-line">{</div>
+              <div class="code-line">  <span class="code-str">"hooks"</span>: {</div>
+              <div class="code-line">    <span class="code-str">"PreToolCall"</span>: [</div>
+              <div class="code-line">      {</div>
+              <div class="code-line">        <span class="code-str">"matcher"</span>: <span class="code-hl">"Write"</span>,   <span class="code-comment">// Chạy trước khi Write</span></div>
+              <div class="code-line">        <span class="code-str">"hooks"</span>: [{</div>
+              <div class="code-line">          <span class="code-str">"type"</span>: <span class="code-hl">"command"</span>,</div>
+              <div class="code-line">          <span class="code-str">"command"</span>: <span class="code-hl">"echo 'Claude đang ghi file: ' $TOOL_INPUT"</span></div>
+              <div class="code-line">        }]</div>
+              <div class="code-line">      }</div>
+              <div class="code-line">    ]</div>
+              <div class="code-line">  }</div>
+              <div class="code-line">}</div>
+            </div>
+            <div class="tip-box" style="margin-top:.5rem">
+              <div class="tip-label">💡 Người mới nên dùng hooks nào?</div>
+              Bắt đầu với <strong>không cần hooks</strong>. Hooks dành cho người đã dùng Claude Code thành thạo và muốn tự động hóa nâng cao. Khi gặp tình huống cụ thể cần tự động hóa, quay lại phần này.
             </div>
           </div>
         </div>
@@ -1172,6 +1521,109 @@
             <div class="tip-box" style="margin-top:1rem">
               <div class="tip-label">💡 Bí quyết cuối khóa</div>
               <strong>Đừng sợ thử sai!</strong> Claude Code không xóa file của bạn trừ khi bạn yêu cầu rõ ràng. Hãy thử nghiệm tự do. Nếu kết quả chưa ưng, nói <em>"Làm lại nhưng..."</em> và Claude sẽ cải thiện.
+            </div>
+          </div>
+        </div>
+
+        <!-- SETUP M5 -->
+        <div class="lesson" id="lesson5-setup">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">⚙️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">⚙️ Setup & Settings — Claude Code</div>
+              <div class="lesson-subtitle">Cấu hình API key, global settings và permission modes <span class="badge badge-important">Setup</span></div>
+            </div>
+            <div class="lesson-time">⏱ 12 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ cài xong</strong>
+              Toàn bộ cấu hình Claude Code: API key an toàn, settings.json global, permission mode phù hợp, và model mặc định.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">1 — API Key: Lưu trữ an toàn</p>
+            <p style="font-size:.84rem;color:var(--gray-700);margin-bottom:.6rem">Có 3 cách lưu API key — mỗi cách phù hợp với tình huống khác nhau:</p>
+            <table class="cmd-table">
+              <thead><tr><th>Cách</th><th>Lệnh</th><th>Ưu/nhược điểm</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Lưu vĩnh viễn</strong> ⭐</td><td><code>claude</code> → nhập key lần đầu</td><td>✅ Tiện nhất, key lưu trong <code>~/.claude</code></td></tr>
+                <tr><td><strong>Biến môi trường</strong></td><td>Thêm vào <code>~/.zshrc</code></td><td>✅ Linh hoạt, chia sẻ giữa nhiều tools</td></tr>
+                <tr><td><strong>Mỗi phiên</strong></td><td><code>export ANTHROPIC_API_KEY=...</code></td><td>⚠️ Phải nhập lại mỗi lần mở terminal mới</td></tr>
+              </tbody>
+            </table>
+
+            <div class="code-block" style="margin:.75rem 0">
+              <div class="code-label">Cách lưu API key vĩnh viễn vào ~/.zshrc (Mac) — Khuyến nghị</div>
+              <div class="code-line"><span class="code-comment"># Bước 1: Mở file cấu hình shell</span></div>
+              <div class="code-line"><span class="code-cmd">open ~/.zshrc</span>  <span class="code-comment">← mở bằng TextEdit</span></div>
+              <div class="code-line" style="margin-top:.4rem"><span class="code-comment"># Bước 2: Thêm dòng này vào cuối file</span></div>
+              <div class="code-line"><span class="code-hl">export ANTHROPIC_API_KEY="sk-ant-..."</span>  <span class="code-comment">← paste key của bạn</span></div>
+              <div class="code-line" style="margin-top:.4rem"><span class="code-comment"># Bước 3: Áp dụng ngay</span></div>
+              <div class="code-line"><span class="code-cmd">source ~/.zshrc</span></div>
+              <div class="code-line" style="margin-top:.4rem"><span class="code-comment"># Kiểm tra: key đã được load chưa</span></div>
+              <div class="code-line"><span class="code-cmd">echo $ANTHROPIC_API_KEY</span>  <span class="code-comment">← phải thấy key của bạn</span></div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">2 — Global Settings: ~/.claude/settings.json</p>
+            <div class="code-block">
+              <div class="code-label">~/.claude/settings.json — Cấu hình toàn cục tối thiểu cho người mới</div>
+              <div class="code-line">{</div>
+              <div class="code-line">  <span class="code-str">"model"</span>: <span class="code-hl">"claude-sonnet-4-6"</span>,</div>
+              <div class="code-line">  <span class="code-str">"permissions"</span>: {</div>
+              <div class="code-line">    <span class="code-str">"allow"</span>: [<span class="code-hl">"Read"</span>, <span class="code-hl">"Write"</span>, <span class="code-hl">"Bash(ls:*)"</span>, <span class="code-hl">"WebSearch"</span>],</div>
+              <div class="code-line">    <span class="code-str">"deny"</span>:  [<span class="code-hl">"Bash(rm:*)"</span>, <span class="code-hl">"Bash(sudo:*)"</span>]</div>
+              <div class="code-line">  }</div>
+              <div class="code-line">}</div>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Tạo file settings.json bằng lệnh Claude Code</div>
+              <div class="code-line"><span class="code-comment"># Trong Claude Code, gõ:</span></div>
+              <div class="code-line"><span class="code-cmd">/config</span>   <span class="code-comment">← mở màn hình cấu hình tương tác</span></div>
+              <div class="code-line"><span class="code-comment"># Hoặc tự tạo file:</span></div>
+              <div class="code-line"><span class="code-cmd">claude config set model claude-sonnet-4-6</span></div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">3 — Permission Modes: 3 chế độ kiểm soát</p>
+            <table class="cmd-table">
+              <thead><tr><th>Mode</th><th>Hành vi</th><th>Dùng khi nào</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Default</strong> ⭐</td><td>Hỏi trước mỗi hành động nguy hiểm</td><td>Người mới — an toàn nhất</td></tr>
+                <tr><td><strong>--dangerously-skip-permissions</strong></td><td>Tự làm không hỏi</td><td>Khi đã tin tưởng và muốn nhanh</td></tr>
+                <tr><td><strong>Plan mode</strong></td><td>Chỉ lên kế hoạch, không thực thi</td><td>Xem trước Claude định làm gì</td></tr>
+              </tbody>
+            </table>
+            <div class="code-block" style="margin-top:.6rem">
+              <div class="code-label">Các lệnh khởi động với mode khác nhau</div>
+              <div class="code-line"><span class="code-cmd">claude</span>                              <span class="code-comment">← default mode, hỏi trước — khuyến nghị</span></div>
+              <div class="code-line"><span class="code-cmd">claude --dangerously-skip-permissions</span> <span class="code-comment">← tự làm không hỏi — dùng khi đã quen</span></div>
+              <div class="code-line"><span class="code-cmd">claude --print "tóm tắt file này"</span>    <span class="code-comment">← chạy 1 lệnh rồi thoát, không interactive</span></div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">4 — Project Settings: .claude/settings.json</p>
+            <p style="font-size:.84rem;color:var(--gray-700);margin-bottom:.6rem">Mỗi project có thể có settings riêng, <strong>ghi đè</strong> global settings. Đặt trong thư mục dự án.</p>
+            <div class="code-block">
+              <div class="code-label">/Desktop/MyProject/.claude/settings.json — Override cho project cụ thể</div>
+              <div class="code-line">{</div>
+              <div class="code-line">  <span class="code-comment">// Project này dùng Opus vì phân tích chiến lược phức tạp</span></div>
+              <div class="code-line">  <span class="code-str">"model"</span>: <span class="code-hl">"claude-opus-4-7"</span>,</div>
+              <div class="code-line">  <span class="code-str">"permissions"</span>: {</div>
+              <div class="code-line">    <span class="code-comment">// Cho phép thêm: ghi vào output/ folder</span></div>
+              <div class="code-line">    <span class="code-str">"allow"</span>: [<span class="code-hl">"Read"</span>, <span class="code-hl">"Write"</span>, <span class="code-hl">"Bash(ls:*)"</span>,</div>
+              <div class="code-line">               <span class="code-hl">"Bash(mkdir:*)"</span>, <span class="code-hl">"WebSearch"</span>]</div>
+              <div class="code-line">  }</div>
+              <div class="code-line">}</div>
+            </div>
+
+            <div class="success-box" style="margin-top:.875rem">
+              <div class="success-label">✅ Checklist Settings Claude Code hoàn chỉnh</div>
+              <ul style="list-style:none;margin-top:.5rem;display:flex;flex-direction:column;gap:.3rem;font-size:.83rem">
+                <li>☐ API key đã lưu vào ~/.zshrc (không phải paste mỗi lần)</li>
+                <li>☐ ~/.claude/settings.json có model + permissions cơ bản</li>
+                <li>☐ CLAUDE.md đã tạo trong thư mục dự án</li>
+                <li>☐ Chạy <code style="font-family:monospace;background:#1e293b;color:#7dd3fc;padding:.1rem .3rem;border-radius:.2rem">claude --version</code> — thấy version mới nhất</li>
+                <li>☐ Test: <code style="font-family:monospace;background:#1e293b;color:#7dd3fc;padding:.1rem .3rem;border-radius:.2rem">claude "Xin chào, liệt kê file trong thư mục này"</code></li>
+              </ul>
             </div>
           </div>
         </div>
