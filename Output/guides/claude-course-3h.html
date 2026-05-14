@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Làm Chủ Claude AI Trong 3 Giờ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --blue:#0E4174;
+      --blue-dark:#0a2f57;
+      --blue-light:#1a5fa8;
+      --orange:#FF7F32;
+      --orange-light:#fff3eb;
+      --green:#10B981;
+      --green-light:#ecfdf5;
+      --red:#EF4444;
+      --red-light:#fef2f2;
+      --yellow:#F59E0B;
+      --yellow-light:#fffbeb;
+      --teal:#0891b2;
+      --purple:#7C3AED;
+      --gray-50:#f9fafb;
+      --gray-100:#f3f4f6;
+      --gray-200:#e5e7eb;
+      --gray-600:#4b5563;
+      --gray-700:#374151;
+      --gray-800:#1f2937;
+      --white:#ffffff;
+      --radius:1rem;
+      --radius-sm:0.5rem;
+      --shadow:0 4px 24px rgba(14,65,116,.10);
+      --shadow-sm:0 2px 8px rgba(14,65,116,.08);
+    }
+    html{scroll-behavior:smooth;font-size:16px}
+    body{font-family:'Lexend',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.65;overflow-x:hidden}
+
+    /* ── PROGRESS BAR ── */
+    #progress-bar{position:fixed;top:0;left:0;width:0%;height:4px;background:linear-gradient(90deg,var(--orange),var(--green));z-index:9999;transition:width .15s}
+
+    /* ── TOP NAV ── */
+    .top-nav{position:sticky;top:4px;z-index:900;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray-200);padding:0 2rem}
+    .top-nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:1rem;height:56px;overflow-x:auto;scrollbar-width:none}
+    .top-nav-inner::-webkit-scrollbar{display:none}
+    .nav-item{display:flex;align-items:center;gap:.4rem;padding:.4rem .8rem;border-radius:2rem;font-size:.78rem;font-weight:600;white-space:nowrap;cursor:pointer;text-decoration:none;transition:all .2s;color:var(--gray-600);border:1.5px solid transparent}
+    .nav-item:hover{background:var(--gray-100);color:var(--blue)}
+    .nav-item.active{background:var(--blue);color:var(--white);border-color:var(--blue)}
+    .nav-dot{width:8px;height:8px;border-radius:50%}
+    .nav-time{font-size:.7rem;opacity:.75}
+
+    /* ── HERO ── */
+    .hero{background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue) 50%,var(--blue-light) 100%);color:var(--white);padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+    .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.4rem 1rem;font-size:.8rem;font-weight:600;letter-spacing:.05em;margin-bottom:1.5rem;backdrop-filter:blur(4px)}
+    .hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:1rem;text-shadow:0 2px 20px rgba(0,0,0,.2)}
+    .hero-sub{font-size:1.1rem;opacity:.85;max-width:560px;margin:0 auto 2rem;font-weight:400}
+    .hero-stats{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap}
+    .hero-stat{text-align:center}
+    .hero-stat-num{font-size:2rem;font-weight:800;color:var(--orange);letter-spacing:-.03em}
+    .hero-stat-label{font-size:.8rem;opacity:.75;font-weight:500}
+    .hero-modules{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-top:2rem}
+    .hero-mod-tag{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:2rem;padding:.3rem .8rem;font-size:.75rem;font-weight:600}
+
+    /* ── LAYOUT ── */
+    .main-wrap{max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem;display:grid;grid-template-columns:1fr 240px;gap:2rem;align-items:start}
+    @media(max-width:900px){.main-wrap{grid-template-columns:1fr;}.sidebar{display:none}}
+
+    /* ── SIDEBAR ── */
+    .sidebar{position:sticky;top:80px}
+    .sidebar-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);padding:1.25rem;margin-bottom:1rem}
+    .sidebar-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gray-600);margin-bottom:.75rem}
+    .sidebar-link{display:flex;align-items:center;gap:.6rem;padding:.5rem .6rem;border-radius:.5rem;font-size:.8rem;font-weight:500;color:var(--gray-700);text-decoration:none;transition:all .15s;margin-bottom:.15rem}
+    .sidebar-link:hover,.sidebar-link.active{background:var(--blue);color:var(--white)}
+    .sidebar-icon{font-size:1rem;width:1.2rem;text-align:center}
+    .sidebar-time-badge{margin-left:auto;font-size:.68rem;background:var(--gray-100);padding:.15rem .45rem;border-radius:1rem;font-weight:600;color:var(--gray-600)}
+    .sidebar-link.active .sidebar-time-badge{background:rgba(255,255,255,.2);color:var(--white)}
+    .checklist-item{display:flex;align-items:center;gap:.6rem;padding:.35rem 0;font-size:.8rem;color:var(--gray-700);cursor:pointer}
+    .checklist-item input{width:15px;height:15px;accent-color:var(--green);cursor:pointer}
+    .checklist-item.done{text-decoration:line-through;color:var(--gray-600);opacity:.6}
+
+    /* ── MODULE CARDS ── */
+    .module{margin-bottom:3rem;scroll-margin-top:72px}
+    .module-header{border-radius:var(--radius) var(--radius) 0 0;padding:1.75rem 2rem;color:var(--white);position:relative;overflow:hidden}
+    .module-header::after{content:'';position:absolute;right:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08)}
+    .module-body{background:var(--white);border-radius:0 0 var(--radius) var(--radius);border:1px solid var(--gray-200);border-top:none;padding:2rem;box-shadow:var(--shadow)}
+    .module-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.8;margin-bottom:.35rem}
+    .module-title{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.35rem}
+    .module-meta{display:flex;align-items:center;gap:1rem;font-size:.82rem;opacity:.85}
+    .module-meta span{display:flex;align-items:center;gap:.3rem}
+
+    /* module colors */
+    .m1 .module-header{background:linear-gradient(135deg,#0E4174,#1a5fa8)}
+    .m2 .module-header{background:linear-gradient(135deg,#0891b2,#06b6d4)}
+    .m3 .module-header{background:linear-gradient(135deg,#ea580c,#FF7F32)}
+    .m4 .module-header{background:linear-gradient(135deg,#7C3AED,#a855f7)}
+    .m5 .module-header{background:linear-gradient(135deg,#0a2f57,#0E4174)}
+
+    /* ── LESSON CARDS ── */
+    .lesson{border:1.5px solid var(--gray-200);border-radius:.875rem;margin-bottom:1.25rem;overflow:hidden;transition:box-shadow .2s}
+    .lesson:hover{box-shadow:var(--shadow)}
+    .lesson-header{display:flex;align-items:center;gap:.75rem;padding:1rem 1.25rem;cursor:pointer;background:var(--gray-50);user-select:none}
+    .lesson-icon{font-size:1.4rem;width:2rem;text-align:center}
+    .lesson-info{flex:1}
+    .lesson-title{font-size:.95rem;font-weight:700;color:var(--gray-800);margin-bottom:.15rem}
+    .lesson-subtitle{font-size:.78rem;color:var(--gray-600)}
+    .lesson-time{font-size:.75rem;font-weight:700;color:var(--white);background:var(--blue);padding:.25rem .65rem;border-radius:2rem;white-space:nowrap}
+    .lesson-chevron{color:var(--gray-600);transition:transform .2s;font-size:.85rem}
+    .lesson.open .lesson-chevron{transform:rotate(180deg)}
+    .lesson-body{padding:1.5rem 1.25rem;display:none;border-top:1.5px solid var(--gray-200)}
+    .lesson.open .lesson-body{display:block}
+
+    /* ── CONTENT ELEMENTS ── */
+    .objective-box{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-left:4px solid var(--blue);border-radius:.5rem;padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:.88rem}
+    .objective-box strong{color:var(--blue);display:block;margin-bottom:.3rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
+
+    .steps-list{list-style:none;margin:1rem 0}
+    .steps-list li{display:flex;gap:.875rem;margin-bottom:.875rem;align-items:flex-start}
+    .step-num{min-width:1.6rem;height:1.6rem;border-radius:50%;background:var(--blue);color:var(--white);font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:.05rem;flex-shrink:0}
+    .step-content{font-size:.88rem;line-height:1.6;color:var(--gray-700)}
+    .step-content strong{color:var(--gray-800)}
+
+    .tip-box{background:var(--yellow-light);border:1.5px solid #fcd34d;border-radius:.75rem;padding:1rem 1.25rem;margin:1rem 0;font-size:.85rem}
+    .tip-box .tip-label{color:var(--yellow);font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem;display:flex;align-items:center;gap:.3rem}
+
+    .warning-box{background:var(--red-light);border:1.5px solid #fca5a5;border-radius:.75rem;padding:1rem 1.25rem;margin:1rem 0;font-size:.85rem}
+    .warning-box .warn-label{color:var(--red);font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem;display:flex;align-items:center;gap:.3rem}
+
+    .success-box{background:var(--green-light);border:1.5px solid #6ee7b7;border-radius:.75rem;padding:1rem 1.25rem;margin:1rem 0;font-size:.85rem}
+    .success-box .success-label{color:var(--green);font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem;display:flex;align-items:center;gap:.3rem}
+
+    .code-block{background:#1e293b;border-radius:.625rem;padding:1rem 1.25rem;margin:.75rem 0;font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:.82rem;line-height:1.7;overflow-x:auto;position:relative}
+    .code-block .code-label{color:#64748b;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;font-family:'Lexend',sans-serif}
+    .code-line{color:#e2e8f0}
+    .code-comment{color:#64748b}
+    .code-cmd{color:#7dd3fc}
+    .code-str{color:#86efac}
+    .code-hl{color:#fbbf24}
+    .copy-btn{position:absolute;top:.6rem;right:.75rem;background:rgba(255,255,255,.1);border:none;color:#94a3b8;font-size:.7rem;padding:.3rem .6rem;border-radius:.35rem;cursor:pointer;font-family:'Lexend',sans-serif;transition:all .15s}
+    .copy-btn:hover{background:rgba(255,255,255,.2);color:#e2e8f0}
+
+    .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1rem 0}
+    @media(max-width:500px){.compare-grid{grid-template-columns:1fr}}
+    .compare-card{border-radius:.625rem;padding:1rem;font-size:.82rem}
+    .compare-card.bad{background:#fef2f2;border:1.5px solid #fca5a5}
+    .compare-card.good{background:#f0fdf4;border:1.5px solid #86efac}
+    .compare-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
+    .compare-card.bad .compare-label{color:var(--red)}
+    .compare-card.good .compare-label{color:var(--green)}
+
+    .badge{display:inline-flex;align-items:center;gap:.25rem;padding:.2rem .55rem;border-radius:2rem;font-size:.7rem;font-weight:700;margin:.1rem}
+    .badge-practice{background:var(--green-light);color:var(--green);border:1px solid #a7f3d0}
+    .badge-important{background:var(--red-light);color:var(--red);border:1px solid #fca5a5}
+    .badge-tip{background:var(--yellow-light);color:#92400e;border:1px solid #fcd34d}
+    .badge-new{background:#ede9fe;color:var(--purple);border:1px solid #c4b5fd}
+
+    .template-box{background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:1.5px solid #7dd3fc;border-radius:.875rem;padding:1.25rem;margin:1rem 0}
+    .template-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#0369a1;margin-bottom:.75rem;display:flex;align-items:center;gap:.35rem}
+    .template-part{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.6rem}
+    .template-tag{min-width:80px;background:var(--blue);color:var(--white);font-size:.68rem;font-weight:700;padding:.2rem .5rem;border-radius:.35rem;text-align:center;flex-shrink:0;margin-top:.1rem}
+    .template-desc{font-size:.82rem;color:var(--gray-700)}
+
+    .cmd-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.83rem}
+    .cmd-table th{background:var(--blue);color:var(--white);padding:.6rem .875rem;text-align:left;font-weight:600;font-size:.75rem}
+    .cmd-table td{padding:.6rem .875rem;border-bottom:1px solid var(--gray-200);vertical-align:top}
+    .cmd-table tr:nth-child(even) td{background:var(--gray-50)}
+    .cmd-table code{background:#1e293b;color:#7dd3fc;padding:.1rem .4rem;border-radius:.25rem;font-family:'JetBrains Mono','Courier New',monospace;font-size:.8rem}
+
+    .divider{border:none;border-top:1.5px dashed var(--gray-200);margin:1.5rem 0}
+
+    /* ── FOOTER ── */
+    .footer{background:var(--blue-dark);color:var(--white);padding:3rem 2rem;margin-top:3rem}
+    .footer-inner{max-width:900px;margin:0 auto;text-align:center}
+    .footer h3{font-size:1.4rem;font-weight:800;margin-bottom:.75rem}
+    .footer p{opacity:.75;font-size:.9rem;margin-bottom:2rem}
+    .cert-box{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:var(--radius);padding:1.75rem;max-width:500px;margin:0 auto}
+    .cert-box h4{font-size:1rem;font-weight:700;margin-bottom.5rem}
+    .final-checklist{list-style:none;text-align:left;margin-top:1rem}
+    .final-checklist li{padding:.4rem 0;font-size:.85rem;display:flex;align-items:center;gap:.6rem;opacity:.9}
+    .final-checklist li::before{content:'✅';font-size:.9rem}
+
+    /* ── SCROLL ANIMATIONS ── */
+    .fade-in{opacity:0;transform:translateY(16px);transition:opacity .4s,transform .4s}
+    .fade-in.visible{opacity:1;transform:none}
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="top-nav-inner">
+    <span style="font-size:.8rem;font-weight:700;color:var(--blue);white-space:nowrap;padding-right:.5rem">🚀 Claude 3H</span>
+    <a class="nav-item active" href="#module1" data-module="1">
+      <div class="nav-dot" style="background:#0E4174"></div>💻 Claude Web <span class="nav-time">40ph</span>
+    </a>
+    <a class="nav-item" href="#module2" data-module="2">
+      <div class="nav-dot" style="background:#0891b2"></div>📁 Projects <span class="nav-time">35ph</span>
+    </a>
+    <a class="nav-item" href="#module3" data-module="3">
+      <div class="nav-dot" style="background:#FF7F32"></div>🖥️ Desktop <span class="nav-time">35ph</span>
+    </a>
+    <a class="nav-item" href="#module4" data-module="4">
+      <div class="nav-dot" style="background:#7C3AED"></div>⚡ Cowork <span class="nav-time">30ph</span>
+    </a>
+    <a class="nav-item" href="#module5" data-module="5">
+      <div class="nav-dot" style="background:#0a2f57"></div>🤖 Claude Code <span class="nav-time">40ph</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-badge">🎓 Khóa học thực hành · 2026</div>
+  <h1>Làm Chủ Claude AI<br>Trong 3 Giờ</h1>
+  <p class="hero-sub">Từ người chưa biết gì đến sử dụng thành thục Claude AI, Desktop, Projects, Cowork và Claude Code — không cần biết lập trình.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">3H</div>
+      <div class="hero-stat-label">Thời lượng</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">5</div>
+      <div class="hero-stat-label">Module</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">15</div>
+      <div class="hero-stat-label">Bài học</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">0</div>
+      <div class="hero-stat-label">Yêu cầu code</div>
+    </div>
+  </div>
+  <div class="hero-modules">
+    <span class="hero-mod-tag">Claude AI Web</span>
+    <span class="hero-mod-tag">Projects</span>
+    <span class="hero-mod-tag">Claude Desktop</span>
+    <span class="hero-mod-tag">Cowork</span>
+    <span class="hero-mod-tag">Claude Code</span>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+  <div class="content">
+
+    <!-- ═══════════════════════════════════════════
+         MODULE 1: CLAUDE AI WEB
+    ═══════════════════════════════════════════ -->
+    <section class="module m1 fade-in" id="module1">
+      <div class="module-header">
+        <div class="module-label">Module 1 · 40 phút</div>
+        <div class="module-title">💻 Claude AI Web — Cơ Bản</div>
+        <div class="module-meta">
+          <span>📚 3 bài học</span>
+          <span>🎯 Sử dụng Claude AI thành thục trên trình duyệt</span>
+        </div>
+      </div>
+      <div class="module-body">
+
+        <!-- BÀI 1.1 -->
+        <div class="lesson open" id="lesson1-1">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🤖</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 1.1 — Claude là ai?</div>
+              <div class="lesson-subtitle">Hiểu Claude trước khi dùng <span class="badge badge-important">Quan trọng</span></div>
+            </div>
+            <div class="lesson-time">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Claude là gì, mạnh ở điểm nào, và tại sao nên dùng Claude thay vì các AI khác.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Claude là gì?</p>
+            <ul class="steps-list">
+              <li>
+                <div class="step-num">1</div>
+                <div class="step-content"><strong>Claude = Trợ lý AI</strong> do công ty Anthropic (Mỹ) tạo ra. Hãy nghĩ Claude như một người đồng nghiệp thông minh, làm việc 24/7, không bao giờ mệt — bạn hỏi gì cũng trả lời được.</div>
+              </li>
+              <li>
+                <div class="step-num">2</div>
+                <div class="step-content"><strong>Khác ChatGPT & Gemini:</strong> Claude được huấn luyện ưu tiên an toàn & chính xác, đặc biệt giỏi đọc tài liệu dài, phân tích văn bản, và viết nội dung chuyên nghiệp.</div>
+              </li>
+              <li>
+                <div class="step-num">3</div>
+                <div class="step-content"><strong>Ba phiên bản:</strong> Haiku = nhanh nhất / Sonnet = cân bằng tốt nhất (nên dùng hàng ngày) / Opus = thông minh nhất, dùng cho tác vụ phức tạp.</div>
+              </li>
+            </ul>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">Claude làm được gì?</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.6rem;margin-bottom:1rem">
+              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">📄 Đọc & tóm tắt PDF, Word</div>
+              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">✍️ Viết email, báo cáo, slide</div>
+              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">🖼️ Phân tích ảnh, biểu đồ</div>
+              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">📊 Xử lý dữ liệu, Excel</div>
+              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">🔍 Nghiên cứu & tổng hợp</div>
+              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">💡 Brainstorm ý tưởng</div>
+            </div>
+
+            <div class="tip-box">
+              <div class="tip-label">💡 Mẹo nhớ nhanh</div>
+              Nếu bạn có thể giao việc cho một intern thông minh biết mọi thứ — Claude làm được việc đó, và còn nhanh hơn.
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 1.2 -->
+        <div class="lesson" id="lesson1-2">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🔑</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 1.2 — Tạo tài khoản & khám phá giao diện</div>
+              <div class="lesson-subtitle">Bước đầu tiên để dùng Claude <span class="badge badge-practice">Thực hành</span></div>
+            </div>
+            <div class="lesson-time">⏱ 15 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Tạo tài khoản, đăng nhập, và gửi tin nhắn đầu tiên cho Claude.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Tạo tài khoản (5 phút)</p>
+            <ul class="steps-list">
+              <li><div class="step-num">1</div><div class="step-content">Mở trình duyệt (Chrome hoặc Safari) → gõ vào thanh địa chỉ: <code style="background:#1e293b;color:#7dd3fc;padding:.1rem .4rem;border-radius:.25rem;font-family:monospace">claude.ai</code></div></li>
+              <li><div class="step-num">2</div><div class="step-content">Nhấn nút <strong>"Sign up"</strong> màu cam → Chọn <strong>"Continue with Google"</strong> (cách dễ nhất)</div></li>
+              <li><div class="step-num">3</div><div class="step-content">Chọn gói: <strong>Free</strong> (đủ để học hôm nay) hoặc <strong>Pro $20/tháng</strong> (không giới hạn tin nhắn, dùng được Claude Opus)</div></li>
+              <li><div class="step-num">4</div><div class="step-content">Hoàn thành! Bạn sẽ thấy giao diện chat trống — đây là "nhà" của Claude.</div></li>
+            </ul>
+
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Khám phá giao diện (5 phút)</p>
+
+            <div style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:.875rem;padding:1.25rem;margin:.75rem 0;font-size:.85rem">
+              <p style="font-weight:700;margin-bottom:.75rem">📌 3 vùng chính của giao diện:</p>
+              <div style="display:flex;flex-direction:column;gap:.6rem">
+                <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="min-width:28px;height:28px;background:var(--blue);border-radius:.35rem;display:flex;align-items:center;justify-content:center;color:white;font-size:.75rem;font-weight:700;flex-shrink:0">A</div><div><strong>Sidebar trái:</strong> Lịch sử các cuộc trò chuyện. Nhấn "New conversation" để bắt đầu chat mới.</div></div>
+                <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="min-width:28px;height:28px;background:var(--orange);border-radius:.35rem;display:flex;align-items:center;justify-content:center;color:white;font-size:.75rem;font-weight:700;flex-shrink:0">B</div><div><strong>Vùng chat giữa:</strong> Nơi bạn nhìn thấy câu hỏi và câu trả lời của Claude.</div></div>
+                <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="min-width:28px;height:28px;background:var(--green);border-radius:.35rem;display:flex;align-items:center;justify-content:center;color:white;font-size:.75rem;font-weight:700;flex-shrink:0">C</div><div><strong>Ô nhập tin dưới:</strong> Nơi bạn gõ câu hỏi. Nhấn nút 📎 để đính kèm file, Enter để gửi.</div></div>
+              </div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .5rem">Gửi tin nhắn đầu tiên (5 phút)</p>
+            <ul class="steps-list">
+              <li><div class="step-num">1</div><div class="step-content">Nhấn vào ô chat dưới cùng → gõ: <em>"Chào Claude! Hãy giới thiệu bản thân bằng tiếng Việt"</em> → nhấn Enter</div></li>
+              <li><div class="step-num">2</div><div class="step-content">Thử đính kèm file: Nhấn 📎 → chọn một file PDF hoặc ảnh từ máy → gõ <em>"Tóm tắt nội dung file này"</em></div></li>
+            </ul>
+
+            <div class="success-box">
+              <div class="success-label">✅ Kiểm tra thành công</div>
+              Claude trả lời bằng tiếng Việt = bạn đã setup xong! Nếu Claude trả lời tiếng Anh, hãy nhắc lại: <em>"Hãy trả lời bằng tiếng Việt"</em>
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 1.3 -->
+        <div class="lesson" id="lesson1-3">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">✍️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 1.3 — Nghệ thuật viết Prompt</div>
+              <div class="lesson-subtitle">Kỹ năng quan trọng nhất khi dùng AI <span class="badge badge-important">Quan trọng</span> <span class="badge badge-practice">Thực hành</span></div>
+            </div>
+            <div class="lesson-time">⏱ 15 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Viết prompt (câu lệnh) rõ ràng để Claude hiểu đúng và ra kết quả tốt ngay lần đầu.
+            </div>
+
+            <div class="template-box">
+              <div class="template-title">📐 Template Prompt Chuẩn — 4 Thành Phần</div>
+              <div class="template-part">
+                <div class="template-tag">VAI TRÒ</div>
+                <div class="template-desc">Bạn muốn Claude đóng vai gì? <em>"Bạn là chuyên gia HR..."</em></div>
+              </div>
+              <div class="template-part">
+                <div class="template-tag">NGỮ CẢNH</div>
+                <div class="template-desc">Tình huống cụ thể là gì? <em>"Tôi cần viết email xin hoãn họp..."</em></div>
+              </div>
+              <div class="template-part">
+                <div class="template-tag">YÊU CẦU</div>
+                <div class="template-desc">Cần làm gì chính xác? <em>"Viết email lịch sự, súc tích..."</em></div>
+              </div>
+              <div class="template-part">
+                <div class="template-tag">FORMAT</div>
+                <div class="template-desc">Muốn kết quả trông như thế nào? <em>"Gồm: tiêu đề + nội dung, dưới 100 chữ"</em></div>
+              </div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .6rem">So sánh: Prompt tệ vs Prompt tốt</p>
+            <div class="compare-grid">
+              <div class="compare-card bad">
+                <div class="compare-label">❌ Prompt tệ</div>
+                <p style="font-size:.85rem">"viết email"</p>
+                <p style="font-size:.78rem;margin-top:.5rem;opacity:.7">→ Claude không biết gửi cho ai, về chủ đề gì, tone thế nào → kết quả chung chung, vô dụng</p>
+              </div>
+              <div class="compare-card good">
+                <div class="compare-label">✅ Prompt tốt</div>
+                <p style="font-size:.85rem">"Bạn là chuyên gia viết email công việc. Tôi cần hoãn cuộc họp ngày mai với đối tác vì lý do đột xuất. Viết email lịch sự, dưới 80 chữ. Format: Tiêu đề + Nội dung."</p>
+              </div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .6rem">3 Kỹ thuật nâng cao</p>
+            <ul class="steps-list">
+              <li><div class="step-num">A</div><div class="step-content"><strong>Cho ví dụ mẫu:</strong> Paste một đoạn viết bạn thích → <em>"Hãy viết theo phong cách tương tự"</em></div></li>
+              <li><div class="step-num">B</div><div class="step-content"><strong>Giới hạn đầu ra:</strong> <em>"Tối đa 200 chữ"</em>, <em>"Liệt kê đúng 5 gạch đầu dòng"</em>, <em>"Dưới dạng bảng"</em></div></li>
+              <li><div class="step-num">C</div><div class="step-content"><strong>Hỏi lại nếu chưa ưng:</strong> <em>"Làm lại nhưng tone thân thiện hơn"</em>, <em>"Rút ngắn còn một nửa"</em></div></li>
+            </ul>
+
+            <div class="tip-box">
+              <div class="tip-label">💡 Bài tập thực hành</div>
+              Thử viết prompt theo template: yêu cầu Claude tóm tắt một cuốn sách bạn đã đọc hoặc một tài liệu PDF của bạn. Kiểm tra: kết quả có đúng format bạn muốn không?
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         MODULE 2: PROJECTS
+    ═══════════════════════════════════════════ -->
+    <section class="module m2 fade-in" id="module2">
+      <div class="module-header">
+        <div class="module-label">Module 2 · 35 phút</div>
+        <div class="module-title">📁 Projects — Làm Việc Có Tổ Chức</div>
+        <div class="module-meta">
+          <span>📚 3 bài học</span>
+          <span>🎯 Tạo workspace riêng để Claude luôn hiểu ngữ cảnh công việc của bạn</span>
+        </div>
+      </div>
+      <div class="module-body">
+
+        <!-- BÀI 2.1 -->
+        <div class="lesson" id="lesson2-1">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">❓</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 2.1 — Projects là gì?</div>
+              <div class="lesson-subtitle">Tại sao Projects thay đổi cách bạn làm việc với AI</div>
+            </div>
+            <div class="lesson-time">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Sự khác biệt giữa chat thường và Projects, và khi nào nên dùng cái nào.
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin:1rem 0">
+              <div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:.75rem;padding:1rem">
+                <p style="font-weight:700;color:var(--red);font-size:.82rem;margin-bottom:.5rem">💬 Chat thường</p>
+                <ul style="font-size:.82rem;color:var(--gray-700);list-style:none;display:flex;flex-direction:column;gap:.4rem">
+                  <li>❌ Claude không nhớ cuộc chat trước</li>
+                  <li>❌ Phải giải thích lại ngữ cảnh mỗi lần</li>
+                  <li>❌ Không lưu được tài liệu tham chiếu</li>
+                  <li>✅ Phù hợp: câu hỏi nhanh, one-time task</li>
+                </ul>
+              </div>
+              <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:.75rem;padding:1rem">
+                <p style="font-weight:700;color:var(--green);font-size:.82rem;margin-bottom:.5rem">📁 Projects</p>
+                <ul style="font-size:.82rem;color:var(--gray-700);list-style:none;display:flex;flex-direction:column;gap:.4rem">
+                  <li>✅ Claude luôn nhớ context project</li>
+                  <li>✅ Upload tài liệu → Claude tham chiếu mãi</li>
+                  <li>✅ Cài Instructions một lần, dùng mãi</li>
+                  <li>✅ Chia sẻ với đồng nghiệp (Pro)</li>
+                </ul>
+              </div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .5rem">Khi nào nên dùng Projects?</p>
+            <ul class="steps-list">
+              <li><div class="step-num">✓</div><div class="step-content">Bạn có <strong>công việc lặp đi lặp lại:</strong> soạn báo cáo tuần, phân tích số liệu, viết nội dung...</div></li>
+              <li><div class="step-num">✓</div><div class="step-content">Bạn cần Claude <strong>hiểu về team/công ty/dự án:</strong> cách viết văn phong riêng, thuật ngữ nội bộ...</div></li>
+              <li><div class="step-num">✓</div><div class="step-content">Bạn có <strong>tài liệu tham chiếu:</strong> SOP, báo cáo mẫu, dữ liệu lịch sử...</div></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- BÀI 2.2 -->
+        <div class="lesson" id="lesson2-2">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🏗️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 2.2 — Tạo Project đầu tiên</div>
+              <div class="lesson-subtitle">Hướng dẫn từng bước thực hành <span class="badge badge-practice">Thực hành</span></div>
+            </div>
+            <div class="lesson-time">⏱ 15 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ có</strong>
+              Một Project hoạt động với Instructions và Knowledge files — sẵn sàng dùng ngay.
+            </div>
+
+            <ul class="steps-list">
+              <li>
+                <div class="step-num">1</div>
+                <div class="step-content"><strong>Tạo Project mới:</strong> Sidebar trái → Nhìn thấy mục "Projects" → Nhấn <strong>"+ New project"</strong></div>
+              </li>
+              <li>
+                <div class="step-num">2</div>
+                <div class="step-content"><strong>Đặt tên rõ ràng:</strong> Ví dụ: "Báo cáo Driver Ops 2026" hoặc "Nghiên cứu Đối thủ Q2" — tên càng rõ càng dễ tìm sau này.</div>
+              </li>
+              <li>
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <strong>Viết Instructions (quan trọng nhất!):</strong> Đây là "bản mô tả công việc" cho Claude trong project này. Ví dụ:
+                  <div class="code-block" style="margin-top:.6rem">
+                    <div class="code-label">Ví dụ Instructions cho Project Ahamove</div>
+                    <div class="code-line">Bạn là trợ lý phân tích dữ liệu của team Driver Management,</div>
+                    <div class="code-line">Ahamove. Nhiệm vụ chính: hỗ trợ phân tích KPI vận hành.</div>
+                    <div class="code-line" style="margin-top:.5rem"><span class="code-comment">// Quy tắc làm việc:</span></div>
+                    <div class="code-line">- Luôn trả lời bằng tiếng Việt</div>
+                    <div class="code-line">- Ưu tiên chỉ số: AR, FR, CPO, EPH, RPH</div>
+                    <div class="code-line">- Trình bày dưới dạng bảng khi có nhiều số liệu</div>
+                    <div class="code-line">- Kết thúc mỗi phân tích bằng mục "Khuyến nghị hành động"</div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="step-num">4</div>
+                <div class="step-content"><strong>Upload Knowledge files:</strong> Nhấn "Add content" → "Upload files" → Kéo thả file PDF, Excel, Word vào đây. Claude sẽ đọc và tham chiếu mỗi khi bạn hỏi.</div>
+              </li>
+              <li>
+                <div class="step-num">5</div>
+                <div class="step-content"><strong>Test:</strong> Nhấn "New conversation" trong Project → Hỏi thử một câu liên quan tài liệu bạn vừa upload → Kiểm tra Claude có dùng đúng tài liệu không.</div>
+              </li>
+            </ul>
+
+            <div class="tip-box">
+              <div class="tip-label">💡 Mẹo viết Instructions hay</div>
+              Instructions tốt = Claude không cần bạn giải thích lại mỗi lần. Hãy bao gồm: <strong>ngôn ngữ</strong> (tiếng Việt/Anh), <strong>vai trò</strong> (phân tích/viết lách/tóm tắt), <strong>format đầu ra</strong> (bảng/bullet/văn xuôi), và <strong>từ cấm</strong> (không dùng thuật ngữ X, không đề xuất Y...).
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 2.3 -->
+        <div class="lesson" id="lesson2-3">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">⭐</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 2.3 — Best Practices với Projects</div>
+              <div class="lesson-subtitle">Dùng Projects như một chuyên gia <span class="badge badge-tip">Mẹo</span></div>
+            </div>
+            <div class="lesson-time">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Cách tổ chức Projects hiệu quả để tiết kiệm thời gian lâu dài.
+            </div>
+
+            <table class="cmd-table">
+              <thead><tr><th>Vấn đề hay gặp</th><th>Giải pháp</th></tr></thead>
+              <tbody>
+                <tr><td>Claude trả lời tiếng Anh trong Project</td><td>Thêm vào Instructions: <em>"QUAN TRỌNG: Luôn trả lời bằng tiếng Việt"</em></td></tr>
+                <tr><td>Claude không dùng file bạn upload</td><td>Nhắc trực tiếp: <em>"Dựa vào tài liệu X tôi đã upload, hãy..."</em></td></tr>
+                <tr><td>Nhiều cuộc chat lộn xộn</td><td>Đặt tên conversation rõ ràng: "Phân tích AR Tuần 19" thay vì "New conversation"</td></tr>
+                <tr><td>Muốn đồng nghiệp cùng dùng</td><td>Mở Project → Settings → "Share project" → Copy link gửi đồng nghiệp (cần Pro)</td></tr>
+              </tbody>
+            </table>
+
+            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .5rem">Ví dụ Projects nên tạo ngay</p>
+            <ul style="font-size:.85rem;color:var(--gray-700);list-style:none;display:flex;flex-direction:column;gap:.4rem;margin-left:.5rem">
+              <li>📊 <strong>Báo cáo Vận Hành:</strong> Upload báo cáo mẫu + template → ra báo cáo hàng tuần nhanh 10x</li>
+              <li>📧 <strong>Soạn Thảo Văn Bản:</strong> Upload mẫu email/thông báo nội bộ → giữ nhất quán văn phong</li>
+              <li>🔍 <strong>Nghiên Cứu Đối Thủ:</strong> Upload báo cáo ngành, tin tức → phân tích cạnh tranh nhanh</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         MODULE 3: CLAUDE DESKTOP
+    ═══════════════════════════════════════════ -->
+    <section class="module m3 fade-in" id="module3">
+      <div class="module-header">
+        <div class="module-label">Module 3 · 35 phút</div>
+        <div class="module-title">🖥️ Claude Desktop — Nâng Cấp Trải Nghiệm</div>
+        <div class="module-meta">
+          <span>📚 3 bài học</span>
+          <span>🎯 Kết nối Claude với máy tính và các app bạn đang dùng</span>
+        </div>
+      </div>
+      <div class="module-body">
+
+        <!-- BÀI 3.1 -->
+        <div class="lesson" id="lesson3-1">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🔌</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 3.1 — Tại sao cần Claude Desktop?</div>
+              <div class="lesson-subtitle">Hiểu sức mạnh thực sự của Claude Desktop và MCP</div>
+            </div>
+            <div class="lesson-time">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Claude Desktop làm được gì mà web không làm được, và MCP là gì.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Web vs Desktop — So sánh trực quan</p>
+            <table class="cmd-table">
+              <thead><tr><th>Tính năng</th><th>🌐 Claude Web</th><th>🖥️ Claude Desktop</th></tr></thead>
+              <tbody>
+                <tr><td>Chat với Claude</td><td>✅</td><td>✅</td></tr>
+                <tr><td>Upload file từ web</td><td>✅</td><td>✅</td></tr>
+                <tr><td>Đọc file thẳng từ máy tính</td><td>❌</td><td>✅</td></tr>
+                <tr><td>Kết nối Gmail/Drive/Calendar</td><td>❌</td><td>✅ (qua MCP)</td></tr>
+                <tr><td>Mở Claude bằng phím tắt</td><td>❌</td><td>✅</td></tr>
+                <tr><td>Làm việc offline một phần</td><td>❌</td><td>✅</td></tr>
+              </tbody>
+            </table>
+
+            <div style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1.5px solid #fdba74;border-radius:.875rem;padding:1.25rem;margin:1rem 0">
+              <p style="font-weight:700;color:#c2410c;margin-bottom:.75rem;font-size:.88rem">🔌 MCP là gì? — Giải thích đơn giản</p>
+              <p style="font-size:.85rem;color:var(--gray-700);line-height:1.65">Hãy nghĩ MCP (Model Context Protocol) như một <strong>"phiên dịch viên"</strong> — nó giúp Claude "nói chuyện" được với các phần mềm khác (Gmail, Google Drive, Notion...). Nhờ MCP, bạn có thể nói với Claude: <em>"Tóm tắt 10 email chưa đọc của tôi"</em> và Claude sẽ tự vào Gmail đọc rồi tóm tắt cho bạn.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 3.2 -->
+        <div class="lesson" id="lesson3-2">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">⬇️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 3.2 — Cài đặt Claude Desktop</div>
+              <div class="lesson-subtitle">Từng bước cho Mac và Windows <span class="badge badge-practice">Thực hành</span></div>
+            </div>
+            <div class="lesson-time">⏱ 15 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ có</strong>
+              Claude Desktop chạy trên máy tính và đăng nhập thành công.
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0">
+              <div>
+                <p style="font-size:.85rem;font-weight:700;margin-bottom:.6rem">🍎 Cài trên Mac</p>
+                <ul class="steps-list">
+                  <li><div class="step-num">1</div><div class="step-content">Vào <code style="background:#1e293b;color:#7dd3fc;padding:.1rem .35rem;border-radius:.25rem;font-size:.78rem;font-family:monospace">claude.ai/download</code></div></li>
+                  <li><div class="step-num">2</div><div class="step-content">Tải file <strong>.dmg</strong> (macOS)</div></li>
+                  <li><div class="step-num">3</div><div class="step-content">Mở file .dmg → Kéo biểu tượng Claude vào thư mục Applications</div></li>
+                  <li><div class="step-num">4</div><div class="step-content">Mở Claude từ Launchpad hoặc Spotlight (Cmd+Space → gõ "Claude")</div></li>
+                  <li><div class="step-num">5</div><div class="step-content">Đăng nhập tài khoản claude.ai của bạn</div></li>
+                </ul>
+              </div>
+              <div>
+                <p style="font-size:.85rem;font-weight:700;margin-bottom:.6rem">🪟 Cài trên Windows</p>
+                <ul class="steps-list">
+                  <li><div class="step-num">1</div><div class="step-content">Vào <code style="background:#1e293b;color:#7dd3fc;padding:.1rem .35rem;border-radius:.25rem;font-size:.78rem;font-family:monospace">claude.ai/download</code></div></li>
+                  <li><div class="step-num">2</div><div class="step-content">Tải file <strong>.exe</strong> (Windows)</div></li>
+                  <li><div class="step-num">3</div><div class="step-content">Chạy file .exe → Nhấn "Yes" nếu Windows hỏi → Next → Install</div></li>
+                  <li><div class="step-num">4</div><div class="step-content">Claude tự mở sau khi cài xong. Nếu không, tìm trong Start Menu.</div></li>
+                  <li><div class="step-num">5</div><div class="step-content">Đăng nhập tài khoản claude.ai của bạn</div></li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.75rem;padding:1rem;margin:.75rem 0;font-size:.85rem">
+              <p style="font-weight:700;margin-bottom:.5rem">⌨️ Phím tắt hữu ích</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+                <div><strong>Mac:</strong> <code style="background:#1e293b;color:#fbbf24;padding:.1rem .4rem;border-radius:.25rem;font-family:monospace;font-size:.8rem">Cmd+Shift+Space</code> = Mở Claude từ bất cứ đâu</div>
+                <div><strong>Windows:</strong> <code style="background:#1e293b;color:#fbbf24;padding:.1rem .4rem;border-radius:.25rem;font-family:monospace;font-size:.8rem">Ctrl+Shift+Space</code> = Mở Claude nhanh</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 3.3 -->
+        <div class="lesson" id="lesson3-3">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🔗</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 3.3 — Kết nối MCP Server cơ bản</div>
+              <div class="lesson-subtitle">Cho Claude quyền đọc Gmail, Drive, Calendar <span class="badge badge-new">Nâng cao</span></div>
+            </div>
+            <div class="lesson-time">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ có</strong>
+              Claude kết nối được với ít nhất một app (Google Drive hoặc Gmail).
+            </div>
+
+            <ul class="steps-list">
+              <li><div class="step-num">1</div><div class="step-content">Mở Claude Desktop → Nhấn vào menu <strong>"Claude"</strong> (góc trên trái, Mac) hoặc nút <strong>⚙️ Settings</strong> (Windows)</div></li>
+              <li><div class="step-num">2</div><div class="step-content">Chọn tab <strong>"Integrations"</strong> hoặc <strong>"MCP"</strong> — bạn sẽ thấy danh sách các app có thể kết nối</div></li>
+              <li><div class="step-num">3</div><div class="step-content">Tìm <strong>Google Drive</strong> → Nhấn toggle để bật → Nhấn <strong>"Authorize"</strong> → Đăng nhập Google và cấp quyền</div></li>
+              <li><div class="step-num">4</div><div class="step-content">Tương tự với <strong>Gmail</strong> và <strong>Google Calendar</strong> nếu muốn</div></li>
+              <li><div class="step-num">5</div><div class="step-content"><strong>Test:</strong> Quay lại chat → Gõ: <em>"Liệt kê 3 file gần nhất trên Google Drive của tôi"</em></div></li>
+            </ul>
+
+            <div class="warning-box">
+              <div class="warn-label">⚠️ Lưu ý bảo mật</div>
+              Chỉ kết nối với các app bạn hoàn toàn tin tưởng. Claude sẽ có quyền đọc (và đôi khi ghi) dữ liệu trong các app đó. Bạn có thể thu hồi quyền bất cứ lúc nào trong Settings → Integrations → Revoke.
+            </div>
+
+            <div class="success-box">
+              <div class="success-label">✅ Kiểm tra thành công</div>
+              Claude liệt kê được tên file thực từ Drive của bạn = kết nối thành công! Chúc mừng, bạn vừa mở khóa một sức mạnh hoàn toàn mới.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         MODULE 4: COWORK
+    ═══════════════════════════════════════════ -->
+    <section class="module m4 fade-in" id="module4">
+      <div class="module-header">
+        <div class="module-label">Module 4 · 30 phút</div>
+        <div class="module-title">⚡ Cowork — Làm Việc Chuyên Nghiệp</div>
+        <div class="module-meta">
+          <span>📚 3 bài học</span>
+          <span>🎯 Tự động hóa workflow và dùng Skills chuyên biệt</span>
+        </div>
+      </div>
+      <div class="module-body">
+
+        <!-- BÀI 4.1 -->
+        <div class="lesson" id="lesson4-1">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">⚡</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 4.1 — Cowork là gì?</div>
+              <div class="lesson-subtitle">Môi trường làm việc nâng cao trên Claude Code</div>
+            </div>
+            <div class="lesson-time">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Cowork là gì, tại sao nó mạnh hơn Claude Desktop, và khi nào nên dùng.
+            </div>
+
+            <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1.5px solid #c4b5fd;border-radius:.875rem;padding:1.25rem;margin:1rem 0">
+              <p style="font-weight:700;color:var(--purple);margin-bottom:.75rem">⚡ Cowork = Claude Code + Skills + Tools</p>
+              <div style="display:flex;flex-direction:column;gap:.6rem;font-size:.85rem">
+                <div style="display:flex;gap:.75rem;align-items:flex-start">
+                  <span style="font-size:1.1rem">🧰</span>
+                  <div><strong>Skills:</strong> Các "kỹ năng đặc biệt" được cài sẵn. Ví dụ: skill "xlsx" giúp Claude xử lý Excel chuyên nghiệp; skill "pptx" tạo PowerPoint đẹp ngay.</div>
+                </div>
+                <div style="display:flex;gap:.75rem;align-items:flex-start">
+                  <span style="font-size:1.1rem">🔧</span>
+                  <div><strong>Tools:</strong> Kết nối sâu hơn với Gmail, Calendar, Drive, Lark... Claude tự động làm theo workflow phức tạp.</div>
+                </div>
+                <div style="display:flex;gap:.75rem;align-items:flex-start">
+                  <span style="font-size:1.1rem">🤖</span>
+                  <div><strong>Automation:</strong> Đặt lịch tự động chạy task: "Mỗi sáng thứ 2 tóm tắt email tuần qua và gửi cho team".</div>
+                </div>
+              </div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .5rem">Ví dụ workflow thực tế</p>
+            <ul style="font-size:.85rem;color:var(--gray-700);list-style:none;display:flex;flex-direction:column;gap:.5rem">
+              <li>📊 <strong>Không dùng Cowork:</strong> Tải báo cáo → Mở Excel → Copy dữ liệu → Paste vào Claude Web → Yêu cầu phân tích → Copy kết quả → Mở Word → Paste → Format → 45 phút</li>
+              <li>⚡ <strong>Dùng Cowork:</strong> Nói với Claude: <em>"Phân tích báo cáo Driver_May2026.xlsx, tạo tóm tắt PDF và gửi email cho team@company.com"</em> → Claude tự làm → 2 phút</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- BÀI 4.2 -->
+        <div class="lesson" id="lesson4-2">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🛠️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 4.2 — Setup Cowork Workspace</div>
+              <div class="lesson-subtitle">Cài đặt và kết nối tools lần đầu <span class="badge badge-practice">Thực hành</span></div>
+            </div>
+            <div class="lesson-time">⏱ 15 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Yêu cầu trước</strong>
+              Hoàn thành Module 5 (cài Claude Code) trước, rồi quay lại bài này.
+            </div>
+
+            <ul class="steps-list">
+              <li>
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <strong>Mở Terminal</strong> và gõ <code style="background:#1e293b;color:#7dd3fc;padding:.1rem .4rem;border-radius:.25rem;font-family:monospace">claude</code> để vào Claude Code
+                </div>
+              </li>
+              <li>
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  Gõ lệnh setup Cowork:
+                  <div class="code-block">
+                    <div class="code-label">Terminal — Setup Cowork</div>
+                    <div class="code-line"><span class="code-cmd">/setup-cowork</span></div>
+                    <div class="code-comment" style="margin-top:.4rem"># Claude sẽ hỏi bạn muốn kết nối tool nào</div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="step-num">3</div>
+                <div class="step-content">Chọn các tools bạn muốn: Gmail ✓, Google Calendar ✓, Google Drive ✓, Notion ✓</div>
+              </li>
+              <li>
+                <div class="step-num">4</div>
+                <div class="step-content">Làm theo hướng dẫn authorize từng tool — thường chỉ cần đăng nhập Google và nhấn "Allow"</div>
+              </li>
+              <li>
+                <div class="step-num">5</div>
+                <div class="step-content">
+                  <strong>Test:</strong> Gõ câu hỏi tự nhiên:
+                  <div class="code-block">
+                    <div class="code-line"><span class="code-str">"Liệt kê 5 email quan trọng nhất chưa đọc trong Gmail của tôi"</span></div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+
+            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .5rem">Skills có sẵn trong Cowork</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.5rem;margin:.5rem 0">
+              <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:.5rem;padding:.6rem;font-size:.78rem;text-align:center"><strong>/xlsx</strong><br>Xử lý Excel</div>
+              <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:.5rem;padding:.6rem;font-size:.78rem;text-align:center"><strong>/pdf</strong><br>Đọc PDF</div>
+              <div style="background:#fff7ed;border:1px solid #fdba74;border-radius:.5rem;padding:.6rem;font-size:.78rem;text-align:center"><strong>/html</strong><br>Tạo báo cáo</div>
+              <div style="background:#fdf4ff;border:1px solid #e879f9;border-radius:.5rem;padding:.6rem;font-size:.78rem;text-align:center"><strong>/pptx</strong><br>Tạo slide</div>
+              <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:.5rem;padding:.6rem;font-size:.78rem;text-align:center"><strong>/docx</strong><br>Word doc</div>
+              <div style="background:#fff1f2;border:1px solid #fca5a5;border-radius:.5rem;padding:.6rem;font-size:.78rem;text-align:center"><strong>/schedule</strong><br>Lên lịch tự động</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 4.3 -->
+        <div class="lesson" id="lesson4-3">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🎬</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 4.3 — Workflow thực chiến</div>
+              <div class="lesson-subtitle">Demo 2 workflow giải quyết vấn đề thực tế <span class="badge badge-practice">Thực hành</span></div>
+            </div>
+            <div class="lesson-time">⏱ 5 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Cách mô tả yêu cầu để Claude tự chọn đúng skills và hoàn thành toàn bộ task.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Nguyên tắc vàng: Mô tả INPUT + OUTPUT</p>
+            <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.75rem;padding:1rem;font-size:.85rem;margin-bottom:1rem">
+              <strong>Thay vì:</strong> <em>"Làm báo cáo cho tôi"</em><br>
+              <strong>Hãy nói:</strong> <em>"INPUT: file Excel Driver_May2026.xlsx trong thư mục Downloads. OUTPUT: Tạo báo cáo HTML gồm 3 bảng KPI chính và gửi email cho team@ahamove.com."</em>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:.875rem">
+              <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:.875rem;padding:1.25rem">
+                <p style="font-weight:700;color:var(--green);font-size:.85rem;margin-bottom:.6rem">Demo 1 — PDF → Slide trình bày</p>
+                <div class="code-block">
+                  <div class="code-line"><span class="code-str">"Đọc file báo cáo Q1_2026.pdf trong thư mục Desktop.</span></div>
+                  <div class="code-line"><span class="code-str"> Tóm tắt thành slide PowerPoint 10 trang.</span></div>
+                  <div class="code-line"><span class="code-str"> Lưu tên file là Q1_Summary_Slide.pptx."</span></div>
+                </div>
+                <p style="font-size:.78rem;color:var(--gray-600);margin-top:.5rem">→ Claude tự dùng skills /pdf + /pptx</p>
+              </div>
+
+              <div style="background:#eff6ff;border:1.5px solid #93c5fd;border-radius:.875rem;padding:1.25rem">
+                <p style="font-weight:700;color:var(--blue);font-size:.85rem;margin-bottom:.6rem">Demo 2 — Data → Báo cáo → Email</p>
+                <div class="code-block">
+                  <div class="code-line"><span class="code-str">"Mở file Driver_KPI.xlsx. Tính tổng AR và FR</span></div>
+                  <div class="code-line"><span class="code-str"> theo từng khu vực. Tạo báo cáo HTML đẹp.</span></div>
+                  <div class="code-line"><span class="code-str"> Gửi email báo cáo cho manager@ahamove.com."</span></div>
+                </div>
+                <p style="font-size:.78rem;color:var(--gray-600);margin-top:.5rem">→ Claude tự dùng skills /xlsx + /html + Gmail tool</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         MODULE 5: CLAUDE CODE
+    ═══════════════════════════════════════════ -->
+    <section class="module m5 fade-in" id="module5">
+      <div class="module-header">
+        <div class="module-label">Module 5 · 40 phút</div>
+        <div class="module-title">🤖 Claude Code — Sức Mạnh Tối Thượng</div>
+        <div class="module-meta">
+          <span>📚 3 bài học</span>
+          <span>🎯 Khai thác toàn bộ sức mạnh của Claude trên máy tính của bạn</span>
+        </div>
+      </div>
+      <div class="module-body">
+
+        <!-- BÀI 5.1 -->
+        <div class="lesson" id="lesson5-1">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">💎</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 5.1 — Claude Code là gì?</div>
+              <div class="lesson-subtitle">Bạn không cần biết code để dùng Claude Code</div>
+            </div>
+            <div class="lesson-time">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Claude Code là gì, sức mạnh của nó, và tại sao ngay cả người không biết code cũng nên dùng.
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin:1rem 0">
+              <div style="background:#fff7ed;border:1.5px solid #fdba74;border-radius:.75rem;padding:1rem;font-size:.83rem">
+                <p style="font-weight:700;color:#c2410c;margin-bottom:.5rem">🖥️ Claude Desktop</p>
+                <ul style="list-style:none;display:flex;flex-direction:column;gap:.3rem;color:var(--gray-700)">
+                  <li>• Giao diện đồ họa đẹp</li>
+                  <li>• Dễ dùng cho người mới</li>
+                  <li>• Kết nối MCP cơ bản</li>
+                  <li>• Phù hợp: dùng hàng ngày</li>
+                </ul>
+              </div>
+              <div style="background:#f0f9ff;border:1.5px solid #7dd3fc;border-radius:.75rem;padding:1rem;font-size:.83rem">
+                <p style="font-weight:700;color:#0369a1;margin-bottom:.5rem">🤖 Claude Code</p>
+                <ul style="list-style:none;display:flex;flex-direction:column;gap:.3rem;color:var(--gray-700)">
+                  <li>• Chạy qua Terminal (dòng lệnh)</li>
+                  <li>• Quyền truy cập máy tính đầy đủ</li>
+                  <li>• Skills & Automation nâng cao</li>
+                  <li>• Phù hợp: tự động hóa, dự án lớn</li>
+                </ul>
+              </div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .5rem">Bạn không cần code — đây là những gì Claude Code làm thay:</p>
+            <ul class="steps-list">
+              <li><div class="step-num">✓</div><div class="step-content">Bạn nói: <em>"Phân tích 200 file Excel trong thư mục này và tạo báo cáo tổng hợp"</em> → Claude Code đọc, tính, tổng hợp</div></li>
+              <li><div class="step-num">✓</div><div class="step-content">Bạn nói: <em>"Tìm tất cả PDF có chứa từ 'driver retention' và tóm tắt từng file"</em> → Claude Code tự tìm và đọc</div></li>
+              <li><div class="step-num">✓</div><div class="step-content">Bạn nói: <em>"Tạo bộ slide PowerPoint từ outline này"</em> → Claude Code tạo file .pptx hoàn chỉnh</div></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- BÀI 5.2 -->
+        <div class="lesson" id="lesson5-2">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">⚙️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 5.2 — Cài đặt Claude Code từng bước</div>
+              <div class="lesson-subtitle">Hướng dẫn chi tiết, không bỏ bước nào <span class="badge badge-important">Quan trọng</span> <span class="badge badge-practice">Thực hành</span></div>
+            </div>
+            <div class="lesson-time">⏱ 20 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ có</strong>
+              Claude Code chạy trên Terminal và sẵn sàng nhận lệnh đầu tiên.
+            </div>
+
+            <!-- BƯỚC 1: Node.js -->
+            <div style="border:2px solid var(--gray-200);border-radius:.875rem;overflow:hidden;margin:.75rem 0">
+              <div style="background:var(--gray-800);color:white;padding:.75rem 1.25rem;font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:.6rem">
+                <span style="background:var(--orange);border-radius:50%;width:1.5rem;height:1.5rem;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0">1</span>
+                Cài Node.js (nền tảng để chạy Claude Code)
+              </div>
+              <div style="padding:1.25rem;font-size:.85rem">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                  <div>
+                    <p style="font-weight:600;margin-bottom:.5rem">🍎 Mac:</p>
+                    <ol style="list-style:decimal;margin-left:1rem;display:flex;flex-direction:column;gap:.3rem;color:var(--gray-700)">
+                      <li>Vào <strong>nodejs.org</strong></li>
+                      <li>Nhấn nút xanh <strong>"Download LTS"</strong></li>
+                      <li>Mở file .pkg tải về → Next → Install</li>
+                      <li>Nhập mật khẩu Mac nếu được hỏi</li>
+                    </ol>
+                  </div>
+                  <div>
+                    <p style="font-weight:600;margin-bottom:.5rem">🪟 Windows:</p>
+                    <ol style="list-style:decimal;margin-left:1rem;display:flex;flex-direction:column;gap:.3rem;color:var(--gray-700)">
+                      <li>Vào <strong>nodejs.org</strong></li>
+                      <li>Nhấn nút xanh <strong>"Download LTS"</strong></li>
+                      <li>Chạy file .msi → Next → Next → Install</li>
+                      <li>Restart máy tính sau khi cài xong</li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="code-block" style="margin-top:.875rem">
+                  <div class="code-label">Kiểm tra cài thành công</div>
+                  <div class="code-line"><span class="code-cmd">node --version</span>  <span class="code-comment"># Phải thấy: v20.x.x hoặc cao hơn</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BƯỚC 2: Terminal -->
+            <div style="border:2px solid var(--gray-200);border-radius:.875rem;overflow:hidden;margin:.75rem 0">
+              <div style="background:var(--gray-800);color:white;padding:.75rem 1.25rem;font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:.6rem">
+                <span style="background:var(--orange);border-radius:50%;width:1.5rem;height:1.5rem;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0">2</span>
+                Mở Terminal (cửa sổ dòng lệnh)
+              </div>
+              <div style="padding:1.25rem;font-size:.85rem">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                  <div>
+                    <p style="font-weight:600;margin-bottom:.4rem">🍎 Mac:</p>
+                    <p style="color:var(--gray-700)">Nhấn <strong>Cmd+Space</strong> → Gõ <strong>"Terminal"</strong> → Enter. Cửa sổ đen xuất hiện = thành công.</p>
+                  </div>
+                  <div>
+                    <p style="font-weight:600;margin-bottom:.4rem">🪟 Windows:</p>
+                    <p style="color:var(--gray-700)">Nhấn <strong>Windows+R</strong> → Gõ <strong>"cmd"</strong> → Enter. Hoặc tìm "PowerShell" trong Start Menu.</p>
+                  </div>
+                </div>
+                <div class="tip-box" style="margin-top:.875rem">
+                  <div class="tip-label">💡 Terminal trông đáng sợ nhưng không nguy hiểm</div>
+                  Terminal chỉ là một cách khác để ra lệnh cho máy tính. Thay vì click chuột, bạn gõ chữ. Claude Code sẽ hướng dẫn bạn cần gõ gì.
+                </div>
+              </div>
+            </div>
+
+            <!-- BƯỚC 3: Cài Claude Code -->
+            <div style="border:2px solid var(--gray-200);border-radius:.875rem;overflow:hidden;margin:.75rem 0">
+              <div style="background:var(--gray-800);color:white;padding:.75rem 1.25rem;font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:.6rem">
+                <span style="background:var(--orange);border-radius:50%;width:1.5rem;height:1.5rem;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0">3</span>
+                Cài Claude Code
+              </div>
+              <div style="padding:1.25rem">
+                <div class="code-block">
+                  <div class="code-label">Gõ lệnh này vào Terminal (copy và paste nguyên vẹn)</div>
+                  <div class="code-line"><span class="code-cmd">npm install -g @anthropic/claude-code</span></div>
+                  <div class="code-comment" style="margin-top:.5rem"># Thấy nhiều dòng chữ chạy = bình thường, chờ 1-2 phút</div>
+                  <div class="code-comment"># Thấy "added X packages" = cài thành công</div>
+                </div>
+                <div class="code-block">
+                  <div class="code-label">Kiểm tra</div>
+                  <div class="code-line"><span class="code-cmd">claude --version</span>  <span class="code-comment"># Phải thấy: 1.x.x</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BƯỚC 4: API Key -->
+            <div style="border:2px solid var(--gray-200);border-radius:.875rem;overflow:hidden;margin:.75rem 0">
+              <div style="background:var(--gray-800);color:white;padding:.75rem 1.25rem;font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:.6rem">
+                <span style="background:var(--orange);border-radius:50%;width:1.5rem;height:1.5rem;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0">4</span>
+                Lấy API Key (chìa khóa kết nối)
+              </div>
+              <div style="padding:1.25rem;font-size:.85rem">
+                <ul class="steps-list">
+                  <li><div class="step-num">→</div><div class="step-content">Truy cập <strong>console.anthropic.com</strong> → Đăng nhập bằng tài khoản claude.ai</div></li>
+                  <li><div class="step-num">→</div><div class="step-content">Nhấn <strong>"API Keys"</strong> trong menu trái → Nhấn <strong>"+ Create Key"</strong></div></li>
+                  <li><div class="step-num">→</div><div class="step-content">Đặt tên key (ví dụ: "Laptop cá nhân") → <strong>Copy key</strong> (bắt đầu bằng "sk-ant-...")</div></li>
+                </ul>
+                <div class="warning-box">
+                  <div class="warn-label">⚠️ Cực kỳ quan trọng — Bảo mật API Key</div>
+                  API Key này giống như mật khẩu ngân hàng. <strong>Không chia sẻ với ai, không paste vào chat, không đưa lên internet.</strong> Nếu lộ, vào console.anthropic.com để xóa ngay và tạo key mới.
+                </div>
+              </div>
+            </div>
+
+            <!-- BƯỚC 5: Kết nối & Test -->
+            <div style="border:2px solid var(--green);border-radius:.875rem;overflow:hidden;margin:.75rem 0">
+              <div style="background:var(--green);color:white;padding:.75rem 1.25rem;font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:.6rem">
+                <span style="background:rgba(255,255,255,.25);border-radius:50%;width:1.5rem;height:1.5rem;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0">5</span>
+                Kết nối và chạy lần đầu tiên 🎉
+              </div>
+              <div style="padding:1.25rem">
+                <div class="code-block">
+                  <div class="code-label">Gõ lệnh này để khởi động Claude Code</div>
+                  <div class="code-line"><span class="code-cmd">claude</span></div>
+                  <div class="code-comment" style="margin-top:.5rem"># Lần đầu: Claude sẽ hỏi API Key → paste key vào → Enter</div>
+                  <div class="code-comment"># Thấy dòng chữ "Welcome to Claude Code" = thành công!</div>
+                </div>
+                <div class="code-block">
+                  <div class="code-label">Test tin nhắn đầu tiên</div>
+                  <div class="code-line"><span class="code-str">"Xin chào! Hãy giới thiệu bản thân và những gì bạn có thể làm."</span></div>
+                </div>
+                <div class="success-box" style="margin-top:.75rem">
+                  <div class="success-label">🎉 Chúc mừng!</div>
+                  Claude trả lời = bạn đã cài thành công Claude Code! Đây là cột mốc quan trọng nhất trong khóa học này.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 5.3 -->
+        <div class="lesson" id="lesson5-3">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🚀</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 5.3 — Sử dụng Claude Code hiệu quả</div>
+              <div class="lesson-subtitle">CLAUDE.md, Slash Commands và workflows thực tế <span class="badge badge-tip">Mẹo</span></div>
+            </div>
+            <div class="lesson-time">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Cách setup CLAUDE.md và dùng Slash Commands để làm việc hiệu quả hơn.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">📄 CLAUDE.md — "Hộ chiếu" của dự án</p>
+            <p style="font-size:.85rem;color:var(--gray-700);margin-bottom:.75rem">CLAUDE.md là file văn bản đặc biệt mà Claude Code đọc mỗi khi bạn mở project. Nó nói với Claude: "Đây là ai, project này là gì, làm việc theo cách nào." Có CLAUDE.md = không cần giải thích lại mỗi lần.</p>
+
+            <div class="code-block">
+              <div class="code-label">Tạo CLAUDE.md tự động (cách dễ nhất)</div>
+              <div class="code-line"><span class="code-comment"># Trong Claude Code, gõ lệnh:</span></div>
+              <div class="code-line"><span class="code-cmd">/init</span></div>
+              <div class="code-comment" style="margin-top:.4rem"># Claude sẽ hỏi về dự án của bạn và tự tạo CLAUDE.md</div>
+            </div>
+
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">⌨️ Slash Commands quan trọng nhất</p>
+
+            <table class="cmd-table">
+              <thead><tr><th>Lệnh</th><th>Tác dụng</th><th>Khi nào dùng</th></tr></thead>
+              <tbody>
+                <tr><td><code>/help</code></td><td>Xem toàn bộ lệnh có thể dùng</td><td>Khi bạn không nhớ lệnh nào</td></tr>
+                <tr><td><code>/clear</code></td><td>Xóa lịch sử chat hiện tại</td><td>Khi bắt đầu task mới, không liên quan</td></tr>
+                <tr><td><code>/compact</code></td><td>Tóm tắt conversation dài</td><td>Khi chat quá dài, muốn tiết kiệm chi phí</td></tr>
+                <tr><td><code>/cost</code></td><td>Xem chi phí token đã dùng</td><td>Theo dõi ngân sách API</td></tr>
+                <tr><td><code>/model</code></td><td>Chuyển đổi giữa các model</td><td>Dùng Haiku cho task đơn giản, Opus cho phức tạp</td></tr>
+                <tr><td><code>/init</code></td><td>Tạo CLAUDE.md cho project</td><td>Khi bắt đầu dự án mới</td></tr>
+              </tbody>
+            </table>
+
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Ví dụ thực tế — Không cần biết code</p>
+
+            <div style="display:flex;flex-direction:column;gap:.6rem">
+              <div class="code-block">
+                <div class="code-label">Phân tích nhiều file</div>
+                <div class="code-line"><span class="code-str">"Đọc tất cả file Excel trong thư mục Downloads/Reports</span></div>
+                <div class="code-line"><span class="code-str"> và tạo một bảng tổng hợp các chỉ số chính."</span></div>
+              </div>
+              <div class="code-block">
+                <div class="code-label">Tìm kiếm trong tài liệu</div>
+                <div class="code-line"><span class="code-str">"Tìm tất cả file PDF trên Desktop chứa từ khóa</span></div>
+                <div class="code-line"><span class="code-str"> 'tài xế' và liệt kê nội dung liên quan."</span></div>
+              </div>
+              <div class="code-block">
+                <div class="code-label">Tạo file đầu ra</div>
+                <div class="code-line"><span class="code-str">"Từ outline sau, tạo file PowerPoint 8 slide:</span></div>
+                <div class="code-line"><span class="code-str"> [paste outline của bạn vào đây]"</span></div>
+              </div>
+            </div>
+
+            <div class="tip-box" style="margin-top:1rem">
+              <div class="tip-label">💡 Bí quyết cuối khóa</div>
+              <strong>Đừng sợ thử sai!</strong> Claude Code không xóa file của bạn trừ khi bạn yêu cầu rõ ràng. Hãy thử nghiệm tự do. Nếu kết quả chưa ưng, nói <em>"Làm lại nhưng..."</em> và Claude sẽ cải thiện.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- /content -->
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">Điều hướng nhanh</div>
+      <a class="sidebar-link active" href="#module1"><span class="sidebar-icon">💻</span> Claude Web <span class="sidebar-time-badge">40ph</span></a>
+      <a class="sidebar-link" href="#module2"><span class="sidebar-icon">📁</span> Projects <span class="sidebar-time-badge">35ph</span></a>
+      <a class="sidebar-link" href="#module3"><span class="sidebar-icon">🖥️</span> Desktop <span class="sidebar-time-badge">35ph</span></a>
+      <a class="sidebar-link" href="#module4"><span class="sidebar-icon">⚡</span> Cowork <span class="sidebar-time-badge">30ph</span></a>
+      <a class="sidebar-link" href="#module5"><span class="sidebar-icon">🤖</span> Claude Code <span class="sidebar-time-badge">40ph</span></a>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">Checklist hoàn thành</div>
+      <label class="checklist-item" id="chk1"><input type="checkbox" onchange="checkItem(this)"> Tạo tài khoản claude.ai</label>
+      <label class="checklist-item" id="chk2"><input type="checkbox" onchange="checkItem(this)"> Gửi tin nhắn đầu tiên</label>
+      <label class="checklist-item" id="chk3"><input type="checkbox" onchange="checkItem(this)"> Viết prompt theo template 4 phần</label>
+      <label class="checklist-item" id="chk4"><input type="checkbox" onchange="checkItem(this)"> Tạo Project đầu tiên</label>
+      <label class="checklist-item" id="chk5"><input type="checkbox" onchange="checkItem(this)"> Cài Claude Desktop</label>
+      <label class="checklist-item" id="chk6"><input type="checkbox" onchange="checkItem(this)"> Kết nối Google Drive qua MCP</label>
+      <label class="checklist-item" id="chk7"><input type="checkbox" onchange="checkItem(this)"> Cài Node.js thành công</label>
+      <label class="checklist-item" id="chk8"><input type="checkbox" onchange="checkItem(this)"> Chạy Claude Code lần đầu</label>
+      <label class="checklist-item" id="chk9"><input type="checkbox" onchange="checkItem(this)"> Tạo CLAUDE.md với /init</label>
+    </div>
+
+    <div class="sidebar-card" style="background:linear-gradient(135deg,#0E4174,#1a5fa8);color:white;border:none">
+      <div class="sidebar-title" style="color:rgba(255,255,255,.7)">Tiến độ học</div>
+      <div style="font-size:1.8rem;font-weight:800;letter-spacing:-.03em" id="progress-pct">0%</div>
+      <div style="background:rgba(255,255,255,.2);border-radius:1rem;height:6px;margin:.5rem 0">
+        <div style="background:var(--orange);border-radius:1rem;height:100%;transition:width .3s" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div style="font-size:.75rem;opacity:.75">Hoàn thành checklist để tăng tiến độ</div>
+    </div>
+  </aside>
+
+</div><!-- /main-wrap -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <h3>🎓 Hoàn thành khóa học!</h3>
+    <p>Bạn đã đi qua toàn bộ hành trình từ người mới đến người dùng Claude thành thục.<br>Tiếp tục thực hành mỗi ngày — kỹ năng AI là kỹ năng của tương lai.</p>
+
+    <div class="cert-box">
+      <p style="font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:.5rem">Bạn đã làm được</p>
+      <ul class="final-checklist">
+        <li>Sử dụng Claude AI Web thành thục</li>
+        <li>Tạo và quản lý Projects hiệu quả</li>
+        <li>Cài đặt và dùng Claude Desktop</li>
+        <li>Kết nối Claude với Gmail, Drive, Calendar</li>
+        <li>Setup và dùng Cowork với Skills</li>
+        <li>Cài và chạy Claude Code thành công</li>
+      </ul>
+    </div>
+
+    <p style="margin-top:2rem;font-size:.8rem;opacity:.5">Ahamove Driver Management Team · 2026 · Khóa học nội bộ</p>
+  </div>
+</footer>
+
+<script>
+  // Toggle lesson open/close
+  function toggleLesson(header) {
+    const lesson = header.parentElement;
+    lesson.classList.toggle('open');
+  }
+
+  // Progress bar on scroll
+  window.addEventListener('scroll', () => {
+    const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    document.getElementById('progress-bar').style.width = scrolled + '%';
+    updateActiveNav();
+  });
+
+  // Update active nav item based on scroll position
+  function updateActiveNav() {
+    const modules = ['module1','module2','module3','module4','module5'];
+    const navItems = document.querySelectorAll('.nav-item');
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    let current = 0;
+    modules.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= 80) current = i;
+    });
+    navItems.forEach((n, i) => n.classList.toggle('active', i === current));
+    sidebarLinks.forEach((n, i) => n.classList.toggle('active', i === current));
+  }
+
+  // Checklist progress
+  function checkItem(checkbox) {
+    const label = checkbox.parentElement;
+    label.classList.toggle('done', checkbox.checked);
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const all = document.querySelectorAll('.checklist-item input');
+    const done = document.querySelectorAll('.checklist-item input:checked');
+    const pct = Math.round((done.length / all.length) * 100);
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }
+
+  // Fade-in animations on scroll
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+  fadeEls.forEach(el => observer.observe(el));
+
+  // Copy button for code blocks
+  document.querySelectorAll('.code-block').forEach(block => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+      const text = block.querySelectorAll('.code-line,.code-comment').length
+        ? Array.from(block.querySelectorAll('.code-line,.code-comment')).map(l => l.textContent).join('\n')
+        : block.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '✓ Copied';
+        setTimeout(() => btn.textContent = 'Copy', 1500);
+      });
+    };
+    block.appendChild(btn);
+  });
+</script>
+</body>
+</html>
