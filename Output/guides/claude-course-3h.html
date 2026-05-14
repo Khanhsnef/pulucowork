@@ -1150,6 +1150,158 @@
           </div>
         </div>
 
+        <!-- BÀI 4.4 -->
+        <div class="lesson" id="lesson4-4">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">📂</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 4.4 — Sau khi link folder: Claude cần đọc gì?</div>
+              <div class="lesson-subtitle">Từ "Claude chưa biết gì" đến "Claude hiểu 100% về bạn" <span class="badge badge-important">Quan trọng</span> <span class="badge badge-practice">Thực hành</span></div>
+            </div>
+            <div class="lesson-time">⏱ 15 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Khi đã link folder vào Cowork, cần tạo thêm những file gì — theo thứ tự nào — để Claude thực sự hiểu bạn, ngữ cảnh, quy tắc và phong cách làm việc.
+            </div>
+
+            <div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:1.5px solid #f59e0b;border-radius:.875rem;padding:1.25rem;margin-bottom:1.25rem;font-size:.88rem">
+              <p style="font-weight:700;color:#92400e;margin-bottom:.4rem">⚠️ Vấn đề khi mới link folder</p>
+              <p style="color:#78350f">Bạn đã mở Cowork, chọn tab <strong>Cowork</strong>, link đến folder dự án — nhưng Claude vẫn <strong>chưa biết gì về bạn</strong>. Nó chỉ thấy một folder trống. Cần tạo thêm file để Claude có context làm việc.</p>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Cấu trúc folder cần tạo</p>
+            <div class="code-block">
+              <div class="code-label">Cấu trúc folder Cowork hoàn chỉnh</div>
+              <div class="code-line"><span class="code-hl">📁 MyProject/</span>                 <span class="code-comment">← folder đã link vào Cowork</span></div>
+              <div class="code-line">├── <span class="code-str">CLAUDE.md</span>              <span class="code-comment">← BẮT BUỘC — Claude tự đọc ngay khi mở folder</span></div>
+              <div class="code-line">├── <span class="code-str">about-me.md</span>            <span class="code-comment">← Tôi là ai (được CLAUDE.md trỏ đến)</span></div>
+              <div class="code-line">├── <span class="code-str">my-rules.md</span>            <span class="code-comment">← Claude phải / không được làm gì</span></div>
+              <div class="code-line">├── <span class="code-str">my-voice.md</span>            <span class="code-comment">← Giọng văn, format output</span></div>
+              <div class="code-line">├── <span class="code-line">output/</span>                <span class="code-comment">← Thư mục chứa mọi file đầu ra</span></div>
+              <div class="code-line">└── <span class="code-line">.claude/</span></div>
+              <div class="code-line">    └── <span class="code-str">settings.json</span>      <span class="code-comment">← Tool nào được phép chạy tự động</span></div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:1.25rem 0 .6rem">Thứ tự ưu tiên tạo file</p>
+            <div style="display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.25rem">
+              <div style="display:flex;gap:.875rem;align-items:flex-start">
+                <div style="min-width:2rem;height:2rem;border-radius:50%;background:var(--red);color:white;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+                <div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:.75rem;padding:.875rem;flex:1;font-size:.84rem">
+                  <strong style="color:var(--red)">CLAUDE.md</strong> — Làm trước tiên, bắt buộc<br>
+                  <span style="color:var(--gray-600)">Claude tự đọc file này ngay khi bạn mở folder. Không có file này = Claude không biết gì.</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:.875rem;align-items:flex-start">
+                <div style="min-width:2rem;height:2rem;border-radius:50%;background:var(--orange);color:white;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+                <div style="background:#fff7ed;border:1.5px solid #fdba74;border-radius:.75rem;padding:.875rem;flex:1;font-size:.84rem">
+                  <strong style="color:#c2410c">.claude/settings.json</strong> — Làm ngay sau CLAUDE.md<br>
+                  <span style="color:var(--gray-600)">Kiểm soát tool nào Claude được tự chạy, tool nào phải hỏi bạn trước.</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:.875rem;align-items:flex-start">
+                <div style="min-width:2rem;height:2rem;border-radius:50%;background:var(--green);color:white;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+                <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:.75rem;padding:.875rem;flex:1;font-size:.84rem">
+                  <strong style="color:#065f46">about-me.md + my-rules.md + my-voice.md</strong> — Làm sau, hoàn thiện dần<br>
+                  <span style="color:var(--gray-600)">3 file này nâng Claude từ 70% → 100% hiểu bạn. Có thể viết dần, không cần hoàn hảo ngay.</span>
+                </div>
+              </div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">CLAUDE.md tối thiểu cần có gì?</p>
+            <div class="code-block">
+              <div class="code-label">CLAUDE.md — 4 phần tối thiểu, copy và điền vào</div>
+              <div class="code-line"><span class="code-hl">## Tôi là ai</span></div>
+              <div class="code-line">[Tên, chức vụ, công ty, team phụ trách]</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-hl">## Dự án này là gì</span></div>
+              <div class="code-line">[Mục đích của folder này, output mong muốn là gì]</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-hl">## Quy tắc làm việc</span></div>
+              <div class="code-line">- Luôn trả lời tiếng Việt</div>
+              <div class="code-line">- Kết luận trước, chi tiết sau</div>
+              <div class="code-line">- Dùng bảng khi có nhiều items để so sánh</div>
+              <div class="code-line">- Lưu mọi output vào folder output/</div>
+              <div class="code-line" style="margin-top:.5rem"><span class="code-hl">## Đọc thêm để hiểu tôi</span></div>
+              <div class="code-line">- Xem about-me.md — tôi là ai, chuyên môn ở đâu</div>
+              <div class="code-line">- Xem my-rules.md — điều tuyệt đối không được làm</div>
+              <div class="code-line">- Xem my-voice.md — giọng văn và format mong muốn</div>
+            </div>
+
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Tại sao CLAUDE.md chỉ bằng 70%?</p>
+
+            <div style="display:grid;grid-template-columns:1fr;gap:.6rem">
+              <div style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:.875rem;overflow:hidden">
+                <div style="background:var(--blue);color:white;padding:.6rem 1rem;font-size:.82rem;font-weight:700;display:flex;align-items:center;gap:.5rem">
+                  <span>📋 CLAUDE.md = 70%</span>
+                  <span style="opacity:.75;font-weight:400">— Claude biết dự án là gì, làm gì</span>
+                </div>
+                <div style="padding:.875rem;font-size:.83rem;color:var(--gray-700)">Nhưng chưa biết <em>người giao việc là ai</em>, <em>điều gì tuyệt đối không được làm</em>, và <em>output nên nghe như thế nào</em>.</div>
+              </div>
+
+              <div style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:.875rem;overflow:hidden">
+                <div style="background:#0891b2;color:white;padding:.6rem 1rem;font-size:.82rem;font-weight:700;display:flex;align-items:center;gap:.5rem">
+                  <span>👤 about-me.md = +10%</span>
+                </div>
+                <div style="padding:.875rem;font-size:.83rem;color:var(--gray-700)">
+                  Claude chưa biết bạn <strong>đã biết gì rồi</strong> → hay giải thích thừa những thứ bạn hiểu hết rồi.<br>
+                  <em style="color:var(--gray-600)">Ví dụ: cứ giải thích AR là gì dù bạn làm vận hành 5 năm rồi.</em>
+                </div>
+              </div>
+
+              <div style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:.875rem;overflow:hidden">
+                <div style="background:#d97706;color:white;padding:.6rem 1rem;font-size:.82rem;font-weight:700;display:flex;align-items:center;gap:.5rem">
+                  <span>📏 my-rules.md = +10%</span>
+                </div>
+                <div style="padding:.875rem;font-size:.83rem;color:var(--gray-700)">
+                  CLAUDE.md có rules chung, nhưng chưa có <strong>điều tuyệt đối không được làm</strong> — những thứ Claude hay tự ý làm mà bạn ghét.<br>
+                  <em style="color:var(--gray-600)">Ví dụ: bịa số, kết thúc bằng "Tóm lại...", hỏi lại thay vì làm thẳng.</em>
+                </div>
+              </div>
+
+              <div style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:.875rem;overflow:hidden">
+                <div style="background:#7C3AED;color:white;padding:.6rem 1rem;font-size:.82rem;font-weight:700;display:flex;align-items:center;gap:.5rem">
+                  <span>🎨 my-voice.md = +10%</span>
+                </div>
+                <div style="padding:.875rem;font-size:.83rem;color:var(--gray-700)">
+                  Claude biết <em>làm gì</em> nhưng chưa biết <em>nghe như thế nào</em>. Output ra đúng nội dung nhưng vẫn "mùi AI".<br>
+                  <em style="color:var(--gray-600)">Không có file này → mang báo cáo đưa sếp, sếp biết ngay AI viết.</em>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid var(--green);border-radius:.875rem;padding:1.25rem;margin-top:1.25rem">
+              <p style="font-weight:700;color:#065f46;margin-bottom:.75rem;font-size:.88rem">✅ Checklist — Đủ 4 file = Claude hiểu 100%</p>
+              <table style="width:100%;font-size:.82rem;border-collapse:collapse">
+                <tr style="border-bottom:1px solid #a7f3d0">
+                  <td style="padding:.4rem .5rem;font-weight:600">CLAUDE.md</td>
+                  <td style="padding:.4rem .5rem;color:var(--gray-700)">Dự án là gì, làm gì, quy tắc cơ bản</td>
+                  <td style="padding:.4rem .5rem;text-align:right;font-weight:700;color:var(--green)">70%</td>
+                </tr>
+                <tr style="border-bottom:1px solid #a7f3d0">
+                  <td style="padding:.4rem .5rem;font-weight:600">about-me.md</td>
+                  <td style="padding:.4rem .5rem;color:var(--gray-700)">Người giao việc là ai, biết gì rồi</td>
+                  <td style="padding:.4rem .5rem;text-align:right;font-weight:700;color:#0891b2">+10%</td>
+                </tr>
+                <tr style="border-bottom:1px solid #a7f3d0">
+                  <td style="padding:.4rem .5rem;font-weight:600">my-rules.md</td>
+                  <td style="padding:.4rem .5rem;color:var(--gray-700)">Điều tuyệt đối không được làm</td>
+                  <td style="padding:.4rem .5rem;text-align:right;font-weight:700;color:#d97706">+10%</td>
+                </tr>
+                <tr>
+                  <td style="padding:.4rem .5rem;font-weight:600">my-voice.md</td>
+                  <td style="padding:.4rem .5rem;color:var(--gray-700)">Output nghe như tôi tự viết</td>
+                  <td style="padding:.4rem .5rem;text-align:right;font-weight:700;color:var(--purple)">+10%</td>
+                </tr>
+              </table>
+              <div style="border-top:2px solid var(--green);margin-top:.5rem;padding-top:.5rem;display:flex;justify-content:space-between;font-size:.88rem;font-weight:700;color:#065f46">
+                <span>Tổng</span><span>= 100% Claude hiểu bạn</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- SETUP M4 -->
         <div class="lesson" id="lesson4-setup">
           <div class="lesson-header" onclick="toggleLesson(this)">
