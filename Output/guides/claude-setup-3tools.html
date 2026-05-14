@@ -432,6 +432,207 @@ body {
   white-space: nowrap;
 }
 
+/* ══════════════════════════════
+   SETTINGS DEEP DIVE STYLES
+══════════════════════════════ */
+
+/* Sidebar + content layout */
+.settings-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  margin-top: 20px;
+}
+.settings-sidebar {
+  background: #f8fafc;
+  border-right: 1.5px solid #e2e8f0;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.settings-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: .78rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: default;
+  transition: background .1s;
+}
+.settings-tab.active {
+  background: #fff;
+  color: #0E4174;
+  font-weight: 800;
+  box-shadow: 0 1px 4px rgba(14,65,116,.1);
+}
+.settings-tab .tab-icon { font-size: .9rem; flex-shrink: 0; }
+.settings-content { padding: 24px 28px; background: #fff; }
+
+/* Section within content */
+.sc-section { margin-bottom: 22px; }
+.sc-section:last-child { margin-bottom: 0; }
+.sc-label {
+  font-size: .62rem; font-weight: 700; letter-spacing: 1.2px;
+  text-transform: uppercase; color: #94a3b8;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.sc-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f8fafc;
+}
+.sc-row:last-child { border-bottom: none; }
+.sc-row-left { flex: 1; }
+.sc-row-name { font-size: .82rem; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+.sc-row-desc { font-size: .72rem; color: #64748b; line-height: 1.5; }
+.sc-row-right { flex-shrink: 0; display: flex; align-items: center; }
+
+/* Toggle switch visual */
+.toggle {
+  width: 36px; height: 20px;
+  border-radius: 99px;
+  display: flex; align-items: center;
+  padding: 2px;
+  flex-shrink: 0;
+}
+.toggle.on  { background: #0E4174; justify-content: flex-end; }
+.toggle.off { background: #cbd5e1; justify-content: flex-start; }
+.toggle-dot { width: 16px; height: 16px; background: #fff; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+
+/* Select visual */
+.select-pill {
+  background: #f1f5f9; border: 1px solid #e2e8f0;
+  border-radius: 6px; padding: 4px 10px;
+  font-size: .72rem; font-weight: 700; color: #334155;
+  display: flex; align-items: center; gap: 4px;
+}
+.select-pill::after { content: '▾'; color: #94a3b8; font-size: .65rem; }
+
+/* Instruction box visual */
+.instruction-box {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: 'Space Mono', monospace;
+  font-size: .7rem;
+  line-height: 1.8;
+  color: #334155;
+  margin-top: 8px;
+  white-space: pre-wrap;
+}
+.instruction-box .ib-comment { color: #94a3b8; }
+.instruction-box .ib-key    { color: #0E4174; font-weight: 700; }
+.instruction-box .ib-val    { color: #334155; }
+
+/* MCP server card in connectors */
+.mcp-server-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 10px; padding: 12px 14px;
+  margin-bottom: 8px;
+}
+.mcp-server-row:last-child { margin-bottom: 0; }
+.mcp-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.mcp-status.on  { background: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,.15); }
+.mcp-status.off { background: #e2e8f0; }
+.mcp-status.err { background: #EF4444; box-shadow: 0 0 0 3px rgba(239,68,68,.15); }
+.mcp-s-name { font-size: .8rem; font-weight: 800; color: #1e293b; margin-bottom: 2px; }
+.mcp-s-cmd  { font-family: 'Space Mono', monospace; font-size: .65rem; color: #64748b; margin-bottom: 3px; }
+.mcp-s-tools { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.mcp-s-tool {
+  background: #eff6ff; border: 1px solid #bfdbfe;
+  border-radius: 4px; padding: 1px 7px;
+  font-size: .62rem; font-weight: 700; color: #2563eb;
+}
+
+/* Hierarchy diagram for instructions */
+.hierarchy {
+  display: flex; flex-direction: column; gap: 0;
+  margin-top: 12px;
+}
+.hier-row {
+  display: flex; align-items: stretch; gap: 0;
+}
+.hier-left {
+  display: flex; flex-direction: column; align-items: center;
+  width: 32px; flex-shrink: 0;
+}
+.hier-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 800; flex-shrink: 0;
+  font-family: 'Space Mono', monospace;
+}
+.hier-line { flex: 1; width: 2px; background: #e2e8f0; margin: 3px 0; }
+.hier-body { flex: 1; padding: 0 0 16px 12px; }
+.hier-row:last-child .hier-body { padding-bottom: 0; }
+.hier-row:last-child .hier-line { display: none; }
+.hier-name { font-size: .82rem; font-weight: 800; color: #1e293b; margin-bottom: 2px; }
+.hier-desc { font-size: .73rem; color: #64748b; line-height: 1.5; }
+.hier-scope { display: inline-flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+
+/* Cowork plugin visual */
+.plugin-header {
+  display: flex; align-items: center; gap: 10px;
+  background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+  border: 1.5px solid #dbeafe;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+.plugin-icon { font-size: 1.4rem; }
+.plugin-name { font-size: .9rem; font-weight: 800; color: #0E4174; }
+.plugin-version { font-size: .68rem; font-family: 'Space Mono', monospace; color: #64748b; margin-top: 1px; }
+
+/* Window chrome mockup */
+.window-mock {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  margin-top: 16px;
+}
+.window-titlebar {
+  background: #f1f5f9;
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.wt-dots { display: flex; gap: 5px; }
+.wt-dot { width: 10px; height: 10px; border-radius: 50%; }
+.wt-dot.red { background: #ef4444; }
+.wt-dot.yellow { background: #f59e0b; }
+.wt-dot.green { background: #22c55e; }
+.wt-title { font-size: .72rem; font-weight: 700; color: #64748b; flex: 1; text-align: center; letter-spacing: .3px; }
+.window-body { display: grid; grid-template-columns: 180px 1fr; }
+.wb-nav {
+  background: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+  padding: 8px;
+}
+.wb-nav-item {
+  padding: 6px 10px; border-radius: 6px;
+  font-size: .72rem; font-weight: 600; color: #64748b;
+  margin-bottom: 1px;
+  display: flex; align-items: center; gap: 6px;
+}
+.wb-nav-item.active { background: #dbeafe; color: #1d4ed8; font-weight: 700; }
+.wb-nav-section { font-size: .58rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #94a3b8; padding: 8px 10px 4px; margin-top: 4px; }
+.wb-content { padding: 16px 20px; min-height: 200px; }
+
 </style>
 </head>
 <body>
@@ -923,6 +1124,669 @@ body {
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       CLAUDE DESKTOP SETTINGS DEEP DIVE
+  ══════════════════════════════ -->
+  <div class="card s2">
+    <div class="section-header">
+      <div class="section-icon">⚙️</div>
+      <div>
+        <div class="section-label-tag">claude desktop / preferences</div>
+        <div class="section-title">Claude Desktop — Settings Chi Tiết</div>
+        <div class="section-subtitle">Hướng dẫn từng tab trong Preferences (⌘ + ,)</div>
+      </div>
+    </div>
+
+    <!-- Window mockup overview -->
+    <div class="window-mock">
+      <div class="window-titlebar">
+        <div class="wt-dots">
+          <div class="wt-dot red"></div>
+          <div class="wt-dot yellow"></div>
+          <div class="wt-dot green"></div>
+        </div>
+        <div class="wt-title">Claude — Preferences</div>
+      </div>
+      <div class="window-body">
+        <div class="wb-nav">
+          <div class="wb-nav-section">SETTINGS</div>
+          <div class="wb-nav-item active">⚙️ General</div>
+          <div class="wb-nav-item">💬 Instructions for Claude</div>
+          <div class="wb-nav-item">🔌 Connectors</div>
+          <div class="wb-nav-item">⚡ Claude Code</div>
+          <div class="wb-nav-section">PLUGIN</div>
+          <div class="wb-nav-item">🛠️ Cowork</div>
+        </div>
+        <div class="wb-content" style="display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:.78rem;">
+          <div style="text-align:center;">
+            <div style="font-size:1.5rem;margin-bottom:8px;">⌘,</div>
+            <div style="font-weight:700;">Mở Preferences bằng <code style="font-family:'Space Mono',monospace;font-size:.75rem;background:#f1f5f9;padding:1px 6px;border-radius:4px;">Cmd + ,</code></div>
+            <div style="font-size:.7rem;margin-top:4px;">hoặc Claude menu → Preferences</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 1: GENERAL -->
+    <div class="divider" style="margin-top:28px;">
+      <div class="divider-line"></div>
+      <div class="divider-label">TAB 1 — GENERAL</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="settings-layout">
+      <div class="settings-sidebar">
+        <div class="settings-tab active"><span class="tab-icon">⚙️</span> General</div>
+        <div class="settings-tab"><span class="tab-icon">💬</span> Instructions</div>
+        <div class="settings-tab"><span class="tab-icon">🔌</span> Connectors</div>
+        <div class="settings-tab"><span class="tab-icon">⚡</span> Claude Code</div>
+        <div class="settings-tab"><span class="tab-icon">🛠️</span> Cowork</div>
+      </div>
+      <div class="settings-content">
+
+        <div class="sc-section">
+          <div class="sc-label">Appearance</div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Theme</div>
+              <div class="sc-row-desc">Giao diện sáng/tối. Chọn <strong>System</strong> để tự động theo macOS.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">System</div>
+            </div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Language</div>
+              <div class="sc-row-desc">Ngôn ngữ UI của app (không ảnh hưởng ngôn ngữ Claude trả lời — việc đó do Instructions kiểm soát).</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">English</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sc-section">
+          <div class="sc-label">Startup & System</div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Launch at Login</div>
+              <div class="sc-row-desc">Tự động mở Claude Desktop khi khởi động Mac. Bật nếu dùng hàng ngày.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="toggle on"><div class="toggle-dot"></div></div>
+            </div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Show in Menu Bar</div>
+              <div class="sc-row-desc">Hiện icon Claude trên menu bar (top-right). Cho phép mở nhanh bằng <code style="font-family:'Space Mono',monospace;font-size:.72rem;">⌥ Space</code>.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="toggle on"><div class="toggle-dot"></div></div>
+            </div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Global Hotkey</div>
+              <div class="sc-row-desc">Phím tắt mở Claude từ bất kỳ đâu. Mặc định <strong>⌥ Space</strong>, có thể tùy chỉnh.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">⌥ Space</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sc-section">
+          <div class="sc-label">Notifications</div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Desktop Notifications</div>
+              <div class="sc-row-desc">Hiện thông báo khi Claude xong task dài. Hữu ích khi giao task background.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="toggle on"><div class="toggle-dot"></div></div>
+            </div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Sound</div>
+              <div class="sc-row-desc">Phát âm thanh khi có response mới.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="toggle off"><div class="toggle-dot"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sc-section">
+          <div class="sc-label">Updates</div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Auto-update</div>
+              <div class="sc-row-desc">Tự động cập nhật Claude Desktop khi có phiên bản mới. Nên bật để có tính năng mới nhất.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="toggle on"><div class="toggle-dot"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 2: INSTRUCTIONS FOR CLAUDE -->
+    <div class="divider" style="margin-top:28px;">
+      <div class="divider-line"></div>
+      <div class="divider-label">TAB 2 — INSTRUCTIONS FOR CLAUDE</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="note note-orange" style="margin-bottom:16px;">
+      <div class="note-icon">🧠</div>
+      <div><strong>Đây là setting quan trọng nhất.</strong> "Instructions for Claude" là system prompt được inject vào <em>mọi</em> conversation — Claude luôn "mang theo" context này mà không cần Khanh nhắc lại.</div>
+    </div>
+
+    <!-- Hierarchy diagram -->
+    <div class="two-col" style="gap:24px;">
+      <div>
+        <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">Phân tầng Instructions</div>
+        <div class="hierarchy">
+          <div class="hier-row">
+            <div class="hier-left">
+              <div class="hier-icon" style="background:#0E4174;color:#fff;">G</div>
+              <div class="hier-line"></div>
+            </div>
+            <div class="hier-body">
+              <div class="hier-name">Global Instructions <span class="badge b-blue" style="font-size:.6rem;">Settings → Instructions</span></div>
+              <div class="hier-desc">Áp dụng cho <strong>tất cả</strong> conversations trong Claude Desktop. Đây là "DNA" cố định — role, persona, ngôn ngữ, format output.</div>
+              <div class="hier-scope">
+                <span class="badge b-gray">Mọi Project</span>
+                <span class="badge b-gray">Mọi chat</span>
+                <span class="badge b-gray">Tất cả tools</span>
+              </div>
+            </div>
+          </div>
+          <div class="hier-row">
+            <div class="hier-left">
+              <div class="hier-icon" style="background:#FF7F32;color:#fff;">P</div>
+              <div class="hier-line"></div>
+            </div>
+            <div class="hier-body">
+              <div class="hier-name">Project Instructions <span class="badge b-orange" style="font-size:.6rem;">Project → Settings</span></div>
+              <div class="hier-desc">Áp dụng cho <strong>project cụ thể</strong>. Thêm context đặc thù: dataset, rules riêng, personas khác nhau per-project.</div>
+              <div class="hier-scope">
+                <span class="badge b-gray">1 Project cụ thể</span>
+                <span class="badge b-gray">Cộng thêm Global</span>
+              </div>
+            </div>
+          </div>
+          <div class="hier-row">
+            <div class="hier-left">
+              <div class="hier-icon" style="background:#10B981;color:#fff;">C</div>
+            </div>
+            <div class="hier-body">
+              <div class="hier-name">Conversation Prompt <span class="badge b-green" style="font-size:.6rem;">Chat message</span></div>
+              <div class="hier-desc">Prompt Khanh gõ trực tiếp — ghi đè hoặc bổ sung cho session hiện tại. Không lưu lại.</div>
+              <div class="hier-scope">
+                <span class="badge b-gray">1 conversation</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">Global Instructions của Khanh (mẫu)</div>
+        <div class="instruction-box"><span class="ib-comment"># IDENTITY</span>
+<span class="ib-key">Tên tôi:</span> <span class="ib-val">Lê Phương Khanh</span>
+<span class="ib-key">Role:</span> <span class="ib-val">Driver Management Leader, Ahamove</span>
+<span class="ib-key">Scope:</span> <span class="ib-val">Xe máy Instant (Giao ngay 1H,
+  Siêu tốc, Ghép đơn, 4H)</span>
+
+<span class="ib-comment"># LANGUAGE & FORMAT</span>
+<span class="ib-val">- Trả lời tiếng Việt</span>
+<span class="ib-val">- Thuật ngữ: AR, FR, CPO, EPH,
+  RPH, GDR, CTR giữ tiếng Anh</span>
+<span class="ib-val">- Bảng > bullet > văn xuôi</span>
+<span class="ib-val">- Pyramid Principle</span>
+
+<span class="ib-comment"># RULES</span>
+<span class="ib-val">- Không bịa số</span>
+<span class="ib-val">- Brief trước, chờ confirm</span>
+<span class="ib-val">- SQL first cho data questions</span></div>
+      </div>
+    </div>
+
+    <div class="note note-blue" style="margin-top:16px;">
+      <div class="note-icon">💡</div>
+      <div><strong>Global Instructions ≠ CLAUDE.md.</strong> Global Instructions chỉ áp dụng trong Claude Desktop app. CLAUDE.md áp dụng cho Claude Code (terminal). Nên đồng bộ nội dung 2 nơi cho nhất quán.</div>
+    </div>
+
+    <!-- What to put / not put table -->
+    <div style="margin-top:16px;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>✅ NÊN đặt trong Global Instructions</th>
+            <th>❌ KHÔNG nên đặt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Role, tên, công ty, team</td>
+            <td>Task cụ thể (VD: "viết email cho anh X")</td>
+          </tr>
+          <tr>
+            <td>Ngôn ngữ ưu tiên (Tiếng Việt)</td>
+            <td>Data real-time (AR hôm qua là X%)</td>
+          </tr>
+          <tr>
+            <td>Format output: bảng, bullet, Pyramid</td>
+            <td>Thông tin deadline/date cụ thể</td>
+          </tr>
+          <tr>
+            <td>Behavioral rules: không bịa số, brief trước</td>
+            <td>File paths dài hoặc config kỹ thuật</td>
+          </tr>
+          <tr>
+            <td>Domain vocabulary (AR, FR, CPO…)</td>
+            <td>Nội dung quá dài (>500 từ) — dùng Project Knowledge thay</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TAB 3: CONNECTORS -->
+    <div class="divider" style="margin-top:28px;">
+      <div class="divider-line"></div>
+      <div class="divider-label">TAB 3 — CONNECTORS (MCP SERVERS)</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="note note-blue" style="margin-bottom:16px;">
+      <div class="note-icon">🔌</div>
+      <div><strong>Connectors = MCP Servers.</strong> Mỗi connector là một "bridge" giúp Claude Desktop kết nối với tool bên ngoài (Gmail, Drive, BigQuery…). Quản lý tại <strong>Preferences → Connectors</strong> hoặc chỉnh trực tiếp file <code style="font-family:'Space Mono',monospace;">claude_desktop_config.json</code>.</div>
+    </div>
+
+    <!-- How to add a connector -->
+    <div class="two-col" style="margin-bottom:16px;">
+      <div>
+        <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Cách thêm Connector mới</div>
+        <div class="code-block">
+          <div class="code-line code-comment"># Mở config file trong terminal</div>
+          <div class="code-line code-cmd">code ~/Library/Application\ Support/</div>
+          <div class="code-line code-cmd">     Claude/claude_desktop_config.json</div>
+          <div class="code-line" style="height:6px;"></div>
+          <div class="code-line code-comment"># Cấu trúc JSON chuẩn</div>
+          <div class="code-line code-val">{</div>
+          <div class="code-line code-val">  <span class="code-key">"mcpServers"</span>: {</div>
+          <div class="code-line code-val">    <span class="code-str">"tên-server"</span>: {</div>
+          <div class="code-line code-val">      <span class="code-key">"command"</span>: <span class="code-str">"npx"</span>,</div>
+          <div class="code-line code-val">      <span class="code-key">"args"</span>: [<span class="code-str">"-y"</span>, <span class="code-str">"package-name"</span>],</div>
+          <div class="code-line code-val">      <span class="code-key">"env"</span>: {</div>
+          <div class="code-line code-val">        <span class="code-str">"API_KEY"</span>: <span class="code-str">"..."</span></div>
+          <div class="code-line code-val">      }</div>
+          <div class="code-line code-val">    }</div>
+          <div class="code-line code-val">  }</div>
+          <div class="code-line code-val">}</div>
+        </div>
+        <div class="note note-yellow" style="margin-top:10px;">
+          <div class="note-icon">⚠️</div>
+          <div>Sau khi sửa config → <strong>Restart Claude Desktop</strong> hoàn toàn (Quit → mở lại). Connector mới không active cho tới khi restart.</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Connectors của Khanh</div>
+        <div class="mcp-server-row">
+          <div class="mcp-status on"></div>
+          <div style="flex:1;">
+            <div class="mcp-s-name">📊 Aira Analytics</div>
+            <div class="mcp-s-cmd">mcp__claude_ai_Aira__*</div>
+            <div class="mcp-s-tools">
+              <span class="mcp-s-tool">get_analytics_catalog</span>
+              <span class="mcp-s-tool">run_readonly_query</span>
+            </div>
+          </div>
+        </div>
+        <div class="mcp-server-row">
+          <div class="mcp-status on"></div>
+          <div style="flex:1;">
+            <div class="mcp-s-name">📧 Gmail</div>
+            <div class="mcp-s-cmd">mcp__claude_ai_Gmail__*</div>
+            <div class="mcp-s-tools">
+              <span class="mcp-s-tool">search_threads</span>
+              <span class="mcp-s-tool">get_thread</span>
+              <span class="mcp-s-tool">create_draft</span>
+              <span class="mcp-s-tool">label_*</span>
+            </div>
+          </div>
+        </div>
+        <div class="mcp-server-row">
+          <div class="mcp-status on"></div>
+          <div style="flex:1;">
+            <div class="mcp-s-name">📅 Google Calendar</div>
+            <div class="mcp-s-cmd">mcp__claude_ai_Google_Calendar__*</div>
+            <div class="mcp-s-tools">
+              <span class="mcp-s-tool">list_events</span>
+              <span class="mcp-s-tool">create_event</span>
+              <span class="mcp-s-tool">suggest_time</span>
+            </div>
+          </div>
+        </div>
+        <div class="mcp-server-row">
+          <div class="mcp-status on"></div>
+          <div style="flex:1;">
+            <div class="mcp-s-name">📁 Google Drive</div>
+            <div class="mcp-s-cmd">mcp__claude_ai_Google_Drive__*</div>
+            <div class="mcp-s-tools">
+              <span class="mcp-s-tool">search_files</span>
+              <span class="mcp-s-tool">read_file_content</span>
+              <span class="mcp-s-tool">create_file</span>
+            </div>
+          </div>
+        </div>
+        <div class="mcp-server-row">
+          <div class="mcp-status on"></div>
+          <div style="flex:1;">
+            <div class="mcp-s-name">📓 NotebookLM</div>
+            <div class="mcp-s-cmd">mcp__notebooklm-mcp__*</div>
+            <div class="mcp-s-tools">
+              <span class="mcp-s-tool">notebook_query</span>
+              <span class="mcp-s-tool">source_add</span>
+              <span class="mcp-s-tool">studio_create</span>
+            </div>
+          </div>
+        </div>
+        <div class="mcp-server-row">
+          <div class="mcp-status off"></div>
+          <div style="flex:1;">
+            <div class="mcp-s-name" style="color:#94a3b8;">📋 Notion / Atlassian</div>
+            <div class="mcp-s-cmd">Chưa auth — cần chạy authenticate flow</div>
+            <div class="mcp-s-tools">
+              <span class="mcp-s-tool" style="background:#f1f5f9;border-color:#e2e8f0;color:#64748b;">Pending auth</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connector auth flow -->
+    <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px 20px;">
+      <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Flow xác thực Connector lần đầu</div>
+      <div class="flow-row" style="margin-top:0;">
+        <div class="flow-node fn-gray" style="min-width:80px;font-size:.72rem;">Thêm<br>config JSON</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node fn-orange" style="min-width:80px;font-size:.72rem;">Restart<br>Desktop</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node fn-blue" style="min-width:80px;font-size:.72rem;">Claude gọi<br>authenticate()</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node fn-purple" style="min-width:80px;font-size:.72rem;">Browser mở<br>OAuth page</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node fn-green" style="min-width:80px;font-size:.72rem;">✓ Connected<br>🟢 Active</div>
+      </div>
+    </div>
+
+    <!-- TAB 4: CLAUDE CODE -->
+    <div class="divider" style="margin-top:28px;">
+      <div class="divider-line"></div>
+      <div class="divider-label">TAB 4 — CLAUDE CODE (TRONG DESKTOP)</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="settings-layout">
+      <div class="settings-sidebar">
+        <div class="settings-tab"><span class="tab-icon">⚙️</span> General</div>
+        <div class="settings-tab"><span class="tab-icon">💬</span> Instructions</div>
+        <div class="settings-tab"><span class="tab-icon">🔌</span> Connectors</div>
+        <div class="settings-tab active"><span class="tab-icon">⚡</span> Claude Code</div>
+        <div class="settings-tab"><span class="tab-icon">🛠️</span> Cowork</div>
+      </div>
+      <div class="settings-content">
+        <div class="sc-section">
+          <div class="sc-label">Integration</div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Enable Claude Code integration</div>
+              <div class="sc-row-desc">Cho phép Claude Desktop nhận biết Claude Code CLI đang chạy trong terminal và chia sẻ context.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="toggle on"><div class="toggle-dot"></div></div>
+            </div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Claude Code executable path</div>
+              <div class="sc-row-desc">Đường dẫn đến binary <code style="font-family:'Space Mono',monospace;font-size:.72rem;">claude</code>. Auto-detect nếu cài qua npm global.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">Auto</div>
+            </div>
+          </div>
+        </div>
+        <div class="sc-section">
+          <div class="sc-label">IDE Extensions</div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">VS Code Extension</div>
+              <div class="sc-row-desc">Tích hợp Claude Code vào VS Code. Cài extension từ Marketplace: <strong>Anthropic Claude Code</strong>.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">Install…</div>
+            </div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Open files in editor</div>
+              <div class="sc-row-desc">Khi Claude Code tạo/edit file → tự động mở trong VS Code hay editor mặc định.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">VS Code</div>
+            </div>
+          </div>
+        </div>
+        <div class="sc-section">
+          <div class="sc-label">Account & Usage</div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Subscription</div>
+              <div class="sc-row-desc">Claude Code dùng chung subscription với Desktop (Max Plan). Không cần API key riêng nếu login cùng account.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">Max Plan ✓</div>
+            </div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Usage cap</div>
+              <div class="sc-row-desc">Claude Code có thể tốn nhiều token hơn — theo dõi usage tại <strong>claude.ai/usage</strong>.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">View usage</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: COWORK -->
+    <div class="divider" style="margin-top:28px;">
+      <div class="divider-line"></div>
+      <div class="divider-label">TAB 5 — COWORK (PLUGIN)</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="plugin-header">
+      <div class="plugin-icon">🛠️</div>
+      <div>
+        <div class="plugin-name">Cowork Plugin for Claude Desktop</div>
+        <div class="plugin-version">Plugin nâng cao — bổ sung Skills, Memory, Hooks vào Claude Desktop</div>
+      </div>
+    </div>
+
+    <div class="settings-layout">
+      <div class="settings-sidebar">
+        <div class="settings-tab"><span class="tab-icon">⚙️</span> General</div>
+        <div class="settings-tab"><span class="tab-icon">💬</span> Instructions</div>
+        <div class="settings-tab"><span class="tab-icon">🔌</span> Connectors</div>
+        <div class="settings-tab"><span class="tab-icon">⚡</span> Claude Code</div>
+        <div class="settings-tab active"><span class="tab-icon">🛠️</span> Cowork</div>
+      </div>
+      <div class="settings-content">
+
+        <div class="sc-section">
+          <div class="sc-label">Workspace</div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Cowork Folder</div>
+              <div class="sc-row-desc">Thư mục gốc chứa toàn bộ context, output, config. Claude Desktop đọc <strong>CLAUDE.md</strong> và <strong>.claude/</strong> từ đây.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">~/Desktop/Cowork</div>
+            </div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Auto-load CLAUDE.md</div>
+              <div class="sc-row-desc">Tự động inject CLAUDE.md vào context khi mở conversation mới trong Cowork workspace.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="toggle on"><div class="toggle-dot"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sc-section">
+          <div class="sc-label">Skills</div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Enable Skills (/<em>command</em>)</div>
+              <div class="sc-row-desc">Cho phép dùng slash commands: <code style="font-family:'Space Mono',monospace;font-size:.72rem;">/pptx</code>, <code style="font-family:'Space Mono',monospace;font-size:.72rem;">/xlsx</code>, <code style="font-family:'Space Mono',monospace;font-size:.72rem;">/html</code>, <code style="font-family:'Space Mono',monospace;font-size:.72rem;">/okr</code>, <code style="font-family:'Space Mono',monospace;font-size:.72rem;">/plan</code>…</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="toggle on"><div class="toggle-dot"></div></div>
+            </div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Skills directory</div>
+              <div class="sc-row-desc">Nơi lưu skill definitions. Mặc định trong <code style="font-family:'Space Mono',monospace;font-size:.72rem;">.claude/</code> folder của Cowork.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">.claude/</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sc-section">
+          <div class="sc-label">Memory System</div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Auto-memory</div>
+              <div class="sc-row-desc">Claude tự động lưu thông tin quan trọng vào <code style="font-family:'Space Mono',monospace;font-size:.72rem;">memory/</code>: user profile, feedback, project context — persist qua sessions.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="toggle on"><div class="toggle-dot"></div></div>
+            </div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Memory index (MEMORY.md)</div>
+              <div class="sc-row-desc">File index tự động load vào mỗi session. Tối đa 200 dòng — Claude đọc để biết context từ các cuộc trò chuyện trước.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">View MEMORY.md</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sc-section">
+          <div class="sc-label">Hooks (Automated Behaviors)</div>
+          <div class="sc-row">
+            <div class="sc-row-left">
+              <div class="sc-row-name">Hooks là gì?</div>
+              <div class="sc-row-desc">Shell commands tự động chạy khi có event: <strong>PostToolUse</strong> (sau mỗi tool call), <strong>Stop</strong> (khi Claude xong). Cấu hình trong <code style="font-family:'Space Mono',monospace;font-size:.72rem;">.claude/settings.json</code>.</div>
+            </div>
+            <div class="sc-row-right">
+              <div class="select-pill">Edit hooks</div>
+            </div>
+          </div>
+          <div class="code-block" style="margin-top:8px;">
+            <div class="code-line code-comment"># Ví dụ: hook auto git-commit sau mỗi file write</div>
+            <div class="code-line code-val">{</div>
+            <div class="code-line code-val">  <span class="code-key">"hooks"</span>: {</div>
+            <div class="code-line code-val">    <span class="code-str">"PostToolUse"</span>: [{</div>
+            <div class="code-line code-val">      <span class="code-key">"matcher"</span>: <span class="code-str">"Write"</span>,</div>
+            <div class="code-line code-val">      <span class="code-key">"hooks"</span>: [{<span class="code-key">"type"</span>: <span class="code-str">"command"</span>,</div>
+            <div class="code-line code-val">        <span class="code-key">"command"</span>: <span class="code-str">"git add -A && git commit -m 'auto-sync'"</span>}]</div>
+            <div class="code-line code-val">    }],</div>
+            <div class="code-line code-val">    <span class="code-str">"Stop"</span>: [{                    <span class="code-comment">// Khi Claude xong task</span></div>
+            <div class="code-line code-val">      <span class="code-key">"hooks"</span>: [{<span class="code-key">"type"</span>: <span class="code-str">"command"</span>,</div>
+            <div class="code-line code-val">        <span class="code-key">"command"</span>: <span class="code-str">"afplay /System/Sounds/Glass.aiff"</span>}]</div>
+            <div class="code-line code-val">    }]</div>
+            <div class="code-line code-val">  }</div>
+            <div class="code-line code-val">}</div>
+          </div>
+          <div class="note note-yellow" style="margin-top:10px;">
+            <div class="note-icon">💡</div>
+            <div>Dùng <code style="font-family:'Space Mono',monospace;">/update-config</code> trong chat để Claude tự cấu hình hooks — không cần sửa JSON thủ công. Ví dụ: <em>"từ giờ khi Claude xong task, phát âm thanh thông báo"</em>.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Quick reference tổng hợp -->
+    <div class="divider" style="margin-top:28px;">
+      <div class="divider-line"></div>
+      <div class="divider-label">TÓM TẮT — CẦU HỎI THƯỜNG GẶP</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Câu hỏi</th>
+          <th>Giải pháp</th>
+          <th>Nơi cấu hình</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"Claude không nhớ tôi là ai"</td>
+          <td>Thêm Global Instructions với role + context</td>
+          <td>Settings → Instructions for Claude</td>
+        </tr>
+        <tr>
+          <td>"Claude trả lời tiếng Anh"</td>
+          <td>Thêm <em>"Luôn trả lời tiếng Việt"</em> vào Global Instructions</td>
+          <td>Settings → Instructions for Claude</td>
+        </tr>
+        <tr>
+          <td>"Connector Gmail không kết nối"</td>
+          <td>Restart Desktop + chạy authenticate() flow lại</td>
+          <td>Settings → Connectors</td>
+        </tr>
+        <tr>
+          <td>"Skill /pptx không hoạt động"</td>
+          <td>Kiểm tra Enable Skills trong Cowork tab</td>
+          <td>Settings → Cowork → Skills</td>
+        </tr>
+        <tr>
+          <td>"Claude hỏi permission mỗi lần"</td>
+          <td>Gõ <code style="font-family:'Space Mono',monospace;font-size:.72rem;">/fewer-permission-prompts</code> hoặc sửa settings.json</td>
+          <td>.claude/settings.json → permissions.allow</td>
+        </tr>
+        <tr>
+          <td>"Muốn Claude tự git commit"</td>
+          <td>Thêm PostToolUse hook cho Write action</td>
+          <td>.claude/settings.json → hooks</td>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
 
   <!-- ══════════════════════════════
