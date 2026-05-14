@@ -96,6 +96,7 @@
     .m4 .module-header{background:linear-gradient(135deg,#7C3AED,#a855f7)}
     .m5 .module-header{background:linear-gradient(135deg,#0a2f57,#0E4174)}
     .m6 .module-header{background:linear-gradient(135deg,#064e3b,#10B981)}
+    .m7 .module-header{background:linear-gradient(135deg,#1e1b4b,#4338ca)}
 
     /* ── LESSON CARDS ── */
     .lesson{border:1.5px solid var(--gray-200);border-radius:.875rem;margin-bottom:1.25rem;overflow:hidden;transition:box-shadow .2s}
@@ -211,6 +212,9 @@
     <a class="nav-item" href="#module6" data-module="6">
       <div class="nav-dot" style="background:#10B981"></div>📄 Config Files <span class="nav-time">30ph</span>
     </a>
+    <a class="nav-item" href="#module7" data-module="7">
+      <div class="nav-dot" style="background:#4338ca"></div>🔒 Tham Khảo <span class="nav-time">Ref</span>
+    </a>
   </div>
 </nav>
 
@@ -221,15 +225,15 @@
   <p class="hero-sub">Từ người chưa biết gì đến sử dụng thành thục Claude AI, Desktop, Projects, Cowork, Claude Code và cách "lập trình" Claude bằng file cấu hình — không cần biết code.</p>
   <div class="hero-stats">
     <div class="hero-stat">
-      <div class="hero-stat-num">3.5H</div>
+      <div class="hero-stat-num">4H+</div>
       <div class="hero-stat-label">Thời lượng</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-num">6</div>
+      <div class="hero-stat-num">7</div>
       <div class="hero-stat-label">Module</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-num">26</div>
+      <div class="hero-stat-num">34</div>
       <div class="hero-stat-label">Bài học</div>
     </div>
     <div class="hero-stat">
@@ -244,6 +248,7 @@
     <span class="hero-mod-tag">Cowork</span>
     <span class="hero-mod-tag">Claude Code</span>
     <span class="hero-mod-tag" style="background:rgba(16,185,129,.25);border-color:rgba(16,185,129,.4)">📄 Config Files</span>
+    <span class="hero-mod-tag" style="background:rgba(67,56,202,.3);border-color:rgba(67,56,202,.4)">🔒 Bảo Mật & Từ Điển</span>
   </div>
 </header>
 
@@ -279,38 +284,157 @@
           <div class="lesson-body">
             <div class="objective-box">
               <strong>🎯 Sau bài này bạn sẽ biết</strong>
-              Claude là gì, mạnh ở điểm nào, và tại sao nên dùng Claude thay vì các AI khác.
+              Claude là gì, AI hoạt động như thế nào, sự khác biệt với ChatGPT, điểm mạnh/yếu, và tại sao bạn cần hiểu đúng trước khi dùng.
             </div>
 
-            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Claude là gì?</p>
+            <div style="background:linear-gradient(135deg,#0E4174,#1a5fa8);border-radius:1rem;padding:1.5rem;margin-bottom:1.25rem;color:white">
+              <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.75;margin-bottom:.5rem">🧑‍💻 Giải thích không kỹ thuật</div>
+              <p style="font-size:1rem;font-weight:700;margin-bottom:.6rem;line-height:1.4">Hãy tưởng tượng một nhân viên đã đọc hết toàn bộ internet.</p>
+              <p style="font-size:.88rem;opacity:.9;line-height:1.65">Họ đọc hàng triệu sách, bài báo, báo cáo, Wikipedia, diễn đàn, tài liệu kỹ thuật — tất cả. Bây giờ họ ngồi ở bàn làm việc của bạn, 24/7, sẵn sàng trả lời bất cứ câu hỏi nào. <strong style="color:#FF7F32">Nhưng không thể tra cứu thêm thông tin mới, và đôi khi nhớ nhầm chi tiết.</strong> Claude chính là nhân viên đó — không có ý thức, nhưng kết quả rất hữu ích.</p>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">4 quan niệm phổ biến về AI — và thực tế</p>
+            <table class="cmd-table">
+              <thead><tr><th>Điều nhiều người nghĩ</th><th>Thực tế</th></tr></thead>
+              <tbody>
+                <tr><td>🧠 AI có ý thức, cảm xúc như con người</td><td>Không có ý thức. Claude xử lý xác suất thống kê — dự đoán từ tiếp theo có nghĩa nhất. Không "nghĩ" theo kiểu người.</td></tr>
+                <tr><td>📚 AI biết hết mọi thứ, không bao giờ sai</td><td>Chỉ biết thứ đã được huấn luyện. Có thể bịa thông tin tự tin (<em>hallucination</em>). Luôn kiểm chứng số liệu quan trọng.</td></tr>
+                <tr><td>🤖 AI thay thế toàn bộ con người</td><td>AI thay thế <strong>tác vụ lặp đi lặp lại</strong> — không thay thế tư duy chiến lược và judgement của con người.</td></tr>
+                <tr><td>💻 Phải biết code mới dùng được AI</td><td>Hoàn toàn không cần. Kỹ năng quan trọng nhất là <strong>mô tả yêu cầu rõ ràng bằng tiếng Việt</strong>.</td></tr>
+              </tbody>
+            </table>
+
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.6rem">📌 Anthropic & Claude — 3 điều cần biết</p>
             <ul class="steps-list">
-              <li>
-                <div class="step-num">1</div>
-                <div class="step-content"><strong>Claude = Trợ lý AI</strong> do công ty Anthropic (Mỹ) tạo ra. Hãy nghĩ Claude như một người đồng nghiệp thông minh, làm việc 24/7, không bao giờ mệt — bạn hỏi gì cũng trả lời được.</div>
-              </li>
-              <li>
-                <div class="step-num">2</div>
-                <div class="step-content"><strong>Khác ChatGPT & Gemini:</strong> Claude được huấn luyện ưu tiên an toàn & chính xác, đặc biệt giỏi đọc tài liệu dài, phân tích văn bản, và viết nội dung chuyên nghiệp.</div>
-              </li>
-              <li>
-                <div class="step-num">3</div>
-                <div class="step-content"><strong>Ba phiên bản:</strong> Haiku = nhanh nhất / Sonnet = cân bằng tốt nhất (nên dùng hàng ngày) / Opus = thông minh nhất, dùng cho tác vụ phức tạp.</div>
-              </li>
+              <li><div class="step-num">1</div><div class="step-content"><strong>Anthropic thành lập 2021</strong> tại Mỹ — tách ra từ OpenAI (công ty tạo ChatGPT). Sứ mệnh: xây dựng AI an toàn và đáng tin cậy. AI Safety là ưu tiên số 1.</div></li>
+              <li><div class="step-num">2</div><div class="step-content"><strong>Claude ra mắt 2023</strong>, hiện ở Claude 4 với 3 phiên bản: <strong>Haiku</strong> (nhanh, nhẹ) · <strong>Sonnet</strong> (cân bằng — dùng hàng ngày) · <strong>Opus</strong> (thông minh nhất — tác vụ phức tạp).</div></li>
+              <li><div class="step-num">3</div><div class="step-content"><strong>Điểm mạnh cốt lõi:</strong> đọc tài liệu rất dài (context window lớn), viết văn bản tự nhiên, phân tích logic phức tạp, và <em>nói thẳng khi không chắc</em> thay vì bịa.</div></li>
             </ul>
 
-            <p style="font-size:.9rem;font-weight:600;margin:.875rem 0 .6rem">Claude làm được gì?</p>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.6rem;margin-bottom:1rem">
-              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">📄 Đọc & tóm tắt PDF, Word</div>
-              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">✍️ Viết email, báo cáo, slide</div>
-              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">🖼️ Phân tích ảnh, biểu đồ</div>
-              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">📊 Xử lý dữ liệu, Excel</div>
-              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">🔍 Nghiên cứu & tổng hợp</div>
-              <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:.625rem;padding:.75rem;font-size:.82rem;text-align:center">💡 Brainstorm ý tưởng</div>
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Claude vs ChatGPT — So sánh nhanh</p>
+            <table class="cmd-table">
+              <thead><tr><th>Tiêu chí</th><th>Claude (Anthropic)</th><th>ChatGPT (OpenAI)</th></tr></thead>
+              <tbody>
+                <tr><td><strong>An toàn & trung thực</strong></td><td>⭐⭐⭐ AI Safety là core mission, nói thẳng khi không chắc</td><td>⭐⭐ Tốt nhưng đôi khi tự tin bịa hơn</td></tr>
+                <tr><td><strong>Đọc tài liệu dài (100+ trang)</strong></td><td>⭐⭐⭐ Context window rất lớn, xử lý tốt</td><td>⭐⭐ Nhỏ hơn, đôi khi "quên" nội dung đầu file</td></tr>
+                <tr><td><strong>Viết văn bản chất lượng</strong></td><td>⭐⭐⭐ Văn phong tự nhiên, ít "AI-sounding"</td><td>⭐⭐ Tốt nhưng đôi khi cứng, dễ nhận ra AI</td></tr>
+                <tr><td><strong>Tích hợp công cụ</strong></td><td>⭐⭐ MCP tools, Claude Code — đang phát triển mạnh</td><td>⭐⭐⭐ GPT Store, plugin phong phú hơn</td></tr>
+                <tr><td><strong>Giá</strong></td><td>Free (không cần thẻ) / Pro $20/tháng</td><td>Free / Plus $20/tháng (GPT-4 cần trả phí)</td></tr>
+              </tbody>
+            </table>
+
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Claude làm được gì? — 6 nhóm khả năng chính</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin-bottom:1.25rem">
+              <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1.5px solid #93c5fd;border-radius:.875rem;padding:1rem;font-size:.83rem"><div style="font-size:1.3rem;margin-bottom:.3rem">📄</div><div style="font-weight:700;color:var(--blue);margin-bottom:.25rem">Đọc & Phân tích</div><div style="color:var(--gray-700)">PDF, Word, Excel, báo cáo. Tóm tắt, trích xuất điểm chính, so sánh nhiều tài liệu.</div></div>
+              <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-radius:.875rem;padding:1rem;font-size:.83rem"><div style="font-size:1.3rem;margin-bottom:.3rem">✍️</div><div style="font-weight:700;color:var(--green);margin-bottom:.25rem">Viết & Soạn thảo</div><div style="color:var(--gray-700)">Email, báo cáo, slide, thông báo, script training — theo đúng văn phong bạn muốn.</div></div>
+              <div style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1.5px solid #fdba74;border-radius:.875rem;padding:1rem;font-size:.83rem"><div style="font-size:1.3rem;margin-bottom:.3rem">📊</div><div style="font-weight:700;color:var(--orange);margin-bottom:.25rem">Xử lý dữ liệu</div><div style="color:var(--gray-700)">Phân tích bảng số, công thức Excel, SQL query, tìm pattern trong data.</div></div>
+              <div style="background:linear-gradient(135deg,#fdf4ff,#fae8ff);border:1.5px solid #d8b4fe;border-radius:.875rem;padding:1rem;font-size:.83rem"><div style="font-size:1.3rem;margin-bottom:.3rem">🔍</div><div style="font-weight:700;color:var(--purple);margin-bottom:.25rem">Nghiên cứu</div><div style="color:var(--gray-700)">Tổng hợp nhiều nguồn, so sánh quan điểm, đưa khuyến nghị dựa trên context.</div></div>
+              <div style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1);border:1.5px solid #5eead4;border-radius:.875rem;padding:1rem;font-size:.83rem"><div style="font-size:1.3rem;margin-bottom:.3rem">💡</div><div style="font-weight:700;color:var(--teal);margin-bottom:.25rem">Brainstorm</div><div style="color:var(--gray-700)">Đề xuất giải pháp, phản biện ý tưởng, đóng vai góc nhìn khác nhau.</div></div>
+              <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1.5px solid #fcd34d;border-radius:.875rem;padding:1rem;font-size:.83rem"><div style="font-size:1.3rem;margin-bottom:.3rem">🖼️</div><div style="font-weight:700;color:#92400e;margin-bottom:.25rem">Phân tích ảnh</div><div style="color:var(--gray-700)">Đọc biểu đồ, screenshot báo cáo, ảnh bảng trắng, sơ đồ quy trình.</div></div>
             </div>
 
             <div class="tip-box">
-              <div class="tip-label">💡 Mẹo nhớ nhanh</div>
-              Nếu bạn có thể giao việc cho một intern thông minh biết mọi thứ — Claude làm được việc đó, và còn nhanh hơn.
+              <div class="tip-label">💡 Cách nghĩ đúng về Claude</div>
+              Hãy nghĩ Claude như <strong>người đồng nghiệp thông minh 24/7</strong> — không ngủ, không phàn nàn, không giới hạn số câu hỏi. Bạn có thể hỏi đi hỏi lại, yêu cầu sửa lại, thử theo hướng khác. Điều duy nhất Claude cần là bạn <strong>nói rõ muốn gì</strong>.
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 1.1b: Context Window + Hallucination -->
+        <div class="lesson" id="lesson1-context">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🧠</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 1.1b — Bộ nhớ làm việc &amp; Hallucination</div>
+              <div class="lesson-subtitle">2 khái niệm quan trọng trước khi bắt đầu <span class="badge badge-important">Quan trọng</span></div>
+            </div>
+            <div class="lesson-time">⏱ 8 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ hiểu</strong>
+              Context window là gì, tại sao Claude "quên" khi mở tab mới, và khi nào KHÔNG nên tin Claude 100% — để tránh sai lầm tốn kém.
+            </div>
+
+            <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-radius:1rem;padding:1.35rem;margin-bottom:1rem">
+              <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:.5rem">💾 Context Window — Bộ nhớ làm việc</div>
+              <p style="font-size:.9rem;font-weight:700;margin-bottom:.5rem;color:var(--gray-800)">Context Window = RAM của Claude trong một cuộc trò chuyện</p>
+              <p style="font-size:.85rem;color:var(--gray-700);line-height:1.65;margin-bottom:.5rem">Trong cùng một tab, Claude nhớ toàn bộ lịch sử — câu bạn hỏi từ đầu buổi, file bạn upload, mọi thứ bạn đã nói. Mỗi câu trả lời đều dựa trên toàn bộ context đó.</p>
+              <p style="font-size:.85rem;color:var(--gray-700);line-height:1.65">Giống RAM máy tính — khi bạn tắt chương trình (đóng tab), RAM xóa sạch. Mở lại = RAM trống, bắt đầu từ đầu.</p>
+            </div>
+
+            <div class="warning-box">
+              <div class="warn-label">⚠️ Cực kỳ quan trọng</div>
+              <strong>TẮT TAB = CLAUDE QUÊN HẾT.</strong> Mỗi conversation mới = trang giấy trắng. Claude không nhớ tên bạn, công việc bạn làm, cuộc trò chuyện trước — phải giới thiệu lại từ đầu. Trừ khi bạn dùng Projects hoặc Cowork Memory (học ở Module 2 và 4).
+            </div>
+
+            <div class="compare-grid">
+              <div class="compare-card good">
+                <div class="compare-label">✅ Trong cùng 1 tab</div>
+                <ul style="list-style:none;font-size:.83rem;display:flex;flex-direction:column;gap:.4rem">
+                  <li>✓ Claude nhớ mọi thứ bạn đã nói</li>
+                  <li>✓ "Sửa lại đoạn 2" — Claude hiểu ngay</li>
+                  <li>✓ "Dịch sang tiếng Anh" — không cần paste lại</li>
+                  <li>✓ Upload file 1 lần, hỏi nhiều câu liên tiếp</li>
+                </ul>
+              </div>
+              <div class="compare-card bad">
+                <div class="compare-label">❌ Mở tab mới / Conversation mới</div>
+                <ul style="list-style:none;font-size:.83rem;display:flex;flex-direction:column;gap:.4rem">
+                  <li>✗ Claude không biết bạn là ai</li>
+                  <li>✗ Không nhớ file đã upload trước đó</li>
+                  <li>✗ Không nhớ quy tắc bạn đã dặn</li>
+                  <li>✗ Phải giới thiệu lại ngữ cảnh từ đầu</li>
+                </ul>
+              </div>
+            </div>
+
+            <hr class="divider">
+            <p style="font-size:.95rem;font-weight:700;margin-bottom:.6rem;color:var(--gray-800)">⚠️ Hallucination — Khi Claude bịa thông tin</p>
+            <p style="font-size:.85rem;color:var(--gray-700);line-height:1.65;margin-bottom:.875rem"><strong>Hallucination</strong> là hiện tượng AI tạo ra thông tin nghe có vẻ hợp lý, nói với giọng tự tin, nhưng thực ra <strong>sai hoặc không tồn tại</strong>. Đây là đặc tính của cách LLM hoạt động (dự đoán xác suất từ, không "biết" sự thật thật sự).</p>
+
+            <div style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:.875rem;padding:1rem;margin-bottom:1rem;font-size:.85rem">
+              <p style="font-weight:700;margin-bottom:.5rem">🚨 Khi nào hallucination nguy hiểm nhất?</p>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.5rem">
+                <div style="background:var(--red-light);border:1px solid #fca5a5;border-radius:.5rem;padding:.6rem;font-size:.8rem;text-align:center">📊 Số liệu thống kê</div>
+                <div style="background:var(--red-light);border:1px solid #fca5a5;border-radius:.5rem;padding:.6rem;font-size:.8rem;text-align:center">👤 Tên người / chức vụ</div>
+                <div style="background:var(--red-light);border:1px solid #fca5a5;border-radius:.5rem;padding:.6rem;font-size:.8rem;text-align:center">📅 Ngày tháng / năm</div>
+                <div style="background:var(--red-light);border:1px solid #fca5a5;border-radius:.5rem;padding:.6rem;font-size:.8rem;text-align:center">⚖️ Luật pháp / y tế</div>
+                <div style="background:var(--red-light);border:1px solid #fca5a5;border-radius:.5rem;padding:.6rem;font-size:.8rem;text-align:center">🔗 Link / URL cụ thể</div>
+                <div style="background:var(--red-light);border:1px solid #fca5a5;border-radius:.5rem;padding:.6rem;font-size:.8rem;text-align:center">📰 Tin tức sau 2024</div>
+              </div>
+            </div>
+
+            <div class="compare-grid">
+              <div class="compare-card good">
+                <div class="compare-label">✅ NÊN dùng Claude cho</div>
+                <ul style="list-style:none;font-size:.83rem;display:flex;flex-direction:column;gap:.35rem">
+                  <li>✓ Soạn thảo văn bản (draft trước, bạn review)</li>
+                  <li>✓ Brainstorm ý tưởng (không cần chính xác 100%)</li>
+                  <li>✓ Giải thích khái niệm, học kiến thức mới</li>
+                  <li>✓ Cấu trúc lại nội dung, dịch thuật</li>
+                  <li>✓ Phân tích tài liệu bạn tự upload</li>
+                </ul>
+              </div>
+              <div class="compare-card bad">
+                <div class="compare-label">❌ KHÔNG dùng làm nguồn sự thật</div>
+                <ul style="list-style:none;font-size:.83rem;display:flex;flex-direction:column;gap:.35rem">
+                  <li>✗ Số liệu thị trường chưa xác minh</li>
+                  <li>✗ Trích dẫn nghiên cứu, tên tác giả</li>
+                  <li>✗ Thông tin pháp lý, y tế cụ thể</li>
+                  <li>✗ Diễn biến tin tức gần đây</li>
+                  <li>✗ Quyết định chiến lược quan trọng chưa review</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tip-box">
+              <div class="tip-label">💡 Quy tắc vàng</div>
+              <strong>Claude = trợ lý thông minh, không phải nguồn sự thật.</strong> Workflow chuẩn: Claude draft nhanh → bạn kiểm tra và chỉnh sửa. Không bao giờ dùng số liệu Claude đưa ra mà không xác minh lại từ nguồn gốc.
             </div>
           </div>
         </div>
@@ -379,52 +503,72 @@
           <div class="lesson-body">
             <div class="objective-box">
               <strong>🎯 Sau bài này bạn sẽ biết</strong>
-              Viết prompt (câu lệnh) rõ ràng để Claude hiểu đúng và ra kết quả tốt ngay lần đầu.
+              Công thức COAT để viết prompt chuẩn, 5 kỹ thuật nâng cao, và ứng dụng ngay vào công việc thực tế Driver Management team.
             </div>
 
             <div class="template-box">
-              <div class="template-title">📐 Template Prompt Chuẩn — 4 Thành Phần</div>
+              <div class="template-title">📐 Công thức COAT — 4 thành phần của Prompt hoàn chỉnh</div>
               <div class="template-part">
-                <div class="template-tag">VAI TRÒ</div>
-                <div class="template-desc">Bạn muốn Claude đóng vai gì? <em>"Bạn là chuyên gia HR..."</em></div>
+                <div class="template-tag" style="background:#0E4174">C — Context</div>
+                <div class="template-desc"><strong>Bối cảnh:</strong> Bạn đang ở tình huống nào? Ai liên quan? Có ràng buộc gì? <em>"Tôi là HR Manager tại Ahamove, vừa phỏng vấn ứng viên vị trí Ops Analyst..."</em></div>
               </div>
               <div class="template-part">
-                <div class="template-tag">NGỮ CẢNH</div>
-                <div class="template-desc">Tình huống cụ thể là gì? <em>"Tôi cần viết email xin hoãn họp..."</em></div>
+                <div class="template-tag" style="background:#FF7F32">O — Objective</div>
+                <div class="template-desc"><strong>Mục tiêu:</strong> Muốn đạt được kết quả gì cụ thể? <em>"Viết email từ chối lịch sự, giữ thiện cảm để ứng viên giới thiệu người khác sau này."</em></div>
               </div>
               <div class="template-part">
-                <div class="template-tag">YÊU CẦU</div>
-                <div class="template-desc">Cần làm gì chính xác? <em>"Viết email lịch sự, súc tích..."</em></div>
+                <div class="template-tag" style="background:#10B981">A — Audience</div>
+                <div class="template-desc"><strong>Đối tượng:</strong> Người nhận là ai? Họ biết gì? Level chuyên môn? <em>"Ứng viên ~23 tuổi, lần đầu đi xin việc tại công ty lớn."</em></div>
               </div>
               <div class="template-part">
-                <div class="template-tag">FORMAT</div>
-                <div class="template-desc">Muốn kết quả trông như thế nào? <em>"Gồm: tiêu đề + nội dung, dưới 100 chữ"</em></div>
+                <div class="template-tag" style="background:#7C3AED">T — Tone/Format</div>
+                <div class="template-desc"><strong>Giọng văn + Định dạng + Độ dài:</strong> Formal hay thân thiện? Bảng hay bullet? Bao nhiêu chữ? <em>"Giọng ấm, khích lệ, dưới 100 chữ, tiếng Việt, không dùng từ 'rất tiếc'."</em></div>
               </div>
             </div>
 
-            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .6rem">So sánh: Prompt tệ vs Prompt tốt</p>
+            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .6rem">COAT trong thực tế — Trước và Sau</p>
             <div class="compare-grid">
               <div class="compare-card bad">
-                <div class="compare-label">❌ Prompt tệ</div>
-                <p style="font-size:.85rem">"viết email"</p>
-                <p style="font-size:.78rem;margin-top:.5rem;opacity:.7">→ Claude không biết gửi cho ai, về chủ đề gì, tone thế nào → kết quả chung chung, vô dụng</p>
+                <div class="compare-label">❌ Prompt không có COAT</div>
+                <p style="font-size:.88rem;font-style:italic">"viết email từ chối ứng viên"</p>
+                <p style="font-size:.78rem;margin-top:.5rem;opacity:.75">→ Claude không biết tone, lý do từ chối, đối tượng → output chung chung, cứng nhắc, không thể dùng ngay.</p>
               </div>
               <div class="compare-card good">
-                <div class="compare-label">✅ Prompt tốt</div>
-                <p style="font-size:.85rem">"Bạn là chuyên gia viết email công việc. Tôi cần hoãn cuộc họp ngày mai với đối tác vì lý do đột xuất. Viết email lịch sự, dưới 80 chữ. Format: Tiêu đề + Nội dung."</p>
+                <div class="compare-label">✅ Prompt đầy đủ COAT</div>
+                <p style="font-size:.83rem;line-height:1.6"><strong>[C]</strong> Tôi là HR Manager Ahamove, vừa PV ứng viên Ops Analyst — thái độ tốt nhưng thiếu SQL. <strong>[O]</strong> Email từ chối nhẹ nhàng, giữ cảm tình. <strong>[A]</strong> Ứng viên 23 tuổi, lần đầu apply công ty lớn. <strong>[T]</strong> Giọng ấm, khích lệ, dưới 100 chữ, tiếng Việt.</p>
               </div>
             </div>
 
-            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .6rem">3 Kỹ thuật nâng cao</p>
-            <ul class="steps-list">
-              <li><div class="step-num">A</div><div class="step-content"><strong>Cho ví dụ mẫu:</strong> Paste một đoạn viết bạn thích → <em>"Hãy viết theo phong cách tương tự"</em></div></li>
-              <li><div class="step-num">B</div><div class="step-content"><strong>Giới hạn đầu ra:</strong> <em>"Tối đa 200 chữ"</em>, <em>"Liệt kê đúng 5 gạch đầu dòng"</em>, <em>"Dưới dạng bảng"</em></div></li>
-              <li><div class="step-num">C</div><div class="step-content"><strong>Hỏi lại nếu chưa ưng:</strong> <em>"Làm lại nhưng tone thân thiện hơn"</em>, <em>"Rút ngắn còn một nửa"</em></div></li>
-            </ul>
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">5 Kỹ thuật nâng cao — Dùng khi nào?</p>
+            <table class="cmd-table">
+              <thead><tr><th>Kỹ thuật</th><th>Cách dùng</th><th>Khi nào dùng</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Giao vai (Persona)</strong></td><td><em>"Bạn là chuyên gia logistics 10 năm kinh nghiệm..."</em></td><td>Cần góc nhìn chuyên gia, phân tích có chiều sâu</td></tr>
+                <tr><td><strong>Cho ví dụ mẫu (Few-shot)</strong></td><td><em>"Output theo format này: [paste ví dụ]. Bây giờ làm tương tự với..."</em></td><td>Cần output đúng cấu trúc, đúng giọng văn cụ thể</td></tr>
+                <tr><td><strong>Step-by-step</strong></td><td><em>"Giải thích từng bước tại sao AR tuần này giảm..."</em></td><td>Cần phân tích rõ ràng, kiểm tra logic từng bước</td></tr>
+                <tr><td><strong>Phê bình ngược</strong></td><td><em>"Chỉ ra 3 điểm yếu trong kế hoạch này và đề xuất cải thiện."</em></td><td>Review, Devil's advocate, cải thiện chất lượng output</td></tr>
+                <tr><td><strong>Rút gọn / Định dạng lại</strong></td><td><em>"Rút xuống còn 5 bullets. Mỗi dòng tối đa 15 chữ."</em></td><td>Output quá dài, cần dùng cho slide hoặc thông báo ngắn</td></tr>
+              </tbody>
+            </table>
+
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">🚚 Ứng dụng thực tế — Driver Management Team</p>
+            <table class="cmd-table">
+              <thead><tr><th>Tình huống thực tế</th><th>Cách dùng Claude + Prompt mẫu</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Soạn thông báo chính sách mới cho tài xế</strong></td><td><em>"Bạn là chuyên gia truyền thông nội bộ logistics. Viết thông báo về [chính sách X] gửi tài xế xe máy. Tone thân thiện, không jargon pháp lý. Gồm: lý do thay đổi + tài xế cần làm gì + deadline. Dưới 200 chữ tiếng Việt."</em></td></tr>
+                <tr><td><strong>Phân tích báo cáo AR/FR tuần</strong></td><td>Upload file → <em>"Đọc báo cáo này. Tìm 3 điểm bất thường về AR hoặc FR. So sánh với tuần trước. Đề xuất nguyên nhân có thể và hành động ưu tiên. Trình bày dạng bảng."</em></td></tr>
+                <tr><td><strong>Chuẩn bị agenda họp team weekly</strong></td><td><em>"Tôi cần agenda họp Driver Ops 45 phút. Mục cần có: review KPI tuần, update campaign, blockers, action items. Format bảng: Mục / Thời gian / Người phụ trách / Kết quả cần đạt."</em></td></tr>
+                <tr><td><strong>Viết script training tài xế mới</strong></td><td><em>"Viết script onboarding 5 phút cho tài xế mới Ahamove. Đối tượng: chưa biết gì về app. Bao gồm: cách nhận đơn, tỷ lệ hoàn thành cần đạt, cách liên hệ hỗ trợ. Giọng thân thiện, dùng ví dụ cụ thể."</em></td></tr>
+                <tr><td><strong>Phân loại feedback tài xế</strong></td><td>Paste toàn bộ feedback → <em>"Phân loại thành nhóm: Thanh toán / App lỗi / Chính sách / Hành vi khách / Khác. Đếm số lượng mỗi nhóm. Tóm tắt top 3 vấn đề và sentiment (tích cực / tiêu cực / trung lập)."</em></td></tr>
+                <tr><td><strong>Nghiên cứu động thái đối thủ</strong></td><td><em>"Phân tích chiến lược driver recruitment của Grab Express, Be Delivery và XanhSM tại HCM Q1 2026. Tập trung: incentive structure, onboarding flow, retention tactic. Bảng so sánh. Ghi rõ [Cần xác nhận] với số liệu chưa chắc chắn."</em></td></tr>
+              </tbody>
+            </table>
 
             <div class="tip-box">
-              <div class="tip-label">💡 Bài tập thực hành</div>
-              Thử viết prompt theo template: yêu cầu Claude tóm tắt một cuốn sách bạn đã đọc hoặc một tài liệu PDF của bạn. Kiểm tra: kết quả có đúng format bạn muốn không?
+              <div class="tip-label">💡 Iterative Prompting — Kỹ năng quan trọng nhất</div>
+              Claude nhớ toàn bộ hội thoại trong cùng 1 tab. Không bao giờ phải giải thích lại từ đầu. Chỉ cần nói: <em>"sửa lại đoạn 2"</em>, <em>"thêm 1 ví dụ cụ thể"</em>, <em>"dịch sang tiếng Anh"</em>, <em>"rút gọn còn một nửa"</em> — Claude hiểu ngay. <strong>Đây chính là iterative prompting</strong> — cách người dùng Claude chuyên nghiệp làm việc.
             </div>
           </div>
         </div>
@@ -511,6 +655,64 @@
     </section>
 
     <!-- ═══════════════════════════════════════════
+         PLATFORM COMPARISON INTERLUDE
+    ═══════════════════════════════════════════ -->
+    <section id="platform-compare" style="background:linear-gradient(135deg,#0a2f57,#0E4174);padding:3rem 2rem;color:white;margin-bottom:3rem;scroll-margin-top:72px;border-radius:var(--radius)">
+      <div style="max-width:900px;margin:0 auto">
+        <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.4rem 1rem;font-size:.78rem;font-weight:700;letter-spacing:.04em;margin-bottom:1.25rem">🗺️ Bản đồ hành trình</div>
+        <h2 style="font-size:1.75rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem">Dùng Claude ở đâu? — 5 Nền Tảng</h2>
+        <p style="font-size:.9rem;opacity:.75;margin-bottom:2rem;font-weight:400">Mỗi nền tảng có sức mạnh riêng. Hiểu rõ để chọn đúng công cụ cho đúng việc — các Module tiếp theo sẽ đi sâu vào từng nền tảng.</p>
+
+        <div style="overflow-x:auto;margin-bottom:2rem">
+          <table style="width:100%;border-collapse:collapse;font-size:.82rem;min-width:700px">
+            <thead>
+              <tr style="background:rgba(255,255,255,.12)">
+                <th style="padding:.75rem 1rem;text-align:left;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2)">Tính năng</th>
+                <th style="padding:.75rem .75rem;text-align:center;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2)">🌐 Claude.ai</th>
+                <th style="padding:.75rem .75rem;text-align:center;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2)">🖥️ Desktop</th>
+                <th style="padding:.75rem .75rem;text-align:center;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2)">💻 Claude Code</th>
+                <th style="padding:.75rem .75rem;text-align:center;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2);color:#FF7F32">🏢 Cowork ⭐</th>
+                <th style="padding:.75rem .75rem;text-align:center;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2)">⌨️ IDE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="6" style="padding:.5rem 1rem;background:rgba(255,255,255,.06);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6)">Tính năng cơ bản</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Chat hỏi đáp</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td></tr>
+              <tr style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Upload file (PDF, ảnh, Excel)</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Projects / Workspace</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
+              <tr style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Dùng trên điện thoại</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
+              <tr><td colspan="6" style="padding:.5rem 1rem;background:rgba(255,255,255,.06);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6)">Kết nối &amp; Tích hợp</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Kết nối Gmail / Google Drive</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Cần setup</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#4ade80">✓ Có sẵn</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
+              <tr style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">NotebookLM / Calendar</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Cần setup</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#4ade80">✓ Có sẵn</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
+              <tr><td colspan="6" style="padding:.5rem 1rem;background:rgba(255,255,255,.06);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6)">Thao tác File</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Đọc / ghi file thật trên máy</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td></tr>
+              <tr style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Sửa code trực tiếp trong editor</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Qua terminal</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Qua terminal</td><td style="text-align:center;font-size:.74rem;color:#4ade80">✓ Trực tiếp</td></tr>
+              <tr><td colspan="6" style="padding:.5rem 1rem;background:rgba(255,255,255,.06);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6)">Memory &amp; Tự động hóa</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Nhớ qua nhiều session</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#4ade80">✓ Memory files</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
+              <tr style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Skills /xlsx /pptx... · Sub-agents</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#4ade80">✓ Đầy đủ</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
+              <tr><td colspan="6" style="padding:.5rem 1rem;background:rgba(255,255,255,.06);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6)">Yêu cầu cài đặt</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Không cần setup</td><td style="text-align:center;color:#4ade80">✓ 100%</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Cài app</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Cài CLI</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Setup cần thời gian</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Cài extension</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:.875rem">Ai nên dùng gì?</h3>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:.83rem;min-width:500px">
+            <thead><tr style="background:#FF7F32"><th style="padding:.75rem 1rem;text-align:left;font-weight:700;color:white">Bạn là ai</th><th style="padding:.75rem 1rem;text-align:left;font-weight:700;color:white">Nên dùng</th><th style="padding:.75rem 1rem;text-align:left;font-weight:700;color:white">Lý do</th></tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid rgba(255,255,255,.12)"><td style="padding:.7rem 1rem;color:rgba(255,255,255,.9)">Người mới bắt đầu</td><td style="padding:.7rem 1rem;font-weight:700;color:#4ade80">claude.ai Web Free</td><td style="padding:.7rem 1rem;color:rgba(255,255,255,.8)">Đơn giản nhất, đủ dùng 80% nhu cầu hàng ngày</td></tr>
+              <tr style="background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.12)"><td style="padding:.7rem 1rem;color:rgba(255,255,255,.9)">Dùng Claude hàng ngày</td><td style="padding:.7rem 1rem;font-weight:700;color:#4ade80">claude.ai Pro ($20/tháng)</td><td style="padding:.7rem 1rem;color:rgba(255,255,255,.8)">Nhiều lượt hơn, dùng được model Opus mạnh nhất</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,.12)"><td style="padding:.7rem 1rem;color:rgba(255,255,255,.9)">Power user, muốn tự động hóa</td><td style="padding:.7rem 1rem;font-weight:700;color:#FF7F32">Cowork ⭐ Recommend</td><td style="padding:.7rem 1rem;color:rgba(255,255,255,.8)">Memory + Skills + auto-sync — nhanh gấp 3x workflow thông thường</td></tr>
+              <tr style="background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.12)"><td style="padding:.7rem 1rem;color:rgba(255,255,255,.9)">Developer, làm với nhiều file</td><td style="padding:.7rem 1rem;font-weight:700;color:#4ade80">VSCode + Claude Code</td><td style="padding:.7rem 1rem;color:rgba(255,255,255,.8)">Thao tác file trực tiếp, diff view ngay trong editor</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,.12)"><td style="padding:.7rem 1rem;color:rgba(255,255,255,.9)">Học viên khóa học này</td><td style="padding:.7rem 1rem;font-weight:700;color:#fbbf24">Bắt đầu Web → tiến lên Cowork</td><td style="padding:.7rem 1rem;color:rgba(255,255,255,.8)">Theo thứ tự Module 1 → 2 → 3 → 4, mỗi bước nâng dần</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
          MODULE 2: PROJECTS
     ═══════════════════════════════════════════ -->
     <section class="module m2 fade-in" id="module2">
@@ -518,11 +720,118 @@
         <div class="module-label">Module 2 · 35 phút</div>
         <div class="module-title">📁 Projects — Làm Việc Có Tổ Chức</div>
         <div class="module-meta">
-          <span>📚 3 bài học</span>
+          <span>📚 4 bài học</span>
           <span>🎯 Tạo workspace riêng để Claude luôn hiểu ngữ cảnh công việc của bạn</span>
         </div>
       </div>
       <div class="module-body">
+
+        <!-- BÀI 2.0: Pricing -->
+        <div class="lesson" id="lesson2-pricing">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">💰</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 2.0 — Free, Pro hay Cowork? Chọn đúng gói</div>
+              <div class="lesson-subtitle">Tối ưu chi phí — không trả thừa <span class="badge badge-tip">Tiết kiệm</span></div>
+            </div>
+            <div class="lesson-time" style="background:var(--teal)">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Sự khác biệt thực sự giữa 3 gói, khi nào nên nâng cấp, và cách tối ưu gói Free để làm được tối đa mà không tốn tiền.
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin:1.25rem 0">
+              <!-- FREE -->
+              <div style="border:1.5px solid #86efac;border-radius:1rem;overflow:hidden">
+                <div style="background:var(--green);color:white;padding:.875rem 1rem">
+                  <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.85;margin-bottom:.2rem">Gói miễn phí</div>
+                  <div style="font-size:1.4rem;font-weight:800">$0 <span style="font-size:.8rem;font-weight:400">/tháng</span></div>
+                </div>
+                <div style="padding:1rem;background:#f0fdf4">
+                  <p style="font-size:.75rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">Bao gồm</p>
+                  <ul style="list-style:none;font-size:.82rem;color:var(--gray-700);display:flex;flex-direction:column;gap:.3rem;margin-bottom:.75rem">
+                    <li>✓ Chat không giới hạn (có rate limit)</li>
+                    <li>✓ Upload file (PDF, ảnh, Excel)</li>
+                    <li>✓ Tạo Projects / Workspace</li>
+                    <li>✓ Model Claude Sonnet</li>
+                    <li>✓ Không cần thẻ tín dụng</li>
+                  </ul>
+                  <p style="font-size:.75rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">Giới hạn</p>
+                  <ul style="list-style:none;font-size:.82rem;color:var(--gray-700);display:flex;flex-direction:column;gap:.3rem">
+                    <li>✗ Số tin nhắn/ngày có giới hạn</li>
+                    <li>✗ Không dùng được model Opus</li>
+                    <li>✗ Không Memory qua session</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- PRO -->
+              <div style="border:2px solid var(--orange);border-radius:1rem;overflow:hidden">
+                <div style="background:var(--orange);color:white;padding:.875rem 1rem">
+                  <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.85;margin-bottom:.2rem">Dùng hàng ngày</div>
+                  <div style="font-size:1.4rem;font-weight:800">$20 <span style="font-size:.8rem;font-weight:400">/tháng</span></div>
+                </div>
+                <div style="padding:1rem;background:#fff7ed">
+                  <p style="font-size:.75rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">Thêm so với Free</p>
+                  <ul style="list-style:none;font-size:.82rem;color:var(--gray-700);display:flex;flex-direction:column;gap:.3rem;margin-bottom:.75rem">
+                    <li>✓ Model Opus 4 — thông minh nhất</li>
+                    <li>✓ Tin nhắn nhiều hơn ~5x</li>
+                    <li>✓ File upload lớn hơn</li>
+                    <li>✓ Ưu tiên xử lý giờ cao điểm</li>
+                    <li>✓ Early access tính năng mới</li>
+                  </ul>
+                  <p style="font-size:.75rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">Vẫn chưa có</p>
+                  <ul style="list-style:none;font-size:.82rem;color:var(--gray-700);display:flex;flex-direction:column;gap:.3rem">
+                    <li>✗ Không Memory vĩnh viễn</li>
+                    <li>✗ Không auto-sync Git/Drive</li>
+                    <li>✗ Không Skills / Sub-agents</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- COWORK -->
+              <div style="border:2px solid var(--blue);border-radius:1rem;overflow:hidden">
+                <div style="background:var(--blue);color:white;padding:.875rem 1rem;position:relative">
+                  <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.85;margin-bottom:.2rem">Môi trường đầy đủ</div>
+                  <div style="font-size:1.4rem;font-weight:800">Cowork</div>
+                  <div style="font-size:.78rem;opacity:.85">Pro + setup cấu hình</div>
+                  <div style="position:absolute;top:.75rem;right:.875rem;background:#FF7F32;color:white;font-size:.65rem;font-weight:800;padding:.2rem .5rem;border-radius:1rem">⭐ Recommend</div>
+                </div>
+                <div style="padding:1rem;background:#eff6ff">
+                  <p style="font-size:.75rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">Thêm so với Pro</p>
+                  <ul style="list-style:none;font-size:.82rem;color:var(--gray-700);display:flex;flex-direction:column;gap:.3rem">
+                    <li>✓ Memory vĩnh viễn — Claude nhớ bạn mãi</li>
+                    <li>✓ 9 Sub-agents chuyên biệt</li>
+                    <li>✓ /Skills — lệnh tắt thông minh</li>
+                    <li>✓ Đọc / ghi file thật trên máy</li>
+                    <li>✓ Kết nối Gmail, Drive, Calendar</li>
+                    <li>✓ Auto-sync Git + Drive tự động</li>
+                    <li>✓ CLAUDE.md — lập trình hành vi Claude</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:700;margin-bottom:.75rem">💡 Tối ưu gói Free — 4 tips thực tế</p>
+            <ul class="steps-list">
+              <li><div class="step-num">1</div><div class="step-content"><strong>Tạo Projects cho từng mảng:</strong> Driver Ops, Competitive Intel, Reporting. Upload SOP, template, báo cáo mẫu → Claude tham chiếu tự động, không cần paste lại mỗi lần hỏi.</div></li>
+              <li><div class="step-num">2</div><div class="step-content"><strong>Viết Instructions rõ trong mỗi Project:</strong> <em>"Tôi là ops manager logistics. Luôn tiếng Việt. Dùng bảng thay văn xuôi. Ghi rõ [Cần xác nhận] khi không chắc."</em> — Viết 1 lần, hiệu lực vĩnh viễn.</div></li>
+              <li><div class="step-num">3</div><div class="step-content"><strong>Lưu prompt template vào Lark / Notion</strong> — Claude Free không nhớ qua session, nhưng bạn có thể xây thư viện prompt hay và copy-paste khi cần.</div></li>
+              <li><div class="step-num">4</div><div class="step-content"><strong>80% công việc văn phòng làm được với Free:</strong> viết email, phân tích báo cáo, tóm tắt tài liệu, brainstorm, soạn script training — không cần Pro hay Cowork.</div></li>
+            </ul>
+
+            <div class="warning-box">
+              <div class="warn-label">⚠️ Rate Limit gói Free</div>
+              Khi hết lượt trong ngày, Claude báo và yêu cầu chờ đến hôm sau. <strong>Giải pháp:</strong> chia task lớn thành nhiều phần nhỏ. Dùng vào sáng sớm khi rate limit được reset.
+            </div>
+            <div class="tip-box">
+              <div class="tip-label">💡 Lộ trình khuyến nghị</div>
+              <strong>Bắt đầu Free</strong> → làm quen, xây thói quen. <strong>Nâng Pro</strong> khi dùng hàng ngày và thấy bị giới hạn lượt. <strong>Chuyển Cowork</strong> khi muốn Claude nhớ mình và tự động hóa workflow. Không cần rush — mỗi giai đoạn có giá trị riêng.
+            </div>
+          </div>
+        </div>
 
         <!-- BÀI 2.1 -->
         <div class="lesson" id="lesson2-1">
@@ -985,14 +1294,207 @@
     ═══════════════════════════════════════════ -->
     <section class="module m4 fade-in" id="module4">
       <div class="module-header">
-        <div class="module-label">Module 4 · 30 phút</div>
+        <div class="module-label">Module 4 · 45 phút</div>
         <div class="module-title">⚡ Cowork — Làm Việc Chuyên Nghiệp</div>
         <div class="module-meta">
-          <span>📚 3 bài học</span>
-          <span>🎯 Tự động hóa workflow và dùng Skills chuyên biệt</span>
+          <span>📚 5 bài học</span>
+          <span>🎯 Memory · Skills · Sub-agents · Kiến trúc 4 tầng</span>
         </div>
       </div>
       <div class="module-body">
+
+        <!-- BÀI 4.0: Tại sao Cowork tốt hơn -->
+        <div class="lesson" id="lesson4-why">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">⚡</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 4.0 — Tại sao Cowork tốt hơn cho công việc hàng ngày?</div>
+              <div class="lesson-subtitle">6 lý do cụ thể với ví dụ trước/sau thực tế <span class="badge badge-new">Nâng cao</span></div>
+            </div>
+            <div class="lesson-time" style="background:var(--purple)">⏱ 12 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ hiểu</strong>
+              6 lý do cụ thể tại sao Cowork thay đổi cách làm việc với AI — dùng ví dụ trước/sau thực tế để thấy sự khác biệt rõ ràng.
+            </div>
+
+            <p style="font-size:.85rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">① Claude không bao giờ hỏi "bạn là ai?" lần 2</p>
+            <div class="compare-grid">
+              <div class="compare-card bad">
+                <div class="compare-label">❌ Không có Cowork</div>
+                <p style="font-size:.83rem;line-height:1.6">Mỗi sáng mở Claude: <em>"Xin chào! Tôi là Khanh, Driver Management Leader tại Ahamove, phụ trách xe máy Instant, đang theo dõi AR/FR/CPO..."</em> — lặp lại 5-6 dòng giới thiệu mỗi ngày.</p>
+              </div>
+              <div class="compare-card good">
+                <div class="compare-label">✅ Với Cowork Memory files</div>
+                <p style="font-size:.83rem;line-height:1.6">Mở Claude → gõ câu hỏi thẳng vào việc. Claude đã biết bạn là ai, scope, style viết, quy tắc không vi phạm — từ câu đầu tiên.</p>
+              </div>
+            </div>
+
+            <p style="font-size:.85rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.05em;margin:.875rem 0 .5rem">② Không mất data dù quên commit</p>
+            <div class="compare-grid">
+              <div class="compare-card bad">
+                <div class="compare-label">❌ Không có Cowork</div>
+                <p style="font-size:.83rem;line-height:1.6">Làm xong quên push → sáng hôm sau ở văn phòng không có file mới, phải làm lại từ đầu.</p>
+              </div>
+              <div class="compare-card good">
+                <div class="compare-label">✅ Với Cowork Hook tự động</div>
+                <p style="font-size:.83rem;line-height:1.6">settings.json hook → mỗi khi Claude dừng, <strong>tự động git push + sync Google Drive</strong> → máy nào cũng có bản mới nhất.</p>
+              </div>
+            </div>
+
+            <p style="font-size:.85rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.05em;margin:.875rem 0 .5rem">③ Đúng chuyên gia cho đúng việc — không cần nhắc</p>
+            <div class="compare-grid">
+              <div class="compare-card bad">
+                <div class="compare-label">❌ Không có Cowork</div>
+                <p style="font-size:.83rem;line-height:1.6"><em>"Tôi muốn bạn đóng vai SQL analyst, viết query theo chuẩn BigQuery, validate data trước khi return..."</em> — paste persona dài mỗi lần.</p>
+              </div>
+              <div class="compare-card good">
+                <div class="compare-label">✅ Với Cowork Sub-agents</div>
+                <p style="font-size:.83rem;line-height:1.6">Claude tự nhận ra <em>"cần query data"</em> → kích hoạt <strong>sql-analyst agent</strong> → viết đúng format BigQuery ngay, không cần nhắc.</p>
+              </div>
+            </div>
+
+            <p style="font-size:.85rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.05em;margin:.875rem 0 .5rem">④ Lệnh tắt /skill thay vì giải thích 20 dòng</p>
+            <div class="compare-grid">
+              <div class="compare-card bad">
+                <div class="compare-label">❌ Không có Cowork</div>
+                <p style="font-size:.83rem;line-height:1.6"><em>"Tạo file Excel với các sheet sau, format bảng đẹp, dùng màu brand Ahamove #0E4174 cho header, freeze top row, thêm filter..."</em> (20 dòng hướng dẫn).</p>
+              </div>
+              <div class="compare-card good">
+                <div class="compare-label">✅ Với Cowork Skills</div>
+                <p style="font-size:.83rem;line-height:1.6">Gõ <strong>/xlsx</strong> → Claude biết chính xác cần làm gì, output chuẩn Ahamove brand ngay lần đầu. Không cần giải thích.</p>
+              </div>
+            </div>
+
+            <p style="font-size:.85rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.05em;margin:.875rem 0 .5rem">⑤ Claude học từ feedback của bạn mãi mãi</p>
+            <div class="compare-grid">
+              <div class="compare-card bad">
+                <div class="compare-label">❌ Không có Cowork</div>
+                <p style="font-size:.83rem;line-height:1.6"><em>"Lần sau đừng dùng thư viện chart ngoài nhé"</em> → Claude quên khi đóng tab → lần sau phải nhắc lại y chang.</p>
+              </div>
+              <div class="compare-card good">
+                <div class="compare-label">✅ Với Cowork Memory</div>
+                <p style="font-size:.83rem;line-height:1.6">Feedback lưu vào <code style="font-size:.75rem;background:#1e293b;color:#7dd3fc;padding:.1rem .3rem;border-radius:.25rem">memory/feedback_visualization.md</code> → Claude áp dụng tự động mọi lần, không bao giờ quên.</p>
+              </div>
+            </div>
+
+            <p style="font-size:.85rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.05em;margin:.875rem 0 .5rem">⑥ Thao tác file thật — không copy-paste thủ công</p>
+            <div class="compare-grid">
+              <div class="compare-card bad">
+                <div class="compare-label">❌ Không có Cowork</div>
+                <p style="font-size:.83rem;line-height:1.6">Copy data từ Excel → paste vào chat → Claude phân tích → copy kết quả → paste lại vào file. Mất 10 phút mỗi lần.</p>
+              </div>
+              <div class="compare-card good">
+                <div class="compare-label">✅ Với Cowork</div>
+                <p style="font-size:.83rem;line-height:1.6">Claude đọc thẳng file Excel trên máy → xử lý → ghi kết quả ra file mới → mở file lên là xong. Không cần động tay.</p>
+              </div>
+            </div>
+
+            <div class="tip-box">
+              <div class="tip-label">💡 Tóm lại</div>
+              Cowork = Claude nhớ bạn, biết công việc của bạn, tự chọn đúng tool. Không phải chat thông thường nữa — đây là <strong>người trợ lý AI cá nhân hóa hoàn toàn</strong>.
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 4.0b: Kiến trúc 4 tầng -->
+        <div class="lesson" id="lesson4-arch">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🏗️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 4.0b — Kiến trúc 4 tầng của Cowork</div>
+              <div class="lesson-subtitle">Hiểu cấu trúc để tùy chỉnh Claude sâu hơn <span class="badge badge-new">Nâng cao</span></div>
+            </div>
+            <div class="lesson-time" style="background:var(--purple)">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ hiểu</strong>
+              Cowork có 4 tầng hoạt động — biết mỗi tầng làm gì giúp bạn setup đúng và debug khi Claude không hành xử như mong muốn.
+            </div>
+
+            <!-- 4-tier diagram -->
+            <div style="display:flex;flex-direction:column;gap:.5rem;margin:1.25rem 0">
+              <!-- Tier 1 -->
+              <div style="border-radius:.875rem;overflow:hidden;border:1.5px solid #93c5fd">
+                <div style="background:var(--blue);color:white;padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between">
+                  <div><span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.8">Tầng 1</span><br><strong>🪪 Danh tính &amp; Bối cảnh</strong></div>
+                  <div style="font-size:.75rem;opacity:.8;text-align:right">Đọc đầu tiên khi khởi động</div>
+                </div>
+                <div style="background:#eff6ff;padding:.875rem 1.25rem;font-size:.83rem;color:var(--gray-700)">
+                  <div style="display:flex;flex-wrap:wrap;gap:.4rem">
+                    <code style="background:#1e293b;color:#7dd3fc;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">CLAUDE.md</code>
+                    <code style="background:#1e293b;color:#7dd3fc;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">AGENTS.md</code>
+                    <code style="background:#1e293b;color:#7dd3fc;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">about-me.md</code>
+                    <code style="background:#1e293b;color:#7dd3fc;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">my-rules.md</code>
+                    <code style="background:#1e293b;color:#7dd3fc;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">my-voice.md</code>
+                  </div>
+                  <p style="margin-top:.5rem;font-size:.8rem">→ Xác định <strong>Claude là ai, phục vụ ai, theo quy tắc nào</strong> — đây là nền tảng của mọi thứ.</p>
+                </div>
+              </div>
+              <div style="text-align:center;font-size:1.2rem;color:var(--gray-600)">↓</div>
+              <!-- Tier 2 -->
+              <div style="border-radius:.875rem;overflow:hidden;border:1.5px solid #5eead4">
+                <div style="background:var(--teal);color:white;padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between">
+                  <div><span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.8">Tầng 2</span><br><strong>💾 Bộ nhớ liên tục (Memory Layer)</strong></div>
+                  <div style="font-size:.75rem;opacity:.8;text-align:right">Nhớ qua mọi phiên làm việc</div>
+                </div>
+                <div style="background:#f0fdfa;padding:.875rem 1.25rem;font-size:.83rem;color:var(--gray-700)">
+                  <div style="display:flex;flex-wrap:wrap;gap:.4rem">
+                    <code style="background:#1e293b;color:#86efac;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">user_profile.md</code>
+                    <code style="background:#1e293b;color:#86efac;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">user_rules.md</code>
+                    <code style="background:#1e293b;color:#86efac;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">feedback_*.md</code>
+                    <code style="background:#1e293b;color:#86efac;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">agent_*_persona.md</code>
+                  </div>
+                  <p style="margin-top:.5rem;font-size:.8rem">→ Claude <strong>nhớ bạn là ai</strong> dù đóng máy hàng tháng — không cần giới thiệu lại.</p>
+                </div>
+              </div>
+              <div style="text-align:center;font-size:1.2rem;color:var(--gray-600)">↓</div>
+              <!-- Tier 3 -->
+              <div style="border-radius:.875rem;overflow:hidden;border:1.5px solid #c4b5fd">
+                <div style="background:var(--purple);color:white;padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between">
+                  <div><span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.8">Tầng 3</span><br><strong>🤖 Sub-Agents Chuyên Biệt</strong></div>
+                  <div style="font-size:.75rem;opacity:.8;text-align:right">Chuyên gia cho từng domain</div>
+                </div>
+                <div style="background:#fdf4ff;padding:.875rem 1.25rem;font-size:.83rem;color:var(--gray-700)">
+                  <div style="display:flex;flex-wrap:wrap;gap:.4rem">
+                    <code style="background:#1e293b;color:#d8b4fe;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">sql-analyst</code>
+                    <code style="background:#1e293b;color:#d8b4fe;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">report-writer</code>
+                    <code style="background:#1e293b;color:#d8b4fe;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">competitive-intel</code>
+                    <code style="background:#1e293b;color:#d8b4fe;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">driver-comms</code>
+                    <code style="background:#1e293b;color:#d8b4fe;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">+5 agents khác</code>
+                  </div>
+                  <p style="margin-top:.5rem;font-size:.8rem">→ Mỗi agent có <strong>persona, quy tắc, và output format riêng</strong> — Claude tự chọn agent phù hợp.</p>
+                </div>
+              </div>
+              <div style="text-align:center;font-size:1.2rem;color:var(--gray-600)">↓</div>
+              <!-- Tier 4 -->
+              <div style="border-radius:.875rem;overflow:hidden;border:1.5px solid #fdba74">
+                <div style="background:var(--orange);color:white;padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between">
+                  <div><span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.8">Tầng 4</span><br><strong>⚙️ Tự động hóa &amp; Đầu ra</strong></div>
+                  <div style="font-size:.75rem;opacity:.8;text-align:right">Chạy ngầm, không cần nhắc</div>
+                </div>
+                <div style="background:#fff7ed;padding:.875rem 1.25rem;font-size:.83rem;color:var(--gray-700)">
+                  <div style="display:flex;flex-wrap:wrap;gap:.4rem">
+                    <code style="background:#1e293b;color:#fdba74;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">settings.json hooks</code>
+                    <code style="background:#1e293b;color:#fdba74;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">GitHub auto-sync</code>
+                    <code style="background:#1e293b;color:#fdba74;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">Google Drive sync</code>
+                    <code style="background:#1e293b;color:#fdba74;padding:.2rem .5rem;border-radius:.35rem;font-size:.75rem">output/Ahamove/</code>
+                  </div>
+                  <p style="margin-top:.5rem;font-size:.8rem">→ Mỗi khi Claude dừng, hook tự động <strong>lưu file, push git, sync Drive</strong> — không cần làm thủ công.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="tip-box">
+              <div class="tip-label">💡 Hình dung nhanh</div>
+              Tầng 1 = Danh tính (Claude là ai?) · Tầng 2 = Ký ức (Claude nhớ gì?) · Tầng 3 = Kỹ năng (Claude làm được gì?) · Tầng 4 = Tự động hóa (Claude tự làm gì khi xong?). Cả 4 tầng hoạt động cùng nhau mỗi khi bạn gõ một câu hỏi.
+            </div>
+          </div>
+        </div>
 
         <!-- BÀI 4.1 -->
         <div class="lesson" id="lesson4-1">
@@ -2203,6 +2705,230 @@
       </div>
     </section>
 
+    <!-- ═══════════════════════════════════════════
+         MODULE 7: BẢO MẬT, TỪ ĐIỂN & KIẾN TRÚC
+    ═══════════════════════════════════════════ -->
+    <section class="module m7 fade-in" id="module7">
+      <div class="module-header">
+        <div class="module-label">Module 7 · Tham Khảo</div>
+        <div class="module-title">🔒 Bảo Mật, Từ Điển &amp; Kiến Trúc</div>
+        <div class="module-meta">
+          <span>📚 3 bài học</span>
+          <span>📖 Tài liệu tham khảo — đọc khi cần</span>
+        </div>
+      </div>
+      <div class="module-body">
+
+        <!-- BÀI 7.1: Bảo Mật -->
+        <div class="lesson" id="lesson7-security">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🛡️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 7.1 — Bảo Mật Dữ Liệu khi dùng Claude</div>
+              <div class="lesson-subtitle">Những gì tuyệt đối không chia sẻ &amp; cách anonymize an toàn <span class="badge badge-important">Quan trọng</span></div>
+            </div>
+            <div class="lesson-time">⏱ 10 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ biết</strong>
+              Dữ liệu nào tuyệt đối không paste vào Claude, cách anonymize trước khi hỏi, và 5 thói quen bảo mật thiết yếu khi dùng AI.
+            </div>
+
+            <div class="warning-box">
+              <div class="warn-label">⚠️ Nguyên tắc cơ bản</div>
+              Khi bạn gõ vào claude.ai, dữ liệu được gửi lên server của Anthropic. <strong>TUYỆT ĐỐI KHÔNG chia sẻ:</strong>
+              <ul style="list-style:none;margin-top:.5rem;display:flex;flex-direction:column;gap:.25rem;font-size:.85rem">
+                <li>🔐 Mật khẩu, API key, thông tin đăng nhập</li>
+                <li>🏦 Số tài khoản ngân hàng, thông tin thanh toán</li>
+                <li>👤 Thông tin cá nhân nhạy cảm của tài xế (CMND, SĐT thật, địa chỉ)</li>
+                <li>📋 Hợp đồng bảo mật, nội dung NDA</li>
+                <li>💼 Dữ liệu kinh doanh mật chưa công bố (revenue, pipeline, M&A)</li>
+              </ul>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .75rem">Cách Anonymize — Thay thế thông tin nhạy cảm trước khi hỏi</p>
+            <div class="compare-grid">
+              <div class="compare-card bad">
+                <div class="compare-label">❌ SAI — Dữ liệu thật</div>
+                <p style="font-size:.83rem;font-family:monospace;line-height:1.8;background:#fef2f2;padding:.5rem;border-radius:.35rem">Phân tích dữ liệu tài xế:<br>Nguyễn Văn A - SĐT 0901234567 - AR 45%<br>Trần Thị B - SĐT 0987654321 - AR 62%<br>Khu vực: Q.Bình Thạnh</p>
+              </div>
+              <div class="compare-card good">
+                <div class="compare-label">✅ ĐÚNG — Đã anonymize</div>
+                <p style="font-size:.83rem;font-family:monospace;line-height:1.8;background:#f0fdf4;padding:.5rem;border-radius:.35rem">Phân tích dữ liệu tài xế ẩn danh:<br>Tài xế X - AR 45%<br>Tài xế Y - AR 62%<br>Khu vực: Khu vực A<br>Chỉ ra pattern và đề xuất.</p>
+              </div>
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin:1rem 0 .75rem">5 Thói quen bảo mật thiết yếu</p>
+            <ul class="steps-list">
+              <li><div class="step-num">1</div><div class="step-content"><strong>Anonymize trước khi paste</strong> — Thay tên thật → "Tài xế X/Y/Z", số điện thoại → "SĐT ẩn", địa chỉ → "Khu vực A/B".</div></li>
+              <li><div class="step-num">2</div><div class="step-content"><strong>Không lưu conversation chứa data nhạy cảm</strong> — Sau khi xong việc, xóa conversation đó trong lịch sử chat.</div></li>
+              <li><div class="step-num">3</div><div class="step-content"><strong>Dùng Projects riêng cho data internal</strong> — Không mix conversation công việc nội bộ với chat cá nhân.</div></li>
+              <li><div class="step-num">4</div><div class="step-content"><strong>Review output trước khi forward</strong> — Claude có thể vô tình bao gồm thông tin từ context. Luôn đọc lại trước khi share.</div></li>
+              <li><div class="step-num">5</div><div class="step-content"><strong>Không tin số liệu Claude đưa ra 100%</strong> — Với báo cáo quan trọng, luôn verify nguồn gốc số liệu. Ghi rõ "Nguồn: Claude (cần xác nhận)" nếu dùng.</div></li>
+            </ul>
+
+            <div class="tip-box">
+              <div class="tip-label">💡 Quy tắc thực tế</div>
+              Nếu bạn sẽ <strong>không in tài liệu đó và để trên bàn làm việc công cộng</strong> — thì đừng paste vào Claude. Đây là test đơn giản nhất để quyết định có nên share hay không.
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 7.2: Kiến Trúc Visual Guide -->
+        <div class="lesson" id="lesson7-architecture">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">🏛️</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 7.2 — Kiến Trúc Claude Code (Visual Guide)</div>
+              <div class="lesson-subtitle">4 lớp môi trường · Thứ tự khởi động · Skills vs Agents <span class="badge badge-new">Kỹ thuật</span></div>
+            </div>
+            <div class="lesson-time">⏱ 15 phút</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>🎯 Sau bài này bạn sẽ hiểu</strong>
+              Claude Code có 4 lớp môi trường, khởi động theo thứ tự cụ thể, và sự khác biệt quan trọng giữa Skills và Agents — để debug hiệu quả khi Claude không hành xử như mong muốn.
+            </div>
+
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">4 Lớp Môi Trường — Thứ tự ưu tiên (lớp thấp thắng)</p>
+            <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.25rem">
+              <div style="border-radius:.75rem;overflow:hidden;border:1.5px solid #fca5a5">
+                <div style="background:#1e293b;color:#f87171;padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;font-size:.82rem">
+                  <span><strong>🔐 LOCAL</strong> — Riêng máy này · THẮNG TẤT CẢ</span>
+                  <span style="font-size:.7rem;opacity:.7">CLAUDE.local.md · settings.local.json</span>
+                </div>
+                <div style="background:#fef2f2;padding:.6rem 1rem;font-size:.8rem;color:var(--gray-700)">API key bí mật, override cá nhân, không lên git. <strong>Lớp này có hiệu lực cao nhất.</strong></div>
+              </div>
+              <div style="text-align:center;font-size:.8rem;color:var(--gray-600)">▲ Ghi đè lên ▲</div>
+              <div style="border-radius:.75rem;overflow:hidden;border:1.5px solid #93c5fd">
+                <div style="background:#1e293b;color:#7dd3fc;padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;font-size:.82rem">
+                  <span><strong>🏢 PROJECT</strong> — Cả team dùng · Mặc định khi không nói gì</span>
+                  <span style="font-size:.7rem;opacity:.7">CLAUDE.md · .claude/ · AGENTS.md</span>
+                </div>
+                <div style="background:#eff6ff;padding:.6rem 1rem;font-size:.8rem;color:var(--gray-700)">Quy tắc Ahamove, 9 agents, hooks tự động. Commit vào git, cả team kế thừa.</div>
+              </div>
+              <div style="text-align:center;font-size:.8rem;color:var(--gray-600)">▲ Ghi đè lên ▲</div>
+              <div style="border-radius:.75rem;overflow:hidden;border:1.5px solid #86efac">
+                <div style="background:#1e293b;color:#86efac;padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;font-size:.82rem">
+                  <span><strong>🌐 GLOBAL</strong> — Mọi project trên máy</span>
+                  <span style="font-size:.7rem;opacity:.7">~/.claude/ · .mcp.json</span>
+                </div>
+                <div style="background:#f0fdf4;padding:.6rem 1rem;font-size:.8rem;color:var(--gray-700)">14 skills, MCP tools (Gmail, Drive...), Memory. Base chung — áp dụng cho tất cả project.</div>
+              </div>
+              <div style="text-align:center;font-size:.8rem;color:var(--gray-600)">▲ Ghi đè lên ▲</div>
+              <div style="border-radius:.75rem;overflow:hidden;border:1.5px solid var(--gray-200)">
+                <div style="background:#1e293b;color:#94a3b8;padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;font-size:.82rem">
+                  <span><strong>💬 CHAT PURE</strong> — claude.ai trình duyệt · Ít power nhất</span>
+                  <span style="font-size:.7rem;opacity:.7">Nhanh · Không tools · Không memory</span>
+                </div>
+                <div style="background:#f9fafb;padding:.6rem 1rem;font-size:.8rem;color:var(--gray-600)">Đơn giản nhất, không cần setup. Phù hợp cho câu hỏi nhanh không cần context phức tạp.</div>
+              </div>
+            </div>
+
+            <div class="tip-box" style="margin-bottom:1.25rem">
+              <div class="tip-label">💡 Override Principle</div>
+              <strong>Lớp nào ở dưới thì thắng.</strong> Viết vào LOCAL để override PROJECT, viết vào PROJECT để override GLOBAL. Bạn luôn có quyền kiểm soát tuyệt đối bằng cách ghi vào lớp thấp hơn.
+            </div>
+
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Claude khởi động theo thứ tự nào? — 6 bước</p>
+            <ul class="steps-list">
+              <li><div class="step-num">1</div><div class="step-content"><strong>Đọc Global Settings</strong> (~/.claude/settings.json) — Quyền thực thi lệnh gì, mức tự động cao đến đâu.</div></li>
+              <li><div class="step-num">2</div><div class="step-content"><strong>Đăng ký MCP Tools</strong> (~/.claude/.mcp.json) — Biết Gmail, GDrive, Calendar, NotebookLM... tồn tại.</div></li>
+              <li><div class="step-num">3</div><div class="step-content"><strong>⭐ Đọc Project Rules</strong> (CLAUDE.md + AGENTS.md) — Quan trọng nhất: Ahamove scope, output rules, brand, AI conventions.</div></li>
+              <li><div class="step-num">4</div><div class="step-content"><strong>Kích hoạt Hooks tự động</strong> (.claude/settings.json) — Mỗi khi Claude dừng → chạy git commit + sync Google Drive.</div></li>
+              <li><div class="step-num">5</div><div class="step-content"><strong>Nạp Memory</strong> (MEMORY.md index → chọn file liên quan) — Claude biết bạn là ai, preferences, dự án đang chạy.</div></li>
+              <li><div class="step-num">6</div><div class="step-content"><strong>✓ Claude sẵn sàng</strong> với đầy đủ context — Bạn gõ câu hỏi đầu tiên, Claude đã biết mọi thứ cần biết.</div></li>
+            </ul>
+
+            <hr class="divider">
+            <p style="font-size:.9rem;font-weight:600;margin-bottom:.75rem">Skills vs Agents — Khác nhau thế nào?</p>
+            <table class="cmd-table">
+              <thead><tr><th>Khía cạnh</th><th>⚡ SKILL — Công thức có sẵn</th><th>🤖 AGENT — Chuyên gia tự trị</th></tr></thead>
+              <tbody>
+                <tr><td>Cách gọi</td><td><code>/tên-skill</code> (vd: /xlsx, /pptx, /pdf)</td><td>Ủy thác bằng ngôn ngữ tự nhiên rồi chờ</td></tr>
+                <tr><td>Chạy ở đâu</td><td>Cùng cửa sổ với bạn — nạp rồi giải phóng</td><td>Cửa sổ context riêng biệt — không làm nặng luồng chính</td></tr>
+                <tr><td>Khi nào dùng</td><td>Output là file cụ thể, quy trình cố định, muốn nhất quán</td><td>Nhiều bước phụ thuộc, cần phán đoán, tác vụ phức tạp</td></tr>
+                <tr><td>Ví dụ thực tế</td><td>/xlsx → Excel chuẩn Ahamove brand ngay lần đầu</td><td>"Tại sao AR tuần này thấp?" → tự query DB, phân tích, viết báo cáo</td></tr>
+              </tbody>
+            </table>
+
+            <div style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:.75rem;padding:1rem;margin-top:.875rem;font-size:.85rem">
+              <p style="font-weight:700;margin-bottom:.5rem">🔧 Ghi file vào đâu? — Quick Reference</p>
+              <table class="cmd-table" style="margin:0">
+                <thead><tr><th>Khi muốn...</th><th>Ghi vào đây</th><th>Ví dụ</th></tr></thead>
+                <tbody>
+                  <tr><td>"Hãy nhớ rằng..." / Cài skill / Thêm MCP</td><td>🌐 Global (~/.claude/)</td><td>Memory files, skills folder, .mcp.json</td></tr>
+                  <tr><td>Sửa CLAUDE.md / Thêm agent / Cài hook / (không nói gì thêm)</td><td>🏢 Project (.claude/)</td><td>CLAUDE.md, AGENTS.md, settings.json</td></tr>
+                  <tr><td>"đừng commit" / "riêng tư" / "chỉ máy này"</td><td>🔐 Local (*.local.*)</td><td>CLAUDE.local.md, settings.local.json</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- BÀI 7.3: Từ Điển Thuật Ngữ -->
+        <div class="lesson" id="lesson7-glossary">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-icon">📖</div>
+            <div class="lesson-info">
+              <div class="lesson-title">Bài 7.3 — Từ Điển Thuật Ngữ AI &amp; Claude</div>
+              <div class="lesson-subtitle">30+ thuật ngữ — tham khảo khi đọc tài liệu hoặc gặp từ lạ <span class="badge badge-tip">Tham khảo</span></div>
+            </div>
+            <div class="lesson-time">⏱ Tự học</div>
+            <div class="lesson-chevron">▼</div>
+          </div>
+          <div class="lesson-body">
+            <div class="objective-box">
+              <strong>📖 Hướng dẫn sử dụng</strong>
+              Không cần đọc hết ngay. Khi gặp từ lạ trong tài liệu hoặc khóa học — tra cứu ở đây. Bookmark bài này để dùng lâu dài.
+            </div>
+
+            <table class="cmd-table">
+              <thead><tr><th style="width:25%">Thuật ngữ</th><th>Giải thích đơn giản</th></tr></thead>
+              <tbody>
+                <tr><td><strong>AI</strong></td><td>Trí tuệ nhân tạo — phần mềm có khả năng xử lý ngôn ngữ và lý luận, được train từ lượng văn bản khổng lồ.</td></tr>
+                <tr><td><strong>LLM</strong></td><td>"Large Language Model" — loại AI được train trên hàng tỷ văn bản. Claude, ChatGPT, Gemini đều là LLM.</td></tr>
+                <tr><td><strong>Prompt</strong></td><td>Câu lệnh / câu hỏi bạn gửi cho Claude. Prompt tốt = kết quả tốt — đây là kỹ năng quan trọng nhất khi dùng AI.</td></tr>
+                <tr><td><strong>Context Window</strong></td><td>"Bộ nhớ làm việc" — lượng text Claude xử lý trong 1 hội thoại. Tắt tab → xóa sạch. Giống RAM máy tính.</td></tr>
+                <tr><td><strong>Hallucination</strong></td><td>Khi AI tự bịa ra thông tin sai nhưng trình bày tự tin như thật. Luôn verify số liệu, tên người, ngày tháng quan trọng.</td></tr>
+                <tr><td><strong>COAT</strong></td><td>Công thức prompt: Context (bối cảnh) + Objective (mục tiêu) + Audience (đối tượng) + Tone/Format (giọng + định dạng).</td></tr>
+                <tr><td><strong>Iterative Prompting</strong></td><td>Tinh chỉnh output bằng cách chat tiếp trong cùng 1 tab: "sửa lại đoạn 2", "thêm ví dụ", "rút gọn còn một nửa".</td></tr>
+                <tr><td><strong>Training</strong></td><td>Quá trình "học" của AI — đọc hàng tỷ tài liệu để hiểu ngôn ngữ và cách trả lời. Xảy ra trước khi bạn dùng.</td></tr>
+                <tr><td><strong>Knowledge Cutoff</strong></td><td>Ngày Claude ngừng được cập nhật kiến thức. Sau đó không biết tin tức mới (Claude 4 ≈ đầu 2026).</td></tr>
+                <tr><td><strong>Model</strong></td><td>Phiên bản AI cụ thể. Claude có: Haiku (nhanh/nhẹ), Sonnet (cân bằng), Opus (mạnh nhất).</td></tr>
+                <tr><td><strong>Token</strong></td><td>Đơn vị đo văn bản (~3/4 từ tiếng Anh). Giới hạn context window tính bằng token. /cost trong Claude Code hiển thị số token đã dùng.</td></tr>
+                <tr><td><strong>API</strong></td><td>Cách kết nối Claude vào phần mềm / app khác. Developer dùng API để build ứng dụng có AI. Cần API key (bắt đầu bằng sk-ant-).</td></tr>
+                <tr><td><strong>System Prompt</strong></td><td>Lệnh nền cài sẵn định hình cách Claude phản hồi. Bạn thường không thấy nhưng nó ảnh hưởng mọi câu trả lời (= Instructions trong Project).</td></tr>
+                <tr><td><strong>MCP</strong></td><td>"Model Context Protocol" — chuẩn kết nối Claude với Gmail, Calendar, Notion, Slack... Giống plugin cài thêm cho Claude.</td></tr>
+                <tr><td><strong>Projects</strong></td><td>Không gian làm việc trong claude.ai — lưu Instructions + tài liệu nền. Mọi hội thoại trong Project đều kế thừa context đó.</td></tr>
+                <tr><td><strong>Claude Code</strong></td><td>Claude chạy trong terminal/IDE — có thể đọc/ghi file thật trên máy tính, chạy lệnh, thao tác codebase. Mạnh hơn nhiều so với chat.</td></tr>
+                <tr><td><strong>Claude Desktop</strong></td><td>App Mac/Windows giống claude.ai nhưng hỗ trợ kết nối MCP thêm tool ngoài (Gmail, Drive, Notion...).</td></tr>
+                <tr><td><strong>Cowork</strong></td><td>Môi trường làm việc đầy đủ xây trên Claude Code — có Memory, Skills, Sub-agents, auto-sync. Mạnh hơn Web/Desktop.</td></tr>
+                <tr><td><strong>Memory</strong></td><td>Hệ thống lưu thông tin qua nhiều session — Claude nhớ bạn là ai, preferences, dự án đang chạy. Không bị xóa khi tắt tab.</td></tr>
+                <tr><td><strong>Skills</strong></td><td>Lệnh tắt /tên trong Cowork — gõ /xlsx, /pptx, /pdf... Claude thực hiện task phức tạp theo quy trình định sẵn, không cần giải thích.</td></tr>
+                <tr><td><strong>Sub-agent</strong></td><td>Claude "phân thân" thành chuyên gia con — sql-analyst, report-writer, driver-comms... Mỗi agent có persona và output format riêng.</td></tr>
+                <tr><td><strong>Hook</strong></td><td>Hành động tự động được kích hoạt khi có sự kiện. Hook Stop = tự git push mỗi khi Claude dừng làm việc.</td></tr>
+                <tr><td><strong>CLAUDE.md</strong></td><td>File cấu hình gốc trong Cowork — Claude đọc đầu tiên khi khởi động để hiểu context công ty, brand, quy tắc output.</td></tr>
+                <tr><td><strong>IDE</strong></td><td>"Integrated Development Environment" — phần mềm soạn thảo siêu mạnh (VSCode, Cursor). Khi tích hợp Claude Code, thao tác file trực tiếp.</td></tr>
+                <tr><td><strong>VSCode</strong></td><td>Visual Studio Code — IDE miễn phí phổ biến nhất của Microsoft. Cài Claude Code extension để dùng AI trực tiếp trong editor.</td></tr>
+                <tr><td><strong>Cursor</strong></td><td>IDE AI-first xây trên nền VSCode, tích hợp Claude/GPT sâu hơn. Phổ biến trong developer 2024-2026.</td></tr>
+                <tr><td><strong>Diff View</strong></td><td>Chức năng trong IDE hiển thị chính xác thay đổi (đỏ = xóa, xanh = thêm) — kiểm soát được Claude đã làm gì trước khi accept.</td></tr>
+                <tr><td><strong>Anthropic</strong></td><td>Công ty tạo ra Claude. Thành lập 2021 tại Mỹ, tập trung vào AI an toàn (AI Safety). Tách ra từ OpenAI.</td></tr>
+                <tr><td><strong>Rate Limit</strong></td><td>Giới hạn số tin nhắn trong một khoảng thời gian (thường theo ngày). Gói Free có giới hạn thấp hơn Pro.</td></tr>
+                <tr><td><strong>Override</strong></td><td>Ghi đè, thay thế. Trong Claude Code: lớp LOCAL ghi đè PROJECT, PROJECT ghi đè GLOBAL — lớp thấp hơn luôn thắng.</td></tr>
+                <tr><td><strong>AR / FR / CPO</strong></td><td>Acceptance Rate / Fulfillment Rate / Cost Per Order — 3 chỉ số vận hành cốt lõi của Driver Management team Ahamove.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </div><!-- /content -->
 
   <!-- SIDEBAR -->
@@ -2215,13 +2941,14 @@
       <a class="sidebar-link" href="#module4"><span class="sidebar-icon">⚡</span> Cowork <span class="sidebar-time-badge">30ph</span></a>
       <a class="sidebar-link" href="#module5"><span class="sidebar-icon">🤖</span> Claude Code <span class="sidebar-time-badge">40ph</span></a>
       <a class="sidebar-link" href="#module6"><span class="sidebar-icon">📄</span> Config Files <span class="sidebar-time-badge">30ph</span></a>
+      <a class="sidebar-link" href="#module7"><span class="sidebar-icon">🔒</span> Tham Khảo <span class="sidebar-time-badge">Ref</span></a>
     </div>
 
     <div class="sidebar-card">
       <div class="sidebar-title">Checklist hoàn thành</div>
       <label class="checklist-item" id="chk1"><input type="checkbox" onchange="checkItem(this)"> Tạo tài khoản claude.ai</label>
       <label class="checklist-item" id="chk2"><input type="checkbox" onchange="checkItem(this)"> Gửi tin nhắn đầu tiên</label>
-      <label class="checklist-item" id="chk3"><input type="checkbox" onchange="checkItem(this)"> Viết prompt theo template 4 phần</label>
+      <label class="checklist-item" id="chk3"><input type="checkbox" onchange="checkItem(this)"> Viết prompt theo công thức COAT</label>
       <label class="checklist-item" id="chk4"><input type="checkbox" onchange="checkItem(this)"> Tạo Project đầu tiên</label>
       <label class="checklist-item" id="chk5"><input type="checkbox" onchange="checkItem(this)"> Cài Claude Desktop</label>
       <label class="checklist-item" id="chk6"><input type="checkbox" onchange="checkItem(this)"> Kết nối Google Drive qua MCP</label>
@@ -2231,6 +2958,8 @@
       <label class="checklist-item" id="chk10"><input type="checkbox" onchange="checkItem(this)"> Viết about-me.md cá nhân</label>
       <label class="checklist-item" id="chk11"><input type="checkbox" onchange="checkItem(this)"> Viết my-rules.md</label>
       <label class="checklist-item" id="chk12"><input type="checkbox" onchange="checkItem(this)"> Viết my-voice.md + test</label>
+      <label class="checklist-item" id="chk13"><input type="checkbox" onchange="checkItem(this)"> Biết khi nào KHÔNG chia sẻ data với Claude</label>
+      <label class="checklist-item" id="chk14"><input type="checkbox" onchange="checkItem(this)"> Đọc qua Từ Điển Thuật Ngữ AI</label>
     </div>
 
     <div class="sidebar-card" style="background:linear-gradient(135deg,#0E4174,#1a5fa8);color:white;border:none">
@@ -2262,6 +2991,8 @@
         <li>Cài và chạy Claude Code thành công</li>
         <li>Tạo CLAUDE.md, about-me.md, my-rules.md, my-voice.md</li>
         <li>Claude làm việc đúng style mà không cần nhắc lại</li>
+        <li>Biết cách anonymize data trước khi hỏi Claude</li>
+        <li>Nắm vững 30+ thuật ngữ AI và kiến trúc Claude Code</li>
       </ul>
     </div>
 
@@ -2285,7 +3016,7 @@
 
   // Update active nav item based on scroll position
   function updateActiveNav() {
-    const modules = ['module1','module2','module3','module4','module5','module6'];
+    const modules = ['module1','module2','module3','module4','module5','module6','module7'];
     const navItems = document.querySelectorAll('.nav-item');
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
     let current = 0;
