@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude — Hướng dẫn Setup 3 Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Lexend', sans-serif;
+  background: #f0f4f8;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+.wrap { max-width: 1060px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+
+/* ══════════════════════════════
+   CARD BASE
+══════════════════════════════ */
+.card {
+  background: #fff;
+  border-radius: 2rem;
+  padding: 40px 44px;
+  box-shadow: 0 4px 24px rgba(14,65,116,.08);
+  border: 1.5px solid #e8eef5;
+}
+
+/* ══════════════════════════════
+   HERO CARD
+══════════════════════════════ */
+.hero {
+  background: linear-gradient(135deg, #0E4174 0%, #0a3060 60%, #071f40 100%);
+  border-radius: 2rem;
+  padding: 44px 48px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.hero-top { display: flex; align-items: center; gap: 20px; }
+.hero-logo {
+  width: 60px; height: 60px;
+  background: #FF7F32;
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(255,127,50,.35);
+}
+.hero-logo svg { width: 34px; height: 34px; }
+.hero-title { font-size: 1.7rem; font-weight: 900; color: #fff; letter-spacing: -.6px; line-height: 1.15; }
+.hero-sub { font-size: .85rem; color: rgba(255,255,255,.65); margin-top: 4px; line-height: 1.6; }
+.hero-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.hero-pill {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 99px;
+  padding: 5px 14px;
+  font-size: .72rem; font-weight: 700;
+  color: rgba(255,255,255,.9);
+  letter-spacing: .3px;
+}
+.hero-pill.orange { background: rgba(255,127,50,.2); border-color: rgba(255,127,50,.4); color: #ff9f5e; }
+
+/* ══════════════════════════════
+   3-TOOL OVERVIEW ROW
+══════════════════════════════ */
+.tools-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+.tool-thumb {
+  border-radius: 1.2rem;
+  padding: 22px 24px;
+  border: 2px solid transparent;
+  cursor: default;
+  transition: transform .15s;
+}
+.tool-thumb:hover { transform: translateY(-2px); }
+.tool-thumb.t1 { background: #eff6ff; border-color: #bfdbfe; }
+.tool-thumb.t2 { background: #fff7ed; border-color: #fed7aa; }
+.tool-thumb.t3 { background: #f0fdf4; border-color: #bbf7d0; }
+.tool-thumb-icon { font-size: 1.8rem; margin-bottom: 10px; }
+.tool-thumb-name { font-size: .95rem; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
+.tool-thumb-mode {
+  font-size: .67rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.t1 .tool-thumb-mode { color: #2563eb; }
+.t2 .tool-thumb-mode { color: #ea580c; }
+.t3 .tool-thumb-mode { color: #16a34a; }
+.tool-thumb-desc { font-size: .75rem; color: #64748b; line-height: 1.6; }
+
+/* ══════════════════════════════
+   SECTION HEADER
+══════════════════════════════ */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.section-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.s1 .section-icon { background: #dbeafe; }
+.s2 .section-icon { background: #ffedd5; }
+.s3 .section-icon { background: #dcfce7; }
+.section-label-tag {
+  font-size: .62rem; font-weight: 700; letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.s1 .section-label-tag { color: #2563eb; }
+.s2 .section-label-tag { color: #ea580c; }
+.s3 .section-label-tag { color: #16a34a; }
+.section-title { font-size: 1.25rem; font-weight: 900; color: #0E4174; letter-spacing: -.4px; }
+.section-subtitle { font-size: .8rem; color: #64748b; margin-top: 2px; }
+
+/* ══════════════════════════════
+   STEP TIMELINE
+══════════════════════════════ */
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step-row { display: flex; align-items: stretch; gap: 0; }
+.step-left {
+  display: flex; flex-direction: column; align-items: center;
+  width: 44px; flex-shrink: 0;
+}
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 800;
+  font-family: 'Space Mono', monospace;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.s1 .step-num { background: #0E4174; color: #fff; }
+.s2 .step-num { background: #FF7F32; color: #fff; }
+.s3 .step-num { background: #10B981; color: #fff; }
+.step-line {
+  flex: 1;
+  width: 2px;
+  background: #e2e8f0;
+  margin: 4px 0;
+}
+.step-content { flex: 1; padding: 0 0 28px 16px; }
+.step-row:last-child .step-content { padding-bottom: 0; }
+.step-row:last-child .step-line { display: none; }
+.step-name { font-size: .95rem; font-weight: 800; color: #1e293b; margin-bottom: 5px; }
+.step-desc { font-size: .8rem; color: #64748b; line-height: 1.7; }
+
+/* ══════════════════════════════
+   CODE BLOCK
+══════════════════════════════ */
+.code-block {
+  background: #0f172a;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.code-line {
+  font-family: 'Space Mono', monospace;
+  font-size: .75rem;
+  line-height: 1.5;
+}
+.code-comment { color: #64748b; }
+.code-cmd { color: #7dd3fc; }
+.code-str { color: #86efac; }
+.code-key { color: #fbbf24; }
+.code-val { color: #e2e8f0; }
+.code-tag { display: inline-block; background: rgba(255,127,50,.15); border: 1px solid rgba(255,127,50,.3); border-radius: 5px; padding: 0 6px; color: #fdba74; font-size: .68rem; font-weight: 700; margin-left: 8px; vertical-align: middle; }
+
+/* ══════════════════════════════
+   FEATURE GRID
+══════════════════════════════ */
+.feat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+}
+.feat-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+}
+.feat-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.feat-name { font-size: .8rem; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+.feat-desc { font-size: .73rem; color: #64748b; line-height: 1.5; }
+
+/* ══════════════════════════════
+   TAG / BADGE
+══════════════════════════════ */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 10px; border-radius: 99px;
+  font-size: .67rem; font-weight: 700; letter-spacing: .3px;
+}
+.b-blue   { background: #dbeafe; color: #1e40af; }
+.b-orange { background: #ffedd5; color: #9a3412; }
+.b-green  { background: #dcfce7; color: #166534; }
+.b-purple { background: #ede9fe; color: #5b21b6; }
+.b-gray   { background: #f1f5f9; color: #475569; }
+.b-red    { background: #fee2e2; color: #991b1b; }
+.b-teal   { background: #ccfbf1; color: #0f766e; }
+
+/* ══════════════════════════════
+   DIVIDER
+══════════════════════════════ */
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 24px 0;
+}
+.divider-line { flex: 1; height: 1px; background: #e2e8f0; }
+.divider-label { font-size: .62rem; color: #94a3b8; font-weight: 700; letter-spacing: 1px; white-space: nowrap; text-transform: uppercase; }
+
+/* ══════════════════════════════
+   NOTE BOX
+══════════════════════════════ */
+.note {
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: .78rem;
+  line-height: 1.6;
+}
+.note-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.note.note-blue   { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+.note.note-orange { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; }
+.note.note-green  { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+.note.note-yellow { background: #fefce8; border: 1px solid #fde68a; color: #854d0e; }
+
+/* ══════════════════════════════
+   COMPARISON TABLE
+══════════════════════════════ */
+.compare-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+.compare-table th {
+  text-align: left;
+  font-size: .68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: #94a3b8;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+}
+.compare-table th:first-child { border-radius: 10px 0 0 0; }
+.compare-table th:last-child  { border-radius: 0 10px 0 0; }
+.compare-table td {
+  padding: 10px 14px;
+  font-size: .78rem;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+  line-height: 1.5;
+}
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table tr:hover td { background: #f8fafc; }
+.compare-table td:first-child { font-weight: 700; color: #1e293b; }
+
+/* ══════════════════════════════
+   KNOWLEDGE CARD (for Projects)
+══════════════════════════════ */
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+.knowledge-item {
+  border-radius: 12px;
+  padding: 14px 16px;
+  border: 1.5px solid transparent;
+  text-align: center;
+}
+.ki-1 { background: #fef3c7; border-color: #fde68a; }
+.ki-2 { background: #dbeafe; border-color: #bfdbfe; }
+.ki-3 { background: #dcfce7; border-color: #bbf7d0; }
+.ki-4 { background: #ede9fe; border-color: #ddd6fe; }
+.ki-5 { background: #ffedd5; border-color: #fed7aa; }
+.ki-6 { background: #f0f9ff; border-color: #bae6fd; }
+.ki-icon { font-size: 1.5rem; margin-bottom: 6px; }
+.ki-name { font-size: .78rem; font-weight: 800; color: #1e293b; margin-bottom: 2px; }
+.ki-ext  { font-family: 'Space Mono', monospace; font-size: .65rem; color: #64748b; }
+
+/* ══════════════════════════════
+   MCP CARDS
+══════════════════════════════ */
+.mcp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+.mcp-item {
+  display: flex; align-items: center; gap: 12px;
+  background: #f8fafc; border-radius: 12px; padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+}
+.mcp-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.mcp-dot.active { background: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,.2); }
+.mcp-dot.optional { background: #94a3b8; }
+.mcp-name { font-size: .8rem; font-weight: 700; color: #1e293b; }
+.mcp-desc { font-size: .7rem; color: #64748b; margin-top: 1px; }
+
+/* ══════════════════════════════
+   FLOW DIAGRAM (Antigravity Workflow)
+══════════════════════════════ */
+.flow-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.flow-node {
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: .78rem; font-weight: 700;
+  text-align: center;
+  min-width: 100px;
+  line-height: 1.3;
+}
+.fn-blue   { background: #dbeafe; color: #1e40af; border: 1.5px solid #bfdbfe; }
+.fn-orange { background: #ffedd5; color: #9a3412; border: 1.5px solid #fed7aa; }
+.fn-green  { background: #dcfce7; color: #166534; border: 1.5px solid #bbf7d0; }
+.fn-purple { background: #ede9fe; color: #5b21b6; border: 1.5px solid #ddd6fe; }
+.fn-gray   { background: #f1f5f9; color: #475569; border: 1.5px solid #e2e8f0; }
+.flow-arrow { color: #94a3b8; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
+
+/* ══════════════════════════════
+   FOOTER CARD
+══════════════════════════════ */
+.footer-card {
+  background: linear-gradient(135deg, #0E4174 0%, #1a3a6b 100%);
+  border-radius: 2rem;
+  padding: 36px 44px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.footer-text h3 { font-size: 1.1rem; font-weight: 900; color: #fff; margin-bottom: 6px; }
+.footer-text p  { font-size: .8rem; color: rgba(255,255,255,.65); line-height: 1.6; }
+.footer-pills { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.footer-pill {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-family: 'Space Mono', monospace;
+  font-size: .7rem; color: rgba(255,255,255,.8);
+}
+.footer-pill span { color: #fdba74; }
+
+/* ══════════════════════════════
+   SETTINGS PREVIEW
+══════════════════════════════ */
+.settings-preview {
+  background: #0f172a;
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-top: 12px;
+}
+.sp-line {
+  font-family: 'Space Mono', monospace;
+  font-size: .72rem;
+  line-height: 1.8;
+}
+.sp-brace  { color: #94a3b8; }
+.sp-key    { color: #7dd3fc; }
+.sp-colon  { color: #94a3b8; }
+.sp-str    { color: #86efac; }
+.sp-bool   { color: #f472b6; }
+.sp-arr    { color: #fbbf24; }
+.sp-comment{ color: #475569; font-style: italic; }
+.sp-indent { padding-left: 20px; }
+.sp-indent2{ padding-left: 40px; }
+
+/* ══════════════════════════════
+   TWO COL LAYOUT
+══════════════════════════════ */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+/* ══════════════════════════════
+   CHECKLIST
+══════════════════════════════ */
+.checklist { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.check-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: .8rem; color: #334155; line-height: 1.5;
+}
+.check-box {
+  width: 20px; height: 20px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .7rem; flex-shrink: 0;
+  margin-top: 1px;
+}
+.check-box.done   { background: #dcfce7; color: #166534; }
+.check-box.todo   { background: #f1f5f9; border: 2px solid #e2e8f0; color: transparent; }
+.check-box.warn   { background: #fef3c7; color: #854d0e; }
+
+/* ══════════════════════════════
+   SEPARATOR SECTION
+══════════════════════════════ */
+.tool-separator {
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 8px;
+}
+.ts-line { flex: 1; height: 2px; background: linear-gradient(90deg, transparent, #e2e8f0, transparent); }
+.ts-badge {
+  background: #fff;
+  border: 2px solid #e2e8f0;
+  border-radius: 99px;
+  padding: 6px 20px;
+  font-size: .72rem; font-weight: 800;
+  color: #64748b;
+  letter-spacing: .5px;
+  white-space: nowrap;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ══════════════════════════════
+       HERO
+  ══════════════════════════════ -->
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-logo">
+        <svg viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="14" fill="white" opacity=".95"/>
+          <text x="18" y="23" text-anchor="middle" font-size="14" font-weight="900" fill="#FF7F32" font-family="Lexend, sans-serif">C</text>
+        </svg>
+      </div>
+      <div>
+        <div class="hero-title">Claude — Hướng Dẫn Setup<br>3 Tools Làm Việc</div>
+        <div class="hero-sub">Cấu hình tối ưu cho từng môi trường: Web · Desktop · Terminal</div>
+      </div>
+    </div>
+    <div class="hero-pills">
+      <div class="hero-pill">🌐 Claude.ai — Projects</div>
+      <div class="hero-pill">🖥️ Claude Desktop — Cowork</div>
+      <div class="hero-pill orange">⚡ Claude Code — Antigravity</div>
+      <div class="hero-pill">Khanh · Driver Management · Ahamove</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       3-TOOL OVERVIEW
+  ══════════════════════════════ -->
+  <div class="card">
+    <div style="font-size:.67rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#94a3b8;margin-bottom:16px;">TỔNG QUAN 3 CÔNG CỤ</div>
+    <div class="tools-row">
+      <div class="tool-thumb t1">
+        <div class="tool-thumb-icon">🌐</div>
+        <div class="tool-thumb-name">Claude.ai</div>
+        <div class="tool-thumb-mode">Projects Mode</div>
+        <div class="tool-thumb-desc">Giao diện web. Tạo Project với context cố định, upload tài liệu, dùng cho research, drafting, phân tích không cần file local.</div>
+      </div>
+      <div class="tool-thumb t2">
+        <div class="tool-thumb-icon">🖥️</div>
+        <div class="tool-thumb-name">Claude Desktop</div>
+        <div class="tool-thumb-mode">Cowork Mode</div>
+        <div class="tool-thumb-desc">App native Mac. Tích hợp MCP servers (Gmail, Drive, Calendar), đọc file local, chạy skills nâng cao trong folder Cowork.</div>
+      </div>
+      <div class="tool-thumb t3">
+        <div class="tool-thumb-icon">⚡</div>
+        <div class="tool-thumb-name">Claude Code</div>
+        <div class="tool-thumb-mode">Antigravity Terminal</div>
+        <div class="tool-thumb-desc">CLI agent trong terminal. Chạy trên máy Antigravity, đọc/ghi file, chạy git, deploy, viết code — agent tự xử lý nhiều bước.</div>
+      </div>
+    </div>
+
+    <!-- When to use table -->
+    <div class="divider" style="margin-top:24px;">
+      <div class="divider-line"></div>
+      <div class="divider-label">Khi nào dùng tool nào?</div>
+      <div class="divider-line"></div>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Tình huống</th>
+          <th>Claude.ai Projects</th>
+          <th>Claude Desktop</th>
+          <th>Claude Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Soạn báo cáo / strategy doc</td>
+          <td><span class="badge b-blue">✓ Ưu tiên</span></td>
+          <td><span class="badge b-gray">Được</span></td>
+          <td><span class="badge b-gray">Được</span></td>
+        </tr>
+        <tr>
+          <td>Phân tích SQL / data Aira</td>
+          <td><span class="badge b-blue">✓ Ưu tiên</span></td>
+          <td><span class="badge b-orange">Với MCP</span></td>
+          <td><span class="badge b-gray">Được</span></td>
+        </tr>
+        <tr>
+          <td>Tạo file HTML / PPTX / XLSX</td>
+          <td><span class="badge b-gray">Hạn chế</span></td>
+          <td><span class="badge b-orange">✓ Ưu tiên</span></td>
+          <td><span class="badge b-green">✓ Tốt nhất</span></td>
+        </tr>
+        <tr>
+          <td>Đọc email / calendar / Drive</td>
+          <td><span class="badge b-red">✗ Không</span></td>
+          <td><span class="badge b-orange">✓ Ưu tiên</span></td>
+          <td><span class="badge b-red">✗ Không</span></td>
+        </tr>
+        <tr>
+          <td>Code, git, deploy, shell script</td>
+          <td><span class="badge b-red">✗ Không</span></td>
+          <td><span class="badge b-gray">Hạn chế</span></td>
+          <td><span class="badge b-green">✓ Tốt nhất</span></td>
+        </tr>
+        <tr>
+          <td>Task phức tạp nhiều bước</td>
+          <td><span class="badge b-gray">Được</span></td>
+          <td><span class="badge b-orange">✓ Tốt</span></td>
+          <td><span class="badge b-green">✓ Tốt nhất</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════
+       TOOL 1 — CLAUDE.AI PROJECTS
+  ══════════════════════════════ -->
+  <div class="tool-separator">
+    <div class="ts-line"></div>
+    <div class="ts-badge">🌐 TOOL 1 — CLAUDE.AI PROJECTS</div>
+    <div class="ts-line"></div>
+  </div>
+
+  <div class="card s1">
+    <div class="section-header">
+      <div class="section-icon">🌐</div>
+      <div>
+        <div class="section-label-tag">claude.ai / web</div>
+        <div class="section-title">Claude.ai — Projects Mode</div>
+        <div class="section-subtitle">Làm việc theo Project với context cố định, knowledge base riêng</div>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="steps">
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Tạo Project mới</div>
+          <div class="step-desc">
+            Vào <strong>claude.ai</strong> → Sidebar trái → <strong>"New Project"</strong>.<br>
+            Đặt tên rõ ràng theo workstream: <em>"Ahamove — Driver Tiering 2026"</em>, <em>"Ahamove — Mega Sales Q3"</em>, <em>"Personal — Smart Home"</em>…
+          </div>
+          <div class="note note-blue">
+            <div class="note-icon">💡</div>
+            <div>Projects giúp Claude nhớ context xuyên suốt — không cần paste lại prompt mỗi cuộc trò chuyện.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Viết Project Instructions (System Prompt)</div>
+          <div class="step-desc">
+            Trong Project → <strong>"Project Instructions"</strong> → paste system prompt định nghĩa role, output format, và constraints.<br><br>
+            <strong>Template cho Ahamove Projects:</strong>
+          </div>
+          <div class="code-block">
+            <div class="code-line code-comment"># Dán vào ô Project Instructions</div>
+            <div class="code-line" style="height:8px;"></div>
+            <div class="code-line code-val">Bạn là AI hỗ trợ <span class="code-str">Lê Phương Khanh</span>, Driver Management Leader tại Ahamove.</div>
+            <div class="code-line code-val">Scope: xe máy Instant (Giao ngay 1H, Siêu tốc, Ghép đơn, 4H).</div>
+            <div class="code-line" style="height:8px;"></div>
+            <div class="code-line code-key">METRICS THEO DÕI:</div>
+            <div class="code-line code-val">- AR (Acceptance Rate), FR (Fulfillment Rate)</div>
+            <div class="code-line code-val">- CPO, EPH, RPH, GDR, CTR</div>
+            <div class="code-line" style="height:8px;"></div>
+            <div class="code-line code-key">OUTPUT RULES:</div>
+            <div class="code-line code-val">- Trả lời tiếng Việt, thuật ngữ giữ tiếng Anh</div>
+            <div class="code-line code-val">- Bảng > bullet > văn xuôi</div>
+            <div class="code-line code-val">- Pyramid Principle: Kết luận → Lý do → Data</div>
+            <div class="code-line code-val">- Không bịa số, không lời khuyên chung chung</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Upload Knowledge Files</div>
+          <div class="step-desc">Thêm tài liệu tham chiếu vào Project để Claude có context sâu hơn:</div>
+          <div class="knowledge-grid">
+            <div class="knowledge-item ki-1">
+              <div class="ki-icon">📊</div>
+              <div class="ki-name">Metrics / KPI</div>
+              <div class="ki-ext">.xlsx · .csv</div>
+            </div>
+            <div class="knowledge-item ki-2">
+              <div class="ki-icon">📋</div>
+              <div class="ki-name">Strategy Docs</div>
+              <div class="ki-ext">.pdf · .docx</div>
+            </div>
+            <div class="knowledge-item ki-3">
+              <div class="ki-icon">🗄️</div>
+              <div class="ki-name">SQL / Data Schema</div>
+              <div class="ki-ext">.sql · .md</div>
+            </div>
+            <div class="knowledge-item ki-4">
+              <div class="ki-icon">🎯</div>
+              <div class="ki-name">OKR / Plans</div>
+              <div class="ki-ext">.pdf · .md</div>
+            </div>
+            <div class="knowledge-item ki-5">
+              <div class="ki-icon">🏎️</div>
+              <div class="ki-name">Competitive Intel</div>
+              <div class="ki-ext">.pdf · .docx</div>
+            </div>
+            <div class="knowledge-item ki-6">
+              <div class="ki-icon">📑</div>
+              <div class="ki-name">Tiering Rules</div>
+              <div class="ki-ext">.md · .txt</div>
+            </div>
+          </div>
+          <div class="note note-yellow">
+            <div class="note-icon">⚠️</div>
+            <div>Giới hạn 200K tokens (~500 trang). Ưu tiên upload tài liệu <strong>evergreen</strong> (rules, schema, policy) thay vì data real-time.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">4</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Cấu trúc Projects gợi ý cho Khanh</div>
+          <div class="feat-grid">
+            <div class="feat-item">
+              <div class="feat-icon">🚗</div>
+              <div>
+                <div class="feat-name">Driver Tiering 2026</div>
+                <div class="feat-desc">KPI rules, tier logic, incentive structure, benchmark</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">📦</div>
+              <div>
+                <div class="feat-name">Mega Sales / Campaigns</div>
+                <div class="feat-desc">Campaign brief, post-analysis, promo burn tracking</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">📊</div>
+              <div>
+                <div class="feat-name">Ops Metrics & SQL</div>
+                <div class="feat-desc">BigQuery schema, daily AR/FR tracking, CPO analysis</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">🏠</div>
+              <div>
+                <div class="feat-name">Personal Projects</div>
+                <div class="feat-desc">Smart Home, Cibes Elevator, Numerology — tách riêng</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">5</div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Thói quen sử dụng hiệu quả</div>
+          <div class="checklist">
+            <div class="check-item">
+              <div class="check-box done">✓</div>
+              <div>Mở đúng Project trước khi chat — Claude dùng knowledge base của Project đó</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box done">✓</div>
+              <div>Đặt tiêu đề conversation rõ ràng (Claude tự đặt, có thể rename)</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box done">✓</div>
+              <div>Cập nhật Knowledge Files khi có tài liệu mới (VD: OKR Q3 update)</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box warn">!</div>
+              <div>Không upload data nhạy cảm (lương, cá nhân tài xế) vào Knowledge Files</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       TOOL 2 — CLAUDE DESKTOP COWORK
+  ══════════════════════════════ -->
+  <div class="tool-separator">
+    <div class="ts-line"></div>
+    <div class="ts-badge">🖥️ TOOL 2 — CLAUDE DESKTOP COWORK</div>
+    <div class="ts-line"></div>
+  </div>
+
+  <div class="card s2">
+    <div class="section-header">
+      <div class="section-icon">🖥️</div>
+      <div>
+        <div class="section-label-tag">claude desktop / mac app</div>
+        <div class="section-title">Claude Desktop — Cowork Mode</div>
+        <div class="section-subtitle">App native, tích hợp MCP tools, đọc file local, chạy skills nâng cao</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Cài đặt Claude Desktop</div>
+          <div class="step-desc">Download tại <strong>claude.ai/download</strong> → Chọn <strong>macOS</strong> → Cài đặt bình thường.<br>Đăng nhập cùng tài khoản Anthropic (Max Plan).</div>
+          <div class="note note-orange">
+            <div class="note-icon">📌</div>
+            <div>Claude Desktop ≠ claude.ai web. Desktop có khả năng kết nối MCP servers và đọc file local — web không có.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Cấu trúc Cowork Folder</div>
+          <div class="step-desc">Toàn bộ output, context, và config được tổ chức trong <code style="font-family:'Space Mono',monospace;font-size:.78rem;background:#f1f5f9;padding:1px 6px;border-radius:4px;">~/Desktop/Cowork/</code>:</div>
+          <div class="code-block">
+            <div class="code-line code-comment"># Cấu trúc thư mục Cowork</div>
+            <div class="code-line code-key">~/Desktop/Cowork/</div>
+            <div class="code-line code-val">├── <span class="code-str">CLAUDE.md</span>          <span class="code-comment"># ← System prompt tổng (role, rules, brand)</span></div>
+            <div class="code-line code-val">├── <span class="code-str">.claude/</span>           <span class="code-comment"># ← Config: settings.json, hooks, skills</span></div>
+            <div class="code-line code-val">│   ├── settings.json  <span class="code-comment"># Permissions, MCP servers, hooks</span></div>
+            <div class="code-line code-val">│   └── memory/        <span class="code-comment"># Auto-memory: user profile, feedback</span></div>
+            <div class="code-line code-val">└── <span class="code-str">output/</span>            <span class="code-comment"># Tất cả file output theo cấu trúc</span></div>
+            <div class="code-line code-val">    ├── Ahamove/       <span class="code-comment"># 01~07 folders</span></div>
+            <div class="code-line code-val">    ├── guides/        <span class="code-comment"># File này đang ở đây!</span></div>
+            <div class="code-line code-val">    └── Personal/</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">MCP Servers đang kết nối</div>
+          <div class="step-desc">Các MCP servers cho phép Claude Desktop truy cập tools bên ngoài:</div>
+          <div class="mcp-grid">
+            <div class="mcp-item">
+              <div class="mcp-dot active"></div>
+              <div>
+                <div class="mcp-name">📧 Gmail MCP</div>
+                <div class="mcp-desc">Đọc, soạn, label email khanhlp@ahamove.com</div>
+              </div>
+            </div>
+            <div class="mcp-item">
+              <div class="mcp-dot active"></div>
+              <div>
+                <div class="mcp-name">📅 Google Calendar</div>
+                <div class="mcp-desc">Tạo, xem, cập nhật sự kiện; gợi ý thời gian</div>
+              </div>
+            </div>
+            <div class="mcp-item">
+              <div class="mcp-dot active"></div>
+              <div>
+                <div class="mcp-name">📁 Google Drive</div>
+                <div class="mcp-desc">Đọc, tìm kiếm, copy file trên Drive</div>
+              </div>
+            </div>
+            <div class="mcp-item">
+              <div class="mcp-dot active"></div>
+              <div>
+                <div class="mcp-name">📓 NotebookLM MCP</div>
+                <div class="mcp-desc">Tạo notebook, query, studio audio/video</div>
+              </div>
+            </div>
+            <div class="mcp-item">
+              <div class="mcp-dot active"></div>
+              <div>
+                <div class="mcp-name">📊 Aira Analytics</div>
+                <div class="mcp-desc">Query BigQuery (read-only) — AR, FR, CPO data</div>
+              </div>
+            </div>
+            <div class="mcp-item">
+              <div class="mcp-dot optional"></div>
+              <div>
+                <div class="mcp-name">📋 Notion / Atlassian</div>
+                <div class="mcp-desc">Kết nối khi cần — auth flow riêng</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">4</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Skills hỗ trợ trong Cowork</div>
+          <div class="step-desc">Gọi skill bằng cách gõ <code style="font-family:'Space Mono',monospace;font-size:.78rem;background:#f1f5f9;padding:1px 6px;border-radius:4px;">/tên-skill</code> trong chat:</div>
+          <div class="feat-grid">
+            <div class="feat-item">
+              <div class="feat-icon">📑</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/pptx</code> · <code style="font-size:.72rem;">/pdf</code> · <code style="font-size:.72rem;">/docx</code></div>
+                <div class="feat-desc">Tạo presentation, PDF, Word document chuyên nghiệp</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">📊</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/xlsx</code> · <code style="font-size:.72rem;">/xlsx-a</code></div>
+                <div class="feat-desc">Financial model, spreadsheet, 3-statement model (IB standard)</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">🌐</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/html</code> · <code style="font-size:.72rem;">/md</code></div>
+                <div class="feat-desc">Report HTML McKinsey-style, markdown document</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">🎯</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/okr</code> · <code style="font-size:.72rem;">/plan</code></div>
+                <div class="feat-desc">Build OKR quarterly, lập kế hoạch đa bước phức tạp</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">🏠</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/home-design</code></div>
+                <div class="feat-desc">Thiết kế nội thất, phong thủy, layout phòng</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">⏰</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/schedule</code> · <code style="font-size:.72rem;">/loop</code></div>
+                <div class="feat-desc">Lên lịch task tự động, chạy lặp theo interval</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">5</div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Tips làm việc hiệu quả với Cowork</div>
+          <div class="checklist">
+            <div class="check-item">
+              <div class="check-box done">✓</div>
+              <div>Luôn mở Claude Desktop từ folder <strong>~/Desktop/Cowork</strong> để Claude nhận CLAUDE.md đúng</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box done">✓</div>
+              <div>Dùng <strong>"Extended Thinking"</strong> (nút ⚡ trong chat) cho phân tích phức tạp cần suy luận sâu</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box done">✓</div>
+              <div>File output tạo ra → Lưu vào đúng folder <code style="font-family:'Space Mono',monospace;font-size:.75rem;">output/Ahamove/XX.FOLDER/</code></div>
+            </div>
+            <div class="check-item">
+              <div class="check-box warn">!</div>
+              <div>Khi Claude xin quyền tool (Gmail, Drive) → approve từng lần hoặc dùng <code style="font-family:'Space Mono',monospace;font-size:.75rem;">/fewer-permission-prompts</code></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       TOOL 3 — CLAUDE CODE ANTIGRAVITY
+  ══════════════════════════════ -->
+  <div class="tool-separator">
+    <div class="ts-line"></div>
+    <div class="ts-badge">⚡ TOOL 3 — CLAUDE CODE / ANTIGRAVITY</div>
+    <div class="ts-line"></div>
+  </div>
+
+  <div class="card s3">
+    <div class="section-header">
+      <div class="section-icon">⚡</div>
+      <div>
+        <div class="section-label-tag">claude code / terminal / antigravity mac</div>
+        <div class="section-title">Claude Code — Terminal Agent</div>
+        <div class="section-subtitle">CLI agent chạy trong terminal, tự đọc/ghi file, chạy shell, git, deploy</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Cài đặt Claude Code trên Antigravity</div>
+          <div class="step-desc">Chạy trong Terminal (zsh):</div>
+          <div class="code-block">
+            <div class="code-line code-comment"># Bước 1: Cài Node.js nếu chưa có (via Homebrew)</div>
+            <div class="code-line code-cmd">brew install node</div>
+            <div class="code-line" style="height:6px;"></div>
+            <div class="code-line code-comment"># Bước 2: Cài Claude Code global</div>
+            <div class="code-line code-cmd">npm install -g @anthropic-ai/claude-code</div>
+            <div class="code-line" style="height:6px;"></div>
+            <div class="code-line code-comment"># Bước 3: Login (mở browser, authenticate)</div>
+            <div class="code-line code-cmd">claude</div>
+            <div class="code-line code-comment"># → Lần đầu: paste Anthropic API key hoặc OAuth</div>
+            <div class="code-line" style="height:6px;"></div>
+            <div class="code-line code-comment"># Kiểm tra version</div>
+            <div class="code-line code-cmd">claude --version</div>
+          </div>
+          <div class="note note-green">
+            <div class="note-icon">✅</div>
+            <div>Trên Antigravity đã cài sẵn — mở terminal, <code style="font-family:'Space Mono',monospace;">cd ~/Desktop/Cowork</code> rồi gõ <code style="font-family:'Space Mono',monospace;">claude</code> là chạy ngay.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">CLAUDE.md — "Hồ sơ công việc" của dự án</div>
+          <div class="step-desc">File <strong>CLAUDE.md</strong> trong thư mục làm việc là system prompt tự động — Claude Code đọc mỗi khi khởi động. Đây là nguồn context quan trọng nhất:</div>
+          <div class="code-block">
+            <div class="code-line code-comment"># Cấu trúc CLAUDE.md hiện tại (~/Desktop/Cowork/CLAUDE.md)</div>
+            <div class="code-line" style="height:6px;"></div>
+            <div class="code-line code-key">## 🏢 Company & Role Context</div>
+            <div class="code-line code-val">- Khanh: Driver Management Leader, Ahamove</div>
+            <div class="code-line code-val">- Scope: Bike Instant (Giao ngay, Siêu tốc, Ghép đơn)</div>
+            <div class="code-line" style="height:6px;"></div>
+            <div class="code-line code-key">## Brand</div>
+            <div class="code-line code-val">- Colors: #0E4174 (Blue), #FF7F32 (Orange)</div>
+            <div class="code-line code-val">- Fonts: Lexend</div>
+            <div class="code-line" style="height:6px;"></div>
+            <div class="code-line code-key">## Output Rules & File Naming</div>
+            <div class="code-line code-val">- output/Ahamove/01~07 folder structure</div>
+            <div class="code-line code-val">- Naming: YYYY-MM-topic.ext (lowercase, hyphens)</div>
+          </div>
+          <div class="note note-yellow">
+            <div class="note-icon">💡</div>
+            <div>CLAUDE.md được load tự động — <strong>không cần paste lại</strong> mỗi session. Nếu cần cập nhật rules, chỉnh trực tiếp file này.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Cách khởi động và giao việc</div>
+          <div class="two-col">
+            <div>
+              <div style="font-size:.72rem;font-weight:700;color:#16a34a;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;">INTERACTIVE MODE (thường dùng)</div>
+              <div class="code-block">
+                <div class="code-line code-comment"># Mở Claude Code trong Cowork</div>
+                <div class="code-line code-cmd">cd ~/Desktop/Cowork</div>
+                <div class="code-line code-cmd">claude</div>
+                <div class="code-line" style="height:6px;"></div>
+                <div class="code-line code-comment"># → Giao tiếp bằng chat trong terminal</div>
+                <div class="code-line code-comment"># → Claude tự đọc CLAUDE.md</div>
+                <div class="code-line code-comment"># → Dùng skill: /html /xlsx /pdf ...</div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:.72rem;font-weight:700;color:#16a34a;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;">ONE-SHOT MODE (task nhanh)</div>
+              <div class="code-block">
+                <div class="code-line code-comment"># Chạy task rồi thoát luôn</div>
+                <div class="code-line code-cmd">claude <span class="code-str">"Tạo file HTML báo cáo AR tuần này,</span></div>
+                <div class="code-line code-str">  lưu vào output/Ahamove/04.OPS_METRICS/"</div>
+                <div class="code-line" style="height:6px;"></div>
+                <div class="code-line code-comment"># Với file input</div>
+                <div class="code-line code-cmd">claude <span class="code-str">"Đọc data.csv, phân tích CPO"</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">4</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Workflow chuẩn cho task phức tạp</div>
+          <div class="step-desc">Claude Code xử lý task nhiều bước theo flow:</div>
+          <div class="flow-row">
+            <div class="flow-node fn-blue">📋<br><strong>Nhận task</strong><br><span style="font-size:.65rem;">gõ yêu cầu</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node fn-orange">🔍<br><strong>Đọc context</strong><br><span style="font-size:.65rem;">CLAUDE.md + files</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node fn-purple">🗺️<br><strong>Plan mode</strong><br><span style="font-size:.65rem;">/plan để duyệt</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node fn-green">⚡<br><strong>Execute</strong><br><span style="font-size:.65rem;">write + run</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node fn-blue">✅<br><strong>Verify</strong><br><span style="font-size:.65rem;">test + report</span></div>
+          </div>
+          <div class="note note-blue">
+            <div class="note-icon">🗺️</div>
+            <div>Với task lớn, gõ <code style="font-family:'Space Mono',monospace;">/plan</code> trước — Claude sẽ đưa ra kế hoạch để Khanh duyệt trước khi execute. Tránh sai hướng.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">5</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Slash Commands quan trọng</div>
+          <div class="feat-grid">
+            <div class="feat-item">
+              <div class="feat-icon">🗺️</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/plan</code></div>
+                <div class="feat-desc">Lập kế hoạch đa bước, đợi confirm trước khi làm</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">🔍</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/review</code></div>
+                <div class="feat-desc">Review code/output vừa tạo cho bugs & style</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">🧹</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/simplify</code></div>
+                <div class="feat-desc">Tối ưu code sau khi viết xong</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">💾</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/init</code></div>
+                <div class="feat-desc">Khởi tạo CLAUDE.md mới cho project/repo khác</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">⚙️</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/update-config</code></div>
+                <div class="feat-desc">Cập nhật settings.json, permissions, hooks</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">🔐</div>
+              <div>
+                <div class="feat-name"><code style="font-size:.72rem;">/security-review</code></div>
+                <div class="feat-desc">Scan code changes cho security vulnerabilities</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">6</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">settings.json — Cấu hình permission & hooks</div>
+          <div class="step-desc">File <code style="font-family:'Space Mono',monospace;font-size:.78rem;background:#f1f5f9;padding:1px 6px;border-radius:4px;">~/.claude/settings.json</code> kiểm soát những gì Claude Code được phép làm tự động:</div>
+          <div class="settings-preview">
+            <div class="sp-line sp-brace">{</div>
+            <div class="sp-line sp-indent">
+              <span class="sp-key">"permissions"</span><span class="sp-colon">: </span><span class="sp-brace">{</span>
+            </div>
+            <div class="sp-line sp-indent2">
+              <span class="sp-key">"allow"</span><span class="sp-colon">: </span><span class="sp-arr">[</span>
+            </div>
+            <div class="sp-line sp-indent2" style="padding-left:60px;">
+              <span class="sp-str">"Read"</span><span class="sp-colon">, </span><span class="sp-str">"Edit"</span><span class="sp-colon">, </span><span class="sp-str">"Write"</span><span class="sp-colon">, </span><span class="sp-str">"Bash(git *)"</span><span class="sp-colon">,</span>
+            </div>
+            <div class="sp-line sp-indent2" style="padding-left:60px;">
+              <span class="sp-str">"Bash(ls *)"</span><span class="sp-colon">, </span><span class="sp-str">"Bash(find *)"</span><span class="sp-colon">, </span><span class="sp-str">"Bash(grep *)"</span>
+            </div>
+            <div class="sp-line sp-indent2">
+              <span class="sp-arr">]</span>
+            </div>
+            <div class="sp-line sp-indent">
+              <span class="sp-brace">},</span>
+            </div>
+            <div class="sp-line sp-indent">
+              <span class="sp-key">"hooks"</span><span class="sp-colon">: </span><span class="sp-brace">{</span>
+            </div>
+            <div class="sp-line sp-indent2">
+              <span class="sp-key">"PostToolUse"</span><span class="sp-colon">: </span><span class="sp-comment">// chạy script sau mỗi tool call</span>
+            </div>
+            <div class="sp-line sp-indent2">
+              <span class="sp-key">"Stop"</span><span class="sp-colon">: </span><span class="sp-comment">// notification khi Claude xong việc</span>
+            </div>
+            <div class="sp-line sp-indent">
+              <span class="sp-brace">}</span>
+            </div>
+            <div class="sp-line sp-brace">}</div>
+          </div>
+          <div class="note note-green">
+            <div class="note-icon">⚙️</div>
+            <div>Dùng <code style="font-family:'Space Mono',monospace;">/fewer-permission-prompts</code> để Claude tự scan history và tự động thêm các tool hay dùng vào allowlist.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">7</div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Memory System — Claude nhớ qua các session</div>
+          <div class="step-desc">Claude Code có hệ thống memory tự động lưu vào <code style="font-family:'Space Mono',monospace;font-size:.78rem;background:#f1f5f9;padding:1px 6px;border-radius:4px;">~/.claude/projects/…/memory/</code>:</div>
+          <div class="feat-grid">
+            <div class="feat-item">
+              <div class="feat-icon">👤</div>
+              <div>
+                <div class="feat-name">user_profile.md</div>
+                <div class="feat-desc">Role, background, cách Khanh làm việc, metrics theo dõi</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">📝</div>
+              <div>
+                <div class="feat-name">user_rules.md</div>
+                <div class="feat-desc">Rules: brief trước, chờ confirm, SQL first, Pyramid Principle</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">🎨</div>
+              <div>
+                <div class="feat-name">user_voice.md</div>
+                <div class="feat-desc">Format output: bảng > bullet > văn xuôi, từ vựng chuyên ngành</div>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">💬</div>
+              <div>
+                <div class="feat-name">feedback_*.md</div>
+                <div class="feat-desc">Ghi lại corrections + confirmations — tránh lặp lại lỗi cũ</div>
+              </div>
+            </div>
+          </div>
+          <div class="note note-blue">
+            <div class="note-icon">💾</div>
+            <div>Khi muốn Claude nhớ điều gì: gõ <strong>"hãy nhớ…"</strong> — Claude tự lưu vào memory file đúng loại. Memory này persist qua tất cả sessions.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       CHEAT SHEET
+  ══════════════════════════════ -->
+  <div class="card">
+    <div style="font-size:.67rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#94a3b8;margin-bottom:20px;">QUICK REFERENCE — 3 TOOLS AT A GLANCE</div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Tiêu chí</th>
+          <th>🌐 Claude.ai Projects</th>
+          <th>🖥️ Claude Desktop</th>
+          <th>⚡ Claude Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Truy cập</td>
+          <td>claude.ai (browser)</td>
+          <td>App Mac (Desktop)</td>
+          <td>Terminal: <code style="font-family:'Space Mono',monospace;font-size:.72rem;">claude</code></td>
+        </tr>
+        <tr>
+          <td>Context mặc định</td>
+          <td>Project Instructions + Knowledge Files</td>
+          <td>CLAUDE.md + Memory</td>
+          <td>CLAUDE.md + Memory</td>
+        </tr>
+        <tr>
+          <td>Đọc file local</td>
+          <td>Upload thủ công</td>
+          <td>✓ Tự động</td>
+          <td>✓ Tự động</td>
+        </tr>
+        <tr>
+          <td>Ghi / tạo file</td>
+          <td>✗ Chỉ xem</td>
+          <td>✓ Có</td>
+          <td>✓ Có (mạnh nhất)</td>
+        </tr>
+        <tr>
+          <td>Chạy shell / git</td>
+          <td>✗</td>
+          <td>✗</td>
+          <td>✓ Full bash</td>
+        </tr>
+        <tr>
+          <td>External tools</td>
+          <td>✗</td>
+          <td>✓ MCP: Gmail, Drive, Calendar, Aira</td>
+          <td>✗ (local only)</td>
+        </tr>
+        <tr>
+          <td>Skills (<code style="font-family:'Space Mono',monospace;font-size:.72rem;">/pptx</code>, <code style="font-family:'Space Mono',monospace;font-size:.72rem;">/xlsx</code>…)</td>
+          <td>✗</td>
+          <td>✓ Có</td>
+          <td>✓ Có</td>
+        </tr>
+        <tr>
+          <td>Memory persist</td>
+          <td>✗ (Project Instructions)</td>
+          <td>✓ Auto-memory</td>
+          <td>✓ Auto-memory</td>
+        </tr>
+        <tr>
+          <td>Model mặc định</td>
+          <td>Claude Sonnet 4.6</td>
+          <td>Claude Sonnet 4.6</td>
+          <td>Claude Sonnet 4.6</td>
+        </tr>
+        <tr>
+          <td>Best for</td>
+          <td>Research, drafting, knowledge Q&A</td>
+          <td>Automation, multi-tool workflows</td>
+          <td>Code, files, git, deploy</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════
+       FOOTER
+  ══════════════════════════════ -->
+  <div class="footer-card">
+    <div class="footer-text">
+      <h3>Setup checklist của Khanh ✓</h3>
+      <p>3 tools đã cấu hình và sẵn sàng.<br>
+      Mọi thay đổi CLAUDE.md → có hiệu lực ngay session tiếp theo.</p>
+    </div>
+    <div class="footer-pills">
+      <div class="footer-pill">claude.ai → <span>Projects mode ✓</span></div>
+      <div class="footer-pill">Claude Desktop → <span>Cowork + MCP ✓</span></div>
+      <div class="footer-pill">Antigravity → <span>claude (terminal) ✓</span></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
