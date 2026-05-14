@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Root Cause Analysis: FR Giảm — Ahamove SGN Driver Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0E4174; --blue-mid: #1A5BA8; --blue-pale: #E8F0FB;
+    --orange: #FF7F32; --orange-pale: #FFF0E6; --orange-mid: #FD9A57;
+    --green: #10B981; --green-pale: #D1FAE5;
+    --red: #EF4444; --red-pale: #FEE2E2;
+    --amber: #F59E0B; --amber-pale: #FEF3C7;
+    --gray-50: #F9FAFB; --gray-100: #F3F4F6; --gray-200: #E5E7EB;
+    --gray-400: #9CA3AF; --gray-600: #4B5563; --gray-800: #1F2937;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Lexend', sans-serif; background: var(--gray-50); color: var(--gray-800); font-size: 14px; line-height: 1.6; }
+  .page { max-width: 1240px; margin: 0 auto; padding: 24px 20px 72px; }
+
+  /* ─── HEADER ─── */
+  .header { background: linear-gradient(135deg, #0E4174 0%, #1A5BA8 100%); border-radius: 2.5rem; padding: 40px 48px; color: #fff; margin-bottom: 24px; position: relative; overflow: hidden; }
+  .header::after { content: ''; position: absolute; right: -80px; top: -80px; width: 320px; height: 320px; background: rgba(255,127,50,.12); border-radius: 50%; pointer-events: none; }
+  .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--orange); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .08em; padding: 4px 14px; border-radius: 999px; text-transform: uppercase; margin-bottom: 14px; }
+  .header h1 { font-size: 28px; font-weight: 900; line-height: 1.25; margin-bottom: 8px; }
+  .header p { font-size: 14px; opacity: .75; font-weight: 300; margin-bottom: 20px; }
+  .header-meta { display: flex; gap: 28px; flex-wrap: wrap; }
+  .header-meta span { font-size: 12px; opacity: .65; }
+  .header-meta strong { opacity: 1; font-weight: 600; }
+
+  /* ─── SECTION ─── */
+  .sec { margin-bottom: 28px; }
+  .sec-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gray-400); border-left: 3px solid var(--orange); padding-left: 10px; margin-bottom: 14px; }
+
+  /* ─── CARDS ─── */
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: 1fr 1fr; }
+  .g3 { grid-template-columns: 1fr 1fr 1fr; }
+  .g4 { grid-template-columns: repeat(4, 1fr); }
+  .g5 { grid-template-columns: repeat(5, 1fr); }
+  .card { background: #fff; border: 1px solid var(--gray-200); border-radius: 1.5rem; padding: 20px; }
+  .card-pad { padding: 28px; }
+  .card-sm { padding: 16px; }
+
+  /* ─── VERDICT ─── */
+  .verdict { background: #fff; border: 2.5px solid var(--orange); border-radius: 2rem; padding: 24px 32px; display: flex; gap: 18px; align-items: flex-start; margin-bottom: 24px; }
+  .verdict-ico { font-size: 28px; flex-shrink: 0; }
+  .verdict h2 { font-size: 17px; font-weight: 800; color: var(--blue); margin-bottom: 8px; }
+  .verdict p { font-size: 13px; color: var(--gray-600); line-height: 1.7; }
+
+  /* ─── METRIC CARD ─── */
+  .metric-card { text-align: center; }
+  .mc-label { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 4px; }
+  .mc-val { font-size: 30px; font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+  .mc-sub { font-size: 11px; color: var(--gray-400); margin-top: 4px; }
+  .delta { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-top: 8px; }
+  .d-up { background: var(--green-pale); color: #059669; }
+  .d-dn { background: var(--red-pale); color: var(--red); }
+  .d-warn { background: var(--amber-pale); color: #D97706; }
+  .d-neu { background: var(--gray-100); color: var(--gray-600); }
+
+  /* ─── SCR ─── */
+  .scr { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .scr-s { background: var(--blue-pale); border: 1px solid #BDD0F0; border-radius: 1.5rem; padding: 20px; }
+  .scr-c { background: var(--red-pale); border: 1px solid #FECACA; border-radius: 1.5rem; padding: 20px; }
+  .scr-r { background: var(--green-pale); border: 1px solid #A7F3D0; border-radius: 1.5rem; padding: 20px; }
+  .scr-head { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+  .scr-s .scr-head { color: var(--blue); }
+  .scr-c .scr-head { color: var(--red); }
+  .scr-r .scr-head { color: #059669; }
+  .scr-s p, .scr-c p, .scr-r p { font-size: 13px; line-height: 1.65; }
+
+  /* ─── TABLE ─── */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--blue); color: #fff; padding: 10px 14px; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; text-align: left; }
+  th:first-child { border-radius: 10px 0 0 0; }
+  th:last-child { border-radius: 0 10px 0 0; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--gray-50); }
+  .num { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .hl-row td { background: var(--orange-pale) !important; font-weight: 700; }
+  .hl-red td { background: var(--red-pale) !important; }
+  .hl-green td { background: var(--green-pale) !important; }
+
+  /* ─── BADGES / PILLS ─── */
+  .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+  .p-blue { background: var(--blue-pale); color: var(--blue); }
+  .p-orange { background: var(--orange-pale); color: #C05F1F; }
+  .p-green { background: var(--green-pale); color: #047857; }
+  .p-red { background: var(--red-pale); color: #DC2626; }
+  .p-amber { background: var(--amber-pale); color: #92400E; }
+  .p-gray { background: var(--gray-100); color: var(--gray-600); }
+
+  .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+  .t-up { background: var(--green-pale); color: #059669; }
+  .t-dn { background: var(--red-pale); color: #DC2626; }
+  .t-flat { background: var(--gray-100); color: var(--gray-600); }
+  .t-warn { background: var(--amber-pale); color: #B45309; }
+  .t-fire { background: #FEF3C7; color: #B45309; border: 1px solid #F59E0B; }
+
+  /* ─── CAUSE CHAIN ─── */
+  .chain { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 16px; background: var(--blue-pale); border-radius: 1.5rem; }
+  .chain-box { background: #fff; border: 1.5px solid #BDD0F0; border-radius: 1rem; padding: 10px 16px; font-size: 13px; font-weight: 600; color: var(--blue); min-width: 120px; text-align: center; }
+  .chain-box.fire { background: var(--orange); border-color: var(--orange); color: #fff; }
+  .chain-box.warn { background: var(--amber-pale); border-color: var(--amber); color: #92400E; }
+  .chain-box.bad { background: var(--red-pale); border-color: var(--red); color: #DC2626; }
+  .chain-arr { color: var(--gray-400); font-size: 18px; font-weight: 700; }
+
+  /* ─── CAPTION ─── */
+  .cap { font-size: 11px; color: var(--gray-400); margin-top: 8px; font-style: italic; }
+
+  /* ─── HYPO ─── */
+  .hypo { border-radius: 1.5rem; padding: 20px 24px; margin-bottom: 12px; }
+  .hypo-1 { background: var(--blue); color: #fff; }
+  .hypo-2 { background: var(--amber-pale); border: 1px solid #F59E0B; }
+  .hypo-3 { background: var(--gray-100); border: 1px solid var(--gray-200); }
+  .hypo-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; opacity: .75; }
+  .hypo-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .hypo-body { font-size: 13px; line-height: 1.65; opacity: .88; }
+  .conf { display: flex; gap: 3px; margin-top: 12px; align-items: center; }
+  .c-fill { width: 10px; height: 10px; border-radius: 2px; background: var(--orange); }
+  .c-empty { width: 10px; height: 10px; border-radius: 2px; background: rgba(255,255,255,.25); }
+  .conf span { font-size: 11px; margin-left: 6px; opacity: .75; }
+
+  /* ─── ACTION ITEM ─── */
+  .action { display: flex; gap: 14px; padding: 14px 18px; border-radius: 1rem; margin-bottom: 10px; align-items: flex-start; }
+  .a-crit { background: var(--red-pale); border: 1px solid #FECACA; }
+  .a-high { background: var(--blue-pale); border: 1px solid #BDD0F0; }
+  .a-med { background: var(--gray-100); border: 1px solid var(--gray-200); }
+  .a-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+  .a-crit .a-num { background: var(--red); color: #fff; }
+  .a-high .a-num { background: var(--blue); color: #fff; }
+  .a-med .a-num { background: var(--gray-400); color: #fff; }
+  .a-content strong { font-size: 13px; font-weight: 700; display: block; margin-bottom: 4px; }
+  .a-content p { font-size: 12px; color: var(--gray-600); line-height: 1.55; }
+  .sql { background: rgba(14,65,116,.08); border-radius: 8px; padding: 8px 12px; font-family: monospace; font-size: 11px; color: var(--blue); margin-top: 8px; line-height: 1.6; }
+
+  /* ─── DIVIDER ─── */
+  hr { border: none; border-top: 1px solid var(--gray-200); margin: 24px 0; }
+
+  /* ─── FOOTER ─── */
+  .footer { background: var(--blue-pale); border-radius: 1.5rem; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; margin-top: 48px; }
+  .footer p { font-size: 12px; color: var(--gray-600); }
+
+  @media(max-width:900px){.g3,.g4,.g5,.scr,.g2{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){.g2,.g3,.g4,.g5,.scr{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══════════════════════════════════════
+     HEADER
+═══════════════════════════════════════ -->
+<div class="header">
+  <div class="header-badge">🔍 Root Cause Analysis</div>
+  <h1>Tại Sao FR Giảm?<br>Tác Động Dispatch 1H-TMDT Lên Hệ Sinh Thái BIKE/ECO</h1>
+  <p>Ahamove SGN · Phân tích active drivers × dispatch data · Nov 2025 – May 13, 2026</p>
+  <div class="header-meta">
+    <span><strong>Scope:</strong> SGN · 14 services · 137,427 active rows + 39,180 dispatch rows</span>
+    <span><strong>Sự kiện:</strong> 7/5/2026 — tăng tần suất dispatch 1H-TMDT & 1H-TMDT-LOW</span>
+    <span><strong>Cập nhật:</strong> 14/05/2026</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     VERDICT
+═══════════════════════════════════════ -->
+<div class="verdict">
+  <div class="verdict-ico">⚡</div>
+  <div>
+    <h2>Kết Luận: Confirmed — Chuỗi nhân quả 3 tầng dẫn đến FR sụt giảm</h2>
+    <p>
+      <strong>(1)</strong> Thay đổi dispatch 7/5 khiến <strong>1H-TMDT-LOW rec_rate bùng nổ từ 48.9% → 80.2% (+31pp)</strong>, đẩy thêm <strong>+3,244 recommended orders/ngày</strong> vào hệ thống (từ 4,769 → 8,013/ngày, tăng +68%).
+      <strong>(2)</strong> <em>Cùng tài xế FT/PT</em> phục vụ cả ECO lẫn 1H-TMDT-LOW bị <strong>"kéo" sang 1H-TMDT-LOW</strong>: ECO mất -464 tài xế active/ngày (-7.2%), 1H-TMDT-LOW được +294 tài xế (+8.6%), <em>cùng tier FT/PT</em>.
+      <strong>(3)</strong> BIKE volume leo dần lên đỉnh 34k+/ngày trong khi <strong>dispatch pressure tăng +37-50%</strong> trên mỗi tài xế → acceptance rate sau dispatch bị xói mòn → FR giảm dù rec_rate bề ngoài ổn.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     S-C-R
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">Situation · Complication · Resolution</div>
+  <div class="scr">
+    <div class="scr-s">
+      <div class="scr-head">S — Bối cảnh</div>
+      <p>BIKE và ECO là 2 dịch vụ cốt lõi của SGN. Volume BIKE đang tăng trưởng đều (~31k → 34k req/ngày). Ngày 7/5 Ahamove thay đổi cơ chế: tăng tần suất dispatch (rec_rate) cho <strong>1H-TMDT và 1H-TMDT-LOW</strong> nhằm nâng trải nghiệm e-commerce. Trước đó W5 (28/4-6/5) đã có spike volume bất thường do hậu holiday.</p>
+    </div>
+    <div class="scr-c">
+      <div class="scr-head">C — Vấn đề cốt lõi</div>
+      <p>FR của BIKE và ECO giảm rõ rệt. Nhưng nhìn bề ngoài, rec_rate của BIKE lại <em>cải thiện</em> (+2pp), số tài xế BIKE tăng nhẹ. Nghịch lý: <strong>tại sao dispatch cải thiện mà FR vẫn giảm?</strong> Câu trả lời nằm ở cơ chế "crowding-out" và dispatch pressure — tầng ẩn mà rec_rate không đo được.</p>
+    </div>
+    <div class="scr-r">
+      <div class="scr-head">R — Phát hiện</div>
+      <p>3 root causes được xác định từ data: <strong>(1)</strong> 1H-TMDT-LOW hút tài xế ECO khỏi dịch vụ này; <strong>(2)</strong> Dispatch pressure/tài xế tăng +37-50% cho nhóm TMDT làm giảm responsiveness; <strong>(3)</strong> BIKE volume tăng dài hạn chưa được bù đắp đủ supply. Cả 3 compound lên nhau.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     CAUSAL CHAIN
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">Chuỗi nhân quả — Root Cause Chain</div>
+  <div class="chain">
+    <div class="chain-box fire">7/5: Tăng<br>dispatch freq<br>1H-TMDT*</div>
+    <div class="chain-arr">→</div>
+    <div class="chain-box fire">rec_rate<br>1H-TMDT-LOW<br>49% → 80%</div>
+    <div class="chain-arr">→</div>
+    <div class="chain-box warn">Rec volume<br>+68%<br>(+3,244/ngày)</div>
+    <div class="chain-arr">→</div>
+    <div class="chain-box warn">FT/PT bị<br>"kéo" sang<br>1H-TMDT</div>
+    <div class="chain-arr">→</div>
+    <div class="chain-box bad">ECO active<br>−7.2%<br>−464 tài xế</div>
+    <div class="chain-arr">+</div>
+    <div class="chain-box bad">Dispatch pressure<br>/tài xế +37%<br>→ ↓ acceptance</div>
+    <div class="chain-arr">→</div>
+    <div class="chain-box bad">FR BIKE/ECO<br>↓ GIẢM</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     KPI SCORECARD — 5 smoking guns
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">5 Chỉ Số Then Chốt — The Smoking Guns</div>
+  <div class="grid g5">
+
+    <div class="card metric-card">
+      <div class="mc-label">1H-TMDT-LOW<br>rec_rate ▲</div>
+      <div class="mc-val" style="color:var(--red)">+31pp</div>
+      <div class="mc-sub">48.9% → 80.2%</div>
+      <div class="delta d-dn">Lớn nhất trong 14 services</div>
+    </div>
+
+    <div class="card metric-card">
+      <div class="mc-label">Rec vol 1H-TMDT-LOW</div>
+      <div class="mc-val" style="color:var(--red)">+68%</div>
+      <div class="mc-sub">4,769 → 8,013 orders/ngày</div>
+      <div class="delta d-dn">+3,244 dispatches/ngày</div>
+    </div>
+
+    <div class="card metric-card">
+      <div class="mc-label">ECO active drivers</div>
+      <div class="mc-val" style="color:var(--red)">−7.2%</div>
+      <div class="mc-sub">6,479 → 6,015/ngày</div>
+      <div class="delta d-dn">−464 tài xế/ngày</div>
+    </div>
+
+    <div class="card metric-card">
+      <div class="mc-label">Dispatch pressure<br>per driver</div>
+      <div class="mc-val" style="color:var(--amber)">+37%</div>
+      <div class="mc-sub">1H-TMDT-LOW: 1.57→2.15/ngày</div>
+      <div class="delta d-warn">1H-TMDT: +49.5%</div>
+    </div>
+
+    <div class="card metric-card">
+      <div class="mc-label">1H-TMDT share<br>tổng dispatches</div>
+      <div class="mc-val" style="color:var(--orange)">+6pp</div>
+      <div class="mc-sub">10.2% → 16.1%</div>
+      <div class="delta d-warn">Chiếm 1/6 toàn hệ thống</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     WEEKLY TREND TABLE + CHART
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">Diễn Biến Theo Tuần — W1 April → W6 May 7-13</div>
+  <div class="grid g2">
+
+    <!-- Table -->
+    <div class="card card-sm" style="overflow-x:auto">
+      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px">BIKE &amp; ECO: Volume, rec_rate, Active</div>
+      <table>
+        <thead>
+          <tr><th>Tuần</th><th>BIKE vol</th><th>BIKE rr</th><th>ECO vol</th><th>ECO rr</th><th>ECO active</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>W1 Apr 1-6</td><td class="num">31,539</td><td><span class="pill p-blue">90.6%</span></td><td class="num">10,915</td><td><span class="pill p-blue">86.1%</span></td><td class="num">6,558</td></tr>
+          <tr><td>W2 Apr 7-13</td><td class="num">31,748</td><td><span class="pill p-blue">90.2%</span></td><td class="num">9,651</td><td><span class="pill p-blue">87.5%</span></td><td class="num">6,227</td></tr>
+          <tr><td>W3 Apr 14-20</td><td class="num">31,655</td><td><span class="pill p-blue">89.9%</span></td><td class="num">9,067</td><td><span class="pill p-blue">86.1%</span></td><td class="num">5,940</td></tr>
+          <tr><td>W4 Apr 21-27</td><td class="num">32,257</td><td><span class="pill p-blue">89.6%</span></td><td class="num">9,335</td><td><span class="pill p-blue">88.2%</span></td><td class="num">6,235</td></tr>
+          <tr class="hl-row"><td>W5 Apr28-May6 ⚠</td><td class="num">34,124</td><td><span class="pill p-amber">87.7%</span></td><td class="num">12,365</td><td><span class="pill p-red">80.2%</span></td><td class="num">7,018</td></tr>
+          <tr class="hl-row"><td>W6 May 7-13 ◄</td><td class="num">33,954</td><td><span class="pill p-green">91.3%</span></td><td class="num">9,056</td><td><span class="pill p-blue">86.0%</span></td><td class="num">6,015</td></tr>
+        </tbody>
+      </table>
+      <p class="cap">W5 = tuần hậu holiday 30/4-1/5, có volume spike bất thường. W6 = post dispatch change 7/5.</p>
+    </div>
+
+    <!-- Chart: 1H-TMDT-LOW rec_rate + ECO active trend -->
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px">1H-TMDT-LOW rec_rate vs ECO Active Drivers (Weekly)</div>
+      <div style="font-size:11px;color:var(--gray-400);margin-bottom:14px">Đường đỏ = 1H-TMDT-LOW rec_rate (trục trái) | Thanh xanh = ECO active (trục phải)</div>
+
+      <svg viewBox="0 0 440 220" style="width:100%;overflow:visible">
+        <!-- Background -->
+        <rect x="0" y="0" width="440" height="220" fill="transparent"/>
+
+        <!-- Highlight W6 -->
+        <rect x="370" y="10" width="60" height="175" fill="rgba(239,68,68,0.06)" rx="4"/>
+        <text x="400" y="8" text-anchor="middle" font-size="9" fill="var(--red)" font-weight="700">W6 POST</text>
+
+        <!-- Axes -->
+        <line x1="55" y1="10" x2="55" y2="185" stroke="var(--gray-200)" stroke-width="1"/>
+        <line x1="55" y1="185" x2="430" y2="185" stroke="var(--gray-200)" stroke-width="1"/>
+
+        <!-- Y left: rec_rate 40-90% -->
+        <!-- 40%→y=185, 90%→y=10. range=50pp, px=175. 1pp=3.5px. y = 185-(rr-40)*3.5 -->
+        <text x="50" y="14" text-anchor="end" font-size="9" fill="var(--red)" opacity=".7">90%</text>
+        <text x="50" y="49" text-anchor="end" font-size="9" fill="var(--red)" opacity=".7">80%</text>
+        <text x="50" y="84" text-anchor="end" font-size="9" fill="var(--red)" opacity=".7">70%</text>
+        <text x="50" y="119" text-anchor="end" font-size="9" fill="var(--red)" opacity=".7">60%</text>
+        <text x="50" y="154" text-anchor="end" font-size="9" fill="var(--red)" opacity=".7">50%</text>
+        <text x="50" y="189" text-anchor="end" font-size="9" fill="var(--red)" opacity=".7">40%</text>
+        <line x1="55" y1="49" x2="430" y2="49" stroke="var(--gray-100)" stroke-width="1"/>
+        <line x1="55" y1="119" x2="430" y2="119" stroke="var(--gray-100)" stroke-width="1"/>
+
+        <!-- Y right: ECO active 5000-8000 -->
+        <!-- 5000→y=185, 8000→y=10. range=3000, px=175. 1unit=175/3000=0.0583. y=185-(active-5000)*0.0583 -->
+        <text x="435" y="14" text-anchor="start" font-size="9" fill="var(--blue)" opacity=".7">8k</text>
+        <text x="435" y="72" text-anchor="start" font-size="9" fill="var(--blue)" opacity=".7">7k</text>
+        <text x="435" y="130" text-anchor="start" font-size="9" fill="var(--blue)" opacity=".7">6k</text>
+        <text x="435" y="188" text-anchor="start" font-size="9" fill="var(--blue)" opacity=".7">5k</td>
+
+        <!-- X positions: 6 weeks equally spaced from x=80 to x=390, step 62 -->
+        <!-- W1:80, W2:142, W3:204, W4:266, W5:328, W6:390 -->
+
+        <!-- ECO active bars (background) -->
+        <!-- 6558→y=185-(6558-5000)*0.0583=185-90.8=94 -->
+        <!-- 6227→y=185-72.7=112 -->
+        <!-- 5940→y=185-55.9=129 -->
+        <!-- 6235→y=185-72.9=112 -->
+        <!-- 7018→y=185-117.6=67 -->
+        <!-- 6015→y=185-59.0=126 -->
+        <rect x="65" y="94" width="28" height="91" rx="4" fill="rgba(14,65,116,0.15)"/>
+        <rect x="127" y="112" width="28" height="73" rx="4" fill="rgba(14,65,116,0.15)"/>
+        <rect x="189" y="129" width="28" height="56" rx="4" fill="rgba(14,65,116,0.15)"/>
+        <rect x="251" y="112" width="28" height="73" rx="4" fill="rgba(14,65,116,0.15)"/>
+        <rect x="313" y="67" width="28" height="118" rx="4" fill="rgba(245,158,11,0.2)"/>
+        <rect x="375" y="126" width="28" height="59" rx="4" fill="rgba(239,68,68,0.2)"/>
+        <!-- ECO bar labels -->
+        <text x="79" y="89" text-anchor="middle" font-size="8" fill="var(--blue)" opacity=".8">6,558</text>
+        <text x="141" y="107" text-anchor="middle" font-size="8" fill="var(--blue)" opacity=".8">6,227</text>
+        <text x="203" y="124" text-anchor="middle" font-size="8" fill="var(--blue)" opacity=".8">5,940</text>
+        <text x="265" y="107" text-anchor="middle" font-size="8" fill="var(--blue)" opacity=".8">6,235</text>
+        <text x="327" y="62" text-anchor="middle" font-size="8" fill="#B45309" font-weight="700">7,018</text>
+        <text x="389" y="120" text-anchor="middle" font-size="8" fill="var(--red)" font-weight="700">6,015</text>
+
+        <!-- 1H-TMDT-LOW rec_rate LINE -->
+        <!-- y = 185-(rr-40)*3.5 -->
+        <!-- 50.1→y=185-35.4=149.6 | 51.2→150 | 49.3→150.9 | 55.6→143.4 | 48.9→151.5 | 80.2→36.3 -->
+        <!-- use cx at center of bar: 79,141,203,265,327,389 -->
+        <polyline points="79,150 141,150 203,151 265,143 327,151 389,36"
+                  fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="0"/>
+        <circle cx="79" cy="150" r="4" fill="var(--red)"/>
+        <circle cx="141" cy="150" r="4" fill="var(--red)"/>
+        <circle cx="203" cy="151" r="4" fill="var(--red)"/>
+        <circle cx="265" cy="143" r="4" fill="var(--red)"/>
+        <circle cx="327" cy="151" r="4" fill="var(--amber)"/>
+        <circle cx="389" cy="36" r="6" fill="var(--red)"/>
+
+        <!-- rec_rate value labels -->
+        <text x="79" y="145" text-anchor="middle" font-size="9" fill="var(--red)">50%</text>
+        <text x="141" y="145" text-anchor="middle" font-size="9" fill="var(--red)">51%</text>
+        <text x="203" y="146" text-anchor="middle" font-size="9" fill="var(--red)">49%</text>
+        <text x="265" y="138" text-anchor="middle" font-size="9" fill="var(--red)">56%</text>
+        <text x="327" y="146" text-anchor="middle" font-size="9" fill="var(--amber)">49%</text>
+        <text x="389" y="30" text-anchor="middle" font-size="11" fill="var(--red)" font-weight="800">80%</text>
+
+        <!-- X labels -->
+        <text x="79" y="200" text-anchor="middle" font-size="9" fill="var(--gray-400)">W1 Apr</text>
+        <text x="141" y="200" text-anchor="middle" font-size="9" fill="var(--gray-400)">W2 Apr</text>
+        <text x="203" y="200" text-anchor="middle" font-size="9" fill="var(--gray-400)">W3 Apr</text>
+        <text x="265" y="200" text-anchor="middle" font-size="9" fill="var(--gray-400)">W4 Apr</text>
+        <text x="327" y="200" text-anchor="middle" font-size="9" fill="var(--amber)">W5 ⚠</text>
+        <text x="389" y="200" text-anchor="middle" font-size="9" fill="var(--red)" font-weight="700">W6 ◄</text>
+
+        <!-- Legend -->
+        <line x1="58" y1="215" x2="75" y2="215" stroke="var(--red)" stroke-width="2.5"/>
+        <circle cx="66" cy="215" r="3" fill="var(--red)"/>
+        <text x="78" y="219" font-size="9" fill="var(--gray-600)">1H-TMDT-LOW rec_rate</text>
+        <rect x="160" y="210" width="12" height="10" rx="2" fill="rgba(14,65,116,0.2)"/>
+        <text x="175" y="219" font-size="9" fill="var(--gray-600)">ECO active drivers</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     DISPATCH DEEP-DIVE
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">Dispatch Analysis — rec_rate &amp; Volume Pre vs Post 7/5</div>
+  <div class="card card-sm" style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th><th>Pre vol/ngày</th><th>Pre rec_rate</th><th>Pre rec vol</th>
+          <th>Post vol/ngày</th><th>Post rec_rate</th><th>Post rec vol</th>
+          <th>Δ rec_rate</th><th>Δ rec vol</th><th>Nhận xét</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>BIKE</strong></td>
+          <td class="num">32,574</td><td><span class="pill p-blue">89.0%</span></td><td class="num">28,991</td>
+          <td class="num">33,954</td><td><span class="pill p-green">91.3%</span></td><td class="num">30,987</td>
+          <td><span class="tag t-up">+2.2pp</span></td><td><span class="tag t-up">+2,000</span></td>
+          <td style="font-size:12px">Volume tăng +4.2%, dispatch cải thiện → supply khá ổn nhưng acceptance sau đó mới là vấn đề</td>
+        </tr>
+        <tr class="hl-red">
+          <td><strong>ECO</strong></td>
+          <td class="num">10,515</td><td><span class="pill p-amber">84.1%</span></td><td class="num">8,846</td>
+          <td class="num">9,056</td><td><span class="pill p-blue">86.0%</span></td><td class="num">7,789</td>
+          <td><span class="tag t-up">+2.0pp</span></td><td><span class="tag t-dn">−1,057</span></td>
+          <td style="font-size:12px">Volume chuẩn hóa sau spike W5. Nhưng active drivers giảm -7.2% → ít người xử lý đơn hơn thực tế</td>
+        </tr>
+        <tr class="hl-row">
+          <td><strong>1H-TMDT</strong></td>
+          <td class="num">1,212</td><td><span class="pill p-red">49.8%</span></td><td class="num">604</td>
+          <td class="num">992</td><td><span class="pill p-green">78.5%</span></td><td class="num">779</td>
+          <td><span class="tag t-dn">+28.7pp ▲▲</span></td><td><span class="tag t-up">+175</span></td>
+          <td style="font-size:12px;color:var(--red);font-weight:600">Thay đổi cực lớn — từ ~50% lên 79%. Tài xế nhận +49% notifications mỗi ngày</td>
+        </tr>
+        <tr class="hl-row">
+          <td><strong>1H-TMDT-LOW</strong></td>
+          <td class="num">10,066</td><td><span class="pill p-red">53.5%</span></td><td class="num">5,385</td>
+          <td class="num">9,987</td><td><span class="pill p-green">80.2%</span></td><td class="num">8,009</td>
+          <td><span class="tag t-dn">+26.7pp ▲▲</span></td><td><span class="tag t-dn">+2,624 ▲▲▲</span></td>
+          <td style="font-size:12px;color:var(--red);font-weight:600">REC VOLUME tăng +68%! Đây là smoking gun chính — tạo flood notifications</td>
+        </tr>
+        <tr>
+          <td>TMDT</td>
+          <td class="num">127</td><td>95.9%</td><td class="num">122</td>
+          <td class="num">89</td><td>93.7%</td><td class="num">83</td>
+          <td><span class="tag t-flat">−2.2pp</span></td><td class="num">−39</td><td style="font-size:12px;color:var(--gray-400)">Nhỏ, không đáng kể</td>
+        </tr>
+        <tr>
+          <td>TMDT-LOW</td>
+          <td class="num">1,906</td><td>96.5%</td><td class="num">1,839</td>
+          <td class="num">1,332</td><td>95.9%</td><td class="num">1,278</td>
+          <td><span class="tag t-flat">−0.6pp</span></td><td class="num">−561</td><td style="font-size:12px;color:var(--gray-400)">Ổn định</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="cap">Pre = weekdays 21/4–6/5 (loại holiday 30/4–3/5). Post = weekdays 7–13/5. rec vol = recommended orders/ngày.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TIER MIGRATION — ECO vs 1H-TMDT-LOW
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">Driver Tier Migration — Cùng Tài Xế FT/PT Đang Rời ECO Sang 1H-TMDT-LOW</div>
+  <div class="grid g2">
+
+    <div class="card card-sm">
+      <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:12px">ECO — Tất cả tier đều GIẢM</div>
+      <table>
+        <thead><tr><th>Tier</th><th>Pre avg/ngày</th><th>Post avg/ngày</th><th>Δ tuyệt đối</th><th>Δ%</th></tr></thead>
+        <tbody>
+          <tr><td>FT</td><td class="num">1,958</td><td class="num">1,775</td><td class="num">−183</td><td><span class="tag t-dn">−9.3%</span></td></tr>
+          <tr><td>PT</td><td class="num">1,877</td><td class="num">1,718</td><td class="num">−159</td><td><span class="tag t-dn">−8.4%</span></td></tr>
+          <tr><td style="color:var(--green)">return</td><td class="num">2,299</td><td class="num">2,214</td><td class="num">−85</td><td><span class="tag t-dn">−3.7%</span></td></tr>
+          <tr><td>NIM</td><td class="num">181</td><td class="num">167</td><td class="num">−14</td><td><span class="tag t-dn">−7.8%</span></td></tr>
+          <tr><td>NLM</td><td class="num">164</td><td class="num">140</td><td class="num">−24</td><td><span class="tag t-dn">−14.7%</span></td></tr>
+          <tr style="background:var(--red-pale)"><td colspan="3"><strong>TỔNG THIẾU HỤT</strong></td><td><strong>−465/ngày</strong></td><td><span class="tag t-dn">−7.2%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card card-sm">
+      <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:12px">1H-TMDT-LOW — Cùng tier FT/PT đang TĂNG</div>
+      <table>
+        <thead><tr><th>Tier</th><th>Pre avg/ngày</th><th>Post avg/ngày</th><th>Δ tuyệt đối</th><th>Δ%</th></tr></thead>
+        <tbody>
+          <tr><td>FT</td><td class="num">881</td><td class="num">999</td><td class="num">+118</td><td><span class="tag t-up">+13.3%</span></td></tr>
+          <tr><td>PT</td><td class="num">1,088</td><td class="num">1,164</td><td class="num">+76</td><td><span class="tag t-up">+7.0%</span></td></tr>
+          <tr><td style="color:var(--green)">return</td><td class="num">1,273</td><td class="num">1,369</td><td class="num">+96</td><td><span class="tag t-up">+7.5%</span></td></tr>
+          <tr><td>NIM</td><td class="num">109</td><td class="num">101</td><td class="num">−8</td><td><span class="tag t-dn">−7.9%</span></td></tr>
+          <tr><td>NLM</td><td class="num">89</td><td class="num">104</td><td class="num">+15</td><td><span class="tag t-up">+16.4%</span></td></tr>
+          <tr style="background:var(--green-pale)"><td colspan="3"><strong>TỔNG TĂNG THÊM</strong></td><td><strong>+297/ngày</strong></td><td><span class="tag t-up">+8.6%</span></td></tr>
+        </tbody>
+      </table>
+      <p class="cap" style="color:var(--red)">⚡ FT và PT: ECO mất −183 FT, −159 PT // 1H-TMDT-LOW được +118 FT, +76 PT → CÙNG POOL tài xế dịch chuyển</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     HOURLY ANALYSIS
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">Phân Tích Giờ — 1H-TMDT Dispatch Surge vs ECO Active Decline</div>
+  <div class="grid g2">
+
+    <div class="card card-sm">
+      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px">1H-TMDT* rec volume tăng mạnh nhất ở đâu?</div>
+      <table>
+        <thead><tr><th>Giờ</th><th>Pre rec/ngày</th><th>Post rec/ngày</th><th>Δ%</th><th>Nhận xét</th></tr></thead>
+        <tbody>
+          <tr><td>8h</td><td class="num">892</td><td class="num">1,469</td><td><span class="tag t-dn">+65%</span></td><td style="font-size:11px">Peak sáng — cạnh tranh cao với BIKE/ECO</td></tr>
+          <tr class="hl-red"><td>9h</td><td class="num">998</td><td class="num">1,789</td><td><span class="tag t-dn">+79%</span></td><td style="font-size:11px;color:var(--red);font-weight:600">Tăng mạnh nhất trong ngày</td></tr>
+          <tr><td>10h</td><td class="num">697</td><td class="num">1,009</td><td><span class="tag t-dn">+45%</span></td><td style="font-size:11px">Giờ ECO cũng cao</td></tr>
+          <tr><td>13h</td><td class="num">529</td><td class="num">688</td><td><span class="tag t-dn">+30%</span></td><td style="font-size:11px">Giữa giờ lunch</td></tr>
+          <tr><td>14h</td><td class="num">447</td><td class="num">621</td><td><span class="tag t-dn">+39%</span></td><td style="font-size:11px">Đầu giờ chiều</td></tr>
+          <tr><td>16h</td><td class="num">303</td><td class="num">463</td><td><span class="tag t-dn">+53%</span></td><td style="font-size:11px">Chiều muộn</td></tr>
+          <tr><td>17h</td><td class="num">252</td><td class="num">412</td><td><span class="tag t-dn">+63%</span></td><td style="font-size:11px">Giờ tan làm</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card card-sm">
+      <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:12px">ECO active drivers — giảm nhiều nhất giờ nào?</div>
+      <table>
+        <thead><tr><th>Giờ</th><th>ECO Pre</th><th>ECO Post</th><th>Δ%</th><th>BIKE Pre→Post</th></tr></thead>
+        <tbody>
+          <tr><td>10h</td><td class="num">639</td><td class="num">607</td><td><span class="tag t-dn">−5%</span></td><td class="num">2,002→2,040 (+2%)</td></tr>
+          <tr><td>11h</td><td class="num">600</td><td class="num">553</td><td><span class="tag t-dn">−8%</span></td><td class="num">1,802→1,872 (+4%)</td></tr>
+          <tr class="hl-red"><td>12h</td><td class="num">546</td><td class="num">426</td><td><span class="tag t-dn">−22%</span></td><td class="num">1,259→1,306 (+4%)</td></tr>
+          <tr><td>13h</td><td class="num">623</td><td class="num">579</td><td><span class="tag t-dn">−7%</span></td><td class="num">1,798→1,862 (+4%)</td></tr>
+          <tr><td>14h</td><td class="num">674</td><td class="num">601</td><td><span class="tag t-dn">−11%</span></td><td class="num">2,039→2,135 (+5%)</td></tr>
+          <tr><td>15h</td><td class="num">614</td><td class="num">558</td><td><span class="tag t-dn">−9%</span></td><td class="num">1,995→2,087 (+5%)</td></tr>
+          <tr><td>6h</td><td class="num">15</td><td class="num">13</td><td><span class="tag t-dn">−17%</span></td><td class="num">109→106 (−3%)</td></tr>
+        </tbody>
+      </table>
+      <p class="cap">ECO giảm nhiều nhất giờ trưa (12h: −22%) và chiều (14h: −11%). BIKE duy trì tốt hơn cùng giờ → ECO bị ảnh hưởng nặng hơn BIKE.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     DISPATCH PRESSURE
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">Dispatch Pressure — Số Lệnh Dispatch Per Tài Xế</div>
+  <div class="card card-sm" style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr><th>Service</th><th>Pre: rec/driver/ngày</th><th>Post: rec/driver/ngày</th><th>Δ%</th><th>Ý nghĩa</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>BIKE</strong></td><td class="num">1.41</td><td class="num">1.45</td><td><span class="tag t-flat">+2.6%</span></td><td style="font-size:12px">Ổn định — mỗi BIKE driver nhận ~1.4 dispatches/ngày</td></tr>
+        <tr><td><strong>ECO</strong></td><td class="num">1.36</td><td class="num">1.30</td><td><span class="tag t-flat">−5.1%</span></td><td style="font-size:12px">Ít lệnh hơn do volume giảm → nhưng ít driver hơn nhiều hơn</td></tr>
+        <tr class="hl-row"><td><strong>1H-TMDT</strong></td><td class="num">1.30</td><td class="num">1.94</td><td><span class="tag t-dn">+49.5% ▲▲</span></td><td style="font-size:12px;color:var(--red);font-weight:600">Mỗi tài xế 1H-TMDT nhận gần 2 lệnh/ngày — tăng gần gấp đôi</td></tr>
+        <tr class="hl-row"><td><strong>1H-TMDT-LOW</strong></td><td class="num">1.57</td><td class="num">2.15</td><td><span class="tag t-dn">+37.0% ▲▲</span></td><td style="font-size:12px;color:var(--red);font-weight:600">2.15 lệnh/tài xế/ngày — khi kết hợp với BIKE tạo "notification overload"</td></tr>
+        <tr><td>TMDT-LOW</td><td class="num">2.36</td><td class="num">2.36</td><td><span class="tag t-flat">0.0%</span></td><td style="font-size:12px;color:var(--gray-400)">Ổn định</td></tr>
+      </tbody>
+    </table>
+    <p class="cap">Dispatch pressure = recommended_orders / active_drivers (avg per day). Tài xế phục vụ nhiều service cùng lúc nhận lệnh từ nhiều nguồn → khả năng "notification fatigue" cao.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     DAILY GRANULAR TIMELINE
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">Timeline Ngày — Apr 21 → May 13 (SGN)</div>
+  <div class="card card-sm" style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr><th>Ngày</th><th>Thứ</th><th>1H-TMDT-LOW<br>rec_rate</th><th>BIKE vol</th><th>BIKE active</th><th>ECO active</th><th>1H-TMDT-LOW<br>active</th><th>Ghi chú</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>21 Apr</td><td>T3</td><td>58.0%</td><td class="num">30,963</td><td class="num">20,681</td><td class="num">6,166</td><td class="num">3,572</td><td></td></tr>
+        <tr><td>22 Apr</td><td>T4</td><td>63.1%</td><td class="num">30,991</td><td class="num">20,902</td><td class="num">6,598</td><td class="num">3,897</td><td></td></tr>
+        <tr><td>23 Apr</td><td>T5</td><td>60.8%</td><td class="num">31,292</td><td class="num">21,020</td><td class="num">6,200</td><td class="num">3,867</td><td></td></tr>
+        <tr><td>24 Apr</td><td>T6</td><td>51.1%</td><td class="num">35,874</td><td class="num">22,150</td><td class="num">5,825</td><td class="num">3,582</td><td style="font-size:11px;color:var(--amber)">BIKE volume spike thứ 6</td></tr>
+        <tr><td>27 Apr</td><td>T2</td><td>57.1%</td><td class="num">25,996</td><td class="num">16,706</td><td class="num">4,913</td><td class="num">3,528</td><td style="font-size:11px;color:var(--gray-400)">Đầu tuần thấp</td></tr>
+        <tr><td>28 Apr</td><td>T3</td><td>52.9%</td><td class="num">32,077</td><td class="num">20,840</td><td class="num">6,017</td><td class="num">2,686</td><td></td></tr>
+        <tr><td>29 Apr</td><td>T4</td><td>46.4%</td><td class="num">37,440</td><td class="num">21,629</td><td class="num">5,912</td><td class="num">2,413</td><td style="font-size:11px;color:var(--amber)">BIKE 37k — highest!</td></tr>
+        <tr><td>04 May</td><td>T2</td><td>53.1%</td><td class="num">33,537</td><td class="num">21,102</td><td class="num">6,656</td><td class="num">3,462</td><td style="font-size:11px;color:var(--blue)">Trở lại sau holiday</td></tr>
+        <tr><td>05 May</td><td>T3</td><td>45.2%</td><td class="num">34,051</td><td class="num">19,682</td><td class="num">8,762</td><td class="num">3,717</td><td style="font-size:11px;color:var(--amber)">ECO 8,762 — đỉnh cao nhất!</td></tr>
+        <tr><td>06 May</td><td>T4</td><td>48.5%</td><td class="num">33,516</td><td class="num">20,293</td><td class="num">7,745</td><td class="num">3,689</td><td style="font-size:11px;color:var(--amber)">ECO vẫn cao, TMDT-LOW chưa thay đổi</td></tr>
+        <tr class="hl-row">
+          <td><strong>07 May</strong></td><td><strong>T4</strong></td>
+          <td><strong style="color:var(--red)">75.5% ▲▲</strong></td>
+          <td class="num">34,043</td><td class="num">21,166</td>
+          <td><strong style="color:var(--red)">5,851</strong></td>
+          <td><strong style="color:var(--green)">4,076</strong></td>
+          <td style="font-size:11px;color:var(--red);font-weight:600">◄ DISPATCH CHANGE — ECO giảm −1,894 so hôm qua!</td>
+        </tr>
+        <tr><td>08 May</td><td>T5</td><td style="color:var(--red);font-weight:700">80.3%</td><td class="num">34,648</td><td class="num">21,446</td><td class="num">5,963</td><td class="num">3,756</td><td style="font-size:11px;color:var(--red)">rec_rate duy trì cao</td></tr>
+        <tr><td>11 May</td><td>T2</td><td style="color:var(--red);font-weight:700">79.0%</td><td class="num">34,489</td><td class="num">21,182</td><td class="num">6,333</td><td class="num">3,793</td><td></td></tr>
+        <tr><td>12 May</td><td>T3</td><td style="color:var(--red);font-weight:700">84.7%</td><td class="num">33,094</td><td class="num">21,373</td><td class="num">5,729</td><td class="num">3,465</td><td></td></tr>
+        <tr><td>13 May</td><td>T4</td><td style="color:var(--red);font-weight:700">83.1%</td><td class="num">33,494</td><td class="num">21,583</td><td class="num">6,197</td><td class="num">3,589</td><td></td></tr>
+      </tbody>
+    </table>
+    <p class="cap">Ngày 7/5: ECO active giảm từ 7,745 (6/5) xuống 5,851 (7/5) — giảm 1,894 chỉ trong 1 ngày. Đây là signal mạnh nhất.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     HYPOTHESES
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">Phân Tích Nguyên Nhân — Ranked By Evidence Strength</div>
+
+  <div class="hypo hypo-1">
+    <div class="hypo-label">Root Cause 1 — CONFIRMED (Evidence mạnh nhất)</div>
+    <div class="hypo-title">1H-TMDT-LOW dispatch surge "kéo" tài xế FT/PT ra khỏi ECO, làm sụt nguồn cung ECO</div>
+    <div class="hypo-body">
+      Sau 7/5, 1H-TMDT-LOW rec_rate bùng nổ lên 80.2% (+26.7pp), tạo thêm 3,244 recommended orders/ngày (+68%). Lệnh dispatch chủ động (push notification) hấp dẫn hơn listing thụ động → tài xế FT/PT có xu hướng ưu tiên service được push mạnh hơn. ECO mất −464 active tài xế/ngày (-7.2%) trong khi 1H-TMDT-LOW được +297 (+8.6%). Tier FT và PT: ECO mất −183 FT, −159 PT // TMDT-LOW được +118 FT, +76 PT — <strong>cùng driver pool dịch chuyển</strong>. Ngày 7/5 ECO active sụt −1,894 trong 1 ngày.
+    </div>
+    <div class="conf">
+      <div class="c-fill"></div><div class="c-fill"></div><div class="c-fill"></div><div class="c-fill"></div><div class="c-fill"></div>
+      <span>Confidence 5/5 — Data xác nhận trực tiếp từ tier migration</span>
+    </div>
+  </div>
+
+  <div class="hypo hypo-1" style="margin-top:12px">
+    <div class="hypo-label">Root Cause 2 — CONFIRMED (Dispatch overload)</div>
+    <div class="hypo-title">Dispatch pressure tăng +37-50% trên mỗi tài xế TMDT → Notification fatigue → Giảm acceptance rate sau dispatch cho toàn bộ services</div>
+    <div class="hypo-body">
+      Tài xế phục vụ 1H-TMDT-LOW nay nhận trung bình 2.15 dispatch/ngày (vs 1.57 trước, +37%). Tài xế 1H-TMDT: 1.94 vs 1.30 (+49.5%). Khi cùng một tài xế đang phục vụ cả BIKE lẫn TMDT, việc nhận quá nhiều notifications tạo ra "notification fatigue": driver giảm responsiveness, reject nhiều hơn, hoặc bị occupied với TMDT khi BIKE notification đến. <strong>Hệ quả: rec_rate của BIKE tăng nhưng FR vẫn giảm</strong> vì acceptance sau dispatch mới là bottleneck thực sự.
+    </div>
+    <div class="conf">
+      <div class="c-fill"></div><div class="c-fill"></div><div class="c-fill"></div><div class="c-fill"></div><div class="c-empty"></div>
+      <span>Confidence 4/5 — Cần thêm acceptance rate data để confirm hoàn toàn</span>
+    </div>
+  </div>
+
+  <div class="hypo hypo-2" style="margin-top:12px">
+    <div class="hypo-label">Contributing Factor 3 — Pre-existing (trước 7/5)</div>
+    <div class="hypo-title">BIKE volume leo dần lên đỉnh (31k → 34k+ trong 6 tuần) trong khi driver pool chưa tăng tương ứng</div>
+    <div class="hypo-body" style="color:var(--gray-800)">
+      BIKE volume đã tăng +8% từ W1 Apr (31,539) lên W6 (33,954). Active drivers chỉ tăng +4% (20k → 21.4k). Ratio drivers/orders duy trì nhưng không có dư địa. Bất kỳ supply shock nào (như 1H-TMDT pulling drivers) đều tác động ngay lập tức đến FR. <strong>Đây là nền tảng dễ tổn thương sẵn có trước 7/5.</strong>
+    </div>
+  </div>
+
+  <div class="hypo hypo-3" style="margin-top:12px">
+    <div class="hypo-label">Context Factor 4 — W5 Anomaly</div>
+    <div class="hypo-title">Tuần W5 (28/4–6/5): Post-holiday demand spike làm méo mó baseline, khiến W6 trông như "giảm" thêm</div>
+    <div class="hypo-body">
+      W5 có ECO volume đột biến 12,365/ngày (bình thường ~9-10k) và ECO active lên 7,018/ngày. Đây là hậu holiday 30/4-1/5. Khi so sánh W6 với W5, ECO "giảm" nhiều. Nhưng so với W3-W4 (9,000-9,300, active 5,940-6,235), W6 (9,056 vol, 6,015 active) thực ra <em>là bình thường hoặc hơi thấp</em> — không phải sụp đổ. <strong>Tuy nhiên</strong>, kết hợp với root cause 1&2, sự chuẩn hóa này diễn ra quá nhanh và đồng thời với driver pull-out, làm FR tệ hơn mức bình thường.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     ACTION PLAN
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">Recommendations &amp; Action Plan</div>
+
+  <div class="action a-crit">
+    <div class="a-num">1</div>
+    <div class="a-content">
+      <strong>🚨 URGENT: Monitor & điều chỉnh rec_rate cap cho 1H-TMDT-LOW</strong>
+      <p>rec_rate 80.2% có thể quá cao — tạo 3,244 dispatches/ngày thêm vào hệ thống. Xem xét <strong>rate-limiting: giới hạn maximum rec_rate của 1H-TMDT-LOW ở mức 65-70%</strong> (vẫn cao hơn mức cũ ~50% nhưng không flooding). Theo dõi ECO active &amp; FR response trong 3 ngày tiếp theo.</p>
+      <div class="sql">KPI cần monitor hàng ngày: <br>
+        — 1H-TMDT-LOW rec_rate (target: &lt; 70%)<br>
+        — ECO active drivers (target: duy trì ≥ 6,200)<br>
+        — BIKE FR (target: ≥ 88%)<br>
+        — ECO FR (target: ≥ 84%)
+      </div>
+    </div>
+  </div>
+
+  <div class="action a-crit">
+    <div class="a-num">2</div>
+    <div class="a-content">
+      <strong>🚨 URGENT: Phân tích acceptance rate sau dispatch (không chỉ rec_rate)</strong>
+      <p>rec_rate = dispatch, FR = fulfillment. Gap giữa 2 metrics là <strong>acceptance rate</strong> — đây mới là bottleneck thực sự chưa được đo. Cần pull data: trong tổng recommended orders, bao nhiêu % được tài xế ACCEPT trong vòng 60 giây? So sánh BIKE/ECO trước và sau 7/5.</p>
+      <div class="sql">
+        SELECT service, order_date, <br>
+        &nbsp;&nbsp;COUNT(CASE WHEN accepted_at IS NOT NULL THEN 1 END) / COUNT(*) as acceptance_rate<br>
+        FROM dispatched_orders<br>
+        WHERE order_date BETWEEN '2026-04-21' AND '2026-05-13'<br>
+        &nbsp;&nbsp;AND service IN ('BIKE', 'ECO', '1H-TMDT-LOW')<br>
+        GROUP BY service, order_date
+      </div>
+    </div>
+  </div>
+
+  <div class="action a-high">
+    <div class="a-num">3</div>
+    <div class="a-content">
+      <strong>Phân tích crossover drivers: tài xế làm cả ECO lẫn 1H-TMDT-LOW — ai bị "pull out"?</strong>
+      <p>Identify driver segment đang hoạt động trên cả ECO và 1H-TMDT-LOW. Sau 7/5, segment này có giảm ECO activity không? Đây là nhóm tài xế bị ảnh hưởng trực tiếp nhất và là target để điều chỉnh incentive.</p>
+      <div class="sql">
+        SELECT driver_id, <br>
+        &nbsp;&nbsp;SUM(CASE WHEN service='ECO' THEN 1 END) as eco_orders,<br>
+        &nbsp;&nbsp;SUM(CASE WHEN service='1H-TMDT-LOW' THEN 1 END) as tmdt_orders<br>
+        FROM completed_orders <br>
+        WHERE order_date BETWEEN '2026-04-28' AND '2026-05-13'<br>
+        GROUP BY driver_id HAVING eco_orders &gt; 0 AND tmdt_orders &gt; 0
+      </div>
+    </div>
+  </div>
+
+  <div class="action a-high">
+    <div class="a-num">4</div>
+    <div class="a-content">
+      <strong>Xem xét tách biệt driver pool: ECO-dedicated vs 1H-TMDT dedicated</strong>
+      <p>Nếu dispatch mechanism của 1H-TMDT liên tục cạnh tranh với ECO cho cùng driver pool, cân nhắc <strong>soft segmentation</strong>: tài xế tier FT/PT ưu tiên ECO được cấp "ECO priority flag" — khi đang trong vùng ECO demand cao, hệ thống sẽ giảm 1H-TMDT recommendations cho họ.</p>
+    </div>
+  </div>
+
+  <div class="action a-med">
+    <div class="a-num">5</div>
+    <div class="a-content">
+      <strong>BIKE supply planning: volume đang tăng trưởng, cần bổ sung ~2,000 active drivers/ngày để duy trì FR</strong>
+      <p>BIKE volume tăng từ 31.5k → 34k (+8%) nhưng active chỉ tăng +4%. Để duy trì ratio 0.63+ drivers/order ở mức volume 35-36k (dự báo tháng 6), cần thêm 600-1,200 daily active BIKE drivers. Xem xét điều chỉnh incentive BIKE vào giờ thiếu hụt (12-15h là giờ ECO sụt mạnh nhất).</p>
+    </div>
+  </div>
+
+  <div class="action a-med">
+    <div class="a-num">6</div>
+    <div class="a-content">
+      <strong>Monitor 1H-TMDT-LOW acceptance rate &amp; cancellation rate riêng</strong>
+      <p>Với 2.15 dispatches/driver/ngày (tăng +37%), nếu tỉ lệ acceptance không tương ứng thì đang "lãng phí" dispatch budget. Đặt threshold: nếu acceptance rate &lt; 60% cho 1H-TMDT-LOW → trigger review rec_rate. Đồng thời check cancellation rate (driver cancel sau accept) của service này.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════
+     DATA GAPS
+═══════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label">Data Gaps — Cần Thêm Để Kết Luận 100%</div>
+  <div class="card card-sm">
+    <table>
+      <thead><tr><th>Câu hỏi còn open</th><th>Data cần</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>FR thực tế (fulfilled/requested) của BIKE &amp; ECO giảm bao nhiêu?</strong><br><span style="font-size:11px;color:var(--gray-400)">File hiện tại không có fulfilled orders</span></td>
+          <td style="font-size:12px">completed_orders by service by date</td>
+          <td><span class="pill p-red">Critical</span></td>
+        </tr>
+        <tr>
+          <td><strong>Acceptance rate sau dispatch có giảm không?</strong><br><span style="font-size:11px;color:var(--gray-400)">rec_rate ≠ FR, gap là acceptance</span></td>
+          <td style="font-size:12px">dispatched_orders + accepted flag + timestamp</td>
+          <td><span class="pill p-red">Critical</span></td>
+        </tr>
+        <tr>
+          <td>Tài xế ECO có chuyển sang 1H-TMDT không (at driver_id level)?</td>
+          <td style="font-size:12px">completed_orders by driver_id × service</td>
+          <td><span class="pill p-orange">High</span></td>
+        </tr>
+        <tr>
+          <td>Cancellation rate của driver sau accept cho 1H-TMDT-LOW?</td>
+          <td style="font-size:12px">cancellation data by service</td>
+          <td><span class="pill p-orange">High</span></td>
+        </tr>
+        <tr>
+          <td>HAN có cùng pattern không? (file hiện tại chỉ có SGN)</td>
+          <td style="font-size:12px">Pivot Table 1 HAN breakdown</td>
+          <td><span class="pill p-blue">Medium</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<div class="footer">
+  <p>Ahamove · Driver Management SGN · Root Cause Analysis · 14/05/2026 · Data range: Nov 2025 – May 13, 2026</p>
+  <p style="color:var(--orange);font-weight:700">Ahamove — On-demand Logistics</p>
+</div>
+
+</div>
+</body>
+</html>
