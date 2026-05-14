@@ -203,8 +203,9 @@
     <a class="nav-item" href="#module3" data-module="3">
       <div class="nav-dot" style="background:#FF7F32"></div>🖥️ Desktop <span class="nav-time">35ph</span>
     </a>
+    <span style="width:1.5px;height:1.25rem;background:var(--gray-200);display:inline-block;margin:0 .25rem;flex-shrink:0;align-self:center"></span>
     <a class="nav-item" href="#module4" data-module="4">
-      <div class="nav-dot" style="background:#7C3AED"></div>⚡ Cowork <span class="nav-time">30ph</span>
+      <div class="nav-dot" style="background:#7C3AED"></div>⚡ Cowork <span class="nav-time">45ph</span>
     </a>
     <a class="nav-item" href="#module5" data-module="5">
       <div class="nav-dot" style="background:#0a2f57"></div>🤖 Claude Code <span class="nav-time">40ph</span>
@@ -251,6 +252,118 @@
     <span class="hero-mod-tag" style="background:rgba(67,56,202,.3);border-color:rgba(67,56,202,.4)">🔒 Bảo Mật & Từ Điển</span>
   </div>
 </header>
+
+<!-- ECOSYSTEM MAP -->
+<section style="background:#f8fafc;border-bottom:1.5px solid #e2e8f0;padding:2.5rem 2rem">
+  <div style="max-width:960px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:1.75rem">
+      <div style="display:inline-flex;align-items:center;gap:.5rem;background:var(--blue);color:white;border-radius:2rem;padding:.4rem 1.1rem;font-size:.78rem;font-weight:700;letter-spacing:.05em;margin-bottom:.75rem">🗺️ Bản đồ sinh thái Claude</div>
+      <h2 style="font-size:1.2rem;font-weight:800;color:var(--gray-800);letter-spacing:-.02em;margin-bottom:.35rem">Các nền tảng Claude — Phân nhóm đúng để không bị nhầm</h2>
+      <p style="font-size:.85rem;color:var(--gray-600);max-width:580px;margin:0 auto">Claude có <strong>2 nhóm chính</strong>. Nhóm 1 dùng ngay trên trình duyệt/app, không cần setup. Nhóm 2 cần cài terminal — nhưng mạnh hơn rất nhiều.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+
+      <!-- GROUP 1 -->
+      <div style="background:white;border:2px solid #93c5fd;border-radius:1.25rem;overflow:hidden;box-shadow:0 2px 12px rgba(14,65,116,.08)">
+        <div style="background:var(--blue);color:white;padding:1rem 1.25rem">
+          <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.8;margin-bottom:.3rem">Nhóm 1 — Không cần setup</div>
+          <div style="font-size:1rem;font-weight:800">🖥️ Giao diện Chat</div>
+          <div style="font-size:.78rem;opacity:.8;margin-top:.15rem">Mở trình duyệt hoặc cài app → dùng ngay</div>
+        </div>
+        <div style="padding:1.1rem 1.25rem;display:flex;flex-direction:column;gap:1rem">
+
+          <!-- claude.ai Web -->
+          <div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:.875rem;padding:.875rem 1rem">
+            <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+              <span style="font-size:1.1rem">🌐</span>
+              <strong style="font-size:.9rem;color:var(--blue)">claude.ai Web</strong>
+              <span style="font-size:.68rem;background:#dbeafe;color:var(--blue);padding:.15rem .5rem;border-radius:1rem;font-weight:700;margin-left:auto">= Claude Chat</span>
+            </div>
+            <div style="font-size:.8rem;color:var(--gray-700);line-height:1.55">Chat hỏi đáp · Upload file PDF/ảnh/Excel · Dùng trên điện thoại</div>
+            <div style="margin-top:.5rem;padding:.5rem .75rem;background:white;border:1px solid #bfdbfe;border-radius:.5rem;font-size:.78rem;color:var(--gray-700)">
+              <strong style="color:var(--blue)">📁 Projects</strong> — <em>Tính năng bên trong claude.ai</em><br>
+              Tạo workspace với Instructions + Knowledge files. Không phải nền tảng riêng.
+            </div>
+          </div>
+
+          <!-- Claude Desktop -->
+          <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:.875rem;padding:.875rem 1rem">
+            <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+              <span style="font-size:1.1rem">🖥️</span>
+              <strong style="font-size:.9rem;color:var(--green)">Claude Desktop</strong>
+              <span style="font-size:.68rem;background:#dcfce7;color:var(--green);padding:.15rem .5rem;border-radius:1rem;font-weight:700;margin-left:auto">= Web + MCP</span>
+            </div>
+            <div style="font-size:.8rem;color:var(--gray-700);line-height:1.55">Tất cả tính năng Web + kết nối Gmail, Drive, Calendar qua MCP — tích hợp sẵn, không cần code</div>
+            <div style="margin-top:.5rem;padding:.4rem .75rem;background:white;border:1px solid #86efac;border-radius:.5rem;font-size:.78rem;color:var(--gray-600)">
+              ⚠️ Desktop ≠ Cowork. Desktop chỉ thêm MCP, không có Memory/Skills/Agents.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- GROUP 2 -->
+      <div style="background:white;border:2px solid #c4b5fd;border-radius:1.25rem;overflow:hidden;box-shadow:0 2px 12px rgba(124,58,237,.08)">
+        <div style="background:var(--purple);color:white;padding:1rem 1.25rem">
+          <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.8;margin-bottom:.3rem">Nhóm 2 — Cần cài Node.js + Terminal</div>
+          <div style="font-size:1rem;font-weight:800">💻 Terminal / CLI</div>
+          <div style="font-size:.78rem;opacity:.8;margin-top:.15rem">Mạnh hơn nhiều · Đọc/ghi file thật · Tự động hóa</div>
+        </div>
+        <div style="padding:1.1rem 1.25rem;display:flex;flex-direction:column;gap:1rem">
+
+          <!-- Claude Code -->
+          <div style="background:#fdf4ff;border:1.5px solid #d8b4fe;border-radius:.875rem;padding:.875rem 1rem">
+            <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+              <span style="font-size:1.1rem">💻</span>
+              <strong style="font-size:.9rem;color:var(--purple)">Claude Code (CLI)</strong>
+              <span style="font-size:.68rem;background:#ede9fe;color:var(--purple);padding:.15rem .5rem;border-radius:1rem;font-weight:700;margin-left:auto">npm install</span>
+            </div>
+            <div style="font-size:.8rem;color:var(--gray-700);line-height:1.55">Gõ <code style="background:#1e293b;color:#d8b4fe;padding:.1rem .3rem;border-radius:.25rem;font-size:.75rem">claude</code> trong terminal · Đọc/ghi file thật · Chạy lệnh · CLAUDE.md context</div>
+          </div>
+
+          <!-- Cowork -->
+          <div style="background:#fff7ed;border:2px solid var(--orange);border-radius:.875rem;padding:.875rem 1rem;position:relative">
+            <div style="position:absolute;top:-.6rem;left:50%;transform:translateX(-50%);background:#1e293b;color:#94a3b8;font-size:.65rem;padding:.15rem .5rem;border-radius:1rem;white-space:nowrap">Xây trên Claude Code</div>
+            <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+              <span style="font-size:1.1rem">🏢</span>
+              <strong style="font-size:.9rem;color:var(--orange)">Cowork</strong>
+              <span style="font-size:.68rem;background:#fff3eb;color:var(--orange);padding:.15rem .5rem;border-radius:1rem;font-weight:700;margin-left:auto">⭐ Mạnh nhất</span>
+            </div>
+            <div style="font-size:.8rem;color:var(--gray-700);line-height:1.55">= Claude Code + CLAUDE.md + Memory + Skills + Sub-agents + Hooks tự động</div>
+            <div style="margin-top:.5rem;padding:.4rem .75rem;background:white;border:1px solid #fdba74;border-radius:.5rem;font-size:.78rem;color:var(--gray-600)">
+              Cowork <strong>không thuộc Desktop</strong>. Cowork = Claude Code được cấu hình đầy đủ.
+            </div>
+          </div>
+
+          <!-- IDE -->
+          <div style="background:#f9fafb;border:1.5px solid var(--gray-200);border-radius:.875rem;padding:.875rem 1rem">
+            <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+              <span style="font-size:1.1rem">⌨️</span>
+              <strong style="font-size:.9rem;color:var(--gray-700)">IDE Extension</strong>
+              <span style="font-size:.68rem;background:var(--gray-100);color:var(--gray-600);padding:.15rem .5rem;border-radius:1rem;font-weight:700;margin-left:auto">VSCode · Cursor</span>
+            </div>
+            <div style="font-size:.8rem;color:var(--gray-700);line-height:1.55">Claude Code engine tích hợp vào editor · Sửa file trực tiếp · Diff view · Dành cho developer</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Key takeaways -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;margin-top:1.25rem">
+      <div style="background:white;border:1.5px solid #bfdbfe;border-radius:.75rem;padding:.75rem 1rem;font-size:.8rem;display:flex;gap:.5rem;align-items:flex-start">
+        <span style="font-size:1rem;flex-shrink:0">✅</span><div><strong style="color:var(--blue)">claude.ai Web = Claude Chat</strong> — cùng một thứ, khác nhau chỗ gọi tên</div>
+      </div>
+      <div style="background:white;border:1.5px solid #86efac;border-radius:.75rem;padding:.75rem 1rem;font-size:.8rem;display:flex;gap:.5rem;align-items:flex-start">
+        <span style="font-size:1rem;flex-shrink:0">✅</span><div><strong style="color:var(--green)">Projects là tính năng</strong> bên trong claude.ai — không phải nền tảng riêng</div>
+      </div>
+      <div style="background:white;border:1.5px solid #fdba74;border-radius:.75rem;padding:.75rem 1rem;font-size:.8rem;display:flex;gap:.5rem;align-items:flex-start">
+        <span style="font-size:1rem;flex-shrink:0">✅</span><div><strong style="color:var(--orange)">Cowork ≠ Desktop</strong> — Cowork xây trên Claude Code (terminal), Desktop chỉ thêm MCP</div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- MAIN -->
 <div class="main-wrap">
@@ -660,40 +773,121 @@
     <section id="platform-compare" style="background:linear-gradient(135deg,#0a2f57,#0E4174);padding:3rem 2rem;color:white;margin-bottom:3rem;scroll-margin-top:72px;border-radius:var(--radius)">
       <div style="max-width:900px;margin:0 auto">
         <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.4rem 1rem;font-size:.78rem;font-weight:700;letter-spacing:.04em;margin-bottom:1.25rem">🗺️ Bản đồ hành trình</div>
-        <h2 style="font-size:1.75rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem">Dùng Claude ở đâu? — 5 Nền Tảng</h2>
-        <p style="font-size:.9rem;opacity:.75;margin-bottom:2rem;font-weight:400">Mỗi nền tảng có sức mạnh riêng. Hiểu rõ để chọn đúng công cụ cho đúng việc — các Module tiếp theo sẽ đi sâu vào từng nền tảng.</p>
+        <h2 style="font-size:1.75rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem">2 Nhóm · 5 Công Cụ — Dùng Claude Đúng Chỗ</h2>
+        <p style="font-size:.9rem;opacity:.75;margin-bottom:2rem;font-weight:400">Claude có 2 nhóm công cụ rõ ràng. Hiểu đúng nhóm = không bao giờ bị nhầm lẫn giữa Desktop và Cowork, hay Projects và claude.ai.</p>
 
-        <div style="overflow-x:auto;margin-bottom:2rem">
-          <table style="width:100%;border-collapse:collapse;font-size:.82rem;min-width:700px">
-            <thead>
-              <tr style="background:rgba(255,255,255,.12)">
-                <th style="padding:.75rem 1rem;text-align:left;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2)">Tính năng</th>
-                <th style="padding:.75rem .75rem;text-align:center;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2)">🌐 Claude.ai</th>
-                <th style="padding:.75rem .75rem;text-align:center;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2)">🖥️ Desktop</th>
-                <th style="padding:.75rem .75rem;text-align:center;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2)">💻 Claude Code</th>
-                <th style="padding:.75rem .75rem;text-align:center;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2);color:#FF7F32">🏢 Cowork ⭐</th>
-                <th style="padding:.75rem .75rem;text-align:center;font-weight:700;border-bottom:1.5px solid rgba(255,255,255,.2)">⌨️ IDE</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td colspan="6" style="padding:.5rem 1rem;background:rgba(255,255,255,.06);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6)">Tính năng cơ bản</td></tr>
-              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Chat hỏi đáp</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td></tr>
-              <tr style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Upload file (PDF, ảnh, Excel)</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td></tr>
-              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Projects / Workspace</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
-              <tr style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Dùng trên điện thoại</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
-              <tr><td colspan="6" style="padding:.5rem 1rem;background:rgba(255,255,255,.06);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6)">Kết nối &amp; Tích hợp</td></tr>
-              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Kết nối Gmail / Google Drive</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Cần setup</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#4ade80">✓ Có sẵn</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
-              <tr style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">NotebookLM / Calendar</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Cần setup</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#4ade80">✓ Có sẵn</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
-              <tr><td colspan="6" style="padding:.5rem 1rem;background:rgba(255,255,255,.06);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6)">Thao tác File</td></tr>
-              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Đọc / ghi file thật trên máy</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td><td style="text-align:center;color:#4ade80">✓</td></tr>
-              <tr style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Sửa code trực tiếp trong editor</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Qua terminal</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Qua terminal</td><td style="text-align:center;font-size:.74rem;color:#4ade80">✓ Trực tiếp</td></tr>
-              <tr><td colspan="6" style="padding:.5rem 1rem;background:rgba(255,255,255,.06);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6)">Memory &amp; Tự động hóa</td></tr>
-              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Nhớ qua nhiều session</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#4ade80">✓ Memory files</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
-              <tr style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Skills /xlsx /pptx... · Sub-agents</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td><td style="text-align:center;font-size:.74rem;color:#4ade80">✓ Đầy đủ</td><td style="text-align:center;color:rgba(255,255,255,.3)">—</td></tr>
-              <tr><td colspan="6" style="padding:.5rem 1rem;background:rgba(255,255,255,.06);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6)">Yêu cầu cài đặt</td></tr>
-              <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:.6rem 1rem;color:rgba(255,255,255,.9)">Không cần setup</td><td style="text-align:center;color:#4ade80">✓ 100%</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Cài app</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Cài CLI</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Setup cần thời gian</td><td style="text-align:center;font-size:.74rem;color:#fbbf24">Cài extension</td></tr>
-            </tbody>
-          </table>
+        <!-- TWO GROUPS GRID -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:2rem">
+
+          <!-- GROUP 1 -->
+          <div style="border:2px solid rgba(99,179,237,.6);border-radius:1rem;overflow:hidden">
+            <div style="background:rgba(99,179,237,.18);padding:.875rem 1.125rem;border-bottom:1px solid rgba(99,179,237,.3)">
+              <div style="font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.7;margin-bottom:.2rem">Nhóm 1</div>
+              <div style="font-size:1.05rem;font-weight:800;letter-spacing:-.01em">🌐 Giao Diện Chat</div>
+              <div style="font-size:.76rem;opacity:.75;margin-top:.2rem">Dùng ngay — không cần cài Terminal</div>
+            </div>
+            <div style="padding:.875rem 1.125rem;display:flex;flex-direction:column;gap:.875rem">
+              <!-- claude.ai Web -->
+              <div style="background:rgba(255,255,255,.08);border-radius:.625rem;padding:.75rem .875rem">
+                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem">
+                  <span style="font-size:1rem">🌐</span>
+                  <strong style="font-size:.9rem">claude.ai Web</strong>
+                  <span style="font-size:.65rem;font-weight:700;background:#4ade80;color:#14532d;border-radius:.3rem;padding:.1rem .45rem;letter-spacing:.03em">= Claude Chat</span>
+                </div>
+                <ul style="list-style:none;font-size:.78rem;opacity:.85;display:flex;flex-direction:column;gap:.2rem">
+                  <li>✓ Trình duyệt &amp; điện thoại, không cài gì</li>
+                  <li>✓ Upload PDF, ảnh, Excel &amp; chat</li>
+                  <li>✓ Tạo Projects để lưu context</li>
+                </ul>
+              </div>
+              <!-- Projects note -->
+              <div style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.35);border-radius:.625rem;padding:.6rem .875rem">
+                <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem">
+                  <span style="font-size:.9rem">📁</span>
+                  <strong style="font-size:.82rem;color:#fbbf24">Projects</strong>
+                  <span style="font-size:.65rem;color:#fbbf24;font-weight:600;opacity:.85">— Tính năng BÊN TRONG claude.ai</span>
+                </div>
+                <p style="font-size:.75rem;opacity:.75;margin:0">Không phải nền tảng riêng. Projects là cách tổ chức conversation và upload tài liệu nền trong claude.ai Web hoặc Desktop.</p>
+              </div>
+              <!-- Desktop -->
+              <div style="background:rgba(255,255,255,.08);border-radius:.625rem;padding:.75rem .875rem">
+                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem">
+                  <span style="font-size:1rem">🖥️</span>
+                  <strong style="font-size:.9rem">Claude Desktop</strong>
+                  <span style="font-size:.65rem;font-weight:700;background:rgba(255,255,255,.2);color:white;border-radius:.3rem;padding:.1rem .45rem;letter-spacing:.03em">= Web + MCP</span>
+                </div>
+                <ul style="list-style:none;font-size:.78rem;opacity:.85;display:flex;flex-direction:column;gap:.2rem">
+                  <li>✓ Giao diện giống Web, cài trên máy</li>
+                  <li>✓ Kết nối Gmail, Drive, Calendar qua MCP</li>
+                  <li style="color:#fbbf24">⚠ Desktop ≠ Cowork — Desktop chỉ thêm MCP</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- GROUP 2 -->
+          <div style="border:2px solid rgba(167,139,250,.6);border-radius:1rem;overflow:hidden">
+            <div style="background:rgba(167,139,250,.18);padding:.875rem 1.125rem;border-bottom:1px solid rgba(167,139,250,.3)">
+              <div style="font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.7;margin-bottom:.2rem">Nhóm 2</div>
+              <div style="font-size:1.05rem;font-weight:800;letter-spacing:-.01em">💻 Terminal / CLI</div>
+              <div style="font-size:.76rem;opacity:.75;margin-top:.2rem">Cần cài Node.js — mạnh hơn nhiều</div>
+            </div>
+            <div style="padding:.875rem 1.125rem;display:flex;flex-direction:column;gap:.875rem">
+              <!-- Claude Code -->
+              <div style="background:rgba(255,255,255,.08);border-radius:.625rem;padding:.75rem .875rem">
+                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem">
+                  <span style="font-size:1rem">💻</span>
+                  <strong style="font-size:.9rem">Claude Code CLI</strong>
+                </div>
+                <ul style="list-style:none;font-size:.78rem;opacity:.85;display:flex;flex-direction:column;gap:.2rem">
+                  <li>✓ Chạy trong Terminal, đọc/ghi file thật</li>
+                  <li>✓ Chạy lệnh tự động trên máy tính</li>
+                  <li>✓ Nền tảng để xây Cowork</li>
+                </ul>
+              </div>
+              <!-- Cowork -->
+              <div style="background:rgba(255,127,50,.15);border:1px solid rgba(255,127,50,.45);border-radius:.625rem;padding:.75rem .875rem">
+                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem">
+                  <span style="font-size:1rem">⚡</span>
+                  <strong style="font-size:.9rem;color:#FF7F32">Cowork ⭐</strong>
+                  <span style="font-size:.65rem;font-weight:700;background:#FF7F32;color:white;border-radius:.3rem;padding:.1rem .45rem;letter-spacing:.03em">XÂY TRÊN Claude Code</span>
+                </div>
+                <ul style="list-style:none;font-size:.78rem;opacity:.85;display:flex;flex-direction:column;gap:.2rem">
+                  <li>✓ Claude Code + Memory + Skills + Agents</li>
+                  <li>✓ Tích hợp Gmail, Drive, Lark có sẵn</li>
+                  <li style="color:#FF7F32;font-weight:600">← Mạnh nhất. Cowork ≠ Desktop</li>
+                </ul>
+              </div>
+              <!-- IDE -->
+              <div style="background:rgba(255,255,255,.08);border-radius:.625rem;padding:.75rem .875rem">
+                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem">
+                  <span style="font-size:1rem">⌨️</span>
+                  <strong style="font-size:.9rem">IDE Extension</strong>
+                </div>
+                <ul style="list-style:none;font-size:.78rem;opacity:.85;display:flex;flex-direction:column;gap:.2rem">
+                  <li>✓ Tích hợp vào VS Code, JetBrains</li>
+                  <li>✓ Chỉnh sửa code trực tiếp trong editor</li>
+                  <li style="opacity:.6">Dành cho developer — khóa học này không đi sâu</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KEY TAKEAWAYS -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.875rem;margin-bottom:2rem">
+          <div style="background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);border-radius:.75rem;padding:.875rem 1rem">
+            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#4ade80;margin-bottom:.35rem">✅ Web = Chat</div>
+            <p style="font-size:.8rem;opacity:.85;margin:0">claude.ai Web và "Claude Chat" là <strong>cùng một thứ</strong>. Gọi theo cách nào cũng đúng.</p>
+          </div>
+          <div style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);border-radius:.75rem;padding:.875rem 1rem">
+            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#fbbf24;margin-bottom:.35rem">📁 Projects = Tính năng</div>
+            <p style="font-size:.8rem;opacity:.85;margin:0">Projects <strong>không phải nền tảng riêng</strong>. Nó là tính năng trong claude.ai hoặc Desktop — như folder trong Google Drive.</p>
+          </div>
+          <div style="background:rgba(255,127,50,.12);border:1px solid rgba(255,127,50,.3);border-radius:.75rem;padding:.875rem 1rem">
+            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#FF7F32;margin-bottom:.35rem">⚡ Cowork ≠ Desktop</div>
+            <p style="font-size:.8rem;opacity:.85;margin:0">Cowork <strong>xây trên Claude Code (terminal)</strong>, không phải Desktop. Desktop chỉ thêm MCP — Cowork có Memory, Skills, Agents.</p>
+          </div>
         </div>
 
         <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:.875rem">Ai nên dùng gì?</h3>
@@ -705,7 +899,7 @@
               <tr style="background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.12)"><td style="padding:.7rem 1rem;color:rgba(255,255,255,.9)">Dùng Claude hàng ngày</td><td style="padding:.7rem 1rem;font-weight:700;color:#4ade80">claude.ai Pro ($20/tháng)</td><td style="padding:.7rem 1rem;color:rgba(255,255,255,.8)">Nhiều lượt hơn, dùng được model Opus mạnh nhất</td></tr>
               <tr style="border-bottom:1px solid rgba(255,255,255,.12)"><td style="padding:.7rem 1rem;color:rgba(255,255,255,.9)">Power user, muốn tự động hóa</td><td style="padding:.7rem 1rem;font-weight:700;color:#FF7F32">Cowork ⭐ Recommend</td><td style="padding:.7rem 1rem;color:rgba(255,255,255,.8)">Memory + Skills + auto-sync — nhanh gấp 3x workflow thông thường</td></tr>
               <tr style="background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.12)"><td style="padding:.7rem 1rem;color:rgba(255,255,255,.9)">Developer, làm với nhiều file</td><td style="padding:.7rem 1rem;font-weight:700;color:#4ade80">VSCode + Claude Code</td><td style="padding:.7rem 1rem;color:rgba(255,255,255,.8)">Thao tác file trực tiếp, diff view ngay trong editor</td></tr>
-              <tr style="border-bottom:1px solid rgba(255,255,255,.12)"><td style="padding:.7rem 1rem;color:rgba(255,255,255,.9)">Học viên khóa học này</td><td style="padding:.7rem 1rem;font-weight:700;color:#fbbf24">Bắt đầu Web → tiến lên Cowork</td><td style="padding:.7rem 1rem;color:rgba(255,255,255,.8)">Theo thứ tự Module 1 → 2 → 3 → 4, mỗi bước nâng dần</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,.12)"><td style="padding:.7rem 1rem;color:rgba(255,255,255,.9)">Học viên khóa học này</td><td style="padding:.7rem 1rem;font-weight:700;color:#fbbf24">Bắt đầu Web → tiến lên Cowork</td><td style="padding:.7rem 1rem;color:rgba(255,255,255,.8)">Module 1–2 (Nhóm 1) → Module 4–5 (Nhóm 2)</td></tr>
             </tbody>
           </table>
         </div>
@@ -717,11 +911,11 @@
     ═══════════════════════════════════════════ -->
     <section class="module m2 fade-in" id="module2">
       <div class="module-header">
-        <div class="module-label">Module 2 · 35 phút</div>
-        <div class="module-title">📁 Projects — Làm Việc Có Tổ Chức</div>
+        <div class="module-label">Module 2 · 35 phút &nbsp;·&nbsp; <span style="background:rgba(255,255,255,.2);border-radius:.3rem;padding:.1rem .5rem;font-size:.72rem;font-weight:700;letter-spacing:.04em">🌐 Nhóm 1 — Giao diện Chat</span></div>
+        <div class="module-title">📁 Projects — Tính Năng Trong claude.ai</div>
         <div class="module-meta">
           <span>📚 4 bài học</span>
-          <span>🎯 Tạo workspace riêng để Claude luôn hiểu ngữ cảnh công việc của bạn</span>
+          <span>🎯 Projects = folder thông minh bên trong claude.ai — không phải nền tảng riêng</span>
         </div>
       </div>
       <div class="module-body">
@@ -1061,11 +1255,11 @@
     ═══════════════════════════════════════════ -->
     <section class="module m3 fade-in" id="module3">
       <div class="module-header">
-        <div class="module-label">Module 3 · 35 phút</div>
-        <div class="module-title">🖥️ Claude Desktop — Nâng Cấp Trải Nghiệm</div>
+        <div class="module-label">Module 3 · 35 phút &nbsp;·&nbsp; <span style="background:rgba(255,255,255,.2);border-radius:.3rem;padding:.1rem .5rem;font-size:.72rem;font-weight:700;letter-spacing:.04em">🌐 Nhóm 1 — Giao diện Chat</span></div>
+        <div class="module-title">🖥️ Claude Desktop — Web + MCP (Không Phải Cowork)</div>
         <div class="module-meta">
           <span>📚 3 bài học</span>
-          <span>🎯 Kết nối Claude với máy tính và các app bạn đang dùng</span>
+          <span>🎯 Desktop = claude.ai Web + kết nối MCP · Không cần Terminal · Desktop ≠ Cowork</span>
         </div>
       </div>
       <div class="module-body">
@@ -1294,11 +1488,11 @@
     ═══════════════════════════════════════════ -->
     <section class="module m4 fade-in" id="module4">
       <div class="module-header">
-        <div class="module-label">Module 4 · 45 phút</div>
-        <div class="module-title">⚡ Cowork — Làm Việc Chuyên Nghiệp</div>
+        <div class="module-label">Module 4 · 45 phút &nbsp;·&nbsp; <span style="background:rgba(255,255,255,.2);border-radius:.3rem;padding:.1rem .5rem;font-size:.72rem;font-weight:700;letter-spacing:.04em">💻 Nhóm 2 — Terminal/CLI</span></div>
+        <div class="module-title">⚡ Cowork — Claude Code Được Cấu Hình Đầy Đủ</div>
         <div class="module-meta">
           <span>📚 5 bài học</span>
-          <span>🎯 Memory · Skills · Sub-agents · Kiến trúc 4 tầng</span>
+          <span>🎯 Cowork ≠ Desktop · Xây trên Claude Code · Memory · Skills · Sub-agents</span>
         </div>
       </div>
       <div class="module-body">
@@ -1501,8 +1695,8 @@
           <div class="lesson-header" onclick="toggleLesson(this)">
             <div class="lesson-icon">⚡</div>
             <div class="lesson-info">
-              <div class="lesson-title">Bài 4.1 — Cowork là gì?</div>
-              <div class="lesson-subtitle">Môi trường làm việc nâng cao trên Claude Code</div>
+              <div class="lesson-title">Bài 4.1 — Cowork là gì? <span class="badge badge-important">≠ Desktop</span></div>
+              <div class="lesson-subtitle">Claude Code được cấu hình đầy đủ — Nhóm 2 Terminal/CLI, không phải Claude Desktop</div>
             </div>
             <div class="lesson-time">⏱ 10 phút</div>
             <div class="lesson-chevron">▼</div>
@@ -1511,6 +1705,17 @@
             <div class="objective-box">
               <strong>🎯 Sau bài này bạn sẽ biết</strong>
               Cowork là gì, tại sao nó mạnh hơn Claude Desktop, và khi nào nên dùng.
+            </div>
+
+            <div class="compare-grid" style="margin:1rem 0">
+              <div class="compare-card bad">
+                <div class="compare-label">❌ Hiểu sai thường gặp</div>
+                <p style="font-size:.85rem;margin:0">"Cowork là một tính năng trong Claude Desktop" — <strong>SAI hoàn toàn.</strong> Desktop và Cowork là hai thứ khác nhau, thuộc hai nhóm khác nhau.</p>
+              </div>
+              <div class="compare-card good">
+                <div class="compare-label">✅ Đúng</div>
+                <p style="font-size:.85rem;margin:0">Cowork = <strong>Claude Code (terminal) được cấu hình đầy đủ</strong>. Desktop là ứng dụng giao diện đồ họa. Muốn dùng Cowork, bạn phải cài Claude Code trước — không liên quan đến Desktop.</p>
+              </div>
             </div>
 
             <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1.5px solid #c4b5fd;border-radius:.875rem;padding:1.25rem;margin:1rem 0">
@@ -1928,11 +2133,11 @@
     ═══════════════════════════════════════════ -->
     <section class="module m5 fade-in" id="module5">
       <div class="module-header">
-        <div class="module-label">Module 5 · 40 phút</div>
-        <div class="module-title">🤖 Claude Code — Sức Mạnh Tối Thượng</div>
+        <div class="module-label">Module 5 · 40 phút &nbsp;·&nbsp; <span style="background:rgba(255,255,255,.2);border-radius:.3rem;padding:.1rem .5rem;font-size:.72rem;font-weight:700;letter-spacing:.04em">💻 Nhóm 2 — Terminal/CLI</span></div>
+        <div class="module-title">🤖 Claude Code CLI — Nền Tảng Của Cowork</div>
         <div class="module-meta">
           <span>📚 3 bài học</span>
-          <span>🎯 Khai thác toàn bộ sức mạnh của Claude trên máy tính của bạn</span>
+          <span>🎯 Cài Claude Code trước → Cowork chạy trên nó · Đọc/ghi file thật · Tự động hóa</span>
         </div>
       </div>
       <div class="module-body">
@@ -2935,11 +3140,14 @@
   <aside class="sidebar">
     <div class="sidebar-card">
       <div class="sidebar-title">Điều hướng nhanh</div>
+      <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#63b3ed;padding:.25rem .5rem .1rem;margin-top:.25rem">🌐 Nhóm 1 — Chat</div>
       <a class="sidebar-link active" href="#module1"><span class="sidebar-icon">💻</span> Claude Web <span class="sidebar-time-badge">40ph</span></a>
       <a class="sidebar-link" href="#module2"><span class="sidebar-icon">📁</span> Projects <span class="sidebar-time-badge">35ph</span></a>
       <a class="sidebar-link" href="#module3"><span class="sidebar-icon">🖥️</span> Desktop <span class="sidebar-time-badge">35ph</span></a>
-      <a class="sidebar-link" href="#module4"><span class="sidebar-icon">⚡</span> Cowork <span class="sidebar-time-badge">30ph</span></a>
+      <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#a78bfa;padding:.25rem .5rem .1rem;margin-top:.5rem">💻 Nhóm 2 — Terminal</div>
+      <a class="sidebar-link" href="#module4"><span class="sidebar-icon">⚡</span> Cowork <span class="sidebar-time-badge">45ph</span></a>
       <a class="sidebar-link" href="#module5"><span class="sidebar-icon">🤖</span> Claude Code <span class="sidebar-time-badge">40ph</span></a>
+      <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;padding:.25rem .5rem .1rem;margin-top:.5rem">📚 Nâng Cao</div>
       <a class="sidebar-link" href="#module6"><span class="sidebar-icon">📄</span> Config Files <span class="sidebar-time-badge">30ph</span></a>
       <a class="sidebar-link" href="#module7"><span class="sidebar-icon">🔒</span> Tham Khảo <span class="sidebar-time-badge">Ref</span></a>
     </div>
