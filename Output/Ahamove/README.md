@@ -67,7 +67,8 @@ Output/Ahamove/
 | `dm-weekly-review-template.pptx` | 07. TEAM_MGMT | Template weekly review DM team |
 | `2026-05-claude-guide-for-team.md` | 07. TEAM_MGMT | Hướng dẫn Claude AI toàn diện cho team (dành cho người chưa biết gì) |
 | `2026-05-ev-charging-financial-model.html` | 01. STRATEGY | Financial model EV charging station VN: CAPEX/OPEX/IRR/NPV 3 station types, 4 business models, EVN tariff 2025 |
-| `2026-05-ao-khi-campaign-plan.md` | 02. CAMPAIGNS | Kế hoạch truyền thông 990 áo khỉ — 2 track: bán 800 áo (gắn KPI AR/FR) + tặng 190 áo (EV/tuyển dụng). Target 1,500+ đăng ký tạo hiệu ứng khan hiếm. |
+| `2026-05-ao-khi-campaign-plan.md` | 02. CAMPAIGNS | Kế hoạch truyền thông 990 áo khỉ — 2 track: bán 800 áo 120k (gắn KPI AR/FR) + tặng 190 áo (EV/tuyển dụng). Target 1,500+ đăng ký tạo hiệu ứng khan hiếm. |
+| `2026-05-ao-khi-comms-drafts.md` | 02. CAMPAIGNS | Draft nội dung post/push/Lark sẵn sàng gửi — đủ 5 ngày Phase 2, form cấu trúc, message kết quả cá nhân. |
 
 ---
 

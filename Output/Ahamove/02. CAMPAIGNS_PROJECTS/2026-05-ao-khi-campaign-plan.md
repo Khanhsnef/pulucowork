@@ -40,7 +40,7 @@
 - **Không** tiết lộ tổng số đăng ký — chỉ show số slot còn lại
 - Đặt deadline cứng: cửa sổ đăng ký **5 ngày**, không gia hạn
 
-**Giá bán:** Giá thị trường, không trợ giá. Tham khảo: 150,000–200,000 VND/áo (Khanh confirm giá cụ thể).
+**Giá bán:** **120,000 VND/áo** — không trợ giá. Thanh toán khi nhận áo tại MiniHub.
 
 ---
 
