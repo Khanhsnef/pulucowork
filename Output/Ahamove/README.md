@@ -69,6 +69,7 @@ Output/Ahamove/
 | `2026-05-ev-charging-financial-model.html` | 01. STRATEGY | Financial model EV charging station VN: CAPEX/OPEX/IRR/NPV 3 station types, 4 business models, EVN tariff 2025 |
 | `2026-05-ao-khi-campaign-plan.md` | 02. CAMPAIGNS | Kế hoạch truyền thông 990 áo khỉ — 2 track: bán 800 áo 120k (gắn KPI AR/FR) + tặng 190 áo (EV/tuyển dụng). Target 1,500+ đăng ký tạo hiệu ứng khan hiếm. |
 | `2026-05-ao-khi-comms-drafts.md` | 02. CAMPAIGNS | Draft nội dung post/push/Lark sẵn sàng gửi — đủ 5 ngày Phase 2, form cấu trúc, message kết quả cá nhân. |
+| `2026-05-ao-khi-campaign-tracker.xlsx` | 02. CAMPAIGNS | **Master tracker 6 sheets**: Plan timeline, Nội dung truyền thông copy-paste, Google Form setup, Slot tracking (công thức tự tính), Track B EV gift, Checklist 31 items. |
 
 ---
 
