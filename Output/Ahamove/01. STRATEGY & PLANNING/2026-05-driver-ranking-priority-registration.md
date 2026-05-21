@@ -151,15 +151,20 @@ R1 Anh Hùng — cascade trong ngày 1–5/7:
 
 ### 6.1 Bảng tổng hợp quyền lợi
 
-| Layer | Khu vực / Đơn | Thu nhập đảm bảo | Ghép đơn tối đa | Dispatch ưu tiên | Quyền lợi thêm |
-| --- | --- | --- | --- | --- | --- |
-| **L2 Minizone** | ≤ 4km | SGN: 60k/h · HAN: 70k/h | 4–5 đơn | 30s đầu exclusive <4km · Radius 2km | Đội trưởng hỗ trợ · Lộ trình Đội phó/Đội trưởng · BH sức khỏe* |
-| **L3 Mediumzone** | 4–7km | SGN: 60k/h · HAN: 70k/h | 3–4 đơn | 30s đầu exclusive 4–7km · Radius 2km | Đội trưởng hỗ trợ · Lộ trình Đội phó/Đội trưởng · BH sức khỏe* |
-| **L4 Bigzone** | 7–11km | SGN: 60k/h · HAN: 70k/h | 2–3 đơn | 30s đầu exclusive 7–11km · Radius 1.5km | Đội trưởng hỗ trợ · Lộ trình Đội phó/Đội trưởng · BH sức khỏe* |
-| **L5 Cityzone** | >11km · 2H/4H | SGN: 60k/h · HAN: 70k/h | 2–3 đơn | 30s đầu exclusive >11km · Radius 1.5km | BH sức khỏe* |
-| **L6 MASS** | Toàn bộ còn lại | Không đảm bảo | — | Group REC + Listing (standard) | Tự do ca giờ · Incentive/promo thông thường · Upgrade path rõ ràng |
+> Nguồn: DM Đề xuất Quyền lợi — mục 2.2
 
-> **Lý do ghép đơn giảm dần L2→L5:** zone rộng hơn → thời gian di chuyển dài hơn → ghép nhiều sẽ kéo SLA. L4/L5 capped 2–3 đơn để bảo vệ FR.
+| Layer | Khu vực | Thu nhập đảm bảo | Ghép đơn tối đa | Đội trưởng | Lộ trình thăng tiến | BH sức khỏe |
+| --- | --- | --- | --- | --- | --- | --- |
+| **L2 Minizone** | ≤ 4km | SGN: 60k/h · HAN: 70k/h | 4–5 đơn | ✅ | Đội phó / Đội trưởng | pending* |
+| **L3 Mediumzone** | 4–7km | SGN: 60k/h · HAN: 70k/h | 3–4 đơn | ✅ | Đội phó / Đội trưởng | pending* |
+| **L4 Bigzone** | 7–11km | SGN: 60k/h · HAN: 70k/h | 2–3 đơn | ✅ | Đội phó / Đội trưởng | pending* |
+| **L5 Cityzone** | >11km (avg 25–30km) | SGN: 60k/h · HAN: 70k/h | 2–3 đơn | — | — | pending* |
+| **L6 MASS** | Toàn bộ còn lại | Không đảm bảo | — | — | — | — |
+
+**L6:** Tự do ca giờ · Incentive/promo thông thường · Upgrade path rõ ràng: đạt threshold sau 1 tháng → eligible đăng ký Zone
+
+> \* BH sức khỏe đang check điều kiện (ví dụ: cam kết hoạt động ≥ 1 năm liên tục) — phối hợp DM + HR.
+> Ghép đơn capped L4/L5 để bảo vệ FR: zone rộng → thêm đơn kéo SLA.
 
 ### 6.2 Quyền lợi theo Rank (liên kết với hệ thống đăng ký ca)
 
