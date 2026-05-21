@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver Ranking × Priority Registration — Ahamove</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:    #0E4174;
+      --orange:  #FF7F32;
+      --green:   #10B981;
+      --red:     #EF4444;
+      --slate:   #64748B;
+      --gray-50: #F9FAFB;
+      --gray-100:#F3F4F6;
+      --gray-200:#E5E7EB;
+      --gray-400:#9CA3AF;
+      --gray-600:#4B5563;
+      --gray-800:#1F2937;
+      --r1:      #FF7F32;
+      --r2:      #0E4174;
+      --r3:      #64748B;
+      --un:      #94A3B8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lexend', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--blue);
+      padding: 0 2rem;
+      display: flex; align-items: center; gap: 0;
+      box-shadow: 0 2px 12px rgba(14,65,116,.25);
+      overflow-x: auto;
+    }
+    .nav-brand {
+      font-size: 13px; font-weight: 700; color: #fff;
+      white-space: nowrap; padding: 14px 24px 14px 0;
+      border-right: 1px solid rgba(255,255,255,.2);
+      margin-right: 8px; letter-spacing: -.3px;
+    }
+    nav a {
+      color: rgba(255,255,255,.75); text-decoration: none;
+      font-size: 12.5px; font-weight: 500; white-space: nowrap;
+      padding: 14px 14px;
+      border-bottom: 3px solid transparent;
+      transition: all .15s;
+    }
+    nav a:hover { color: #fff; border-bottom-color: var(--orange); }
+
+    /* LAYOUT */
+    .page { max-width: 960px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, var(--blue) 0%, #1a5c9e 100%);
+      border-radius: 2rem;
+      padding: 40px 44px;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .header-tag {
+      display: inline-block;
+      background: rgba(255,127,50,.25); color: var(--orange);
+      font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; padding: 4px 12px;
+      border-radius: 999px; border: 1px solid rgba(255,127,50,.4);
+      margin-bottom: 16px;
+    }
+    .header h1 {
+      font-size: 28px; font-weight: 800; letter-spacing: -.5px;
+      line-height: 1.25; margin-bottom: 8px;
+    }
+    .header-sub { font-size: 13px; opacity: .7; margin-bottom: 20px; }
+    .rules-row {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      border-top: 1px solid rgba(255,255,255,.15);
+      padding-top: 20px; margin-top: 4px;
+    }
+    .rule-chip {
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 12px; font-weight: 600; color: #fff;
+    }
+    .rule-chip span { color: var(--orange); }
+
+    /* SECTION */
+    section { margin-bottom: 48px; }
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--orange);
+      margin-bottom: 6px;
+    }
+    .section-title {
+      font-size: 20px; font-weight: 800; color: var(--blue);
+      letter-spacing: -.3px; margin-bottom: 6px;
+    }
+    .section-note {
+      font-size: 13px; color: var(--gray-600);
+      background: var(--gray-100); border-left: 3px solid var(--blue);
+      padding: 10px 16px; border-radius: 0 8px 8px 0;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 1.5rem;
+      border: 1px solid var(--gray-200);
+      padding: 24px 28px;
+      margin-bottom: 16px;
+    }
+
+    /* DECISIONS */
+    .decisions-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+      gap: 12px;
+    }
+    .decision-item {
+      background: #fff; border: 1px solid var(--gray-200);
+      border-radius: 1rem; padding: 14px 18px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .decision-num {
+      min-width: 24px; height: 24px;
+      background: var(--blue); color: #fff;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 11px; font-weight: 700;
+      margin-top: 1px;
+    }
+    .decision-title { font-size: 12px; font-weight: 600; color: var(--gray-600); margin-bottom: 2px; }
+    .decision-val { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+
+    /* TIER CARDS */
+    .tier-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px,1fr)); gap: 16px; }
+    .tier-card {
+      border-radius: 1.5rem; padding: 22px 22px 18px;
+      border: 2px solid;
+    }
+    .tier-card.r1 { border-color: var(--r1); background: #FFF7F2; }
+    .tier-card.r2 { border-color: var(--r2); background: #F0F5FF; }
+    .tier-card.r3 { border-color: var(--r3); background: #F8FAFC; }
+    .tier-card.un  { border-color: var(--un);  background: #F8FAFC; }
+
+    .tier-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 800; margin-bottom: 14px;
+    }
+    .tier-badge .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .r1 .dot { background: var(--r1); }
+    .r2 .dot { background: var(--r2); }
+    .r3 .dot { background: var(--r3); }
+    .un  .dot { background: var(--un); }
+    .r1 .tier-badge { color: var(--r1); }
+    .r2 .tier-badge { color: var(--r2); }
+    .r3 .tier-badge { color: var(--r3); }
+    .un  .tier-badge { color: var(--un); }
+
+    .kpi-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      font-size: 13px;
+    }
+    .kpi-row:last-child { border-bottom: none; }
+    .kpi-label { font-weight: 600; color: var(--gray-600); }
+    .kpi-val { font-weight: 700; }
+    .r1 .kpi-val { color: var(--r1); }
+    .r2 .kpi-val { color: var(--r2); }
+    .r3 .kpi-val { color: var(--r3); }
+    .un  .kpi-val { color: var(--un); }
+    .city-sub { font-size: 11px; color: var(--gray-400); font-weight: 400; }
+
+    /* ACCESS MATRIX */
+    .matrix-wrap { overflow-x: auto; }
+    .matrix-table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      border-radius: 1.25rem; overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+    .matrix-table th {
+      background: var(--blue); color: #fff;
+      padding: 12px 8px; text-align: center;
+      font-size: 13px; font-weight: 700;
+    }
+    .matrix-table th:first-child { text-align: left; padding-left: 20px; }
+    .matrix-table td {
+      padding: 13px 8px; text-align: center;
+      font-size: 14px; border-bottom: 1px solid var(--gray-100);
+    }
+    .matrix-table td:first-child {
+      text-align: left; padding-left: 20px;
+      font-weight: 700; font-size: 13px;
+    }
+    .matrix-table tr:last-child td { border-bottom: none; }
+    .matrix-table tr:nth-child(even) td { background: #FAFBFC; }
+    .cell-yes {
+      background: #D1FAE5 !important;
+      border-radius: 8px; display: inline-flex;
+      align-items: center; justify-content: center;
+      width: 32px; height: 32px; font-size: 16px;
+    }
+    .cell-no {
+      background: var(--gray-100);
+      border-radius: 8px; display: inline-flex;
+      align-items: center; justify-content: center;
+      width: 32px; height: 32px; font-size: 14px;
+      color: var(--gray-400);
+    }
+    .cell-always {
+      background: #DBEAFE !important;
+      border-radius: 8px; display: inline-flex;
+      align-items: center; justify-content: center;
+      width: 32px; height: 32px; font-size: 14px;
+      color: var(--blue); font-weight: 700;
+    }
+    .supply-row td {
+      background: #F0F5FF !important;
+      font-size: 12px; color: var(--blue); font-weight: 500;
+      padding: 10px 8px !important;
+    }
+    .supply-row td:first-child { font-weight: 700; color: var(--blue); }
+
+    /* PRIORITY */
+    .priority-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width:640px){ .priority-grid { grid-template-columns: 1fr; } }
+    .priority-rules .rule-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 12px 0; border-bottom: 1px solid var(--gray-100);
+    }
+    .priority-rules .rule-item:last-child { border-bottom: none; }
+    .rule-num {
+      min-width: 28px; height: 28px;
+      background: var(--orange); color: #fff;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 12px; font-weight: 800;
+    }
+    .rule-text { font-size: 13px; font-weight: 500; padding-top: 4px; }
+    .code-block {
+      background: var(--gray-800); color: #E2E8F0;
+      border-radius: 1rem; padding: 20px 22px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px; line-height: 1.7; overflow-x: auto;
+    }
+    .code-block .cm { color: #94A3B8; }
+    .code-block .ck { color: #7DD3FC; font-weight: 600; }
+    .code-block .cv { color: #86EFAC; }
+    .code-block .ch { color: var(--orange); font-weight: 700; }
+
+    /* TABLES */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th {
+      background: var(--gray-100); color: var(--gray-600);
+      padding: 10px 14px; text-align: left;
+      font-size: 12px; font-weight: 700; letter-spacing: .3px;
+      text-transform: uppercase; border-bottom: 2px solid var(--gray-200);
+    }
+    .data-table td {
+      padding: 11px 14px; border-bottom: 1px solid var(--gray-100);
+      vertical-align: top;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: #FAFBFC; }
+    .tag {
+      display: inline-block; border-radius: 999px;
+      padding: 2px 10px; font-size: 11px; font-weight: 700;
+    }
+    .tag-r1 { background: #FFF0E6; color: var(--r1); border: 1px solid #FECBA0; }
+    .tag-r2 { background: #EBF3FF; color: var(--r2); border: 1px solid #BFDBFE; }
+    .tag-r3 { background: #F1F5F9; color: var(--r3); border: 1px solid #CBD5E1; }
+    .tag-green { background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; }
+    .tag-red   { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+
+    /* UPGRADE PATH */
+    .upgrade-flow {
+      display: flex; align-items: stretch; gap: 0;
+      overflow-x: auto; padding: 4px 0 16px;
+    }
+    .upgrade-node {
+      min-width: 180px; flex: 1;
+      border-radius: 1.5rem; padding: 20px 18px;
+      border: 2px solid; position: relative;
+    }
+    .upgrade-node.un-node  { border-color: var(--un);  background: #F8FAFC; }
+    .upgrade-node.r3-node  { border-color: var(--r3);  background: #F8FAFC; }
+    .upgrade-node.r2-node  { border-color: var(--r2);  background: #F0F5FF; }
+    .upgrade-node.r1-node  { border-color: var(--r1);  background: #FFF7F2; }
+    .upgrade-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 0 8px; min-width: 60px;
+    }
+    .arrow-line { width: 100%; height: 2px; background: var(--gray-300); position: relative; }
+    .arrow-line::after {
+      content: '▶'; position: absolute; right: -8px; top: -9px;
+      font-size: 14px; color: var(--gray-400);
+    }
+    .arrow-cond {
+      font-size: 10px; font-weight: 600; color: var(--gray-500);
+      text-align: center; margin-top: 6px; max-width: 80px; line-height: 1.3;
+    }
+    .up-tier { font-size: 13px; font-weight: 800; margin-bottom: 10px; }
+    .un-node  .up-tier { color: var(--un); }
+    .r3-node  .up-tier { color: var(--r3); }
+    .r2-node  .up-tier { color: var(--r2); }
+    .r1-node  .up-tier { color: var(--r1); }
+    .up-layers { display: flex; flex-wrap: wrap; gap: 4px; }
+    .layer-pill {
+      font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 999px;
+    }
+    .lp-locked { background: var(--gray-200); color: var(--gray-400); }
+    .lp-1 { background: #FFF0E6; color: #C2410C; border: 1px solid #FDBA74; }
+    .lp-2 { background: #EBF3FF; color: #1D4ED8; border: 1px solid #93C5FD; }
+    .lp-3 { background: #F0FDF4; color: #166534; border: 1px solid #86EFAC; }
+    .lp-4 { background: #F0FDF4; color: #166534; border: 1px solid #86EFAC; }
+    .lp-5 { background: #FEFCE8; color: #854D0E; border: 1px solid #FDE047; }
+    .lp-6 { background: var(--gray-100); color: var(--gray-600); border: 1px solid var(--gray-200); }
+
+    /* EXAMPLES */
+    .ex-card {
+      background: #fff; border: 1px solid var(--gray-200);
+      border-radius: 1.5rem; padding: 24px 28px;
+      margin-bottom: 20px;
+    }
+    .ex-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--blue); color: #fff;
+      font-size: 12px; font-weight: 800; margin-right: 10px;
+    }
+    .ex-title { font-size: 15px; font-weight: 800; color: var(--blue); margin-bottom: 16px; display: flex; align-items: center; }
+    .callout {
+      border-radius: 1rem; padding: 12px 16px;
+      font-size: 12.5px; font-weight: 500; margin-top: 12px;
+    }
+    .callout-orange { background: #FFF7F2; border-left: 3px solid var(--orange); color: #7C2D12; }
+    .callout-blue   { background: #EBF3FF; border-left: 3px solid var(--blue);   color: #1E3A5F; }
+    .callout-green  { background: #ECFDF5; border-left: 3px solid var(--green);  color: #065F46; }
+    .callout-red    { background: #FEF2F2; border-left: 3px solid var(--red);    color: #7F1D1D; }
+    .callout strong { font-weight: 700; }
+
+    .slot-diagram {
+      background: var(--gray-800); color: #E2E8F0;
+      border-radius: 1rem; padding: 18px 22px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px; line-height: 1.8; margin-top: 14px;
+    }
+    .slot-diagram .h { color: var(--orange); font-weight: 700; }
+    .slot-diagram .g { color: #86EFAC; }
+    .slot-diagram .b { color: #7DD3FC; }
+    .slot-diagram .dim { color: #64748B; }
+
+    .journey-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .journey-table th {
+      background: var(--blue); color: #fff;
+      padding: 10px 12px; text-align: left;
+      font-size: 12px; font-weight: 700;
+    }
+    .journey-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: middle;
+    }
+    .journey-table .highlight-row td { background: #FFF7F2; }
+    .month-badge {
+      background: var(--blue); color: #fff;
+      border-radius: 999px; padding: 2px 10px;
+      font-size: 11px; font-weight: 700;
+    }
+    .month-badge.active { background: var(--orange); }
+
+    /* FOOTER */
+    .footer {
+      text-align: center; padding: 32px 0 0;
+      font-size: 12px; color: var(--gray-400);
+      border-top: 1px solid var(--gray-200);
+    }
+
+    @media(max-width:768px){
+      .header { padding: 28px 24px; }
+      .header h1 { font-size: 22px; }
+      .tier-cards { grid-template-columns: 1fr 1fr; }
+      .upgrade-flow { flex-direction: column; }
+      .upgrade-arrow { transform: rotate(90deg); }
+      .page { padding: 32px 16px 60px; }
+    }
+    @media(max-width:480px){
+      .tier-cards { grid-template-columns: 1fr; }
+      .decisions-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">🚀 Ahamove DM</div>
+  <a href="#decisions">Quyết định</a>
+  <a href="#tier-conditions">Xếp Tier</a>
+  <a href="#layer-access">Layer Access</a>
+  <a href="#slot-priority">Slot Priority</a>
+  <a href="#equipment">Equipment</a>
+  <a href="#upgrade">Upgrade Path</a>
+  <a href="#examples">Ví dụ</a>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-tag">Driver Management · 2026-05 · FINAL</div>
+    <h1>Driver Ranking &times; Priority Registration System</h1>
+    <div class="header-sub">Ahamove | Phiên bản: 3-Tier | SGN &amp; HAN</div>
+    <div class="rules-row">
+      <div class="rule-chip"><span>Quy tắc 1 —</span> Tier xác định tài xế thấy layer nào</div>
+      <div class="rule-chip"><span>Quy tắc 2 —</span> Tier cao hơn được cấp slot trước; cùng tier → first-come-first-served</div>
+      <div class="rule-chip"><span>Xếp tier —</span> Check đủ KPI (AR + FR + DCR + Prod), không tính điểm</div>
+    </div>
+  </div>
+
+  <!-- DECISIONS -->
+  <section id="decisions">
+    <div class="section-label">Tổng quan</div>
+    <div class="section-title">Các quyết định đã xác nhận</div>
+    <div class="decisions-grid">
+      <div class="decision-item"><div class="decision-num">1</div><div><div class="decision-title">Số tier</div><div class="decision-val">3-Tier + Chưa xếp hạng</div></div></div>
+      <div class="decision-item"><div class="decision-num">2</div><div><div class="decision-title">Cách xếp tier</div><div class="decision-val">Check KPI pass/fail — không tính điểm</div></div></div>
+      <div class="decision-item"><div class="decision-num">3</div><div><div class="decision-title">Chu kỳ tính Ranking</div><div class="decision-val">Hàng tháng — cuối tháng check, đầu tháng sau áp dụng</div></div></div>
+      <div class="decision-item"><div class="decision-num">4</div><div><div class="decision-title">Hiển thị KPI cho tài xế</div><div class="decision-val">Có — cập nhật mỗi ngày (rolling 30 ngày)</div></div></div>
+      <div class="decision-item"><div class="decision-num">5</div><div><div class="decision-title">Tài xế mới &lt; 1 tháng</div><div class="decision-val">"Chưa xếp hạng" — chỉ thấy L6</div></div></div>
+      <div class="decision-item"><div class="decision-num">6</div><div><div class="decision-title">Slot priority</div><div class="decision-val">Tier cao trước · cùng tier → timestamp</div></div></div>
+      <div class="decision-item"><div class="decision-num">7</div><div><div class="decision-title">Equipment gate</div><div class="decision-val">Tự động tại lúc đăng ký — system check</div></div></div>
+    </div>
+  </section>
+
+  <!-- TIER CONDITIONS -->
+  <section id="tier-conditions">
+    <div class="section-label">Phần 1</div>
+    <div class="section-title">Điều kiện xếp Tier</div>
+    <div class="section-note">
+      Cuối tháng hệ thống check theo thứ tự <strong>R1 → R2 → R3</strong>. Đạt đủ <strong>cả 4 điều kiện</strong> của tier cao nhất → xếp vào tier đó. Thiếu 1 điều kiện → rớt xuống tier thấp hơn.
+    </div>
+    <div class="tier-cards">
+
+      <div class="tier-card r1">
+        <div class="tier-badge"><div class="dot"></div>R1 · Elite</div>
+        <div class="kpi-row"><span class="kpi-label">AR</span><span class="kpi-val">≥ 95% <span class="city-sub">/ HAN ≥ 93%</span></span></div>
+        <div class="kpi-row"><span class="kpi-label">FR</span><span class="kpi-val">≥ 85% <span class="city-sub">/ HAN ≥ 83%</span></span></div>
+        <div class="kpi-row"><span class="kpi-label">DCR</span><span class="kpi-val">&lt; 10% <span class="city-sub">/ HAN &lt; 12%</span></span></div>
+        <div class="kpi-row"><span class="kpi-label">Prod</span><span class="kpi-val">≥ 100 stp/tháng</span></div>
+        <div class="kpi-row"><span class="kpi-label">Thâm niên</span><span class="kpi-val">≥ 1 tháng (FAT)</span></div>
+      </div>
+
+      <div class="tier-card r2">
+        <div class="tier-badge"><div class="dot"></div>R2 · Active</div>
+        <div class="kpi-row"><span class="kpi-label">AR</span><span class="kpi-val">≥ 90% <span class="city-sub">/ HAN ≥ 88%</span></span></div>
+        <div class="kpi-row"><span class="kpi-label">FR</span><span class="kpi-val">≥ 80% <span class="city-sub">/ HAN ≥ 78%</span></span></div>
+        <div class="kpi-row"><span class="kpi-label">DCR</span><span class="kpi-val">&lt; 12% <span class="city-sub">/ HAN &lt; 14%</span></span></div>
+        <div class="kpi-row"><span class="kpi-label">Prod</span><span class="kpi-val">≥ 60 stp/tháng</span></div>
+        <div class="kpi-row"><span class="kpi-label">Thâm niên</span><span class="kpi-val">≥ 1 tháng (FAT)</span></div>
+      </div>
+
+      <div class="tier-card r3">
+        <div class="tier-badge"><div class="dot"></div>R3 · Standard</div>
+        <div class="kpi-row"><span class="kpi-label">DCR</span><span class="kpi-val">&lt; 20%</span></div>
+        <div class="kpi-row"><span class="kpi-label">Rating</span><span class="kpi-val">≥ 4.7 <span class="city-sub">(cảnh báo)</span></span></div>
+        <div class="kpi-row"><span class="kpi-label">Thâm niên</span><span class="kpi-val">≥ 1 tháng (FAT)</span></div>
+        <div style="margin-top:10px;font-size:12px;color:var(--slate);">Tài khoản active, không vi phạm ĐBCL cơ bản. Không đạt R2.</div>
+      </div>
+
+      <div class="tier-card un">
+        <div class="tier-badge"><div class="dot"></div>Chưa xếp hạng</div>
+        <div class="kpi-row"><span class="kpi-label">Thâm niên</span><span class="kpi-val">&lt; 1 tháng</span></div>
+        <div style="margin-top:10px;font-size:12px;color:var(--gray-400);">Tài xế mới chưa đủ dữ liệu để đánh giá. Chỉ có thể đăng ký L6 MASS.</div>
+      </div>
+
+    </div>
+    <div class="callout callout-blue" style="margin-top:4px;">
+      <strong>Thiết kế nhất quán:</strong> KPI xếp tier khớp với KPI vào layer tương ứng — tài xế đạt R1 gần như tự động đủ điều kiện L1/L2, tránh check trùng 2 lần.
+    </div>
+  </section>
+
+  <!-- LAYER ACCESS -->
+  <section id="layer-access">
+    <div class="section-label">Phần 2</div>
+    <div class="section-title">Tier → Layer Access</div>
+    <div class="section-note">
+      Tier thấp hơn ngưỡng = <strong>hard block</strong> — không bao giờ thấy layer đó dù còn slot trống. L6 MASS luôn mở cho tất cả.
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div class="matrix-wrap">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th style="width:160px">Tier</th>
+              <th>L1<br><span style="font-size:10px;font-weight:400;opacity:.8">CORE</span></th>
+              <th>L2<br><span style="font-size:10px;font-weight:400;opacity:.8">Minizone</span></th>
+              <th>L3<br><span style="font-size:10px;font-weight:400;opacity:.8">Mediumzone</span></th>
+              <th>L4<br><span style="font-size:10px;font-weight:400;opacity:.8">Bigzone</span></th>
+              <th>L5<br><span style="font-size:10px;font-weight:400;opacity:.8">Cityzone</span></th>
+              <th>L6<br><span style="font-size:10px;font-weight:400;opacity:.8">MASS</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag tag-r1">R1 Elite</span></td>
+              <td><div class="cell-yes" style="margin:auto">✅</div></td>
+              <td><div class="cell-yes" style="margin:auto">✅</div></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-always" style="margin:auto">✅</div></td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-r2">R2 Active</span></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-yes" style="margin:auto">✅</div></td>
+              <td><div class="cell-yes" style="margin:auto">✅</div></td>
+              <td><div class="cell-yes" style="margin:auto">✅</div></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-always" style="margin:auto">✅</div></td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-r3">R3 Standard</span></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-yes" style="margin:auto">✅</div></td>
+              <td><div class="cell-yes" style="margin:auto">✅</div></td>
+              <td><div class="cell-yes" style="margin:auto">✅</div></td>
+              <td><div class="cell-always" style="margin:auto">✅</div></td>
+            </tr>
+            <tr>
+              <td><span style="font-size:12px;color:var(--un);font-weight:700;">⬜ Chưa XH</span></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-no"  style="margin:auto">—</div></td>
+              <td><div class="cell-always" style="margin:auto">✅</div></td>
+            </tr>
+            <tr class="supply-row">
+              <td>Supply từ</td>
+              <td>R1 độc quyền</td>
+              <td>R1 + R2<br>R1 ưu tiên trước</td>
+              <td>R2 + R3<br>Vùng đệm</td>
+              <td>R2 + R3<br>Vùng đệm</td>
+              <td>R3 độc quyền</td>
+              <td>Tất cả · Buffer</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-600);">
+        <div class="cell-yes" style="width:20px;height:20px;font-size:11px;">✅</div> Tier được đăng ký
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-600);">
+        <div class="cell-no" style="width:20px;height:20px;font-size:11px;">—</div> Hard block
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-600);">
+        <div class="cell-always" style="width:20px;height:20px;font-size:11px;color:var(--blue);">✅</div> Luôn mở (L6)
+      </div>
+    </div>
+  </section>
+
+  <!-- SLOT PRIORITY -->
+  <section id="slot-priority">
+    <div class="section-label">Phần 3</div>
+    <div class="section-title">Slot Priority trong Layer chung</div>
+    <div class="section-note">Áp dụng cho L2 (R1+R2 cùng thấy) và L3, L4 (R2+R3 cùng thấy).</div>
+    <div class="priority-grid">
+      <div class="card">
+        <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:14px;">2 quy tắc phân bổ</div>
+        <div class="priority-rules">
+          <div class="rule-item">
+            <div class="rule-num">1</div>
+            <div class="rule-text"><strong>Tier cao hơn được xử lý trước</strong> — R1 lấy slot trước R2, R2 lấy trước R3, bất kể thời gian đăng ký.</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-num">2</div>
+            <div class="rule-text"><strong>Cùng tier → first-come-first-served</strong> — timestamp đăng ký quyết định thứ tự trong cùng nhóm.</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-num">3</div>
+            <div class="rule-text"><strong>Slot hết</strong> → tài xế còn lại chuyển sang layer khác trong quyền hạn tier của mình.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="code-block">
+<span class="ch">L2 có 500 slot · R1 + R2 đăng ký</span>
+
+<span class="cm">── Xử lý R1 trước ──────────────</span>
+<span class="ck">R1</span> đăng ký: <span class="cv">120 drivers</span>
+→ nhận slot <span class="g">#1 → #120</span>
+
+<span class="cm">── Xử lý R2 theo timestamp ──────</span>
+<span class="ck">R2</span> đăng ký: <span class="cv">450 drivers</span>
+→ slot còn lại: <span class="g">380 slot</span>
+→ R2 sớm nhất → <span class="g">#121 ... #500</span>
+→ <span class="b">70 R2 trượt slot</span>
+
+<span class="cm">── 70 R2 trượt L2 ───────────────</span>
+→ vẫn thấy <span class="g">L3, L4</span> (quyền hạn R2)
+→ <span class="b">L1 vẫn hard-block</span> với R2</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPMENT + REQUIREMENTS -->
+  <section id="equipment">
+    <div class="section-label">Phần 4 – 5</div>
+    <div class="section-title">Equipment Gate &amp; Layer Requirements</div>
+    <div class="section-note">System tự động check khi tài xế bấm đăng ký. Thiếu điều kiện → từ chối kèm lý do. Không cần ops xử lý tay.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:16px 20px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--gray-100);">Equipment bắt buộc</div>
+        <table class="data-table">
+          <thead><tr><th>Layer</th><th>Yêu cầu</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:700">L1</td><td>Baga · COD ≥ 1M · Ký cam kết</td></tr>
+            <tr><td style="font-weight:700">L2, L3</td><td>EV · Túi giữ nhiệt · COD ≥ 2M</td></tr>
+            <tr><td style="font-weight:700">L4, L5</td><td>Baga · COD ≥ 2M</td></tr>
+            <tr><td style="font-weight:700">L6</td><td>COD ≥ 500k</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:16px 20px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--gray-100);">KPI tối thiểu khi đăng ký</div>
+        <table class="data-table">
+          <thead><tr><th>Layer</th><th>KPI (SGN / HAN)</th><th>Thâm niên</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:700">L1</td><td style="font-size:12px">AR ≥96% · FR ≥85% · DCR &lt;10%</td><td>≥ 3 tháng</td></tr>
+            <tr><td style="font-weight:700">L2, L3</td><td style="font-size:12px">AR ≥95/93% · FR ≥85/83%<br>DCR &lt;10/12% · Prod ≥100</td><td>≥ 1 tháng</td></tr>
+            <tr><td style="font-weight:700">L4, L5</td><td style="font-size:12px">AR ≥90/88% · FR ≥80/78%<br>DCR &lt;12/14% · Prod ≥60</td><td>≥ 1 tháng</td></tr>
+            <tr><td style="font-weight:700">L6</td><td style="font-size:12px">DCR &lt;20% · Rating ≥4.7</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPGRADE PATH -->
+  <section id="upgrade">
+    <div class="section-label">Phần 6</div>
+    <div class="section-title">Upgrade Path — Lộ trình thăng hạng</div>
+    <div class="section-note">KPI hiển thị mỗi ngày (rolling 30 ngày) để tài xế tự theo dõi. Tier chính thức cập nhật 1 lần/tháng.</div>
+    <div class="upgrade-flow">
+      <div class="upgrade-node un-node">
+        <div class="up-tier">⬜ Chưa xếp hạng</div>
+        <div style="font-size:11px;color:var(--gray-400);margin-bottom:8px;">Tài xế mới &lt; 1 tháng</div>
+        <div class="up-layers">
+          <span class="layer-pill lp-locked">L1</span>
+          <span class="layer-pill lp-locked">L2</span>
+          <span class="layer-pill lp-locked">L3</span>
+          <span class="layer-pill lp-locked">L4</span>
+          <span class="layer-pill lp-locked">L5</span>
+          <span class="layer-pill lp-6">L6 ✓</span>
+        </div>
+      </div>
+      <div class="upgrade-arrow">
+        <div class="arrow-line"></div>
+        <div class="arrow-cond">Đủ 1 tháng + đạt KPI R3</div>
+      </div>
+      <div class="upgrade-node r3-node">
+        <div class="up-tier">🥉 R3 Standard</div>
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:8px;">DCR &lt;20% · Rating ≥4.7</div>
+        <div class="up-layers">
+          <span class="layer-pill lp-locked">L1</span>
+          <span class="layer-pill lp-locked">L2</span>
+          <span class="layer-pill lp-3">L3 ✓</span>
+          <span class="layer-pill lp-4">L4 ✓</span>
+          <span class="layer-pill lp-5">L5 ✓</span>
+          <span class="layer-pill lp-6">L6 ✓</span>
+        </div>
+      </div>
+      <div class="upgrade-arrow">
+        <div class="arrow-line"></div>
+        <div class="arrow-cond">Đạt KPI R2 trong tháng</div>
+      </div>
+      <div class="upgrade-node r2-node">
+        <div class="up-tier">🥈 R2 Active</div>
+        <div style="font-size:11px;color:var(--r2);opacity:.7;margin-bottom:8px;">AR ≥90% · FR ≥80% · Prod ≥60</div>
+        <div class="up-layers">
+          <span class="layer-pill lp-locked">L1</span>
+          <span class="layer-pill lp-2">L2 ✓</span>
+          <span class="layer-pill lp-3">L3 ✓</span>
+          <span class="layer-pill lp-4">L4 ✓</span>
+          <span class="layer-pill lp-locked">L5</span>
+          <span class="layer-pill lp-6">L6 ✓</span>
+        </div>
+      </div>
+      <div class="upgrade-arrow">
+        <div class="arrow-line"></div>
+        <div class="arrow-cond">Đạt KPI R1 trong tháng</div>
+      </div>
+      <div class="upgrade-node r1-node">
+        <div class="up-tier">🥇 R1 Elite</div>
+        <div style="font-size:11px;color:var(--r1);opacity:.8;margin-bottom:8px;">AR ≥95% · FR ≥85% · Prod ≥100</div>
+        <div class="up-layers">
+          <span class="layer-pill lp-1">L1 ✓</span>
+          <span class="layer-pill lp-2">L2 ✓</span>
+          <span class="layer-pill lp-locked">L3</span>
+          <span class="layer-pill lp-locked">L4</span>
+          <span class="layer-pill lp-locked">L5</span>
+          <span class="layer-pill lp-6">L6 ✓</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXAMPLES -->
+  <section id="examples">
+    <div class="section-label">Phần 7</div>
+    <div class="section-title">Ví dụ minh họa</div>
+
+    <!-- 7.1 -->
+    <div class="ex-card">
+      <div class="ex-title"><span class="ex-num">1</span>Xếp tier cuối tháng — 5 profile tài xế</div>
+      <div class="section-note" style="margin-bottom:16px;">Hệ thống check theo thứ tự R1 → R2 → R3. Đạt đủ cả 4 điều kiện mới vào tier đó.</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Tài xế</th><th>AR</th><th>FR</th><th>DCR</th><th>Prod</th><th>Kết quả</th><th>Lý do</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:700">Anh Hùng</td>
+              <td><span class="tag tag-green">97%</span></td>
+              <td><span class="tag tag-green">88%</span></td>
+              <td><span class="tag tag-green">6%</span></td>
+              <td><span class="tag tag-green">120 stp</span></td>
+              <td><span class="tag tag-r1">R1 Elite</span></td>
+              <td style="font-size:12px;color:var(--gray-600);">Đạt đủ 4 điều kiện R1</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700">Chị Lan</td>
+              <td><span class="tag tag-red">92%</span></td>
+              <td><span class="tag tag-green">82%</span></td>
+              <td><span class="tag tag-green">10%</span></td>
+              <td><span class="tag tag-green">75 stp</span></td>
+              <td><span class="tag tag-r2">R2 Active</span></td>
+              <td style="font-size:12px;color:var(--gray-600);">AR 92% &lt; 95% → trượt R1. Đạt đủ R2</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700">Anh Minh</td>
+              <td><span class="tag tag-green">96%</span></td>
+              <td><span class="tag tag-green">87%</span></td>
+              <td><span class="tag tag-green">9%</span></td>
+              <td><span class="tag tag-red">85 stp</span></td>
+              <td><span class="tag tag-r2">R2 Active</span></td>
+              <td style="font-size:12px;color:var(--gray-600);">Prod 85 &lt; 100 → trượt R1. Đạt đủ R2</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700">Chị Hoa</td>
+              <td><span class="tag tag-red">85%</span></td>
+              <td><span class="tag tag-red">73%</span></td>
+              <td><span class="tag tag-red">15%</span></td>
+              <td><span class="tag tag-red">40 stp</span></td>
+              <td><span class="tag tag-r3">R3 Standard</span></td>
+              <td style="font-size:12px;color:var(--gray-600);">Không đạt R2 (AR, FR, Prod thấp)</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700">Anh Tuấn</td>
+              <td colspan="4" style="font-size:12px;color:var(--gray-400);font-style:italic;">Mới join 2 tuần — chưa đủ dữ liệu</td>
+              <td><span style="font-size:12px;color:var(--un);font-weight:700;">⬜ Chưa XH</span></td>
+              <td style="font-size:12px;color:var(--gray-600);">Chưa đủ 1 tháng thâm niên</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout callout-orange" style="margin-top:14px;">
+        <strong>Lưu ý anh Minh:</strong> AR/FR/DCR đều đủ R1 nhưng Prod chỉ 85 stp — thiếu đúng 1 điều kiện → xếp R2. <strong>Cả 4 điều kiện phải đạt đồng thời.</strong>
+      </div>
+    </div>
+
+    <!-- 7.2 -->
+    <div class="ex-card">
+      <div class="ex-title"><span class="ex-num">2</span>Đăng ký ca T7 — Layer L2 (500 slot, SGN)</div>
+      <p style="font-size:13px;color:var(--gray-600);margin-bottom:12px;">L2 được nhìn thấy bởi R1 và R2. Slot được cấp cho R1 trước, sau đó R2 theo timestamp.</p>
+      <div class="slot-diagram">
+<span class="h">Đầu chu kỳ — L2 mở đăng ký (500 slot)</span>
+
+<span class="b">R1 Elite</span> đăng ký L2: <span class="g">120 drivers</span>
+<span class="b">R2 Active</span> đăng ký L2: <span class="g">450 drivers</span>
+
+<span class="dim">─── Phân bổ ────────────────────────────</span>
+Bước 1: <span class="b">120 R1</span> → slot <span class="g">#1 → #120</span>   (ưu tiên tier cao)
+Bước 2: <span class="b">380 slot còn lại</span> → <span class="b">R2</span> theo timestamp
+         R2 sớm nhất → <span class="g">#121 ... #500</span>  ← slot cuối
+         <span class="h">70 R2 trượt slot</span> → L2 hết
+
+<span class="dim">─── 70 R2 trượt L2 ─────────────────────</span>
+✅ Vẫn thấy và đăng ký được <span class="g">L3, L4</span>
+❌ <span class="h">Không thấy L1</span> (hard block với R2)</div>
+    </div>
+
+    <!-- 7.3 -->
+    <div class="ex-card">
+      <div class="ex-title"><span class="ex-num">3</span>Đăng ký ca T7 — Layer L3 (1.000 slot, SGN)</div>
+      <p style="font-size:13px;color:var(--gray-600);margin-bottom:12px;">L3 được nhìn thấy bởi R2 và R3. R2 luôn được xử lý trước R3.</p>
+      <div class="slot-diagram">
+<span class="h">L3 — 1.000 slot</span>
+
+<span class="b">R2</span> đăng ký L3: <span class="g">380 drivers</span>
+  (70 R2 vừa trượt L2 + 310 R2 chọn L3 ngay)
+<span class="b">R3</span> đăng ký L3: <span class="g">620 drivers</span>
+
+<span class="dim">─── Phân bổ ────────────────────────────</span>
+Bước 1: <span class="b">380 R2</span> → slot <span class="g">#1 → #380</span>
+Bước 2: <span class="b">620 slot còn lại</span> → <span class="b">R3</span> theo timestamp
+         620 R3 sớm → <span class="g">#381 → #1.000</span>
+         <span class="h">R3 còn lại trượt</span> → chuyển L4, L5, L6</div>
+    </div>
+
+    <!-- 7.4 -->
+    <div class="ex-card">
+      <div class="ex-title"><span class="ex-num">4</span>Hành trình thăng hạng — Tài xế Minh (6 tháng)</div>
+      <div style="overflow-x:auto;">
+        <table class="journey-table">
+          <thead>
+            <tr>
+              <th>Tháng</th><th>AR</th><th>FR</th><th>DCR</th><th>Prod</th>
+              <th>Tier</th><th>Layer thấy</th><th>Sự kiện</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="month-badge">T5</span></td>
+              <td colspan="4" style="font-size:12px;color:var(--gray-400);font-style:italic;">Mới join</td>
+              <td><span style="font-size:11px;color:var(--un);font-weight:700;">⬜ Chưa XH</span></td>
+              <td style="font-size:12px">L6</td>
+              <td style="font-size:12px">Mới join, chạy MASS</td>
+            </tr>
+            <tr>
+              <td><span class="month-badge">T6</span></td>
+              <td>88%</td><td>77%</td><td>14%</td><td>55 stp</td>
+              <td><span class="tag tag-r3">R3</span></td>
+              <td style="font-size:12px">L3, L4, L5, L6</td>
+              <td style="font-size:12px">Lên R3, đăng ký L4</td>
+            </tr>
+            <tr>
+              <td><span class="month-badge">T7</span></td>
+              <td>91%</td><td>81%</td><td>11%</td><td>65 stp</td>
+              <td><span class="tag tag-r2">R2</span></td>
+              <td style="font-size:12px">L2, L3, L4, L6</td>
+              <td style="font-size:12px">Lên R2, đăng ký L3</td>
+            </tr>
+            <tr class="highlight-row">
+              <td><span class="month-badge active">T8</span></td>
+              <td>93%</td><td>84%</td>
+              <td>9%</td>
+              <td><strong style="color:var(--red)">95 stp</strong></td>
+              <td><span class="tag tag-r2">R2</span></td>
+              <td style="font-size:12px">L2, L3, L4, L6</td>
+              <td style="font-size:12px;color:var(--red)">Giữ R2 — Prod chưa đủ 100!</td>
+            </tr>
+            <tr>
+              <td><span class="month-badge">T9</span></td>
+              <td>95%</td><td>86%</td><td>8%</td><td>108 stp</td>
+              <td><span class="tag tag-r1">R1</span></td>
+              <td style="font-size:12px">L1, L2, L6</td>
+              <td style="font-size:12px">Lên R1, đăng ký L2</td>
+            </tr>
+            <tr>
+              <td><span class="month-badge">T10</span></td>
+              <td>97%</td><td>89%</td><td>6%</td><td>125 stp</td>
+              <td><span class="tag tag-r1">R1</span></td>
+              <td style="font-size:12px">L1, L2, L6</td>
+              <td style="font-size:12px">Duy trì R1, đăng ký L1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout callout-orange" style="margin-top:14px;">
+        <strong>T8 — điển hình:</strong> AR/FR/DCR đã đủ R1 nhưng Prod 95 stp &lt; 100 → giữ R2. Tháng sau Prod lên 108 → đủ R1. <strong>Cải thiện 1 KPI còn thiếu là đủ thăng hạng.</strong>
+      </div>
+    </div>
+
+    <!-- 7.5 -->
+    <div class="ex-card">
+      <div class="ex-title"><span class="ex-num">5</span>Tài xế có equipment không phù hợp với layer</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px;">Tình huống</div>
+          <div style="font-size:13px;line-height:1.8;">
+            <strong>Chị Hà — R2 Active</strong>, chỉ có <strong>EV</strong> (không có Baga).<br><br>
+            Theo tier R2, chị Hà <em>nhìn thấy</em>: L2 ✅ · L3 ✅ · L4 ✅ · L6 ✅
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px;">Kết quả đăng ký</div>
+          <div class="callout callout-red" style="margin-bottom:10px;">
+            <strong>Thử đăng ký L4:</strong><br>
+            System check → L4 yêu cầu <strong>Baga</strong><br>
+            → Từ chối: "Cần trang bị Baga để đăng ký Bigzone (L4)"
+          </div>
+          <div class="callout callout-green">
+            <strong>Đăng ký L3 thay thế:</strong><br>
+            L3 yêu cầu EV + TGN → Chị Hà có đủ<br>
+            → <strong>Đăng ký thành công ✅</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="footer">
+    Ahamove Driver Management · Driver Ranking × Priority Registration System · 2026-05
+  </div>
+
+</div>
+</body>
+</html>
