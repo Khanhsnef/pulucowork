@@ -86,6 +86,8 @@
     .cn { background:var(--g100); border-radius:8px; display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; font-size:13px; color:var(--g400); }
     .ca { background:#DBEAFE!important; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; font-size:13px; color:var(--blue); font-weight:700; }
     .cf { background:#FFF0E6!important; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; font-size:13px; color:var(--r1); font-weight:700; }
+    .cx { background:#FFFBEB!important; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; font-size:12px; color:#92400E; font-weight:700; border:1px solid #FDE68A; }
+    .lp-x { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
     .supply-row td { background:#F0F5FF!important; font-size:12px; color:var(--blue); font-weight:500; padding:10px 8px!important; }
     .supply-row td:first-child { font-weight:700; }
 
@@ -317,14 +319,14 @@
   <section id="access">
     <div class="section-label">Phần 2</div>
     <div class="section-title">Tier → Layer Access</div>
-    <div class="note">Tier thấp hơn ngưỡng = <strong>hard block</strong> — không bao giờ thấy layer đó dù còn slot. L6 MASS luôn mở. <strong>R1 thấy thêm L3 khi L2 đạt ≥80% slot</strong> (cascade tự nhiên — R1 fallback vào L3 mà không cần cấu hình riêng).</div>
+    <div class="note"><strong>L1 KA/MP</strong> là đội assigned trực tiếp — <em>không qua hệ thống đăng ký ca này</em>. Hệ thống đăng ký ca áp dụng cho <strong>L2–L5</strong> (+ L6 buffer). ↩ = cascade fallback khi layer ưu tiên đạt ≥80% slot.</div>
     <div class="card" style="padding:0;overflow:hidden;">
       <div style="overflow-x:auto;">
         <table class="mtable">
           <thead>
             <tr>
               <th>Tier</th>
-              <th>L1<br><span style="font-size:10px;opacity:.8;font-weight:400">CORE</span></th>
+              <th>L1<br><span style="font-size:10px;opacity:.8;font-weight:400">KA/MP ★</span></th>
               <th>L2<br><span style="font-size:10px;opacity:.8;font-weight:400">Minizone</span></th>
               <th>L3<br><span style="font-size:10px;opacity:.8;font-weight:400">Mediumzone</span></th>
               <th>L4<br><span style="font-size:10px;opacity:.8;font-weight:400">Bigzone</span></th>
@@ -335,34 +337,34 @@
           <tbody>
             <tr>
               <td><span class="tag tr1">R1 Elite</span></td>
+              <td><div class="cx" style="margin:auto" title="KA/MP — assigned trực tiếp, không qua đăng ký ca">★</div></td>
               <td><div class="cy" style="margin:auto">✅</div></td>
-              <td><div class="cy" style="margin:auto">✅</div></td>
-              <td><div class="cf" style="margin:auto" title="Fallback khi L1+L2 hết slot">↩</div></td>
+              <td><div class="cf" style="margin:auto" title="Cascade khi L2 ≥80% slot">↩</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="ca" style="margin:auto">✅</div></td>
             </tr>
             <tr>
               <td><span class="tag tr2">R2 Active</span></td>
+              <td><div class="cx" style="margin:auto" title="KA/MP — assigned trực tiếp, không qua đăng ký ca">★</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="cy" style="margin:auto">✅</div></td>
-              <td><div class="cy" style="margin:auto">✅</div></td>
-              <td><div class="cy" style="margin:auto">✅</div></td>
+              <td><div class="cf" style="margin:auto" title="Cascade khi L3 ≥80% slot">↩</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="ca" style="margin:auto">✅</div></td>
             </tr>
             <tr>
               <td><span class="tag tr3">R3 Standard</span></td>
+              <td><div class="cx" style="margin:auto" title="KA/MP — assigned trực tiếp, không qua đăng ký ca">★</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="cy" style="margin:auto">✅</div></td>
-              <td><div class="cy" style="margin:auto">✅</div></td>
-              <td><div class="cy" style="margin:auto">✅</div></td>
+              <td><div class="cf" style="margin:auto" title="Cascade khi L4 ≥80% slot">↩</div></td>
               <td><div class="ca" style="margin:auto">✅</div></td>
             </tr>
             <tr>
               <td><span style="font-size:12px;color:var(--un);font-weight:700">⬜ Chưa XH</span></td>
-              <td><div class="cn" style="margin:auto">—</div></td>
+              <td><div class="cx" style="margin:auto" title="KA/MP — assigned trực tiếp, không qua đăng ký ca">★</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
@@ -371,11 +373,11 @@
             </tr>
             <tr class="supply-row">
               <td>Supply từ</td>
-              <td>R1 độc quyền</td>
-              <td>R1 + R2</td>
-              <td>R1 + R2 + R3<br>Vùng chung</td>
-              <td>R2 + R3</td>
-              <td>R3 độc quyền</td>
+              <td>★ KA/MP assigned<br><em style="opacity:.75;font-style:normal">Không qua đăng ký ca</em></td>
+              <td>R1 ưu tiên</td>
+              <td>R2 ưu tiên<br>R1 cascade ↩</td>
+              <td>R3 ưu tiên<br>R2 cascade ↩</td>
+              <td>R3 cascade ↩</td>
               <td>Tất cả · Buffer</td>
             </tr>
           </tbody>
@@ -383,10 +385,11 @@
       </div>
     </div>
     <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--g600);">
-      <div style="display:flex;align-items:center;gap:6px;"><div class="cy" style="width:20px;height:20px;font-size:11px">✅</div> Được đăng ký (primary)</div>
-      <div style="display:flex;align-items:center;gap:6px;"><div class="cf" style="width:20px;height:20px;font-size:11px">↩</div> R1 fallback (L3)</div>
+      <div style="display:flex;align-items:center;gap:6px;"><div class="cy" style="width:20px;height:20px;font-size:11px">✅</div> Đăng ký ca (ưu tiên)</div>
+      <div style="display:flex;align-items:center;gap:6px;"><div class="cf" style="width:20px;height:20px;font-size:11px">↩</div> Cascade fallback (≥80%)</div>
       <div style="display:flex;align-items:center;gap:6px;"><div class="ca" style="width:20px;height:20px;font-size:11px;color:var(--blue)">✅</div> Luôn mở (L6)</div>
       <div style="display:flex;align-items:center;gap:6px;"><div class="cn" style="width:20px;height:20px;font-size:11px">—</div> Hard block</div>
+      <div style="display:flex;align-items:center;gap:6px;"><div class="cx" style="width:20px;height:20px;font-size:11px">★</div> KA/MP assigned (ngoài hệ thống)</div>
     </div>
   </section>
 
@@ -400,11 +403,11 @@
         <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:14px;">Nguyên tắc</div>
         <div class="rule-item">
           <div class="rn">1</div>
-          <div class="rt"><strong>Mỗi tier bắt đầu từ layer ưu tiên.</strong> R1 thấy L1 trước, R2 thấy L2, R3 thấy L3 — tập trung supply vào đúng layer.</div>
+          <div class="rt"><strong>Mỗi tier bắt đầu từ layer ưu tiên.</strong> R1 thấy L2 trước, R2 thấy L3, R3 thấy L4 — tập trung supply vào đúng layer.</div>
         </div>
         <div class="rule-item">
           <div class="rn">2</div>
-          <div class="rt"><strong>Layer tiếp theo mở khi ≥ 80% slot.</strong> L1 đủ 80% → R1 thấy thêm L2. L2 đủ 80% → R1 thấy thêm L3 ↩.</div>
+          <div class="rt"><strong>Layer tiếp theo mở khi ≥ 80% slot.</strong> L2 đủ 80% → R1 thấy thêm L3 ↩. L3 đủ 80% → R2 thấy thêm L4 ↩.</div>
         </div>
         <div class="rule-item">
           <div class="rn">3</div>
@@ -418,21 +421,18 @@
       <div class="codeblk">
 <span class="h">R1 Anh Hùng — cascade ngày 1–5/7</span>
 
-<span class="d">── PHASE 1: L1 mở đầu ────────────────</span>
-<span class="b">01/07</span>  Mở app → chỉ thấy <span class="g">L1</span> (300 slot)
-<span class="b">01/07 08:22</span>  Anh Hùng → <span class="g">L1 slot #12</span>
-       <span class="d">(R2 chạy L2 song song độc lập)</span>
-
-<span class="d">── TRIGGER: L1 = 80% (240/300) ───────</span>
-<span class="g">Hệ thống mở L2 → R1 thấy thêm L2</span>
-
-<span class="d">── PHASE 2: L1 + L2 ──────────────────</span>
-<span class="b">02/07 10:06</span>  R1 Anh Hùng → <span class="g">L2 slot #88</span>
-<span class="b">02/07 10:09</span>  R2 Chị Lan  → <span class="g">L2 slot #89</span>
-       <span class="d">(FCFS — R1/R2 bình đẳng trong L2)</span>
+<span class="d">── PHASE 1: L2 mở đầu ────────────────</span>
+<span class="b">01/07</span>  Mở app → chỉ thấy <span class="g">L2</span> (500 slot)
+<span class="b">01/07 08:22</span>  Anh Hùng → <span class="g">L2 slot #12</span>
+       <span class="d">(R2 chạy L3 song song độc lập)</span>
 
 <span class="d">── TRIGGER: L2 = 80% (400/500) ───────</span>
 <span class="g">Hệ thống mở L3 ↩ → R1 thấy thêm L3</span>
+
+<span class="d">── PHASE 2: L2 + L3 ──────────────────</span>
+<span class="b">02/07 10:06</span>  R1 Anh Hùng → <span class="g">L3 slot #88</span>
+<span class="b">02/07 10:09</span>  R2 Chị Lan  → <span class="g">L3 slot #89</span>
+       <span class="d">(FCFS — R1/R2 bình đẳng trong L3)</span>
 
 <span class="d">──────────────────────────────────────</span>
 <span class="r">Hết 05/07</span>: Chưa ĐK → <span class="g">Auto L6</span></div>
@@ -456,7 +456,7 @@
         <table class="dtable">
           <thead><tr><th>Layer</th><th>Yêu cầu</th></tr></thead>
           <tbody>
-            <tr><td style="font-weight:700">L1</td><td>Baga · Ký cam kết</td></tr>
+            <tr><td style="font-weight:700;color:var(--g400)">L1</td><td style="color:var(--g400);font-style:italic">★ KA/MP assigned — không qua đăng ký ca</td></tr>
             <tr><td style="font-weight:700">L2, L3</td><td>EV</td></tr>
             <tr><td style="font-weight:700">L4, L5</td><td>Baga</td></tr>
             <tr><td style="font-weight:700">L6</td><td style="color:var(--g400);font-style:italic">Không yêu cầu</td></tr>
@@ -471,9 +471,10 @@
             <table class="dtable">
               <thead><tr><th>Layer</th><th>AR</th><th>FR</th><th>DCR</th><th>Prod</th><th>Rating</th><th>Thâm niên</th></tr></thead>
               <tbody>
-                <tr><td style="font-weight:700"><span class="tag tr1" style="font-size:11px">L1</span></td><td>≥ 95%</td><td>≥ 85%</td><td>&lt; 10%</td><td>≥ 100 stp</td><td>—</td><td>≥ 3 tháng</td></tr>
-                <tr><td style="font-weight:700"><span class="tag tr2" style="font-size:11px">L2</span></td><td>≥ 90%</td><td>≥ 80%</td><td>&lt; 12%</td><td>≥ 60 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
-                <tr><td style="font-weight:700"><span class="tag tr3" style="font-size:11px">L3, L4, L5</span></td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td>≥ 4.7</td><td>≥ 1 tháng</td></tr>
+                <tr><td style="font-weight:700;color:var(--g400)"><em>L1</em></td><td colspan="6" style="color:var(--g400);font-style:italic;font-size:12px">★ KA/MP assigned — không áp dụng</td></tr>
+                <tr><td style="font-weight:700"><span class="tag tr1" style="font-size:11px">L2</span></td><td>≥ 95%</td><td>≥ 85%</td><td>&lt; 10%</td><td>≥ 100 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
+                <tr><td style="font-weight:700"><span class="tag tr2" style="font-size:11px">L3</span></td><td>≥ 90%</td><td>≥ 80%</td><td>&lt; 12%</td><td>≥ 60 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
+                <tr><td style="font-weight:700"><span class="tag tr3" style="font-size:11px">L4, L5</span></td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td>≥ 4.7</td><td>≥ 1 tháng</td></tr>
                 <tr><td style="font-weight:700;color:var(--g600)">L6</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td></tr>
               </tbody>
             </table>
@@ -485,9 +486,10 @@
             <table class="dtable">
               <thead><tr><th>Layer</th><th>AR</th><th>FR</th><th>DCR</th><th>Prod</th><th>Rating</th><th>Thâm niên</th></tr></thead>
               <tbody>
-                <tr><td style="font-weight:700"><span class="tag tr1" style="font-size:11px">L1</span></td><td>≥ 93%</td><td>≥ 83%</td><td>&lt; 12%</td><td>≥ 100 stp</td><td>—</td><td>≥ 3 tháng</td></tr>
-                <tr><td style="font-weight:700"><span class="tag tr2" style="font-size:11px">L2</span></td><td>≥ 88%</td><td>≥ 78%</td><td>&lt; 14%</td><td>≥ 60 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
-                <tr><td style="font-weight:700"><span class="tag tr3" style="font-size:11px">L3, L4, L5</span></td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td>≥ 4.7</td><td>≥ 1 tháng</td></tr>
+                <tr><td style="font-weight:700;color:var(--g400)"><em>L1</em></td><td colspan="6" style="color:var(--g400);font-style:italic;font-size:12px">★ KA/MP assigned — không áp dụng</td></tr>
+                <tr><td style="font-weight:700"><span class="tag tr1" style="font-size:11px">L2</span></td><td>≥ 93%</td><td>≥ 83%</td><td>&lt; 12%</td><td>≥ 100 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
+                <tr><td style="font-weight:700"><span class="tag tr2" style="font-size:11px">L3</span></td><td>≥ 88%</td><td>≥ 78%</td><td>&lt; 14%</td><td>≥ 60 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
+                <tr><td style="font-weight:700"><span class="tag tr3" style="font-size:11px">L4, L5</span></td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td>≥ 4.7</td><td>≥ 1 tháng</td></tr>
                 <tr><td style="font-weight:700;color:var(--g600)">L6</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td></tr>
               </tbody>
             </table>
@@ -541,38 +543,34 @@
           <thead>
             <tr>
               <th style="text-align:left;padding-left:16px;min-width:115px">Tier</th>
-              <th>🔓 Mở đầu<br><span style="font-size:10px;font-weight:400;opacity:.8">Ngày 1 — ngay khi mở</span></th>
-              <th>📈 Khi ≥80% → thêm<br><span style="font-size:10px;font-weight:400;opacity:.8">Layer 1 đạt ngưỡng</span></th>
-              <th>📈 Khi ≥80% → thêm<br><span style="font-size:10px;font-weight:400;opacity:.8">Layer 2 đạt ngưỡng</span></th>
+              <th>🔓 Ngày 1 — Mở đầu<br><span style="font-size:10px;font-weight:400;opacity:.8">Layer ưu tiên của tier</span></th>
+              <th>📈 Khi ≥80% → mở thêm<br><span style="font-size:10px;font-weight:400;opacity:.8">Cascade fallback ↩</span></th>
               <th>⏰ Hết ngày 5<br><span style="font-size:10px;font-weight:400;opacity:.8">Chưa đăng ký ca nào</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td style="padding-left:16px"><span class="tag tr1">R1 Elite</span></td>
-              <td style="text-align:center"><span class="lp lp-1" style="font-size:12px;padding:4px 14px">L1</span></td>
-              <td style="text-align:center"><span style="color:var(--g400);font-size:13px;margin-right:4px">＋</span><span class="lp lp-2" style="font-size:12px;padding:4px 14px">L2</span></td>
+              <td style="text-align:center"><span class="lp lp-2" style="font-size:12px;padding:4px 14px">L2</span></td>
               <td style="text-align:center"><span style="color:var(--g400);font-size:13px;margin-right:4px">＋</span><span class="lp lp-3" style="font-size:12px;padding:4px 14px">L3 ↩</span></td>
               <td style="text-align:center"><span style="font-size:12px;font-weight:700;padding:4px 12px;background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;border-radius:999px">Auto L6</span></td>
             </tr>
             <tr>
               <td style="padding-left:16px"><span class="tag tr2">R2 Active</span></td>
-              <td style="text-align:center"><span class="lp lp-2" style="font-size:12px;padding:4px 14px">L2</span></td>
-              <td style="text-align:center"><span style="color:var(--g400);font-size:13px;margin-right:4px">＋</span><span class="lp lp-3" style="font-size:12px;padding:4px 14px">L3</span></td>
-              <td style="text-align:center"><span style="color:var(--g400);font-size:13px;margin-right:4px">＋</span><span class="lp lp-4" style="font-size:12px;padding:4px 14px">L4</span></td>
+              <td style="text-align:center"><span class="lp lp-3" style="font-size:12px;padding:4px 14px">L3</span></td>
+              <td style="text-align:center"><span style="color:var(--g400);font-size:13px;margin-right:4px">＋</span><span class="lp lp-4" style="font-size:12px;padding:4px 14px">L4 ↩</span></td>
               <td style="text-align:center"><span style="font-size:12px;font-weight:700;padding:4px 12px;background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;border-radius:999px">Auto L6</span></td>
             </tr>
             <tr>
               <td style="padding-left:16px"><span class="tag tr3">R3 Standard</span></td>
-              <td style="text-align:center"><span class="lp lp-3" style="font-size:12px;padding:4px 14px">L3</span></td>
-              <td style="text-align:center"><span style="color:var(--g400);font-size:13px;margin-right:4px">＋</span><span class="lp lp-4" style="font-size:12px;padding:4px 14px">L4</span></td>
-              <td style="text-align:center"><span style="color:var(--g400);font-size:13px;margin-right:4px">＋</span><span class="lp lp-5" style="font-size:12px;padding:4px 14px">L5</span></td>
+              <td style="text-align:center"><span class="lp lp-4" style="font-size:12px;padding:4px 14px">L4</span></td>
+              <td style="text-align:center"><span style="color:var(--g400);font-size:13px;margin-right:4px">＋</span><span class="lp lp-5" style="font-size:12px;padding:4px 14px">L5 ↩</span></td>
               <td style="text-align:center"><span style="font-size:12px;font-weight:700;padding:4px 12px;background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;border-radius:999px">Auto L6</span></td>
             </tr>
             <tr>
               <td style="padding-left:16px"><span style="font-size:12px;color:var(--un);font-weight:700">⬜ Chưa XH</span></td>
               <td style="text-align:center"><span class="lp lp-6" style="font-size:12px;padding:4px 14px">L6</span></td>
-              <td colspan="2" style="text-align:center;color:var(--g400);font-size:13px">—</td>
+              <td style="text-align:center;color:var(--g400);font-size:13px">—</td>
               <td style="text-align:center"><span class="lp lp-6" style="font-size:12px;padding:4px 14px">L6</span></td>
             </tr>
           </tbody>
@@ -592,7 +590,8 @@
         <div class="utier">⬜ Chưa xếp hạng</div>
         <div style="font-size:11px;color:var(--g400);margin-bottom:8px;">Mới join &lt; 1 tháng</div>
         <div class="ulayers">
-          <span class="lp lp-off">L1</span><span class="lp lp-off">L2</span><span class="lp lp-off">L3</span>
+          <span class="lp lp-x">L1★</span>
+          <span class="lp lp-off">L2</span><span class="lp lp-off">L3</span>
           <span class="lp lp-off">L4</span><span class="lp lp-off">L5</span><span class="lp lp-6">L6 ✓</span>
         </div>
       </div>
@@ -601,8 +600,9 @@
         <div class="utier">🥉 R3 Standard</div>
         <div style="font-size:11px;color:var(--g500);margin-bottom:8px;">DCR &lt;20% · Rating ≥4.7</div>
         <div class="ulayers">
-          <span class="lp lp-off">L1</span><span class="lp lp-off">L2</span>
-          <span class="lp lp-3">L3 ✓</span><span class="lp lp-4">L4 ✓</span><span class="lp lp-5">L5 ✓</span><span class="lp lp-6">L6 ✓</span>
+          <span class="lp lp-x">L1★</span>
+          <span class="lp lp-off">L2</span><span class="lp lp-off">L3</span>
+          <span class="lp lp-4">L4 ✓</span><span class="lp lp-5">L5 ↩</span><span class="lp lp-6">L6 ✓</span>
         </div>
       </div>
       <div class="uarrow"><div class="aline"></div><div class="acond">Đạt KPI R2 trong tháng</div></div>
@@ -610,8 +610,9 @@
         <div class="utier">🥈 R2 Active</div>
         <div style="font-size:11px;color:var(--r2);opacity:.7;margin-bottom:8px;">AR ≥90% · FR ≥80% · Prod ≥60</div>
         <div class="ulayers">
-          <span class="lp lp-off">L1</span><span class="lp lp-2">L2 ✓</span>
-          <span class="lp lp-3">L3 ✓</span><span class="lp lp-4">L4 ✓</span><span class="lp lp-off">L5</span><span class="lp lp-6">L6 ✓</span>
+          <span class="lp lp-x">L1★</span>
+          <span class="lp lp-off">L2</span>
+          <span class="lp lp-3">L3 ✓</span><span class="lp lp-4">L4 ↩</span><span class="lp lp-off">L5</span><span class="lp lp-6">L6 ✓</span>
         </div>
       </div>
       <div class="uarrow"><div class="aline"></div><div class="acond">Đạt KPI R1 trong tháng</div></div>
@@ -619,12 +620,13 @@
         <div class="utier">🥇 R1 Elite</div>
         <div style="font-size:11px;color:var(--r1);opacity:.8;margin-bottom:8px;">AR ≥95% · FR ≥85% · Prod ≥100</div>
         <div class="ulayers">
-          <span class="lp lp-1">L1 ✓</span><span class="lp lp-2">L2 ✓</span>
+          <span class="lp lp-x">L1★</span>
+          <span class="lp lp-2">L2 ✓</span>
           <span class="lp lp-3">L3 ↩</span><span class="lp lp-off">L4</span><span class="lp lp-off">L5</span><span class="lp lp-6">L6 ✓</span>
         </div>
       </div>
     </div>
-    <div class="callout cb" style="margin-top:8px;"><span style="font-size:12px">↩ L3 = fallback cho R1 khi L1+L2 hết slot</span></div>
+    <div class="callout cb" style="margin-top:8px;"><span style="font-size:12px">★ L1 = KA/MP assigned, không qua đăng ký ca. &nbsp;↩ = cascade fallback: <strong>R1</strong> L2→L3 · <strong>R2</strong> L3→L4 · <strong>R3</strong> L4→L5</span></div>
   </section>
 
   <!-- EXAMPLES -->
@@ -682,29 +684,29 @@
 
     <!-- 8.2 -->
     <div class="ex-card">
-      <div class="ex-title"><span class="exn">2</span>R1 fallback khi L1 + L2 hết slot</div>
+      <div class="ex-title"><span class="exn">2</span>R1 cascade khi L2 ≥ 80% slot</div>
       <div class="two-col-eq">
         <div>
           <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px">Tình huống</div>
-          <p style="font-size:13px;line-height:1.8"><strong>Anh Hùng — R1 Elite</strong>, đăng ký ca <strong>ngày 4/7</strong> (muộn).<br><br>Mở app thấy:</p>
+          <p style="font-size:13px;line-height:1.8"><strong>Anh Hùng — R1 Elite</strong>, mở app <strong>ngày 3/7</strong> khi L2 đã gần đầy.<br><br>Mở app thấy:</p>
           <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
-            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:var(--g100);border-radius:8px"><span style="font-weight:600">L1</span><span class="tag tre">HẾT 300/300</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:var(--g100);border-radius:8px"><span style="font-weight:600">L2</span><span class="tag tre">HẾT 500/500</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:#ECFDF5;border-radius:8px"><span style="font-weight:600">L3 ↩ fallback</span><span class="tag tg">Còn 350/1000</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:var(--g100);border-radius:8px"><span style="font-weight:600">L1</span><span style="font-size:12px;color:var(--g400);font-style:italic">★ KA/MP — không hiển thị</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:var(--g100);border-radius:8px"><span style="font-weight:600">L2</span><span class="tag tre">≥80% · 420/500</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:#ECFDF5;border-radius:8px"><span style="font-weight:600">L3 ↩ cascade</span><span class="tag tg">Còn 350/1000</span></div>
             <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:var(--g100);border-radius:8px"><span style="font-weight:600">L6</span><span style="font-size:12px;color:var(--g600)">Luôn mở</span></div>
           </div>
         </div>
         <div>
           <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px">Kết quả</div>
           <div class="callout cg">
-            <strong>Anh Hùng chọn L3:</strong><br>
-            System check equipment: L3 yêu cầu EV ✅<br>
-            → <strong>Đăng ký L3 thành công</strong><br>
+            <strong>Anh Hùng chọn L2 (còn slot) hoặc L3 ↩:</strong><br>
+            L2: còn 80 slot — vẫn có thể đăng ký.<br>
+            L3: System check EV ✅ → <strong>Đăng ký thành công</strong><br>
             Không bị đẩy xuống L6 MASS.
           </div>
           <div class="callout cb" style="margin-top:10px">
-            <strong>Nếu không có R1 fallback:</strong><br>
-            Anh Hùng chỉ thấy L6 → tài xế chất lượng cao bị lãng phí vào pool vãng lai.
+            <strong>Thiết kế cascade:</strong><br>
+            L3 tự động mở cho R1 khi L2 ≥80%. R1 luôn có layer phù hợp để đăng ký — không cần config riêng.
           </div>
         </div>
       </div>
@@ -718,11 +720,11 @@
           <thead><tr><th>Tháng</th><th>AR</th><th>FR</th><th>DCR</th><th>Prod</th><th>Tier</th><th>Layer thấy</th><th>Sự kiện</th></tr></thead>
           <tbody>
             <tr><td><span class="mbadge">T5</span></td><td colspan="4" style="font-size:12px;color:var(--g400);font-style:italic">Mới join</td><td><span style="font-size:11px;color:var(--un);font-weight:700">⬜ Chưa XH</span></td><td style="font-size:12px">L6</td><td style="font-size:12px">Chạy MASS</td></tr>
-            <tr><td><span class="mbadge">T6</span></td><td>88%</td><td>77%</td><td>14%</td><td>55 stp</td><td><span class="tag tr3">R3</span></td><td style="font-size:12px">L3, L4, L5, L6</td><td style="font-size:12px">Lên R3, đăng ký L4</td></tr>
-            <tr><td><span class="mbadge">T7</span></td><td>91%</td><td>81%</td><td>11%</td><td>65 stp</td><td><span class="tag tr2">R2</span></td><td style="font-size:12px">L2, L3, L4, L6</td><td style="font-size:12px">Lên R2, đăng ký L3</td></tr>
-            <tr class="hl"><td><span class="mbadge hot">T8</span></td><td>93%</td><td>84%</td><td>9%</td><td><strong style="color:var(--red)">95 stp</strong></td><td><span class="tag tr2">R2</span></td><td style="font-size:12px">L2, L3, L4, L6</td><td style="font-size:12px;color:var(--red)">Giữ R2 — Prod chưa đủ 100!</td></tr>
-            <tr><td><span class="mbadge">T9</span></td><td>95%</td><td>86%</td><td>8%</td><td>108 stp</td><td><span class="tag tr1">R1</span></td><td style="font-size:12px">L1, L2, L3↩, L6</td><td style="font-size:12px">Lên R1, đăng ký L2</td></tr>
-            <tr><td><span class="mbadge">T10</span></td><td>97%</td><td>89%</td><td>6%</td><td>125 stp</td><td><span class="tag tr1">R1</span></td><td style="font-size:12px">L1, L2, L3↩, L6</td><td style="font-size:12px">Duy trì R1, đăng ký L1</td></tr>
+            <tr><td><span class="mbadge">T6</span></td><td>88%</td><td>77%</td><td>14%</td><td>55 stp</td><td><span class="tag tr3">R3</span></td><td style="font-size:12px">L4, L5↩, L6</td><td style="font-size:12px">Lên R3, đăng ký L4</td></tr>
+            <tr><td><span class="mbadge">T7</span></td><td>91%</td><td>81%</td><td>11%</td><td>65 stp</td><td><span class="tag tr2">R2</span></td><td style="font-size:12px">L3, L4↩, L6</td><td style="font-size:12px">Lên R2, đăng ký L3</td></tr>
+            <tr class="hl"><td><span class="mbadge hot">T8</span></td><td>93%</td><td>84%</td><td>9%</td><td><strong style="color:var(--red)">95 stp</strong></td><td><span class="tag tr2">R2</span></td><td style="font-size:12px">L3, L4↩, L6</td><td style="font-size:12px;color:var(--red)">Giữ R2 — Prod chưa đủ 100!</td></tr>
+            <tr><td><span class="mbadge">T9</span></td><td>95%</td><td>86%</td><td>8%</td><td>108 stp</td><td><span class="tag tr1">R1</span></td><td style="font-size:12px">L2, L3↩, L6</td><td style="font-size:12px">Lên R1, đăng ký L2</td></tr>
+            <tr><td><span class="mbadge">T10</span></td><td>97%</td><td>89%</td><td>6%</td><td>125 stp</td><td><span class="tag tr1">R1</span></td><td style="font-size:12px">L2, L3↩, L6</td><td style="font-size:12px">Duy trì R1, tiếp tục L2</td></tr>
           </tbody>
         </table>
       </div>
@@ -737,9 +739,10 @@
           <p style="font-size:13px;margin-bottom:12px"><strong>Chị Hà — R2 Active</strong>, chỉ có EV (không có Baga).</p>
           <div style="font-size:13px;font-weight:600;color:var(--g600);margin-bottom:8px">Layers chị Hà nhìn thấy (theo tier R2):</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <span class="lp lp-2" style="font-size:12px;padding:4px 12px">L2 ✓</span>
+            <span class="lp lp-x" style="font-size:12px;padding:4px 12px">L1 ★</span>
+            <span class="lp lp-off" style="font-size:12px;padding:4px 12px">L2 ✗</span>
             <span class="lp lp-3" style="font-size:12px;padding:4px 12px">L3 ✓</span>
-            <span class="lp lp-4" style="font-size:12px;padding:4px 12px">L4 ✓</span>
+            <span class="lp lp-4" style="font-size:12px;padding:4px 12px">L4 ↩</span>
             <span class="lp lp-6" style="font-size:12px;padding:4px 12px">L6 ✓</span>
           </div>
         </div>

@@ -53,24 +53,24 @@ Ahamove Driver Management | 2026-05 | Phiên bản: FINAL 3-Tier
 
 ## 2. Tier → Layer Access
 
-> Tier thấp hơn ngưỡng = **hard block** — không bao giờ thấy layer đó, dù còn slot trống.
-> L6 MASS luôn mở cho tất cả.
-> **R1 thấy được L3** để có layer dự phòng nếu L1+L2 hết slot.
+> **L1 KA/MP** được assigned trực tiếp — không qua hệ thống đăng ký ca này.
+> Hệ thống đăng ký ca áp dụng cho **L2–L5** (+ L6 buffer). Tier thấp hơn = **hard block**.
+> ↩ = cascade fallback: mở thêm khi layer ưu tiên đạt ≥80% slot.
 
 | Tier | L1 | L2 | L3 | L4 | L5 | L6 |
 | --- | --- | --- | --- | --- | --- | --- |
-| R1 Elite | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ |
-| R2 Active | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ |
-| R3 Standard | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
-| Chưa xếp hạng | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| R1 Elite | ★ assigned | ✅ | ↩ cascade | ❌ | ❌ | ✅ |
+| R2 Active | ★ assigned | ❌ | ✅ | ↩ cascade | ❌ | ✅ |
+| R3 Standard | ★ assigned | ❌ | ❌ | ✅ | ↩ cascade | ✅ |
+| Chưa xếp hạng | ★ assigned | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 | Layer | Supply đến từ | Ghi chú |
 | --- | --- | --- |
-| L1 | R1 độc quyền | KA/MP — chỉ tài xế chất lượng cao nhất |
-| L2 | R1 + R2 | Timestamp quyết định |
-| L3 | **R1 + R2 + R3** | Vùng chung — supply dồi dào, R1 có thể fallback về đây |
-| L4 | R2 + R3 | Vùng đệm |
-| L5 | R3 độc quyền | Long-haul >11km |
+| L1 | ★ KA/MP assigned | Không qua đăng ký ca — assigned trực tiếp |
+| L2 | R1 ưu tiên | Đăng ký ca, R1 primary layer |
+| L3 | R2 ưu tiên · R1 cascade ↩ | R1 fallback khi L2 ≥80% slot |
+| L4 | R3 ưu tiên · R2 cascade ↩ | Vùng đệm |
+| L5 | R3 cascade ↩ | Long-haul >11km |
 | L6 | Tất cả | Buffer co giãn toàn hệ thống |
 
 ---
@@ -81,28 +81,25 @@ Ahamove Driver Management | 2026-05 | Phiên bản: FINAL 3-Tier
 > **Timestamp FCFS** áp dụng trong mọi layer đang hiển thị — không ưu tiên theo tier.
 > **Auto L6**: Hết ngày 5 chưa đăng ký bất kỳ layer nào → system tự động xếp vào L6.
 
-| Tier | Mở đầu | Khi ≥80% → thêm | Khi ≥80% → thêm | Hết ngày 5 |
-| --- | --- | --- | --- | --- |
-| R1 Elite | L1 | + L2 | + L3 ↩ | Auto L6 |
-| R2 Active | L2 | + L3 | + L4 | Auto L6 |
-| R3 Standard | L3 | + L4 | + L5 | Auto L6 |
-| Chưa xếp hạng | L6 | — | — | L6 |
+| Tier | Mở đầu | Khi ≥80% → thêm | Hết ngày 5 |
+| --- | --- | --- | --- |
+| R1 Elite | L2 | + L3 ↩ | Auto L6 |
+| R2 Active | L3 | + L4 ↩ | Auto L6 |
+| R3 Standard | L4 | + L5 ↩ | Auto L6 |
+| Chưa xếp hạng | L6 | — | L6 |
 
 ```text
 R1 Anh Hùng — cascade trong ngày 1–5/7:
 
-  Phase 1: L1 mở đầu
-    01/07 08:22 — R1 Anh Hùng → L1 slot #12
-    (R2 chạy L2 song song)
+  Phase 1: L2 mở đầu (R1 primary)
+    01/07 08:22 — R1 Anh Hùng → L2 slot #12
+    (R2 chạy L3 song song độc lập)
 
-  [02/07] L1 đạt 80% (240/300 slot) → Hệ thống mở L2 cho R1
-  Phase 2: R1 thấy L1 + L2
-    02/07 10:06 — R1 Anh Hùng → L2 slot #88
-    02/07 10:09 — R2 Chị Lan  → L2 slot #89
-    (FCFS — R1/R2 bình đẳng trong L2)
-
-  [03/07] L2 đạt 80% (400/500 slot) → Hệ thống mở L3 ↩ cho R1
-  Phase 3: R1 thấy L1 + L2 + L3 ↩
+  [02/07] L2 đạt 80% (400/500 slot) → Hệ thống mở L3 ↩ cho R1
+  Phase 2: R1 thấy L2 + L3 ↩
+    02/07 10:06 — R1 Anh Hùng → L3 slot #88
+    02/07 10:09 — R2 Chị Lan  → L3 slot #89
+    (FCFS — R1/R2 bình đẳng trong L3)
 
   Hết 05/07: Tài xế chưa đăng ký → Auto L6
 ```
@@ -124,24 +121,26 @@ R1 Anh Hùng — cascade trong ngày 1–5/7:
 
 ## 5. Layer Hard Requirements (KPI + Thâm niên)
 
-> Check tại thời điểm đăng ký. **Đồng bộ với rank**: L1 = R1 KPI, L2 = R2 KPI, L3–L5 = R3 KPI.
+> Check tại thời điểm đăng ký. **L1 không áp dụng** (KA/MP assigned). Đồng bộ với rank: L2 = R1 KPI, L3 = R2 KPI, L4–L5 = R3 KPI.
 
 ### 5.1 SGN
 
 | Layer | AR | FR | DCR | Prod | Rating | Thâm niên |
 | --- | --- | --- | --- | --- | --- | --- |
-| L1 | ≥ 95% | ≥ 85% | < 10% | ≥ 100 stp | — | ≥ 3 tháng |
-| L2 | ≥ 90% | ≥ 80% | < 12% | ≥ 60 stp | — | ≥ 1 tháng |
-| L3, L4, L5 | — | — | < 20% | — | ≥ 4.7 | ≥ 1 tháng |
+| L1 | — | — | — | — | — | ★ KA/MP assigned |
+| L2 | ≥ 95% | ≥ 85% | < 10% | ≥ 100 stp | — | ≥ 1 tháng |
+| L3 | ≥ 90% | ≥ 80% | < 12% | ≥ 60 stp | — | ≥ 1 tháng |
+| L4, L5 | — | — | < 20% | — | ≥ 4.7 | ≥ 1 tháng |
 | L6 | — | — | < 20% | — | — | — |
 
 ### 5.2 HAN
 
 | Layer | AR | FR | DCR | Prod | Rating | Thâm niên |
 | --- | --- | --- | --- | --- | --- | --- |
-| L1 | ≥ 93% | ≥ 83% | < 12% | ≥ 100 stp | — | ≥ 3 tháng |
-| L2 | ≥ 88% | ≥ 78% | < 14% | ≥ 60 stp | — | ≥ 1 tháng |
-| L3, L4, L5 | — | — | < 20% | — | ≥ 4.7 | ≥ 1 tháng |
+| L1 | — | — | — | — | — | ★ KA/MP assigned |
+| L2 | ≥ 93% | ≥ 83% | < 12% | ≥ 100 stp | — | ≥ 1 tháng |
+| L3 | ≥ 88% | ≥ 78% | < 14% | ≥ 60 stp | — | ≥ 1 tháng |
+| L4, L5 | — | — | < 20% | — | ≥ 4.7 | ≥ 1 tháng |
 | L6 | — | — | < 20% | — | — | — |
 
 ---
@@ -166,27 +165,30 @@ Ngày 6+ tháng T
 
 ### Cascade đăng ký — Mở dần theo fill-rate
 
-| Tier | Mở đầu | Khi ≥80% → thêm | Khi ≥80% → thêm | Hết ngày 5 chưa ĐK |
-| --- | --- | --- | --- | --- |
-| R1 Elite | L1 | + L2 | + L3 ↩ | Auto L6 |
-| R2 Active | L2 | + L3 | + L4 | Auto L6 |
-| R3 Standard | L3 | + L4 | + L5 | Auto L6 |
-| Chưa xếp hạng | L6 | — | — | L6 |
+| Tier | Mở đầu | Khi ≥80% → thêm | Hết ngày 5 chưa ĐK |
+| --- | --- | --- | --- |
+| R1 Elite | L2 | + L3 ↩ | Auto L6 |
+| R2 Active | L3 | + L4 ↩ | Auto L6 |
+| R3 Standard | L4 | + L5 ↩ | Auto L6 |
+| Chưa xếp hạng | L6 | — | L6 |
 
 ---
 
 ## 7. Upgrade Path
 
 ```text
-Chưa xếp hạng ──(đủ 1 tháng, đạt KPI R3)──► R3 Standard  →  thấy L3, L4, L5
+Chưa xếp hạng ──(đủ 1 tháng, đạt KPI R3)──► R3 Standard  →  đăng ký L4, L5 ↩
                                                     │
                                           Đạt KPI R2 trong tháng
                                                     ▼
-                                               R2 Active   →  thấy L2, L3, L4
+                                               R2 Active   →  đăng ký L3, L4 ↩
                                                     │
                                           Đạt KPI R1 trong tháng
                                                     ▼
-                                               R1 Elite    →  thấy L1, L2, L3
+                                               R1 Elite    →  đăng ký L2, L3 ↩
+
+★ L1 KA/MP = assigned trực tiếp, không qua đăng ký ca
+↩ = cascade fallback khi layer ưu tiên ≥80% slot
 ```
 
 > KPI hiển thị mỗi ngày (rolling 30 ngày). Tier chính thức cập nhật 1 lần/tháng.
