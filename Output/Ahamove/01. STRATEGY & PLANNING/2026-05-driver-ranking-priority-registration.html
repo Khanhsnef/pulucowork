@@ -48,11 +48,9 @@
 
     /* CITY TABS */
     .city-tabs { display:flex; gap:8px; margin-bottom:16px; }
-    .city-tab { padding:7px 20px; border-radius:999px; font-size:13px; font-weight:700; cursor:pointer; border:2px solid var(--g200); background:#fff; color:var(--g600); transition:all .15s; user-select:none; }
+    .city-tab { font-family:'Lexend',sans-serif; font-size:13px; font-weight:700; cursor:pointer; padding:7px 20px; border-radius:999px; border:2px solid var(--g200); background:#fff; color:var(--g600); transition:all .15s; user-select:none; outline:none; -webkit-appearance:none; appearance:none; }
     .city-tab.active-sgn { background:var(--orange); border-color:var(--orange); color:#fff; }
     .city-tab.active-han { background:var(--blue); border-color:var(--blue); color:#fff; }
-    .city-content { display:none; }
-    .city-content.show { display:block; }
 
     /* TIER CARDS */
     .tier-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
@@ -242,12 +240,12 @@
     <div class="section-title">Điều kiện xếp Tier</div>
     <div class="note">Cuối tháng hệ thống check theo thứ tự <strong>R1 → R2 → R3</strong>. Đạt đủ <strong>cả 4 điều kiện</strong> của tier cao nhất → xếp vào tier đó. Thiếu 1 điều kiện → rớt tier thấp hơn.</div>
 
-    <div class="city-tabs">
-      <div class="city-tab active-sgn" onclick="switchCity('sgn')">📍 SGN — Hồ Chí Minh</div>
-      <div class="city-tab" id="tab-han" onclick="switchCity('han')">📍 HAN — Hà Nội</div>
+    <div class="city-tabs" id="tabs-city">
+      <button type="button" class="city-tab active-sgn" data-city="sgn">📍 SGN — Hồ Chí Minh</button>
+      <button type="button" class="city-tab" data-city="han">📍 HAN — Hà Nội</button>
     </div>
 
-    <div id="city-sgn" class="city-content show">
+    <div id="city-sgn" class="city-content" style="display:block">
       <div class="tier-grid">
         <div class="tc r1">
           <div class="tc-badge"><div class="tc-dot"></div>R1 · Elite</div>
@@ -280,7 +278,7 @@
       </div>
     </div>
 
-    <div id="city-han" class="city-content">
+    <div id="city-han" class="city-content" style="display:none">
       <div class="tier-grid">
         <div class="tc r1">
           <div class="tc-badge"><div class="tc-dot"></div>R1 · Elite</div>
@@ -445,9 +443,9 @@
     <div class="section-title">Equipment Gate &amp; Layer Requirements</div>
     <div class="note">System tự động check khi bấm đăng ký. Thiếu điều kiện → từ chối kèm lý do. <strong>COD không check tại bước đăng ký ca.</strong></div>
 
-    <div class="city-tabs">
-      <div class="city-tab active-sgn" onclick="switchReq('sgn')">📍 SGN</div>
-      <div class="city-tab" id="req-tab-han" onclick="switchReq('han')">📍 HAN</div>
+    <div class="city-tabs" id="tabs-req">
+      <button type="button" class="city-tab active-sgn" data-req="sgn">📍 SGN</button>
+      <button type="button" class="city-tab" data-req="han">📍 HAN</button>
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px;">
@@ -465,7 +463,7 @@
       </div>
 
       <div>
-        <div id="req-sgn" class="city-content show">
+        <div id="req-sgn" class="city-content" style="display:block">
           <div class="card" style="padding:0;overflow:hidden;">
             <div style="padding:14px 18px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">KPI đăng ký ca (đồng bộ Rank) — SGN</div>
             <table class="dtable">
@@ -480,7 +478,7 @@
             </table>
           </div>
         </div>
-        <div id="req-han" class="city-content">
+        <div id="req-han" class="city-content" style="display:none">
           <div class="card" style="padding:0;overflow:hidden;">
             <div style="padding:14px 18px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">KPI đăng ký ca (đồng bộ Rank) — HAN</div>
             <table class="dtable">
@@ -769,21 +767,31 @@
 
 <script>
   function switchCity(city) {
-    var isSgn = city === 'sgn';
-    document.getElementById('city-sgn').classList[isSgn ? 'add' : 'remove']('show');
-    document.getElementById('city-han').classList[isSgn ? 'remove' : 'add']('show');
-    document.querySelectorAll('.city-tabs')[0].querySelectorAll('.city-tab').forEach(function(t, i) {
-      t.className = 'city-tab' + (i === 0 && isSgn ? ' active-sgn' : i === 1 && !isSgn ? ' active-han' : '');
+    var isSgn = (city === 'sgn');
+    document.getElementById('city-sgn').style.display = isSgn ? 'block' : 'none';
+    document.getElementById('city-han').style.display = isSgn ? 'none' : 'block';
+    document.querySelectorAll('#tabs-city .city-tab').forEach(function(btn) {
+      var c = btn.getAttribute('data-city');
+      btn.className = 'city-tab' + (c === 'sgn' && isSgn ? ' active-sgn' : c === 'han' && !isSgn ? ' active-han' : '');
     });
   }
   function switchReq(city) {
-    var isSgn = city === 'sgn';
-    document.getElementById('req-sgn').classList[isSgn ? 'add' : 'remove']('show');
-    document.getElementById('req-han').classList[isSgn ? 'remove' : 'add']('show');
-    document.querySelectorAll('.city-tabs')[1].querySelectorAll('.city-tab').forEach(function(t, i) {
-      t.className = 'city-tab' + (i === 0 && isSgn ? ' active-sgn' : i === 1 && !isSgn ? ' active-han' : '');
+    var isSgn = (city === 'sgn');
+    document.getElementById('req-sgn').style.display = isSgn ? 'block' : 'none';
+    document.getElementById('req-han').style.display = isSgn ? 'none' : 'block';
+    document.querySelectorAll('#tabs-req .city-tab').forEach(function(btn) {
+      var c = btn.getAttribute('data-req');
+      btn.className = 'city-tab' + (c === 'sgn' && isSgn ? ' active-sgn' : c === 'han' && !isSgn ? ' active-han' : '');
     });
   }
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('#tabs-city .city-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() { switchCity(this.getAttribute('data-city')); });
+    });
+    document.querySelectorAll('#tabs-req .city-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() { switchReq(this.getAttribute('data-req')); });
+    });
+  });
 </script>
 </body>
 </html>
