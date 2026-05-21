@@ -46,12 +46,6 @@
     .dec-k { font-size:11px; font-weight:600; color:var(--g400); margin-bottom:2px; }
     .dec-v { font-size:13px; font-weight:600; color:var(--g800); }
 
-    /* CITY TABS */
-    .city-tabs { display:flex; gap:8px; margin-bottom:16px; }
-    .city-tab { font-family:'Lexend',sans-serif; font-size:13px; font-weight:700; cursor:pointer; padding:7px 20px; border-radius:999px; border:2px solid var(--g200); background:#fff; color:var(--g600); transition:all .15s; user-select:none; outline:none; -webkit-appearance:none; appearance:none; }
-    .city-tab.active-sgn { background:var(--orange); border-color:var(--orange); color:#fff; }
-    .city-tab.active-han { background:var(--blue); border-color:var(--blue); color:#fff; }
-
     /* TIER CARDS */
     .tier-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
     .tc { border-radius:1.5rem; padding:20px 20px 16px; border:2px solid; }
@@ -186,38 +180,6 @@
     }
     @media(max-width:480px){ .tier-grid { grid-template-columns:1fr; } .dec-grid { grid-template-columns:1fr; } }
   </style>
-  <script>
-    function switchCity(city) {
-      var sgn = document.getElementById('city-sgn');
-      var han = document.getElementById('city-han');
-      if (!sgn || !han) return;
-      var isSgn = (city === 'sgn');
-      sgn.style.display = isSgn ? 'block' : 'none';
-      han.style.display = isSgn ? 'none' : 'block';
-      var tabs = document.querySelectorAll('#tabs-city button');
-      tabs.forEach(function(btn) {
-        btn.className = 'city-tab';
-        if (btn.getAttribute('data-city') === city) {
-          btn.className = 'city-tab ' + (isSgn ? 'active-sgn' : 'active-han');
-        }
-      });
-    }
-    function switchReq(city) {
-      var sgn = document.getElementById('req-sgn');
-      var han = document.getElementById('req-han');
-      if (!sgn || !han) return;
-      var isSgn = (city === 'sgn');
-      sgn.style.display = isSgn ? 'block' : 'none';
-      han.style.display = isSgn ? 'none' : 'block';
-      var tabs = document.querySelectorAll('#tabs-req button');
-      tabs.forEach(function(btn) {
-        btn.className = 'city-tab';
-        if (btn.getAttribute('data-req') === city) {
-          btn.className = 'city-tab ' + (isSgn ? 'active-sgn' : 'active-han');
-        }
-      });
-    }
-  </script>
 </head>
 <body>
 
@@ -272,74 +234,67 @@
     <div class="section-title">Điều kiện xếp Tier</div>
     <div class="note">Cuối tháng hệ thống check theo thứ tự <strong>R1 → R2 → R3</strong>. Đạt đủ <strong>cả 4 điều kiện</strong> của tier cao nhất → xếp vào tier đó. Thiếu 1 điều kiện → rớt tier thấp hơn.</div>
 
-    <div class="city-tabs" id="tabs-city">
-      <button type="button" class="city-tab active-sgn" data-city="sgn" onclick="switchCity('sgn')">📍 SGN — Hồ Chí Minh</button>
-      <button type="button" class="city-tab" data-city="han" onclick="switchCity('han')">📍 HAN — Hà Nội</button>
-    </div>
-
-    <div id="city-sgn" class="city-content" style="display:block">
-      <div class="tier-grid">
-        <div class="tc r1">
-          <div class="tc-badge"><div class="tc-dot"></div>R1 · Elite</div>
-          <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 95%</span></div>
-          <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 85%</span></div>
-          <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 10%</span></div>
-          <div class="kpi-row"><span class="kpi-k">Prod</span><span class="kpi-v">≥ 100 stp</span></div>
-          <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-        </div>
-        <div class="tc r2">
-          <div class="tc-badge"><div class="tc-dot"></div>R2 · Active</div>
-          <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 90%</span></div>
-          <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 80%</span></div>
-          <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 12%</span></div>
-          <div class="kpi-row"><span class="kpi-k">Prod</span><span class="kpi-v">≥ 60 stp</span></div>
-          <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-        </div>
-        <div class="tc r3">
-          <div class="tc-badge"><div class="tc-dot"></div>R3 · Standard</div>
-          <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 20%</span></div>
-          <div class="kpi-row"><span class="kpi-k">Rating</span><span class="kpi-v">≥ 4.7</span></div>
-          <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-          <div style="font-size:12px;color:var(--g400);margin-top:8px;">Tài khoản active, không vi phạm ĐBCL cơ bản. Không đạt R2.</div>
-        </div>
-        <div class="tc un">
-          <div class="tc-badge"><div class="tc-dot"></div>Chưa xếp hạng</div>
-          <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">&lt; 1 tháng</span></div>
-          <div style="font-size:12px;color:var(--g400);margin-top:8px;">Tài xế mới, chưa đủ dữ liệu đánh giá. Chỉ đăng ký L6.</div>
-        </div>
+    <div style="font-size:12px;font-weight:700;color:var(--orange);letter-spacing:.5px;margin-bottom:10px;">📍 SGN — Hồ Chí Minh</div>
+    <div class="tier-grid">
+      <div class="tc r1">
+        <div class="tc-badge"><div class="tc-dot"></div>R1 · Elite</div>
+        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 95%</span></div>
+        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 85%</span></div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 10%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Prod</span><span class="kpi-v">≥ 100 stp</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+      </div>
+      <div class="tc r2">
+        <div class="tc-badge"><div class="tc-dot"></div>R2 · Active</div>
+        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 90%</span></div>
+        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 80%</span></div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 12%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Prod</span><span class="kpi-v">≥ 60 stp</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+      </div>
+      <div class="tc r3">
+        <div class="tc-badge"><div class="tc-dot"></div>R3 · Standard</div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 20%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Rating</span><span class="kpi-v">≥ 4.7</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+        <div style="font-size:12px;color:var(--g400);margin-top:8px;">Tài khoản active, không vi phạm ĐBCL cơ bản. Không đạt R2.</div>
+      </div>
+      <div class="tc un">
+        <div class="tc-badge"><div class="tc-dot"></div>Chưa xếp hạng</div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">&lt; 1 tháng</span></div>
+        <div style="font-size:12px;color:var(--g400);margin-top:8px;">Tài xế mới, chưa đủ dữ liệu đánh giá. Chỉ đăng ký L6.</div>
       </div>
     </div>
 
-    <div id="city-han" class="city-content" style="display:none">
-      <div class="tier-grid">
-        <div class="tc r1">
-          <div class="tc-badge"><div class="tc-dot"></div>R1 · Elite</div>
-          <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 93%</span></div>
-          <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 83%</span></div>
-          <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 12%</span></div>
-          <div class="kpi-row"><span class="kpi-k">Prod</span><span class="kpi-v">≥ 100 stp</span></div>
-          <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-        </div>
-        <div class="tc r2">
-          <div class="tc-badge"><div class="tc-dot"></div>R2 · Active</div>
-          <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 88%</span></div>
-          <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 78%</span></div>
-          <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 14%</span></div>
-          <div class="kpi-row"><span class="kpi-k">Prod</span><span class="kpi-v">≥ 60 stp</span></div>
-          <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-        </div>
-        <div class="tc r3">
-          <div class="tc-badge"><div class="tc-dot"></div>R3 · Standard</div>
-          <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 20%</span></div>
-          <div class="kpi-row"><span class="kpi-k">Rating</span><span class="kpi-v">≥ 4.7</span></div>
-          <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-          <div style="font-size:12px;color:var(--g400);margin-top:8px;">Tài khoản active, không vi phạm ĐBCL cơ bản. Không đạt R2.</div>
-        </div>
-        <div class="tc un">
-          <div class="tc-badge"><div class="tc-dot"></div>Chưa xếp hạng</div>
-          <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">&lt; 1 tháng</span></div>
-          <div style="font-size:12px;color:var(--g400);margin-top:8px;">Tài xế mới, chưa đủ dữ liệu đánh giá. Chỉ đăng ký L6.</div>
-        </div>
+    <div style="font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.5px;margin:20px 0 10px;">📍 HAN — Hà Nội</div>
+    <div class="tier-grid">
+      <div class="tc r1">
+        <div class="tc-badge"><div class="tc-dot"></div>R1 · Elite</div>
+        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 93%</span></div>
+        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 83%</span></div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 12%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Prod</span><span class="kpi-v">≥ 100 stp</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+      </div>
+      <div class="tc r2">
+        <div class="tc-badge"><div class="tc-dot"></div>R2 · Active</div>
+        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 88%</span></div>
+        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 78%</span></div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 14%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Prod</span><span class="kpi-v">≥ 60 stp</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+      </div>
+      <div class="tc r3">
+        <div class="tc-badge"><div class="tc-dot"></div>R3 · Standard</div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 20%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Rating</span><span class="kpi-v">≥ 4.7</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+        <div style="font-size:12px;color:var(--g400);margin-top:8px;">Tài khoản active, không vi phạm ĐBCL cơ bản. Không đạt R2.</div>
+      </div>
+      <div class="tc un">
+        <div class="tc-badge"><div class="tc-dot"></div>Chưa xếp hạng</div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">&lt; 1 tháng</span></div>
+        <div style="font-size:12px;color:var(--g400);margin-top:8px;">Tài xế mới, chưa đủ dữ liệu đánh giá. Chỉ đăng ký L6.</div>
       </div>
     </div>
     <div class="callout cb" style="margin-top:8px;"><strong>Thiết kế nhất quán:</strong> KPI xếp tier khớp với KPI vào layer — tránh check trùng 2 lần khi đăng ký ca.</div>
@@ -475,18 +430,13 @@
     <div class="section-title">Equipment Gate &amp; Layer Requirements</div>
     <div class="note">System tự động check khi bấm đăng ký. Thiếu điều kiện → từ chối kèm lý do. <strong>COD không check tại bước đăng ký ca.</strong></div>
 
-    <div class="city-tabs" id="tabs-req">
-      <button type="button" class="city-tab active-sgn" data-req="sgn" onclick="switchReq('sgn')">📍 SGN</button>
-      <button type="button" class="city-tab" data-req="han" onclick="switchReq('han')">📍 HAN</button>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px;">
+    <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px;align-items:start;">
       <div class="card" style="padding:0;overflow:hidden;">
         <div style="padding:14px 18px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">Equipment khi đăng ký ca</div>
         <table class="dtable">
           <thead><tr><th>Layer</th><th>Yêu cầu</th></tr></thead>
           <tbody>
-            <tr><td style="font-weight:700;color:var(--g400)">L1</td><td style="color:var(--g400);font-style:italic">★ KA/MP assigned — không qua đăng ký ca</td></tr>
+            <tr><td style="font-weight:700;color:var(--g400)">L1</td><td style="color:var(--g400);font-style:italic">★ KA/MP — không áp dụng</td></tr>
             <tr><td style="font-weight:700">L2, L3</td><td>EV</td></tr>
             <tr><td style="font-weight:700">L4, L5</td><td>Baga</td></tr>
             <tr><td style="font-weight:700">L6</td><td style="color:var(--g400);font-style:italic">Không yêu cầu</td></tr>
@@ -494,36 +444,38 @@
         </table>
       </div>
 
-      <div>
-        <div id="req-sgn" class="city-content" style="display:block">
-          <div class="card" style="padding:0;overflow:hidden;">
-            <div style="padding:14px 18px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">KPI đăng ký ca (đồng bộ Rank) — SGN</div>
-            <table class="dtable">
-              <thead><tr><th>Layer</th><th>AR</th><th>FR</th><th>DCR</th><th>Prod</th><th>Rating</th><th>Thâm niên</th></tr></thead>
-              <tbody>
-                <tr><td style="font-weight:700;color:var(--g400)"><em>L1</em></td><td colspan="6" style="color:var(--g400);font-style:italic;font-size:12px">★ KA/MP assigned — không áp dụng</td></tr>
-                <tr><td style="font-weight:700"><span class="tag tr1" style="font-size:11px">L2</span></td><td>≥ 95%</td><td>≥ 85%</td><td>&lt; 10%</td><td>≥ 100 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
-                <tr><td style="font-weight:700"><span class="tag tr2" style="font-size:11px">L3</span></td><td>≥ 90%</td><td>≥ 80%</td><td>&lt; 12%</td><td>≥ 60 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
-                <tr><td style="font-weight:700"><span class="tag tr3" style="font-size:11px">L4, L5</span></td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td>≥ 4.7</td><td>≥ 1 tháng</td></tr>
-                <tr><td style="font-weight:700;color:var(--g600)">L6</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td></tr>
-              </tbody>
-            </table>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="padding:12px 18px 10px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--g100)">
+            <span style="font-size:11px;font-weight:700;background:var(--orange);color:#fff;border-radius:999px;padding:2px 10px">📍 SGN</span>
+            <span style="font-size:13px;font-weight:800;color:var(--blue)">KPI đăng ký ca (đồng bộ Rank)</span>
           </div>
+          <table class="dtable">
+            <thead><tr><th>Layer</th><th>AR</th><th>FR</th><th>DCR</th><th>Prod</th><th>Rating</th><th>Thâm niên</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:700;color:var(--g400)"><em>L1</em></td><td colspan="6" style="color:var(--g400);font-style:italic;font-size:12px">★ KA/MP — không áp dụng</td></tr>
+              <tr><td><span class="tag tr1" style="font-size:11px">L2</span></td><td>≥ 95%</td><td>≥ 85%</td><td>&lt; 10%</td><td>≥ 100 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
+              <tr><td><span class="tag tr2" style="font-size:11px">L3</span></td><td>≥ 90%</td><td>≥ 80%</td><td>&lt; 12%</td><td>≥ 60 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
+              <tr><td><span class="tag tr3" style="font-size:11px">L4, L5</span></td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td>≥ 4.7</td><td>≥ 1 tháng</td></tr>
+              <tr><td style="font-weight:700;color:var(--g600)">L6</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div id="req-han" class="city-content" style="display:none">
-          <div class="card" style="padding:0;overflow:hidden;">
-            <div style="padding:14px 18px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">KPI đăng ký ca (đồng bộ Rank) — HAN</div>
-            <table class="dtable">
-              <thead><tr><th>Layer</th><th>AR</th><th>FR</th><th>DCR</th><th>Prod</th><th>Rating</th><th>Thâm niên</th></tr></thead>
-              <tbody>
-                <tr><td style="font-weight:700;color:var(--g400)"><em>L1</em></td><td colspan="6" style="color:var(--g400);font-style:italic;font-size:12px">★ KA/MP assigned — không áp dụng</td></tr>
-                <tr><td style="font-weight:700"><span class="tag tr1" style="font-size:11px">L2</span></td><td>≥ 93%</td><td>≥ 83%</td><td>&lt; 12%</td><td>≥ 100 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
-                <tr><td style="font-weight:700"><span class="tag tr2" style="font-size:11px">L3</span></td><td>≥ 88%</td><td>≥ 78%</td><td>&lt; 14%</td><td>≥ 60 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
-                <tr><td style="font-weight:700"><span class="tag tr3" style="font-size:11px">L4, L5</span></td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td>≥ 4.7</td><td>≥ 1 tháng</td></tr>
-                <tr><td style="font-weight:700;color:var(--g600)">L6</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td></tr>
-              </tbody>
-            </table>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="padding:12px 18px 10px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--g100)">
+            <span style="font-size:11px;font-weight:700;background:var(--blue);color:#fff;border-radius:999px;padding:2px 10px">📍 HAN</span>
+            <span style="font-size:13px;font-weight:800;color:var(--blue)">KPI đăng ký ca (đồng bộ Rank)</span>
           </div>
+          <table class="dtable">
+            <thead><tr><th>Layer</th><th>AR</th><th>FR</th><th>DCR</th><th>Prod</th><th>Rating</th><th>Thâm niên</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:700;color:var(--g400)"><em>L1</em></td><td colspan="6" style="color:var(--g400);font-style:italic;font-size:12px">★ KA/MP — không áp dụng</td></tr>
+              <tr><td><span class="tag tr1" style="font-size:11px">L2</span></td><td>≥ 93%</td><td>≥ 83%</td><td>&lt; 12%</td><td>≥ 100 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
+              <tr><td><span class="tag tr2" style="font-size:11px">L3</span></td><td>≥ 88%</td><td>≥ 78%</td><td>&lt; 14%</td><td>≥ 60 stp</td><td>—</td><td>≥ 1 tháng</td></tr>
+              <tr><td><span class="tag tr3" style="font-size:11px">L4, L5</span></td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td>≥ 4.7</td><td>≥ 1 tháng</td></tr>
+              <tr><td style="font-weight:700;color:var(--g600)">L6</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td>&lt; 20%</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
