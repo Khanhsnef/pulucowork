@@ -18,9 +18,10 @@ Ahamove Driver Management | 2026-05 | Phiên bản: FINAL 3-Tier
 | 4 | Thời gian mở đăng ký ca | **Ngày 1–5 hàng tháng** |
 | 5 | Hiển thị KPI cho tài xế | Có — cập nhật mỗi ngày (rolling 30 ngày gần nhất) |
 | 6 | Tài xế mới < 1 tháng | Tier "Chưa xếp hạng" — chỉ thấy L6 |
-| 7 | Slot priority | **First-come-first-served theo timestamp** — không ưu tiên theo tier trong cùng layer |
+| 7 | Slot priority | **FCFS theo timestamp** + **Cascade reveal** — layer mở dần khi layer trước ≥ 80% slot |
 | 8 | Equipment gate | Tự động tại lúc đăng ký — COD không check khi đăng ký ca |
-| 9 | R1 fallback | R1 thấy được L3 — nếu L1+L2 hết slot hoặc không đăng ký kịp vẫn có layer để hoạt động |
+| 9 | R1 fallback | R1 thấy thêm L3 khi L2 đạt ≥80% slot — layer dự phòng theo cascade |
+| 10 | Auto L6 fallback | Hết ngày 5 chưa đăng ký ca → system tự động xếp vào L6 MASS |
 
 ---
 
@@ -74,23 +75,36 @@ Ahamove Driver Management | 2026-05 | Phiên bản: FINAL 3-Tier
 
 ---
 
-## 3. Slot Priority
+## 3. Slot Priority — Cascade Reveal + FCFS
 
-> **First-come-first-served theo timestamp** — không ưu tiên theo tier.
-> Tier chỉ quyết định THẤY layer nào, không quyết định ưu tiên slot.
+> **Cascade reveal**: Mỗi tier bắt đầu từ layer ưu tiên cao nhất. Layer tiếp theo chỉ mở khi layer trước đạt **≥ 80% fill-rate**.
+> **Timestamp FCFS** áp dụng trong mọi layer đang hiển thị — không ưu tiên theo tier.
+> **Auto L6**: Hết ngày 5 chưa đăng ký bất kỳ layer nào → system tự động xếp vào L6.
+
+| Tier | Mở đầu | Khi ≥80% → thêm | Khi ≥80% → thêm | Hết ngày 5 |
+| --- | --- | --- | --- | --- |
+| R1 Elite | L1 | + L2 | + L3 ↩ | Auto L6 |
+| R2 Active | L2 | + L3 | + L4 | Auto L6 |
+| R3 Standard | L3 | + L4 | + L5 | Auto L6 |
+| Chưa xếp hạng | L6 | — | — | L6 |
 
 ```text
-L2 có 500 slot — R1 và R2 cùng đăng ký trong ngày 1–5:
+R1 Anh Hùng — cascade trong ngày 1–5/7:
 
-  01/07 08:15 — R2 Chị Lan   → slot #1
-  01/07 08:22 — R1 Anh Hùng  → slot #2
-  01/07 09:05 — R1 Anh Minh  → slot #3
-  01/07 09:40 — R2 Anh Bình  → slot #4
-  ...
-  03/07 14:30 — slot #500 (cuối) → L2 hết slot
+  Phase 1: L1 mở đầu
+    01/07 08:22 — R1 Anh Hùng → L1 slot #12
+    (R2 chạy L2 song song)
 
-  R1 đăng ký sau 03/07 14:30 → L2 hết → vẫn còn thấy L1 và L3
-  R2 đăng ký sau 03/07 14:30 → L2 hết → vẫn còn thấy L3, L4
+  [02/07] L1 đạt 80% (240/300 slot) → Hệ thống mở L2 cho R1
+  Phase 2: R1 thấy L1 + L2
+    02/07 10:06 — R1 Anh Hùng → L2 slot #88
+    02/07 10:09 — R2 Chị Lan  → L2 slot #89
+    (FCFS — R1/R2 bình đẳng trong L2)
+
+  [03/07] L2 đạt 80% (400/500 slot) → Hệ thống mở L3 ↩ cho R1
+  Phase 3: R1 thấy L1 + L2 + L3 ↩
+
+  Hết 05/07: Tài xế chưa đăng ký → Auto L6
 ```
 
 ---
@@ -110,25 +124,25 @@ L2 có 500 slot — R1 và R2 cùng đăng ký trong ngày 1–5:
 
 ## 5. Layer Hard Requirements (KPI + Thâm niên)
 
-> Check tại thời điểm đăng ký. Áp dụng đồng nhất cho mọi tier.
+> Check tại thời điểm đăng ký. **Đồng bộ với rank**: L1 = R1 KPI, L2 = R2 KPI, L3–L5 = R3 KPI.
 
 ### 5.1 SGN
 
-| Layer | AR | FR | DCR | Prod | Thâm niên |
-| --- | --- | --- | --- | --- | --- |
-| L1 | ≥ 96% | ≥ 85% | < 10% | — | ≥ 3 tháng |
-| L2, L3 | ≥ 95% | ≥ 85% | < 10% | ≥ 100 stp | ≥ 1 tháng |
-| L4, L5 | ≥ 90% | ≥ 80% | < 12% | ≥ 60 stp | ≥ 1 tháng |
-| L6 | — | — | < 20% | — | — |
+| Layer | AR | FR | DCR | Prod | Rating | Thâm niên |
+| --- | --- | --- | --- | --- | --- | --- |
+| L1 | ≥ 95% | ≥ 85% | < 10% | ≥ 100 stp | — | ≥ 3 tháng |
+| L2 | ≥ 90% | ≥ 80% | < 12% | ≥ 60 stp | — | ≥ 1 tháng |
+| L3, L4, L5 | — | — | < 20% | — | ≥ 4.7 | ≥ 1 tháng |
+| L6 | — | — | < 20% | — | — | — |
 
 ### 5.2 HAN
 
-| Layer | AR | FR | DCR | Prod | Thâm niên |
-| --- | --- | --- | --- | --- | --- |
-| L1 | ≥ 94% | ≥ 83% | < 12% | — | ≥ 3 tháng |
-| L2, L3 | ≥ 93% | ≥ 83% | < 12% | ≥ 100 stp | ≥ 1 tháng |
-| L4, L5 | ≥ 88% | ≥ 78% | < 14% | ≥ 60 stp | ≥ 1 tháng |
-| L6 | — | — | < 20% | — | — |
+| Layer | AR | FR | DCR | Prod | Rating | Thâm niên |
+| --- | --- | --- | --- | --- | --- | --- |
+| L1 | ≥ 93% | ≥ 83% | < 12% | ≥ 100 stp | — | ≥ 3 tháng |
+| L2 | ≥ 88% | ≥ 78% | < 14% | ≥ 60 stp | — | ≥ 1 tháng |
+| L3, L4, L5 | — | — | < 20% | — | ≥ 4.7 | ≥ 1 tháng |
+| L6 | — | — | < 20% | — | — | — |
 
 ---
 
@@ -140,13 +154,24 @@ Tuần cuối tháng (T-1)
   └─ Check điều kiện → gán tier mới cho từng tài xế
 
 Ngày 1–5 tháng T  ←  CỬA SỔ ĐĂNG KÝ CA
-  └─ Tài xế thấy layer theo tier mới
-  └─ Đăng ký theo timestamp — ai nhanh được slot trước
+  └─ Mỗi tier thấy layer ưu tiên trước (cascade reveal)
+  └─ Layer tiếp theo mở khi layer trước ≥ 80% slot
+  └─ Timestamp FCFS trong mọi layer đang mở
 
 Ngày 6+ tháng T
   └─ Đóng đăng ký (slot đã phân bổ xong)
+  └─ Tài xế chưa đăng ký → đã được auto gán L6
   └─ Vận hành theo ca đã đăng ký
 ```
+
+### Cascade đăng ký — Mở dần theo fill-rate
+
+| Tier | Mở đầu | Khi ≥80% → thêm | Khi ≥80% → thêm | Hết ngày 5 chưa ĐK |
+| --- | --- | --- | --- | --- |
+| R1 Elite | L1 | + L2 | + L3 ↩ | Auto L6 |
+| R2 Active | L2 | + L3 | + L4 | Auto L6 |
+| R3 Standard | L3 | + L4 | + L5 | Auto L6 |
+| Chưa xếp hạng | L6 | — | — | L6 |
 
 ---
 
