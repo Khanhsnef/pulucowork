@@ -769,17 +769,19 @@
 
 <script>
   function switchCity(city) {
-    document.getElementById('city-sgn').classList.toggle('show', city==='sgn');
-    document.getElementById('city-han').classList.toggle('show', city==='han');
-    document.querySelectorAll('.city-tabs')[0].querySelectorAll('.city-tab').forEach((t,i)=>{
-      t.className = 'city-tab' + (i===0&&city==='sgn'?' active-sgn':i===1&&city==='han'?' active-han':'');
+    var isSgn = city === 'sgn';
+    document.getElementById('city-sgn').classList[isSgn ? 'add' : 'remove']('show');
+    document.getElementById('city-han').classList[isSgn ? 'remove' : 'add']('show');
+    document.querySelectorAll('.city-tabs')[0].querySelectorAll('.city-tab').forEach(function(t, i) {
+      t.className = 'city-tab' + (i === 0 && isSgn ? ' active-sgn' : i === 1 && !isSgn ? ' active-han' : '');
     });
   }
   function switchReq(city) {
-    document.getElementById('req-sgn').classList.toggle('show', city==='sgn');
-    document.getElementById('req-han').classList.toggle('show', city==='han');
-    document.querySelectorAll('.city-tabs')[1].querySelectorAll('.city-tab').forEach((t,i)=>{
-      t.className = 'city-tab' + (i===0&&city==='sgn'?' active-sgn':i===1&&city==='han'?' active-han':'');
+    var isSgn = city === 'sgn';
+    document.getElementById('req-sgn').classList[isSgn ? 'add' : 'remove']('show');
+    document.getElementById('req-han').classList[isSgn ? 'remove' : 'add']('show');
+    document.querySelectorAll('.city-tabs')[1].querySelectorAll('.city-tab').forEach(function(t, i) {
+      t.className = 'city-tab' + (i === 0 && isSgn ? ' active-sgn' : i === 1 && !isSgn ? ' active-han' : '');
     });
   }
 </script>
