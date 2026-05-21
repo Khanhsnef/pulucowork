@@ -4,7 +4,7 @@ Ahamove Driver Management | 2026-05 | Phiên bản: FINAL 3-Tier
 
 > Hai quy tắc duy nhất:
 > **Tier** xác định tài xế được nhìn thấy layer nào.
-> **Điểm số** xác định ai được slot trước khi nhiều người cùng đăng ký.
+> **Tier cao hơn** được cấp slot trước trong layer chung; cùng tier thì ai đăng ký trước được trước.
 
 ---
 
@@ -13,66 +13,34 @@ Ahamove Driver Management | 2026-05 | Phiên bản: FINAL 3-Tier
 | # | Quyết định | Nội dung |
 | --- | --- | --- |
 | 1 | Số tier | **3-Tier** + tier "Chưa xếp hạng" |
-| 2 | Chu kỳ tính Ranking | Hàng tháng — cuối tháng tính, đầu tháng sau áp dụng |
-| 3 | Hiển thị điểm | Có — cập nhật mỗi ngày (rolling 30 ngày gần nhất) |
-| 4 | Tài xế mới < 1 tháng | Tier "Chưa xếp hạng" — chỉ thấy L6 |
-| 5 | Window đăng ký | Mở 7 ngày/chu kỳ, không phân ngày theo tier — tier cao không bao giờ bị đóng |
-| 6 | Equipment | Gate tự động tại lúc đăng ký — system check, không xử lý tay |
+| 2 | Xếp tier bằng cách nào | **Check đủ điều kiện KPI** (AR + FR + DCR + Prod) — pass/fail, không tính điểm |
+| 3 | Chu kỳ tính Ranking | Hàng tháng — cuối tháng check, đầu tháng sau áp dụng |
+| 4 | Hiển thị KPI cho tài xế | Có — cập nhật mỗi ngày (rolling 30 ngày gần nhất) |
+| 5 | Tài xế mới < 1 tháng | Tier "Chưa xếp hạng" — chỉ thấy L6 |
+| 6 | Slot priority | Tier cao hơn được cấp trước; cùng tier → first-come-first-served |
+| 7 | Equipment | Gate tự động tại lúc đăng ký — system check, không xử lý tay |
 
 ---
 
-## 1. Công thức Ranking Score
+## 1. Điều kiện xếp Tier
 
-### 1.1 Base Score (0–100 điểm)
+> Hệ thống check cuối tháng: tài xế đạt **đủ cả 4 điều kiện** của tier cao nhất mình đạt được → xếp vào tier đó.
+> Không đạt R2 → xét R3. Không đạt R3 → Standard mặc định (nếu tài khoản active).
 
-| Metric | Weight | Cách tính |
-| --- | --- | --- |
-| AR (Acceptance Rate) | **37%** | `min(AR / 98%, 1.0) × 100` |
-| FR (Fulfillment Rate) | **33%** | `min(FR / 90%, 1.0) × 100` |
-| DCR (Cancellation Rate) | **30%** | `max(0, (20% − DCR) / 20%) × 100` |
+### Điều kiện theo tier (SGN / HAN)
 
-> DCR đảo chiều: DCR 0% → 100đ / DCR 10% → 50đ / DCR ≥ 20% → 0đ.
+| Tier | AR | FR | DCR | Prod | Thâm niên |
+| --- | --- | --- | --- | --- | --- |
+| **R1 Elite** | ≥ 95% / ≥ 93% | ≥ 85% / ≥ 83% | < 10% / < 12% | ≥ 100 stp | ≥ 1 tháng (FAT) |
+| **R2 Active** | ≥ 90% / ≥ 88% | ≥ 80% / ≥ 78% | < 12% / < 14% | ≥ 60 stp | ≥ 1 tháng (FAT) |
+| **R3 Standard** | Tài khoản active, không vi phạm ĐBCL cơ bản (DCR < 20%, Rating ≥ 4.7) | | | | ≥ 1 tháng (FAT) |
+| **Chưa xếp hạng** | Tài xế mới — chưa đủ 1 tháng thâm niên | | | | < 1 tháng |
 
-`Base Score = AR_score × 37% + FR_score × 33% + DCR_score × 30%`
-
-### 1.2 Prod Bonus (Optional, +0–8 điểm)
-
-> Tie-break khi 2 tài xế cùng Base Score.
-
-| Prod (stp/tháng) | Bonus |
-| --- | --- |
-| ≥ 150 stp | +8 |
-| ≥ 100 stp | +5 |
-| ≥ 60 stp | +2 |
-| < 60 stp | +0 |
-
-`Final Score = Base Score + Prod Bonus` (capped tại 100)
-
-### 1.3 Ví dụ tính điểm
-
-| Tài xế | AR | FR | DCR | Prod | Final Score | Tier |
-| --- | --- | --- | --- | --- | --- | --- |
-| A | 98% | 93% | 2% | 140 stp | 100 (capped) | R1 Elite |
-| B | 95% | 87% | 8% | 90 stp | 86 | R1 Elite |
-| C | 90% | 82% | 12% | 45 stp | 75 | R2 Active |
-| D | 82% | 73% | 18% | 20 stp | 63 | R2 Active |
-| E | 72% | 65% | 22% | 10 stp | 51 | R3 Standard |
-| F | 55% | 50% | 28% | 5 stp | 32 | R3 Standard |
+> KPI dùng để xếp tier **khớp với KPI vào layer tương ứng** — tài xế đạt tier nào thì gần như đương nhiên đủ điều kiện vào layer của tier đó, tránh check 2 lần.
 
 ---
 
-## 2. Định nghĩa 3-Tier
-
-| Tier | Tên | Score | Ước tính % driver |
-| --- | --- | --- | --- |
-| **R1** | Elite | ≥ 78 | ~20% |
-| **R2** | Active | 55–77 | ~35% |
-| **R3** | Standard | < 55 | ~40% |
-| **—** | Chưa xếp hạng | N/A | ~5% |
-
----
-
-## 3. Tier → Layer Access (Quy tắc 1)
+## 2. Tier → Layer Access
 
 > Tier thấp hơn ngưỡng = **hard block** — không bao giờ thấy layer đó, dù còn slot trống.
 > L6 MASS luôn mở cho tất cả.
@@ -84,83 +52,81 @@ Ahamove Driver Management | 2026-05 | Phiên bản: FINAL 3-Tier
 | R3 Standard | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
 | Chưa xếp hạng | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
-**Logic phân bổ:**
+**Lý do phân bổ:**
 
-| Layer | Phục vụ ai | Supply đến từ |
+| Layer | Supply đến từ | Ghi chú |
 | --- | --- | --- |
-| L1 | KA/MP specialist | R1 độc quyền |
-| L2 | Minizone ≤4km | R1 + R2 (R1 điểm cao hơn → fill trước tự nhiên) |
-| L3 | Mediumzone 4–7km | R2 + R3 (buffer tốt, không lo thiếu cung) |
-| L4 | Bigzone 7–11km | R2 + R3 (buffer tốt) |
-| L5 | Cityzone >11km | R3 độc quyền |
-| L6 | MASS | Tất cả |
+| L1 | R1 độc quyền | Chỉ tài xế chất lượng cao nhất phục vụ KA/MP |
+| L2 | R1 + R2 | R1 được cấp slot trước; R2 điền phần còn lại |
+| L3 | R2 + R3 | Vùng đệm, hai tầng cùng cover → không lo thiếu cung |
+| L4 | R2 + R3 | Vùng đệm, hai tầng cùng cover |
+| L5 | R3 độc quyền | Long-haul >11km dành cho tài xế phổ thông ổn định |
+| L6 | Tất cả | Buffer co giãn toàn hệ thống |
 
 ---
 
-## 4. Score → Thứ tự ưu tiên slot (Quy tắc 2)
+## 3. Slot Priority trong Layer chung
 
-> Khi nhiều tài xế cùng đăng ký 1 layer trong 7 ngày, slot được cấp theo **điểm số cao → thấp**.
-> Không cần time window. Không cần cascade. Hệ thống tự sort.
+> Áp dụng cho L2 (R1+R2 cùng thấy) và L3, L4 (R2+R3 cùng thấy).
 
 ```text
-Ví dụ: L2 có 500 slot, R1+R2 cùng thấy L2
+Bước 1: Hệ thống thu thập đăng ký trong suốt 7 ngày chu kỳ
 
-  Hàng đợi L2 được sort tự động:
-  #1  R1 — Score 100  → slot #1
-  #2  R1 — Score 96   → slot #2
-  #3  R2 — Score 88   → slot #3   ← R2 điểm cao vẫn được trước R1 điểm thấp
-  #4  R1 — Score 85   → slot #4
-  #5  R2 — Score 82   → slot #5
-  ...
-  #500 → slot cuối cùng
-  #501 trở đi → không có slot L2, tự động thấy L6
+Bước 2: Phân bổ slot theo thứ tự:
+  → Tier cao hơn được xử lý trước
+  → Trong cùng tier: ai đăng ký sớm hơn được trước (timestamp)
+
+Ví dụ — L2 có 500 slot, R1 và R2 cùng đăng ký:
+  Xử lý R1 trước (bất kể thời điểm đăng ký)
+    → R1 đã đăng ký: 120 drivers → lấy 120 slot
+  Xử lý R2 tiếp theo theo thứ tự timestamp
+    → 380 slot còn lại → R2 đăng ký theo thứ tự thời gian
+    → Slot hết → R2 còn lại → chỉ còn L3, L4, L6
 ```
 
 ---
 
-## 5. Equipment Gate (Tự động, không cần ops xử lý)
+## 4. Equipment Gate (Tự động)
 
-> Equipment check chạy tự động khi tài xế bấm đăng ký.
-> Thiếu equipment → hệ thống từ chối, hiện thông báo lý do.
+> System check khi tài xế bấm đăng ký. Thiếu equipment → từ chối + hiện lý do.
 
 | Layer | Equipment bắt buộc |
 | --- | --- |
-| L1 | Baga + COD ≥1M + Ký cam kết |
-| L2, L3 | EV + Túi giữ nhiệt + COD ≥2M |
-| L4, L5 | Baga + COD ≥2M |
-| L6 | COD ≥500k |
+| L1 | Baga + COD ≥ 1M + Ký cam kết |
+| L2, L3 | EV + Túi giữ nhiệt + COD ≥ 2M |
+| L4, L5 | Baga + COD ≥ 2M |
+| L6 | COD ≥ 500k |
 
 ---
 
-## 6. Layer Hard Requirements (KPI + Thâm niên)
+## 5. Layer Hard Requirements (KPI + Thâm niên)
 
-> Ngoài equipment, tài xế phải đạt KPI tối thiểu của layer để đăng ký hợp lệ.
-> Áp dụng đồng nhất cho mọi tier đăng ký layer đó.
+> Check tại thời điểm đăng ký. Áp dụng đồng nhất cho mọi tier.
 
-| Layer | KPI tối thiểu (SGN) | Thâm niên |
+| Layer | KPI tối thiểu (SGN / HAN) | Thâm niên |
 | --- | --- | --- |
-| L1 | AR ≥96%, FR ≥85%, DCR <10% | ≥3 tháng platform |
-| L2, L3 | AR ≥95%, FR ≥85%, DCR <10%, Prod ≥100 stp | ≥1 tháng (FAT) |
-| L4, L5 | AR ≥90%, FR ≥80%, DCR <12%, Prod ≥60 stp | ≥1 tháng (FAT) |
-| L6 | DCR <20%, Rating ≥4.7 (warning only) | Không yêu cầu |
+| L1 | AR ≥ 96%, FR ≥ 85%, DCR < 10% | ≥ 3 tháng platform |
+| L2, L3 | AR ≥ 95% / 93%, FR ≥ 85% / 83%, DCR < 10% / 12%, Prod ≥ 100 stp | ≥ 1 tháng (FAT) |
+| L4, L5 | AR ≥ 90% / 88%, FR ≥ 80% / 78%, DCR < 12% / 14%, Prod ≥ 60 stp | ≥ 1 tháng (FAT) |
+| L6 | DCR < 20%, Rating ≥ 4.7 (cảnh báo) | Không yêu cầu |
 
 ---
 
-## 7. Upgrade Path
+## 6. Upgrade Path
 
 ```text
-Chưa xếp hạng ──(1 tháng, đủ KPI)──► R3 Standard  →  thấy L3, L4, L5
-                                             │
-                                     Cải thiện AR/FR/DCR
-                                             ▼
-                                        R2 Active   →  thấy L2, L3, L4
-                                             │
-                                     Duy trì KPI cao
-                                             ▼
-                                        R1 Elite    →  thấy L1, L2
+Chưa xếp hạng ──(đủ 1 tháng, đạt KPI R3)──► R3 Standard  →  thấy L3, L4, L5
+                                                    │
+                                          Đạt KPI R2 trong tháng
+                                                    ▼
+                                               R2 Active   →  thấy L2, L3, L4
+                                                    │
+                                          Đạt KPI R1 trong tháng
+                                                    ▼
+                                               R1 Elite    →  thấy L1, L2
 ```
 
-> Điểm hiển thị mỗi ngày (rolling 30 ngày).
+> KPI hiển thị mỗi ngày (rolling 30 ngày) để tài xế biết mình đang ở đâu so với ngưỡng tier.
 > Tier chính thức cập nhật 1 lần/tháng — quyết định quyền đăng ký ca tháng tiếp theo.
 
 ---
