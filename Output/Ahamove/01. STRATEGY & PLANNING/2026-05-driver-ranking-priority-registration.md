@@ -6,6 +6,17 @@
 
 ---
 
+## Các quyết định đã xác nhận
+
+| # | Quyết định | Nội dung |
+|---|---|---|
+| 1 | Chu kỳ tính lại Ranking | **Hàng tháng** (tính vào cuối tháng, áp dụng cho tháng tiếp theo) |
+| 2 | Tài xế mới < 1 tháng | Xếp tier **"Chưa xếp hạng"** — chỉ thấy & đăng ký được L6 |
+| 3 | Hiển thị điểm cho tài xế | **Có** — cập nhật mỗi ngày (rolling 30 ngày gần nhất) |
+| 4 | Xử lý slot còn trống | **Không đóng window tier cao** — R1 vẫn thấy L1 suốt chu kỳ đăng ký. Tiers thấp hơn bị hard-block (không bao giờ nhìn thấy layer không thuộc quyền hạn của mình) |
+
+---
+
 ## 1. Công thức Ranking Score
 
 ### 1.1 Base Score (0–100 điểm)
@@ -16,190 +27,206 @@
 | FR (Fulfillment Rate) | **33%** | `min(FR / 90%, 1.0) × 100` |
 | DCR (Cancellation Rate) | **30%** | `max(0, (20% − DCR) / 20%) × 100` |
 
-> DCR được đảo chiều: tài xế DCR = 0% → 100 điểm. DCR = 20% → 0 điểm.  
-> Benchmark AR = 98%, FR = 90% là ngưỡng tuyệt đối để đạt max score.
+> DCR đảo chiều: DCR = 0% → 100đ / DCR = 10% → 50đ / DCR ≥ 20% → 0đ.  
+> Rating đã loại khỏi công thức. Benchmark AR 98%, FR 90% = ngưỡng max điểm.
 
 **Base Score = AR_score × 37% + FR_score × 33% + DCR_score × 30%**
 
----
-
 ### 1.2 Prod Bonus (Optional, +0–8 điểm)
 
-> Prod không bắt buộc trong công thức — đây là **bonus** để phân biệt tài xế có cùng base score.  
-> Dùng khi cần tie-break hoặc khi muốn khuyến khích tần suất hoạt động cao.
+> Dùng để tie-break khi 2 tài xế cùng Base Score. Không bắt buộc trong công thức core.
 
 | Prod (stp/tháng) | Bonus |
 |---|---|
 | ≥ 150 stp | +8 |
 | ≥ 100 stp | +5 |
 | ≥ 60 stp | +2 |
-| < 60 stp | 0 |
+| < 60 stp | +0 |
 
 **Final Score = Base Score + Prod Bonus** *(capped tại 100)*
 
----
-
 ### 1.3 Ví dụ tính điểm
 
-| Tài xế | AR | FR | DCR | Prod | Base Score | Prod Bonus | Final |
+| Tài xế | AR | FR | DCR | Prod | Base Score | Prod Bonus | Final Score |
 |---|---|---|---|---|---|---|---|
-| Tài xế A | 98% | 92% | 3% | 130 stp | 97.7 + 33.0 + 25.5 = **95.3** × weights ≈ **95** | +5 | **100** (capped) |
-| Tài xế B | 95% | 87% | 8% | 80 stp | 93.3 + 96.7 + 60.0 → **83.8** | +2 | **86** |
-| Tài xế C | 90% | 82% | 12% | 45 stp | 91.8 + 91.1 + 40.0 → **75.2** | 0 | **75** |
-| Tài xế D | 85% | 75% | 15% | 30 stp | 86.7 + 83.3 + 25.0 → **66.0** | 0 | **66** |
+| A | 98% | 93% | 2% | 140 stp | (100×37% + 100×33% + 90×30%) = **97** | +8 | **100** (capped) |
+| B | 95% | 87% | 8% | 90 stp | (96.9×37% + 96.7×33% + 60×30%) = **83.7** | +2 | **86** |
+| C | 90% | 82% | 12% | 45 stp | (91.8×37% + 91.1×33% + 40×30%) = **75.2** | +0 | **75** |
+| D | 82% | 73% | 18% | 20 stp | (83.7×37% + 81.1×33% + 10×30%) = **62.9** | +0 | **63** |
+| E | 72% | 65% | 22% | 10 stp | (73.5×37% + 72.2×33% + 0×30%) = **50.9** | +0 | **51** |
 
 ---
 
 ## 2. Phương án A — 3-Tier Ranking
 
-### Phân tier
+### 2.1 Phân tier
 
-| Tier | Tên | Score | Ước lượng % driver | Đặc điểm |
+| Tier | Tên | Score | Ước tính % driver | Đặc điểm |
 |---|---|---|---|---|
 | **R1** | 🥇 Elite | ≥ 78 | ~20% | Tài xế chất lượng cao, hoạt động ổn định |
 | **R2** | 🥈 Active | 55–77 | ~35% | Tài xế trung bình khá, chạy đều |
-| **R3** | 🥉 Standard | < 55 | ~45% | Tài xế vãng lai, chất lượng dao động |
+| **R3** | 🥉 Standard | < 55 | ~40% | Tài xế vãng lai, chất lượng dao động |
+| **—** | ⬜ Chưa xếp hạng | N/A | ~5% | Tài xế mới < 1 tháng |
 
-### Priority Registration Matrix — 3 Tier
+### 2.2 Tier Eligibility — Ai được thấy layer nào?
 
-*(Slot numbers dựa theo SGN demand planning T7/2026)*
+> Đây là **hard access control**: tier thấp hơn ngưỡng KHÔNG BAO GIỜ nhìn thấy layer đó,  
+> dù layer còn slot trống. Không phải "window delay" — mà là block hoàn toàn.
 
-| Layer | Slot SGN | Window 1 (72h) | Window 2 (48h) | Window 3 (24h) | Sau đó |
-|---|---|---|---|---|---|
-| **L1 CORE** | 300 | R1 | — | — | Đóng (chỉ R1 eligible) |
-| **L2 Minizone** | 500 | R1 overflow → R2 | R2 tiếp | R3 | Mở tự do |
-| **L3 Mediumzone** | 1.000 | R1+R2 overflow → R2 | R3 | Mở tự do | — |
-| **L4 Bigzone** | 1.000 | R2 overflow → R3 | Mở tự do | — | — |
-| **L5 Citizone** | 1.000 | R3 | Mở tự do | — | — |
-| **L6 MASS** | Không giới hạn | Tất cả | — | — | — |
+| Tier | L1 | L2 | L3 | L4 | L5 | L6 |
+|---|---|---|---|---|---|---|
+| 🥇 R1 Elite | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 🥈 R2 Active | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 🥉 R3 Standard | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| ⬜ Chưa xếp hạng | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
-### Ưu điểm / Nhược điểm
+### 2.3 Registration Window — Thứ tự mở đăng ký trong chu kỳ
 
-| | 3-Tier |
+> **Window không đóng lại đối với tier đã được mở.**  
+> R1 đăng ký L1 ở Window 1 → R2 mở L2 ở Window 2 → R1 vẫn còn thấy & đăng ký được L1.
+
+| Layer | Slot SGN | Window 1 (Ngày 1–3) | Window 2 (Ngày 4–5) | Window 3 (Ngày 6–7) |
+|---|---|---|---|---|
+| **L1** | 300 | 🥇 R1 mở | *(R1 vẫn tiếp tục)* | *(R1 vẫn tiếp tục)* |
+| **L2** | 500 | 🥇 R1 mở | 🥈 R2 mở thêm | *(R1+R2 tiếp tục)* |
+| **L3** | 1.000 | 🥇 R1 mở | 🥈 R2 mở thêm | 🥉 R3 mở thêm |
+| **L4** | 1.000 | 🥇 R1 mở | 🥈 R2 mở thêm | 🥉 R3 mở thêm |
+| **L5** | 1.000 | 🥇 R1 mở | 🥈 R2 mở thêm | 🥉 R3 mở thêm |
+| **L6** | Không giới hạn | Tất cả mở ngay | — | — |
+
+### 2.4 Ưu / Nhược điểm
+
+| ✅ Ưu điểm | ❌ Nhược điểm |
 |---|---|
-| ✅ | Đơn giản, dễ truyền thông với tài xế ("bạn đang ở nhóm Vàng/Bạc/Đồng") |
-| ✅ | Ít phức tạp vận hành, threshold dễ calibrate |
-| ✅ | Phù hợp giai đoạn rollout đầu |
-| ❌ | Khó phân biệt top 5% với top 20% → cùng nhóm R1, cùng quyền lợi |
-| ❌ | Ít động lực cải thiện ở mid-tier (R2 rộng) |
+| Đơn giản, dễ communicate với tài xế | Không phân biệt top 5% vs top 20% trong R1 |
+| Ít phức tạp vận hành, threshold dễ calibrate | Mid-tier R2 rộng → ít động lực cải thiện dần |
+| Phù hợp rollout T7/2026 | — |
 
 ---
 
 ## 3. Phương án B — 5-Tier Ranking
 
-### Phân tier
+### 3.1 Phân tier
 
-| Tier | Tên | Score | Ước lượng % driver | Đặc điểm |
+| Tier | Tên | Score | Ước tính % driver | Đặc điểm |
 |---|---|---|---|---|
-| **R1** | 💎 Diamond | ≥ 88 | ~8% | Tài xế xuất sắc, hiệu suất vượt chuẩn |
-| **R2** | 🥇 Gold | 75–87 | ~17% | Tài xế giỏi, hoạt động đều, ít sự cố |
-| **R3** | 🥈 Silver | 60–74 | ~25% | Tài xế ổn định, đủ tiêu chuẩn zone |
-| **R4** | 🥉 Bronze | 45–59 | ~25% | Tài xế đang phát triển, cần cải thiện |
-| **R5** | ⚪ Basic | < 45 | ~25% | Tài xế mới hoặc chất lượng thấp |
+| **R1** | 💎 Diamond | ≥ 88 | ~8% | Xuất sắc, vượt benchmark tất cả KPI |
+| **R2** | 🥇 Gold | 75–87 | ~17% | Giỏi, hoạt động đều, ít sự cố |
+| **R3** | 🥈 Silver | 60–74 | ~25% | Ổn định, đủ tiêu chuẩn zone |
+| **R4** | 🥉 Bronze | 45–59 | ~25% | Đang phát triển, cần cải thiện |
+| **R5** | ⚪ Basic | < 45 | ~20% | Tài xế chất lượng thấp / thiếu hoạt động |
+| **—** | ⬜ Chưa xếp hạng | N/A | ~5% | Tài xế mới < 1 tháng |
 
-### Priority Registration Matrix — 5 Tier
+### 3.2 Tier Eligibility — Ai được thấy layer nào?
 
-| Layer | Slot SGN | Window 1 (48h) | Window 2 (36h) | Window 3 (24h) | Window 4 (12h) | Sau đó |
+| Tier | L1 | L2 | L3 | L4 | L5 | L6 |
 |---|---|---|---|---|---|---|
-| **L1 CORE** | 300 | R1 | R2 | — | — | Đóng (chỉ R1+R2 eligible) |
-| **L2 Minizone** | 500 | R1 overflow → R2 | R2 overflow → R3 | R4 | — | Mở tự do |
-| **L3 Mediumzone** | 1.000 | R2 overflow → R3 | R3 overflow → R4 | R5 | Mở tự do | — |
-| **L4 Bigzone** | 1.000 | R3 overflow → R4 | R4 overflow → R5 | Mở tự do | — | — |
-| **L5 Citizone** | 1.000 | R4 overflow → R5 | Mở tự do | — | — | — |
-| **L6 MASS** | Không giới hạn | Tất cả | — | — | — | — |
+| 💎 R1 Diamond | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 🥇 R2 Gold | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 🥈 R3 Silver | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| 🥉 R4 Bronze | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| ⚪ R5 Basic | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| ⬜ Chưa xếp hạng | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
-### Ưu điểm / Nhược điểm
+### 3.3 Registration Window — Thứ tự mở đăng ký
 
-| | 5-Tier |
+| Layer | Slot SGN | Window 1 (Ngày 1–2) | Window 2 (Ngày 3) | Window 3 (Ngày 4) | Window 4 (Ngày 5) | Window 5 (Ngày 6–7) |
+| --- | --- | --- | --- | --- | --- | --- |
+| **L1** | 300 | 💎 R1 mở | *(R1 tiếp tục)* | *(R1 tiếp tục)* | *(R1 tiếp tục)* | *(R1 tiếp tục)* |
+| **L2** | 500 | 💎 R1 mở | 🥇 R2 mở thêm | *(R1+R2 tiếp tục)* | *(R1+R2 tiếp tục)* | *(R1+R2 tiếp tục)* |
+| **L3** | 1.000 | 💎 R1 mở | 🥇 R2 mở thêm | 🥈 R3 mở thêm | *(tiếp tục)* | *(tiếp tục)* |
+| **L4** | 1.000 | 💎 R1 mở | 🥇 R2 mở thêm | 🥈 R3 mở thêm | 🥉 R4 mở thêm | *(tiếp tục)* |
+| **L5** | 1.000 | 💎 R1 mở | 🥇 R2 mở thêm | 🥈 R3 mở thêm | 🥉 R4 mở thêm | ⚪ R5 mở thêm |
+| **L6** | Không giới hạn | Tất cả mở ngay | — | — | — | — |
+
+### 3.4 Ưu / Nhược điểm
+
+| ✅ Ưu điểm | ❌ Nhược điểm |
 |---|---|
-| ✅ | Gamification rõ ràng hơn — tài xế thấy được lộ trình từ R5 → R1 |
-| ✅ | Phân biệt được nhóm top 8% (Diamond) với 17% tiếp theo → quyền lợi L1 chính xác hơn |
-| ✅ | Mỗi tier cải thiện ~13-15 điểm là lên tier → khoảng cách khả đạt |
-| ❌ | Phức tạp hơn khi communicate 5 nhóm cho tài xế |
-| ❌ | Cần calibrate kỹ threshold — nếu phân phối lệch sẽ tier bị rỗng |
+| Gamification rõ ràng — tài xế thấy lộ trình R5 → R1 | Phức tạp hơn khi communicate 5 nhóm + Chưa xếp hạng |
+| Phân tách chính xác nhóm top 8% (Diamond) riêng | Cần calibrate threshold kỹ — tránh tier bị rỗng |
+| Mỗi bước tăng ~13–15 điểm → khoảng cách khả đạt | — |
+| Gắn chặt với Layer access: mỗi tier = 1 layer tương ứng | — |
 
 ---
 
-## 4. Waterfall Logic — Cơ chế Overflow
+## 4. Waterfall Logic — Cơ chế Spillover khi hết slot
 
-### Nguyên tắc hoạt động
+### Nguyên tắc
 
+```text
+RULE 1 — Hard block:
+  Tier thấp hơn threshold KHÔNG BAO GIỜ thấy layer đó.
+  (R2 mở L2 window không ảnh hưởng gì đến L1 của R1)
+
+RULE 2 — Windows không đóng:
+  Khi window của tier kế tiếp mở ra,
+  tier cũ VẪN GIỮ quyền truy cập layer của mình.
+
+RULE 3 — Spillover xuống layer kế:
+  R1 đăng ký L1 → L1 FULL → R1 còn lại:
+    → Tự động thấy và có thể đăng ký L2
+    → Được xếp TRƯỚC R2 trong hàng đợi L2
+    (vì R1 > R2 về ranking)
+
+RULE 4 — Slot hết vs. Window đóng (khác nhau):
+  Slot hết = layer đó không nhận thêm đăng ký (bất kể tier nào)
+  Window đóng = KHÔNG XẢY RA trong thiết kế này
 ```
-Bước 1: Hệ thống tính Ranking Score tất cả driver → gán Tier (cuối tháng)
-Bước 2: Mở đăng ký ca chu kỳ tiếp theo (2 tuần/lần — per kế hoạch vận hành)
-Bước 3: Ưu tiên theo thứ tự sau:
 
-  [Mỗi Layer mở window theo Tier]
-        │
-        ▼
-  Window Tier cao nhất (ví dụ R1/Diamond)
-        │
-        ├── Còn slot? → Driver đăng ký được
-        │
-        └── Hết slot? → Driver R1 dư → ĐỨng ĐẦU HÀNG ĐỢI Layer kế tiếp
-                                         (trước cả Tier thấp hơn)
+### Ví dụ minh họa (3-Tier, SGN, Ngày 4 của chu kỳ đăng ký)
 
-Bước 4: Window kế tiếp mở → Tier kế tiếp vào, thêm vào SAU overflow tier trên
-```
+```text
+Tình huống:
+  R1 = 900 tài xế | L1 = 300 slot | L2 = 500 slot
+  Ngày 1–3: R1 có thể đăng ký L1 + L2 + L3 + L4 + L5
+  Ngày 4: R2 mở đăng ký (L2, L3, L4, L5)
 
-### Ví dụ cụ thể (3-Tier, SGN)
+Kết quả sau 3 ngày R1 hoạt động:
+  L1: 300/300 slot → FULL (280 R1 đã đăng ký, 20 slot cuối fill bởi R1 khác)
+  L2: 180/500 slot → còn 320 slot trống
+  Còn lại 620 R1 chưa đăng ký ca nào
 
-```
-R1 = 800 tài xế | L1 = 300 slot | L2 = 500 slot
+Ngày 4 — R2 mở đăng ký L2:
+  Hàng đợi L2 = [620 R1 chưa đăng ký] → [R2 vào sau]
+  → 320 slot trống: R1 lấy trước → sau đó R2 tiếp
+  → R1 fill thêm 200 slot → còn 120 cho R2
+  → R2 đăng ký 120 slot → L2 FULL
 
-Window 1 (72h): 800 R1 mở đăng ký L1
-  → 300 đăng ký thành công → L1 FULL
-  → 500 R1 còn lại → ưu tiên đầu hàng đợi L2
-
-Window 2 (48h): L2 mở đăng ký
-  → 500 R1 overflow vào trước
-  → L2 có 500 slot → R1 fill hết → L2 FULL (trường hợp này không còn slot cho R2 ở window này)
-  → R2 overflow xuống L3, tiếp tục cascade...
-
-Nếu L2 = 500 slot, R1 overflow = 300 (500 R1 chỉ có 300 muốn L2):
-  → 300 R1 overflow lấy trước
-  → 200 slot còn lại mở cho R2 trong window 2
+Kết quả: R1 luôn được ưu tiên trong mọi layer họ eligible.
 ```
 
 ---
 
-## 5. So sánh nhanh: Chọn 3-Tier hay 5-Tier?
+## 5. So sánh & Khuyến nghị
 
 | Tiêu chí | 3-Tier | 5-Tier |
 |---|---|---|
-| **Giai đoạn phù hợp** | Rollout T7/2026 | Sau khi hệ thống ổn định (T10+) |
+| **Giai đoạn phù hợp** | ✅ Rollout T7/2026 | T10/2026 trở đi |
 | **Độ phức tạp vận hành** | Thấp | Trung bình |
-| **Động lực tài xế** | Trung bình | Cao |
-| **Độ chính xác phân tier** | Đủ dùng | Tốt hơn |
-| **Khuyến nghị** | ✅ Bắt đầu với 3-Tier | → Nâng lên 5-Tier sau 3 tháng |
+| **Động lực tài xế** | Trung bình | Cao (lộ trình rõ) |
+| **Khớp với số layer** | 3 tier / 5 layer → hơi lệch | 5 tier / 5 layer → khớp đẹp |
+| **Khuyến nghị** | Bắt đầu đây | Nâng cấp sau 3 tháng vận hành |
+
+> **Lộ trình đề xuất:** Triển khai 3-Tier T7/2026 → Thu thập data phân phối thực tế → Calibrate threshold 5-Tier → Migrate T10/2026.
 
 ---
 
-## 6. Điều kiện bổ sung khi đăng ký Layer
+## 6. Layer Hard Requirements (ngoài Ranking)
 
-> Ranking Score xác định **thứ tự ưu tiên** đăng ký.  
-> Nhưng tài xế vẫn phải đáp ứng **điều kiện đầu vào** của layer đó (per 2.2 DM FINAL).
+> Ranking xác định **thứ tự ưu tiên**. Tài xế vẫn phải đáp ứng điều kiện đầu vào của layer.  
+> Nếu không đủ hard requirement → không thể đăng ký dù có ranking cao.
 
-| Layer | Điều kiện hard (bắt buộc ngoài Ranking) |
+| Layer | Hard Requirements (per 2.2 DM FINAL) |
 |---|---|
-| L1 CORE | Ký cam kết + COD ≥1M + Baga + 3 tháng thâm niên platform |
-| L2 Minizone | Có EV + Túi giữ nhiệt + Thâm niên ≥1 tháng (kể từ FAT) |
-| L3 Mediumzone | Có EV + Túi giữ nhiệt + Thâm niên ≥1 tháng |
-| L4 Bigzone | Có Baga + Thâm niên ≥1 tháng |
-| L5 Citizone | Có Baga + Thâm niên ≥1 tháng |
-| L6 MASS | COD ≥500k + Không vi phạm ĐBCL cơ bản |
+| **L1 CORE** | Ký cam kết + COD ≥1M + Baga + ≥3 tháng thâm niên platform |
+| **L2 Minizone** | EV + Túi giữ nhiệt + ≥1 tháng thâm niên (kể từ FAT) |
+| **L3 Mediumzone** | EV + Túi giữ nhiệt + ≥1 tháng thâm niên |
+| **L4 Bigzone** | Baga + ≥1 tháng thâm niên |
+| **L5 Citizone** | Baga + ≥1 tháng thâm niên |
+| **L6 MASS** | COD ≥500k + Không vi phạm ĐBCL cơ bản |
+| **Chưa xếp hạng** | COD ≥500k (chỉ L6) |
 
 ---
 
-## 7. Câu hỏi mở — Cần quyết định trước khi triển khai
-
-| # | Câu hỏi | Tác động |
-|---|---|---|
-| 1 | Chu kỳ tính lại Ranking: **hàng tháng** hay **rolling 4 tuần**? | Rolling 4 tuần phản ánh gần hơn, nhưng phức tạp hơn |
-| 2 | Tài xế mới chưa đủ data (< 1 tháng) xếp tier nào? | Nếu gán R3/R5 mặc định → cần upgrade path rõ |
-| 3 | Có cho tài xế **xem điểm Ranking** không? | Transparency tăng động lực nhưng cũng tăng dispute |
-| 4 | Nếu layer thiếu driver sau khi đóng window ưu tiên → mở public hay push noti? | Ảnh hưởng fill rate của layer |
-
----
-
-*Tiếp theo: Chuyển sang HTML interactive khi Khanh confirm phương án tier.*
+*Trạng thái: Đã xác nhận 4/4 quyết định vận hành. Sẵn sàng chuyển sang HTML.*
