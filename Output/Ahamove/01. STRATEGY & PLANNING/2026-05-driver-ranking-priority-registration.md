@@ -153,7 +153,6 @@ R1 Anh Hùng — cascade trong ngày 1–5/7:
 
 | Layer | Khu vực / Đơn | Thu nhập đảm bảo | Ghép đơn tối đa | Dispatch ưu tiên | Quyền lợi thêm |
 | --- | --- | --- | --- | --- | --- |
-| **L1 CORE** | KA/MP assigned | ≥ 20M / tháng | — | AutoAssign + 30s đầu chỉ L1 thấy đơn KA/MP | Kênh support riêng · CCDC miễn phí (Baga) · BH sức khỏe* · Zalo nhóm đội chuyên · Ưu tiên đổi đồng phục |
 | **L2 Minizone** | ≤ 4km | SGN: 60k/h · HAN: 70k/h | 4–5 đơn | 30s đầu exclusive <4km · Radius 2km | Đội trưởng hỗ trợ · Lộ trình Đội phó/Đội trưởng · BH sức khỏe* |
 | **L3 Mediumzone** | 4–7km | SGN: 60k/h · HAN: 70k/h | 3–4 đơn | 30s đầu exclusive 4–7km · Radius 2km | Đội trưởng hỗ trợ · Lộ trình Đội phó/Đội trưởng · BH sức khỏe* |
 | **L4 Bigzone** | 7–11km | SGN: 60k/h · HAN: 70k/h | 2–3 đơn | 30s đầu exclusive 7–11km · Radius 1.5km | Đội trưởng hỗ trợ · Lộ trình Đội phó/Đội trưởng · BH sức khỏe* |
