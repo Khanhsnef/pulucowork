@@ -186,6 +186,38 @@
     }
     @media(max-width:480px){ .tier-grid { grid-template-columns:1fr; } .dec-grid { grid-template-columns:1fr; } }
   </style>
+  <script>
+    function switchCity(city) {
+      var sgn = document.getElementById('city-sgn');
+      var han = document.getElementById('city-han');
+      if (!sgn || !han) return;
+      var isSgn = (city === 'sgn');
+      sgn.style.display = isSgn ? 'block' : 'none';
+      han.style.display = isSgn ? 'none' : 'block';
+      var tabs = document.querySelectorAll('#tabs-city button');
+      tabs.forEach(function(btn) {
+        btn.className = 'city-tab';
+        if (btn.getAttribute('data-city') === city) {
+          btn.className = 'city-tab ' + (isSgn ? 'active-sgn' : 'active-han');
+        }
+      });
+    }
+    function switchReq(city) {
+      var sgn = document.getElementById('req-sgn');
+      var han = document.getElementById('req-han');
+      if (!sgn || !han) return;
+      var isSgn = (city === 'sgn');
+      sgn.style.display = isSgn ? 'block' : 'none';
+      han.style.display = isSgn ? 'none' : 'block';
+      var tabs = document.querySelectorAll('#tabs-req button');
+      tabs.forEach(function(btn) {
+        btn.className = 'city-tab';
+        if (btn.getAttribute('data-req') === city) {
+          btn.className = 'city-tab ' + (isSgn ? 'active-sgn' : 'active-han');
+        }
+      });
+    }
+  </script>
 </head>
 <body>
 
@@ -241,8 +273,8 @@
     <div class="note">Cuối tháng hệ thống check theo thứ tự <strong>R1 → R2 → R3</strong>. Đạt đủ <strong>cả 4 điều kiện</strong> của tier cao nhất → xếp vào tier đó. Thiếu 1 điều kiện → rớt tier thấp hơn.</div>
 
     <div class="city-tabs" id="tabs-city">
-      <button type="button" class="city-tab active-sgn" data-city="sgn">📍 SGN — Hồ Chí Minh</button>
-      <button type="button" class="city-tab" data-city="han">📍 HAN — Hà Nội</button>
+      <button type="button" class="city-tab active-sgn" data-city="sgn" onclick="switchCity('sgn')">📍 SGN — Hồ Chí Minh</button>
+      <button type="button" class="city-tab" data-city="han" onclick="switchCity('han')">📍 HAN — Hà Nội</button>
     </div>
 
     <div id="city-sgn" class="city-content" style="display:block">
@@ -444,8 +476,8 @@
     <div class="note">System tự động check khi bấm đăng ký. Thiếu điều kiện → từ chối kèm lý do. <strong>COD không check tại bước đăng ký ca.</strong></div>
 
     <div class="city-tabs" id="tabs-req">
-      <button type="button" class="city-tab active-sgn" data-req="sgn">📍 SGN</button>
-      <button type="button" class="city-tab" data-req="han">📍 HAN</button>
+      <button type="button" class="city-tab active-sgn" data-req="sgn" onclick="switchReq('sgn')">📍 SGN</button>
+      <button type="button" class="city-tab" data-req="han" onclick="switchReq('han')">📍 HAN</button>
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px;">
@@ -765,33 +797,5 @@
 
 </div>
 
-<script>
-  function switchCity(city) {
-    var isSgn = (city === 'sgn');
-    document.getElementById('city-sgn').style.display = isSgn ? 'block' : 'none';
-    document.getElementById('city-han').style.display = isSgn ? 'none' : 'block';
-    document.querySelectorAll('#tabs-city .city-tab').forEach(function(btn) {
-      var c = btn.getAttribute('data-city');
-      btn.className = 'city-tab' + (c === 'sgn' && isSgn ? ' active-sgn' : c === 'han' && !isSgn ? ' active-han' : '');
-    });
-  }
-  function switchReq(city) {
-    var isSgn = (city === 'sgn');
-    document.getElementById('req-sgn').style.display = isSgn ? 'block' : 'none';
-    document.getElementById('req-han').style.display = isSgn ? 'none' : 'block';
-    document.querySelectorAll('#tabs-req .city-tab').forEach(function(btn) {
-      var c = btn.getAttribute('data-req');
-      btn.className = 'city-tab' + (c === 'sgn' && isSgn ? ' active-sgn' : c === 'han' && !isSgn ? ' active-han' : '');
-    });
-  }
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('#tabs-city .city-tab').forEach(function(btn) {
-      btn.addEventListener('click', function() { switchCity(this.getAttribute('data-city')); });
-    });
-    document.querySelectorAll('#tabs-req .city-tab').forEach(function(btn) {
-      btn.addEventListener('click', function() { switchReq(this.getAttribute('data-req')); });
-    });
-  });
-</script>
 </body>
 </html>
