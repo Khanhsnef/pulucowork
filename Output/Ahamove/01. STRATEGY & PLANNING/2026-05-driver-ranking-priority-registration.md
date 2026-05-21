@@ -145,49 +145,141 @@ R1 Anh Hùng — cascade trong ngày 1–5/7:
 
 ---
 
-## 6. Quyền lợi theo Layer
+## 6. Quyền lợi theo Layer & Rank
 
-> Quyền lợi áp dụng cho tài xế **đang hoạt động trong layer** (đã đăng ký ca và duy trì tiêu chuẩn). Các mục có `*` đang trong quá trình finalize với các team liên quan.
+> Quyền lợi áp dụng khi tài xế **đang hoạt động trong layer** (đã đăng ký ca, duy trì tiêu chuẩn KPI). Các mục `📋 đề xuất` cần validate với team liên quan. Các mục `⏳ pending` đang trong quá trình finalize.
 
-### 6.1 Bảng tổng hợp quyền lợi
+---
 
-> Nguồn: DM Đề xuất Quyền lợi — mục 2.2
+### 6.1 Thu nhập đảm bảo (đề xuất cân chỉnh)
 
-| Layer | Khu vực | Thu nhập đảm bảo | Ghép đơn tối đa | Đội trưởng | Lộ trình thăng tiến | BH sức khỏe |
-| --- | --- | --- | --- | --- | --- | --- |
-| **L2 Minizone** | ≤ 4km | SGN: 60k/h · HAN: 70k/h | 4–5 đơn | ✅ | Đội phó / Đội trưởng | pending* |
-| **L3 Mediumzone** | 4–7km | SGN: 60k/h · HAN: 70k/h | 3–4 đơn | ✅ | Đội phó / Đội trưởng | pending* |
-| **L4 Bigzone** | 7–11km | SGN: 60k/h · HAN: 70k/h | 2–3 đơn | ✅ | Đội phó / Đội trưởng | pending* |
-| **L5 Cityzone** | >11km (avg 25–30km) | SGN: 60k/h · HAN: 70k/h | 2–3 đơn | — | — | pending* |
-| **L6 MASS** | Toàn bộ còn lại | Không đảm bảo | — | — | — | — |
+> **Nguyên tắc cân chỉnh:** Layer có yêu cầu KPI đầu vào cao hơn → ngưỡng đảm bảo cao hơn để phản ánh đúng giá trị cam kết của tài xế. L2 yêu cầu KPI R1 (cao nhất) → xứng đáng được đảm bảo thu nhập cao nhất. Cần validate với S&P dựa trên data EPH thực tế.
 
-**L6:** Tự do ca giờ · Incentive/promo thông thường · Upgrade path rõ ràng: đạt threshold sau 1 tháng → eligible đăng ký Zone
+| Layer | Khu vực | SGN (đề xuất) | HAN (đề xuất) | Ghi chú |
+| --- | --- | --- | --- | --- |
+| **L2 Minizone** | ≤ 4km | **70k/h** | **80k/h** | Ghép 4–5 đơn, KPI R1 → EPH cao nhất |
+| **L3 Mediumzone** | 4–7km | **65k/h** | **75k/h** | Ghép 3–4 đơn, KPI R2 |
+| **L4 Bigzone** | 7–11km | **60k/h** | **70k/h** | Ghép 2–3 đơn, KPI R3 |
+| **L5 Cityzone** | >11km | **60k/h** | **70k/h** | Đơn 2H/4H, zone rộng — giữ nguyên baseline |
+| **L6 MASS** | Toàn bộ | Không đảm bảo | Không đảm bảo | Tự do ca, co giãn theo demand |
 
-> \* BH sức khỏe đang check điều kiện (ví dụ: cam kết hoạt động ≥ 1 năm liên tục) — phối hợp DM + HR.
-> Ghép đơn capped L4/L5 để bảo vệ FR: zone rộng → thêm đơn kéo SLA.
+---
 
-### 6.2 Quyền lợi theo Rank (liên kết với hệ thống đăng ký ca)
+### 6.2 Rewards Points — Hệ thống nhân điểm theo Layer
 
-Rank không tạo ra quyền lợi độc lập — mà **quyết định tài xế tiếp cận được layer nào**, từ đó hưởng toàn bộ quyền lợi của layer đó.
+Tài xế tích lũy điểm trên mỗi đơn hoàn thành. Layer quyết định hệ số nhân. Điểm dùng để đổi ưu đãi từ Ahamove và đối tác.
 
-| Rank | Layer ưu tiên đăng ký | Cascade fallback | Quyền lợi gián tiếp |
+| Layer | Hệ số nhân | Điểm / đơn (ví dụ base = 10đ) | Tích lũy 100 đơn |
 | --- | --- | --- | --- |
-| **R1 Elite** | L2 (Minizone) | → L3 khi L2 ≥80% | Thu nhập đảm bảo 60–70k/h · Ghép 4–5 đơn · Dispatch ưu tiên cao nhất trong L2 |
-| **R2 Active** | L3 (Mediumzone) | → L4 khi L3 ≥80% | Thu nhập đảm bảo 60–70k/h · Ghép 3–4 đơn |
-| **R3 Standard** | L4 (Bigzone) | → L5 khi L4 ≥80% | Thu nhập đảm bảo 60–70k/h · Ghép 2–3 đơn |
-| **Chưa xếp hạng** | L6 (MASS) | — | Tự do giờ giấc · Điều kiện tham gia incentive thông thường |
+| **L2 Minizone** | **×2.0** | 20 điểm | 2.000 điểm |
+| **L3 Mediumzone** | **×1.7** | 17 điểm | 1.700 điểm |
+| **L4 Bigzone** | **×1.3** | 13 điểm | 1.300 điểm |
+| **L5 Cityzone** | **×1.0** | 10 điểm | 1.000 điểm |
+| **L6 MASS** | ×1.0 | 10 điểm | 1.000 điểm |
 
-> **Về mức thưởng (bonus):** Rank được xem xét thêm khi tính mức thưởng — R1 sẽ có tier bonus cao hơn R2/R3 trong cùng layer. Chi tiết scheme phối hợp với S&P.
+**Điểm có thể dùng để đổi:**
 
-### 6.3 Quyền lợi đang pending finalize
+- Voucher nhiên liệu (xăng / sạc điện)
+- Voucher bảo dưỡng xe tại garage đối tác
+- Thiết bị / CCDC hỗ trợ (túi giữ nhiệt, baga, áo đồng phục)
+- Ưu đãi F&B từ merchant đối tác trên Ahamove
+- Điểm thưởng tích lũy đổi thẻ quà tặng / tiền mặt (📋 đề xuất — cần check với Product & S&P)
+
+---
+
+### 6.3 Quyền lợi từ đối tác (Partner Benefits)
+
+Ahamove đàm phán gói ưu đãi theo tier — tài xế được access dựa trên layer đang hoạt động.
+
+| Loại quyền lợi | L2–L3 (Hạng Vàng) | L4–L5 (Hạng Bạc) | L6 (Cơ bản) |
+| --- | --- | --- | --- |
+| **Nhiên liệu** | Giảm 5–8% tại trạm đối tác | Giảm 3–5% | — |
+| **Sạc điện EV** | Ưu tiên slot + giảm 10% | Giảm 5% | — |
+| **Bảo dưỡng xe** | Voucher miễn phí 1 lần/quý | Voucher 1 lần/6 tháng | — |
+| **Sức khỏe** | Khám định kỳ 1 lần/năm (phòng khám đối tác) | — | — |
+| **Telecom** | Data 30GB/tháng (Viettel / Mobifone) | Data 15GB/tháng | — |
+| **F&B / Tiêu dùng** | Discount tại merchant đối tác Ahamove | Discount cơ bản | Standard offers |
+| **Bảo hiểm tai nạn** | ⏳ pending — đang đàm phán với PTI / PJICO | ⏳ pending | — |
+
+> Gói "Hạng Vàng" (L2/L3) nhắm đến tài xế chất lượng cao nhất trong hệ thống — giữ chân bằng tổng gói quyền lợi, không chỉ thu nhập. Cần DM phối hợp Partnership để chốt danh sách đối tác cụ thể.
+
+---
+
+### 6.4 Quyền lợi theo Rank
+
+Rank ảnh hưởng trực tiếp đến 4 quyền lợi độc lập ngoài layer access:
+
+#### A. Ưu tiên đăng ký ca (Priority Registration Window)
+
+| Rank | Thời điểm mở đăng ký | Layer được thấy |
+| --- | --- | --- |
+| **R1 Elite** | Ngày 1 · 00:00 (sớm nhất) | L2 + cascade L3 |
+| **R2 Active** | Ngày 1 · 08:00 | L3 + cascade L4 |
+| **R3 Standard** | Ngày 1 · 14:00 | L4 + cascade L5 |
+| **Chưa xếp hạng** | Ngày 2+ | L6 only |
+
+> R1 có lợi thế đăng ký sớm nhất trong ngày 1 → giảm nguy cơ hết slot ở layer ưu tiên. FCFS timestamp vẫn áp dụng trong cùng window. (📋 đề xuất — cần check với Product về technical feasibility)
+
+#### B. Tier Bonus (Mức thưởng theo Rank)
+
+| Rank | Hệ số bonus trên incentive scheme | Ghi chú |
+| --- | --- | --- |
+| **R1 Elite** | ×1.3 | Top performer — thưởng cao nhất |
+| **R2 Active** | ×1.15 | Active tier — thưởng trung bình |
+| **R3 Standard** | ×1.0 | Baseline |
+| **Chưa xếp hạng** | ×1.0 | Baseline, không có tier bonus riêng |
+
+> Rank bonus áp dụng nhân thêm trên incentive scheme hiện hành — không thay thế scheme. Chi tiết scheme phối hợp S&P. (📋 đề xuất)
+
+#### C. Ưu tiên sự kiện / hoạt động Ahamove
+
+| Rank | Quyền lợi sự kiện |
+| --- | --- |
+| **R1 Elite** | Invite VIP · Reserved seating · Vinh danh tại Gala / Community Day · Nhận quà recognition |
+| **R2 Active** | Invite ưu tiên · Đảm bảo có slot tham dự |
+| **R3 Standard** | Tham dự theo số lượng còn lại |
+| **Chưa xếp hạng** | Không ưu tiên |
+
+#### D. Hỗ trợ ưu tiên (Support SLA theo Layer)
+
+| Layer (Rank tương ứng) | Kênh hỗ trợ | SLA phản hồi | Nội dung hỗ trợ |
+| --- | --- | --- | --- |
+| **L2 (R1)** | Kênh riêng (Hotline / Chat ưu tiên) | < 15 phút | Xử lý tài khoản, khiếu nại đơn, coaching KPI hàng tháng |
+| **L3 (R2)** | Priority queue | < 30 phút | Xử lý tài khoản, khiếu nại đơn, check-in quý |
+| **L4–L5 (R3)** | Priority queue | < 1 giờ | Xử lý tài khoản, khiếu nại đơn |
+| **L6 (Chưa XH)** | Standard CS | Standard SLA | Standard |
+
+> Đội trưởng (Team Leader) phụ trách L2/L3/L4 là đầu mối hỗ trợ trực tiếp tại khu vực — giảm tải CS trung tâm và tăng tốc xử lý vấn đề thực địa.
+
+---
+
+### 6.5 Tổng hợp so sánh ngang — Rank
+
+| Quyền lợi | R1 Elite | R2 Active | R3 Standard | Chưa XH |
+| --- | --- | --- | --- | --- |
+| Layer ưu tiên | L2 (Minizone) | L3 (Medium) | L4 (Bigzone) | L6 only |
+| Thu nhập đảm bảo | 70k/h SGN · 80k/h HAN | 65k/h SGN · 75k/h HAN | 60k/h SGN · 70k/h HAN | Không |
+| Rewards multiplier | ×2.0 | ×1.7 | ×1.3 | ×1.0 |
+| Partner benefits | Hạng Vàng | Hạng Vàng | Hạng Bạc | — |
+| Tier bonus | ×1.3 | ×1.15 | ×1.0 | ×1.0 |
+| Đăng ký ca sớm | Ngày 1 · 00:00 | Ngày 1 · 08:00 | Ngày 1 · 14:00 | Ngày 2+ |
+| Sự kiện Ahamove | VIP + vinh danh | Ưu tiên | Theo slot | Không ưu tiên |
+| Hỗ trợ SLA | < 15 phút | < 30 phút | < 1 giờ | Standard |
+| BH sức khỏe | ⏳ pending | ⏳ pending | ⏳ pending | — |
+
+---
+
+### 6.6 Pending finalize
 
 | Mục | Trạng thái | Team phụ trách |
 | --- | --- | --- |
-| Bảo hiểm sức khỏe (L1–L5) | Đang check điều kiện (ví dụ: cam kết hoạt động ≥ 1 năm liên tục) | DM + HR |
-| Mức thu nhập đảm bảo cụ thể L1 | Đang validate với S&P (đề xuất: EPH L1 > EPH L2 ít nhất 10%) | DM + S&P |
-| Bonus performance L1 | Đang xây scheme | DM + S&P |
-| Quy định CCDC miễn phí L1 | Add challenge hoàn tiền để giảm chi phí upfront | DM + OE |
-| Tiêu chuẩn chất lượng duy trì (L2–L5) | Đang xem xét theo phễu tiêu chuẩn từng city | DM |
+| Thu nhập đảm bảo L2/L3 (70k/65k SGN) | Validate với S&P — đối chiếu EPH P50 thực tế | DM + S&P |
+| Bảo hiểm sức khỏe (L2–L5) | Check điều kiện (đề xuất: cam kết ≥ 1 năm) | DM + HR |
+| Gói đối tác Hạng Vàng / Bạc | Đàm phán danh sách đối tác cụ thể | DM + Partnership |
+| Bảo hiểm tai nạn (L2–L3) | Đàm phán với PTI / PJICO | DM + HR |
+| Priority registration window (time-based) | Check technical feasibility với Product | DM + Product |
+| Tier bonus multiplier (×1.3 / ×1.15) | Xây scheme chi tiết | DM + S&P |
+| Rewards points system (base point, redemption catalog) | Thiết kế product feature | DM + Product |
 
 ---
 
