@@ -1024,63 +1024,120 @@
 
     <!-- 6.3 REDEMPTION CATALOG -->
     <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:6px;">6.3 · Catalog Đổi Điểm (Redeem)</div>
-    <div class="note" style="margin-bottom:14px;">Giá điểm đề xuất — <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:0 6px;font-size:11px;font-weight:700">📋 pending Finance validate</span>. Tỉ lệ quy đổi tham chiếu: <strong>1 điểm ≈ 67đ giá trị voucher</strong> (tương đương ~1.3% cashback trên thu nhập).</div>
-    <div class="catalog-grid" style="margin-bottom:20px;">
 
-      <!-- Xăng / EV -->
+    <!-- Catalog split explanation -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+      <div style="background:#ECFDF5;border:1.5px solid #6EE7B7;border-radius:12px;padding:12px 16px;">
+        <div style="font-size:11px;font-weight:800;color:#065F46;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">🤝 Partner Rewards — Đổi bằng điểm</div>
+        <div style="font-size:12px;color:#047857;line-height:1.6;">Ahamove chi phí <strong>= 0đ</strong>. Đối tác subsidize để tiếp cận driver base. Tất cả các Rank đều có thể dùng điểm để đổi.</div>
+      </div>
+      <div style="background:#FFF7F2;border:1.5px solid #FDBA74;border-radius:12px;padding:12px 16px;">
+        <div style="font-size:11px;font-weight:800;color:#C2410C;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">💎 Rank Entitlements — Tự động theo Rank</div>
+        <div style="font-size:12px;color:#C2410C;line-height:1.6;"><strong>Không</strong> dùng điểm để đổi. Cấp tự động: Kim Cương 2 items · Vàng 1 item. Nằm trong budget <strong>200M/tháng</strong>.</div>
+      </div>
+    </div>
+
+    <!-- PART A: Free Partner Rewards -->
+    <div style="font-size:12.5px;font-weight:800;color:#065F46;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:14px;height:14px;background:#10B981;border-radius:3px;"></span> A · Partner Rewards (Ahamove cost = 0đ)</div>
+    <div class="catalog-grid" style="margin-bottom:22px;">
+
+      <!-- Xăng / EV Partner -->
       <div class="cat-card">
-        <div class="cat-head"><span class="cat-icon">⛽</span><span class="cat-title">Nhiên liệu & Sạc EV</span></div>
-        <div class="cat-item"><span class="cat-name">Voucher xăng 50k</span><span class="cat-badge cb-pts">800 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Voucher xăng 100k</span><span class="cat-badge cb-pts">1.500 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Voucher sạc EV 50k</span><span class="cat-badge cb-pts">800 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Voucher sạc EV 100k</span><span class="cat-badge cb-pts">1.500 pts</span></div>
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">⛽</span><span class="cat-title" style="color:#065F46;">Nhiên liệu & Sạc EV</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: xăng chain (VD: Petrolimex), trạm sạc EV</div>
+        <div class="cat-item"><span class="cat-name">Giảm giá xăng 5% / lần đổ</span><span class="cat-badge cb-pts">600 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm giá xăng 10% / lần đổ</span><span class="cat-badge cb-pts">1.100 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm giá sạc EV 20% / lần</span><span class="cat-badge cb-pts">800 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Combo sạc EV tháng (10%)</span><span class="cat-badge cb-excl">2.000 pts · R2+</span></div>
       </div>
 
-      <!-- Bảo dưỡng -->
+      <!-- Bảo dưỡng Partner -->
       <div class="cat-card">
-        <div class="cat-head"><span class="cat-icon">🔧</span><span class="cat-title">Bảo dưỡng xe</span></div>
-        <div class="cat-item"><span class="cat-name">Bảo dưỡng cơ bản (dầu, lọc)</span><span class="cat-badge cb-pts">2.000 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Bảo dưỡng toàn diện</span><span class="cat-badge cb-pts">4.000 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Vá lốp / thay lốp</span><span class="cat-badge cb-pts">1.200 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Thay má phanh</span><span class="cat-badge cb-pts">1.000 pts</span></div>
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🔧</span><span class="cat-title" style="color:#065F46;">Bảo dưỡng xe</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: chuỗi sửa xe (VD: Honda Head, Yamaha)</div>
+        <div class="cat-item"><span class="cat-name">Giảm 15% dầu nhớt / lọc</span><span class="cat-badge cb-pts">900 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm 20% bảo dưỡng định kỳ</span><span class="cat-badge cb-pts">1.800 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm 30% vá/thay lốp</span><span class="cat-badge cb-pts">1.200 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Gói bảo dưỡng ưu tiên R1</span><span class="cat-badge cb-r1">3.000 pts · R1 only</span></div>
       </div>
 
-      <!-- CCDC -->
+      <!-- CCDC Partner -->
       <div class="cat-card">
-        <div class="cat-head"><span class="cat-icon">🎽</span><span class="cat-title">CCDC & Trang thiết bị</span></div>
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🎽</span><span class="cat-title" style="color:#065F46;">CCDC & Trang thiết bị</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Nhập từ Ahamove Store / đối tác sản xuất</div>
         <div class="cat-item"><span class="cat-name">Túi giữ nhiệt tiêu chuẩn</span><span class="cat-badge cb-pts">800 pts</span></div>
         <div class="cat-item"><span class="cat-name">Túi giữ nhiệt cao cấp (XL)</span><span class="cat-badge cb-pts">1.400 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Baga tiêu chuẩn</span><span class="cat-badge cb-pts">1.500 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Baga / phụ kiện xe</span><span class="cat-badge cb-pts">1.500 pts</span></div>
         <div class="cat-item"><span class="cat-name">Đồng phục 1 bộ</span><span class="cat-badge cb-pts">700 pts</span></div>
       </div>
 
-      <!-- F&B -->
+      <!-- F&B Partner -->
       <div class="cat-card">
-        <div class="cat-head"><span class="cat-icon">🍜</span><span class="cat-title">F&B / Tiêu dùng</span></div>
-        <div class="cat-item"><span class="cat-name">Voucher F&B merchant 50k</span><span class="cat-badge cb-pts">600 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Voucher F&B merchant 100k</span><span class="cat-badge cb-pts">1.100 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Voucher siêu thị 50k</span><span class="cat-badge cb-pts">650 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Voucher siêu thị 100k</span><span class="cat-badge cb-pts">1.200 pts</span></div>
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🍜</span><span class="cat-title" style="color:#065F46;">F&B / Tiêu dùng</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Merchant Ahamove giao / chuỗi F&B partner</div>
+        <div class="cat-item"><span class="cat-name">Voucher F&B partner 50k</span><span class="cat-badge cb-pts">500 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Voucher F&B partner 100k</span><span class="cat-badge cb-pts">950 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm 10% chuỗi siêu thị</span><span class="cat-badge cb-pts">600 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Combo bữa trưa tài xế</span><span class="cat-badge cb-pts">400 pts</span></div>
       </div>
 
-      <!-- Data SIM -->
+      <!-- Data SIM Partner -->
       <div class="cat-card">
-        <div class="cat-head"><span class="cat-icon">📱</span><span class="cat-title">Data SIM & Viễn thông</span></div>
-        <div class="cat-item"><span class="cat-name">Data 5GB (1 tháng)</span><span class="cat-badge cb-pts">500 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Data 10GB (1 tháng)</span><span class="cat-badge cb-pts">900 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Data 20GB (1 tháng)</span><span class="cat-badge cb-pts">1.700 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Nạp tiền điện thoại 50k</span><span class="cat-badge cb-pts">700 pts</span></div>
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">📱</span><span class="cat-title" style="color:#065F46;">Data SIM & Viễn thông</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: Viettel / Vinaphone / Mobifone (gói group)</div>
+        <div class="cat-item"><span class="cat-name">Data 5GB ưu đãi tài xế</span><span class="cat-badge cb-pts">450 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Data 10GB ưu đãi tài xế</span><span class="cat-badge cb-pts">800 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Data 20GB ưu đãi tài xế</span><span class="cat-badge cb-pts">1.500 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Gói SIM ưu tiên cao tốc</span><span class="cat-badge cb-excl">2.200 pts · R2+</span></div>
       </div>
 
-      <!-- Exclusive R1/R2 -->
-      <div class="cat-card" style="border-color:var(--orange);border-width:2px;">
-        <div class="cat-head" style="background:#FFF7F2;"><span class="cat-icon">💎</span><span class="cat-title" style="color:var(--orange);">Exclusive — R1 & R2 only</span></div>
-        <div class="cat-item"><span class="cat-name">Thẻ quà tặng 100k</span><span class="cat-badge cb-excl">2.000 pts · R2+</span></div>
-        <div class="cat-item"><span class="cat-name">Thẻ quà tặng 200k</span><span class="cat-badge cb-r1">3.800 pts · R1 only</span></div>
-        <div class="cat-item"><span class="cat-name">Cash out 50k <span style="font-size:10px;color:var(--g400)">(max 1 lần/tháng)</span></span><span class="cat-badge cb-r1">2.500 pts · R1 only</span></div>
-        <div class="cat-item"><span class="cat-name">Upgrade Partner tier 1 tháng</span><span class="cat-badge cb-excl">5.000 pts · R2+</span></div>
+      <!-- Health Partner -->
+      <div class="cat-card">
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🏥</span><span class="cat-title" style="color:#065F46;">Sức khoẻ & Bảo vệ</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: phòng khám, bảo hiểm sức khoẻ driver</div>
+        <div class="cat-item"><span class="cat-name">Giảm 20% khám tổng quát</span><span class="cat-badge cb-pts">1.500 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm 15% mua thuốc tại nhà thuốc</span><span class="cat-badge cb-pts">600 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Bảo hiểm tai nạn 1 tháng</span><span class="cat-badge cb-excl">2.500 pts · R2+</span></div>
+        <div class="cat-item"><span class="cat-name">Bảo hiểm tai nạn 3 tháng</span><span class="cat-badge cb-r1">6.000 pts · R1 only</span></div>
       </div>
     </div>
+
+    <!-- PART B: Rank Entitlements (paid, Ahamove-funded) -->
+    <div style="font-size:12.5px;font-weight:800;color:#C2410C;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:14px;height:14px;background:var(--orange);border-radius:3px;"></span> B · Rank Entitlements — Tự động, nằm trong 200M budget</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+
+      <!-- Kim Cuong entitlements -->
+      <div class="cat-card" style="border:2px solid var(--r1);">
+        <div class="cat-head" style="background:#FEF2F2;"><span class="cat-icon">💎</span><span class="cat-title" style="color:var(--r1);">Kim Cương — R1 Elite · 2 items</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 6px;font-style:italic;">Cấp tự động mỗi tháng · không cần đổi điểm</div>
+        <div class="cat-item" style="background:#FEF2F2;">
+          <span class="cat-name" style="font-weight:700;">⛽ Voucher xăng/EV <strong>50k</strong>/tháng</span>
+          <span style="font-size:10px;font-weight:800;color:#C2410C;background:#FEE2E2;padding:2px 8px;border-radius:20px;white-space:nowrap;">~37.5k cost</span>
+        </div>
+        <div style="padding:4px 12px 2px;font-size:10.5px;color:#6B7280;">Cost sau đàm phán 25% off · Ahamove trả 75% giá trị</div>
+        <div class="cat-item" style="background:#FEF2F2;margin-top:4px;">
+          <span class="cat-name" style="font-weight:700;">🏥 Khám sức khoẻ <strong>1 lần/năm</strong></span>
+          <span style="font-size:10px;font-weight:800;color:#C2410C;background:#FEE2E2;padding:2px 8px;border-radius:20px;white-space:nowrap;">~21k/tháng</span>
+        </div>
+        <div style="padding:4px 12px 8px;font-size:10.5px;color:#6B7280;">250k/lần ÷ 12 tháng · 1.575 tài xế × ~21k ≈ 33M/tháng</div>
+        <div style="margin:8px 12px 10px;background:#FFF7F0;border:1px solid #FDBA74;border-radius:8px;padding:6px 10px;font-size:11.5px;color:#92400E;font-weight:700;">💰 Chi phí R1 ≈ 92M/tháng cho cả 2 items</div>
+      </div>
+
+      <!-- Vang entitlements -->
+      <div class="cat-card" style="border:2px solid var(--r2);">
+        <div class="cat-head" style="background:#EFF6FF;"><span class="cat-icon">🥇</span><span class="cat-title" style="color:var(--r2);">Vàng — R2 Active · 1 item</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 6px;font-style:italic;">Cấp tự động mỗi tháng · không cần đổi điểm</div>
+        <div class="cat-item" style="background:#EFF6FF;">
+          <span class="cat-name" style="font-weight:700;">⛽ Voucher xăng/EV <strong>30k</strong>/tháng</span>
+          <span style="font-size:10px;font-weight:800;color:var(--r2);background:#DBEAFE;padding:2px 8px;border-radius:20px;white-space:nowrap;">~22.5k cost</span>
+        </div>
+        <div style="padding:4px 12px 8px;font-size:10.5px;color:#6B7280;">Cost sau đàm phán 25% off · Ahamove trả 75% giá trị · 3.675 tài xế × 22.5k ≈ 83M/tháng</div>
+        <div style="margin:8px 12px 10px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:6px 10px;font-size:11.5px;color:var(--r2);font-weight:700;">💰 Chi phí R2 ≈ 83M/tháng cho 1 item</div>
+        <div style="margin:0 12px 10px;background:#F0FDF4;border:1px solid #6EE7B7;border-radius:8px;padding:6px 10px;font-size:11.5px;color:#065F46;font-weight:700;">✅ Tổng paid = ~175M · Buffer ~25M vs 200M budget</div>
+      </div>
+    </div>
+
+    <div class="callout co" style="margin-bottom:20px;"><strong>Ghi chú vận hành:</strong> Điểm AhaBenefits <em>chỉ</em> đổi được phần <strong>A · Partner Rewards</strong> (Ahamove cost ≈0đ). Rank Entitlements (Phần B) cấp tự động — không liên kết điểm. Tài xế cần hoàn thành đủ điều kiện Rank trong tháng để nhận entitlement tháng kế tiếp.</div>
 
     <!-- 6.4 EXCLUSIVE PERKS (không mua được bằng điểm) -->
     <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">6.4 · Exclusive Perks — Không thể mua bằng điểm</div>
@@ -1175,7 +1232,7 @@
               <td style="font-weight:700;">18.040</td>
               <td style="font-weight:800;color:var(--r1);font-size:15px;">54.120</td>
               <td style="font-weight:700;color:#065F46;">~16.200 pts</td>
-              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">6× bảo dưỡng cơ bản <em>hoặc</em> 10× data 10GB + 4× voucher xăng 100k</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">5× giảm bảo dưỡng 20% <em>hoặc</em> 10× data 10GB + 4× giảm xăng 10% · <em>+ tự động nhận voucher xăng 50k + khám sức khoẻ</em></td>
             </tr>
             <tr class="r2-row">
               <td><span class="tag-sm t-r2">R2 Active</span></td>
@@ -1183,7 +1240,7 @@
               <td style="font-weight:700;">11.682</td>
               <td style="font-weight:800;color:var(--r2);font-size:15px;">35.046</td>
               <td style="font-weight:700;color:#065F46;">~10.500 pts</td>
-              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">3× bảo dưỡng cơ bản <em>hoặc</em> 7× data 10GB + 3× voucher xăng 100k</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">4× giảm bảo dưỡng 20% + 6× data 10GB <em>hoặc</em> bảo hiểm tai nạn 3 tháng + còn dư · <em>+ tự động nhận voucher xăng 30k</em></td>
             </tr>
             <tr class="r3-row">
               <td><span class="tag-sm t-r3">R3 Standard</span></td>
@@ -1191,7 +1248,7 @@
               <td style="font-weight:700;">6.512</td>
               <td style="font-weight:800;color:var(--r3);font-size:15px;">19.536</td>
               <td style="font-weight:700;color:#065F46;">~5.800 pts</td>
-              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">2× bảo dưỡng cơ bản <em>hoặc</em> 6× data 5GB + 3× voucher xăng 50k</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">2× giảm bảo dưỡng + 6× data 5GB <em>hoặc</em> 3× voucher F&B 100k + giảm xăng 5%</td>
             </tr>
             <tr class="un-row">
               <td><span class="tag-sm t-un">L6 MASS</span></td>
@@ -1199,7 +1256,7 @@
               <td style="color:var(--g400);">1.936</td>
               <td style="color:var(--g400);">5.808</td>
               <td style="color:var(--g400);">~1.700 pts</td>
-              <td style="font-size:12px;color:var(--g400);text-align:left;padding-left:14px;">3× voucher F&B 50k <em>hoặc</em> 3× data 5GB · động lực upgrade lên R3</td>
+              <td style="font-size:12px;color:var(--g400);text-align:left;padding-left:14px;">3× voucher F&B 50k <em>hoặc</em> 3× data 5GB · động lực upgrade lên R3 để ×1.3 pts</td>
             </tr>
           </tbody>
         </table>
@@ -1207,7 +1264,7 @@
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
-      <div class="callout co"><strong>Tại sao 30% burn rate?</strong> Điểm tích lũy theo quý — tài xế thường dùng khoảng 30% để đổi, phần còn lại hết hạn. Budget thực tế Ahamove cần cover = điểm đã đổi thành công × giá trị voucher. Cần Finance model burn rate thực tế sau 1 quý pilot.</div>
+      <div class="callout co"><strong>Tại sao 30% burn rate?</strong> Điểm tích lũy theo quý — tài xế thường dùng khoảng 30% để đổi, phần còn lại hết hạn. Với catalog <strong>100% partner-funded</strong>, burn rate cao cũng không làm tăng budget Ahamove — chỉ là tín hiệu engagement. Cần Finance model tỉ lệ partner co-fund sau 1 quý pilot.</div>
       <div class="callout cg"><strong>Upgrade incentive:</strong> Gap điểm giữa L6 (~5.8k pts/quý) và R3 (~19.5k pts/quý) = 3.4× — đủ lớn để tạo động lực upgrade. Gap R3→R2 = 1.8×. Thiết kế có chủ ý: càng lên cao càng nhân lợi ích.</div>
     </div>
   </section>
@@ -1216,177 +1273,139 @@
   <section id="budget">
     <div class="section-label">Phần 7 — Budget Analysis</div>
     <div class="section-title">Ước tính Chi phí Vận hành</div>
-    <div class="note">Input: <strong>10–11k tài xế active/tuần/city · 40–45k/tháng/city · 2 cities (SGN + HAN)</strong>. Tất cả số liệu mang tính ước tính — cần validate với Finance trước khi commit. <span style="background:#FEE2E2;color:#991B1B;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">⚠ Budget sensitive</span></div>
+    <div class="note">Input: <strong>10–11k tài xế active/tuần · 40–45k/tháng — TỔNG 2 cities (SGN + HAN)</strong>. Budget target: <strong style="color:var(--red);">200M VND/tháng</strong>. Chiến lược: <em>Free partner rewards làm backbone · Paid rewards chỉ 2 items cho Kim Cương + 1 item cho Vàng.</em></div>
 
-    <!-- ASSUMPTIONS -->
+    <!-- FLEET INPUT (corrected) -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
       <div class="card" style="padding:0;overflow:hidden;">
-        <div style="padding:12px 16px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100);">Giả định Fleet</div>
+        <div style="padding:12px 16px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100);">Fleet thực tế — Tổng 2 cities</div>
         <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
           <tbody>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Weekly actives/city</td><td style="padding:8px 16px;font-weight:800;text-align:right;">10.500</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Monthly actives/city</td><td style="padding:8px 16px;font-weight:800;text-align:right;">42.000</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Occasional (monthly - weekly)</td><td style="padding:8px 16px;font-weight:700;color:var(--g400);text-align:right;">~31.500</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r1);font-weight:700;">R1 (15% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r1);text-align:right;">~1.575</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r2);font-weight:700;">R2 (35% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r2);text-align:right;">~3.675</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r3);font-weight:700;">R3 (35% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r3);text-align:right;">~3.675</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Weekly actives (tổng)</td><td style="padding:8px 16px;font-weight:800;text-align:right;color:var(--blue);">~10.500</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Monthly actives (tổng)</td><td style="padding:8px 16px;font-weight:800;text-align:right;color:var(--blue);">~42.000</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Occasional pool (monthly - weekly)</td><td style="padding:8px 16px;font-weight:700;color:var(--g400);text-align:right;">~31.500</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r1);font-weight:700;">💎 R1 Kim Cương (15% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r1);text-align:right;">~1.575</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r2);font-weight:700;">🥇 R2 Vàng (35% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r2);text-align:right;">~3.675</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r3);font-weight:700;">🥈 R3 Bạc (35% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r3);text-align:right;">~3.675</td></tr>
             <tr><td style="padding:8px 16px;color:var(--g400);font-weight:600;">L6 / Unranked (15%)</td><td style="padding:8px 16px;font-weight:700;color:var(--g400);text-align:right;">~1.575</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="card" style="padding:0;overflow:hidden;">
-        <div style="padding:12px 16px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100);">Giả định EPH & Hoạt động <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:0 5px;font-size:10px;font-weight:700">📋 cần verify</span></div>
-        <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
-          <tbody>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">EPH P50 · R1</td><td style="padding:8px 16px;font-weight:800;text-align:right;">~100k/h</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">EPH P50 · R2</td><td style="padding:8px 16px;font-weight:800;text-align:right;">~85k/h</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">EPH P50 · R3</td><td style="padding:8px 16px;font-weight:800;text-align:right;">~70k/h</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Ca/tuần trung bình</td><td style="padding:8px 16px;font-weight:800;text-align:right;">3 ca</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">% R1/R2 đăng ký Full-day</td><td style="padding:8px 16px;font-weight:800;text-align:right;">~25%</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Voucher cost vs face value</td><td style="padding:8px 16px;font-weight:800;text-align:right;">75% (25% disc)</td></tr>
-            <tr><td style="padding:8px 16px;color:var(--g600);font-weight:600;">1 point cost to Ahamove</td><td style="padding:8px 16px;font-weight:800;text-align:right;">~50đ</td></tr>
-          </tbody>
-        </table>
+      <div class="card" style="border:2px solid var(--green);padding:20px 22px;">
+        <div style="font-size:12px;font-weight:800;color:var(--green);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;">Chiến lược 200M/tháng</div>
+        <div style="font-size:13px;font-weight:600;color:var(--g800);line-height:1.8;">
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;"><span style="min-width:22px;height:22px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">A</span><span><strong>Free partner rewards</strong> làm backbone — Ahamove chi $0, đối tác subsidize để có access vào driver base</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;"><span style="min-width:22px;height:22px;background:var(--r1);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">B</span><span><strong>Kim Cương: 2 paid rewards</strong> — Voucher xăng/EV 50k + Khám sức khoẻ 1 lần/năm</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="min-width:22px;height:22px;background:var(--r2);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">C</span><span><strong>Vàng: 1 paid reward</strong> — Voucher xăng/EV 30k/tháng</span></div>
+        </div>
+        <div style="margin-top:12px;background:#ECFDF5;border-radius:8px;padding:8px 12px;font-size:12px;color:#065F46;font-weight:600;">
+          Points system → chỉ đổi FREE partner items. Không dùng điểm để đổi cash voucher Ahamove trả tiền.
+        </div>
       </div>
     </div>
 
-    <!-- BUCKET 1: AHABENEFITS REDEMPTION -->
-    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">Bucket 1 · AhaBenefits Redemption <span style="background:#EBF3FF;color:var(--blue);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">Dự đoán được</span></div>
-    <div class="card" style="padding:0;overflow:hidden;margin-bottom:8px;">
-      <div style="overflow-x:auto;">
-        <table class="proj-table">
-          <thead><tr>
-            <th style="text-align:left;padding-left:18px;">Rank</th>
-            <th>Drivers<br><span style="font-size:10px;opacity:.7">/city</span></th>
-            <th>Pts/tháng<br><span style="font-size:10px;opacity:.7">/driver</span></th>
-            <th>Total pts<br><span style="font-size:10px;opacity:.7">/city/tháng</span></th>
-            <th>Cost 10% burn<br><span style="font-size:10px;opacity:.7">@50đ/pt</span></th>
-            <th>Cost 20% burn</th>
-            <th>Cost 30% burn</th>
-          </tr></thead>
-          <tbody>
-            <tr class="r1-row"><td style="padding-left:18px;"><span class="tag-sm t-r1">R1</span></td><td>1.575</td><td>18.040</td><td>28,4M</td><td style="color:#065F46;font-weight:700">142M</td><td style="font-weight:700">284M</td><td style="color:var(--red);font-weight:700">426M</td></tr>
-            <tr class="r2-row"><td style="padding-left:18px;"><span class="tag-sm t-r2">R2</span></td><td>3.675</td><td>11.682</td><td>42,9M</td><td style="color:#065F46;font-weight:700">215M</td><td style="font-weight:700">429M</td><td style="color:var(--red);font-weight:700">644M</td></tr>
-            <tr class="r3-row"><td style="padding-left:18px;"><span class="tag-sm t-r3">R3</span></td><td>3.675</td><td>6.512</td><td>23,9M</td><td style="color:#065F46;font-weight:700">120M</td><td style="font-weight:700">239M</td><td style="color:var(--red);font-weight:700">359M</td></tr>
-            <tr><td style="padding-left:18px;"><span class="tag-sm t-un">L6/Occ.</span></td><td>~33.000</td><td>~250</td><td>8,3M</td><td style="color:var(--g400);">42M</td><td style="color:var(--g400);">83M</td><td style="color:var(--g400);">125M</td></tr>
-            <tr style="background:var(--g100);"><td style="padding-left:18px;font-weight:800;">Tổng / city</td><td style="font-weight:700;">—</td><td>—</td><td style="font-weight:800;">103,5M pts</td><td style="font-weight:800;color:#065F46;">519M</td><td style="font-weight:800;">1.035M</td><td style="font-weight:800;color:var(--red);">1.554M</td></tr>
-            <tr style="background:var(--blue);"><td style="padding-left:18px;font-weight:800;color:#fff;">Tổng 2 cities</td><td colspan="3" style="color:#fff;opacity:.7">SGN + HAN</td><td style="font-weight:800;color:#86EFAC;font-size:14px;">~1,0B</td><td style="font-weight:800;color:#FCD34D;font-size:14px;">~2,1B</td><td style="font-weight:800;color:#FCA5A5;font-size:14px;">~3,1B</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="callout cb" style="margin-bottom:20px;"><strong>Lever kiểm soát:</strong> Burn rate phụ thuộc vào catalog pricing. Tăng giá điểm 50% (ví dụ: voucher 100k = 2.200 pts thay vì 1.500 pts) → cắt cost Bucket 1 xuống còn ~1.4B ở burn 30%. Điểm hết hạn theo quý cũng tự nhiên giảm burn rate thực tế.</div>
-
-    <!-- BUCKET 2: FULL-DAY GUARANTEE -->
-    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">Bucket 2 · Full-day Guarantee Top-up <span style="background:#FFFBEB;color:#92400E;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">Phụ thuộc EPH</span></div>
-    <div class="card" style="padding:0;overflow:hidden;margin-bottom:8px;">
-      <div style="overflow-x:auto;">
-        <table class="proj-table">
-          <thead><tr>
-            <th style="text-align:left;padding-left:18px;">Rank</th>
-            <th>Full-day<br><span style="font-size:10px;opacity:.7">registrants/city</span></th>
-            <th>Guarantee<br><span style="font-size:10px;opacity:.7">/ngày</span></th>
-            <th>EPH P50 × 10h</th>
-            <th>Trigger rate<br><span style="font-size:10px;opacity:.7">(ngày dưới GĐ)</span></th>
-            <th>Avg shortfall</th>
-            <th>Cost/city/tháng</th>
-          </tr></thead>
-          <tbody>
-            <tr class="r1-row">
-              <td style="padding-left:18px;"><span class="tag-sm t-r1">R1</span></td>
-              <td>~394 <span style="font-size:11px;color:var(--g400)">(25% × 1.575)</span></td>
-              <td style="font-weight:800;color:var(--r1);">600k</td>
-              <td>~1.000k <span style="font-size:11px;color:var(--g400)">(100k × 10h)</span></td>
-              <td>~15% ngày</td>
-              <td>~80k</td>
-              <td style="font-weight:800;">~104M</td>
-            </tr>
-            <tr class="r2-row">
-              <td style="padding-left:18px;"><span class="tag-sm t-r2">R2</span></td>
-              <td>~919 <span style="font-size:11px;color:var(--g400)">(25% × 3.675)</span></td>
-              <td style="font-weight:800;color:var(--r2);">500k</td>
-              <td>~850k <span style="font-size:11px;color:var(--g400)">(85k × 10h)</span></td>
-              <td>~20% ngày</td>
-              <td>~70k</td>
-              <td style="font-weight:800;">~258M</td>
-            </tr>
-            <tr style="background:var(--g100);"><td style="padding-left:18px;font-weight:800;">Tổng / city</td><td colspan="5"></td><td style="font-weight:800;color:var(--g800);">~362M</td></tr>
-            <tr style="background:var(--blue);"><td style="padding-left:18px;font-weight:800;color:#fff;">Tổng 2 cities</td><td colspan="5" style="color:#fff;opacity:.7">Base case · EPH P50 giả định</td><td style="font-weight:800;color:#FCD34D;font-size:14px;">~724M</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;">
-      <div style="background:#ECFDF5;border:1px solid #6EE7B7;border-radius:1rem;padding:12px 14px;"><div style="font-size:11px;font-weight:700;color:#065F46;margin-bottom:4px;">Best case (EPH tốt)</div><div style="font-size:18px;font-weight:800;color:#065F46;">~200M</div><div style="font-size:11px;color:#065F46;">5% trigger, gap nhỏ</div></div>
-      <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:1rem;padding:12px 14px;"><div style="font-size:11px;font-weight:700;color:#92400E;margin-bottom:4px;">Base case</div><div style="font-size:18px;font-weight:800;color:#92400E;">~724M</div><div style="font-size:11px;color:#92400E;">15-20% trigger, gap vừa</div></div>
-      <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:1rem;padding:12px 14px;"><div style="font-size:11px;font-weight:700;color:#991B1B;margin-bottom:4px;">Worst case (EPH thấp)</div><div style="font-size:18px;font-weight:800;color:#991B1B;">~1,8B</div><div style="font-size:11px;color:#991B1B;">40% trigger, gap lớn</div></div>
-    </div>
-
-    <!-- BUCKET 3: HOURLY GUARANTEE -->
-    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">Bucket 3 · Hourly Guarantee Top-up <span style="background:#FEE2E2;color:#991B1B;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">⚠ Rủi ro cao nhất</span></div>
-    <div class="callout cr" style="margin-bottom:12px;"><strong>Lưu ý:</strong> Hourly guarantee là cost item khó dự đoán nhất vì phụ thuộc hoàn toàn vào phân phối EPH thực tế. Guarantee chỉ trigger khi EPH &lt; mức đảm bảo (65k/h cho R1). Cần chạy query EPH distribution trước khi commit mức guarantee này.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:8px;">
-      <div style="background:#ECFDF5;border:1px solid #6EE7B7;border-radius:1rem;padding:14px 16px;">
-        <div style="font-size:11px;font-weight:700;color:#065F46;margin-bottom:6px;">✅ Best case — EPH P50 &gt; GĐ</div>
-        <div style="font-size:22px;font-weight:800;color:#065F46;">~150M</div>
-        <div style="font-size:11px;color:#065F46;margin-top:4px;">Chỉ &lt;10% ca trigger · Gap &lt;5k/h · Ahamove gần như không bù</div>
-      </div>
-      <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:1rem;padding:14px 16px;">
-        <div style="font-size:11px;font-weight:700;color:#92400E;margin-bottom:6px;">⚠ Base case — ~20% ca trigger</div>
-        <div style="font-size:22px;font-weight:800;color:#92400E;">~800M</div>
-        <div style="font-size:11px;color:#92400E;margin-top:4px;">20% ca có EPH dưới GĐ · Gap ~10k/h × 4h · Moderate exposure</div>
-      </div>
-      <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:1rem;padding:14px 16px;">
-        <div style="font-size:11px;font-weight:700;color:#991B1B;margin-bottom:6px;">🚨 Worst case — EPH structural thấp</div>
-        <div style="font-size:22px;font-weight:800;color:#991B1B;">&gt;3B</div>
-        <div style="font-size:11px;color:#991B1B;margin-top:4px;">35%+ ca trigger · Gap &gt;20k/h · Budget breach nghiêm trọng</div>
-      </div>
-    </div>
-    <div class="callout co" style="margin-bottom:20px;"><strong>SQL cần chạy trước:</strong> <code style="background:var(--g800);color:#86EFAC;padding:2px 6px;border-radius:4px;font-size:12px;">SELECT rank, PERCENTILE_CONT(0.1/0.25/0.5/0.75) WITHIN GROUP (ORDER BY eph) FROM driver_trips WHERE month = '2026-04' GROUP BY rank</code> → xem EPH P10/P25/P50 thực tế. Nếu EPH P25 &gt; mức guarantee → Bucket 3 cost rất nhỏ.</div>
-
-    <!-- TOTAL SUMMARY -->
-    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:12px;">Tổng hợp 3 Scenarios — 2 Cities / Tháng</div>
+    <!-- PAID REWARDS BUDGET BREAKDOWN -->
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">Chi phí Paid Rewards — Tính toán cụ thể</div>
     <div class="card" style="padding:0;overflow:hidden;margin-bottom:14px;">
       <div style="overflow-x:auto;">
         <table class="proj-table">
           <thead><tr>
-            <th style="text-align:left;padding-left:18px;">Cost Bucket</th>
-            <th style="background:#065F46;">Best case</th>
-            <th style="background:#92400E;">Base case</th>
-            <th style="background:#991B1B;">Worst case</th>
-            <th>Lever kiểm soát</th>
+            <th style="text-align:left;padding-left:18px;">Rank & Reward</th>
+            <th>Số lượng<br><span style="font-size:10px;opacity:.7">drivers tổng</span></th>
+            <th>Face value<br><span style="font-size:10px;opacity:.7">/driver/tháng</span></th>
+            <th>Cost Ahamove<br><span style="font-size:10px;opacity:.7">@75% face value</span></th>
+            <th>Tổng/tháng</th>
+            <th>Ghi chú</th>
           </tr></thead>
           <tbody>
-            <tr><td style="padding-left:18px;font-weight:600;">AhaBenefits Redemption</td><td style="color:#065F46;font-weight:800;">~1,0B</td><td style="font-weight:800;">~2,1B</td><td style="color:var(--red);font-weight:800;">~3,1B</td><td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Catalog pricing · Redemption rate · Quarterly expiry</td></tr>
-            <tr><td style="padding-left:18px;font-weight:600;">Full-day Guarantee</td><td style="color:#065F46;font-weight:800;">~200M</td><td style="font-weight:800;">~724M</td><td style="color:var(--red);font-weight:800;">~1,8B</td><td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Giới hạn Full-day slots · Điều kiện kích hoạt (95%+AR)</td></tr>
-            <tr><td style="padding-left:18px;font-weight:600;">Hourly Guarantee</td><td style="color:#065F46;font-weight:800;">~150M</td><td style="font-weight:800;">~800M</td><td style="color:var(--red);font-weight:800;">&gt;3,0B</td><td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Set guarantee dưới EPH P25 · Pilot L2 only trước</td></tr>
-            <tr style="background:var(--g100);border-top:2px solid var(--g200);"><td style="padding-left:18px;font-weight:800;">TỔNG / tháng</td><td style="font-weight:800;font-size:16px;color:#065F46;">~1,35B</td><td style="font-weight:800;font-size:16px;">~3,62B</td><td style="font-weight:800;font-size:16px;color:var(--red);">&gt;7,9B</td><td></td></tr>
-            <tr style="background:var(--g100);"><td style="padding-left:18px;font-weight:800;">TỔNG / năm</td><td style="font-weight:800;color:#065F46;">~16B</td><td style="font-weight:800;">~43B</td><td style="font-weight:800;color:var(--red);">&gt;95B</td><td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Worst case cần tránh bằng mọi giá</td></tr>
+            <tr class="r1-row">
+              <td style="padding-left:18px;font-weight:700;color:var(--r1);">💎 Kim Cương — Paid #1<br><span style="font-size:11px;color:var(--g600);font-weight:500;">Voucher xăng/EV 50k</span></td>
+              <td style="font-weight:800;">1.575</td>
+              <td>50.000đ</td>
+              <td style="font-weight:700;">~37.500đ</td>
+              <td style="font-weight:800;color:var(--r1);font-size:14px;">~59M</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Mua bulk qua đối tác xăng/EV, chiết khấu 25%</td>
+            </tr>
+            <tr class="r1-row">
+              <td style="padding-left:18px;font-weight:700;color:var(--r1);">💎 Kim Cương — Paid #2<br><span style="font-size:11px;color:var(--g600);font-weight:500;">Khám sức khoẻ cơ bản · 1 lần/năm</span></td>
+              <td style="font-weight:800;">1.575</td>
+              <td>250.000đ/năm<br><span style="font-size:11px;color:var(--g400)">= ~21k/tháng</span></td>
+              <td style="font-weight:700;">~21.000đ/tháng</td>
+              <td style="font-weight:800;color:var(--r1);font-size:14px;">~33M</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Trả theo quý hoặc tháng khi driver sử dụng</td>
+            </tr>
+            <tr class="r2-row">
+              <td style="padding-left:18px;font-weight:700;color:var(--r2);">🥇 Vàng — Paid #1<br><span style="font-size:11px;color:var(--g600);font-weight:500;">Voucher xăng/EV 30k</span></td>
+              <td style="font-weight:800;">3.675</td>
+              <td>30.000đ</td>
+              <td style="font-weight:700;">~22.500đ</td>
+              <td style="font-weight:800;color:var(--r2);font-size:14px;">~83M</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Cùng cơ chế bulk purchase với Kim Cương</td>
+            </tr>
+            <tr style="background:var(--g100);">
+              <td style="padding-left:18px;font-weight:800;">R3 Bạc & L6</td>
+              <td colspan="3" style="font-size:12px;color:var(--g600);">Chỉ nhận Free Partner Rewards — Ahamove chi $0</td>
+              <td style="font-weight:800;color:var(--green);">0đ</td>
+              <td></td>
+            </tr>
+            <tr style="background:linear-gradient(135deg,#ECFDF5,#EBF3FF);">
+              <td style="padding-left:18px;font-weight:800;font-size:14px;">TỔNG PAID / tháng</td>
+              <td colspan="3" style="font-size:12px;color:var(--g600);">59M + 33M + 83M</td>
+              <td style="font-weight:800;color:#065F46;font-size:20px;">~175M</td>
+              <td style="font-size:12px;color:#065F46;font-weight:700;text-align:left;padding-left:10px;">✅ Trong ngưỡng 200M · Buffer ~25M</td>
+            </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- MITIGATION -->
-    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:12px;">Khuyến nghị kiểm soát Budget — Phased Approach</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-      <div style="background:#fff;border:2px solid var(--green);border-radius:1.25rem;padding:18px 16px;">
-        <div style="font-size:11px;font-weight:800;color:var(--green);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;">Phase 1 · Tháng 1–2</div>
-        <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:8px;">Launch AhaBenefits only</div>
-        <div style="font-size:12px;color:var(--g600);line-height:1.7;">• Chỉ mở điểm + catalog<br>• Chưa có guarantee nào<br>• Measure burn rate thực tế<br>• Expected cost: ~1,0–1,5B/tháng<br><strong style="color:var(--green)">→ Risk thấp nhất</strong></div>
+    <!-- FREE PARTNER MODEL -->
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">Free Partner Rewards — Cơ chế Partnership (Ahamove chi $0)</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">⛽ Nhiên liệu & EV</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Petrolimex, Shell, Evgo, VinFast charging → đàm phán <strong>3–8% discount tại quầy</strong> cho driver có badge Ahamove. Partner hưởng traffic + brand exposure.</div>
       </div>
-      <div style="background:#fff;border:2px solid var(--gold);border-radius:1.25rem;padding:18px 16px;">
-        <div style="font-size:11px;font-weight:800;color:var(--gold);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;">Phase 2 · Tháng 3–4</div>
-        <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:8px;">Thêm Full-day Guarantee (R1 only)</div>
-        <div style="font-size:12px;color:var(--g600);line-height:1.7;">• Full-day guarantee R1 trước<br>• Cap số lượng Full-day slots<br>• Monitor EPH distribution<br>• Expected cost thêm: ~200–400M<br><strong style="color:var(--gold)">→ Risk có thể kiểm soát</strong></div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🔧 Bảo dưỡng xe</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Garage đối tác (CarCare, Vinfast Service, local chains) → <strong>10–15% discount + priority slot</strong>. Partner nhận lượng khách ổn định từ fleet Ahamove.</div>
       </div>
-      <div style="background:#fff;border:2px solid var(--orange);border-radius:1.25rem;padding:18px 16px;">
-        <div style="font-size:11px;font-weight:800;color:var(--orange);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;">Phase 3 · Tháng 5–6</div>
-        <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:8px;">Hourly guarantee sau khi có EPH data</div>
-        <div style="font-size:12px;color:var(--g600);line-height:1.7;">• Set guarantee = EPH P20 (không phải P50)<br>• Mở R2 Full-day guarantee<br>• Review catalog pricing theo burn rate thực<br><strong style="color:var(--orange)">→ Data-driven, không đoán mò</strong></div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🍜 F&B Merchant</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Merchant đang chạy trên Ahamove → đổi <strong>điểm lấy voucher</strong> merchant tự fund như marketing spend. Win-win: merchant tăng order, driver có quyền lợi.</div>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">📱 Data SIM</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Đàm phán <strong>group rate</strong> với Viettel/Vinaphone/Mobifone. ~42k drivers là customer block đủ lớn để negotiate rate đặc biệt, gần như không tốn chi phí Ahamove.</div>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🏥 Khám sức khoẻ (R3)</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Clinic partner (Medlatec, Vinmec, phòng khám địa phương) → discount 20–30% cho R3. Partner nhận volume khách; R3 có benefit không tốn budget Ahamove.</div>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🎯 Points → Partner Voucher</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Hệ thống điểm AhaBenefits <strong>chỉ đổi partner-funded items</strong>. Ahamove là nền tảng trung gian, không trả tiền mặt. Chi phí điểm = 0 với Ahamove.</div>
       </div>
     </div>
-    <div class="callout cr" style="margin-top:14px;"><strong>🚨 Red flag cần check ngay:</strong> Nếu EPH P25 của R1/R2/R3 thấp hơn mức guarantee đề xuất (65k/60k/55k) → Hourly guarantee cost sẽ vượt ngưỡng. Chạy query EPH distribution <em>trước khi approve framework</em> này với Finance.</div>
+
+    <!-- BUDGET SUMMARY BAR -->
+    <div style="background:linear-gradient(135deg,var(--blue),#1a5c9e);border-radius:1.5rem;padding:24px 28px;color:#fff;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:700;opacity:.7;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Tổng kết Budget / Tháng</div>
+      <div style="display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap;">
+        <div><div style="font-size:11px;opacity:.6;margin-bottom:4px;">Paid rewards (Kim Cương + Vàng)</div><div style="font-size:36px;font-weight:800;letter-spacing:-1px;color:#86EFAC;">~175M</div></div>
+        <div style="font-size:28px;opacity:.4;padding-bottom:8px;">+</div>
+        <div><div style="font-size:11px;opacity:.6;margin-bottom:4px;">AhaBenefits Points (partner-funded)</div><div style="font-size:36px;font-weight:800;letter-spacing:-1px;color:#7DD3FC;">~0đ</div></div>
+        <div style="font-size:28px;opacity:.4;padding-bottom:8px;">=</div>
+        <div><div style="font-size:11px;opacity:.6;margin-bottom:4px;">Tổng chi phí Ahamove</div><div style="font-size:36px;font-weight:800;letter-spacing:-1px;color:#FCD34D;">~175M</div></div>
+        <div style="margin-left:auto;background:rgba(134,239,172,.15);border:1px solid rgba(134,239,172,.3);border-radius:1rem;padding:12px 20px;text-align:center;">
+          <div style="font-size:11px;opacity:.7;margin-bottom:4px;">vs Budget</div>
+          <div style="font-size:22px;font-weight:800;color:#86EFAC;">200M</div>
+          <div style="font-size:11px;color:#86EFAC;margin-top:2px;">Buffer: ~25M ✅</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout co"><strong>Lưu ý về Guarantee:</strong> Hourly guarantee &amp; Full-day guarantee là chi phí <em>tách biệt</em>, không tính trong 200M AhaBenefits budget. Cần EPH data thực tế và duyệt riêng với Finance trước khi activate. Đề xuất: launch AhaBenefits + paid rewards trước (tháng 1), guarantee xét sau khi có 2 tháng EPH data.</div>
   </section>
 
   <div class="footer">
