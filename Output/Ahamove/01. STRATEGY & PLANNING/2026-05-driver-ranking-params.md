@@ -234,7 +234,7 @@ Pts tích/tháng (avg, 22 ca):
 
 ---
 
-### B. Rank Entitlements — Đặc quyền theo Rank (chủ động đổi điểm)
+### B. Rank Entitlements — Đặc quyền theo Rank
 
 #### 💎 R1 Exclusive — Mua bảo hiểm tai nạn theo tháng
 
@@ -271,6 +271,56 @@ Pts tích/tháng (avg, 22 ca):
 | Hourly guarantee | TBD | Tách biệt, cần EPH data |
 | Full-day guarantee | TBD | Tách biệt, cần EPH data |
 | **AhaBenefits budget** | **≤ 200M** | Buffer ~25M |
+
+---
+
+---
+
+## 10. Bảng Tổng Hợp Benefits — Theo Rank & Layer
+
+### 10.1 Tổng hợp theo Rank
+
+| Benefit | 💎 R1 Kim Cương | 🥇 R2 Vàng | 🥈 R3 Bạc | Unranked |
+| --- | --- | --- | --- | --- |
+| **Điều kiện xét** | DQS ≥80, DCR <10%, Prod ≥280 | DQS ≥75, DCR <10%, Prod ≥210 | DQS ≥70, DCR ≤15%, Prod ≥70 | Dưới R3 |
+| **Primary Layer** | L2 Minizone | L3 Mediumzone | L4 Bigzone | L6 MASS |
+| **AhaBenefits hệ số** | ×1.5 | ×1.3 | ×1.1 | ×1.0 |
+| **Bonus hoàn ca** | +30 pts | +25 pts | +20 pts | — |
+| **Pts tích/tháng (est.)** | ~2.508 pts | ~2.046 pts | ~1.606 pts | ~968 pts |
+| **Ca Full-day** | ✅ 08:00–18:00 | ✅ 08:00–18:00 | ❌ | ❌ |
+| **Thu nhập target/ngày Full-day** | SGN 600k · HAN 650k | SGN 550k · HAN 600k | — | — |
+| **Voucher xăng/EV (tự động)** | 50k/tháng | 30k/tháng | — | — |
+| **Bảo hiểm tai nạn Mini** | ✅ Đổi điểm (285–857 pts) | ❌ | ❌ | ❌ |
+| **Slot ưu tiên Ca Peak** | 20% | 40% | 40% | on-demand |
+| **Partner Tier** | 💎 Kim Cương | 🥇 Vàng | 🥈 Bạc | — |
+
+---
+
+### 10.2 Tổng hợp theo Layer
+
+| | **L2 Minizone** | **L3 Mediumzone** | **L4 Bigzone** | **L5 Cityzone** | **L6 MASS** |
+| --- | --- | --- | --- | --- | --- |
+| **Rank ưu tiên** | R1 | R2 | R3 | Overflow R3 | Unranked |
+| **AhaBenefits ×** | ×1.5 | ×1.3 | ×1.1 | ×1.0 | ×1.0 |
+| **Bonus/ca** | +30 pts | +25 pts | +20 pts | +20 pts | — |
+| **Overflow** | ×1.0, no bonus | ×1.0, no bonus | ×1.0, no bonus | — | — |
+| **Target earn SGN** | lên đến 65k/h | lên đến 60k/h | lên đến 55k/h | lên đến 55k/h | — |
+| **Target earn HAN** | lên đến 70k/h | lên đến 65k/h | lên đến 60k/h | lên đến 60k/h | — |
+| **Cascade mở khi** | L2 ≥80% fill | L3 ≥80% fill | L4 ≥80% fill | — | luôn mở |
+
+---
+
+### 10.3 Tổng hợp Ca làm việc
+
+| | **Ca Sáng** | **Ca Chiều** | **Ca Tối** | **Ca Full-day** |
+| --- | --- | --- | --- | --- |
+| **Giờ** | 08:00–12:00 | 13:00–17:00 | 17:00–21:00 | 08:00–18:00 |
+| **Loại** | 4 tiếng ⚡ Peak | 4 tiếng ⚡ Peak | 4 tiếng | 10 tiếng |
+| **Slot R1** | 20% | 20% | 15% | 50% |
+| **Slot R2** | 40% | 40% | 40% | 50% |
+| **Slot R3** | 40% | 40% | 45% | — |
+| **Unranked** | on-demand | on-demand | on-demand | ❌ |
+| **Thu nhập target** | Theo Layer | Theo Layer | Theo Layer | R1: 600–650k · R2: 550–600k |
 
 ---
 
