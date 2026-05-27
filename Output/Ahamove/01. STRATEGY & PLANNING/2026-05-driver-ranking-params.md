@@ -178,59 +178,52 @@ Pts tích/tháng (avg, 22 ca):
 > Tương đương 0.7% GSV tài xế mang về (base, ×1.0) hoặc 0.3–0.5% GSV khi có layer multiplier.
 > Cột "Giá trị est." là giá trị kinh tế thực của reward với tài xế — cần Finance/partner validate.
 
-### A. Partner Rewards (Ahamove cost = 0đ)
+### A. Partner Rewards — Phân theo Rank
 
-#### ⛽ Nhiên liệu & Sạc EV
+> Unranked / L6 không có quyền truy cập catalog — tạo động lực đạt R3.
 
-| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
+#### 🥈 R3+ Bạc trở lên — Quyền lợi cơ bản
+
+| Danh mục | Item | Giá trị est. | Điểm |
 | --- | --- | --- | --- |
-| Giảm xăng 5% / lần (~đổ 200k) | ~10.000đ | 285 → **300** | Tất cả |
-| Giảm xăng 10% / lần | ~20.000đ | 571 → **550** | Tất cả |
-| Sạc EV 20% / lần (~sạc 80k) | ~16.000đ | 457 → **450** | Tất cả |
-| Combo sạc EV tháng 10% | ~40.000đ | 1.143 → **1.100** | R2+ |
+| ⛽ Xăng/EV | Giảm xăng 5% / lần (~đổ 200k) | ~10.000đ | **300** |
+| ⛽ Xăng/EV | Sạc EV 20% / lần (~sạc 80k) | ~16.000đ | **450** |
+| 🔧 Bảo dưỡng | Giảm 30% vá / thay lốp (~100k) | ~30.000đ | **850** |
+| 🍜 F&B | Combo bữa trưa tài xế | ~25.000đ | **700** |
+| 🍜 F&B | Giảm 10% siêu thị (~200k basket) | ~20.000đ | **550** |
+| 📱 Data | Data 5GB ưu đãi tài xế | ~15.000đ | **400** |
+| 🏥 Sức khoẻ | Giảm 15% mua thuốc (~100k) | ~15.000đ | **400** |
 
-#### 🔧 Bảo dưỡng xe
+#### 🥇 R2+ Vàng trở lên — Quyền lợi nâng cao
 
-| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
+> Bao gồm toàn bộ quyền lợi R3+ và thêm:
+
+| Danh mục | Item | Giá trị est. | Điểm |
 | --- | --- | --- | --- |
-| Giảm 15% dầu nhớt / lọc (~150k) | ~22.500đ | 643 → **650** | Tất cả |
-| Giảm 20% bảo dưỡng định kỳ (~250k) | ~50.000đ | 1.429 → **1.400** | Tất cả |
-| Giảm 30% vá / thay lốp (~100k) | ~30.000đ | 857 → **850** | Tất cả |
-| Gói bảo dưỡng ưu tiên R1 (~300k) | ~90.000đ | 2.571 → **2.550** | R1 only |
+| ⛽ Xăng/EV | Giảm xăng 10% / lần | ~20.000đ | **550** |
+| ⛽ Xăng/EV | Combo sạc EV tháng 10% | ~40.000đ | **1.100** |
+| 🔧 Bảo dưỡng | Giảm 15% dầu nhớt / lọc (~150k) | ~22.500đ | **650** |
+| 🔧 Bảo dưỡng | Giảm 20% bảo dưỡng định kỳ (~250k) | ~50.000đ | **1.400** |
+| 🎽 CCDC | Túi giữ nhiệt tiêu chuẩn | ~50.000đ | **1.400** |
+| 🎽 CCDC | Đồng phục 1 bộ | ~60.000đ | **1.700** |
+| 🍜 F&B | Voucher F&B partner 50k | ~50.000đ | **1.400** |
+| 📱 Data | Data 10GB ưu đãi tài xế | ~25.000đ | **700** |
+| 📱 Data | Data 20GB ưu đãi tài xế | ~50.000đ | **1.400** |
+| 🏥 Sức khoẻ | Giảm 20% khám tổng quát (~300k) | ~60.000đ | **1.700** |
 
-#### 🎽 CCDC & Trang thiết bị
+#### 💎 R1 Kim Cương — Đặc quyền cao nhất
 
-| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
+> Bao gồm toàn bộ quyền lợi R2+ và thêm:
+
+| Danh mục | Item | Giá trị est. | Điểm |
 | --- | --- | --- | --- |
-| Túi giữ nhiệt tiêu chuẩn | ~50.000đ | 1.429 → **1.400** | Tất cả |
-| Túi giữ nhiệt cao cấp (XL) | ~80.000đ | 2.286 → **2.300** | Tất cả |
-| Baga / phụ kiện xe | ~120.000đ | 3.429 → **3.400** | Tất cả |
-| Đồng phục 1 bộ | ~60.000đ | 1.714 → **1.700** | Tất cả |
-
-#### 🍜 F&B / Tiêu dùng
-
-| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
-| --- | --- | --- | --- |
-| Voucher F&B partner 50k | 50.000đ | 1.429 → **1.400** | Tất cả |
-| Voucher F&B partner 100k | 100.000đ | 2.857 → **2.850** | Tất cả |
-| Giảm 10% siêu thị (~200k basket) | ~20.000đ | 571 → **550** | Tất cả |
-| Combo bữa trưa tài xế | ~25.000đ | 714 → **700** | Tất cả |
-
-#### 📱 Data SIM & Viễn thông
-
-| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
-| --- | --- | --- | --- |
-| Data 5GB ưu đãi tài xế | ~15.000đ | 429 → **400** | Tất cả |
-| Data 10GB ưu đãi tài xế | ~25.000đ | 714 → **700** | Tất cả |
-| Data 20GB ưu đãi tài xế | ~50.000đ | 1.429 → **1.400** | Tất cả |
-| Gói SIM ưu tiên cao tốc / tháng | ~80.000đ | 2.286 → **2.300** | R2+ |
-
-#### 🏥 Sức khoẻ & Bảo vệ
-
-| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
-| --- | --- | --- | --- |
-| Giảm 20% khám tổng quát (~300k) | ~60.000đ | 1.714 → **1.700** | Tất cả |
-| Giảm 15% mua thuốc (~100k) | ~15.000đ | 429 → **400** | Tất cả |
+| ⛽ Xăng/EV | Gói sạc EV ưu tiên tháng (15%) | ~60.000đ | **1.700** |
+| 🔧 Bảo dưỡng | Gói bảo dưỡng ưu tiên (~300k) | ~90.000đ | **2.550** |
+| 🎽 CCDC | Túi giữ nhiệt cao cấp (XL) | ~80.000đ | **2.300** |
+| 🎽 CCDC | Baga / phụ kiện xe | ~120.000đ | **3.400** |
+| 🍜 F&B | Voucher F&B partner 100k | ~100.000đ | **2.850** |
+| 📱 Data | Gói SIM ưu tiên cao tốc / tháng | ~80.000đ | **2.300** |
+| 🛡️ Bảo hiểm | Bảo hiểm tai nạn Mini (đổi điểm để mua) | 10k–30k/tháng | **285–857** |
 
 ---
 
