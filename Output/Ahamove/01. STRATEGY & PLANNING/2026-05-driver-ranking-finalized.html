@@ -1,0 +1,2692 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driver Ranking Framework 2026 — Ahamove</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ===== COMBINED RESET & VARIABLES ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+/* Dark theme vars (params sheet) */
+:root {
+  /* Dark palette */
+  --bg-base:    #0D1117;
+  --bg-card:    #161B22;
+  --bg-card2:   #1C2430;
+  --bg-code:    #0A0F15;
+  --bg-hover:   #1F2937;
+  --border:     rgba(255,255,255,0.07);
+  --text-prime: #E6EDF3;
+  --text-sec:   #8B949E;
+  --text-muted: #586069;
+  /* Light palette */
+  --blue:       #0E4174;
+  --blue-58:    #58A6FF;
+  --orange:     #FF7F32;
+  --green:      #10B981;
+  --red:        #EF4444;
+  --gold:       #F59E0B;
+  --silver:     #64748B;
+  --orange-dim: rgba(255,127,50,0.12);
+  --yellow:     #F59E0B;
+  --yellow-dim: rgba(245,158,11,0.12);
+  --blue-dim:   rgba(88,166,255,0.12);
+  --teal:       #22D3EE;
+  --teal-dim:   rgba(34,211,238,0.1);
+  --green-dim:  rgba(16,185,129,0.12);
+  --red-dim:    rgba(239,68,68,0.12);
+  --purple:     #A78BFA;
+  --gray-dim:   rgba(139,148,158,0.1);
+  --r1-c:       #FF7F32;
+  --r2-c:       #F59E0B;
+  --r3-c:       #58A6FF;
+  /* Light theme aliases */
+  --r1: #FF7F32; --r2: #0E4174; --r3: #64748B; --un: #94A3B8;
+  --g50: #F9FAFB; --g100: #F3F4F6; --g200: #E5E7EB; --g400: #9CA3AF;
+  --g600: #4B5563; --g800: #1F2937;
+}
+
+/* ===== TOP STICKY NAV (TAB SWITCHER) ===== */
+#top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #0E4174;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 16px rgba(14,65,116,.35);
+  overflow-x: auto;
+  gap: 0;
+  padding: 0 24px;
+}
+.tn-brand {
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  padding: 0 20px 0 0;
+  border-right: 1px solid rgba(255,255,255,.2);
+  margin-right: 12px;
+  flex-shrink: 0;
+  line-height: 50px;
+}
+.tn-tab {
+  color: rgba(255,255,255,.7);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Lexend', sans-serif;
+  white-space: nowrap;
+  padding: 0 18px;
+  line-height: 50px;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  transition: all .15s;
+}
+.tn-tab:hover, .tn-tab.active {
+  color: #fff;
+  border-bottom-color: #FF7F32;
+}
+.tn-sep { color: rgba(255,255,255,.25); padding: 0 4px; font-size: 18px; line-height: 50px; }
+
+/* ===== TAB PANELS ===== */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ===== PANEL 1: PARAMS (DARK THEME) ===== */
+#panel-params {
+  background: var(--bg-base);
+  color: var(--text-prime);
+  font-family: 'Lexend', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: calc(100vh - 50px);
+}
+#panel-params .inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 36px 44px 60px;
+}
+
+/* ===== PANEL 2: BENEFITS (LIGHT THEME) ===== */
+#panel-benefits {
+  background: var(--g50);
+  color: var(--g800);
+  font-family: 'Lexend', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: calc(100vh - 50px);
+}
+#panel-benefits .page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* ===== PARAMS DARK STYLES ===== */
+
+  :root {
+    --bg-base:    #0D1117;
+    --bg-card:    #161B22;
+    --bg-card2:   #1C2430;
+    --bg-code:    #0A0F15;
+    --bg-hover:   #1F2937;
+    --border:     rgba(255,255,255,0.07);
+    --text-prime: #E6EDF3;
+    --text-sec:   #8B949E;
+    --text-muted: #586069;
+    --orange:     #FF7F32;
+    --orange-dim: rgba(255,127,50,0.12);
+    --yellow:     #F59E0B;
+    --yellow-dim: rgba(245,158,11,0.12);
+    --blue:       #58A6FF;
+    --blue-dim:   rgba(88,166,255,0.12);
+    --teal:       #22D3EE;
+    --teal-dim:   rgba(34,211,238,0.1);
+    --green:      #10B981;
+    --green-dim:  rgba(16,185,129,0.12);
+    --red:        #EF4444;
+    --red-dim:    rgba(239,68,68,0.12);
+    --purple:     #A78BFA;
+    --gray-dim:   rgba(139,148,158,0.1);
+    --r1-c:       #FF7F32;
+    --r2-c:       #F59E0B;
+    --r3-c:       #58A6FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg-base); color: var(--text-prime); font-family: 'Lexend', sans-serif; font-size: 14px; line-height: 1.7; display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar { width: 230px; min-width: 230px; background: var(--bg-card); border-right: 1px solid var(--border); position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 24px 0; flex-shrink: 0; }
+  #sidebar::-webkit-scrollbar { width: 3px; }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .sb-logo { padding: 0 18px 18px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+  .sb-tag { display: inline-block; background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(255,127,50,0.25); border-radius: 6px; font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; padding: 3px 8px; margin-bottom: 8px; text-transform: uppercase; }
+  .sb-logo h2 { font-size: 12.5px; font-weight: 700; color: var(--text-prime); line-height: 1.45; }
+  .sb-logo p { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .sb-group { padding: 8px 18px 2px; font-size: 9.5px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  #sidebar a { display: flex; align-items: center; gap: 10px; padding: 7px 18px; color: var(--text-sec); text-decoration: none; font-size: 12px; border-left: 2px solid transparent; transition: all 0.15s; }
+  #sidebar a:hover { color: var(--text-prime); background: var(--bg-hover); border-left-color: var(--orange); }
+  .sb-num { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--text-muted); min-width: 18px; }
+  .sb-footer { padding: 14px 18px; margin-top: 8px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted); }
+  .sb-footer strong { color: var(--text-sec); }
+
+  /* ── MAIN ── */
+  #main { flex: 1; padding: 36px 44px; max-width: 980px; overflow-x: hidden; }
+
+  /* ── HERO ── */
+  .hero { background: linear-gradient(135deg, #0D1A2B 0%, #172030 60%, #0F1620 100%); border: 1px solid rgba(255,127,50,0.12); border-radius: 16px; padding: 32px 36px; margin-bottom: 36px; position: relative; overflow: hidden; }
+  .hero::after { content: ''; position: absolute; bottom: -40px; right: -40px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(255,127,50,0.07) 0%, transparent 70%); pointer-events: none; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(255,127,50,0.25); border-radius: 20px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; padding: 4px 12px; margin-bottom: 14px; text-transform: uppercase; }
+  .hero h1 { font-size: 24px; font-weight: 800; color: var(--text-prime); letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 8px; }
+  .hero h1 span { color: var(--orange); }
+  .hero-sub { font-size: 13px; color: var(--text-sec); margin-bottom: 20px; }
+  .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+  .hm-item .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; display: block; }
+  .hm-item .value { font-size: 12px; font-family: 'Space Mono', monospace; color: var(--text-sec); }
+
+  /* ── RANK BADGES ── */
+  .rank-r1 { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,127,50,0.12); color: var(--orange); border: 1px solid rgba(255,127,50,0.25); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .rank-r2 { display: inline-flex; align-items: center; gap: 5px; background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.25); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .rank-r3 { display: inline-flex; align-items: center; gap: 5px; background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(88,166,255,0.25); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .rank-un { display: inline-flex; align-items: center; gap: 5px; background: var(--gray-dim); color: var(--text-sec); border: 1px solid rgba(139,148,158,0.2); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+
+  /* ── LAYER BADGES ── */
+  .layer-badge { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 20px; border-radius: 6px; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; }
+  .l2 { background: rgba(255,127,50,0.15); color: var(--orange); border: 1px solid rgba(255,127,50,0.3); }
+  .l3 { background: rgba(245,158,11,0.15); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+  .l4 { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(88,166,255,0.3); }
+  .l5 { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(34,211,238,0.3); }
+  .l6 { background: var(--gray-dim); color: var(--text-sec); border: 1px solid rgba(139,148,158,0.2); }
+
+  /* ── SECTIONS ── */
+  section { margin-bottom: 48px; scroll-margin-top: 24px; }
+  .sec-hdr { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .sec-num { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; min-width: 34px; background: var(--orange-dim); border: 1px solid rgba(255,127,50,0.25); border-radius: 9px; font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; color: var(--orange); }
+  .sec-title h2 { font-size: 17px; font-weight: 700; color: var(--text-prime); letter-spacing: -0.01em; }
+  .sec-title p { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
+
+  /* ── TABLES ── */
+  .tw { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--bg-card2); }
+  th { padding: 9px 14px; text-align: left; font-size: 10.5px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 10px 14px; font-size: 13px; color: var(--text-sec); border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--bg-hover); }
+  td strong { color: var(--text-prime); font-weight: 700; }
+  td.num { font-family: 'Space Mono', monospace; font-size: 12px; }
+  td.good { color: var(--green); font-weight: 600; }
+  td.warn { color: var(--yellow); }
+  td.na { color: var(--text-muted); }
+
+  /* ── CODE BLOCKS ── */
+  .code-block { background: var(--bg-code); border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 10px; padding: 16px 20px; margin-bottom: 14px; overflow-x: auto; }
+  .code-block pre { font-family: 'Space Mono', monospace; font-size: 12px; line-height: 1.8; color: #C9D1D9; white-space: pre; }
+  .code-label { font-size: 10px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; font-family: 'Space Mono', monospace; }
+
+  /* ── CALLOUTS ── */
+  .callout { border-radius: 10px; padding: 12px 16px; margin-bottom: 14px; display: flex; gap: 12px; align-items: flex-start; border: 1px solid; font-size: 12.5px; }
+  .ci { background: var(--blue-dim); border-color: rgba(88,166,255,0.2); color: #93C5FD; }
+  .cw { background: var(--yellow-dim); border-color: rgba(245,158,11,0.25); color: #FCD34D; }
+  .cs { background: var(--green-dim); border-color: rgba(16,185,129,0.25); color: #6EE7B7; }
+  .co { background: var(--orange-dim); border-color: rgba(255,127,50,0.25); color: #FDB68F; }
+  .callout-body strong { font-weight: 700; }
+
+  /* ── KPI THRESHOLD PILLS ── */
+  .kpi-pill { display: inline-block; font-family: 'Space Mono', monospace; font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 8px; }
+  .kpi-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .kpi-orange { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(255,127,50,0.3); }
+  .kpi-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(88,166,255,0.3); }
+  .kpi-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .kpi-gray { background: var(--gray-dim); color: var(--text-sec); border: 1px solid rgba(139,148,158,0.2); }
+
+  /* ── MULT BIG ── */
+  .mult-big { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 800; line-height: 1; }
+
+  /* ── CITY TAB ── */
+  .city-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width:680px){ .city-grid{ grid-template-columns:1fr; } }
+  .city-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .city-header { padding: 10px 16px; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* ── CATALOG TIER ── */
+  .catalog-tier { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+  .ct-header { padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .ct-title { font-size: 13px; font-weight: 700; }
+  .ct-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ── SUMMARY GRID (section 9) ── */
+  .s9-note { font-size: 11.5px; color: var(--text-muted); margin-top: 8px; }
+
+  /* ── PROGRESS BAR ── */
+  .pbar-wrap { display: flex; align-items: center; gap: 10px; }
+  .pbar { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+  .pbar-fill { height: 100%; border-radius: 3px; }
+  .pbar-val { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; min-width: 32px; text-align: right; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+  code { font-family: 'Space Mono', monospace; font-size: 11.5px; background: rgba(255,127,50,0.1); color: var(--orange); padding: 1px 5px; border-radius: 4px; }
+
+
+/* ===== BENEFITS LIGHT STYLES ===== */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:#0E4174; --orange:#FF7F32; --green:#10B981; --red:#EF4444;
+      --gold:#F59E0B; --silver:#64748B;
+      --r1:#FF7F32; --r2:#0E4174; --r3:#64748B; --un:#94A3B8;
+      --g50:#F9FAFB; --g100:#F3F4F6; --g200:#E5E7EB; --g400:#9CA3AF;
+      --g600:#4B5563; --g800:#1F2937;
+    }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Lexend',sans-serif; background:var(--g50); color:var(--g800); font-size:15px; line-height:1.6; }
+
+    /* NAV */
+    nav { position:sticky; top:0; z-index:100; background:var(--blue); padding:0 2rem; display:flex; align-items:center; box-shadow:0 2px 12px rgba(14,65,116,.25); overflow-x:auto; gap:0; }
+    .nav-brand { font-size:13px; font-weight:700; color:#fff; white-space:nowrap; padding:14px 20px 14px 0; border-right:1px solid rgba(255,255,255,.2); margin-right:8px; flex-shrink:0; }
+    nav a { color:rgba(255,255,255,.75); text-decoration:none; font-size:12.5px; font-weight:500; white-space:nowrap; padding:14px 13px; border-bottom:3px solid transparent; transition:all .15s; }
+    nav a:hover { color:#fff; border-bottom-color:var(--orange); }
+
+    /* LAYOUT */
+    .page { max-width:1000px; margin:0 auto; padding:48px 24px 80px; }
+    section { margin-bottom:56px; }
+    .section-label { font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--orange); margin-bottom:6px; }
+    .section-title { font-size:22px; font-weight:800; color:var(--blue); letter-spacing:-.4px; margin-bottom:10px; }
+    .note { font-size:13px; color:var(--g600); background:var(--g100); border-left:3px solid var(--blue); padding:10px 16px; border-radius:0 8px 8px 0; margin-bottom:20px; }
+    .card { background:#fff; border-radius:1.5rem; border:1px solid var(--g200); padding:24px 28px; }
+
+    /* HEADER */
+    .header { background:linear-gradient(135deg,var(--blue) 0%,#1a5c9e 100%); border-radius:2rem; padding:40px 44px; color:#fff; margin-bottom:12px; }
+    .htag { display:inline-block; background:rgba(255,127,50,.2); color:var(--orange); font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; padding:4px 12px; border-radius:999px; border:1px solid rgba(255,127,50,.35); margin-bottom:14px; }
+    .header h1 { font-size:30px; font-weight:800; letter-spacing:-.6px; margin-bottom:6px; }
+    .header-sub { font-size:13px; opacity:.65; margin-bottom:24px; }
+    .kv-row { display:flex; gap:20px; flex-wrap:wrap; border-top:1px solid rgba(255,255,255,.15); padding-top:20px; }
+    .kv { display:flex; flex-direction:column; }
+    .kv-k { font-size:11px; font-weight:600; opacity:.6; letter-spacing:.5px; text-transform:uppercase; }
+    .kv-v { font-size:15px; font-weight:800; color:#fff; }
+
+    /* RANK CARDS */
+    .rank-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+    .rc { border-radius:1.5rem; padding:22px 20px 18px; border:2px solid; position:relative; overflow:hidden; }
+    .rc::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; }
+    .rc.r1 { border-color:var(--r1); background:#FFF7F2; }
+    .rc.r1::before { background:var(--r1); }
+    .rc.r2 { border-color:var(--r2); background:#F0F5FF; }
+    .rc.r2::before { background:var(--r2); }
+    .rc.r3 { border-color:var(--r3); background:#F8FAFC; }
+    .rc.r3::before { background:var(--r3); }
+    .rc.un { border-color:var(--un); background:#F8FAFC; }
+    .rc.un::before { background:var(--un); }
+    .rc-name { font-size:14px; font-weight:800; margin-bottom:4px; }
+    .r1 .rc-name { color:var(--r1); } .r2 .rc-name { color:var(--r2); }
+    .r3 .rc-name { color:var(--r3); } .un .rc-name { color:var(--un); }
+    .rc-target { display:inline-block; font-size:11px; font-weight:700; padding:2px 10px; border-radius:999px; margin-bottom:14px; }
+    .r1 .rc-target { background:#FED7AA; color:#9A3412; }
+    .r2 .rc-target { background:#BFDBFE; color:#1D4ED8; }
+    .r3 .rc-target { background:#E2E8F0; color:#334155; }
+    .un .rc-target { background:#E2E8F0; color:#64748B; }
+    .kpi-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(0,0,0,.06); font-size:12.5px; }
+    .kpi-row:last-child { border-bottom:none; }
+    .kpi-k { font-weight:600; color:var(--g600); }
+    .kpi-v { font-weight:700; }
+    .r1 .kpi-v { color:var(--r1); } .r2 .kpi-v { color:var(--r2); }
+    .r3 .kpi-v { color:var(--r3); } .un .kpi-v { color:var(--un); }
+    .rc-note { font-size:11.5px; color:var(--g400); margin-top:10px; line-height:1.5; }
+
+    /* PYRAMID */
+    .pyramid-wrap { display:flex; justify-content:center; margin:24px 0 8px; }
+    .pyramid { display:flex; flex-direction:column; align-items:center; gap:4px; width:100%; max-width:500px; }
+    .py-bar { border-radius:999px; display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 14px; height:46px; font-size:13px; font-weight:700; color:#fff; transition:all .2s; cursor:default; }
+    .py-bar:hover { filter:brightness(1.08); }
+    .py-label { font-size:12px; font-weight:700; }
+    .py-pct { font-size:18px; font-weight:800; letter-spacing:-.5px; }
+    .py-count { font-size:11px; font-weight:500; opacity:.8; }
+
+    /* LAYER ACCESS TABLE */
+    .mtable { width:100%; border-collapse:separate; border-spacing:0; border-radius:1.25rem; overflow:hidden; border:1px solid var(--g200); }
+    .mtable th { background:var(--blue); color:#fff; padding:13px 10px; text-align:center; font-size:13px; font-weight:700; }
+    .mtable th:first-child { text-align:left; padding-left:22px; min-width:140px; }
+    .mtable td { padding:13px 10px; text-align:center; border-bottom:1px solid var(--g100); vertical-align:middle; }
+    .mtable td:first-child { text-align:left; padding-left:22px; }
+    .mtable tr:last-child td { border-bottom:none; }
+    .mtable tr:nth-child(even) td { background:#FAFBFC; }
+    .badge-cell { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:10px; font-size:13px; font-weight:700; }
+    .bc-yes { background:#D1FAE5; color:#065F46; }
+    .bc-no  { background:var(--g100); color:var(--g400); }
+    .bc-cas { background:#FFF0E6; color:#C2410C; }
+    .bc-l1  { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
+    .supply-row td { background:#F0F5FF!important; font-size:12px; color:var(--blue); font-weight:500; padding:10px 10px!important; }
+    .supply-row td:first-child { font-weight:700; }
+
+    /* BENEFITS TABLE */
+    .btable { width:100%; border-collapse:separate; border-spacing:0; }
+    .btable th { background:var(--blue); color:#fff; padding:11px 12px; text-align:center; font-size:12px; font-weight:700; white-space:nowrap; }
+    .btable th:first-child { text-align:left; padding-left:16px; min-width:160px; border-radius:0; }
+    .btable td { padding:11px 12px; text-align:center; border-bottom:1px solid var(--g100); font-size:13px; vertical-align:middle; }
+    .btable td:first-child { text-align:left; padding-left:16px; font-weight:600; color:var(--g600); }
+    .btable tr:last-child td { border-bottom:none; }
+    .btable tr:nth-child(even) td { background:#FAFBFC; }
+    .btable .group-header td { background:var(--g100)!important; font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--g600); padding:7px 16px; }
+    .val-hi { font-weight:800; color:var(--green); }
+    .val-md { font-weight:700; color:var(--blue); }
+    .val-lo { font-weight:600; color:var(--g600); }
+    .val-no { color:var(--g400); }
+    .mult { display:inline-block; border-radius:999px; padding:3px 12px; font-size:13px; font-weight:800; }
+    .m20 { background:#FFF0E6; color:#C2410C; border:1px solid #FDBA74; }
+    .m17 { background:#EBF3FF; color:#1D4ED8; border:1px solid #93C5FD; }
+    .m13 { background:#ECFDF5; color:#065F46; border:1px solid #6EE7B7; }
+    .m10 { background:var(--g100); color:var(--g600); border:1px solid var(--g200); }
+    .tag-sm { display:inline-block; border-radius:999px; padding:2px 9px; font-size:11px; font-weight:700; }
+    .t-r1 { background:#FFF0E6; color:var(--r1); border:1px solid #FECBA0; }
+    .t-r2 { background:#EBF3FF; color:var(--r2); border:1px solid #BFDBFE; }
+    .t-r3 { background:#F1F5F9; color:var(--r3); border:1px solid #CBD5E1; }
+    .t-un { background:#F1F5F9; color:var(--un); border:1px solid #E2E8F0; }
+    .t-diamond { background:#EFF6FF; color:#1E40AF; border:1px solid #93C5FD; }
+    .t-gold { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
+    .t-silver { background:#F1F5F9; color:#475569; border:1px solid #CBD5E1; }
+    .t-green { background:#D1FAE5; color:#065F46; border:1px solid #6EE7B7; }
+
+    /* SHIFT SECTION */
+    .shift-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+    .shift-card { background:#fff; border:2px solid var(--g200); border-radius:1.25rem; padding:16px 14px; text-align:center; }
+    .shift-name { font-size:13px; font-weight:800; color:var(--blue); margin-bottom:4px; }
+    .shift-time { font-size:20px; font-weight:800; color:var(--g800); letter-spacing:-.5px; margin-bottom:6px; }
+    .shift-dur { font-size:11px; font-weight:600; color:var(--g400); background:var(--g100); border-radius:999px; padding:2px 8px; display:inline-block; margin-bottom:8px; }
+    .shift-peak { font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; }
+    .peak-yes { background:#FFF0E6; color:#C2410C; }
+    .peak-no  { background:var(--g100); color:var(--g400); }
+
+    .stable { width:100%; border-collapse:separate; border-spacing:0; border-radius:1.25rem; overflow:hidden; border:1px solid var(--g200); }
+    .stable th { background:var(--g800); color:#fff; padding:12px 14px; text-align:center; font-size:12.5px; font-weight:700; }
+    .stable th:first-child { text-align:left; padding-left:20px; }
+    .stable td { padding:12px 14px; text-align:center; border-bottom:1px solid var(--g100); font-size:13px; vertical-align:middle; }
+    .stable td:first-child { text-align:left; padding-left:20px; font-weight:600; }
+    .stable tr:last-child td { border-bottom:none; }
+    .stable tr:nth-child(even) td { background:#FAFBFC; }
+    .slot-bar { display:flex; align-items:center; gap:8px; justify-content:center; }
+    .sbar { height:8px; border-radius:4px; }
+
+    /* CALLOUT */
+    .callout { border-radius:1rem; padding:12px 16px; font-size:12.5px; font-weight:500; margin-top:12px; }
+    .co { background:#FFF7F2; border-left:3px solid var(--orange); color:#7C2D12; }
+    .cb { background:#EBF3FF; border-left:3px solid var(--blue); color:#1E3A5F; }
+    .cg { background:#ECFDF5; border-left:3px solid var(--green); color:#065F46; }
+    .cr { background:#FEF2F2; border-left:3px solid var(--red); color:#7F1D1D; }
+    .cy-call { background:#FFFBEB; border-left:3px solid var(--gold); color:#78350F; }
+
+    /* MASTER TABLE */
+    .master-table { width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; }
+    .master-table th { background:var(--blue); color:#fff; padding:12px 10px; text-align:center; font-size:11.5px; font-weight:700; white-space:nowrap; }
+    .master-table th:first-child { text-align:left; padding-left:18px; min-width:130px; border-radius:1rem 0 0 0; }
+    .master-table th:last-child { border-radius:0 1rem 0 0; }
+    .master-table td { padding:13px 10px; text-align:center; border-bottom:1px solid var(--g100); font-size:12.5px; vertical-align:middle; }
+    .master-table td:first-child { text-align:left; padding-left:18px; }
+    .master-table tr:last-child td:first-child { border-radius:0 0 0 1rem; }
+    .master-table tr:last-child td:last-child { border-radius:0 0 1rem 0; }
+    .master-table tr:last-child td { border-bottom:none; }
+    .master-table .r1-row td { background:#FFF7F2; }
+    .master-table .r2-row td { background:#F0F5FF; }
+    .master-table .r3-row td { background:#F8FAFC; }
+    .master-table .un-row td { background:#FAFBFC; }
+
+    /* AHABENEFITS TEASER */
+    .ab-header { background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,var(--blue) 100%); border-radius:2rem; padding:36px 40px; color:#fff; position:relative; overflow:hidden; }
+    .ab-header::before { content:'AhaBenefits'; position:absolute; right:-20px; top:10px; font-size:100px; font-weight:800; opacity:.06; white-space:nowrap; letter-spacing:-4px; }
+    .ab-tag { display:inline-block; background:rgba(255,127,50,.25); color:var(--orange); font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; padding:4px 12px; border-radius:999px; border:1px solid rgba(255,127,50,.4); margin-bottom:12px; }
+    .ab-header h2 { font-size:26px; font-weight:800; letter-spacing:-.5px; margin-bottom:6px; }
+    .ab-header p { font-size:13px; opacity:.7; max-width:520px; }
+    .ab-pillars { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:20px; }
+    .ab-pillar { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); border-radius:1.25rem; padding:18px 16px; }
+    .ab-pillar-num { font-size:28px; font-weight:800; color:var(--orange); margin-bottom:6px; }
+    .ab-pillar-name { font-size:14px; font-weight:800; color:#fff; margin-bottom:4px; }
+    .ab-pillar-desc { font-size:12px; opacity:.65; line-height:1.5; }
+    .ab-next { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+    .ab-next-item { background:#fff; border:1px solid var(--g200); border-radius:1.25rem; padding:16px 18px; }
+    .ab-next-num { font-size:11px; font-weight:700; color:var(--orange); letter-spacing:.5px; text-transform:uppercase; margin-bottom:6px; }
+    .ab-next-title { font-size:14px; font-weight:800; color:var(--blue); margin-bottom:5px; }
+    .ab-next-body { font-size:12.5px; color:var(--g600); line-height:1.6; }
+
+    /* AHABENEFITS v2 */
+    .ab2-formula { background:var(--g800); color:#E2E8F0; border-radius:1.25rem; padding:16px 22px; font-family:'Courier New',monospace; font-size:13px; line-height:2; }
+    .ab2-formula .h { color:var(--orange); font-weight:700; } .ab2-formula .g { color:#86EFAC; } .ab2-formula .b { color:#7DD3FC; }
+    .earn-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .earn-card { border-radius:1.25rem; border:2px solid; padding:14px 12px; text-align:center; }
+    .earn-card.ec1 { border-color:var(--r1); background:#FFF7F2; }
+    .earn-card.ec2 { border-color:var(--r2); background:#F0F5FF; }
+    .earn-card.ec3 { border-color:var(--r3); background:#F8FAFC; }
+    .earn-card.ec6 { border-color:var(--un); background:#F8FAFC; }
+    .earn-rank { font-size:11px; font-weight:800; margin-bottom:6px; }
+    .ec1 .earn-rank { color:var(--r1); } .ec2 .earn-rank { color:var(--r2); } .ec3 .earn-rank { color:var(--r3); } .ec6 .earn-rank { color:var(--un); }
+    .earn-pts { font-size:26px; font-weight:800; line-height:1; }
+    .ec1 .earn-pts { color:var(--r1); } .ec2 .earn-pts { color:var(--r2); } .ec3 .earn-pts { color:var(--r3); } .ec6 .earn-pts { color:var(--un); }
+    .earn-sub { font-size:10px; color:var(--g400); margin-top:3px; }
+    .earn-detail { font-size:11px; color:var(--g600); margin-top:8px; line-height:1.5; border-top:1px solid rgba(0,0,0,.07); padding-top:8px; }
+    .catalog-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
+    .cat-card { background:#fff; border:1px solid var(--g200); border-radius:1.25rem; overflow:hidden; }
+    .cat-head { padding:12px 16px 10px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--g100); }
+    .cat-icon { font-size:18px; }
+    .cat-title { font-size:13px; font-weight:800; color:var(--blue); }
+    .cat-item { display:flex; justify-content:space-between; align-items:center; padding:9px 16px; border-bottom:1px solid var(--g100); }
+    .cat-item:last-child { border-bottom:none; }
+    .cat-name { font-size:12.5px; font-weight:500; color:var(--g800); }
+    .cat-badge { font-size:11px; font-weight:800; padding:3px 10px; border-radius:999px; white-space:nowrap; }
+    .cb-pts { background:#EBF3FF; color:var(--blue); border:1px solid #BFDBFE; }
+    .cb-excl { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
+    .cb-r1 { background:#FFF0E6; color:var(--r1); border:1px solid #FECBA0; }
+    .proj-table { width:100%; border-collapse:separate; border-spacing:0; border-radius:1.25rem; overflow:hidden; border:1px solid var(--g200); }
+    .proj-table th { background:var(--blue); color:#fff; padding:11px 14px; text-align:center; font-size:12px; font-weight:700; }
+    .proj-table th:first-child { text-align:left; padding-left:18px; }
+    .proj-table td { padding:12px 14px; text-align:center; border-bottom:1px solid var(--g100); font-size:13px; }
+    .proj-table td:first-child { text-align:left; padding-left:18px; }
+    .proj-table tr:last-child td { border-bottom:none; }
+    .proj-table .r1-row td { background:#FFF7F2; } .proj-table .r2-row td { background:#F0F5FF; }
+    .proj-table .r3-row td { background:#F8FAFC; } .proj-table .un-row td { background:#FAFBFC; }
+    .footer { text-align:center; padding:32px 0 0; font-size:12px; color:var(--g400); border-top:1px solid var(--g200); margin-top:20px; }
+
+    @media(max-width:900px) {
+      .rank-grid { grid-template-columns:1fr 1fr; }
+      .shift-grid { grid-template-columns:1fr 1fr; }
+      .ab-pillars { grid-template-columns:1fr; }
+      .ab-next { grid-template-columns:1fr; }
+    }
+    @media(max-width:640px) {
+      .rank-grid { grid-template-columns:1fr; }
+      .shift-grid { grid-template-columns:1fr 1fr; }
+      .header { padding:28px 22px; } .header h1 { font-size:22px; }
+      .page { padding:32px 14px 60px; }
+    }
+  
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ===== TOP NAV ===== -->
+<nav id="top-nav">
+  <div class="tn-brand">🚀 Driver Ranking Framework 2026 — Ahamove</div>
+  <button class="tn-tab active" onclick="switchTab('params')">⚙ Bộ Tham Số Xếp Hạng</button>
+  <span class="tn-sep">|</span>
+  <button class="tn-tab" onclick="switchTab('benefits')">🏅 Quyền Lợi Theo Tầng</button>
+</nav>
+
+<!-- ===== PANEL 1: PARAMS ===== -->
+<div id="panel-params" class="tab-panel active">
+  <div class="inner">
+
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">⚙ Editable Params</div>
+    <h1>Driver Ranking & <span>AhaBenefits v2.0</span><br>Params Sheet</h1>
+    <p class="hero-sub">Toàn bộ con số có thể điều chỉnh. Sau khi sửa → cập nhật vào HTML tương ứng.</p>
+    <div class="hero-meta">
+      <div class="hm-item"><span class="label">Cập nhật</span><span class="value">2026-05-27</span></div>
+      <div class="hm-item"><span class="label">Owner</span><span class="value">Driver Management</span></div>
+      <div class="hm-item"><span class="label">Scope</span><span class="value">SGN + HAN · Bike</span></div>
+      <div class="hm-item"><span class="label">Version</span><span class="value" style="color:var(--orange);">v2.0</span></div>
+    </div>
+  </div>
+
+  <!-- ── S1: KPI THRESHOLDS ── -->
+  <section id="s1">
+    <div class="sec-hdr">
+      <div class="sec-num">01</div>
+      <div class="sec-title">
+        <h2>Ranking KPI Thresholds</h2>
+        <p>Điều kiện xét Rank hàng tháng — dùng DQS, không dùng AR/FR/Rating riêng lẻ</p>
+      </div>
+    </div>
+
+    <div class="callout ci" style="margin-bottom:20px;">
+      <span style="font-size:15px;flex-shrink:0;">ℹ</span>
+      <div class="callout-body">Cả 3 rank đều xét bằng <strong>DQS (Driver Quality Score)</strong>. Không dùng AR/FR/Rating riêng lẻ.</div>
+    </div>
+
+    <div class="tw">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>DQS</th>
+            <th>DCR (%)</th>
+            <th>Productivity (stp/tháng)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank-r1">💎 R1 Elite</span></td>
+            <td><span class="kpi-pill kpi-green">≥ 80</span></td>
+            <td><span class="kpi-pill kpi-orange">≤ 10%</span></td>
+            <td><span class="kpi-pill kpi-blue">≥ 280 stp</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-r2">🥇 R2 Active</span></td>
+            <td><span class="kpi-pill kpi-green">≥ 75</span></td>
+            <td><span class="kpi-pill kpi-orange">≤ 10%</span></td>
+            <td><span class="kpi-pill kpi-blue">≥ 210 stp</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-r3">🥈 R3 Standard</span></td>
+            <td><span class="kpi-pill kpi-green">≥ 75</span></td>
+            <td><span class="kpi-pill kpi-orange">≤ 15%</span></td>
+            <td><span class="kpi-pill kpi-blue">≥ 70 stp</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-un">Unranked</span></td>
+            <td><span class="kpi-pill kpi-gray">&lt; 75</span></td>
+            <td class="na">—</td>
+            <td class="na">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── S2: FLEET RATIO ── -->
+  <section id="s2">
+    <div class="sec-hdr">
+      <div class="sec-num">02</div>
+      <div class="sec-title">
+        <h2>Fleet Target Ratio</h2>
+        <p>% weekly actives (~10.5k SGN+HAN)</p>
+      </div>
+    </div>
+
+    <div class="tw">
+      <table>
+        <thead>
+          <tr><th>Rank</th><th>Target %</th><th>Số lượng (~10.5k)</th><th>Phân bổ</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank-r1">💎 R1 Kim Cương</span></td>
+            <td class="num" style="color:var(--orange);">15%</td>
+            <td class="num">~1.575</td>
+            <td>
+              <div class="pbar-wrap">
+                <div class="pbar"><div class="pbar-fill" style="width:15%;background:var(--orange);"></div></div>
+                <span class="pbar-val" style="color:var(--orange);">15%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="rank-r2">🥇 R2 Vàng</span></td>
+            <td class="num" style="color:var(--yellow);">35%</td>
+            <td class="num">~3.675</td>
+            <td>
+              <div class="pbar-wrap">
+                <div class="pbar"><div class="pbar-fill" style="width:35%;background:var(--yellow);"></div></div>
+                <span class="pbar-val" style="color:var(--yellow);">35%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="rank-r3">🥈 R3 Bạc</span></td>
+            <td class="num" style="color:var(--blue);">35%</td>
+            <td class="num">~3.675</td>
+            <td>
+              <div class="pbar-wrap">
+                <div class="pbar"><div class="pbar-fill" style="width:35%;background:var(--blue);"></div></div>
+                <span class="pbar-val" style="color:var(--blue);">35%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="rank-un">Unranked</span></td>
+            <td class="num">15%</td>
+            <td class="num">~1.575</td>
+            <td>
+              <div class="pbar-wrap">
+                <div class="pbar"><div class="pbar-fill" style="width:15%;background:var(--text-muted);"></div></div>
+                <span class="pbar-val">15%</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── S3: LAYER CASCADE ── -->
+  <section id="s3">
+    <div class="sec-hdr">
+      <div class="sec-num">03</div>
+      <div class="sec-title">
+        <h2>Layer Access & Cascade</h2>
+        <p>Primary layer theo rank — ngưỡng cascade: 80% slot fill</p>
+      </div>
+    </div>
+
+    <div class="tw">
+      <table>
+        <thead>
+          <tr><th>Rank</th><th>Primary Layer</th><th>Fallback (cascade)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank-r1">💎 R1 Elite</span></td>
+            <td><span class="layer-badge l2">L2</span> <span style="margin-left:6px;font-weight:600;color:var(--text-prime);">Minizone</span></td>
+            <td style="color:var(--text-sec);">→ L3 khi L2 <span class="kpi-pill kpi-orange" style="font-size:10px;padding:1px 7px;">≥ 80% fill</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-r2">🥇 R2 Active</span></td>
+            <td><span class="layer-badge l3">L3</span> <span style="margin-left:6px;font-weight:600;color:var(--text-prime);">Mediumzone</span></td>
+            <td style="color:var(--text-sec);">→ L4 khi L3 <span class="kpi-pill kpi-orange" style="font-size:10px;padding:1px 7px;">≥ 80% fill</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-r3">🥈 R3 Standard</span></td>
+            <td><span class="layer-badge l4">L4</span> <span style="margin-left:6px;font-weight:600;color:var(--text-prime);">Bigzone</span></td>
+            <td style="color:var(--text-sec);">→ L5 khi L4 <span class="kpi-pill kpi-orange" style="font-size:10px;padding:1px 7px;">≥ 80% fill</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-un">Unranked</span></td>
+            <td><span class="layer-badge l6">L6</span> <span style="margin-left:6px;color:var(--text-sec);">MASS</span></td>
+            <td class="na">— (on-demand, luôn mở)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout cw">
+      <span style="font-size:15px;flex-shrink:0;">⚠</span>
+      <div class="callout-body">Hệ số điểm gắn với <strong>layer của đơn hàng</strong>, không theo rank tài xế. R1 nhận đơn overflow từ L3 → multiplier = ×1.3, không phải ×1.5.</div>
+    </div>
+  </section>
+
+  <!-- ── S4: TARGET EARNING ── -->
+  <section id="s4">
+    <div class="sec-hdr">
+      <div class="sec-num">04</div>
+      <div class="sec-title">
+        <h2>Thu nhập tối đa / giờ</h2>
+        <p>Earning target — Ahamove tối đa hóa, không phải guarantee</p>
+      </div>
+    </div>
+
+    <div class="callout co" style="margin-bottom:20px;">
+      <span style="font-size:15px;flex-shrink:0;">📌</span>
+      <div class="callout-body">Đây là <strong>earning target</strong>, không phải guarantee. Ahamove không bù tiền nếu thực tế thấp hơn. Tài xế đạt mức này khi đủ KPI ca + layer hoạt động đúng công suất.</div>
+    </div>
+
+    <div class="city-grid">
+      <div class="city-card">
+        <div class="city-header" style="background:rgba(255,127,50,0.06);color:var(--orange);">🏙 SGN — Hồ Chí Minh</div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Layer</th><th>Thu nhập tối đa/h</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="layer-badge l2">L2</span> <span style="margin-left:6px;">Minizone</span></td>
+                <td><span style="font-family:'Space Mono',monospace;font-size:15px;font-weight:800;color:var(--orange);">65k</span><span style="font-size:11px;color:var(--text-muted);">/h</span></td>
+              </tr>
+              <tr>
+                <td><span class="layer-badge l3">L3</span> <span style="margin-left:6px;">Mediumzone</span></td>
+                <td><span style="font-family:'Space Mono',monospace;font-size:15px;font-weight:800;color:var(--yellow);">60k</span><span style="font-size:11px;color:var(--text-muted);">/h</span></td>
+              </tr>
+              <tr>
+                <td><span class="layer-badge l4">L4</span> <span style="margin-left:6px;">Bigzone</span></td>
+                <td><span style="font-family:'Space Mono',monospace;font-size:15px;font-weight:800;color:var(--blue);">55k</span><span style="font-size:11px;color:var(--text-muted);">/h</span></td>
+              </tr>
+              <tr>
+                <td><span class="layer-badge l5">L5</span> <span style="margin-left:6px;">Cityzone</span></td>
+                <td><span style="font-family:'Space Mono',monospace;font-size:15px;font-weight:800;color:var(--teal);">55k</span><span style="font-size:11px;color:var(--text-muted);">/h</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="city-card">
+        <div class="city-header" style="background:rgba(88,166,255,0.06);color:var(--blue);">🏙 HAN — Hà Nội</div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Layer</th><th>Thu nhập tối đa/h</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="layer-badge l2">L2</span> <span style="margin-left:6px;">Minizone</span></td>
+                <td><span style="font-family:'Space Mono',monospace;font-size:15px;font-weight:800;color:var(--orange);">70k</span><span style="font-size:11px;color:var(--text-muted);">/h</span></td>
+              </tr>
+              <tr>
+                <td><span class="layer-badge l3">L3</span> <span style="margin-left:6px;">Mediumzone</span></td>
+                <td><span style="font-family:'Space Mono',monospace;font-size:15px;font-weight:800;color:var(--yellow);">65k</span><span style="font-size:11px;color:var(--text-muted);">/h</span></td>
+              </tr>
+              <tr>
+                <td><span class="layer-badge l4">L4</span> <span style="margin-left:6px;">Bigzone</span></td>
+                <td><span style="font-family:'Space Mono',monospace;font-size:15px;font-weight:800;color:var(--blue);">60k</span><span style="font-size:11px;color:var(--text-muted);">/h</span></td>
+              </tr>
+              <tr>
+                <td><span class="layer-badge l5">L5</span> <span style="margin-left:6px;">Cityzone</span></td>
+                <td><span style="font-family:'Space Mono',monospace;font-size:15px;font-weight:800;color:var(--teal);">60k</span><span style="font-size:11px;color:var(--text-muted);">/h</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── S5: FULL-DAY GUARANTEE ── -->
+  <section id="s5">
+    <div class="sec-hdr">
+      <div class="sec-num">05</div>
+      <div class="sec-title">
+        <h2>Full-day Guarantee</h2>
+        <p>Đảm bảo thu nhập ngày — R1 & R2 only · Ca 08:00–18:00</p>
+      </div>
+    </div>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>Rank</th><th>SGN</th><th>HAN</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="rank-r1">💎 R1 Kim Cương</span></td>
+            <td><span style="font-family:'Space Mono',monospace;font-size:14px;font-weight:800;color:var(--orange);">600.000đ</span><span style="font-size:11px;color:var(--text-muted);">/ngày</span></td>
+            <td><span style="font-family:'Space Mono',monospace;font-size:14px;font-weight:800;color:var(--orange);">650.000đ</span><span style="font-size:11px;color:var(--text-muted);">/ngày</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-r2">🥇 R2 Vàng</span></td>
+            <td><span style="font-family:'Space Mono',monospace;font-size:14px;font-weight:800;color:var(--yellow);">550.000đ</span><span style="font-size:11px;color:var(--text-muted);">/ngày</span></td>
+            <td><span style="font-family:'Space Mono',monospace;font-size:14px;font-weight:800;color:var(--yellow);">600.000đ</span><span style="font-size:11px;color:var(--text-muted);">/ngày</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div style="background:var(--bg-card);border:1px solid var(--green-dim);border-radius:10px;padding:14px 16px;">
+        <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;font-family:'Space Mono',monospace;">✅ Điều kiện nhận</div>
+        <ol style="list-style:decimal;padding-left:16px;font-size:12.5px;color:var(--text-sec);line-height:2;">
+          <li>Đăng ký ca Full-day (08:00–18:00)</li>
+          <li>App online ≥ 95% + AR = 100%</li>
+          <li>FR ≥ ngưỡng Rank · DCR ≤ ngưỡng Rank</li>
+          <li>Không tự huỷ chuyến</li>
+        </ol>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--red-dim);border-radius:10px;padding:14px 16px;">
+        <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;font-family:'Space Mono',monospace;">❌ Điều kiện mất</div>
+        <div style="font-size:12.5px;color:var(--text-sec);line-height:1.8;">
+          Fail điều kiện <strong style="color:var(--red);">2 lần/tuần</strong><br>→ mất tiền đảm bảo cả tuần đó
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── S6: CA LÀM VIỆC ── -->
+  <section id="s6">
+    <div class="sec-hdr">
+      <div class="sec-num">06</div>
+      <div class="sec-title">
+        <h2>Ca Làm Việc</h2>
+        <p>Cấu trúc ca & Slot allocation theo rank</p>
+      </div>
+    </div>
+
+    <div class="tw" style="margin-bottom:20px;">
+      <table>
+        <thead><tr><th>Ca</th><th>Giờ</th><th>Loại</th><th>Ghi chú</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:700;color:var(--text-prime);">Ca Sáng</td>
+            <td class="num">08:00 – 12:00</td>
+            <td><span style="background:rgba(245,158,11,0.12);color:var(--yellow);border:1px solid rgba(245,158,11,0.25);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;">⚡ Peak · 4h</span></td>
+            <td>Peak sáng</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;color:var(--text-prime);">Ca Chiều</td>
+            <td class="num">13:00 – 17:00</td>
+            <td><span style="background:rgba(245,158,11,0.12);color:var(--yellow);border:1px solid rgba(245,158,11,0.25);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;">⚡ Peak · 4h</span></td>
+            <td>Peak chiều</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;color:var(--text-prime);">Ca Tối</td>
+            <td class="num">17:00 – 21:00</td>
+            <td><span style="background:var(--blue-dim);color:var(--blue);border:1px solid rgba(88,166,255,0.2);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;">4h</span></td>
+            <td>Bình thường</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;color:var(--text-prime);">Ca Full-day</td>
+            <td class="num">08:00 – 18:00</td>
+            <td><span style="background:var(--orange-dim);color:var(--orange);border:1px solid rgba(255,127,50,0.25);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;">10h · R1+R2</span></td>
+            <td>R1 & R2 only</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;color:var(--text-sec);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em;">Slot allocation (% / tổng slot mỗi ca)</div>
+    <div class="tw">
+      <table>
+        <thead>
+          <tr>
+            <th>Ca</th>
+            <th style="color:var(--orange);">R1 💎</th>
+            <th style="color:var(--yellow);">R2 🥇</th>
+            <th style="color:var(--blue);">R3 🥈</th>
+            <th>Unranked</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ca Sáng (Peak)</td>
+            <td class="num" style="color:var(--orange);font-weight:700;">20%</td>
+            <td class="num" style="color:var(--yellow);font-weight:700;">40%</td>
+            <td class="num" style="color:var(--blue);font-weight:700;">40%</td>
+            <td class="na">on-demand</td>
+          </tr>
+          <tr>
+            <td>Ca Chiều (Peak)</td>
+            <td class="num" style="color:var(--orange);font-weight:700;">20%</td>
+            <td class="num" style="color:var(--yellow);font-weight:700;">40%</td>
+            <td class="num" style="color:var(--blue);font-weight:700;">40%</td>
+            <td class="na">on-demand</td>
+          </tr>
+          <tr>
+            <td>Ca Tối</td>
+            <td class="num" style="color:var(--orange);font-weight:700;">15%</td>
+            <td class="num" style="color:var(--yellow);font-weight:700;">40%</td>
+            <td class="num" style="color:var(--blue);font-weight:700;">45%</td>
+            <td class="na">on-demand</td>
+          </tr>
+          <tr>
+            <td>Ca Full-day</td>
+            <td class="num" style="color:var(--orange);font-weight:700;">50%</td>
+            <td class="num" style="color:var(--yellow);font-weight:700;">50%</td>
+            <td class="na">—</td>
+            <td class="na">❌</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11.5px;color:var(--text-muted);">Unranked không có structured slot — nhận đơn on-demand từ khi đơn từ các layer tràn xuống.</p>
+  </section>
+
+  <!-- ── S7: POINT ECONOMY ── -->
+  <section id="s7">
+    <div class="sec-hdr">
+      <div class="sec-num">07</div>
+      <div class="sec-title">
+        <h2>AhaBenefits — Point Economy</h2>
+        <p>Công thức tích điểm · Hệ số Layer · Calibration</p>
+      </div>
+    </div>
+
+    <!-- FORMULA -->
+    <div style="background:var(--bg-code);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-family:'Space Mono',monospace;white-space:nowrap;">Công thức</span>
+      <div style="font-family:'Space Mono',monospace;font-size:14px;color:#C9D1D9;flex:1;min-width:300px;">
+        <span style="color:var(--text-muted);">Điểm/ca = </span>
+        <span style="color:var(--blue);">round(GSV ÷ 5.000)</span>
+        <span style="color:var(--text-muted);"> × </span>
+        <span style="color:var(--orange);">Hệ số Layer</span>
+        <span style="color:var(--text-muted);"> + </span>
+        <span style="color:var(--green);">Bonus hoàn ca</span>
+      </div>
+    </div>
+
+    <!-- LAYER MULTIPLIER TABLE -->
+    <div class="tw" style="margin-bottom:20px;">
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>Hệ số ×</th><th>Bonus/ca</th><th>Ghi chú</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="layer-badge l2">L2</span> <span style="margin-left:6px;font-weight:600;color:var(--text-prime);">Minizone</span></td>
+            <td><span class="mult-big" style="color:var(--orange);">×1.5</span></td>
+            <td><strong style="color:var(--green);">+30 pts</strong></td>
+            <td style="font-size:12px;">R1 priority zone</td>
+          </tr>
+          <tr>
+            <td><span class="layer-badge l3">L3</span> <span style="margin-left:6px;font-weight:600;color:var(--text-prime);">Mediumzone</span></td>
+            <td><span class="mult-big" style="color:var(--yellow);">×1.3</span></td>
+            <td><strong style="color:var(--green);">+25 pts</strong></td>
+            <td style="font-size:12px;">R2 priority zone</td>
+          </tr>
+          <tr>
+            <td><span class="layer-badge l4">L4</span> <span style="margin-left:6px;font-weight:600;color:var(--text-prime);">Bigzone</span></td>
+            <td><span class="mult-big" style="color:var(--blue);">×1.1</span></td>
+            <td><strong style="color:var(--green);">+20 pts</strong></td>
+            <td style="font-size:12px;">R3 priority zone</td>
+          </tr>
+          <tr>
+            <td><span class="layer-badge l5">L5</span> <span style="margin-left:6px;">Cityzone</span></td>
+            <td><span class="mult-big" style="color:var(--teal);">×1.0</span></td>
+            <td><strong style="color:var(--green);">+20 pts</strong></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><span class="layer-badge l6">L6</span> <span style="margin-left:6px;">MASS</span></td>
+            <td><span class="mult-big">×1.0</span></td>
+            <td class="na">—</td>
+            <td style="font-size:12px;">Unranked on-demand</td>
+          </tr>
+          <tr style="background:rgba(139,148,158,0.04);">
+            <td><span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);background:var(--gray-dim);border:1px solid rgba(139,148,158,0.2);border-radius:6px;padding:2px 8px;">OVERFLOW</span></td>
+            <td><span class="mult-big" style="color:var(--text-muted);">×1.0</span></td>
+            <td style="color:var(--red);">— (no bonus)</td>
+            <td style="font-size:12px;color:var(--text-muted);">Đơn L2/L3/L4 cascade ra ngoài layer ưu tiên</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- EARN ESTIMATE -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Ước tính pts/ca (EPH avg × Ca 4h)</div>
+    <div class="tw" style="margin-bottom:20px;">
+      <table>
+        <thead>
+          <tr><th>Rank · Layer</th><th>EPH giả định</th><th>Base pts</th><th>× Hệ số</th><th>+ Bonus</th><th>Tổng/ca</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank-r1">R1</span> <span class="layer-badge l2" style="margin-left:4px;">L2</span></td>
+            <td class="num">~70k/h · 280k/ca</td>
+            <td class="num">56</td>
+            <td class="num" style="color:var(--orange);">×1.5 = 84</td>
+            <td class="num good">+30</td>
+            <td><span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:800;color:var(--orange);">114</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-r2">R2</span> <span class="layer-badge l3" style="margin-left:4px;">L3</span></td>
+            <td class="num">~65k/h · 260k/ca</td>
+            <td class="num">52</td>
+            <td class="num" style="color:var(--yellow);">×1.3 = 68</td>
+            <td class="num good">+25</td>
+            <td><span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:800;color:var(--yellow);">93</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-r3">R3</span> <span class="layer-badge l4" style="margin-left:4px;">L4</span></td>
+            <td class="num">~60k/h · 240k/ca</td>
+            <td class="num">48</td>
+            <td class="num" style="color:var(--blue);">×1.1 = 53</td>
+            <td class="num good">+20</td>
+            <td><span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:800;color:var(--blue);">73</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-un">L6 MASS</span></td>
+            <td class="num">~55k/h · 220k/ca</td>
+            <td class="num">44</td>
+            <td class="num">×1.0 = 44</td>
+            <td class="na">—</td>
+            <td><span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:800;color:var(--text-sec);">44</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CALIBRATION -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Calibration — Mục tiêu đổi điểm/tháng</div>
+    <div class="code-block" style="margin-bottom:16px;">
+      <pre>Pts tích/tháng (avg, 22 ca):
+  R1: 114 × 22 = 2.508 pts  (15% fleet)
+  R2:  93 × 22 = 2.046 pts  (35% fleet)
+  R3:  73 × 22 = 1.606 pts  (35% fleet)
+  L6:  44 × 22 =   968 pts  (15% fleet)
+  Weighted avg ≈ 1.800 pts/tháng
+
+80% burn → paid reward:  1.800 × 80% = ~1.440 pts ≈ 50.000 VND
+  → 1 pt ≈ 35đ giá trị  (tương đương 0.7% GSV mang về)
+  → Paid reward 50k = 1.500 pts (làm tròn)
+
+20% còn lại → free partner:  ~360 pts/tháng
+  → Free items giá 50–300 pts → đổi được 2–5 món/tháng</pre>
+    </div>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>Rank</th><th>Pts/tháng</th><th>80% → Paid 50k</th><th>20% → Free items</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="rank-r1">💎 R1</span></td>
+            <td class="num" style="color:var(--orange);">2.508</td>
+            <td class="good">✅ 1.500 pts <span style="color:var(--text-muted);font-size:11px;">(dư ~1.000)</span></td>
+            <td style="color:var(--text-sec);">~1.000 pts free</td>
+          </tr>
+          <tr>
+            <td><span class="rank-r2">🥇 R2</span></td>
+            <td class="num" style="color:var(--yellow);">2.046</td>
+            <td class="good">✅ 1.500 pts <span style="color:var(--text-muted);font-size:11px;">(dư ~550)</span></td>
+            <td style="color:var(--text-sec);">~550 pts free</td>
+          </tr>
+          <tr>
+            <td><span class="rank-r3">🥈 R3</span></td>
+            <td class="num" style="color:var(--blue);">1.606</td>
+            <td class="warn">✅ 1.500 pts <span style="color:var(--text-muted);font-size:11px;">(~1.1 tháng)</span></td>
+            <td style="color:var(--text-sec);">~100 pts free</td>
+          </tr>
+          <tr>
+            <td><span class="rank-un">L6</span></td>
+            <td class="num">968</td>
+            <td style="color:var(--red);">❌ cần ~1.6 tháng</td>
+            <td style="color:var(--text-muted);font-size:11.5px;font-style:italic;">Động lực lên R3</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px;">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-family:'Space Mono',monospace;">1 Điểm</div>
+        <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:800;color:var(--orange);">≈ 35đ</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">giá trị kinh tế</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-family:'Space Mono',monospace;">Paid 50k</div>
+        <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:800;color:var(--green);">1.500 pts</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">làm tròn từ 1.440</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-family:'Space Mono',monospace;">Expire</div>
+        <div style="font-family:'Space Mono',monospace;font-size:15px;font-weight:800;color:var(--yellow);">Cuối Quý</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">31/3 · 30/6 · 30/9 · 31/12</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
+      <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;font-family:'Space Mono',monospace;">Quy tắc điểm</div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:12.5px;color:var(--text-sec);">
+        <span>📅 Hết hạn cuối Quý: <strong style="color:var(--yellow);">Q1/Q2/Q3/Q4</strong></span>
+        <span>⚡ Phạt ĐBCL: <strong style="color:var(--red);">-50 pts/vi phạm</strong></span>
+        <span>📍 Điểm tối thiểu đổi: theo từng item catalog</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── S8: CATALOG ── -->
+  <section id="s8">
+    <div class="sec-hdr">
+      <div class="sec-num">08</div>
+      <div class="sec-title">
+        <h2>AhaBenefits Catalog — Point Costs</h2>
+        <p>Công thức giá điểm: <code>Điểm = Giá trị (VND) ÷ 35</code> · Tương đương 0.7% GSV base</p>
+      </div>
+    </div>
+
+    <div class="callout ci" style="margin-bottom:20px;">
+      <span style="font-size:15px;flex-shrink:0;">ℹ</span>
+      <div class="callout-body">Unranked / L6 không có quyền truy cập catalog — tạo động lực đạt R3. Giá trị est. cần Finance/partner validate.</div>
+    </div>
+
+    <!-- R3+ -->
+    <div class="catalog-tier" style="border-left:4px solid var(--blue);margin-bottom:16px;">
+      <div class="ct-header" style="background:rgba(88,166,255,0.05);">
+        <span class="rank-r3">🥈 R3+ Bạc trở lên</span>
+        <div style="margin-left:8px;"><div class="ct-title" style="color:var(--blue);">Quyền lợi cơ bản</div><div class="ct-sub">Unranked không có quyền truy cập</div></div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>Danh mục</th><th>Item</th><th>Giá trị est.</th><th>Điểm</th></tr></thead>
+          <tbody>
+            <tr><td>⛽ Xăng/EV</td><td>Giảm xăng 5% / lần (~đổ 200k)</td><td class="num">~10.000đ</td><td><strong class="num" style="color:var(--blue);">300</strong></td></tr>
+            <tr><td>⛽ Xăng/EV</td><td>Sạc EV 20% / lần (~sạc 80k)</td><td class="num">~16.000đ</td><td><strong class="num" style="color:var(--blue);">450</strong></td></tr>
+            <tr><td>🔧 Bảo dưỡng</td><td>Giảm 30% vá / thay lốp (~100k)</td><td class="num">~30.000đ</td><td><strong class="num" style="color:var(--blue);">850</strong></td></tr>
+            <tr><td>🍜 F&amp;B</td><td>Combo bữa trưa tài xế</td><td class="num">~25.000đ</td><td><strong class="num" style="color:var(--blue);">700</strong></td></tr>
+            <tr><td>🍜 F&amp;B</td><td>Giảm 10% siêu thị (~200k basket)</td><td class="num">~20.000đ</td><td><strong class="num" style="color:var(--blue);">550</strong></td></tr>
+            <tr><td>📱 Data</td><td>Data 5GB ưu đãi tài xế</td><td class="num">~15.000đ</td><td><strong class="num" style="color:var(--blue);">400</strong></td></tr>
+            <tr><td>🏥 Sức khoẻ</td><td>Giảm 15% mua thuốc (~100k)</td><td class="num">~15.000đ</td><td><strong class="num" style="color:var(--blue);">400</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- R2+ -->
+    <div class="catalog-tier" style="border-left:4px solid var(--yellow);margin-bottom:16px;">
+      <div class="ct-header" style="background:rgba(245,158,11,0.05);">
+        <span class="rank-r2">🥇 R2+ Vàng trở lên</span>
+        <div style="margin-left:8px;"><div class="ct-title" style="color:var(--yellow);">Quyền lợi nâng cao</div><div class="ct-sub">Bao gồm toàn bộ R3+ và thêm:</div></div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>Danh mục</th><th>Item</th><th>Giá trị est.</th><th>Điểm</th></tr></thead>
+          <tbody>
+            <tr><td>⛽ Xăng/EV</td><td>Giảm xăng 10% / lần</td><td class="num">~20.000đ</td><td><strong class="num" style="color:var(--yellow);">550</strong></td></tr>
+            <tr><td>⛽ Xăng/EV</td><td>Combo sạc EV tháng 10%</td><td class="num">~40.000đ</td><td><strong class="num" style="color:var(--yellow);">1.100</strong></td></tr>
+            <tr><td>🔧 Bảo dưỡng</td><td>Giảm 15% dầu nhớt / lọc (~150k)</td><td class="num">~22.500đ</td><td><strong class="num" style="color:var(--yellow);">650</strong></td></tr>
+            <tr><td>🔧 Bảo dưỡng</td><td>Giảm 20% bảo dưỡng định kỳ (~250k)</td><td class="num">~50.000đ</td><td><strong class="num" style="color:var(--yellow);">1.400</strong></td></tr>
+            <tr><td>🎽 CCDC</td><td>Túi giữ nhiệt tiêu chuẩn</td><td class="num">~50.000đ</td><td><strong class="num" style="color:var(--yellow);">1.400</strong></td></tr>
+            <tr><td>🎽 CCDC</td><td>Đồng phục 1 bộ</td><td class="num">~60.000đ</td><td><strong class="num" style="color:var(--yellow);">1.700</strong></td></tr>
+            <tr><td>🍜 F&amp;B</td><td>Voucher F&amp;B partner 50k</td><td class="num">~50.000đ</td><td><strong class="num" style="color:var(--yellow);">1.400</strong></td></tr>
+            <tr><td>📱 Data</td><td>Data 10GB ưu đãi tài xế</td><td class="num">~25.000đ</td><td><strong class="num" style="color:var(--yellow);">700</strong></td></tr>
+            <tr><td>📱 Data</td><td>Data 20GB ưu đãi tài xế</td><td class="num">~50.000đ</td><td><strong class="num" style="color:var(--yellow);">1.400</strong></td></tr>
+            <tr><td>🏥 Sức khoẻ</td><td>Giảm 20% khám tổng quát (~300k)</td><td class="num">~60.000đ</td><td><strong class="num" style="color:var(--yellow);">1.700</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- R1 -->
+    <div class="catalog-tier" style="border-left:4px solid var(--orange);margin-bottom:20px;">
+      <div class="ct-header" style="background:rgba(255,127,50,0.05);">
+        <span class="rank-r1">💎 R1 Kim Cương</span>
+        <div style="margin-left:8px;"><div class="ct-title" style="color:var(--orange);">Đặc quyền cao nhất</div><div class="ct-sub">Bao gồm toàn bộ R2+ và thêm:</div></div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>Danh mục</th><th>Item</th><th>Giá trị est.</th><th>Điểm</th></tr></thead>
+          <tbody>
+            <tr><td>⛽ Xăng/EV</td><td>Gói sạc EV ưu tiên tháng (15%)</td><td class="num">~60.000đ</td><td><strong class="num" style="color:var(--orange);">1.700</strong></td></tr>
+            <tr><td>🔧 Bảo dưỡng</td><td>Gói bảo dưỡng ưu tiên (~300k)</td><td class="num">~90.000đ</td><td><strong class="num" style="color:var(--orange);">2.550</strong></td></tr>
+            <tr><td>🎽 CCDC</td><td>Túi giữ nhiệt cao cấp (XL)</td><td class="num">~80.000đ</td><td><strong class="num" style="color:var(--orange);">2.300</strong></td></tr>
+            <tr><td>🎽 CCDC</td><td>Baga / phụ kiện xe</td><td class="num">~120.000đ</td><td><strong class="num" style="color:var(--orange);">3.400</strong></td></tr>
+            <tr><td>🍜 F&amp;B</td><td>Voucher F&amp;B partner 100k</td><td class="num">~100.000đ</td><td><strong class="num" style="color:var(--orange);">2.850</strong></td></tr>
+            <tr><td>📱 Data</td><td>Gói SIM ưu tiên cao tốc / tháng</td><td class="num">~80.000đ</td><td><strong class="num" style="color:var(--orange);">2.300</strong></td></tr>
+            <tr style="background:rgba(167,139,250,0.05);">
+              <td>🛡 Bảo hiểm</td>
+              <td>Bảo hiểm tai nạn Mini <span style="font-size:11px;color:var(--text-muted);">(đổi điểm để mua)</span></td>
+              <td class="num">10k – 30k/tháng</td>
+              <td><strong class="num" style="color:var(--purple);">285 – 857</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RANK ENTITLEMENTS -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">B. Rank Entitlements — Đặc quyền theo Rank</div>
+    <div class="tw" style="margin-bottom:14px;">
+      <table>
+        <thead><tr><th>Benefit</th><th style="color:var(--orange);">💎 R1 Kim Cương</th><th style="color:var(--yellow);">🥇 R2 Vàng</th><th style="color:var(--blue);">🥈 R3 Bạc</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Voucher xăng/EV</td>
+            <td><strong style="color:var(--orange);">50k/tháng</strong> · tự động</td>
+            <td><strong style="color:var(--yellow);">30k/tháng</strong> · tự động</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td>Bảo hiểm tai nạn Mini</td>
+            <td><strong style="color:var(--purple);">10k–30k/tháng</strong> · đổi điểm</td>
+            <td class="na">—</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td>Cost Ahamove</td>
+            <td style="font-size:12px;color:var(--text-sec);">~59M/tháng (voucher) + biến phí BH</td>
+            <td style="font-size:12px;color:var(--text-sec);">~83M/tháng</td>
+            <td class="na">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background:var(--bg-card);border:1px solid rgba(167,139,250,0.2);border-radius:12px;padding:16px 18px;margin-bottom:12px;">
+      <div style="font-size:10.5px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;font-family:'Space Mono',monospace;">🛡 Cơ chế Bảo hiểm tai nạn R1</div>
+      <ul style="list-style:none;padding:0;font-size:12.5px;color:var(--text-sec);line-height:2.1;">
+        <li>📅 Đăng ký trong app <strong style="color:var(--text-prime);">trước ngày 25</strong>, hiệu lực từ <strong style="color:var(--text-prime);">ngày 01 tháng kế tiếp</strong></li>
+        <li>💎 Thanh toán bằng điểm: <strong style="color:var(--purple);">10k/tháng = 285 pts</strong> · <strong style="color:var(--purple);">30k/tháng = 857 pts</strong></li>
+        <li>❌ Huỷ trước ngày 25 → ngừng hiệu lực cuối tháng · Mất R1 → không gia hạn được</li>
+      </ul>
+    </div>
+
+    <div class="callout cw">
+      <span style="font-size:15px;flex-shrink:0;">💰</span>
+      <div class="callout-body"><strong>Budget 200M:</strong> Voucher xăng R1+R2 = ~142M · Buffer ~58M. BH tai nạn là biến phí ngoài budget, cần duyệt riêng (tối đa ~47M nếu 100% R1 đăng ký gói 30k).</div>
+    </div>
+  </section>
+
+  <!-- ── S9: SUMMARY ── -->
+  <section id="s9">
+    <div class="sec-hdr">
+      <div class="sec-num">09</div>
+      <div class="sec-title">
+        <h2>Bảng Tổng Hợp</h2>
+        <p>Overview nhanh theo Rank · Layer · Ca làm việc</p>
+      </div>
+    </div>
+
+    <!-- 9.1 By Rank -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">9.1 Theo Rank</div>
+    <div class="tw" style="margin-bottom:24px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Benefit</th>
+            <th style="color:var(--orange);">💎 R1 Kim Cương</th>
+            <th style="color:var(--yellow);">🥇 R2 Vàng</th>
+            <th style="color:var(--blue);">🥈 R3 Bạc</th>
+            <th>Unranked</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Điều kiện xét</td>
+            <td style="font-size:11.5px;">DQS ≥80 · DCR &lt;10% · Prod ≥280</td>
+            <td style="font-size:11.5px;">DQS ≥75 · DCR &lt;10% · Prod ≥210</td>
+            <td style="font-size:11.5px;">DQS ≥75 · DCR ≤15% · Prod ≥70</td>
+            <td class="na">Dưới R3</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Primary Layer</td>
+            <td><span class="layer-badge l2">L2</span> Minizone</td>
+            <td><span class="layer-badge l3">L3</span> Mediumzone</td>
+            <td><span class="layer-badge l4">L4</span> Bigzone</td>
+            <td><span class="layer-badge l6">L6</span> MASS</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Ca Full-day</td>
+            <td class="good">✅ 08:00–18:00</td>
+            <td class="good">✅ 08:00–18:00</td>
+            <td class="na">❌</td>
+            <td class="na">❌</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Thu nhập target Full-day</td>
+            <td><span style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--orange);">600k · 650k</span></td>
+            <td><span style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--yellow);">550k · 600k</span></td>
+            <td class="na">—</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Slot Ca Peak</td>
+            <td class="num" style="color:var(--orange);">20%</td>
+            <td class="num" style="color:var(--yellow);">40%</td>
+            <td class="num" style="color:var(--blue);">40%</td>
+            <td class="na">on-demand</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Hệ số AhaPoints</td>
+            <td><span class="mult-big" style="color:var(--orange);font-size:18px;">×1.5</span></td>
+            <td><span class="mult-big" style="color:var(--yellow);font-size:18px;">×1.3</span></td>
+            <td><span class="mult-big" style="color:var(--blue);font-size:18px;">×1.1</span></td>
+            <td><span class="mult-big" style="font-size:18px;">×1.0</span></td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Bonus hoàn ca</td>
+            <td class="good">+30 pts</td>
+            <td class="good">+25 pts</td>
+            <td class="good">+20 pts</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Voucher xăng/sạc</td>
+            <td style="color:var(--orange);">50k/tháng · tự động</td>
+            <td style="color:var(--yellow);">30k/tháng · tự động</td>
+            <td class="na">—</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Bảo hiểm tai nạn Mini</td>
+            <td style="color:var(--purple);">✅ R1 only · đổi điểm</td>
+            <td class="na">❌</td>
+            <td class="na">❌</td>
+            <td class="na">❌</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Catalog đặc quyền</td>
+            <td style="font-size:11.5px;color:var(--orange);">Kim Cương + Vàng + Bạc</td>
+            <td style="font-size:11.5px;color:var(--yellow);">Vàng + Bạc</td>
+            <td style="font-size:11.5px;color:var(--blue);">Bạc only</td>
+            <td class="na">❌</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 9.2 By Layer -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">9.2 Theo Layer</div>
+    <div class="tw" style="margin-bottom:24px;">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th style="color:var(--orange);">L2 Minizone</th>
+            <th style="color:var(--yellow);">L3 Mediumzone</th>
+            <th style="color:var(--blue);">L4 Bigzone</th>
+            <th style="color:var(--teal);">L5 Cityzone</th>
+            <th>L6 MASS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Rank ưu tiên</td>
+            <td><span class="rank-r1">R1</span></td>
+            <td><span class="rank-r2">R2</span></td>
+            <td><span class="rank-r3">R3</span></td>
+            <td style="font-size:12px;color:var(--text-sec);">Overflow R3</td>
+            <td><span class="rank-un">Unranked</span></td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">AhaPoints ×</td>
+            <td><span class="mult-big" style="color:var(--orange);font-size:18px;">×1.5</span></td>
+            <td><span class="mult-big" style="color:var(--yellow);font-size:18px;">×1.3</span></td>
+            <td><span class="mult-big" style="color:var(--blue);font-size:18px;">×1.1</span></td>
+            <td><span class="mult-big" style="color:var(--teal);font-size:18px;">×1.0</span></td>
+            <td><span class="mult-big" style="font-size:18px;">×1.0</span></td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Bonus/ca</td>
+            <td class="good">+30 pts</td>
+            <td class="good">+25 pts</td>
+            <td class="good">+20 pts</td>
+            <td class="good">+20 pts</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Overflow</td>
+            <td style="font-size:11.5px;color:var(--text-muted);">×1.0 · no bonus</td>
+            <td style="font-size:11.5px;color:var(--text-muted);">×1.0 · no bonus</td>
+            <td style="font-size:11.5px;color:var(--text-muted);">×1.0 · no bonus</td>
+            <td class="na">—</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Target SGN</td>
+            <td class="num" style="color:var(--orange);">lên đến 65k/h</td>
+            <td class="num" style="color:var(--yellow);">lên đến 60k/h</td>
+            <td class="num" style="color:var(--blue);">lên đến 55k/h</td>
+            <td class="num" style="color:var(--teal);">lên đến 55k/h</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Target HAN</td>
+            <td class="num" style="color:var(--orange);">lên đến 70k/h</td>
+            <td class="num" style="color:var(--yellow);">lên đến 65k/h</td>
+            <td class="num" style="color:var(--blue);">lên đến 60k/h</td>
+            <td class="num" style="color:var(--teal);">lên đến 60k/h</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Cascade mở khi</td>
+            <td style="font-size:11.5px;color:var(--yellow);">L2 ≥ 80% fill</td>
+            <td style="font-size:11.5px;color:var(--yellow);">L3 ≥ 80% fill</td>
+            <td style="font-size:11.5px;color:var(--yellow);">L4 ≥ 80% fill</td>
+            <td class="na">—</td>
+            <td style="font-size:11.5px;color:var(--green);">Luôn mở</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 9.3 By Shift -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">9.3 Theo Ca làm việc</div>
+    <div class="tw" style="margin-bottom:16px;">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Ca Sáng</th>
+            <th>Ca Chiều</th>
+            <th>Ca Tối</th>
+            <th style="color:var(--orange);">Ca Full-day</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Giờ</td>
+            <td class="num">08:00–12:00</td>
+            <td class="num">13:00–17:00</td>
+            <td class="num">17:00–21:00</td>
+            <td class="num" style="color:var(--orange);">08:00–18:00</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Loại</td>
+            <td><span style="color:var(--yellow);font-weight:700;font-size:11.5px;">⚡ Peak · 4h</span></td>
+            <td><span style="color:var(--yellow);font-weight:700;font-size:11.5px;">⚡ Peak · 4h</span></td>
+            <td style="font-size:11.5px;">4h</td>
+            <td style="font-size:11.5px;color:var(--orange);">10h · R1+R2</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Slot R1</td>
+            <td class="num" style="color:var(--orange);">20%</td>
+            <td class="num" style="color:var(--orange);">20%</td>
+            <td class="num" style="color:var(--orange);">15%</td>
+            <td class="num" style="color:var(--orange);">50%</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Slot R2</td>
+            <td class="num" style="color:var(--yellow);">40%</td>
+            <td class="num" style="color:var(--yellow);">40%</td>
+            <td class="num" style="color:var(--yellow);">40%</td>
+            <td class="num" style="color:var(--yellow);">50%</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Slot R3</td>
+            <td class="num" style="color:var(--blue);">40%</td>
+            <td class="num" style="color:var(--blue);">40%</td>
+            <td class="num" style="color:var(--blue);">45%</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Unranked</td>
+            <td class="na">on-demand</td>
+            <td class="na">on-demand</td>
+            <td class="na">on-demand</td>
+            <td class="na">❌</td>
+          </tr>
+          <tr>
+            <td style="font-size:11.5px;color:var(--text-muted);">Thu nhập target</td>
+            <td style="font-size:11.5px;color:var(--text-sec);">Theo Layer</td>
+            <td style="font-size:11.5px;color:var(--text-sec);">Theo Layer</td>
+            <td style="font-size:11.5px;color:var(--text-sec);">Theo Layer</td>
+            <td style="font-size:11.5px;color:var(--orange);">R1: 600–650k · R2: 550–600k</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top:32px;padding:18px 22px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-prime);">Driver Ranking & AhaBenefits v2.0 — Params Sheet</div>
+        <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">Driver Management Team · Cập nhật: 2026-05-27</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="font-family:'Space Mono',monospace;font-size:10.5px;background:var(--orange-dim);color:var(--orange);padding:3px 10px;border-radius:6px;border:1px solid rgba(255,127,50,0.25);">2026-05-ahabenefits-points-flow.html</span>
+        <span style="font-family:'Space Mono',monospace;font-size:10.5px;background:var(--blue-dim);color:var(--blue);padding:3px 10px;border-radius:6px;border:1px solid rgba(88,166,255,0.25);">2026-05-driver-ranking-layer-benefits.html</span>
+      </div>
+    </div>
+
+  </section>
+
+
+  </div>
+</div>
+
+<!-- ===== PANEL 2: BENEFITS ===== -->
+<div id="panel-benefits" class="tab-panel">
+  <div class="page">
+
+
+
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="htag">Driver Management · 2026-05 · Framework v1.0</div>
+    <h1>Driver Ranking × Layer Benefits</h1>
+    <div class="header-sub">Khung Xếp hạng, Phân bổ Layer, Quyền lợi & Phân ca · Ahamove SGN & HAN</div>
+    <div class="kv-row">
+      <div class="kv"><span class="kv-k">Hệ thống Rank</span><span class="kv-v">3 Rank + Unranked</span></div>
+      <div class="kv"><span class="kv-k">Layers vận hành</span><span class="kv-v">L1 → L6</span></div>
+      <div class="kv"><span class="kv-k">Chu kỳ xét</span><span class="kv-v">Cuối tháng → đầu tháng sau</span></div>
+      <div class="kv"><span class="kv-k">Rewards system</span><span class="kv-v">AhaBenefits v2.0</span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: RANKING -->
+  <section id="ranking">
+    <div class="section-label">Phần 1</div>
+    <div class="section-title">Điều kiện xếp Rank</div>
+    <div class="note">
+      Hệ thống check <strong>pass/fail</strong> cuối mỗi tháng theo thứ tự R1 → R2 → R3. Đạt đủ <em>tất cả</em> điều kiện của tier cao nhất → xếp tier đó. Thiếu 1 điều kiện → rớt xuống tier thấp hơn. KPI tính trên <strong>rolling 30 ngày</strong>.
+    </div>
+
+    <!-- SGN -->
+    <div style="font-size:12px;font-weight:700;color:var(--orange);letter-spacing:.5px;margin-bottom:10px;">📍 SGN — Hồ Chí Minh</div>
+    <div class="rank-grid" style="margin-bottom:20px;">
+      <div class="rc r1">
+        <div class="rc-name">R1 · Elite</div>
+        <div class="rc-target">Mục tiêu: ~15% fleet</div>
+        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 95%</span></div>
+        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 85%</span></div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 10%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 100 stp</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+        <div class="rc-note">Đội ngũ cốt lõi. Ưu tiên L2 Minizone, hưởng toàn bộ AhaBenefits cao nhất.</div>
+      </div>
+      <div class="rc r2">
+        <div class="rc-name">R2 · Active</div>
+        <div class="rc-target">Mục tiêu: ~35% fleet</div>
+        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 90%</span></div>
+        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 80%</span></div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 12%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 60 stp</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+        <div class="rc-note">Lực lượng chủ lực, backbone supply. Ưu tiên L3 Mediumzone.</div>
+      </div>
+      <div class="rc r3">
+        <div class="rc-name">R3 · Standard</div>
+        <div class="rc-target">Mục tiêu: ~35% fleet</div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 20%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Rating</span><span class="kpi-v">≥ 4.7</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+        <div class="kpi-row"><span class="kpi-k">AR, FR, Prod</span><span class="kpi-v">Không đạt R2</span></div>
+        <div class="rc-note">Active, không vi phạm ĐBCL cơ bản. Ưu tiên L4 Bigzone.</div>
+      </div>
+      <div class="rc un">
+        <div class="rc-name">Chưa xếp hạng</div>
+        <div class="rc-target">Mục tiêu: ~15% fleet</div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">&lt; 1 tháng</span></div>
+        <div class="kpi-row"><span class="kpi-k">Dữ liệu</span><span class="kpi-v">Chưa đủ</span></div>
+        <div class="rc-note">Tài xế mới. Chỉ truy cập L6 MASS. Cần tích lũy 30 ngày để được xếp hạng.</div>
+      </div>
+    </div>
+
+    <!-- HAN -->
+    <div style="font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.5px;margin-bottom:10px;">📍 HAN — Hà Nội</div>
+    <div class="rank-grid">
+      <div class="rc r1">
+        <div class="rc-name">R1 · Elite</div>
+        <div class="rc-target">Mục tiêu: ~15% fleet</div>
+        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 93%</span></div>
+        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 83%</span></div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 12%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 100 stp</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+      </div>
+      <div class="rc r2">
+        <div class="rc-name">R2 · Active</div>
+        <div class="rc-target">Mục tiêu: ~35% fleet</div>
+        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 88%</span></div>
+        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 78%</span></div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 14%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 60 stp</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+      </div>
+      <div class="rc r3">
+        <div class="rc-name">R3 · Standard</div>
+        <div class="rc-target">Mục tiêu: ~35% fleet</div>
+        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 20%</span></div>
+        <div class="kpi-row"><span class="kpi-k">Rating</span><span class="kpi-v">≥ 4.7</span></div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
+        <div class="kpi-row"><span class="kpi-k">AR, FR, Prod</span><span class="kpi-v">Không đạt R2</span></div>
+      </div>
+      <div class="rc un">
+        <div class="rc-name">Chưa xếp hạng</div>
+        <div class="rc-target">Mục tiêu: ~15% fleet</div>
+        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">&lt; 1 tháng</span></div>
+        <div class="kpi-row"><span class="kpi-k">Dữ liệu</span><span class="kpi-v">Chưa đủ</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: PYRAMID / TỈ TRỌNG -->
+  <section id="pyramid">
+    <div class="section-label">Phần 1B</div>
+    <div class="section-title">Tỉ trọng Tài xế Mục tiêu</div>
+    <div class="note">Supply pyramid — % trên tổng active fleet. Dùng để kiểm soát cấu trúc nguồn cung, tránh inflate R1 dẫn đến thiếu hụt L4/L5. Nếu R1 &gt; 20% → review lại ngưỡng KPI.</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;">
+      <div>
+        <div class="pyramid-wrap">
+          <div class="pyramid">
+            <div class="py-bar" style="width:30%;background:var(--r1);">
+              <span class="py-label">R1 Elite</span>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;"><span class="py-pct">15%</span></div>
+            </div>
+            <div class="py-bar" style="width:60%;background:var(--r2);">
+              <span class="py-label">R2 Active</span>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;"><span class="py-pct">35%</span></div>
+            </div>
+            <div class="py-bar" style="width:85%;background:var(--r3);">
+              <span class="py-label">R3 Standard</span>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;"><span class="py-pct">35%</span></div>
+            </div>
+            <div class="py-bar" style="width:100%;background:var(--un);">
+              <span class="py-label">Unranked</span>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;"><span class="py-pct">15%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="callout co"><strong>Tại sao R1 chỉ 15%?</strong><br>R1 vào L2 Minizone — slot hạn chế, ghép đơn cao, earn đảm bảo 70k/h. Nếu R1 quá nhiều mà slot L2 ít → tranh chấp slot, giảm động lực. Target 15% tương đương khoảng 1 Elite / 6 tài xế.</div>
+        <div class="callout cb"><strong>R2 + R3 = 70% backbone:</strong><br>Đây là lực lượng chủ lực duy trì supply ổn định. L3/L4 có volume lớn nhất, giờ cao điểm phủ rộng nhất.</div>
+        <div class="callout cg"><strong>Unranked 15% = pipeline:</strong><br>Tài xế mới liên tục gia nhập. Target duy trì 15% đảm bảo fleet không già hoá, luôn có luồng upgrade lên R3+.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: LAYER ACCESS -->
+  <section id="layer-access">
+    <div class="section-label">Phần 2</div>
+    <div class="section-title">Rank → Layer Access</div>
+    <div class="note"><strong>L1 KA/MP:</strong> Assigned trực tiếp, không qua đăng ký ca. <strong>L2–L5:</strong> Đăng ký theo rank, cửa sổ ngày 1–5 hàng tháng. <strong>L6:</strong> Luôn mở — buffer mọi rank. <span style="color:var(--orange);font-weight:700">↩ Cascade</span> = layer tiếp theo mở khi layer ưu tiên ≥ 80% slot fill.</div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="overflow-x:auto;">
+        <table class="mtable">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>L1<br><span style="font-size:10px;opacity:.7;font-weight:400">KA/MP ★</span></th>
+              <th>L2<br><span style="font-size:10px;opacity:.7;font-weight:400">Minizone</span></th>
+              <th>L3<br><span style="font-size:10px;opacity:.7;font-weight:400">Mediumzone</span></th>
+              <th>L4<br><span style="font-size:10px;opacity:.7;font-weight:400">Bigzone</span></th>
+              <th>L5<br><span style="font-size:10px;opacity:.7;font-weight:400">Cityzone</span></th>
+              <th>L6<br><span style="font-size:10px;opacity:.7;font-weight:400">MASS</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag-sm t-r1">R1 Elite</span></td>
+              <td><div class="badge-cell bc-l1" style="margin:auto">★</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
+              <td><div class="badge-cell bc-cas" style="margin:auto">↩</div></td>
+              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto;background:#DBEAFE;color:var(--blue)">✅</div></td>
+            </tr>
+            <tr>
+              <td><span class="tag-sm t-r2">R2 Active</span></td>
+              <td><div class="badge-cell bc-l1" style="margin:auto">★</div></td>
+              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
+              <td><div class="badge-cell bc-cas" style="margin:auto">↩</div></td>
+              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto;background:#DBEAFE;color:var(--blue)">✅</div></td>
+            </tr>
+            <tr>
+              <td><span class="tag-sm t-r3">R3 Standard</span></td>
+              <td><div class="badge-cell bc-l1" style="margin:auto">★</div></td>
+              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
+              <td><div class="badge-cell bc-cas" style="margin:auto">↩</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto;background:#DBEAFE;color:var(--blue)">✅</div></td>
+            </tr>
+            <tr>
+              <td><span class="tag-sm t-un">Unranked</span></td>
+              <td><div class="badge-cell bc-l1" style="margin:auto">★</div></td>
+              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto;background:#DBEAFE;color:var(--blue)">✅</div></td>
+            </tr>
+            <tr class="supply-row">
+              <td>Supply từ</td>
+              <td>KA/MP<br><em style="font-style:normal;opacity:.7">Assigned trực tiếp</em></td>
+              <td>R1 ưu tiên<br>Cascade từ R2 nếu thiếu</td>
+              <td>R2 ưu tiên<br>R1 cascade ↩</td>
+              <td>R3 ưu tiên<br>R2 cascade ↩</td>
+              <td>R3 cascade ↩</td>
+              <td>Tất cả · Buffer mở</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--g600);">
+      <div style="display:flex;align-items:center;gap:6px;"><div class="badge-cell bc-yes" style="width:22px;height:22px;font-size:11px">✅</div> Layer ưu tiên (đăng ký ca)</div>
+      <div style="display:flex;align-items:center;gap:6px;"><div class="badge-cell bc-cas" style="width:22px;height:22px;font-size:11px">↩</div> Cascade fallback (khi layer ưu tiên ≥ 80%)</div>
+      <div style="display:flex;align-items:center;gap:6px;"><div class="badge-cell bc-yes" style="width:22px;height:22px;font-size:11px;background:#DBEAFE;color:var(--blue)">✅</div> Luôn mở (L6)</div>
+      <div style="display:flex;align-items:center;gap:6px;"><div class="badge-cell bc-no" style="width:22px;height:22px;font-size:11px">—</div> Hard block</div>
+      <div style="display:flex;align-items:center;gap:6px;"><div class="badge-cell bc-l1" style="width:22px;height:22px;font-size:11px">★</div> KA/MP assigned</div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: BENEFITS -->
+  <section id="benefits">
+    <div class="section-label">Phần 3</div>
+    <div class="section-title">Quyền lợi theo Layer</div>
+    <div class="note">Quyền lợi kích hoạt khi tài xế <strong>đang hoạt động trong layer</strong> (đã đăng ký ca tháng đó, duy trì KPI). <span style="background:#FEF9C3;color:#854D0E;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">📋</span> = cần validate với S&amp;P / Finance trước khi áp.</div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="overflow-x:auto;">
+        <table class="btable">
+          <thead>
+            <tr>
+              <th style="border-radius:1.5rem 0 0 0;min-width:170px">Quyền lợi</th>
+              <th style="background:#C2410C;min-width:110px">L2<br><span style="font-size:10px;font-weight:400;opacity:.8">Minizone</span></th>
+              <th style="background:#1D4ED8;min-width:110px">L3<br><span style="font-size:10px;font-weight:400;opacity:.8">Mediumzone</span></th>
+              <th style="background:#166534;min-width:110px">L4<br><span style="font-size:10px;font-weight:400;opacity:.8">Bigzone</span></th>
+              <th style="background:#854D0E;min-width:110px">L5<br><span style="font-size:10px;font-weight:400;opacity:.8">Cityzone</span></th>
+              <th style="background:var(--g600);min-width:110px;border-radius:0 1.5rem 0 0">L6<br><span style="font-size:10px;font-weight:400;opacity:.8">MASS</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="group-header"><td colspan="6">💰 Thu nhập & Đơn hàng</td></tr>
+            <tr>
+              <td>Thu nhập đảm bảo / giờ (SGN) <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:0 5px;font-size:10px;font-weight:700">📋</span></td>
+              <td><span class="val-hi">65k/h</span></td>
+              <td><span class="val-hi">60k/h</span></td>
+              <td><span class="val-md">55k/h</span></td>
+              <td><span class="val-md">55k/h</span></td>
+              <td><span class="val-no">—</span></td>
+            </tr>
+            <tr>
+              <td>Thu nhập đảm bảo / giờ (HAN) <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:0 5px;font-size:10px;font-weight:700">📋</span></td>
+              <td><span class="val-hi">70k/h</span></td>
+              <td><span class="val-hi">65k/h</span></td>
+              <td><span class="val-md">60k/h</span></td>
+              <td><span class="val-md">60k/h</span></td>
+              <td><span class="val-no">—</span></td>
+            </tr>
+            <!-- DAILY GUARANTEE HIGHLIGHT -->
+            <tr>
+              <td colspan="6" style="padding:0;">
+                <div style="margin:6px 0;background:linear-gradient(135deg,#FFF7F2 0%,#EBF3FF 100%);border:2px solid var(--orange);border-radius:1rem;padding:18px 20px;">
+                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+                    <div style="background:var(--orange);color:#fff;font-size:11px;font-weight:800;padding:3px 12px;border-radius:999px;letter-spacing:.5px;text-transform:uppercase;">★ Đặc quyền Full-day</div>
+                    <div style="font-size:14px;font-weight:800;color:var(--blue);">Đảm bảo Thu nhập / Ngày — Ca Full-day 08:00–18:00</div>
+                    <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:1px 7px;font-size:11px;font-weight:700">📋 pending validate</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:auto auto 1fr;gap:16px;align-items:start;flex-wrap:wrap;">
+                    <!-- Mức đảm bảo -->
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                      <div style="background:#fff;border:2px solid var(--r1);border-radius:1rem;padding:14px 18px;text-align:center;min-width:100px;">
+                        <div style="font-size:11px;font-weight:800;color:var(--r1);margin-bottom:4px;">R1 Elite</div>
+                        <div style="font-size:30px;font-weight:800;color:var(--r1);letter-spacing:-1px;line-height:1;">600k</div>
+                        <div style="font-size:10px;color:var(--g400);margin-top:2px;">/ngày · SGN</div>
+                      </div>
+                      <div style="background:#fff;border:2px solid var(--r2);border-radius:1rem;padding:14px 18px;text-align:center;min-width:100px;">
+                        <div style="font-size:11px;font-weight:800;color:var(--r2);margin-bottom:4px;">R2 Active</div>
+                        <div style="font-size:30px;font-weight:800;color:var(--r2);letter-spacing:-1px;line-height:1;">500k</div>
+                        <div style="font-size:10px;color:var(--g400);margin-top:2px;">/ngày · SGN</div>
+                      </div>
+                    </div>
+                    <!-- Divider -->
+                    <div style="width:1px;background:var(--g200);align-self:stretch;"></div>
+                    <!-- Điều kiện -->
+                    <div>
+                      <div style="font-size:12px;font-weight:800;color:var(--blue);margin-bottom:8px;">Điều kiện kích hoạt</div>
+                      <div style="display:flex;flex-direction:column;gap:5px;">
+                        <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--g800);">
+                          <span style="min-width:20px;height:20px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;">①</span>
+                          Đã đăng ký ca Full-day trong cửa sổ ngày 1–5 hàng tháng
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--g800);">
+                          <span style="min-width:20px;height:20px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;">②</span>
+                          <span>App online <strong>≥ 95%</strong> khung giờ 08:00–18:00 <em>và</em> <strong>AR = 100%</strong> trong ngày đó</span>
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--g800);">
+                          <span style="min-width:20px;height:20px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;">③</span>
+                          Duy trì FR &amp; DCR tối thiểu của tier trong ngày
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--g800);">
+                          <span style="min-width:20px;height:20px;background:var(--orange);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;">④</span>
+                          <span>Thu nhập thực tế &lt; mức đảm bảo → <strong style="color:var(--green)">Ahamove bù phần thiếu</strong></span>
+                        </div>
+                      </div>
+                      <!-- Forfeit rules -->
+                      <div style="margin-top:10px;background:#FEF2F2;border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:8px 12px;font-size:12px;color:#991B1B;">
+                        <strong>Mất đảm bảo:</strong>
+                        <div style="margin-top:4px;display:flex;flex-direction:column;gap:3px;">
+                          <div>• Không online / không hoạt động trong ngày đăng ký → <strong>không trả đảm bảo ngày đó</strong></div>
+                          <div>• Fail điều kiện ① hoặc ② <strong>2 lần/tuần</strong> → <strong>mất toàn bộ đảm bảo của tuần đó</strong></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Ghép đơn tối đa</td>
+              <td><span class="val-hi">4–5 đơn</span></td>
+              <td><span class="val-hi">3–4 đơn</span></td>
+              <td><span class="val-md">2–3 đơn</span></td>
+              <td><span class="val-md">2–3 đơn</span></td>
+              <td><span class="val-lo">1–2 đơn</span></td>
+            </tr>
+            <tr>
+              <td>Bán kính tối đa / đơn</td>
+              <td><span class="val-hi">≤ 4 km</span></td>
+              <td><span class="val-md">4–7 km</span></td>
+              <td><span class="val-lo">7–11 km</span></td>
+              <td><span class="val-lo">&gt; 11 km</span></td>
+              <td><span class="val-no">Tự do</span></td>
+            </tr>
+
+            <tr class="group-header"><td colspan="6">⭐ AhaBenefits — Điểm thưởng</td></tr>
+            <tr>
+              <td>Hệ số nhân điểm (per trip)</td>
+              <td><span class="mult m20">×2.0</span></td>
+              <td><span class="mult m17">×1.7</span></td>
+              <td><span class="mult m13">×1.3</span></td>
+              <td><span class="mult m10">×1.0</span></td>
+              <td><span class="mult m10">×1.0</span></td>
+            </tr>
+            <tr>
+              <td>Điểm thưởng hoàn thành ca</td>
+              <td><span class="val-hi">+500 pts</span></td>
+              <td><span class="val-hi">+300 pts</span></td>
+              <td><span class="val-md">+150 pts</span></td>
+              <td><span class="val-lo">+50 pts</span></td>
+              <td><span class="val-no">—</span></td>
+            </tr>
+            <tr>
+              <td>Early access campaign &amp; promo</td>
+              <td style="color:#065F46;font-weight:700">✅ 48h trước</td>
+              <td style="color:#065F46;font-weight:700">✅ 24h trước</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+            </tr>
+
+            <tr class="group-header"><td colspan="6">🤝 Partner Benefits</td></tr>
+            <tr>
+              <td>Partner tier</td>
+              <td><span class="tag-sm t-diamond">💎 Kim Cương</span></td>
+              <td><span class="tag-sm t-gold">🥇 Hạng Vàng</span></td>
+              <td><span class="tag-sm t-silver">🥈 Hạng Bạc</span></td>
+              <td><span class="tag-sm" style="background:var(--g100);color:var(--g400);border:1px solid var(--g200)">Cơ bản</span></td>
+              <td><span class="val-no">—</span></td>
+            </tr>
+            <tr>
+              <td>Giảm nhiên liệu / sạc EV</td>
+              <td><span class="val-hi">5–8%</span></td>
+              <td><span class="val-hi">5–8%</span></td>
+              <td><span class="val-md">3–5%</span></td>
+              <td><span class="val-lo">1–2%</span></td>
+              <td><span class="val-no">—</span></td>
+            </tr>
+            <tr>
+              <td>Bảo dưỡng xe định kỳ</td>
+              <td><span class="val-hi">1 lần / quý</span></td>
+              <td><span class="val-hi">1 lần / quý</span></td>
+              <td><span class="val-md">1 lần / 6T</span></td>
+              <td><span class="val-no">—</span></td>
+              <td><span class="val-no">—</span></td>
+            </tr>
+            <tr>
+              <td>Data telecom hàng tháng</td>
+              <td><span class="val-hi">5 GB</span></td>
+              <td><span class="val-hi">5 GB</span></td>
+              <td><span class="val-md">2 GB</span></td>
+              <td><span class="val-no">—</span></td>
+              <td><span class="val-no">—</span></td>
+            </tr>
+            <tr>
+              <td>Khám sức khoẻ miễn phí</td>
+              <td><span class="val-hi">1 lần / năm</span></td>
+              <td><span class="val-md">1 lần / năm</span></td>
+              <td><span class="val-no">—</span></td>
+              <td><span class="val-no">—</span></td>
+              <td><span class="val-no">—</span></td>
+            </tr>
+            <tr>
+              <td>F&amp;B / Tiêu dùng merchant</td>
+              <td><span class="val-hi">Ưu tiên cao</span></td>
+              <td><span class="val-md">Ưu tiên cao</span></td>
+              <td><span class="val-lo">Cơ bản</span></td>
+              <td><span class="val-no">—</span></td>
+              <td><span class="val-no">—</span></td>
+            </tr>
+
+            <tr class="group-header"><td colspan="6">🎓 Phát triển nghề nghiệp</td></tr>
+            <tr>
+              <td>Vai trò Đội trưởng / Đội phó</td>
+              <td style="color:#065F46;font-weight:700">✅ Đội trưởng</td>
+              <td style="color:#065F46;font-weight:700">✅ Đội trưởng</td>
+              <td style="color:var(--blue);font-weight:700">✅ Đội phó</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+            </tr>
+            <tr>
+              <td>Ưu tiên tham gia pilot EV</td>
+              <td style="color:#065F46;font-weight:700">✅ Slot 1</td>
+              <td style="color:#065F46;font-weight:700">✅ Slot 2</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</span></td>
+            </tr>
+            <tr>
+              <td>Support channel</td>
+              <td><span class="val-hi">Dedicated chat</span></td>
+              <td><span class="val-hi">Dedicated chat</span></td>
+              <td><span class="val-md">Standard</span></td>
+              <td><span class="val-lo">Standard</span></td>
+              <td><span class="val-lo">Basic</span></td>
+            </tr>
+            <tr>
+              <td>Badge hiển thị trên app</td>
+              <td><span class="tag-sm t-r1">🏅 Elite</span></td>
+              <td><span class="tag-sm t-r2">⭐ Active</span></td>
+              <td><span class="tag-sm t-r3">✓ Standard</span></td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="callout cy-call" style="margin-top:12px;"><strong>Lưu ý thu nhập đảm bảo:</strong> Áp dụng theo ca đã đăng ký, tính theo giờ thực tế hoạt động trong zone. Nếu EPH thực tế &gt; mức đảm bảo → trả theo thực tế. Nếu &lt; mức đảm bảo → Ahamove bù phần thiếu. Cần validate với S&amp;P theo EPH P50 thực tế trước khi launch.</div>
+  </section>
+
+  <!-- SECTION 5: SHIFTS -->
+  <section id="shifts">
+    <div class="section-label">Phần 4</div>
+    <div class="section-title">Đề xuất Phân bổ Ca kíp</div>
+    <div class="note">Khung 4 ca cố định/ngày. Layer cao (L2/L3) ưu tiên ca peak volume cao. Layer thấp (L4/L5) lấp đầy mid-day và ngoài giờ cao điểm. L6 luôn mở, không cần đăng ký ca.</div>
+
+    <!-- Ca definitions -->
+    <div class="shift-grid" style="margin-bottom:24px;">
+      <div class="shift-card">
+        <div class="shift-name">Ca Sáng</div>
+        <div class="shift-time">08:00–12:00</div>
+        <div class="shift-dur">Ca 4 tiếng</div>
+        <div class="shift-peak peak-yes">⚡ Peak sáng</div>
+      </div>
+      <div class="shift-card">
+        <div class="shift-name">Ca Chiều</div>
+        <div class="shift-time">13:00–17:00</div>
+        <div class="shift-dur">Ca 4 tiếng</div>
+        <div class="shift-peak peak-yes">⚡ Peak chiều</div>
+      </div>
+      <div class="shift-card">
+        <div class="shift-name">Ca Tối</div>
+        <div class="shift-time">17:00–21:00</div>
+        <div class="shift-dur">Ca 4 tiếng</div>
+        <div class="shift-peak peak-no">Bình thường</div>
+      </div>
+      <div class="shift-card" style="border-color:var(--orange);background:#FFF7F2;">
+        <div class="shift-name" style="color:var(--orange)">Ca Full-day ★</div>
+        <div class="shift-time">08:00–18:00</div>
+        <div class="shift-dur">Ca 10 tiếng</div>
+        <div class="shift-peak" style="background:#FFF0E6;color:#C2410C;margin-bottom:6px;">R1 + R2 only</div>
+        <div style="font-size:11px;font-weight:700;color:#065F46;background:#D1FAE5;border-radius:999px;padding:2px 8px;display:inline-block">💰 Đảm bảo/ngày</div>
+      </div>
+    </div>
+
+    <!-- Slot allocation table -->
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 20px 12px;font-size:14px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">Phân bổ Slot theo Ca × Layer (% tổng slot mỗi ca)</div>
+      <div style="overflow-x:auto;">
+        <table class="stable">
+          <thead>
+            <tr>
+              <th>Ca</th>
+              <th>L2 Minizone<br><span style="font-size:10px;opacity:.7">(R1)</span></th>
+              <th>L3 Mediumzone<br><span style="font-size:10px;opacity:.7">(R2)</span></th>
+              <th>L4 Bigzone<br><span style="font-size:10px;opacity:.7">(R3)</span></th>
+              <th>L5 Cityzone<br><span style="font-size:10px;opacity:.7">(R3 cascade)</span></th>
+              <th>L6 MASS<br><span style="font-size:10px;opacity:.7">(All)</span></th>
+              <th>Ghi chú</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Ca Sáng ⚡</strong><br><span style="font-size:11px;color:var(--g400)">08:00–12:00</span></td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:35px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">35%</span></div>
+              </td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:33px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">33%</span></div>
+              </td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:22px;background:var(--r3)"></div><span style="font-weight:700;color:var(--r3)">22%</span></div>
+              </td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:10px;background:var(--un)"></div><span style="color:var(--g400)">10%</span></div>
+              </td>
+              <td><span style="color:var(--g400);font-size:12px">Mở tự do</span></td>
+              <td style="font-size:12px;color:var(--g600)">Peak sáng: đơn văn phòng + giao hàng thương mại điện tử sớm. L2/L3 chiếm nhiều — ghép đơn mini hiệu quả nhất buổi sáng.</td>
+            </tr>
+            <tr>
+              <td><strong>Ca Chiều ⚡</strong><br><span style="font-size:11px;color:var(--g400)">13:00–17:00</span></td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:22px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">22%</span></div>
+              </td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:28px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">28%</span></div>
+              </td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:33px;background:var(--r3)"></div><span style="font-weight:700;color:var(--r3)">33%</span></div>
+              </td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:17px;background:var(--un)"></div><span style="color:var(--g400)">17%</span></div>
+              </td>
+              <td><span style="color:var(--g400);font-size:12px">Mở tự do</span></td>
+              <td style="font-size:12px;color:var(--g600)">Peak chiều: đơn thương mại điện tử + giao văn phòng tan ca trưa. L2/L3 tăng slot, cùng cấu trúc Ca Sáng.</td>
+            </tr>
+            <tr>
+              <td><strong>Ca Tối</strong><br><span style="font-size:11px;color:var(--g400)">17:00–21:00</span></td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:38px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">38%</span></div>
+              </td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:32px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">32%</span></div>
+              </td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:20px;background:var(--r3)"></div><span style="font-weight:700;color:var(--r3)">20%</span></div>
+              </td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:10px;background:var(--un)"></div><span style="color:var(--g400)">10%</span></div>
+              </td>
+              <td><span style="color:var(--g400);font-size:12px">Mở tự do</span></td>
+              <td style="font-size:12px;color:var(--g600)">Volume thấp hơn 2 ca trước. L4/L5 tăng tỉ lệ — phù hợp đơn cross-zone buổi tối. L2 giảm slot vì density minizone thấp.</td>
+            </tr>
+            <tr style="background:#FFF7F2;">
+              <td><strong style="color:var(--orange)">Ca Full-day ★</strong><br><span style="font-size:11px;color:var(--g400)">08:00–18:00</span></td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:50px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">R1 only</span></div>
+              </td>
+              <td>
+                <div class="slot-bar"><div class="sbar" style="width:40px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">R1+R2</span></div>
+              </td>
+              <td><span class="val-no">—</span></td>
+              <td><span class="val-no">—</span></td>
+              <td><span style="color:var(--g400);font-size:12px">Mở tự do</span></td>
+              <td style="font-size:12px;color:var(--g600)">Đặc quyền R1 &amp; R2. Slot giới hạn — tối đa 20% tổng fleet mỗi ngày để đảm bảo diversity ca.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
+      <div class="callout co"><strong>Giới hạn đăng ký ca:</strong> Mỗi tài xế tối đa <strong>22 ca/tháng</strong> (≈ 5–6 ca/tuần). Tránh burnout và đảm bảo cạnh tranh lành mạnh giữa tài xế cùng tier.</div>
+      <div class="callout cb"><strong>Ca Full-day:</strong> Chỉ mở cửa sổ đăng ký sau khi R1 đã lấp đầy ≥ 70% Ca Sáng + Ca Tối. Logic: tài xế chọn Full-day thay vì 2 ca lẻ → đảm bảo commit supply dài hơn.</div>
+    </div>
+    <div class="callout cg" style="margin-top:12px;">
+      <strong>💰 Tóm tắt: Đảm bảo/ngày Ca Full-day</strong> &nbsp;·&nbsp; R1: <strong>600k/ngày (SGN)</strong> &nbsp;·&nbsp; R2: <strong>500k/ngày (SGN)</strong><br>
+      <span style="font-size:12px;">App online ≥ 95% + AR = 100% · Đủ FR &amp; DCR ngày · Fail 2 lần/tuần → mất đảm bảo cả tuần. Chi tiết xem bảng Quyền lợi ↑</span>
+    </div>
+  </section>
+
+  <!-- SECTION 6: MASTER TABLE -->
+  <section id="master">
+    <div class="section-label">Phần 5 — Bảng tổng hợp</div>
+    <div class="section-title">Master: Rank × Layer × Quyền lợi × Ca</div>
+    <div class="note">Bảng tham chiếu nhanh. Dùng khi cần trả lời câu hỏi: "Tài xế hạng X đang chạy layer Y được gì?"</div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="overflow-x:auto;">
+        <table class="master-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Layer ưu tiên</th>
+              <th>Thu nhập đảm bảo (SGN)</th>
+              <th>Ghép đơn</th>
+              <th>AhaBenefits ×</th>
+              <th>Partner Tier</th>
+              <th>Ca Full-day</th>
+              <th>Đội trưởng</th>
+              <th>EV Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="r1-row">
+              <td><span class="tag-sm t-r1">R1 Elite</span><br><span style="font-size:11px;color:var(--g400)">~15% fleet</span></td>
+              <td><strong style="color:var(--r1)">L2 Minizone</strong><br><span style="font-size:11px;color:var(--g400)">↩ L3 fallback</span></td>
+              <td><strong class="val-hi">65k/h</strong><br><span style="font-size:11px;font-weight:800;color:var(--orange)">★ 600k/ngày</span></td>
+              <td><strong>4–5 đơn</strong></td>
+              <td><span class="mult m20">×2.0</span></td>
+              <td><span class="tag-sm t-diamond">💎 Kim Cương</span></td>
+              <td style="color:#065F46;font-weight:700">✅</td>
+              <td style="color:#065F46;font-weight:700">✅ Trưởng</td>
+              <td style="color:#065F46;font-weight:700">✅ Slot 1</td>
+            </tr>
+            <tr class="r2-row">
+              <td><span class="tag-sm t-r2">R2 Active</span><br><span style="font-size:11px;color:var(--g400)">~35% fleet</span></td>
+              <td><strong style="color:var(--r2)">L3 Mediumzone</strong><br><span style="font-size:11px;color:var(--g400)">↩ L4 fallback</span></td>
+              <td><strong class="val-hi">60k/h</strong><br><span style="font-size:11px;font-weight:800;color:var(--r2)">★ 500k/ngày</span></td>
+              <td><strong>3–4 đơn</strong></td>
+              <td><span class="mult m17">×1.7</span></td>
+              <td><span class="tag-sm t-gold">🥇 Hạng Vàng</span></td>
+              <td style="color:#065F46;font-weight:700">✅</td>
+              <td style="color:#065F46;font-weight:700">✅ Trưởng</td>
+              <td style="color:#065F46;font-weight:700">✅ Slot 2</td>
+            </tr>
+            <tr class="r3-row">
+              <td><span class="tag-sm t-r3">R3 Standard</span><br><span style="font-size:11px;color:var(--g400)">~35% fleet</span></td>
+              <td><strong style="color:var(--r3)">L4 Bigzone</strong><br><span style="font-size:11px;color:var(--g400)">↩ L5 fallback</span></td>
+              <td><strong class="val-md">55k/h</strong></td>
+              <td><strong>2–3 đơn</strong></td>
+              <td><span class="mult m13">×1.3</span></td>
+              <td><span class="tag-sm t-silver">🥈 Hạng Bạc</span></td>
+              <td class="val-no">—</td>
+              <td style="color:var(--blue);font-weight:700">✅ Phó</td>
+              <td class="val-no">—</td>
+            </tr>
+            <tr class="un-row">
+              <td><span class="tag-sm t-un">Unranked</span><br><span style="font-size:11px;color:var(--g400)">~15% fleet</span></td>
+              <td><strong style="color:var(--un)">L6 MASS</strong><br><span style="font-size:11px;color:var(--g400)">Không cascade</span></td>
+              <td class="val-no">—</td>
+              <td><strong>1–2 đơn</strong></td>
+              <td><span class="mult m10">×1.0</span></td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="callout cg" style="margin-top:12px;"><strong>Nguyên tắc thiết kế:</strong> Mỗi bước upgrade Rank đều mang lại quyền lợi <em>rõ ràng và định lượng được</em> — không phải chỉ badge. R3 → R2: thêm 5k/h đảm bảo + ×0.4 multiplier + Partner Vàng. R2 → R1: thêm 5k/h đảm bảo + ×0.3 multiplier + Ca Full-day + EV slot.</div>
+  </section>
+
+  <!-- SECTION 7: AHABENEFITS TEASER -->
+  <section id="ahabenefits">
+    <div class="section-label">Phần 6 — AhaBenefits v2.0</div>
+    <div class="section-title">AhaBenefits — Rewards System</div>
+
+    <!-- BRAND HEADER -->
+    <div class="ab-header" style="margin-bottom:20px;">
+      <div class="ab-tag">AhaBenefits · v2.0 · 2026</div>
+      <h2>Earn · Redeem · Exclusive</h2>
+      <p>Hệ thống quyền lợi toàn diện cho tài xế Ahamove. Tích điểm theo thu nhập thực tế → đổi quà thiết thực → đặc quyền không thể mua gắn theo Rank.</p>
+      <div class="ab-pillars">
+        <div class="ab-pillar">
+          <div class="ab-pillar-num">01</div>
+          <div class="ab-pillar-name">Earn</div>
+          <div class="ab-pillar-desc">5,000đ thu nhập = 1 điểm · Nhân hệ số theo layer · Bonus điểm khi hoàn ca đúng hạn.</div>
+        </div>
+        <div class="ab-pillar">
+          <div class="ab-pillar-num">02</div>
+          <div class="ab-pillar-name">Redeem</div>
+          <div class="ab-pillar-desc">Đổi điểm lấy voucher xăng/EV, bảo dưỡng xe, CCDC, F&amp;B, data SIM, thẻ quà tặng.</div>
+        </div>
+        <div class="ab-pillar">
+          <div class="ab-pillar-num">03</div>
+          <div class="ab-pillar-name">Exclusive</div>
+          <div class="ab-pillar-desc">Đặc quyền gắn Rank — không thể mua bằng điểm: Partner Kim Cương, health check, EV pilot, dedicated support.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6.1 POINT ECONOMY -->
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:12px;">6.1 · Cơ chế Tích điểm (Earn)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+      <div class="card">
+        <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:12px;">Công thức</div>
+        <div class="ab2-formula">
+<span class="b">Điểm/ca</span> = (<span class="g">Thu nhập thực tế</span> ÷ <span class="h">5.000</span>) × <span class="h">Hệ số Layer</span>
+            + <span class="g">Bonus hoàn ca</span>
+
+<span class="b">Ví dụ R1</span> (L2 · EPH 200k/h · Ca 4 tiếng):
+  Base : 800.000 ÷ 5.000 = <span class="g">160 pts</span>
+  × 2.0 : <span class="g">320 pts</span>
+  + Bonus ca: <span class="h">+60 pts</span>
+  → Tổng : <span class="b">380 pts/ca</span>
+        </div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:12px 16px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">Hệ số Layer & Bonus hoàn ca</div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead><tr style="background:var(--g100);">
+            <th style="padding:8px 14px;text-align:left;font-weight:700;color:var(--g600);font-size:11px;">Layer</th>
+            <th style="padding:8px 10px;text-align:center;font-weight:700;color:var(--g600);font-size:11px;">Hệ số ×</th>
+            <th style="padding:8px 14px;text-align:center;font-weight:700;color:var(--g600);font-size:11px;">Bonus/ca</th>
+          </tr></thead>
+          <tbody>
+            <tr style="background:#FFF7F2;"><td style="padding:9px 14px;font-weight:700;color:var(--r1);">L2 Minizone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m20">×2.0</span></td><td style="padding:9px 14px;text-align:center;font-weight:800;color:var(--r1);">+60 pts</td></tr>
+            <tr style="background:#F0F5FF;"><td style="padding:9px 14px;font-weight:700;color:var(--r2);">L3 Mediumzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m17">×1.7</span></td><td style="padding:9px 14px;text-align:center;font-weight:800;color:var(--r2);">+55 pts</td></tr>
+            <tr><td style="padding:9px 14px;font-weight:700;color:var(--r3);">L4 Bigzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m13">×1.3</span></td><td style="padding:9px 14px;text-align:center;font-weight:700;color:var(--r3);">+50 pts</td></tr>
+            <tr><td style="padding:9px 14px;color:var(--g600);">L5 Cityzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m10">×1.0</span></td><td style="padding:9px 14px;text-align:center;color:var(--g400);">+50 pts</td></tr>
+            <tr><td style="padding:9px 14px;color:var(--g400);">L6 MASS</td><td style="padding:9px 10px;text-align:center;"><span class="mult m10">×1.0</span></td><td style="padding:9px 14px;text-align:center;color:var(--g400);">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Earn estimate per rank -->
+    <div style="font-size:12px;font-weight:700;color:var(--g600);margin-bottom:10px;">Ước tính điểm tích lũy / ca (giả định EPH trung bình) <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:0 6px;font-size:10px;font-weight:700">📋</span></div>
+    <div class="earn-grid" style="margin-bottom:20px;">
+      <div class="earn-card ec1">
+        <div class="earn-rank">R1 · L2 · EPH ~200k/h</div>
+        <div class="earn-pts">380</div>
+        <div class="earn-sub">pts / ca 4 tiếng</div>
+        <div class="earn-detail">160 base × 2.0 = 320<br>+ 60 bonus hoàn ca</div>
+      </div>
+      <div class="earn-card ec2">
+        <div class="earn-rank">R2 · L3 · EPH ~170k/h</div>
+        <div class="earn-pts">286</div>
+        <div class="earn-sub">pts / ca 4 tiếng</div>
+        <div class="earn-detail">136 base × 1.7 = 231<br>+ 55 bonus hoàn ca</div>
+      </div>
+      <div class="earn-card ec3">
+        <div class="earn-rank">R3 · L4 · EPH ~140k/h</div>
+        <div class="earn-pts">196</div>
+        <div class="earn-sub">pts / ca 4 tiếng</div>
+        <div class="earn-detail">112 base × 1.3 = 146<br>+ 50 bonus hoàn ca</div>
+      </div>
+      <div class="earn-card ec6">
+        <div class="earn-rank">L6 MASS · EPH ~110k/h</div>
+        <div class="earn-pts">88</div>
+        <div class="earn-sub">pts / ca 4 tiếng</div>
+        <div class="earn-detail">88 base × 1.0 = 88<br>không có bonus hoàn ca</div>
+      </div>
+    </div>
+
+    <!-- 6.2 POINT RULES -->
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:12px;">6.2 · Quy tắc Điểm</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div class="card" style="border-left:4px solid var(--green);padding:16px 18px;">
+        <div style="font-size:11px;font-weight:700;color:var(--green);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Tích điểm</div>
+        <div style="font-size:13px;font-weight:600;color:var(--g800);line-height:1.7;">
+          Tự động sau mỗi chuyến hoàn thành<br>
+          Cộng bonus khi đủ điều kiện hoàn ca<br>
+          Hiển thị realtime trên app tài xế
+        </div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--gold);padding:16px 18px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Hết hạn</div>
+        <div style="font-size:13px;font-weight:600;color:var(--g800);line-height:1.7;">
+          Điểm reset <strong>cuối mỗi quý</strong><br>
+          Thông báo app trước 14 ngày<br>
+          Điểm đã đổi voucher không bị reset
+        </div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--red);padding:16px 18px;">
+        <div style="font-size:11px;font-weight:700;color:var(--red);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Phạt điểm</div>
+        <div style="font-size:13px;font-weight:600;color:var(--g800);line-height:1.7;">
+          Vi phạm ĐBCL (DCR, rating): <strong style="color:var(--red);">−200 pts</strong><br>
+          Điểm tối thiểu = 0 (không âm)<br>
+          Ghi lý do vi phạm vào lịch sử
+        </div>
+      </div>
+    </div>
+
+    <!-- 6.3 REDEMPTION CATALOG -->
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:6px;">6.3 · Catalog Đổi Điểm (Redeem)</div>
+
+    <!-- Catalog split explanation -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+      <div style="background:#ECFDF5;border:1.5px solid #6EE7B7;border-radius:12px;padding:12px 16px;">
+        <div style="font-size:11px;font-weight:800;color:#065F46;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">🤝 Partner Rewards — Đổi bằng điểm</div>
+        <div style="font-size:12px;color:#047857;line-height:1.6;">Ahamove chi phí <strong>= 0đ</strong>. Đối tác subsidize để tiếp cận driver base. Tất cả các Rank đều có thể dùng điểm để đổi.</div>
+      </div>
+      <div style="background:#FFF7F2;border:1.5px solid #FDBA74;border-radius:12px;padding:12px 16px;">
+        <div style="font-size:11px;font-weight:800;color:#C2410C;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">💎 Rank Entitlements — Tự động theo Rank</div>
+        <div style="font-size:12px;color:#C2410C;line-height:1.6;"><strong>Không</strong> dùng điểm để đổi. Cấp tự động: Kim Cương 2 items · Vàng 1 item. Nằm trong budget <strong>200M/tháng</strong>.</div>
+      </div>
+    </div>
+
+    <!-- PART A: Free Partner Rewards -->
+    <div style="font-size:12.5px;font-weight:800;color:#065F46;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:14px;height:14px;background:#10B981;border-radius:3px;"></span> A · Partner Rewards (Ahamove cost = 0đ)</div>
+    <div class="catalog-grid" style="margin-bottom:22px;">
+
+      <!-- Xăng / EV Partner -->
+      <div class="cat-card">
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">⛽</span><span class="cat-title" style="color:#065F46;">Nhiên liệu & Sạc EV</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: xăng chain (VD: Petrolimex), trạm sạc EV</div>
+        <div class="cat-item"><span class="cat-name">Giảm giá xăng 5% / lần đổ</span><span class="cat-badge cb-pts">600 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm giá xăng 10% / lần đổ</span><span class="cat-badge cb-pts">1.100 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm giá sạc EV 20% / lần</span><span class="cat-badge cb-pts">800 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Combo sạc EV tháng (10%)</span><span class="cat-badge cb-excl">2.000 pts · R2+</span></div>
+      </div>
+
+      <!-- Bảo dưỡng Partner -->
+      <div class="cat-card">
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🔧</span><span class="cat-title" style="color:#065F46;">Bảo dưỡng xe</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: chuỗi sửa xe (VD: Honda Head, Yamaha)</div>
+        <div class="cat-item"><span class="cat-name">Giảm 15% dầu nhớt / lọc</span><span class="cat-badge cb-pts">900 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm 20% bảo dưỡng định kỳ</span><span class="cat-badge cb-pts">1.800 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm 30% vá/thay lốp</span><span class="cat-badge cb-pts">1.200 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Gói bảo dưỡng ưu tiên R1</span><span class="cat-badge cb-r1">3.000 pts · R1 only</span></div>
+      </div>
+
+      <!-- CCDC Partner -->
+      <div class="cat-card">
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🎽</span><span class="cat-title" style="color:#065F46;">CCDC & Trang thiết bị</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Nhập từ Ahamove Store / đối tác sản xuất</div>
+        <div class="cat-item"><span class="cat-name">Túi giữ nhiệt tiêu chuẩn</span><span class="cat-badge cb-pts">800 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Túi giữ nhiệt cao cấp (XL)</span><span class="cat-badge cb-pts">1.400 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Baga / phụ kiện xe</span><span class="cat-badge cb-pts">1.500 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Đồng phục 1 bộ</span><span class="cat-badge cb-pts">700 pts</span></div>
+      </div>
+
+      <!-- F&B Partner -->
+      <div class="cat-card">
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🍜</span><span class="cat-title" style="color:#065F46;">F&B / Tiêu dùng</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Merchant Ahamove giao / chuỗi F&B partner</div>
+        <div class="cat-item"><span class="cat-name">Voucher F&B partner 50k</span><span class="cat-badge cb-pts">500 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Voucher F&B partner 100k</span><span class="cat-badge cb-pts">950 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm 10% chuỗi siêu thị</span><span class="cat-badge cb-pts">600 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Combo bữa trưa tài xế</span><span class="cat-badge cb-pts">400 pts</span></div>
+      </div>
+
+      <!-- Data SIM Partner -->
+      <div class="cat-card">
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">📱</span><span class="cat-title" style="color:#065F46;">Data SIM & Viễn thông</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: Viettel / Vinaphone / Mobifone (gói group)</div>
+        <div class="cat-item"><span class="cat-name">Data 5GB ưu đãi tài xế</span><span class="cat-badge cb-pts">450 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Data 10GB ưu đãi tài xế</span><span class="cat-badge cb-pts">800 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Data 20GB ưu đãi tài xế</span><span class="cat-badge cb-pts">1.500 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Gói SIM ưu tiên cao tốc</span><span class="cat-badge cb-excl">2.200 pts · R2+</span></div>
+      </div>
+
+      <!-- Health Partner -->
+      <div class="cat-card">
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🏥</span><span class="cat-title" style="color:#065F46;">Sức khoẻ & Bảo vệ</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: phòng khám, bảo hiểm sức khoẻ driver</div>
+        <div class="cat-item"><span class="cat-name">Giảm 20% khám tổng quát</span><span class="cat-badge cb-pts">1.500 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm 15% mua thuốc tại nhà thuốc</span><span class="cat-badge cb-pts">600 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Bảo hiểm tai nạn 1 tháng</span><span class="cat-badge cb-excl">2.500 pts · R2+</span></div>
+        <div class="cat-item"><span class="cat-name">Bảo hiểm tai nạn 3 tháng</span><span class="cat-badge cb-r1">6.000 pts · R1 only</span></div>
+      </div>
+    </div>
+
+    <!-- PART B: Rank Entitlements (paid, Ahamove-funded) -->
+    <div style="font-size:12.5px;font-weight:800;color:#C2410C;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:14px;height:14px;background:var(--orange);border-radius:3px;"></span> B · Rank Entitlements — Tự động, nằm trong 200M budget</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+
+      <!-- Kim Cuong entitlements -->
+      <div class="cat-card" style="border:2px solid var(--r1);">
+        <div class="cat-head" style="background:#FEF2F2;"><span class="cat-icon">💎</span><span class="cat-title" style="color:var(--r1);">Kim Cương — R1 Elite · 2 items</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 6px;font-style:italic;">Cấp tự động mỗi tháng · không cần đổi điểm</div>
+        <div class="cat-item" style="background:#FEF2F2;">
+          <span class="cat-name" style="font-weight:700;">⛽ Voucher xăng/EV <strong>50k</strong>/tháng</span>
+          <span style="font-size:10px;font-weight:800;color:#C2410C;background:#FEE2E2;padding:2px 8px;border-radius:20px;white-space:nowrap;">~37.5k cost</span>
+        </div>
+        <div style="padding:4px 12px 2px;font-size:10.5px;color:#6B7280;">Cost sau đàm phán 25% off · Ahamove trả 75% giá trị</div>
+        <div class="cat-item" style="background:#FEF2F2;margin-top:4px;">
+          <span class="cat-name" style="font-weight:700;">🏥 Khám sức khoẻ <strong>1 lần/năm</strong></span>
+          <span style="font-size:10px;font-weight:800;color:#C2410C;background:#FEE2E2;padding:2px 8px;border-radius:20px;white-space:nowrap;">~21k/tháng</span>
+        </div>
+        <div style="padding:4px 12px 8px;font-size:10.5px;color:#6B7280;">250k/lần ÷ 12 tháng · 1.575 tài xế × ~21k ≈ 33M/tháng</div>
+        <div style="margin:8px 12px 10px;background:#FFF7F0;border:1px solid #FDBA74;border-radius:8px;padding:6px 10px;font-size:11.5px;color:#92400E;font-weight:700;">💰 Chi phí R1 ≈ 92M/tháng cho cả 2 items</div>
+      </div>
+
+      <!-- Vang entitlements -->
+      <div class="cat-card" style="border:2px solid var(--r2);">
+        <div class="cat-head" style="background:#EFF6FF;"><span class="cat-icon">🥇</span><span class="cat-title" style="color:var(--r2);">Vàng — R2 Active · 1 item</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 6px;font-style:italic;">Cấp tự động mỗi tháng · không cần đổi điểm</div>
+        <div class="cat-item" style="background:#EFF6FF;">
+          <span class="cat-name" style="font-weight:700;">⛽ Voucher xăng/EV <strong>30k</strong>/tháng</span>
+          <span style="font-size:10px;font-weight:800;color:var(--r2);background:#DBEAFE;padding:2px 8px;border-radius:20px;white-space:nowrap;">~22.5k cost</span>
+        </div>
+        <div style="padding:4px 12px 8px;font-size:10.5px;color:#6B7280;">Cost sau đàm phán 25% off · Ahamove trả 75% giá trị · 3.675 tài xế × 22.5k ≈ 83M/tháng</div>
+        <div style="margin:8px 12px 10px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:6px 10px;font-size:11.5px;color:var(--r2);font-weight:700;">💰 Chi phí R2 ≈ 83M/tháng cho 1 item</div>
+        <div style="margin:0 12px 10px;background:#F0FDF4;border:1px solid #6EE7B7;border-radius:8px;padding:6px 10px;font-size:11.5px;color:#065F46;font-weight:700;">✅ Tổng paid = ~175M · Buffer ~25M vs 200M budget</div>
+      </div>
+    </div>
+
+    <div class="callout co" style="margin-bottom:20px;"><strong>Ghi chú vận hành:</strong> Điểm AhaBenefits <em>chỉ</em> đổi được phần <strong>A · Partner Rewards</strong> (Ahamove cost ≈0đ). Rank Entitlements (Phần B) cấp tự động — không liên kết điểm. Tài xế cần hoàn thành đủ điều kiện Rank trong tháng để nhận entitlement tháng kế tiếp.</div>
+
+    <!-- 6.4 EXCLUSIVE PERKS (không mua được bằng điểm) -->
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">6.4 · Exclusive Perks — Không thể mua bằng điểm</div>
+    <div class="note" style="margin-bottom:12px;">Các quyền lợi này được cấp <strong>tự động theo Rank</strong>, không liên quan đến điểm tích lũy. Mất rank → mất perk.</div>
+    <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+      <div style="overflow-x:auto;">
+        <table class="proj-table">
+          <thead>
+            <tr>
+              <th>Exclusive Perk</th>
+              <th style="background:#C2410C;">R1 Elite<br><span style="font-size:10px;opacity:.7">💎 Kim Cương</span></th>
+              <th style="background:#1D4ED8;">R2 Active<br><span style="font-size:10px;opacity:.7">🥇 Vàng</span></th>
+              <th style="background:var(--r3);">R3 Standard<br><span style="font-size:10px;opacity:.7">🥈 Bạc</span></th>
+              <th style="background:var(--un);">Unranked</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="r1-row">
+              <td style="font-weight:600;">Partner tier tự động</td>
+              <td style="color:var(--r1);font-weight:800;">💎 Kim Cương</td>
+              <td style="color:var(--r2);font-weight:800;">🥇 Vàng</td>
+              <td style="color:var(--r3);font-weight:700;">🥈 Bạc</td>
+              <td class="val-no">—</td>
+            </tr>
+            <tr class="r2-row">
+              <td style="font-weight:600;">Early access campaign</td>
+              <td style="color:#065F46;font-weight:700;">✅ 48h trước</td>
+              <td style="color:#065F46;font-weight:700;">✅ 24h trước</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+            </tr>
+            <tr class="r3-row">
+              <td style="font-weight:600;">Khám sức khoẻ miễn phí</td>
+              <td style="color:#065F46;font-weight:700;">1 lần / năm</td>
+              <td style="color:#065F46;font-weight:700;">1 lần / năm</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+            </tr>
+            <tr class="r1-row">
+              <td style="font-weight:600;">Dedicated support channel</td>
+              <td style="color:var(--r1);font-weight:700;">Chat riêng</td>
+              <td style="color:var(--r2);font-weight:700;">Chat riêng</td>
+              <td style="color:var(--g600);">Standard</td>
+              <td style="color:var(--g400);">Basic</td>
+            </tr>
+            <tr class="r2-row">
+              <td style="font-weight:600;">EV pilot access</td>
+              <td style="color:#065F46;font-weight:700;">Slot 1 ưu tiên</td>
+              <td style="color:#065F46;font-weight:700;">Slot 2</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+            </tr>
+            <tr class="r3-row">
+              <td style="font-weight:600;">Ca Full-day & đảm bảo/ngày</td>
+              <td style="color:var(--r1);font-weight:700;">✅ 600k/ngày</td>
+              <td style="color:var(--r2);font-weight:700;">✅ 500k/ngày</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+            </tr>
+            <tr class="r1-row">
+              <td style="font-weight:600;">Đội trưởng / Đội phó</td>
+              <td style="color:var(--r1);font-weight:700;">Đội trưởng</td>
+              <td style="color:var(--r2);font-weight:700;">Đội trưởng</td>
+              <td style="color:var(--g600);font-weight:700;">Đội phó</td>
+              <td class="val-no">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 6.5 QUARTERLY PROJECTION -->
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">6.5 · Dự phóng Điểm theo Quý <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:0 6px;font-size:11px;font-weight:700">📋</span></div>
+    <div class="note" style="margin-bottom:12px;">Giả định: 22 ca/tháng × 3 tháng = 66 ca/quý · EPH theo P50 ước tính · Điểm reset cuối quý.</div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="overflow-x:auto;">
+        <table class="proj-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Pts / ca</th>
+              <th>Pts / tháng<br><span style="font-size:10px;opacity:.7">(22 ca)</span></th>
+              <th>Pts / quý<br><span style="font-size:10px;opacity:.7">(66 ca)</span></th>
+              <th>Có thể đổi<br><span style="font-size:10px;opacity:.7">(30% burn rate)</span></th>
+              <th>Ví dụ đổi trong quý</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="r1-row">
+              <td><span class="tag-sm t-r1">R1 Elite</span></td>
+              <td style="font-weight:800;color:var(--r1);">380</td>
+              <td style="font-weight:700;">8.360</td>
+              <td style="font-weight:800;color:var(--r1);font-size:15px;">25.080</td>
+              <td style="font-weight:700;color:#065F46;">~7.500 pts</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">5× giảm xăng 10% + 3× data 10GB + 2× giảm bảo dưỡng · <em>+ tự động nhận voucher xăng 50k + khám sức khoẻ</em></td>
+            </tr>
+            <tr class="r2-row">
+              <td><span class="tag-sm t-r2">R2 Active</span></td>
+              <td style="font-weight:800;color:var(--r2);">286</td>
+              <td style="font-weight:700;">6.292</td>
+              <td style="font-weight:800;color:var(--r2);font-size:15px;">18.876</td>
+              <td style="font-weight:700;color:#065F46;">~5.700 pts</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">3× data 10GB + 2× giảm bảo dưỡng 20% <em>hoặc</em> bảo hiểm tai nạn 1 tháng + 3× data 5GB · <em>+ tự động nhận voucher xăng 30k</em></td>
+            </tr>
+            <tr class="r3-row">
+              <td><span class="tag-sm t-r3">R3 Standard</span></td>
+              <td style="font-weight:800;color:var(--r3);">196</td>
+              <td style="font-weight:700;">4.312</td>
+              <td style="font-weight:800;color:var(--r3);font-size:15px;">12.936</td>
+              <td style="font-weight:700;color:#065F46;">~3.900 pts</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">2× giảm bảo dưỡng 20% + 1× data 5GB <em>hoặc</em> 2× voucher F&B 100k + 3× data 5GB</td>
+            </tr>
+            <tr class="un-row">
+              <td><span class="tag-sm t-un">L6 MASS</span></td>
+              <td style="color:var(--g400);">88</td>
+              <td style="color:var(--g400);">1.936</td>
+              <td style="color:var(--g400);">5.808</td>
+              <td style="color:var(--g400);">~1.700 pts</td>
+              <td style="font-size:12px;color:var(--g400);text-align:left;padding-left:14px;">3× combo bữa trưa + 1× data 5GB · động lực upgrade lên R3 để ×1.3 pts</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
+      <div class="callout co"><strong>Tại sao 30% burn rate?</strong> Điểm tích lũy theo quý — tài xế thường dùng khoảng 30% để đổi, phần còn lại hết hạn. Với catalog <strong>100% partner-funded</strong>, burn rate cao cũng không làm tăng budget Ahamove — chỉ là tín hiệu engagement. Cần Finance model tỉ lệ partner co-fund sau 1 quý pilot.</div>
+      <div class="callout cg"><strong>Upgrade incentive:</strong> Gap điểm giữa L6 (~5.8k pts/quý) và R3 (~12.9k pts/quý) = 2.2× — tạo động lực upgrade. Gap R3→R2 = 1.6×. Gap R2→R1 = 1.4×. Bonus/ca nhẹ — điểm earn chủ yếu từ thu nhập thực tế × hệ số layer, không phải từ bonus.</div>
+    </div>
+  </section>
+
+  <!-- BUDGET ANALYSIS -->
+  <section id="budget">
+    <div class="section-label">Phần 7 — Budget Analysis</div>
+    <div class="section-title">Ước tính Chi phí Vận hành</div>
+    <div class="note">Input: <strong>10–11k tài xế active/tuần · 40–45k/tháng — TỔNG 2 cities (SGN + HAN)</strong>. Budget target: <strong style="color:var(--red);">200M VND/tháng</strong>. Chiến lược: <em>Free partner rewards làm backbone · Paid rewards chỉ 2 items cho Kim Cương + 1 item cho Vàng.</em></div>
+
+    <!-- FLEET INPUT (corrected) -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:12px 16px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100);">Fleet thực tế — Tổng 2 cities</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+          <tbody>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Weekly actives (tổng)</td><td style="padding:8px 16px;font-weight:800;text-align:right;color:var(--blue);">~10.500</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Monthly actives (tổng)</td><td style="padding:8px 16px;font-weight:800;text-align:right;color:var(--blue);">~42.000</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Occasional pool (monthly - weekly)</td><td style="padding:8px 16px;font-weight:700;color:var(--g400);text-align:right;">~31.500</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r1);font-weight:700;">💎 R1 Kim Cương (15% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r1);text-align:right;">~1.575</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r2);font-weight:700;">🥇 R2 Vàng (35% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r2);text-align:right;">~3.675</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r3);font-weight:700;">🥈 R3 Bạc (35% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r3);text-align:right;">~3.675</td></tr>
+            <tr><td style="padding:8px 16px;color:var(--g400);font-weight:600;">L6 / Unranked (15%)</td><td style="padding:8px 16px;font-weight:700;color:var(--g400);text-align:right;">~1.575</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" style="border:2px solid var(--green);padding:20px 22px;">
+        <div style="font-size:12px;font-weight:800;color:var(--green);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;">Chiến lược 200M/tháng</div>
+        <div style="font-size:13px;font-weight:600;color:var(--g800);line-height:1.8;">
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;"><span style="min-width:22px;height:22px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">A</span><span><strong>Free partner rewards</strong> làm backbone — Ahamove chi $0, đối tác subsidize để có access vào driver base</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;"><span style="min-width:22px;height:22px;background:var(--r1);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">B</span><span><strong>Kim Cương: 2 paid rewards</strong> — Voucher xăng/EV 50k + Khám sức khoẻ 1 lần/năm</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="min-width:22px;height:22px;background:var(--r2);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">C</span><span><strong>Vàng: 1 paid reward</strong> — Voucher xăng/EV 30k/tháng</span></div>
+        </div>
+        <div style="margin-top:12px;background:#ECFDF5;border-radius:8px;padding:8px 12px;font-size:12px;color:#065F46;font-weight:600;">
+          Points system → chỉ đổi FREE partner items. Không dùng điểm để đổi cash voucher Ahamove trả tiền.
+        </div>
+      </div>
+    </div>
+
+    <!-- PAID REWARDS BUDGET BREAKDOWN -->
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">Chi phí Paid Rewards — Tính toán cụ thể</div>
+    <div class="card" style="padding:0;overflow:hidden;margin-bottom:14px;">
+      <div style="overflow-x:auto;">
+        <table class="proj-table">
+          <thead><tr>
+            <th style="text-align:left;padding-left:18px;">Rank & Reward</th>
+            <th>Số lượng<br><span style="font-size:10px;opacity:.7">drivers tổng</span></th>
+            <th>Face value<br><span style="font-size:10px;opacity:.7">/driver/tháng</span></th>
+            <th>Cost Ahamove<br><span style="font-size:10px;opacity:.7">@75% face value</span></th>
+            <th>Tổng/tháng</th>
+            <th>Ghi chú</th>
+          </tr></thead>
+          <tbody>
+            <tr class="r1-row">
+              <td style="padding-left:18px;font-weight:700;color:var(--r1);">💎 Kim Cương — Paid #1<br><span style="font-size:11px;color:var(--g600);font-weight:500;">Voucher xăng/EV 50k</span></td>
+              <td style="font-weight:800;">1.575</td>
+              <td>50.000đ</td>
+              <td style="font-weight:700;">~37.500đ</td>
+              <td style="font-weight:800;color:var(--r1);font-size:14px;">~59M</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Mua bulk qua đối tác xăng/EV, chiết khấu 25%</td>
+            </tr>
+            <tr class="r1-row">
+              <td style="padding-left:18px;font-weight:700;color:var(--r1);">💎 Kim Cương — Paid #2<br><span style="font-size:11px;color:var(--g600);font-weight:500;">Khám sức khoẻ cơ bản · 1 lần/năm</span></td>
+              <td style="font-weight:800;">1.575</td>
+              <td>250.000đ/năm<br><span style="font-size:11px;color:var(--g400)">= ~21k/tháng</span></td>
+              <td style="font-weight:700;">~21.000đ/tháng</td>
+              <td style="font-weight:800;color:var(--r1);font-size:14px;">~33M</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Trả theo quý hoặc tháng khi driver sử dụng</td>
+            </tr>
+            <tr class="r2-row">
+              <td style="padding-left:18px;font-weight:700;color:var(--r2);">🥇 Vàng — Paid #1<br><span style="font-size:11px;color:var(--g600);font-weight:500;">Voucher xăng/EV 30k</span></td>
+              <td style="font-weight:800;">3.675</td>
+              <td>30.000đ</td>
+              <td style="font-weight:700;">~22.500đ</td>
+              <td style="font-weight:800;color:var(--r2);font-size:14px;">~83M</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Cùng cơ chế bulk purchase với Kim Cương</td>
+            </tr>
+            <tr style="background:var(--g100);">
+              <td style="padding-left:18px;font-weight:800;">R3 Bạc & L6</td>
+              <td colspan="3" style="font-size:12px;color:var(--g600);">Chỉ nhận Free Partner Rewards — Ahamove chi $0</td>
+              <td style="font-weight:800;color:var(--green);">0đ</td>
+              <td></td>
+            </tr>
+            <tr style="background:linear-gradient(135deg,#ECFDF5,#EBF3FF);">
+              <td style="padding-left:18px;font-weight:800;font-size:14px;">TỔNG PAID / tháng</td>
+              <td colspan="3" style="font-size:12px;color:var(--g600);">59M + 33M + 83M</td>
+              <td style="font-weight:800;color:#065F46;font-size:20px;">~175M</td>
+              <td style="font-size:12px;color:#065F46;font-weight:700;text-align:left;padding-left:10px;">✅ Trong ngưỡng 200M · Buffer ~25M</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FREE PARTNER MODEL -->
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">Free Partner Rewards — Cơ chế Partnership (Ahamove chi $0)</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">⛽ Nhiên liệu & EV</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Petrolimex, Shell, Evgo, VinFast charging → đàm phán <strong>3–8% discount tại quầy</strong> cho driver có badge Ahamove. Partner hưởng traffic + brand exposure.</div>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🔧 Bảo dưỡng xe</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Garage đối tác (CarCare, Vinfast Service, local chains) → <strong>10–15% discount + priority slot</strong>. Partner nhận lượng khách ổn định từ fleet Ahamove.</div>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🍜 F&B Merchant</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Merchant đang chạy trên Ahamove → đổi <strong>điểm lấy voucher</strong> merchant tự fund như marketing spend. Win-win: merchant tăng order, driver có quyền lợi.</div>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">📱 Data SIM</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Đàm phán <strong>group rate</strong> với Viettel/Vinaphone/Mobifone. ~42k drivers là customer block đủ lớn để negotiate rate đặc biệt, gần như không tốn chi phí Ahamove.</div>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🏥 Khám sức khoẻ (R3)</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Clinic partner (Medlatec, Vinmec, phòng khám địa phương) → discount 20–30% cho R3. Partner nhận volume khách; R3 có benefit không tốn budget Ahamove.</div>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🎯 Points → Partner Voucher</div>
+        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Hệ thống điểm AhaBenefits <strong>chỉ đổi partner-funded items</strong>. Ahamove là nền tảng trung gian, không trả tiền mặt. Chi phí điểm = 0 với Ahamove.</div>
+      </div>
+    </div>
+
+    <!-- BUDGET SUMMARY BAR -->
+    <div style="background:linear-gradient(135deg,var(--blue),#1a5c9e);border-radius:1.5rem;padding:24px 28px;color:#fff;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:700;opacity:.7;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Tổng kết Budget / Tháng</div>
+      <div style="display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap;">
+        <div><div style="font-size:11px;opacity:.6;margin-bottom:4px;">Paid rewards (Kim Cương + Vàng)</div><div style="font-size:36px;font-weight:800;letter-spacing:-1px;color:#86EFAC;">~175M</div></div>
+        <div style="font-size:28px;opacity:.4;padding-bottom:8px;">+</div>
+        <div><div style="font-size:11px;opacity:.6;margin-bottom:4px;">AhaBenefits Points (partner-funded)</div><div style="font-size:36px;font-weight:800;letter-spacing:-1px;color:#7DD3FC;">~0đ</div></div>
+        <div style="font-size:28px;opacity:.4;padding-bottom:8px;">=</div>
+        <div><div style="font-size:11px;opacity:.6;margin-bottom:4px;">Tổng chi phí Ahamove</div><div style="font-size:36px;font-weight:800;letter-spacing:-1px;color:#FCD34D;">~175M</div></div>
+        <div style="margin-left:auto;background:rgba(134,239,172,.15);border:1px solid rgba(134,239,172,.3);border-radius:1rem;padding:12px 20px;text-align:center;">
+          <div style="font-size:11px;opacity:.7;margin-bottom:4px;">vs Budget</div>
+          <div style="font-size:22px;font-weight:800;color:#86EFAC;">200M</div>
+          <div style="font-size:11px;color:#86EFAC;margin-top:2px;">Buffer: ~25M ✅</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout co"><strong>Lưu ý về Guarantee:</strong> Hourly guarantee &amp; Full-day guarantee là chi phí <em>tách biệt</em>, không tính trong 200M AhaBenefits budget. Cần EPH data thực tế và duyệt riêng với Finance trước khi activate. Đề xuất: launch AhaBenefits + paid rewards trước (tháng 1), guarantee xét sau khi có 2 tháng EPH data.</div>
+  </section>
+
+  <div class="footer">
+    Ahamove Driver Management · 2026-05 · Framework v2.0 + AhaBenefits v2.0<br>
+    Tài liệu nội bộ — Liên hệ: khanhlp@ahamove.com
+  </div>
+
+</div>
+
+  </div>
+</div>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tn-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
