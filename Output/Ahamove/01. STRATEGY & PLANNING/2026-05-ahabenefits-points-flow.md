@@ -48,33 +48,59 @@
 
 | Bước | Sự kiện | Hành động hệ thống |
 | --- | --- | --- |
-| 1 | Driver nhấn "Hoàn thành" / hệ thống auto-complete | Ghi nhận `trip_income` (VND) |
+| 1 | Chuyến hoàn thành (auto-complete) | Ghi nhận `trip_GSV` (VND) |
 | 2 | Xác định `layer` của đơn hàng (L2–L6) | Lấy `layer_multiplier` từ config |
-| 3 | Kiểm tra driver có thuộc priority layer không | Nếu overflow → multiplier = ×1.0, bonus = 0 |
-| 4 | Tính `base_pts = floor(trip_income ÷ 5.000)` | Làm tròn xuống |
-| 5 | Tính `earned_pts = base_pts × layer_multiplier` | Làm tròn xuống |
-| 6 | Cộng vào `shift_trip_pts` (tạm tính trong ca) | Chưa credit vào ví |
-| 7 | Cập nhật `shift_income_total` | Dùng để xét bonus hoàn ca |
+| 3 | Kiểm tra driver có thuộc priority layer không | Nếu overflow → multiplier = ×1.0, no bonus |
+| 4 | Tính `raw_pts = trip_GSV ÷ 5.000` | Giá trị thập phân |
+| 5 | Làm tròn: `base_pts = round(raw_pts)` | ≥ 0.5 → làm tròn lên, < 0.5 → làm tròn xuống |
+| 6 | Tính `earned_pts = round(base_pts × layer_multiplier)` | Làm tròn sau khi nhân hệ số |
+| 7 | Cộng vào `shift_trip_pts` (tạm tính trong ca) | Trạng thái PENDING — chưa credit vào ví |
+| 8 | Cập nhật `shift_gsv_total` | Dùng để xét điều kiện bonus hoàn ca |
 
-> **Lưu ý:** Điểm được tính theo **đơn hàng**, không theo rank tài xế.
-> R1 nhận đơn overflow từ L3 → multiplier = ×1.3 (hệ số L3), không phải ×1.5.
+> **Ví dụ làm tròn:** GSV 14.000đ → 14.000 ÷ 5.000 = 2.8 → **3 pts** · GSV 12.000đ → 12.000 ÷ 5.000 = 2.4 → **2 pts**
+
+> **Lưu ý:** Điểm tính theo **đơn hàng** (dùng GSV của đơn), không theo rank tài xế. R1 nhận đơn overflow từ L3 → multiplier = ×1.3 (hệ số L3), không phải ×1.5.
 
 ### 2.2 Bonus hoàn ca
 
-| Điều kiện | Kết quả |
-| --- | --- |
-| Driver hoàn thành đủ ca (không thoát sớm ≥ 15 phút) | +bonus_pts theo layer (30/25/20/20 pts) |
-| Driver thoát ca sớm > 15 phút | Không có bonus, điểm chuyến vẫn giữ |
-| Ca bị hủy do hệ thống | Không có bonus, điểm chuyến vẫn giữ |
+> Không có cơ chế checkout ca. Điều kiện bonus xét dựa trên **online hour in zone** và hoạt động thực tế trong ca.
 
-### 2.3 Credit điểm vào ví
+| Điều kiện | Mô tả | Kết quả |
+| --- | --- | --- |
+| ✅ Đủ online in zone | Online trong zone đăng ký ≥ ngưỡng tối thiểu của ca ([?] % thời lượng ca — cần Product định nghĩa) | Đủ điều kiện nhận bonus |
+| ✅ Đủ điều kiện hoạt động ca | AR, số chuyến hoàn thành tối thiểu trong ca ([?] — cần Product định nghĩa) | Kết hợp với điều kiện trên |
+| ❌ Online in zone không đủ | Driver online nhưng ở ngoài zone, hoặc tắt app quá lâu | Không có bonus, điểm chuyến vẫn giữ |
+| ❌ Ca bị hủy do hệ thống | Force-close ca | Không có bonus, điểm chuyến vẫn giữ |
+
+> **⚠️ Open question cho Product:** Ngưỡng "online in zone" cụ thể là bao nhiêu % thời lượng ca? Đề xuất: ≥ 80% tổng thời gian ca.
+
+### 2.3 Credit điểm vào ví — T+1
 
 ```text
-Thời điểm credit: Cuối ca (khi ca kết thúc hoặc driver kết ca)
-  → Cộng toàn bộ shift_trip_pts + bonus (nếu có) vào ví
-  → Gửi push notification: "Ca [tên ca] hoàn thành — bạn nhận được X pts"
-  → Cập nhật balance realtime trên app
+Thời điểm credit: Ngày hôm sau (T+1), sau khi hệ thống validate dữ liệu ca
+
+Flow:
+  [Kết thúc ca / 23:59 ngày hôm đó]
+         │
+         ▼
+  [Hệ thống batch job chạy (VD: 02:00–04:00 sáng)]
+  Validate: online_hour_in_zone + điều kiện hoạt động ca
+         │
+    ┌────┴────────────────────┐
+    │ Đủ điều kiện            │ Không đủ
+    ▼                         ▼
+  shift_trip_pts              shift_trip_pts
+  + bonus_pts                 (không có bonus)
+    │                         │
+    └──────────┬──────────────┘
+               ▼
+  [Credit vào ví — PENDING → AVAILABLE]
+  [Push notification T+1 sáng:
+   "Ca [tên ca] hôm qua — bạn nhận X pts
+    (Trong đó: Y pts trip + Z pts bonus ca)"]
 ```
+
+> Dữ liệu online hour cần được finalize sau khi ca kết thúc → credit T+1 đảm bảo chính xác, tránh sai lệch do data lag.
 
 ---
 
