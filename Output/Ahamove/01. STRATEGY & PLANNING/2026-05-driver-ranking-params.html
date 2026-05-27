@@ -724,6 +724,23 @@
     .ca-normal { background: var(--gray-dim); color: var(--text-sec); border: 1px solid rgba(139,148,158,0.18); font-size: 11px; font-weight: 600; padding: 3px 12px; border-radius: 20px; }
     .ca-rank { background: rgba(255,127,50,0.1); color: var(--orange); border: 1px solid rgba(255,127,50,0.25); font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
     .ca-guarantee { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.3); font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
+
+    /* ── CA MATRIX ── */
+    .ca-matrix-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 24px rgba(0,0,0,0.5), 0 1px 6px rgba(0,0,0,0.3); background: var(--bg-card); margin-bottom: 14px; }
+    .ca-matrix-wrap table { width: 100%; border-collapse: collapse; }
+    .ca-th-label { padding: 14px 14px; background: #0C1624; border-bottom: 2px solid rgba(255,127,50,0.18); width: 110px; min-width: 90px; }
+    .ca-th-card { padding: 16px 14px 13px; text-align: center; vertical-align: top; background: #0C1624; border-bottom: 2px solid rgba(255,127,50,0.18); border-left: 1px solid var(--border); }
+    .ca-th-featured { background: rgba(255,127,50,0.07); border-left: 2px solid rgba(255,127,50,0.35); border-right: 2px solid rgba(255,127,50,0.35); border-bottom: 2px solid rgba(255,127,50,0.35); }
+    .ca-col-name { font-size: 12px; font-weight: 700; color: var(--text-sec); margin-bottom: 5px; }
+    .ca-col-name-featured { color: var(--orange); }
+    .ca-col-time { font-size: 19px; font-weight: 800; color: var(--text-prime); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 8px; }
+    .ca-col-tags { display: flex; flex-direction: column; gap: 5px; align-items: center; }
+    .ca-matrix-wrap td { padding: 11px 14px; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); vertical-align: middle; font-size: 13px; color: #C8D3DC; }
+    .ca-matrix-wrap td:first-child { border-left: none; font-weight: 700; }
+    .ca-matrix-wrap tr:last-child td { border-bottom: none; }
+    .ca-matrix-wrap tbody tr:hover td { background: var(--bg-hover); }
+    .ca-td-featured { background: rgba(255,127,50,0.04); border-left: 2px solid rgba(255,127,50,0.2) !important; border-right: 2px solid rgba(255,127,50,0.2); }
+    .ca-slot { font-size: 15px; font-weight: 800; }
   </style>
 </head>
 
@@ -1184,86 +1201,83 @@
         </div>
       </div>
 
-      <div class="ca-grid">
-        <!-- Ca Sáng -->
-        <div class="ca-card">
-          <div class="ca-name">Ca Sáng</div>
-          <div class="ca-time">08:00–12:00</div>
-          <div class="ca-dur">Ca 4 tiếng</div>
-          <div class="ca-peak">⚡ Peak sáng</div>
-        </div>
-        <!-- Ca Chiều -->
-        <div class="ca-card">
-          <div class="ca-name">Ca Chiều</div>
-          <div class="ca-time">13:00–17:00</div>
-          <div class="ca-dur">Ca 4 tiếng</div>
-          <div class="ca-peak">⚡ Peak chiều</div>
-        </div>
-        <!-- Ca Tối -->
-        <div class="ca-card">
-          <div class="ca-name">Ca Tối</div>
-          <div class="ca-time">17:00–21:00</div>
-          <div class="ca-dur">Ca 4 tiếng</div>
-          <div class="ca-normal">Bình thường</div>
-        </div>
-        <!-- Ca Full-day — featured -->
-        <div class="ca-card ca-card-featured">
-          <div class="ca-name ca-name-featured">Ca Full-day ★</div>
-          <div class="ca-time">08:00–18:00</div>
-          <div class="ca-dur">Ca 10 tiếng</div>
-          <div class="ca-rank">R1 + R2 only</div>
-          <div class="ca-guarantee">💰 Đảm bảo/ngày</div>
-        </div>
-      </div>
-
-      <div
-        style="font-size:12px;font-weight:700;color:var(--text-sec);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em;">
-        Slot allocation (% / tổng slot mỗi ca)</div>
-      <div class="tw">
+      <div class="ca-matrix-wrap">
         <table>
           <thead>
             <tr>
-              <th>Ca</th>
-              <th style="color:var(--orange);">R1 💎</th>
-              <th style="color:var(--yellow);">R2 🥇</th>
-              <th style="color:var(--blue);">R3 🥈</th>
-              <th>Unranked</th>
+              <th class="ca-th-label" style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">Rank · Slot %</th>
+              <!-- Ca Sáng -->
+              <th class="ca-th-card">
+                <div class="ca-col-name">Ca Sáng</div>
+                <div class="ca-col-time">08:00–12:00</div>
+                <div class="ca-col-tags">
+                  <span class="ca-dur">Ca 4 tiếng</span>
+                  <span class="ca-peak">⚡ Peak sáng</span>
+                </div>
+              </th>
+              <!-- Ca Chiều -->
+              <th class="ca-th-card">
+                <div class="ca-col-name">Ca Chiều</div>
+                <div class="ca-col-time">13:00–17:00</div>
+                <div class="ca-col-tags">
+                  <span class="ca-dur">Ca 4 tiếng</span>
+                  <span class="ca-peak">⚡ Peak chiều</span>
+                </div>
+              </th>
+              <!-- Ca Tối -->
+              <th class="ca-th-card">
+                <div class="ca-col-name">Ca Tối</div>
+                <div class="ca-col-time">17:00–21:00</div>
+                <div class="ca-col-tags">
+                  <span class="ca-dur">Ca 4 tiếng</span>
+                  <span class="ca-normal">Bình thường</span>
+                </div>
+              </th>
+              <!-- Ca Full-day -->
+              <th class="ca-th-card ca-th-featured">
+                <div class="ca-col-name ca-col-name-featured">Ca Full-day ★</div>
+                <div class="ca-col-time">08:00–18:00</div>
+                <div class="ca-col-tags">
+                  <span class="ca-dur">Ca 10 tiếng</span>
+                  <span class="ca-rank">R1 + R2 only</span>
+                  <span class="ca-guarantee">💰 Đảm bảo/ngày</span>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Ca Sáng (Peak)</td>
-              <td class="num" style="color:var(--orange);font-weight:700;">20%</td>
-              <td class="num" style="color:var(--yellow);font-weight:700;">40%</td>
-              <td class="num" style="color:var(--blue);font-weight:700;">40%</td>
-              <td class="na">on-demand</td>
+              <td><span class="rank-r1">💎 R1</span></td>
+              <td style="text-align:center;"><span class="ca-slot" style="color:var(--orange);">20%</span></td>
+              <td style="text-align:center;"><span class="ca-slot" style="color:var(--orange);">20%</span></td>
+              <td style="text-align:center;"><span class="ca-slot" style="color:var(--orange);">15%</span></td>
+              <td style="text-align:center;" class="ca-td-featured"><span class="ca-slot" style="color:var(--orange);">50%</span></td>
             </tr>
             <tr>
-              <td>Ca Chiều (Peak)</td>
-              <td class="num" style="color:var(--orange);font-weight:700;">20%</td>
-              <td class="num" style="color:var(--yellow);font-weight:700;">40%</td>
-              <td class="num" style="color:var(--blue);font-weight:700;">40%</td>
-              <td class="na">on-demand</td>
+              <td><span class="rank-r2">🥇 R2</span></td>
+              <td style="text-align:center;"><span class="ca-slot" style="color:var(--yellow);">40%</span></td>
+              <td style="text-align:center;"><span class="ca-slot" style="color:var(--yellow);">40%</span></td>
+              <td style="text-align:center;"><span class="ca-slot" style="color:var(--yellow);">40%</span></td>
+              <td style="text-align:center;" class="ca-td-featured"><span class="ca-slot" style="color:var(--yellow);">50%</span></td>
             </tr>
             <tr>
-              <td>Ca Tối</td>
-              <td class="num" style="color:var(--orange);font-weight:700;">15%</td>
-              <td class="num" style="color:var(--yellow);font-weight:700;">40%</td>
-              <td class="num" style="color:var(--blue);font-weight:700;">45%</td>
-              <td class="na">on-demand</td>
+              <td><span class="rank-r3">🥈 R3</span></td>
+              <td style="text-align:center;"><span class="ca-slot" style="color:var(--blue);">40%</span></td>
+              <td style="text-align:center;"><span class="ca-slot" style="color:var(--blue);">40%</span></td>
+              <td style="text-align:center;"><span class="ca-slot" style="color:var(--blue);">45%</span></td>
+              <td style="text-align:center;" class="ca-td-featured"><span style="color:var(--text-muted);font-size:15px;">—</span></td>
             </tr>
             <tr>
-              <td>Ca Full-day</td>
-              <td class="num" style="color:var(--orange);font-weight:700;">50%</td>
-              <td class="num" style="color:var(--yellow);font-weight:700;">50%</td>
-              <td class="na">—</td>
-              <td class="na">❌</td>
+              <td><span class="rank-un">Unranked</span></td>
+              <td style="text-align:center;font-size:12px;color:var(--text-muted);">on-demand</td>
+              <td style="text-align:center;font-size:12px;color:var(--text-muted);">on-demand</td>
+              <td style="text-align:center;font-size:12px;color:var(--text-muted);">on-demand</td>
+              <td style="text-align:center;" class="ca-td-featured"><span style="color:var(--red);font-size:15px;">✕</span></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p style="font-size:11.5px;color:var(--text-muted);">Unranked không có structured slot — nhận đơn on-demand từ khi
-        đơn từ các layer tràn xuống.</p>
+      <p style="font-size:11.5px;color:var(--text-muted);">Unranked không có structured slot — nhận đơn on-demand khi đơn từ các layer tràn xuống.</p>
     </section>
 
     <!-- ── S7: POINT ECONOMY ── -->
