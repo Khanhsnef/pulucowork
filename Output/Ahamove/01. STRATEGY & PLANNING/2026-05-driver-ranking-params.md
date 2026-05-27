@@ -234,11 +234,11 @@ Pts tích/tháng (avg, 22 ca):
 
 ---
 
-### B. Rank Entitlements — Tự động & Đặc quyền theo Rank
+### B. Rank Entitlements — Đặc quyền theo Rank (chủ động đổi điểm)
 
 #### 💎 R1 Exclusive — Mua bảo hiểm tai nạn theo tháng
 
-> **Đặc quyền mua**, không tự động cấp — Ahamove đàm phán group rate, R1 được quyền đăng ký.
+> **Không tự động** — tài xế R1 chủ động dùng điểm AhaBenefits để đăng ký. Không đổi điểm = không có coverage.
 
 | Cơ chế | Chi tiết |
 | --- | --- |
