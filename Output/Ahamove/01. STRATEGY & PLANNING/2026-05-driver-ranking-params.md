@@ -229,30 +229,19 @@ Pts tích/tháng (avg, 22 ca):
 
 ### B. Rank Entitlements — Đặc quyền theo Rank
 
-#### 💎 R1 Exclusive — Mua bảo hiểm tai nạn theo tháng
+| | 💎 R1 Kim Cương | 🥇 R2 Vàng | 🥈 R3 Bạc |
+| --- | --- | --- | --- |
+| Voucher xăng/EV | 50k/tháng · tự động | 30k/tháng · tự động | — |
+| Bảo hiểm tai nạn Mini | 10k–30k/tháng · đổi điểm | — | — |
+| Cost Ahamove | ~59M/tháng (voucher) + biến phí BH | ~83M/tháng | — |
 
-> **Không tự động** — tài xế R1 chủ động dùng điểm AhaBenefits để đăng ký. Không đổi điểm = không có coverage.
+**Cơ chế Bảo hiểm tai nạn R1:**
 
-| Cơ chế | Chi tiết |
-| --- | --- |
-| Đối tượng | R1 Elite (💎 Kim Cương) only |
-| Cách mua | Đăng ký trong app trước ngày 25 hàng tháng |
-| Hiệu lực | Từ ngày 01 tháng kế tiếp |
-| Phí | 10.000đ – 30.000đ/tháng (gói Mini, group rate) |
-| Thanh toán | Đổi bằng điểm AhaBenefits (10k = 285 pts · 30k = 857 pts) |
-| Huỷ | Có thể huỷ trước ngày 25, ngừng hiệu lực cuối tháng |
-| Mất R1 | Không được gia hạn tháng tiếp — coverage tháng đã mua vẫn giữ đến hết tháng |
+- Đăng ký trong app **trước ngày 25**, hiệu lực từ **ngày 01 tháng kế tiếp**
+- Thanh toán bằng điểm: 10k/tháng = 285 pts · 30k/tháng = 857 pts
+- Huỷ trước ngày 25 → ngừng hiệu lực cuối tháng; mất R1 → không gia hạn được
 
-> Cost Ahamove = 10.000đ–30.000đ / driver / tháng (tương đương giá trị điểm đã đổi). Biến phí theo số R1 đăng ký — ước tính tối đa ~1.575 × 30k = **~47M/tháng** nếu 100% R1 đăng ký gói cao nhất. Nằm ngoài 200M paid entitlement budget, cần duyệt riêng.
-
-#### 💰 Paid Entitlements (Ahamove chi — nằm trong 200M budget)
-
-| Rank | Item | Giá trị | Chi phí Ahamove | Số lượng | ~Cost/tháng |
-| --- | --- | --- | --- | --- | --- |
-| 💎 Kim Cương | Voucher xăng/EV | 50k/tháng | ~37.5k (75% giá) | ~1.575 | ~59M |
-| 🥇 Vàng | Voucher xăng/EV | 30k/tháng | ~22.5k (75% giá) | ~3.675 | ~83M |
-| **Tổng** | | | | | **~142M** |
-| **Buffer** | | | | | **~58M vs 200M** |
+> Budget 200M: Voucher xăng R1+R2 = **~142M** · Buffer ~58M. BH tai nạn là biến phí ngoài budget, cần duyệt riêng (tối đa ~47M nếu 100% R1 đăng ký gói 30k).
 
 ---
 
