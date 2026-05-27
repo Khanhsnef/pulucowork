@@ -234,27 +234,7 @@ Pts tích/tháng (avg, 22 ca):
 
 ---
 
-### B. Rank Entitlements — Tự động & Đặc quyền theo Rank
-
-#### 💎 R1 Exclusive — Mua bảo hiểm tai nạn theo tháng
-
-> Đây là **đặc quyền mua**, không phải tự động cấp — Ahamove đàm phán group rate với đối tác bảo hiểm, R1 được quyền đăng ký.
-
-| Cơ chế | Chi tiết |
-| --- | --- |
-| Đối tượng | R1 Elite (💎 Kim Cương) only |
-| Cách mua | Đăng ký trong app trước ngày 25 hàng tháng |
-| Hiệu lực | Từ ngày 01 tháng kế tiếp |
-| Phí | [?] VND/tháng — theo group rate Ahamove đàm phán |
-| Thanh toán | Trừ thẳng vào ví tài xế hoặc thu từ thu nhập |
-| Huỷ | Có thể huỷ trước ngày 25, ngừng hiệu lực cuối tháng |
-| Mất R1 | Không được gia hạn tháng tiếp — coverage tháng đã mua vẫn giữ đến hết tháng |
-
-> Cost cho Ahamove = 0đ (driver tự trả phí). Ahamove chỉ đóng vai trò aggregator để có group rate tốt hơn.
-
----
-
-#### 💰 Paid Rank Entitlements (Ahamove chi — nằm trong 200M budget)
+### B. Rank Entitlements — Tự động theo Rank (nằm trong 200M budget)
 
 | Rank | Item | Giá trị | Chi phí Ahamove | Số lượng | ~Cost/tháng |
 |------|------|---------|----------------|----------|-------------|
