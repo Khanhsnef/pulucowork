@@ -634,6 +634,50 @@
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+  /* ── CASCADE VISUAL ── */
+  .casc-card {
+    border-radius: 14px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 190px;
+  }
+  .casc-card-left { padding: 18px 20px; border-right: 1px solid rgba(255,255,255,0.06); }
+  .casc-card-right { padding: 18px 20px; display: flex; flex-direction: column; justify-content: center; gap: 5px; }
+  .casc-badge {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .casc-trigger {
+    display: flex; justify-content: center; align-items: center;
+    padding: 10px 0; position: relative;
+  }
+  .casc-trigger-line {
+    position: absolute; left: 50%; top: 0; bottom: 0;
+    width: 1px; background: var(--border); transform: translateX(-50%); z-index: 0;
+  }
+  .casc-trigger-pill {
+    background: var(--bg-card2); border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 20px; padding: 5px 14px;
+    display: flex; align-items: center; gap: 8px; z-index: 1; position: relative;
+  }
+  .casc-mult {
+    font-family: 'Space Mono', monospace; font-size: 26px;
+    font-weight: 800; line-height: 1;
+  }
+  .casc-bonus { font-size: 11px; color: var(--green); font-weight: 700; }
+  .casc-example { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ── STATE MACHINE SVG ── */
+  .state-machine-wrap {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    overflow-x: auto;
+  }
 </style>
 </head>
 <body>
@@ -649,6 +693,8 @@
   <div class="nav-section-label">Sections</div>
   <a href="#s1"><span class="nav-num">01</span><span>Vòng đời Điểm</span></a>
   <a href="#s2"><span class="nav-num">02</span><span>Earning Flow</span></a>
+  <a href="#s-casc"><span class="nav-num nav-icon" style="color:var(--blue);">↓↓</span><span>Layer Cascade</span></a>
+  <a href="#s-psm"><span class="nav-num nav-icon" style="color:var(--purple);">◎</span><span>State Machine</span></a>
   <a href="#s3"><span class="nav-num">03</span><span>Point Timeline</span></a>
   <a href="#s4"><span class="nav-num">04</span><span>Redemption Flow</span></a>
   <a href="#s5"><span class="nav-num">05</span><span>Cộng / Trừ điểm</span></a>
@@ -918,6 +964,401 @@ shift_trip_pts              shift_trip_pts
         <div class="callout-body">
           Dữ liệu online hour cần được finalize sau khi ca kết thúc → credit T+1 đảm bảo chính xác, tránh sai lệch do data lag.
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── LAYER CASCADE ── -->
+  <section id="s-casc">
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(88,166,255,0.1);border-color:rgba(88,166,255,0.3);color:var(--blue);">↓↓</div>
+      <div class="section-title">
+        <h2>Layer Cascade — Dispatch & Điểm</h2>
+        <p>Luồng phân bổ đơn hàng qua các zone khi fill rate ≥ 80%</p>
+      </div>
+    </div>
+
+    <div class="callout info" style="margin-bottom:24px;">
+      <span class="callout-icon">ℹ</span>
+      <div class="callout-body"><strong>Hệ số điểm gắn với layer của đơn hàng</strong>, không phải rank tài xế. Bonus ca gắn với zone đăng ký shift của driver. R1 nhận đơn overflow → chỉ ×1.0, không bonus.</div>
+    </div>
+
+    <!-- ENTRY BOX -->
+    <div style="display:flex;justify-content:center;margin-bottom:14px;">
+      <div style="background:rgba(255,127,50,0.05);border:1.5px dashed rgba(255,127,50,0.4);border-radius:14px;padding:14px 48px;text-align:center;">
+        <div style="font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.12em;font-family:'Space Mono',monospace;margin-bottom:5px;">Đơn Hàng Mới Đến</div>
+        <div style="font-size:12.5px;color:var(--text-sec);">Hệ thống kiểm tra fill rate theo thứ tự ưu tiên</div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:0;">
+
+      <!-- ── L2 ── -->
+      <div class="casc-card" style="background:rgba(255,127,50,0.05);border:1px solid rgba(255,127,50,0.2);border-left:4px solid var(--orange);">
+        <div class="casc-card-left">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div class="casc-badge" style="background:rgba(255,127,50,0.15);border:1px solid rgba(255,127,50,0.3);color:var(--orange);">L2</div>
+            <div>
+              <div style="font-size:15px;font-weight:700;color:var(--text-prime);">Minizone <span style="font-weight:400;font-size:12px;color:var(--text-muted);">— Ưu tiên cao nhất</span></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Slot dành cho R1, R2</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:11px;background:rgba(255,127,50,0.12);color:var(--orange);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,127,50,0.25);">💎 R1 Kim Cương</span>
+            <span style="font-size:11px;background:rgba(245,158,11,0.12);color:var(--yellow);padding:3px 10px;border-radius:20px;border:1px solid rgba(245,158,11,0.25);">🥇 R2 Vàng</span>
+          </div>
+        </div>
+        <div class="casc-card-right" style="background:rgba(255,127,50,0.04);">
+          <div class="casc-mult" style="color:var(--orange);">×1.5</div>
+          <div class="casc-bonus">+30 pts bonus/ca</div>
+          <div class="casc-example">GSV 60k → <strong style="color:var(--orange);">18 pts</strong>/trip</div>
+        </div>
+      </div>
+
+      <!-- TRIGGER L2→L3 -->
+      <div class="casc-trigger">
+        <div class="casc-trigger-line"></div>
+        <div class="casc-trigger-pill">
+          <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M5 0v9M1.5 6.5L5 10l3.5-3.5" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;color:var(--yellow);">≥ 80% fill rate → cascade</span>
+        </div>
+      </div>
+
+      <!-- ── L3 ── -->
+      <div class="casc-card" style="background:rgba(245,158,11,0.04);border:1px solid rgba(245,158,11,0.18);border-left:4px solid var(--yellow);">
+        <div class="casc-card-left">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div class="casc-badge" style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:var(--yellow);">L3</div>
+            <div>
+              <div style="font-size:15px;font-weight:700;color:var(--text-prime);">Mediumzone <span style="font-weight:400;font-size:12px;color:var(--text-muted);">— Ưu tiên thứ hai</span></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Slot dành cho R1, R2, R3</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:11px;background:rgba(255,127,50,0.12);color:var(--orange);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,127,50,0.25);">💎 R1</span>
+            <span style="font-size:11px;background:rgba(245,158,11,0.12);color:var(--yellow);padding:3px 10px;border-radius:20px;border:1px solid rgba(245,158,11,0.25);">🥇 R2</span>
+            <span style="font-size:11px;background:rgba(139,148,158,0.12);color:var(--text-sec);padding:3px 10px;border-radius:20px;border:1px solid rgba(139,148,158,0.2);">🥈 R3</span>
+          </div>
+        </div>
+        <div class="casc-card-right" style="background:rgba(245,158,11,0.03);">
+          <div class="casc-mult" style="color:var(--yellow);">×1.3</div>
+          <div class="casc-bonus">+25 pts bonus/ca</div>
+          <div class="casc-example">GSV 60k → <strong style="color:var(--yellow);">16 pts</strong>/trip</div>
+        </div>
+      </div>
+
+      <!-- TRIGGER L3→L4 -->
+      <div class="casc-trigger">
+        <div class="casc-trigger-line"></div>
+        <div class="casc-trigger-pill">
+          <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M5 0v9M1.5 6.5L5 10l3.5-3.5" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;color:var(--yellow);">≥ 80% fill rate → cascade</span>
+        </div>
+      </div>
+
+      <!-- ── L4 ── -->
+      <div class="casc-card" style="background:rgba(88,166,255,0.04);border:1px solid rgba(88,166,255,0.18);border-left:4px solid var(--blue);">
+        <div class="casc-card-left">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div class="casc-badge" style="background:rgba(88,166,255,0.15);border:1px solid rgba(88,166,255,0.3);color:var(--blue);">L4</div>
+            <div>
+              <div style="font-size:15px;font-weight:700;color:var(--text-prime);">Bigzone <span style="font-weight:400;font-size:12px;color:var(--text-muted);">— Ưu tiên thứ ba</span></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Slot tất cả tài xế có rank</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:11px;background:rgba(255,127,50,0.12);color:var(--orange);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,127,50,0.25);">💎 R1</span>
+            <span style="font-size:11px;background:rgba(245,158,11,0.12);color:var(--yellow);padding:3px 10px;border-radius:20px;border:1px solid rgba(245,158,11,0.25);">🥇 R2</span>
+            <span style="font-size:11px;background:rgba(139,148,158,0.12);color:var(--text-sec);padding:3px 10px;border-radius:20px;border:1px solid rgba(139,148,158,0.2);">🥈 R3</span>
+          </div>
+        </div>
+        <div class="casc-card-right" style="background:rgba(88,166,255,0.03);">
+          <div class="casc-mult" style="color:var(--blue);">×1.1</div>
+          <div class="casc-bonus">+20 pts bonus/ca</div>
+          <div class="casc-example">GSV 60k → <strong style="color:var(--blue);">13 pts</strong>/trip</div>
+        </div>
+      </div>
+
+      <!-- TRIGGER L4→L5 -->
+      <div class="casc-trigger">
+        <div class="casc-trigger-line"></div>
+        <div class="casc-trigger-pill">
+          <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M5 0v9M1.5 6.5L5 10l3.5-3.5" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;color:var(--yellow);">≥ 80% fill rate → cascade</span>
+        </div>
+      </div>
+
+      <!-- ── L5 ── -->
+      <div class="casc-card" style="background:rgba(34,211,238,0.04);border:1px solid rgba(34,211,238,0.16);border-left:4px solid #22D3EE;">
+        <div class="casc-card-left">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div class="casc-badge" style="background:rgba(34,211,238,0.12);border:1px solid rgba(34,211,238,0.3);color:#22D3EE;">L5</div>
+            <div>
+              <div style="font-size:15px;font-weight:700;color:var(--text-prime);">Cityzone <span style="font-weight:400;font-size:12px;color:var(--text-muted);">— Pool mở rộng</span></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Slot tất cả tài xế có rank</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:11px;background:rgba(255,127,50,0.12);color:var(--orange);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,127,50,0.25);">💎 R1</span>
+            <span style="font-size:11px;background:rgba(245,158,11,0.12);color:var(--yellow);padding:3px 10px;border-radius:20px;border:1px solid rgba(245,158,11,0.25);">🥇 R2</span>
+            <span style="font-size:11px;background:rgba(139,148,158,0.12);color:var(--text-sec);padding:3px 10px;border-radius:20px;border:1px solid rgba(139,148,158,0.2);">🥈 R3</span>
+          </div>
+        </div>
+        <div class="casc-card-right" style="background:rgba(34,211,238,0.03);">
+          <div class="casc-mult" style="color:#22D3EE;">×1.0</div>
+          <div class="casc-bonus">+20 pts bonus/ca</div>
+          <div class="casc-example">GSV 60k → <strong style="color:#22D3EE;">12 pts</strong>/trip</div>
+        </div>
+      </div>
+
+      <!-- TRIGGER L5→OVERFLOW -->
+      <div class="casc-trigger">
+        <div class="casc-trigger-line"></div>
+        <div class="casc-trigger-pill" style="border-color:rgba(239,68,68,0.3);">
+          <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M5 0v9M1.5 6.5L5 10l3.5-3.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;color:var(--red);">≥ 80% fill rate → OVERFLOW</span>
+        </div>
+      </div>
+
+      <!-- ── OVERFLOW ── -->
+      <div class="casc-card" style="background:rgba(139,148,158,0.05);border:1px solid rgba(139,148,158,0.15);border-left:4px solid rgba(139,148,158,0.4);">
+        <div class="casc-card-left">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div class="casc-badge" style="background:rgba(139,148,158,0.12);border:1px solid rgba(139,148,158,0.25);color:var(--text-sec);font-size:10px;">OFW</div>
+            <div>
+              <div style="font-size:15px;font-weight:700;color:var(--text-sec);">Overflow <span style="font-weight:400;font-size:12px;color:var(--text-muted);">— Pool dự phòng</span></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Tất cả tài xế online kể cả Unranked</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+            <span style="font-size:11px;background:rgba(139,148,158,0.1);color:var(--text-muted);padding:3px 10px;border-radius:20px;border:1px solid rgba(139,148,158,0.2);">All drivers</span>
+            <span style="font-size:11px;color:var(--red);">Không có slot ưu tiên</span>
+          </div>
+        </div>
+        <div class="casc-card-right" style="background:rgba(139,148,158,0.03);">
+          <div class="casc-mult" style="color:var(--text-sec);">×1.0</div>
+          <div style="font-size:11px;color:var(--red);font-weight:700;">Không có bonus ca</div>
+          <div class="casc-example">GSV 60k → <strong style="color:var(--text-sec);">12 pts</strong>/trip</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COMPARISON TABLE -->
+    <div style="margin-top:28px;">
+      <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;font-family:'Space Mono',monospace;">So sánh tổng quát (GSV 60k/trip · Bonus tính riêng)</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Layer</th>
+              <th>Zone</th>
+              <th>Eligible</th>
+              <th>Multiplier</th>
+              <th>Bonus/ca</th>
+              <th>Điểm/trip (GSV 60k)</th>
+              <th>Max ca (trip + bonus)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span style="font-family:'Space Mono',monospace;font-weight:700;color:var(--orange);">L2</span></td>
+              <td>Minizone</td>
+              <td>R1, R2</td>
+              <td><strong style="color:var(--orange);">×1.5</strong></td>
+              <td><strong style="color:var(--green);">+30 pts</strong></td>
+              <td><strong style="color:var(--orange);">18 pts</strong></td>
+              <td style="color:var(--text-sec);">18×5 + 30 = <strong style="color:var(--orange);">120 pts</strong></td>
+            </tr>
+            <tr>
+              <td><span style="font-family:'Space Mono',monospace;font-weight:700;color:var(--yellow);">L3</span></td>
+              <td>Mediumzone</td>
+              <td>R1, R2, R3</td>
+              <td><strong style="color:var(--yellow);">×1.3</strong></td>
+              <td><strong style="color:var(--green);">+25 pts</strong></td>
+              <td><strong style="color:var(--yellow);">16 pts</strong></td>
+              <td style="color:var(--text-sec);">16×5 + 25 = <strong style="color:var(--yellow);">105 pts</strong></td>
+            </tr>
+            <tr>
+              <td><span style="font-family:'Space Mono',monospace;font-weight:700;color:var(--blue);">L4</span></td>
+              <td>Bigzone</td>
+              <td>R1, R2, R3</td>
+              <td><strong style="color:var(--blue);">×1.1</strong></td>
+              <td><strong style="color:var(--green);">+20 pts</strong></td>
+              <td><strong style="color:var(--blue);">13 pts</strong></td>
+              <td style="color:var(--text-sec);">13×5 + 20 = <strong style="color:var(--blue);">85 pts</strong></td>
+            </tr>
+            <tr>
+              <td><span style="font-family:'Space Mono',monospace;font-weight:700;color:#22D3EE;">L5</span></td>
+              <td>Cityzone</td>
+              <td>All ranked</td>
+              <td>×1.0</td>
+              <td><strong style="color:var(--green);">+20 pts</strong></td>
+              <td>12 pts</td>
+              <td style="color:var(--text-sec);">12×5 + 20 = 80 pts</td>
+            </tr>
+            <tr>
+              <td><span style="font-family:'Space Mono',monospace;color:var(--text-muted);">OFW</span></td>
+              <td>Overflow</td>
+              <td>All</td>
+              <td style="color:var(--text-muted);">×1.0</td>
+              <td style="color:var(--red);">—</td>
+              <td style="color:var(--text-muted);">12 pts</td>
+              <td style="color:var(--text-muted);">12×5 = 60 pts</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:11.5px;color:var(--text-muted);margin-top:8px;">* Ví dụ ca 5 trip, GSV 60k/trip. Điểm trip = round(60k÷5k) × multiplier. Bonus tính 1 lần/ca.</div>
+    </div>
+  </section>
+
+  <!-- ── POINT STATE MACHINE ── -->
+  <section id="s-psm">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--purple-dim);border-color:rgba(167,139,250,0.3);color:var(--purple);">◎</div>
+      <div class="section-title">
+        <h2>Point State Machine</h2>
+        <p>Sơ đồ chuyển trạng thái điểm — từ PENDING đến REDEEMED / EXPIRED</p>
+      </div>
+    </div>
+
+    <div class="state-machine-wrap">
+      <svg viewBox="0 0 820 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:820px;display:block;margin:0 auto;font-family:'Space Mono',monospace;">
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#586069"/>
+          </marker>
+          <marker id="arr-o" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#FF7F32"/>
+          </marker>
+          <marker id="arr-g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#10B981"/>
+          </marker>
+          <marker id="arr-r" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#EF4444"/>
+          </marker>
+          <marker id="arr-y" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#F59E0B"/>
+          </marker>
+          <marker id="arr-p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#A78BFA"/>
+          </marker>
+        </defs>
+
+        <!-- ── TRIP COMPLETED (entry) ── -->
+        <rect x="290" y="14" width="240" height="44" rx="22" fill="rgba(255,127,50,0.08)" stroke="rgba(255,127,50,0.35)" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="410" y="33" text-anchor="middle" fill="#FF7F32" font-size="10" font-weight="700" letter-spacing="1">TRIP HOÀN THÀNH</text>
+        <text x="410" y="50" text-anchor="middle" fill="#8B949E" font-size="9.5">GSV → round(GSV÷5000) × layer_multiplier</text>
+
+        <!-- Entry → PENDING -->
+        <line x1="410" y1="58" x2="410" y2="90" stroke="#586069" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <!-- ── PENDING ── -->
+        <rect x="300" y="90" width="220" height="52" rx="12" fill="rgba(245,158,11,0.1)" stroke="rgba(245,158,11,0.35)" stroke-width="1.5"/>
+        <text x="410" y="111" text-anchor="middle" fill="#F59E0B" font-size="11" font-weight="700" letter-spacing="0.5">PENDING</text>
+        <text x="410" y="130" text-anchor="middle" fill="#8B949E" font-size="9.5">Tạm giữ trong ca · chưa dùng được</text>
+
+        <!-- PENDING → validate (after shift end) -->
+        <line x1="410" y1="142" x2="410" y2="172" stroke="#586069" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="426" y="161" fill="#586069" font-size="9">batch T+1</text>
+
+        <!-- ── VALIDATE GATE ── -->
+        <polygon points="410,172 460,202 410,232 360,202" fill="rgba(30,40,50,0.8)" stroke="rgba(88,166,255,0.3)" stroke-width="1.5"/>
+        <text x="410" y="199" text-anchor="middle" fill="#58A6FF" font-size="9.5" font-weight="700">Online</text>
+        <text x="410" y="213" text-anchor="middle" fill="#58A6FF" font-size="9.5" font-weight="700">in zone?</text>
+
+        <!-- YES → AVAILABLE (via bonus path) -->
+        <line x1="460" y1="202" x2="570" y2="202" stroke="#10B981" stroke-width="1.5" marker-end="url(#arr-g)"/>
+        <text x="514" y="196" text-anchor="middle" fill="#10B981" font-size="9" font-weight="700">✅ YES + Bonus</text>
+
+        <!-- NO → AVAILABLE (no bonus) -->
+        <line x1="360" y1="202" x2="250" y2="202" stroke="#EF4444" stroke-width="1.5" marker-end="url(#arr-r)"/>
+        <text x="306" y="196" text-anchor="middle" fill="#EF4444" font-size="9">❌ NO (no bonus)</text>
+
+        <!-- AVAILABLE from right path -->
+        <rect x="570" y="174" width="190" height="56" rx="12" fill="rgba(16,185,129,0.1)" stroke="rgba(16,185,129,0.35)" stroke-width="1.5"/>
+        <text x="665" y="198" text-anchor="middle" fill="#10B981" font-size="11" font-weight="700" letter-spacing="0.5">AVAILABLE</text>
+        <text x="665" y="213" text-anchor="middle" fill="#8B949E" font-size="9.5">+ bonus credited · có thể đổi</text>
+
+        <!-- AVAILABLE from left path (no bonus) -->
+        <rect x="60" y="174" width="190" height="56" rx="12" fill="rgba(16,185,129,0.1)" stroke="rgba(16,185,129,0.35)" stroke-width="1.5"/>
+        <text x="155" y="198" text-anchor="middle" fill="#10B981" font-size="11" font-weight="700" letter-spacing="0.5">AVAILABLE</text>
+        <text x="155" y="213" text-anchor="middle" fill="#8B949E" font-size="9.5">no bonus · có thể đổi</text>
+
+        <!-- AVAILABLE (right) → RESERVED -->
+        <line x1="665" y1="230" x2="665" y2="272" stroke="#58A6FF" stroke-width="1.5" marker-end="url(#arr-p)"/>
+        <text x="680" y="254" fill="#A78BFA" font-size="9">driver đổi</text>
+
+        <!-- AVAILABLE (left) → RESERVED -->
+        <line x1="155" y1="230" x2="155" y2="318" stroke="#586069" stroke-width="1.5"/>
+        <line x1="155" y1="318" x2="580" y2="318" stroke="#586069" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <!-- AVAILABLE → DEDUCTED (violation) -->
+        <line x1="60" y1="202" x2="20" y2="202" stroke="#EF4444" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="20" y1="202" x2="20" y2="360" stroke="#EF4444" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="20" y1="360" x2="68" y2="360" stroke="#EF4444" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr-r)"/>
+        <text x="12" y="288" fill="#EF4444" font-size="9" writing-mode="vertical-lr" transform="rotate(180,12,288)">vi phạm ĐBCL</text>
+
+        <!-- ── RESERVED ── -->
+        <rect x="580" y="272" width="170" height="52" rx="12" fill="rgba(88,166,255,0.1)" stroke="rgba(88,166,255,0.3)" stroke-width="1.5"/>
+        <text x="665" y="295" text-anchor="middle" fill="#58A6FF" font-size="11" font-weight="700" letter-spacing="0.5">RESERVED</text>
+        <text x="665" y="311" text-anchor="middle" fill="#8B949E" font-size="9.5">Đang xử lý đổi thưởng</text>
+
+        <!-- RESERVED → REDEEMED (partner OK) -->
+        <line x1="665" y1="324" x2="665" y2="370" stroke="#A78BFA" stroke-width="1.5" marker-end="url(#arr-p)"/>
+        <text x="678" y="350" fill="#A78BFA" font-size="9">partner confirm</text>
+
+        <!-- RESERVED → AVAILABLE (partner fail) -->
+        <line x1="750" y1="298" x2="800" y2="298" stroke="#EF4444" stroke-width="1.5"/>
+        <line x1="800" y1="298" x2="800" y2="148" stroke="#EF4444" stroke-width="1.5"/>
+        <line x1="800" y1="148" x2="760" y2="148" stroke="#EF4444" stroke-width="1.5" marker-end="url(#arr-r)"/>
+        <text x="806" y="228" fill="#EF4444" font-size="9" writing-mode="vertical-lr">partner fail → hoàn điểm</text>
+
+        <!-- ── REDEEMED ── -->
+        <rect x="580" y="370" width="170" height="52" rx="12" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.3)" stroke-width="1.5"/>
+        <text x="665" y="393" text-anchor="middle" fill="#A78BFA" font-size="11" font-weight="700" letter-spacing="0.5">REDEEMED</text>
+        <text x="665" y="409" text-anchor="middle" fill="#8B949E" font-size="9.5">Đổi thành công · voucher phát</text>
+
+        <!-- AVAILABLE → EXPIRED (end of quarter) -->
+        <line x1="155" y1="230" x2="155" y2="370" stroke="#F59E0B" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="155" y1="390" x2="68" y2="390" stroke="#F59E0B" stroke-width="1.5" marker-end="url(#arr-y)"/>
+        <text x="100" y="365" fill="#F59E0B" font-size="9">cuối quý</text>
+
+        <!-- ── EXPIRED ── -->
+        <rect x="68" y="368" width="160" height="52" rx="12" fill="rgba(139,148,158,0.08)" stroke="rgba(139,148,158,0.2)" stroke-width="1.5"/>
+        <text x="148" y="391" text-anchor="middle" fill="#8B949E" font-size="11" font-weight="700" letter-spacing="0.5">EXPIRED</text>
+        <text x="148" y="407" text-anchor="middle" fill="#586069" font-size="9.5">Hết hạn cuối quý</text>
+
+        <!-- ── DEDUCTED ── -->
+        <rect x="68" y="334" width="160" height="52" rx="12" fill="rgba(239,68,68,0.08)" stroke="rgba(239,68,68,0.2)" stroke-width="1.5"/>
+        <text x="148" y="357" text-anchor="middle" fill="#EF4444" font-size="11" font-weight="700" letter-spacing="0.5">DEDUCTED</text>
+        <text x="148" y="373" text-anchor="middle" fill="#586069" font-size="9.5">-50 pts vi phạm ĐBCL</text>
+
+        <!-- Legend bottom -->
+        <line x1="40" y1="430" x2="70" y2="430" stroke="#10B981" stroke-width="1.5" marker-end="url(#arr-g)"/>
+        <text x="78" y="434" fill="#8B949E" font-size="9">Happy path</text>
+        <line x1="160" y1="430" x2="190" y2="430" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-r)"/>
+        <text x="198" y="434" fill="#8B949E" font-size="9">Vi phạm / fail</text>
+        <line x1="290" y1="430" x2="320" y2="430" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-y)"/>
+        <text x="328" y="434" fill="#8B949E" font-size="9">Expire (cuối quý)</text>
+        <line x1="430" y1="430" x2="460" y2="430" stroke="#586069" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="468" y="434" fill="#8B949E" font-size="9">Batch / system</text>
+      </svg>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
+        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;font-family:'Space Mono',monospace;">Bảo vệ RESERVED</div>
+        <div style="font-size:12.5px;color:var(--text-sec);">Điểm đang <span class="pill pill-reserved">RESERVED</span> không bị expire cuối quý. Xem Scenario A.</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
+        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;font-family:'Space Mono',monospace;">Rank downgrade</div>
+        <div style="font-size:12.5px;color:var(--text-sec);"><span class="pill pill-redeemed">REDEEMED</span> vẫn valid trong thời hạn reward. Xem Scenario B.</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
+        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;font-family:'Space Mono',monospace;">PENDING cuối quý</div>
+        <div style="font-size:12.5px;color:var(--text-sec);"><span class="pill pill-pending">PENDING</span> credit T+1 rồi expire. Open question #3.</div>
       </div>
     </div>
   </section>
