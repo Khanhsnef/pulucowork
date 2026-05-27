@@ -10,12 +10,10 @@
 
 | Rank | DQS | DCR (%) | Productivity (stp/tháng) |
 | --- | --- | --- | --- |
-| R1 Elite | ≥ 80 | < 10 | ≥ 280 |
-| R2 Active | ≥ 75 | < 10 | ≥ 210 |
-| R3 Standard | ≥ 70 | ≤ 15 | ≥ 70 |
-| Unranked | < 70 | — | — |
-
-> DQS scale & công thức: cần confirm với Data team trước khi go-live.
+| R1 Elite | ≥ 80 | ≤ 10 | ≥ 280 |
+| R2 Active | ≥ 75 | ≤ 10 | ≥ 210 |
+| R3 Standard | ≥ 75 | ≤ 15 | ≥ 70 |
+| Unranked | < 75 | — | — |
 
 ---
 
@@ -43,25 +41,29 @@
 
 ---
 
-## 4. Hourly Income Guarantee (Đảm bảo theo giờ)
+## 4. Thu nhập tối đa / giờ (Target Earning)
 
-> Chỉ áp dụng khi tài xế đủ điều kiện KPI ca. Tách biệt hoàn toàn với budget 200M AhaBenefits.
+> Ahamove thiết kế phân bổ đơn & layer để **tối đa hóa thu nhập tài xế lên đến** mức mục tiêu dưới đây.
+> Đây là **earning target**, không phải guarantee — Ahamove không bù tiền nếu thực tế thấp hơn.
+> Tài xế đạt mức này khi đủ KPI ca + layer hoạt động đúng công suất.
 
 ### SGN
-| Layer | Guarantee/h |
-|-------|------------|
-| L2 Minizone | 65.000đ |
-| L3 Mediumzone | 60.000đ |
-| L4 Bigzone | 55.000đ |
-| L5 Cityzone | 55.000đ |
+
+| Layer | Thu nhập tối đa/h |
+| --- | --- |
+| L2 Minizone | lên đến 65.000đ |
+| L3 Mediumzone | lên đến 60.000đ |
+| L4 Bigzone | lên đến 55.000đ |
+| L5 Cityzone | lên đến 55.000đ |
 
 ### HAN
-| Layer | Guarantee/h |
-|-------|------------|
-| L2 Minizone | 70.000đ |
-| L3 Mediumzone | 65.000đ |
-| L4 Bigzone | 60.000đ |
-| L5 Cityzone | 60.000đ |
+
+| Layer | Thu nhập tối đa/h |
+| --- | --- |
+| L2 Minizone | lên đến 70.000đ |
+| L3 Mediumzone | lên đến 65.000đ |
+| L4 Bigzone | lên đến 60.000đ |
+| L5 Cityzone | lên đến 60.000đ |
 
 ---
 
@@ -69,8 +71,8 @@
 
 | Rank | SGN | HAN |
 |------|-----|-----|
-| R1 💎 Kim Cương | 600.000đ/ngày | 800.000đ/ngày |
-| R2 🥇 Vàng | 500.000đ/ngày | 750.000đ/ngày |
+| R1 💎 Kim Cương | 600.000đ/ngày | 650.000đ/ngày |
+| R2 🥇 Vàng | 550.000đ/ngày | 600.000đ/ngày |
 
 **Điều kiện nhận:**
 1. Đăng ký ca Full-day (08:00–18:00)
