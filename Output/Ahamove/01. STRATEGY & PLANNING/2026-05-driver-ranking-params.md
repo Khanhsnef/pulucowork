@@ -150,7 +150,7 @@ Pts tích/tháng (avg, 22 ca):
   Weighted avg ≈ 1.800 pts/tháng
 
 80% burn → paid reward:  1.800 × 80% = ~1.440 pts ≈ 50.000 VND
-  → 1 pt ≈ 35đ giá trị
+  → 1 pt ≈ 35đ giá trị (tương đương 0.7% GSV mang về)
   → Paid reward 50k = 1.500 pts (làm tròn)
 
 20% còn lại → free partner:  ~360 pts/tháng
@@ -174,55 +174,65 @@ Pts tích/tháng (avg, 22 ca):
 
 ## 8. AhaBenefits Catalog — Point Costs
 
+> **Công thức giá điểm: Điểm = Giá trị reward (VND) ÷ 35**
+> Tương đương 0.7% GSV tài xế mang về (base, ×1.0) hoặc 0.3–0.5% GSV khi có layer multiplier.
+> Cột "Giá trị est." là giá trị kinh tế thực của reward với tài xế — cần Finance/partner validate.
+
 ### A. Partner Rewards (Ahamove cost = 0đ)
 
 #### ⛽ Nhiên liệu & Sạc EV
-| Item | Điểm | Giới hạn |
-|------|------|----------|
-| Giảm giá xăng 5% / lần | 600 | Tất cả |
-| Giảm giá xăng 10% / lần | 1.100 | Tất cả |
-| Giảm giá sạc EV 20% / lần | 800 | Tất cả |
-| Combo sạc EV tháng (10%) | 2.000 | R2+ |
+
+| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
+| --- | --- | --- | --- |
+| Giảm xăng 5% / lần (~đổ 200k) | ~10.000đ | 285 → **300** | Tất cả |
+| Giảm xăng 10% / lần | ~20.000đ | 571 → **550** | Tất cả |
+| Sạc EV 20% / lần (~sạc 80k) | ~16.000đ | 457 → **450** | Tất cả |
+| Combo sạc EV tháng 10% | ~40.000đ | 1.143 → **1.100** | R2+ |
 
 #### 🔧 Bảo dưỡng xe
-| Item | Điểm | Giới hạn |
-|------|------|----------|
-| Giảm 15% dầu nhớt / lọc | 900 | Tất cả |
-| Giảm 20% bảo dưỡng định kỳ | 1.800 | Tất cả |
-| Giảm 30% vá/thay lốp | 1.200 | Tất cả |
-| Gói bảo dưỡng ưu tiên | 3.000 | R1 only |
+
+| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
+| --- | --- | --- | --- |
+| Giảm 15% dầu nhớt / lọc (~150k) | ~22.500đ | 643 → **650** | Tất cả |
+| Giảm 20% bảo dưỡng định kỳ (~250k) | ~50.000đ | 1.429 → **1.400** | Tất cả |
+| Giảm 30% vá / thay lốp (~100k) | ~30.000đ | 857 → **850** | Tất cả |
+| Gói bảo dưỡng ưu tiên R1 (~300k) | ~90.000đ | 2.571 → **2.550** | R1 only |
 
 #### 🎽 CCDC & Trang thiết bị
-| Item | Điểm | Giới hạn |
-|------|------|----------|
-| Túi giữ nhiệt tiêu chuẩn | 800 | Tất cả |
-| Túi giữ nhiệt cao cấp (XL) | 1.400 | Tất cả |
-| Baga / phụ kiện xe | 1.500 | Tất cả |
-| Đồng phục 1 bộ | 700 | Tất cả |
+
+| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
+| --- | --- | --- | --- |
+| Túi giữ nhiệt tiêu chuẩn | ~50.000đ | 1.429 → **1.400** | Tất cả |
+| Túi giữ nhiệt cao cấp (XL) | ~80.000đ | 2.286 → **2.300** | Tất cả |
+| Baga / phụ kiện xe | ~120.000đ | 3.429 → **3.400** | Tất cả |
+| Đồng phục 1 bộ | ~60.000đ | 1.714 → **1.700** | Tất cả |
 
 #### 🍜 F&B / Tiêu dùng
-| Item | Điểm | Giới hạn |
-|------|------|----------|
-| Voucher F&B partner 50k | 500 | Tất cả |
-| Voucher F&B partner 100k | 950 | Tất cả |
-| Giảm 10% chuỗi siêu thị | 600 | Tất cả |
-| Combo bữa trưa tài xế | 400 | Tất cả |
+
+| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
+| --- | --- | --- | --- |
+| Voucher F&B partner 50k | 50.000đ | 1.429 → **1.400** | Tất cả |
+| Voucher F&B partner 100k | 100.000đ | 2.857 → **2.850** | Tất cả |
+| Giảm 10% siêu thị (~200k basket) | ~20.000đ | 571 → **550** | Tất cả |
+| Combo bữa trưa tài xế | ~25.000đ | 714 → **700** | Tất cả |
 
 #### 📱 Data SIM & Viễn thông
-| Item | Điểm | Giới hạn |
-|------|------|----------|
-| Data 5GB ưu đãi tài xế | 450 | Tất cả |
-| Data 10GB ưu đãi tài xế | 800 | Tất cả |
-| Data 20GB ưu đãi tài xế | 1.500 | Tất cả |
-| Gói SIM ưu tiên cao tốc | 2.200 | R2+ |
+
+| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
+| --- | --- | --- | --- |
+| Data 5GB ưu đãi tài xế | ~15.000đ | 429 → **400** | Tất cả |
+| Data 10GB ưu đãi tài xế | ~25.000đ | 714 → **700** | Tất cả |
+| Data 20GB ưu đãi tài xế | ~50.000đ | 1.429 → **1.400** | Tất cả |
+| Gói SIM ưu tiên cao tốc / tháng | ~80.000đ | 2.286 → **2.300** | R2+ |
 
 #### 🏥 Sức khoẻ & Bảo vệ
-| Item | Điểm | Giới hạn |
-|------|------|----------|
-| Giảm 20% khám tổng quát | 1.500 | Tất cả |
-| Giảm 15% mua thuốc tại nhà thuốc | 600 | Tất cả |
-| Bảo hiểm tai nạn 1 tháng | 2.500 | R2+ |
-| Bảo hiểm tai nạn 3 tháng | 6.000 | R1 only |
+
+| Item | Giá trị est. | Điểm (÷35) | Giới hạn |
+| --- | --- | --- | --- |
+| Giảm 20% khám tổng quát (~300k) | ~60.000đ | 1.714 → **1.700** | Tất cả |
+| Giảm 15% mua thuốc (~100k) | ~15.000đ | 429 → **400** | Tất cả |
+| Bảo hiểm tai nạn 1 tháng | ~50.000đ | 1.429 → **1.400** | R2+ |
+| Bảo hiểm tai nạn 3 tháng | ~150.000đ | 4.286 → **4.300** | R1 only |
 
 ---
 
