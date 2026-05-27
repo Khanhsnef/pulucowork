@@ -231,12 +231,30 @@ Pts tích/tháng (avg, 22 ca):
 | --- | --- | --- | --- |
 | Giảm 20% khám tổng quát (~300k) | ~60.000đ | 1.714 → **1.700** | Tất cả |
 | Giảm 15% mua thuốc (~100k) | ~15.000đ | 429 → **400** | Tất cả |
-| Bảo hiểm tai nạn 1 tháng | ~50.000đ | 1.429 → **1.400** | R2+ |
-| Bảo hiểm tai nạn 3 tháng | ~150.000đ | 4.286 → **4.300** | R1 only |
 
 ---
 
-### B. Rank Entitlements — Tự động theo Rank (nằm trong 200M budget)
+### B. Rank Entitlements — Tự động & Đặc quyền theo Rank
+
+#### 💎 R1 Exclusive — Mua bảo hiểm tai nạn theo tháng
+
+> Đây là **đặc quyền mua**, không phải tự động cấp — Ahamove đàm phán group rate với đối tác bảo hiểm, R1 được quyền đăng ký.
+
+| Cơ chế | Chi tiết |
+| --- | --- |
+| Đối tượng | R1 Elite (💎 Kim Cương) only |
+| Cách mua | Đăng ký trong app trước ngày 25 hàng tháng |
+| Hiệu lực | Từ ngày 01 tháng kế tiếp |
+| Phí | [?] VND/tháng — theo group rate Ahamove đàm phán |
+| Thanh toán | Trừ thẳng vào ví tài xế hoặc thu từ thu nhập |
+| Huỷ | Có thể huỷ trước ngày 25, ngừng hiệu lực cuối tháng |
+| Mất R1 | Không được gia hạn tháng tiếp — coverage tháng đã mua vẫn giữ đến hết tháng |
+
+> Cost cho Ahamove = 0đ (driver tự trả phí). Ahamove chỉ đóng vai trò aggregator để có group rate tốt hơn.
+
+---
+
+#### 💰 Paid Rank Entitlements (Ahamove chi — nằm trong 200M budget)
 
 | Rank | Item | Giá trị | Chi phí Ahamove | Số lượng | ~Cost/tháng |
 |------|------|---------|----------------|----------|-------------|
