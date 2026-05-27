@@ -698,6 +698,18 @@
     /* ── FREE / PAID BADGES ── */
     .type-free { display: inline-flex; align-items: center; gap: 3px; background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.3); padding: 2px 9px; border-radius: 6px; font-size: 10px; font-weight: 700; white-space: nowrap; letter-spacing: 0.04em; }
     .type-paid { display: inline-flex; align-items: center; gap: 3px; background: rgba(139,148,158,0.1); color: #8B949E; border: 1px solid rgba(139,148,158,0.2); padding: 2px 9px; border-radius: 6px; font-size: 10px; font-weight: 700; white-space: nowrap; letter-spacing: 0.04em; }
+
+    /* ── LAYER MATRIX ICONS ── */
+    .lc-cell { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 15px; font-weight: 700; }
+    .lc-check { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.35); color: var(--green); }
+    .lc-cascade { background: rgba(245,158,11,0.13); border: 1px solid rgba(245,158,11,0.32); color: var(--yellow); }
+    .lc-block { background: rgba(139,148,158,0.08); border: 1px solid rgba(139,148,158,0.16); color: var(--text-muted); font-size: 13px; }
+    .lc-star { background: rgba(255,127,50,0.13); border: 1px solid rgba(255,127,50,0.32); color: var(--orange); font-size: 13px; }
+    .lc-legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-sec); align-items: center; padding: 12px 16px; background: var(--bg-card2); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 14px; }
+    .lc-legend span { display: flex; align-items: center; gap: 7px; }
+    .lc-lg { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+    .lc-supply-row td { padding: 10px 14px; border-top: 2px solid rgba(255,127,50,0.18); background: rgba(255,127,50,0.04); font-size: 11px; line-height: 1.5; vertical-align: top; }
+    .lc-supply-label { font-size: 12px; font-weight: 700; color: var(--text-prime); }
   </style>
 </head>
 
@@ -896,45 +908,85 @@
         </div>
       </div>
 
-      <div class="tw">
+      <div class="callout ci" style="margin-bottom:20px;">
+        <span style="font-size:15px;flex-shrink:0;">ℹ</span>
+        <div class="callout-body" style="font-size:12px;">
+          <strong>L1 KA/MP:</strong> Assigned trực tiếp, không qua đăng ký ca. &nbsp;·&nbsp;
+          <strong>L2–L5:</strong> Đăng ký theo rank, cửa sổ ngày 1–5 hàng tháng. &nbsp;·&nbsp;
+          <strong>L6:</strong> Luôn mở — buffer mọi rank. &nbsp;·&nbsp;
+          <span style="color:var(--orange);font-weight:600;">Cascade</span> = layer tiếp theo mở khi layer ưu tiên ≥ 80% slot fill.
+        </div>
+      </div>
+
+      <div class="tw" style="margin-bottom:16px;">
         <table>
           <thead>
             <tr>
-              <th>Rank</th>
-              <th>Primary Layer</th>
-              <th>Fallback (cascade)</th>
+              <th style="min-width:130px;">Rank</th>
+              <th style="text-align:center;color:var(--orange);">L1<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">KA/MP ★</div></th>
+              <th style="text-align:center;color:var(--orange);">L2<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">Minizone</div></th>
+              <th style="text-align:center;color:var(--yellow);">L3<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">Mediumzone</div></th>
+              <th style="text-align:center;color:var(--blue);">L4<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">Bigzone</div></th>
+              <th style="text-align:center;color:var(--teal);">L5<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">Cityzone</div></th>
+              <th style="text-align:center;color:var(--text-sec);">L6<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">MASS</div></th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><span class="rank-r1">💎 R1 Elite</span></td>
-              <td><span class="layer-badge l2">L2</span> <span
-                  style="margin-left:6px;font-weight:600;color:var(--text-prime);">Minizone</span></td>
-              <td style="color:var(--text-sec);">→ L3 khi L2 <span class="kpi-pill kpi-orange"
-                  style="font-size:10px;padding:1px 7px;">≥ 80% fill</span></td>
+              <td style="text-align:center;"><div class="lc-cell lc-star">★</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-check">✓</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-cascade">↩</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-block">—</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-block">—</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-check">✓</div></td>
             </tr>
             <tr>
               <td><span class="rank-r2">🥇 R2 Active</span></td>
-              <td><span class="layer-badge l3">L3</span> <span
-                  style="margin-left:6px;font-weight:600;color:var(--text-prime);">Mediumzone</span></td>
-              <td style="color:var(--text-sec);">→ L4 khi L3 <span class="kpi-pill kpi-orange"
-                  style="font-size:10px;padding:1px 7px;">≥ 80% fill</span></td>
+              <td style="text-align:center;"><div class="lc-cell lc-star">★</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-block">—</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-check">✓</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-cascade">↩</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-block">—</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-check">✓</div></td>
             </tr>
             <tr>
               <td><span class="rank-r3">🥈 R3 Standard</span></td>
-              <td><span class="layer-badge l4">L4</span> <span
-                  style="margin-left:6px;font-weight:600;color:var(--text-prime);">Bigzone</span></td>
-              <td style="color:var(--text-sec);">→ L5 khi L4 <span class="kpi-pill kpi-orange"
-                  style="font-size:10px;padding:1px 7px;">≥ 80% fill</span></td>
+              <td style="text-align:center;"><div class="lc-cell lc-star">★</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-block">—</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-block">—</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-check">✓</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-cascade">↩</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-check">✓</div></td>
             </tr>
             <tr>
               <td><span class="rank-un">Unranked</span></td>
-              <td><span class="layer-badge l6">L6</span> <span
-                  style="margin-left:6px;color:var(--text-sec);">MASS</span></td>
-              <td class="na">— (on-demand, luôn mở)</td>
+              <td style="text-align:center;"><div class="lc-cell lc-star">★</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-block">—</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-block">—</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-block">—</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-block">—</div></td>
+              <td style="text-align:center;"><div class="lc-cell lc-check">✓</div></td>
+            </tr>
+            <tr class="lc-supply-row">
+              <td class="lc-supply-label">Supply từ</td>
+              <td style="text-align:center;"><strong style="color:var(--orange);font-size:11.5px;">KA/MP</strong><br><span style="color:var(--text-muted);">Assigned trực tiếp</span></td>
+              <td style="text-align:center;"><strong style="color:var(--orange);font-size:11.5px;">R1</strong> ưu tiên<br><span style="color:var(--text-muted);">Cascade từ R2 nếu thiếu</span></td>
+              <td style="text-align:center;"><strong style="color:var(--yellow);font-size:11.5px;">R2</strong> ưu tiên<br><span style="color:var(--text-muted);">R1 cascade ↩</span></td>
+              <td style="text-align:center;"><strong style="color:var(--blue);font-size:11.5px;">R3</strong> ưu tiên<br><span style="color:var(--text-muted);">R2 cascade ↩</span></td>
+              <td style="text-align:center;"><strong style="color:var(--teal);font-size:11.5px;">R3</strong> cascade ↩<br><span style="color:var(--text-muted);">&nbsp;</span></td>
+              <td style="text-align:center;"><strong style="color:var(--text-prime);font-size:11.5px;">Tất cả</strong><br><span style="color:var(--text-muted);">Buffer mở</span></td>
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="lc-legend">
+        <span><div class="lc-lg lc-check">✓</div> Layer ưu tiên (đăng ký ca)</span>
+        <span><div class="lc-lg lc-cascade">↩</div> Cascade fallback (khi layer ưu tiên ≥ 80%)</span>
+        <span><div class="lc-lg lc-check">✓</div> Luôn mở (L6)</span>
+        <span><div class="lc-lg lc-block">—</div> Hard block</span>
+        <span><div class="lc-lg lc-star">★</div> KA/MP assigned</span>
       </div>
 
       <div class="callout cw">
