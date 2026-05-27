@@ -12,7 +12,7 @@
 | --- | --- | --- | --- |
 | R1 Elite | ≥ 80 | < 10 | ≥ 280 |
 | R2 Active | ≥ 75 | < 10 | ≥ 210 |
-| R3 Standard | ≥ 70 | — | ≥ 70 |
+| R3 Standard | ≥ 70 | ≤ 15 | ≥ 70 |
 | Unranked | < 70 | — | — |
 
 > DQS scale & công thức: cần confirm với Data team trước khi go-live.
