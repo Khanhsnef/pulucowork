@@ -103,7 +103,7 @@
 | Ca Tối | 15% | 40% | 45% |
 | Ca Full-day | 50% | 50% | — |
 
-> Unranked không có structured slot — nhận đơn on-demand từ L6 MASS khi đơn tràn xuống.
+> Unranked không có structured slot — nhận đơn on-demand từ khi đơn từ các layer tràn xuống.
 
 ---
 
@@ -117,21 +117,27 @@
 > Tỉ lệ quy đổi: **5.000đ thu nhập = 1 điểm base**
 
 ### Hệ số Layer & Bonus/ca
-| Layer | Hệ số × | Bonus/ca |
-|-------|---------|----------|
-| L2 Minizone | ×2.0 | +60 pts |
-| L3 Mediumzone | ×1.7 | +55 pts |
-| L4 Bigzone | ×1.3 | +50 pts |
-| L5 Cityzone | ×1.0 | +50 pts |
-| L6 MASS | ×1.0 | — |
+
+| Layer | Hệ số × | Bonus/ca | Ghi chú |
+| --- | --- | --- | --- |
+| L2 Minizone | ×1.5 | +60 pts | R1 priority zone |
+| L3 Mediumzone | ×1.3 | +55 pts | R2 priority zone |
+| L4 Bigzone | ×1.1 | +50 pts | R3 priority zone |
+| L5 Cityzone | ×1.0 | +50 pts | |
+| L6 MASS | ×1.0 | — | Unranked on-demand |
+| **Overflow** | **×1.0** | **—** | Đơn L2/L3/L4 cascade ra tài xế ngoài layer → ×1.0, không cộng bonus |
+
+> Hệ số áp theo **đơn hàng**, không theo rank tài xế. Tài xế R1 nhận đơn overflow từ L3 vẫn chỉ được ×1.3 (hệ số L3), không phải ×1.5.
 
 ### Ước tính pts/ca (EPH trung bình × Ca 4 tiếng)
+
 | Rank | EPH giả định | Base pts | × Hệ số | + Bonus | Tổng/ca |
-|------|-------------|----------|---------|---------|---------|
-| R1 · L2 | ~200k/h | 160 | 320 | +60 | **380** |
-| R2 · L3 | ~170k/h | 136 | 231 | +55 | **286** |
-| R3 · L4 | ~140k/h | 112 | 146 | +50 | **196** |
+| --- | --- | --- | --- | --- | --- |
+| R1 · L2 | ~200k/h | 160 | 240 | +60 | **300** |
+| R2 · L3 | ~170k/h | 136 | 177 | +55 | **232** |
+| R3 · L4 | ~140k/h | 112 | 123 | +50 | **173** |
 | L6 MASS | ~110k/h | 88 | 88 | — | **88** |
+| Overflow (any) | — | base | ×1.0 | — | base only |
 
 ### Quy tắc điểm
 - Hết hạn: **cuối mỗi Quý** (Q1: 31/3, Q2: 30/6, Q3: 30/9, Q4: 31/12)
