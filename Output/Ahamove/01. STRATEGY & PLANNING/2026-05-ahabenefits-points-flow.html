@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AhaBenefits v2.0 — Points Flow & Product Requirements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-base:     #0D1117;
+    --bg-card:     #161B22;
+    --bg-card2:    #1C2430;
+    --bg-code:     #0A0F15;
+    --bg-hover:    #1F2937;
+    --border:      rgba(255,255,255,0.07);
+    --border-acc:  rgba(255,127,50,0.25);
+    --text-prime:  #E6EDF3;
+    --text-sec:    #8B949E;
+    --text-muted:  #586069;
+    --orange:      #FF7F32;
+    --orange-dim:  rgba(255,127,50,0.12);
+    --orange-glow: rgba(255,127,50,0.06);
+    --blue:        #58A6FF;
+    --blue-dim:    rgba(88,166,255,0.12);
+    --green:       #10B981;
+    --green-dim:   rgba(16,185,129,0.12);
+    --red:         #EF4444;
+    --red-dim:     rgba(239,68,68,0.12);
+    --yellow:      #F59E0B;
+    --yellow-dim:  rgba(245,158,11,0.12);
+    --purple:      #A78BFA;
+    --purple-dim:  rgba(167,139,250,0.12);
+    --gray-dim:    rgba(139,148,158,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-base);
+    color: var(--text-prime);
+    font-family: 'Lexend', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR NAV ── */
+  #sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 24px 0;
+    flex-shrink: 0;
+  }
+
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-track { background: transparent; }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .sidebar-logo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .sidebar-logo .badge {
+    display: inline-block;
+    background: var(--orange-dim);
+    color: var(--orange);
+    border: 1px solid var(--border-acc);
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .sidebar-logo h2 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-prime);
+    line-height: 1.4;
+  }
+  .sidebar-logo p {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .nav-section-label {
+    padding: 8px 20px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  #sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    color: var(--text-sec);
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 400;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+  #sidebar a:hover {
+    color: var(--text-prime);
+    background: var(--bg-hover);
+    border-left-color: var(--orange);
+  }
+  #sidebar a .nav-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    min-width: 18px;
+  }
+  #sidebar a .nav-icon { font-size: 14px; }
+
+  .sidebar-footer {
+    padding: 16px 20px;
+    margin-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .sidebar-footer strong { color: var(--text-sec); }
+
+  /* ── MAIN CONTENT ── */
+  #main {
+    flex: 1;
+    overflow-x: hidden;
+    padding: 40px 48px;
+    max-width: 960px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0E1D2F 0%, #1A2535 50%, #0F1923 100%);
+    border: 1px solid rgba(88,166,255,0.15);
+    border-radius: 16px;
+    padding: 36px 40px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(255,127,50,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--orange-dim);
+    color: var(--orange);
+    border: 1px solid var(--border-acc);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 4px 12px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-prime);
+    line-height: 1.25;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 span { color: var(--orange); }
+  .hero-sub {
+    font-size: 13.5px;
+    color: var(--text-sec);
+    margin-bottom: 20px;
+    max-width: 520px;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .hero-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .hero-meta-item .label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .hero-meta-item .value {
+    font-size: 12px;
+    color: var(--text-sec);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── SECTION ── */
+  section {
+    margin-bottom: 52px;
+    scroll-margin-top: 24px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    background: var(--orange-dim);
+    border: 1px solid var(--border-acc);
+    border-radius: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .section-title h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-prime);
+    letter-spacing: -0.01em;
+  }
+  .section-title p {
+    font-size: 12.5px;
+    color: var(--text-sec);
+    margin-top: 2px;
+  }
+
+  /* ── SUBSECTION ── */
+  .subsection {
+    margin-bottom: 28px;
+  }
+  .subsection h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-prime);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .subsection h3::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 14px;
+    background: var(--orange);
+    border-radius: 2px;
+  }
+
+  /* ── TABLES ── */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead tr {
+    background: var(--bg-card2);
+  }
+  th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-sec);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--bg-hover); }
+
+  /* ── CODE / FLOW BLOCKS ── */
+  .flow-block {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--orange);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+  }
+  .flow-block pre {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    color: #C9D1D9;
+    white-space: pre;
+  }
+  .flow-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    border: 1px solid;
+    font-size: 13px;
+  }
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { flex: 1; }
+  .callout-body strong { font-weight: 700; }
+  .callout.info    { background: var(--blue-dim);   border-color: rgba(88,166,255,0.2);   color: #93C5FD; }
+  .callout.warning { background: var(--yellow-dim); border-color: rgba(245,158,11,0.25);  color: #FCD34D; }
+  .callout.danger  { background: var(--red-dim);    border-color: rgba(239,68,68,0.25);   color: #FCA5A5; }
+  .callout.success { background: var(--green-dim);  border-color: rgba(16,185,129,0.25);  color: #6EE7B7; }
+  .callout.tip     { background: var(--orange-dim); border-color: var(--border-acc);      color: #FDB68F; }
+  .callout.rule    { background: var(--purple-dim); border-color: rgba(167,139,250,0.25); color: #C4B5FD; }
+
+  /* ── STATE PILLS ── */
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-family: 'Space Mono', monospace;
+    white-space: nowrap;
+  }
+  .pill-pending   { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+  .pill-available { background: var(--green-dim);  color: var(--green);  border: 1px solid rgba(16,185,129,0.3); }
+  .pill-reserved  { background: var(--blue-dim);   color: var(--blue);   border: 1px solid rgba(88,166,255,0.3); }
+  .pill-redeemed  { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+  .pill-expired   { background: var(--gray-dim);   color: var(--text-sec); border: 1px solid rgba(139,148,158,0.2); }
+  .pill-deducted  { background: var(--red-dim);    color: var(--red);    border: 1px solid rgba(239,68,68,0.3); }
+  .pill-final     { background: var(--orange-dim); color: var(--orange); border: 1px solid var(--border-acc); }
+
+  /* ── STATE LEGEND ROW ── */
+  .state-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px;
+    background: var(--bg-card2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    align-items: center;
+  }
+  .state-legend-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-right: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .state-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ── DATA MODEL CARDS ── */
+  .data-model-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 700px) { .data-model-grid { grid-template-columns: 1fr; } }
+  .dm-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .dm-card h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--orange);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+  .dm-field {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .dm-field:last-child { border-bottom: none; }
+  .dm-field .fname {
+    font-family: 'Space Mono', monospace;
+    color: var(--blue);
+    min-width: 180px;
+    font-size: 11.5px;
+  }
+  .dm-field .ftype {
+    color: var(--text-muted);
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── SCENARIO CARDS ── */
+  .scenario-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .scenario-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: var(--bg-card2);
+    border-bottom: 1px solid var(--border);
+  }
+  .scenario-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+    flex-shrink: 0;
+  }
+  .scenario-body { padding: 16px 20px; }
+
+  /* ── NOTIFICATION TABLE ── */
+  .notif-row { display: grid; grid-template-columns: 1fr 2fr auto; gap: 12px; align-items: start; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .notif-row:last-child { border-bottom: none; }
+  .notif-row .trigger { font-size: 12px; font-weight: 600; color: var(--text-prime); }
+  .notif-row .content { font-size: 12px; color: var(--text-sec); font-style: italic; }
+  .notif-row .channel { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(88,166,255,0.2); white-space: nowrap; font-family: 'Space Mono', monospace; }
+
+  /* ── OPEN QUESTIONS ── */
+  .oq-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .oq-item:last-child { border-bottom: none; }
+  .oq-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    background: var(--yellow-dim);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-top: 1px;
+  }
+  .oq-body { flex: 1; }
+  .oq-q { font-size: 13px; font-weight: 600; color: var(--text-prime); }
+  .oq-impact { font-size: 12px; color: var(--text-sec); margin-top: 4px; }
+  .oq-impact::before { content: 'Impact: '; color: var(--text-muted); font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ── FORMULA HIGHLIGHT ── */
+  .formula {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12.5px;
+    color: #C9D1D9;
+    margin: 10px 0;
+    display: inline-block;
+    width: 100%;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .formula .hl-orange { color: var(--orange); font-weight: 700; }
+  .formula .hl-green  { color: var(--green);  font-weight: 700; }
+  .formula .hl-blue   { color: var(--blue);   font-weight: 700; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 8px 0 24px;
+  }
+
+  /* ── EXAMPLE CARD ── */
+  .example-card {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 10px 0 14px;
+    font-size: 13px;
+    color: var(--text-sec);
+    line-height: 1.7;
+  }
+  .example-card strong { color: var(--green); }
+  .example-card .ex-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  /* ── STEP FLOW (for 2.1 table) ── */
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: var(--orange-dim);
+    border: 1px solid var(--border-acc);
+    border-radius: 5px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+
+  code {
+    font-family: 'Space Mono', monospace;
+    font-size: 11.5px;
+    background: rgba(255,127,50,0.1);
+    color: var(--orange);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  /* ── TIMELINE VISUAL ── */
+  .timeline-line {
+    border-left: 2px solid var(--border);
+    margin-left: 10px;
+    padding-left: 20px;
+    position: relative;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+  }
+  .timeline-item.accent::before { border-color: var(--orange); background: var(--orange); }
+  .timeline-item.warn::before   { border-color: var(--yellow); background: var(--yellow); }
+  .timeline-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--orange);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .timeline-content {
+    font-size: 13px;
+    color: var(--text-sec);
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="badge">Product Spec</div>
+    <h2>AhaBenefits v2.0<br>Points Flow</h2>
+    <p>Driver Mgmt → Product</p>
+  </div>
+
+  <div class="nav-section-label">Sections</div>
+  <a href="#s1"><span class="nav-num">01</span><span>Vòng đời Điểm</span></a>
+  <a href="#s2"><span class="nav-num">02</span><span>Earning Flow</span></a>
+  <a href="#s3"><span class="nav-num">03</span><span>Point Timeline</span></a>
+  <a href="#s4"><span class="nav-num">04</span><span>Redemption Flow</span></a>
+  <a href="#s5"><span class="nav-num">05</span><span>Cộng / Trừ điểm</span></a>
+  <a href="#s6"><span class="nav-num">06</span><span>Edge Cases</span></a>
+  <a href="#s7"><span class="nav-num">07</span><span>Data Model</span></a>
+  <a href="#s8"><span class="nav-num">08</span><span>Notifications</span></a>
+  <a href="#s9"><span class="nav-num">09</span><span>Open Questions</span></a>
+
+  <div class="sidebar-footer">
+    <strong>Tham chiếu</strong><br>
+    2026-05-driver-ranking-params.md
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main id="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">🎯 Product Requirements Doc</div>
+    <h1>AhaBenefits <span>v2.0</span><br>Points Flow & System Design</h1>
+    <p class="hero-sub">Tài liệu dành cho Product team. Bao gồm: earning flow, timeline, redemption, cộng/trừ điểm, và các kịch bản edge case.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="label">Ngày cập nhật</span>
+        <span class="value">2026-05-27</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">Owner</span>
+        <span class="value">Driver Management</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">Status</span>
+        <span class="value" style="color:var(--yellow)">In Review</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">Scope</span>
+        <span class="value">SGN + HAN · Bike</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- State Legend -->
+  <div class="state-legend">
+    <span class="state-legend-label">Point States:</span>
+    <span class="pill pill-pending">PENDING</span>
+    <span class="state-desc">→ Tạm giữ trong ca</span>
+    <span class="pill pill-available">AVAILABLE</span>
+    <span class="state-desc">→ Có thể đổi</span>
+    <span class="pill pill-reserved">RESERVED</span>
+    <span class="state-desc">→ Đang xử lý đổi</span>
+    <span class="pill pill-redeemed">REDEEMED</span>
+    <span class="state-desc">→ Đổi thành công</span>
+    <span class="pill pill-expired">EXPIRED</span>
+    <span class="state-desc">→ Hết hạn cuối quý</span>
+    <span class="pill pill-deducted">DEDUCTED</span>
+    <span class="state-desc">→ Bị trừ vi phạm</span>
+  </div>
+
+  <!-- ── SECTION 1 ── -->
+  <section id="s1">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title">
+        <h2>Tổng quan Vòng đời Điểm</h2>
+        <p>Point Lifecycle — từ Trip hoàn thành đến Expired</p>
+      </div>
+    </div>
+
+    <div class="flow-block">
+      <div class="flow-label">⟳ Point Lifecycle Flow</div>
+      <pre>[Trip hoàn thành]
+       │
+       ▼
+[Tính điểm chuyến]──────────────────────────────────────────┐
+ GSV ÷ 5.000 × layer_multiplier                             │
+       │                                                     │
+       ▼                                                     │
+[Điểm trạng thái: PENDING]                                  │
+ Giữ tạm, chưa dùng được                                    │
+       │                                                     │
+  [Cuối ca]                                                  │
+       │                                                     │
+       ▼                                                     │
+[Hoàn thành ca? ────Yes──→ +Bonus hoàn ca]                  │
+       │ No                                                  │
+       │ (không bonus)                                       │
+       ▼                                                     │
+[Điểm trạng thái: AVAILABLE] ◄───────────────────────────── ┘
+ Có thể đổi thưởng                                          │
+       │                                                     │
+  ┌────┴────┐                                                │
+  │         │                                                │
+[Đổi]   [Vi phạm]                                           │
+  │         │                                                │
+  ▼         ▼                                                │
+[RESERVED] [DEDUCTED -50 pts]                               │
+  │                                                          │
+[Partner xác nhận]                                          │
+  │                                                          │
+  ▼                                                          │
+[REDEEMED] ─────── Cuối Quý ──────────────► [EXPIRED]</pre>
+    </div>
+
+  </section>
+
+  <!-- ── SECTION 2 ── -->
+  <section id="s2">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title">
+        <h2>Earning Flow — Tích điểm từng chuyến</h2>
+        <p>Công thức tính điểm, bonus hoàn ca, và credit T+1</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>2.1 Công thức & Trigger</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bước</th>
+              <th>Sự kiện</th>
+              <th>Hành động hệ thống</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="step-num">1</span></td>
+              <td>Chuyến hoàn thành (auto-complete)</td>
+              <td>Ghi nhận <code>trip_GSV</code> (VND)</td>
+            </tr>
+            <tr>
+              <td><span class="step-num">2</span></td>
+              <td>Xác định <code>layer</code> của đơn hàng (L2–L6)</td>
+              <td>Lấy <code>layer_multiplier</code> từ config</td>
+            </tr>
+            <tr>
+              <td><span class="step-num">3</span></td>
+              <td>Kiểm tra driver có thuộc priority layer không</td>
+              <td>Nếu overflow → multiplier = ×1.0, no bonus</td>
+            </tr>
+            <tr>
+              <td><span class="step-num">4</span></td>
+              <td>Tính <code>raw_pts = trip_GSV ÷ 5.000</code></td>
+              <td>Giá trị thập phân</td>
+            </tr>
+            <tr>
+              <td><span class="step-num">5</span></td>
+              <td>Làm tròn: <code>base_pts = round(raw_pts)</code></td>
+              <td>≥ 0.5 → làm tròn lên · &lt; 0.5 → làm tròn xuống</td>
+            </tr>
+            <tr>
+              <td><span class="step-num">6</span></td>
+              <td>Tính <code>earned_pts = round(base_pts × layer_multiplier)</code></td>
+              <td>Làm tròn sau khi nhân hệ số</td>
+            </tr>
+            <tr>
+              <td><span class="step-num">7</span></td>
+              <td>Cộng vào <code>shift_trip_pts</code> (tạm tính trong ca)</td>
+              <td>Trạng thái <span class="pill pill-pending">PENDING</span> — chưa credit vào ví</td>
+            </tr>
+            <tr>
+              <td><span class="step-num">8</span></td>
+              <td>Cập nhật <code>shift_gsv_total</code></td>
+              <td>Dùng để xét điều kiện bonus hoàn ca</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="example-card">
+        <span class="ex-label">Ví dụ làm tròn</span>
+        GSV <strong>14.000đ</strong> → 14.000 ÷ 5.000 = 2.8 → <strong>3 pts</strong> (≥ 0.5, làm tròn lên)<br>
+        GSV <strong>12.000đ</strong> → 12.000 ÷ 5.000 = 2.4 → <strong>2 pts</strong> (&lt; 0.5, làm tròn xuống)
+      </div>
+
+      <div class="callout info">
+        <span class="callout-icon">ℹ</span>
+        <div class="callout-body">
+          <strong>Điểm tính theo đơn hàng</strong> (dùng GSV của đơn), không theo rank tài xế. R1 nhận đơn overflow từ L3 → multiplier = ×1.3 (hệ số L3), không phải ×1.5.
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>2.2 Bonus hoàn ca</h3>
+      <div class="callout tip">
+        <span class="callout-icon">📌</span>
+        <div class="callout-body">
+          Không có cơ chế checkout ca. Điều kiện bonus xét dựa trên <strong>online hour in zone</strong> và hoạt động thực tế trong ca.
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Điều kiện</th>
+              <th>Mô tả</th>
+              <th>Kết quả</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>✅ Đủ online in zone</td>
+              <td>Online trong zone đăng ký ≥ ngưỡng tối thiểu của ca (<span style="color:var(--yellow)">[?] % thời lượng ca</span> — cần Product định nghĩa)</td>
+              <td style="color:var(--green)">Đủ điều kiện nhận bonus</td>
+            </tr>
+            <tr>
+              <td>✅ Đủ điều kiện hoạt động ca</td>
+              <td>AR, số chuyến hoàn thành tối thiểu trong ca (<span style="color:var(--yellow)">[?]</span> — cần Product định nghĩa)</td>
+              <td style="color:var(--green)">Kết hợp với điều kiện trên</td>
+            </tr>
+            <tr>
+              <td>❌ Online in zone không đủ</td>
+              <td>Driver online nhưng ở ngoài zone, hoặc tắt app quá lâu</td>
+              <td style="color:var(--text-sec)">Không có bonus, điểm chuyến vẫn giữ</td>
+            </tr>
+            <tr>
+              <td>❌ Ca bị hủy do hệ thống</td>
+              <td>Force-close ca</td>
+              <td style="color:var(--text-sec)">Không có bonus, điểm chuyến vẫn giữ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warning">
+        <span class="callout-icon">⚠</span>
+        <div class="callout-body">
+          <strong>Open question cho Product:</strong> Ngưỡng "online in zone" cụ thể là bao nhiêu % thời lượng ca? Đề xuất: ≥ 80% tổng thời gian ca.
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>2.3 Credit điểm vào ví — T+1</h3>
+
+      <div class="flow-block">
+        <div class="flow-label">🕐 Credit Flow (T+1)</div>
+        <pre>Thời điểm credit: Ngày hôm sau (T+1), sau khi hệ thống validate dữ liệu ca
+
+[Kết thúc ca / 23:59 ngày hôm đó]
+       │
+       ▼
+[Hệ thống batch job chạy (02:00–04:00 sáng)]
+Validate: online_hour_in_zone + điều kiện hoạt động ca
+       │
+  ┌────┴────────────────────┐
+  │ Đủ điều kiện            │ Không đủ
+  ▼                         ▼
+shift_trip_pts              shift_trip_pts
++ bonus_pts                 (không có bonus)
+  │                         │
+  └──────────┬──────────────┘
+             ▼
+[Credit vào ví — PENDING → AVAILABLE]
+[Push notification T+1 sáng:
+ "Ca [tên ca] hôm qua — bạn nhận X pts
+  (Trong đó: Y pts trip + Z pts bonus ca)"]</pre>
+      </div>
+
+      <div class="callout info">
+        <span class="callout-icon">ℹ</span>
+        <div class="callout-body">
+          Dữ liệu online hour cần được finalize sau khi ca kết thúc → credit T+1 đảm bảo chính xác, tránh sai lệch do data lag.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 3 ── -->
+  <section id="s3">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title">
+        <h2>Point Timeline — Mốc thời gian quan trọng</h2>
+        <p>Lịch trình trong tháng và cuối quý</p>
+      </div>
+    </div>
+
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;">
+      <div style="background:var(--bg-card2);padding:12px 20px;border-bottom:1px solid var(--border);">
+        <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-family:'Space Mono',monospace;">TRONG THÁNG</span>
+      </div>
+      <div style="padding:16px 20px;">
+        <div class="timeline-line">
+          <div class="timeline-item accent">
+            <div class="timeline-date">Ngày 01</div>
+            <div class="timeline-content">
+              Voucher xăng/EV rank entitlement được phát tự động (R1, R2)<br>
+              Coverage bảo hiểm có hiệu lực (nếu đã đăng ký tháng trước)
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">Ngày 01 – 24</div>
+            <div class="timeline-content">Cửa sổ hoạt động bình thường: tích điểm, đổi điểm</div>
+          </div>
+          <div class="timeline-item warn">
+            <div class="timeline-date">Ngày 25 ⚠</div>
+            <div class="timeline-content">
+              <strong style="color:var(--yellow)">DEADLINE</strong> đăng ký / huỷ bảo hiểm tai nạn R1<br>
+              <span style="font-size:12px;color:var(--text-muted)">(coverage áp dụng từ ngày 01 tháng sau)</span>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">Ngày 26 – 31</div>
+            <div class="timeline-content">Tích điểm / đổi điểm bình thường</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg-card);border:1px solid rgba(239,68,68,0.2);border-radius:12px;overflow:hidden;">
+      <div style="background:rgba(239,68,68,0.08);padding:12px 20px;border-bottom:1px solid rgba(239,68,68,0.15);">
+        <span style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.08em;font-family:'Space Mono',monospace;">CUỐI QUÝ — 31/3 · 30/6 · 30/9 · 31/12</span>
+      </div>
+      <div style="padding:16px 20px;">
+        <div class="timeline-line" style="border-left-color:rgba(239,68,68,0.3);">
+          <div class="timeline-item" style="margin-bottom:14px;">
+            <div class="timeline-date" style="color:var(--red)">23:59 — Điểm hết hạn</div>
+            <div class="timeline-content">
+              Toàn bộ điểm <span class="pill pill-available">AVAILABLE</span> bị expire<br>
+              Điểm đang <span class="pill pill-reserved">RESERVED</span> (đổi đang xử lý) → giữ nguyên<br>
+              Điểm đang <span class="pill pill-pending">PENDING</span> (trong ca) → credit rồi expire
+            </div>
+          </div>
+          <div class="timeline-item" style="margin-bottom:0;">
+            <div class="timeline-date" style="color:var(--green)">Ngày đầu Quý mới</div>
+            <div class="timeline-content">Balance reset về 0. Bắt đầu quý mới.<br>Push notification: "Quý mới bắt đầu — điểm đã reset"</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── SECTION 4 ── -->
+  <section id="s4">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-title">
+        <h2>Redemption Flow — Đổi điểm</h2>
+        <p>Happy path + Bảo hiểm tai nạn R1 (special flow)</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>4.1 Happy path</h3>
+      <div class="flow-block">
+        <div class="flow-label">🎁 Redemption Happy Path</div>
+        <pre>Driver mở tab AhaBenefits
+       │
+       ▼
+[Hiển thị catalog theo Rank]
+ R3: tier Bạc  │  R2: tier Vàng  │  R1: tier Kim Cương
+ (kế thừa theo thứ tự)
+       │
+       ▼
+[Driver chọn reward]
+       │
+       ▼
+[Hệ thống kiểm tra]
+ ├── balance ≥ điểm yêu cầu?  → No → "Chưa đủ điểm, cần thêm X pts"
+ ├── rank đủ điều kiện?        → No → "Cần đạt [rank] để đổi"
+ └── reward còn hàng/slot?     → No → "Tạm hết — thử lại sau"
+       │ All pass
+       ▼
+[Điểm chuyển sang RESERVED]
+[Màn hình xác nhận: tóm tắt reward + điểm sẽ trừ]
+       │
+       ▼
+[Driver xác nhận]
+       │
+       ▼
+[Hệ thống gửi yêu cầu đến Partner API]
+       │
+  ┌────┴────────────────┐
+  │ Partner confirm      │ Partner timeout/fail
+  │ (≤ 30 giây)         │ (> 30 giây)
+  ▼                     ▼
+[REDEEMED]          [AVAILABLE — hoàn điểm]
+[Gửi voucher/       [Thông báo: "Đổi thất bại,
+ mã giảm giá]        điểm đã được hoàn lại"]
+[Push notif]</pre>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>4.2 Bảo hiểm tai nạn R1 (special flow)</h3>
+      <div class="flow-block">
+        <div class="flow-label">🛡 Insurance R1 — Special Flow</div>
+        <pre>Trước ngày 25 hàng tháng:
+
+Driver vào mục "Bảo hiểm R1"
+       │
+       ▼
+[Chọn gói: 10k (285 pts) hoặc 30k (857 pts)]
+       │
+       ▼
+[Xác nhận: "Coverage sẽ có hiệu lực từ 01/[tháng+1]"]
+       │
+       ▼
+[Điểm RESERVED ngay]
+       │
+       ▼
+[Ngày 01 tháng sau → điểm REDEEMED, coverage kích hoạt]
+[Hệ thống gửi số hợp đồng bảo hiểm qua app/SMS]
+
+──────────────────────────────────────────────────────
+
+Huỷ (trước ngày 25):
+  → Điểm RESERVED → AVAILABLE (hoàn lại)
+  → Coverage ngừng cuối tháng hiện tại
+
+Mất R1 mid-month:
+  → Không cho đăng ký mới
+  → Nếu đã RESERVED: giữ reservation đến hết tháng đã đăng ký</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 5 ── -->
+  <section id="s5">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div class="section-title">
+        <h2>Cộng / Trừ điểm — Adjustment System</h2>
+        <p>Các sự kiện trừ điểm, bonus, và quyền điều chỉnh thủ công</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>5.1 Các sự kiện trừ điểm</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Sự kiện</th><th>Điểm trừ</th><th>Thời điểm</th><th>Ghi chú</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Vi phạm ĐBCL (Đảm bảo Chất lượng)</td>
+              <td><span class="pill pill-deducted">-50 pts</span></td>
+              <td>Ngay khi xác nhận vi phạm</td>
+              <td>Ghi log lý do</td>
+            </tr>
+            <tr>
+              <td>Gian lận / báo cáo giả</td>
+              <td><span class="pill pill-deducted">-50 pts/lần</span> + review rank</td>
+              <td>Sau xác minh</td>
+              <td>CS xử lý thủ công</td>
+            </tr>
+            <tr>
+              <td>Huỷ chuyến không lý do</td>
+              <td style="color:var(--text-muted)">Không trừ điểm</td>
+              <td>—</td>
+              <td>Ảnh hưởng DCR → ảnh hưởng rank</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>5.2 Các sự kiện cộng điểm bonus</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Sự kiện</th><th>Điểm thưởng</th><th>Trigger</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Hoàn thành ca đúng giờ</td>
+              <td>Theo layer <span style="color:var(--green);font-family:'Space Mono',monospace;font-size:12px;">(+20 – +30 pts)</span></td>
+              <td>Cuối ca</td>
+            </tr>
+            <tr>
+              <td>Streak 7 ngày liên tục</td>
+              <td><span style="color:var(--yellow)">[TBD] pts</span></td>
+              <td>Auto detect</td>
+            </tr>
+            <tr>
+              <td>Campaign đặc biệt (Mega Sales)</td>
+              <td><span style="color:var(--yellow)">[TBD] pts</span></td>
+              <td>Campaign config</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>5.3 Adjustment thủ công (CS/Ops)</h3>
+      <div class="flow-block">
+        <div class="flow-label">⚙ Manual Adjustment</div>
+        <pre>Chỉ CS/Ops có quyền → qua Admin tool
+  ├── Add points:    cần lý do + approval cấp trên
+  ├── Deduct points: cần lý do + notification cho driver
+  └── Ghi log đầy đủ: ai làm, lúc nào, lý do gì</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 6 ── -->
+  <section id="s6">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <div class="section-title">
+        <h2>Kịch bản Edge Case</h2>
+        <p>5 scenarios cần Product xác nhận và implement</p>
+      </div>
+    </div>
+
+    <!-- Scenario A -->
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-badge" style="background:rgba(245,158,11,0.15);color:var(--yellow);border:1px solid rgba(245,158,11,0.3);">A</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-prime);">Driver đổi điểm cuối quý</div>
+          <div style="font-size:12px;color:var(--text-muted);">RESERVED vs EXPIRE race condition</div>
+        </div>
+      </div>
+      <div class="scenario-body">
+        <div class="flow-block">
+          <pre>Driver R2, balance 1.800 pts, ngày 29/6
+
+Đổi Voucher F&B 50k (1.400 pts) → RESERVED
+  ├── Partner confirm trước 30/6 23:59 → REDEEMED ✅
+  └── Partner timeout, sau 30/6 00:00 → Điểm expire trước khi hoàn
+        → Rule: RESERVED pts không expire, hoàn về sau khi fail
+        → Balance = 0 (1.800 - 1.400 đã expire) + 1.400 hoàn = 1.400
+        → [⚠️ Edge case cần Product quyết định: hoàn về quý mới hay expire?]
+        → Đề xuất: RESERVED pts được bảo vệ khỏi expire 7 ngày</pre>
+        </div>
+        <div class="callout warning">
+          <span class="callout-icon">⚠</span>
+          <div class="callout-body"><strong>Open question #1:</strong> RESERVED pts có bị expire cuối quý không? Cần rule rõ ràng trước khi build.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario B -->
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-badge" style="background:rgba(88,166,255,0.15);color:var(--blue);border:1px solid rgba(88,166,255,0.3);">B</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-prime);">Driver bị downgrade rank</div>
+          <div style="font-size:12px;color:var(--text-muted);">Reward đã đổi có bị thu hồi không?</div>
+        </div>
+      </div>
+      <div class="scenario-body">
+        <div class="flow-block">
+          <pre>R1 → R2 (sau kỳ xét rank cuối tháng)
+
+Tháng 1 (khi còn R1): đã đổi Gói bảo dưỡng ưu tiên R1 (2.550 pts) → REDEEMED
+Tháng 2: rớt xuống R2
+
+Nguyên tắc: Rewards đã REDEEMED không bị thu hồi khi rớt rank.
+  ├── Reward đã đổi → vẫn được SỬ DỤNG trong thời hạn hiệu lực của reward
+  ├── Hết thời hạn hiệu lực → reward tự expire (không liên quan đến rank)
+  └── KHÔNG được đổi thêm rewards tier R1 kể từ tháng rớt hạng
+
+Ví dụ: Voucher bảo dưỡng đổi tháng 1, hiệu lực đến 31/3
+  → Rớt hạng tháng 2 → vẫn dùng voucher được đến 31/3 ✅
+  → Sau 31/3 voucher expire → không dùng được nữa ✅
+
+Điểm còn lại trong ví:
+  ├── Balance giữ nguyên, không mất
+  ├── Catalog access: xuống tier Vàng (mất quyền đổi R1-only items)
+  └── Voucher xăng tháng sau: 30k (R2), không còn 50k (R1)</pre>
+        </div>
+
+        <div class="callout success">
+          <span class="callout-icon">✓</span>
+          <div class="callout-body">
+            <strong>Notification khi rớt rank:</strong><br>
+            <em>"Rank của bạn thay đổi từ Kim Cương → Vàng. Rewards đã đổi vẫn còn hiệu lực đến hết thời hạn. Một số đặc quyền Kim Cương sẽ không khả dụng từ tháng tới."</em>
+          </div>
+        </div>
+
+        <div class="callout rule">
+          <span class="callout-icon">📐</span>
+          <div class="callout-body">
+            <strong>Rule tổng quát:</strong> Thời hạn sử dụng reward gắn với <em>reward</em>, không với <em>rank</em>. Rank chỉ kiểm soát quyền <em>đổi mới</em> — không ảnh hưởng reward đã hoàn thành.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario C -->
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-badge" style="background:rgba(255,127,50,0.15);color:var(--orange);border:1px solid rgba(255,127,50,0.3);">C</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-prime);">Driver R1 nhận đơn overflow</div>
+          <div style="font-size:12px;color:var(--text-muted);">Multiplier dựa theo layer của đơn, không theo rank</div>
+        </div>
+      </div>
+      <div class="scenario-body">
+        <div class="flow-block">
+          <pre>R1 đang online, L2 đầy (≥80% fill) → hệ thống cascade → giao đơn từ L2 ra L3
+
+Trip GSV: 70.000đ
+  ├── Layer của đơn: L2 (đơn xuất phát từ L2)
+  ├── Driver là R1 nhưng đang nhận overflow
+  └── Điểm = round(70.000 ÷ 5.000) × 1.0 = round(14.0) = 14 pts
+      [×1.0 vì đơn overflow — không phải ×1.5]</pre>
+        </div>
+        <div class="callout warning">
+          <span class="callout-icon">⚠</span>
+          <div class="callout-body"><strong>Open question #2:</strong> Layer của đơn overflow xác định bằng origin zone hay assigned zone? Ảnh hưởng trực tiếp đến điểm tính.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario D -->
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-badge" style="background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3);">D</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-prime);">Đổi điểm thất bại, sắp hết quý</div>
+          <div style="font-size:12px;color:var(--text-muted);">Điểm hoàn về nhưng expire ngay sau đó</div>
+        </div>
+      </div>
+      <div class="scenario-body">
+        <div class="flow-block">
+          <pre>Driver đổi ngày 30/12, partner fail → điểm hoàn về ngày 31/12 23:58
+  → 2 phút sau: điểm expire cuối quý
+
+Rule đề xuất: Nếu redemption fail trong vòng 48h cuối quý
+  → Điểm hoàn về nhưng được gia hạn 7 ngày sang quý mới
+  → Notification: "Điểm được gia hạn thêm 7 ngày do lỗi đổi thưởng"</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario E -->
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-badge" style="background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.3);">E</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-prime);">Ca có cả đơn trong layer và overflow</div>
+          <div style="font-size:12px;color:var(--text-muted);">Mixed multiplier calculation example</div>
+        </div>
+      </div>
+      <div class="scenario-body">
+        <div class="flow-block">
+          <pre>Ca Sáng R2/L3: 5 đơn trong L3 + 2 đơn overflow từ L2
+
+5 đơn L3:  mỗi đơn ~52.000đ → 10 base pts × 1.3 = 13 pts/đơn × 5 = 65 pts
+2 đơn OFW: mỗi đơn ~60.000đ → 12 base pts × 1.0 = 12 pts/đơn × 2 = 24 pts
+Bonus hoàn ca (L3):                                              +25 pts
+─────────────────────────────────────────────────────────────────────────
+Tổng ca:   65 + 24 + 25 = 114 pts
+
+[App hiển thị chi tiết: breakdown by trip type]</pre>
+        </div>
+        <div class="callout success">
+          <span class="callout-icon">✓</span>
+          <div class="callout-body">Cần hiển thị breakdown trong app: trip thường vs overflow để driver hiểu rõ nguồn gốc điểm.</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── SECTION 7 ── -->
+  <section id="s7">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <div class="section-title">
+        <h2>Data Model gợi ý</h2>
+        <p>Dành cho Engineering — schema tham khảo</p>
+      </div>
+    </div>
+
+    <div class="data-model-grid">
+      <!-- PointTransaction -->
+      <div class="dm-card">
+        <h4>PointTransaction</h4>
+        <div class="dm-field"><span class="fname">id</span><span class="ftype">UUID</span></div>
+        <div class="dm-field"><span class="fname">driver_id</span><span class="ftype">FK</span></div>
+        <div class="dm-field"><span class="fname">amount</span><span class="ftype">INT (+ hoặc -)</span></div>
+        <div class="dm-field"><span class="fname">type</span><span class="ftype">EARNED | BONUS | REDEEMED | DEDUCTED | EXPIRED | REFUNDED | ADJUSTED</span></div>
+        <div class="dm-field"><span class="fname">status</span><span class="ftype">PENDING | AVAILABLE | RESERVED | FINAL</span></div>
+        <div class="dm-field"><span class="fname">source_ref</span><span class="ftype">trip_id | shift_id | campaign_id | cs_ticket_id</span></div>
+        <div class="dm-field"><span class="fname">layer</span><span class="ftype">L2–L6 | OVERFLOW</span></div>
+        <div class="dm-field"><span class="fname">multiplier_applied</span><span class="ftype">DECIMAL (1.0–1.5)</span></div>
+        <div class="dm-field"><span class="fname">created_at</span><span class="ftype">TIMESTAMP</span></div>
+        <div class="dm-field"><span class="fname">expires_at</span><span class="ftype">TIMESTAMP (cuối quý)</span></div>
+        <div class="dm-field"><span class="fname">note</span><span class="ftype">TEXT (cho ADJUSTED)</span></div>
+      </div>
+
+      <!-- DriverPointWallet -->
+      <div class="dm-card">
+        <h4>DriverPointWallet</h4>
+        <div class="dm-field"><span class="fname">driver_id</span><span class="ftype">FK (PK)</span></div>
+        <div class="dm-field"><span class="fname">available_balance</span><span class="ftype">INT</span></div>
+        <div class="dm-field"><span class="fname">reserved_balance</span><span class="ftype">INT</span></div>
+        <div class="dm-field"><span class="fname">total_earned_current_quarter</span><span class="ftype">INT</span></div>
+        <div class="dm-field"><span class="fname">quarter_expires_at</span><span class="ftype">TIMESTAMP</span></div>
+        <div class="dm-field"><span class="fname">last_updated_at</span><span class="ftype">TIMESTAMP</span></div>
+        <div style="margin-top:16px;padding:10px;background:var(--bg-code);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-family:'Space Mono',monospace;">Note</div>
+          <div style="font-size:11.5px;color:var(--text-sec);">Field <code>valid_until</code> cần có trong reward redemption record để đảm bảo rule Scenario B (reward survive downgrade trong thời hạn hiệu lực).</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── SECTION 8 ── -->
+  <section id="s8">
+    <div class="section-header">
+      <div class="section-num">08</div>
+      <div class="section-title">
+        <h2>Notifications cần thiết</h2>
+        <p>Danh sách push notification và trigger</p>
+      </div>
+    </div>
+
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="background:var(--bg-card2);padding:10px 14px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 2fr auto;gap:12px;">
+        <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Trigger</span>
+        <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Nội dung</span>
+        <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Kênh</span>
+      </div>
+      <div class="notif-row"><span class="trigger">Cuối ca</span><span class="content">"Bạn vừa nhận X pts — Tổng: Y pts"</span><span class="channel">Push</span></div>
+      <div class="notif-row"><span class="trigger">Đổi thành công</span><span class="content">"Đổi [reward] thành công — trừ X pts"</span><span class="channel">Push + In-app</span></div>
+      <div class="notif-row"><span class="trigger">Đổi thất bại</span><span class="content">"Đổi thất bại — X pts đã hoàn lại"</span><span class="channel">Push</span></div>
+      <div class="notif-row"><span class="trigger">Vi phạm ĐBCL</span><span class="content">"Trừ 50 pts do vi phạm chất lượng"</span><span class="channel">Push + In-app</span></div>
+      <div class="notif-row"><span class="trigger" style="color:var(--yellow);">7 ngày trước hết quý</span><span class="content">"Còn X pts sẽ hết hạn ngày [date] — đổi ngay!"</span><span class="channel">Push</span></div>
+      <div class="notif-row"><span class="trigger" style="color:var(--red);">1 ngày trước hết quý</span><span class="content">"Điểm hết hạn ngày mai — X pts còn lại"</span><span class="channel">Push</span></div>
+      <div class="notif-row"><span class="trigger">Sau reset quý</span><span class="content">"Quý mới bắt đầu — tích điểm để đổi thưởng!"</span><span class="channel">Push</span></div>
+      <div class="notif-row"><span class="trigger" style="color:var(--orange);">Trước ngày 25</span><span class="content">"Còn [X ngày] để đăng ký bảo hiểm tháng [M+1]" (R1 only)</span><span class="channel">Push</span></div>
+      <div class="notif-row" style="border-bottom:none;"><span class="trigger">Rank thay đổi</span><span class="content">"Rank của bạn thay đổi — xem quyền lợi mới"</span><span class="channel">Push + In-app</span></div>
+    </div>
+
+  </section>
+
+  <!-- ── SECTION 9 ── -->
+  <section id="s9">
+    <div class="section-header">
+      <div class="section-num">09</div>
+      <div class="section-title">
+        <h2>Open Questions cho Product</h2>
+        <p>7 câu hỏi cần xác nhận trước khi build</p>
+      </div>
+    </div>
+
+    <div style="background:var(--bg-card);border:1px solid rgba(245,158,11,0.2);border-radius:12px;overflow:hidden;">
+      <div style="background:rgba(245,158,11,0.05);padding:12px 18px;border-bottom:1px solid rgba(245,158,11,0.15);">
+        <span style="font-size:11px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:0.08em;font-family:'Space Mono',monospace;">⚠ 7 Open Questions — Cần confirm trước sprint</span>
+      </div>
+
+      <div class="oq-item">
+        <div class="oq-num">1</div>
+        <div class="oq-body">
+          <div class="oq-q">RESERVED pts có bị expire cuối quý không?</div>
+          <div class="oq-impact">Scenario A — cần rule rõ để implement expire logic</div>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">2</div>
+        <div class="oq-body">
+          <div class="oq-q">Layer của đơn overflow xác định bằng origin zone hay assigned zone?</div>
+          <div class="oq-impact">Scenario C — ảnh hưởng trực tiếp đến điểm tính per trip</div>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">3</div>
+        <div class="oq-body">
+          <div class="oq-q">Điểm PENDING (trong ca) hết quý thì xử lý thế nào?</div>
+          <div class="oq-impact">End-of-quarter edge case — credit rồi expire hay không credit?</div>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">4</div>
+        <div class="oq-body">
+          <div class="oq-q">Có cho phép transfer/gift điểm giữa drivers không?</div>
+          <div class="oq-impact">Scope v2.0 hay để v3? Ảnh hưởng data model nếu cần làm sau</div>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">5</div>
+        <div class="oq-body">
+          <div class="oq-q">Driver bị suspend: điểm freeze hay expire?</div>
+          <div class="oq-impact">CS/policy cần quyết định trước — ảnh hưởng wallet state machine</div>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">6</div>
+        <div class="oq-body">
+          <div class="oq-q">Có cần points history export (thuế/báo cáo)?</div>
+          <div class="oq-impact">Compliance — nếu cần thì ảnh hưởng data retention policy</div>
+        </div>
+      </div>
+      <div class="oq-item" style="border-bottom:none;">
+        <div class="oq-num">7</div>
+        <div class="oq-body">
+          <div class="oq-q">Catalog availability theo thành phố (SGN vs HAN) có khác không?</div>
+          <div class="oq-impact">Partner coverage — ảnh hưởng catalog display logic theo city</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top:40px;padding:20px 24px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:gap;">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-prime);">AhaBenefits v2.0 — Points Flow</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Driver Management → Product handoff · 2026-05-27</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span style="font-size:11px;color:var(--text-muted);">Tham chiếu:</span>
+        <span style="font-family:'Space Mono',monospace;font-size:11px;background:var(--orange-dim);color:var(--orange);padding:3px 8px;border-radius:6px;border:1px solid var(--border-acc);">2026-05-driver-ranking-params.md</span>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+</body>
+</html>
