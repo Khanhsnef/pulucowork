@@ -250,7 +250,7 @@ Pts tích/tháng (avg, 22 ca):
 | Huỷ | Có thể huỷ trước ngày 25, ngừng hiệu lực cuối tháng |
 | Mất R1 | Không được gia hạn tháng tiếp — coverage tháng đã mua vẫn giữ đến hết tháng |
 
-> Cost Ahamove = 0đ. Driver tự trả phí, Ahamove chỉ là aggregator để có group rate tốt hơn.
+> Cost Ahamove = 10.000đ–30.000đ / driver / tháng (tương đương giá trị điểm đã đổi). Biến phí theo số R1 đăng ký — ước tính tối đa ~1.575 × 30k = **~47M/tháng** nếu 100% R1 đăng ký gói cao nhất. Nằm ngoài 200M paid entitlement budget, cần duyệt riêng.
 
 #### 💰 Paid Entitlements (Ahamove chi — nằm trong 200M budget)
 
