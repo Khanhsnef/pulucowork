@@ -710,6 +710,20 @@
     .lc-lg { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
     .lc-supply-row td { padding: 10px 14px; border-top: 2px solid rgba(255,127,50,0.18); background: rgba(255,127,50,0.04); font-size: 11px; line-height: 1.5; vertical-align: top; }
     .lc-supply-label { font-size: 12px; font-weight: 700; color: var(--text-prime); }
+
+    /* ── CA CARDS ── */
+    .ca-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+    @media(max-width:720px){ .ca-grid { grid-template-columns: repeat(2,1fr); } }
+    .ca-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 16px 18px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 7px; box-shadow: 0 4px 16px rgba(0,0,0,0.35); }
+    .ca-card-featured { border: 2px solid var(--orange); background: rgba(255,127,50,0.04); box-shadow: 0 4px 24px rgba(255,127,50,0.12), 0 2px 8px rgba(0,0,0,0.4); }
+    .ca-name { font-size: 13px; font-weight: 700; color: var(--text-sec); }
+    .ca-name-featured { color: var(--orange); }
+    .ca-time { font-size: 22px; font-weight: 800; color: var(--text-prime); letter-spacing: -0.02em; line-height: 1.1; }
+    .ca-dur { background: var(--bg-card2); color: var(--text-muted); font-size: 11px; font-weight: 600; padding: 3px 12px; border-radius: 20px; border: 1px solid var(--border); }
+    .ca-peak { background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.28); font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
+    .ca-normal { background: var(--gray-dim); color: var(--text-sec); border: 1px solid rgba(139,148,158,0.18); font-size: 11px; font-weight: 600; padding: 3px 12px; border-radius: 20px; }
+    .ca-rank { background: rgba(255,127,50,0.1); color: var(--orange); border: 1px solid rgba(255,127,50,0.25); font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
+    .ca-guarantee { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.3); font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
   </style>
 </head>
 
@@ -1170,51 +1184,36 @@
         </div>
       </div>
 
-      <div class="tw" style="margin-bottom:20px;">
-        <table>
-          <thead>
-            <tr>
-              <th>Ca</th>
-              <th>Giờ</th>
-              <th>Loại</th>
-              <th>Ghi chú</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="font-weight:700;color:var(--text-prime);">Ca Sáng</td>
-              <td class="num">08:00 – 12:00</td>
-              <td><span
-                  style="background:rgba(245,158,11,0.12);color:var(--yellow);border:1px solid rgba(245,158,11,0.25);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;">⚡
-                  Peak · 4h</span></td>
-              <td>Peak sáng</td>
-            </tr>
-            <tr>
-              <td style="font-weight:700;color:var(--text-prime);">Ca Chiều</td>
-              <td class="num">13:00 – 17:00</td>
-              <td><span
-                  style="background:rgba(245,158,11,0.12);color:var(--yellow);border:1px solid rgba(245,158,11,0.25);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;">⚡
-                  Peak · 4h</span></td>
-              <td>Peak chiều</td>
-            </tr>
-            <tr>
-              <td style="font-weight:700;color:var(--text-prime);">Ca Tối</td>
-              <td class="num">17:00 – 21:00</td>
-              <td><span
-                  style="background:var(--blue-dim);color:var(--blue);border:1px solid rgba(88,166,255,0.2);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;">4h</span>
-              </td>
-              <td>Bình thường</td>
-            </tr>
-            <tr>
-              <td style="font-weight:700;color:var(--text-prime);">Ca Full-day</td>
-              <td class="num">08:00 – 18:00</td>
-              <td><span
-                  style="background:var(--orange-dim);color:var(--orange);border:1px solid rgba(255,127,50,0.25);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;">10h
-                  · R1+R2</span></td>
-              <td>R1 & R2 only</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="ca-grid">
+        <!-- Ca Sáng -->
+        <div class="ca-card">
+          <div class="ca-name">Ca Sáng</div>
+          <div class="ca-time">08:00–12:00</div>
+          <div class="ca-dur">Ca 4 tiếng</div>
+          <div class="ca-peak">⚡ Peak sáng</div>
+        </div>
+        <!-- Ca Chiều -->
+        <div class="ca-card">
+          <div class="ca-name">Ca Chiều</div>
+          <div class="ca-time">13:00–17:00</div>
+          <div class="ca-dur">Ca 4 tiếng</div>
+          <div class="ca-peak">⚡ Peak chiều</div>
+        </div>
+        <!-- Ca Tối -->
+        <div class="ca-card">
+          <div class="ca-name">Ca Tối</div>
+          <div class="ca-time">17:00–21:00</div>
+          <div class="ca-dur">Ca 4 tiếng</div>
+          <div class="ca-normal">Bình thường</div>
+        </div>
+        <!-- Ca Full-day — featured -->
+        <div class="ca-card ca-card-featured">
+          <div class="ca-name ca-name-featured">Ca Full-day ★</div>
+          <div class="ca-time">08:00–18:00</div>
+          <div class="ca-dur">Ca 10 tiếng</div>
+          <div class="ca-rank">R1 + R2 only</div>
+          <div class="ca-guarantee">💰 Đảm bảo/ngày</div>
+        </div>
       </div>
 
       <div
