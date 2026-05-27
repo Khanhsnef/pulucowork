@@ -6,10 +6,23 @@
 
 ## 1. Ranking KPI Thresholds
 
+> **R1 & R2** xét bằng **DQS** (Driver Quality Score — điểm tổng hợp chất lượng).
+> **R3 & Unranked** vẫn dùng AR + FR riêng lẻ vì chưa đủ data để tính DQS.
+
+### R1 & R2 — DQS-based
+
+| Rank | DQS (điểm) | DCR (%) | Productivity (stp/tháng) | Rating |
+| --- | --- | --- | --- | --- |
+| R1 Elite | ≥ [?] | ≤ 3 | ≥ 300 | ≥ 4.8 |
+| R2 Active | ≥ [?] | ≤ 5 | ≥ 150 | ≥ 4.5 |
+
+> DQS scale: [?] — 100? 1000? Cần confirm với Data team.
+> DQS công thức gợi ý: `DQS = AR × w1 + FR × w2 + (1 - DCR) × w3 + Rating_norm × w4` — điền weights tại đây.
+
+### R3 & Unranked — AR/FR-based
+
 | Rank | AR (%) | FR (%) | DCR (%) | Productivity (stp/tháng) | Rating |
-|------|--------|--------|---------|--------------------------|--------|
-| R1 Elite | ≥ 90 | ≥ 95 | ≤ 3 | ≥ 300 | ≥ 4.8 |
-| R2 Active | ≥ 80 | ≥ 88 | ≤ 5 | ≥ 150 | ≥ 4.5 |
+| --- | --- | --- | --- | --- | --- |
 | R3 Standard | ≥ 70 | ≥ 80 | ≤ 8 | ≥ 60 | ≥ 4.2 |
 | Unranked | < R3 | — | — | — | — |
 
