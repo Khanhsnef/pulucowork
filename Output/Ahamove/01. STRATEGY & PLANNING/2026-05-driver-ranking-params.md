@@ -234,15 +234,32 @@ Pts tích/tháng (avg, 22 ca):
 
 ---
 
-### B. Rank Entitlements — Tự động theo Rank (nằm trong 200M budget)
+### B. Rank Entitlements — Tự động & Đặc quyền theo Rank
+
+#### 💎 R1 Exclusive — Mua bảo hiểm tai nạn theo tháng
+
+> **Đặc quyền mua**, không tự động cấp — Ahamove đàm phán group rate, R1 được quyền đăng ký.
+
+| Cơ chế | Chi tiết |
+| --- | --- |
+| Đối tượng | R1 Elite (💎 Kim Cương) only |
+| Cách mua | Đăng ký trong app trước ngày 25 hàng tháng |
+| Hiệu lực | Từ ngày 01 tháng kế tiếp |
+| Phí | [?] VND/tháng — theo group rate Ahamove đàm phán |
+| Thanh toán | Trừ thẳng vào ví tài xế |
+| Huỷ | Có thể huỷ trước ngày 25, ngừng hiệu lực cuối tháng |
+| Mất R1 | Không được gia hạn tháng tiếp — coverage tháng đã mua vẫn giữ đến hết tháng |
+
+> Cost Ahamove = 0đ. Driver tự trả phí, Ahamove chỉ là aggregator để có group rate tốt hơn.
+
+#### 💰 Paid Entitlements (Ahamove chi — nằm trong 200M budget)
 
 | Rank | Item | Giá trị | Chi phí Ahamove | Số lượng | ~Cost/tháng |
-|------|------|---------|----------------|----------|-------------|
+| --- | --- | --- | --- | --- | --- |
 | 💎 Kim Cương | Voucher xăng/EV | 50k/tháng | ~37.5k (75% giá) | ~1.575 | ~59M |
-| 💎 Kim Cương | Khám sức khoẻ | 1 lần/năm | ~21k/tháng (250k÷12) | ~1.575 | ~33M |
 | 🥇 Vàng | Voucher xăng/EV | 30k/tháng | ~22.5k (75% giá) | ~3.675 | ~83M |
-| **Tổng** | | | | | **~175M** |
-| **Buffer** | | | | | **~25M vs 200M** |
+| **Tổng** | | | | | **~142M** |
+| **Buffer** | | | | | **~58M vs 200M** |
 
 ---
 
