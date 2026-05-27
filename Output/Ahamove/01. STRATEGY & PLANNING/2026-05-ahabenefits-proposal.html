@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AhaBenefits v2.0 — Proposal | Ahamove Driver Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0D1117;
+  --bg-card:   #161B22;
+  --bg-card2:  #1C2430;
+  --bg-hover:  #1F2937;
+  --border:    rgba(255,255,255,0.07);
+  --border-sm: rgba(255,255,255,0.1);
+  --prime:     #F0F6FC;
+  --sec:       #B1BAC4;
+  --muted:     #8B949E;
+  --orange:    #FF7F32;
+  --orange-d:  rgba(255,127,50,0.12);
+  --blue:      #4D8FD6;
+  --blue-d:    rgba(77,143,214,0.12);
+  --navy:      #0E4174;
+  --green:     #10B981;
+  --green-d:   rgba(16,185,129,0.12);
+  --yellow:    #F59E0B;
+  --yellow-d:  rgba(245,158,11,0.12);
+  --red:       #EF4444;
+  --purple:    #A78BFA;
+  --teal:      #22D3EE;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--prime); font-family: 'Montserrat', sans-serif; font-size: 14px; line-height: 1.7; display: flex; min-height: 100vh; }
+
+/* ── SIDEBAR ── */
+#sidebar { width: 240px; min-width: 240px; background: var(--bg-card); border-right: 1px solid var(--border); position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 0 0 24px; flex-shrink: 0; }
+#sidebar::-webkit-scrollbar { width: 3px; }
+#sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.sb-brand { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+.sb-brand-tag { display: inline-block; background: var(--orange-d); color: var(--orange); border: 1px solid rgba(255,127,50,0.3); border-radius: 6px; font-size: 9px; font-weight: 800; letter-spacing: 0.1em; padding: 3px 8px; text-transform: uppercase; margin-bottom: 8px; }
+.sb-brand h2 { font-size: 12px; font-weight: 800; color: var(--prime); line-height: 1.4; }
+.sb-brand p { font-size: 10.5px; color: var(--muted); margin-top: 3px; }
+.sb-section-label { padding: 14px 20px 4px; font-size: 9px; font-weight: 800; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+#sidebar a { display: flex; align-items: center; gap: 10px; padding: 7px 20px; color: var(--sec); text-decoration: none; font-size: 11.5px; font-weight: 500; border-left: 2px solid transparent; transition: all 0.15s; }
+#sidebar a:hover, #sidebar a.active { color: var(--prime); background: var(--bg-hover); border-left-color: var(--orange); }
+.sb-num { font-size: 9.5px; font-weight: 700; color: var(--muted); min-width: 16px; }
+.sb-foot { padding: 14px 20px; margin-top: 8px; border-top: 1px solid var(--border); font-size: 10px; color: var(--muted); line-height: 1.6; }
+.sb-foot strong { color: var(--sec); }
+
+/* ── MAIN ── */
+#main { flex: 1; max-width: 900px; padding: 40px 48px 80px; overflow-x: hidden; }
+
+/* ── HERO ── */
+.hero { background: linear-gradient(135deg, #0D1A2E 0%, #111D30 60%, #0D1520 100%); border: 1px solid rgba(255,127,50,0.15); border-radius: 18px; padding: 36px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(255,127,50,0.08) 0%, transparent 70%); pointer-events: none; }
+.hero::after { content: ''; position: absolute; bottom: -40px; left: -40px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(77,143,214,0.07) 0%, transparent 70%); pointer-events: none; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--orange-d); color: var(--orange); border: 1px solid rgba(255,127,50,0.3); border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; padding: 4px 14px; margin-bottom: 16px; text-transform: uppercase; }
+.hero h1 { font-size: 26px; font-weight: 900; color: var(--prime); letter-spacing: -0.03em; line-height: 1.25; margin-bottom: 10px; }
+.hero h1 span { color: var(--orange); }
+.hero-sub { font-size: 13px; color: var(--sec); line-height: 1.7; margin-bottom: 24px; max-width: 620px; }
+.hero-meta { display: flex; gap: 28px; flex-wrap: wrap; }
+.hm { display: flex; flex-direction: column; }
+.hm-label { font-size: 9.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.hm-val { font-size: 11.5px; font-weight: 600; color: var(--sec); margin-top: 2px; }
+
+/* ── SECTIONS ── */
+section { margin-bottom: 52px; scroll-margin-top: 24px; }
+.sec-hdr { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 22px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.sec-num { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; min-width: 44px; background: var(--orange-d); border: 1px solid rgba(255,127,50,0.28); border-radius: 11px; font-size: 16px; font-weight: 800; color: var(--orange); }
+.sec-title h2 { font-size: 18px; font-weight: 800; color: var(--prime); letter-spacing: -0.02em; }
+.sec-title p { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+/* ── S-C-R ── */
+.scr-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+@media(max-width:680px){ .scr-row { grid-template-columns: 1fr; } }
+.scr-card { border-radius: 12px; padding: 18px 18px; border: 1px solid; position: relative; overflow: hidden; }
+.scr-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 12px 12px 0 0; }
+.scr-s { background: var(--blue-d); border-color: rgba(77,143,214,0.25); }
+.scr-s::after { background: var(--blue); }
+.scr-c { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2); }
+.scr-c::after { background: var(--red); }
+.scr-r { background: var(--green-d); border-color: rgba(16,185,129,0.25); }
+.scr-r::after { background: var(--green); }
+.scr-tag { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+.scr-s .scr-tag { color: var(--blue); }
+.scr-c .scr-tag { color: var(--red); }
+.scr-r .scr-tag { color: var(--green); }
+.scr-card h4 { font-size: 13px; font-weight: 700; color: var(--prime); margin-bottom: 8px; line-height: 1.4; }
+.scr-card p { font-size: 11.5px; color: var(--sec); line-height: 1.65; }
+
+/* ── GOVERNING THOUGHT ── */
+.gov-thought { background: linear-gradient(135deg, rgba(255,127,50,0.08) 0%, rgba(77,143,214,0.06) 100%); border: 1px solid rgba(255,127,50,0.2); border-radius: 14px; padding: 20px 24px; margin-bottom: 20px; display: flex; gap: 14px; align-items: flex-start; }
+.gov-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.gov-label { font-size: 9px; font-weight: 800; color: var(--orange); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 5px; }
+.gov-text { font-size: 14px; font-weight: 700; color: var(--prime); line-height: 1.5; }
+
+/* ── CALLOUTS ── */
+.callout { border-radius: 10px; padding: 13px 16px; margin-bottom: 14px; display: flex; gap: 12px; align-items: flex-start; border: 1px solid; font-size: 12.5px; line-height: 1.6; }
+.ci { background: var(--blue-d); border-color: rgba(77,143,214,0.22); color: #93C5FD; }
+.cw { background: var(--yellow-d); border-color: rgba(245,158,11,0.25); color: #FCD34D; }
+.cs { background: var(--green-d); border-color: rgba(16,185,129,0.25); color: #6EE7B7; }
+.co { background: var(--orange-d); border-color: rgba(255,127,50,0.25); color: #FDB68F; }
+.callout strong { font-weight: 700; }
+.callout-icon { font-size: 15px; flex-shrink: 0; }
+
+/* ── EXEC SUMMARY BULLETS ── */
+.exec-bullets { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.exec-bullet { display: flex; gap: 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.eb-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.eb-o { background: var(--orange-d); }
+.eb-b { background: var(--blue-d); }
+.eb-g { background: var(--green-d); }
+.eb-text strong { font-size: 12.5px; font-weight: 700; color: var(--prime); display: block; margin-bottom: 3px; }
+.eb-text span { font-size: 11.5px; color: var(--sec); }
+
+/* ── TABLES ── */
+.tw { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border-sm); margin-bottom: 14px; background: var(--bg-card); box-shadow: 0 4px 24px rgba(0,0,0,0.5); }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: #0C1624; border-bottom: 2px solid rgba(255,127,50,0.22); }
+th { padding: 11px 14px; text-align: left; font-size: 11px; font-weight: 800; color: #D0D8E4; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: none; white-space: nowrap; }
+td { padding: 11px 14px; font-size: 13px; color: #C8D3DC; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--bg-hover); }
+td strong { color: var(--prime); font-weight: 700; }
+
+/* ── RANK BADGES ── */
+.rk1 { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,127,50,0.12); color: var(--orange); border: 1px solid rgba(255,127,50,0.28); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.rk2 { display: inline-flex; align-items: center; gap: 4px; background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.28); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.rk3 { display: inline-flex; align-items: center; gap: 4px; background: var(--blue-d); color: var(--blue); border: 1px solid rgba(77,143,214,0.28); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.rku { display: inline-flex; align-items: center; gap: 4px; background: rgba(139,148,158,0.1); color: var(--muted); border: 1px solid rgba(139,148,158,0.2); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+
+/* ── RANK CARDS ── */
+.rank-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+@media(max-width:700px){ .rank-grid { grid-template-columns: repeat(2,1fr); } }
+.rank-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.35); }
+.rank-card-r1 { border-color: rgba(255,127,50,0.3); background: rgba(255,127,50,0.05); }
+.rank-card-r2 { border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.04); }
+.rank-card-r3 { border-color: rgba(77,143,214,0.3); background: rgba(77,143,214,0.04); }
+.rc-badge { margin-bottom: 8px; }
+.rc-layer { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 10px; }
+.rc-item { display: flex; align-items: flex-start; gap: 6px; font-size: 11px; color: var(--sec); margin-bottom: 5px; line-height: 1.4; }
+.rc-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); margin-top: 5px; flex-shrink: 0; }
+.rc-dot-y { background: var(--yellow); }
+.rc-dot-b { background: var(--blue); }
+.rc-dot-m { background: var(--muted); }
+.rc-guarantee { margin-top: 10px; background: var(--green-d); border: 1px solid rgba(16,185,129,0.25); border-radius: 8px; padding: 6px 10px; font-size: 11px; font-weight: 700; color: var(--green); }
+.rc-no { margin-top: 10px; background: rgba(139,148,158,0.08); border: 1px solid rgba(139,148,158,0.15); border-radius: 8px; padding: 6px 10px; font-size: 11px; color: var(--muted); }
+
+/* ── LAYER MULTIPLIER ── */
+.layer-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 16px; }
+@media(max-width:600px){ .layer-row { grid-template-columns: 1fr; } }
+.layer-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 16px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.lc-name { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.lc-mult { font-size: 32px; font-weight: 900; letter-spacing: -0.03em; line-height: 1; margin-bottom: 8px; }
+.lc-bonus { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.lc-rank { font-size: 10.5px; color: var(--muted); }
+.lc-l2 .lc-mult, .lc-l2 .lc-bonus { color: var(--orange); }
+.lc-l2 { border-color: rgba(255,127,50,0.25); background: rgba(255,127,50,0.05); }
+.lc-l3 .lc-mult, .lc-l3 .lc-bonus { color: var(--yellow); }
+.lc-l3 { border-color: rgba(245,158,11,0.22); background: rgba(245,158,11,0.04); }
+.lc-l4 .lc-mult, .lc-l4 .lc-bonus { color: var(--blue); }
+.lc-l4 { border-color: rgba(77,143,214,0.22); background: rgba(77,143,214,0.04); }
+
+/* ── FORMULA BOX ── */
+.formula { background: #090E16; border: 1px solid var(--border-sm); border-left: 3px solid var(--orange); border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; font-size: 13.5px; color: var(--prime); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.fml { font-weight: 800; }
+
+/* ── VIRTUOUS CYCLE ── */
+.cycle-wrap { background: var(--bg-card); border: 1px solid var(--border-sm); border-radius: 14px; padding: 28px 24px; margin-bottom: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+.cycle-title { text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; }
+.cycle-nodes { display: flex; flex-wrap: wrap; justify-content: center; gap: 0; position: relative; }
+.cycle-node { display: flex; flex-direction: column; align-items: center; width: 110px; }
+.cn-box { background: var(--bg-card2); border: 1px solid var(--border-sm); border-radius: 10px; padding: 10px 10px; text-align: center; font-size: 11px; font-weight: 700; color: var(--prime); line-height: 1.3; width: 100px; position: relative; z-index: 1; }
+.cn-box.highlight { background: rgba(255,127,50,0.12); border-color: rgba(255,127,50,0.35); color: var(--orange); }
+.cn-arrow { font-size: 18px; color: var(--orange); margin: 4px 0; }
+.cycle-row { display: flex; align-items: center; gap: 0; flex-wrap: wrap; justify-content: center; }
+.ca-arr { font-size: 18px; color: rgba(255,127,50,0.5); margin: 0 4px; }
+.cn-emoji { font-size: 16px; margin-bottom: 4px; }
+
+/* ── CATALOG SPLIT ── */
+.catalog-split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media(max-width:620px){ .catalog-split { grid-template-columns: 1fr; } }
+.cs-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.35); }
+.cs-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.cs-header h4 { font-size: 13px; font-weight: 700; }
+.cs-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 5px; margin-left: auto; }
+.cs-free-h { background: rgba(16,185,129,0.08); }
+.cs-free-h h4 { color: var(--green); }
+.cs-free-tag { background: var(--green-d); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+.cs-paid-h { background: rgba(139,148,158,0.06); }
+.cs-paid-h h4 { color: var(--sec); }
+.cs-paid-tag { background: rgba(139,148,158,0.1); color: var(--muted); border: 1px solid rgba(139,148,158,0.2); }
+.cs-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--sec); }
+.cs-item:last-child { border-bottom: none; }
+.cs-emoji { font-size: 14px; flex-shrink: 0; }
+.cs-pts { margin-left: auto; font-size: 11px; font-weight: 700; }
+.pts-free { color: var(--green); }
+.pts-paid { color: var(--muted); }
+
+/* ── SAVINGS COMPARISON ── */
+.savings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+@media(max-width:620px){ .savings-grid { grid-template-columns: 1fr; } }
+.sav-card { background: var(--bg-card); border-radius: 12px; padding: 18px 18px; border: 1px solid; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.sav-r1 { border-color: rgba(255,127,50,0.3); background: rgba(255,127,50,0.04); }
+.sav-un { border-color: rgba(139,148,158,0.2); }
+.sav-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+.sav-amount { font-size: 28px; font-weight: 900; letter-spacing: -0.03em; line-height: 1; margin-bottom: 6px; }
+.sav-r1 .sav-amount { color: var(--orange); }
+.sav-un .sav-amount { color: var(--muted); }
+.sav-sub { font-size: 11.5px; color: var(--sec); }
+.sav-items { margin-top: 12px; display: flex; flex-direction: column; gap: 5px; }
+.sav-item { font-size: 11px; color: var(--sec); display: flex; gap: 6px; align-items: center; }
+.sav-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+.sav-dot-x { background: var(--muted); }
+
+/* ── TIMELINE ── */
+.timeline { position: relative; margin-bottom: 20px; }
+.timeline::before { content: ''; position: absolute; left: 20px; top: 24px; bottom: 24px; width: 2px; background: rgba(255,127,50,0.2); }
+.tl-item { display: flex; gap: 20px; margin-bottom: 16px; align-items: flex-start; }
+.tl-dot { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; position: relative; z-index: 1; }
+.tl-p1 { background: rgba(255,127,50,0.15); border: 2px solid rgba(255,127,50,0.4); color: var(--orange); }
+.tl-p2 { background: rgba(245,158,11,0.13); border: 2px solid rgba(245,158,11,0.35); color: var(--yellow); }
+.tl-p3 { background: rgba(16,185,129,0.12); border: 2px solid rgba(16,185,129,0.3); color: var(--green); }
+.tl-body { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; flex: 1; }
+.tl-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.tl-phase { font-size: 9.5px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.tl-title { font-size: 13px; font-weight: 700; color: var(--prime); }
+.tl-period { margin-left: auto; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+.tl-p1-tag { background: var(--orange-d); color: var(--orange); border: 1px solid rgba(255,127,50,0.3); }
+.tl-p2-tag { background: var(--yellow-d); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+.tl-p3-tag { background: var(--green-d); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+.tl-items { display: flex; flex-direction: column; gap: 4px; }
+.tl-line { font-size: 11.5px; color: var(--sec); display: flex; gap: 6px; align-items: flex-start; }
+.tl-line::before { content: '→'; color: var(--orange); flex-shrink: 0; font-size: 11px; margin-top: 1px; }
+
+/* ── METRICS ROI ── */
+.roi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 20px; }
+@media(max-width:600px){ .roi-grid { grid-template-columns: 1fr; } }
+.roi-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.roi-icon { font-size: 22px; margin-bottom: 8px; }
+.roi-val { font-size: 26px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 4px; }
+.roi-label { font-size: 11px; font-weight: 600; color: var(--muted); }
+.roi-sub { font-size: 10.5px; color: var(--muted); margin-top: 4px; }
+
+/* ── DECISION ── */
+.decision-box { background: linear-gradient(135deg, rgba(255,127,50,0.1) 0%, rgba(14,65,116,0.12) 100%); border: 2px solid rgba(255,127,50,0.3); border-radius: 16px; padding: 28px 32px; margin-bottom: 20px; }
+.decision-box h3 { font-size: 16px; font-weight: 800; color: var(--prime); margin-bottom: 18px; }
+.decision-items { display: flex; flex-direction: column; gap: 12px; }
+.dec-item { display: flex; gap: 14px; align-items: flex-start; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; }
+.dec-num { width: 28px; height: 28px; background: var(--orange-d); border: 1px solid rgba(255,127,50,0.3); border-radius: 7px; font-size: 13px; font-weight: 800; color: var(--orange); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.dec-text strong { font-size: 12.5px; font-weight: 700; color: var(--prime); display: block; margin-bottom: 3px; }
+.dec-text span { font-size: 11.5px; color: var(--sec); }
+
+/* ── PROBLEM CARDS ── */
+.problem-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 20px; }
+@media(max-width:700px){ .problem-grid { grid-template-columns: 1fr; } }
+.prob-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 16px; border-top: 3px solid; }
+.pc-red { border-top-color: var(--red); }
+.pc-yellow { border-top-color: var(--yellow); }
+.pc-blue { border-top-color: var(--blue); }
+.prob-card .metric { font-size: 28px; font-weight: 900; letter-spacing: -0.03em; margin: 6px 0 4px; }
+.pc-red .metric { color: var(--red); }
+.pc-yellow .metric { color: var(--yellow); }
+.pc-blue .metric { color: var(--blue); }
+.prob-card .label { font-size: 9.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.prob-card .desc { font-size: 11px; color: var(--sec); margin-top: 6px; line-height: 1.5; }
+
+/* ── CHIP ── */
+.chip { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 5px; letter-spacing: 0.04em; }
+.chip-g { background: var(--green-d); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+.chip-o { background: var(--orange-d); color: var(--orange); border: 1px solid rgba(255,127,50,0.3); }
+.chip-m { background: rgba(139,148,158,0.1); color: var(--muted); border: 1px solid rgba(139,148,158,0.2); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-brand">
+    <div class="sb-brand-tag">Proposal · 2026</div>
+    <h2>AhaBenefits v2.0<br>Tái cấu trúc & Xây mới</h2>
+    <p>Driver Management · Ahamove</p>
+  </div>
+
+  <div class="sb-section-label">Nội dung</div>
+  <a href="#s0"><span class="sb-num">00</span><span>Executive Summary</span></a>
+  <a href="#s1"><span class="sb-num">01</span><span>Tại sao phải đổi?</span></a>
+  <a href="#s2"><span class="sb-num">02</span><span>S-C-R Framework</span></a>
+  <a href="#s3"><span class="sb-num">03</span><span>Cấu trúc Ranking mới</span></a>
+  <a href="#s4"><span class="sb-num">04</span><span>Cơ chế tích điểm</span></a>
+  <a href="#s5"><span class="sb-num">05</span><span>AhaBenefits Catalog</span></a>
+  <a href="#s6"><span class="sb-num">06</span><span>Giá trị khi rank cao</span></a>
+  <a href="#s7"><span class="sb-num">07</span><span>Lộ trình triển khai</span></a>
+  <a href="#s8"><span class="sb-num">08</span><span>Investment & ROI</span></a>
+  <a href="#s9"><span class="sb-num">09</span><span>Decision Required</span></a>
+
+  <div class="sb-foot">
+    <strong>Người trình bày</strong><br>
+    Lê Phương Khanh<br>
+    Driver Management Leader<br>
+    Ahamove · 2026-05-27
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">🚀 Strategic Proposal — Driver Management</div>
+    <h1>Tái cấu trúc & Xây mới<br><span>Hệ thống AhaBenefits v2.0</span></h1>
+    <p class="hero-sub">Chuyển đổi AhaBenefits từ "discount tool" thành "loyalty engine" gắn với Hệ thống Xếp hạng — tạo vòng lặp giữ chân tài xế chất lượng cao, tăng AR, giảm CPO, và xây Driver Moat bền vững trước Grab/Be.</p>
+    <div class="hero-meta">
+      <div class="hm"><span class="hm-label">Scope</span><span class="hm-val">Bike Instant — SGN & HAN</span></div>
+      <div class="hm"><span class="hm-label">Timeline</span><span class="hm-val">Q3/2026 – Q1/2027</span></div>
+      <div class="hm"><span class="hm-label">Presenter</span><span class="hm-val">Driver Management Leader</span></div>
+      <div class="hm"><span class="hm-label">Version</span><span class="hm-val">v2.0 · 2026-05-27</span></div>
+    </div>
+  </div>
+
+  <!-- S0: EXECUTIVE SUMMARY -->
+  <section id="s0">
+    <div class="sec-hdr">
+      <div class="sec-num">00</div>
+      <div class="sec-title">
+        <h2>Executive Summary</h2>
+        <p>3 thông điệp chính · Quyết định cần phê duyệt</p>
+      </div>
+    </div>
+
+    <div class="gov-thought">
+      <div class="gov-icon">🎯</div>
+      <div>
+        <div class="gov-label">Governing Thought</div>
+        <div class="gov-text">Tái cấu trúc AhaBenefits gắn với Hệ thống Xếp hạng tạo vòng lặp giữ chân Tài xế chất lượng cao — tăng AR, giảm CPO, và xây Driver Moat bền vững trước Grab/Be.</div>
+      </div>
+    </div>
+
+    <div class="exec-bullets">
+      <div class="exec-bullet">
+        <div class="eb-icon eb-o">🔥</div>
+        <div class="eb-text">
+          <strong>Incentive hiện tại không differentiate — chi tiền đều cho mọi tier, không giữ được tài xế tốt</strong>
+          <span>Tài xế R1/R2 chất lượng cao nhận cùng mức ưu đãi với Unranked → không có lý do dài hạn để duy trì hiệu suất. Tỷ lệ churn R1/R2 đang tăng, AR peak giờ ở mức thấp.</span>
+        </div>
+      </div>
+      <div class="exec-bullet">
+        <div class="eb-icon eb-b">⚙️</div>
+        <div class="eb-text">
+          <strong>AhaBenefits v2.0 = Ranking-gated + Layer-based earning + Partnership Free items</strong>
+          <span>Rank cao → layer tốt hơn → earn điểm nhanh hơn → đổi quyền lợi nhiều hơn → chi phí sinh hoạt thấp hơn → gắn bó với Ahamove. Vòng lặp tự duy trì, không cần cash burn liên tục.</span>
+        </div>
+      </div>
+      <div class="exec-bullet">
+        <div class="eb-icon eb-g">💰</div>
+        <div class="eb-text">
+          <strong>Phần lớn quyền lợi là Free (partnership) — Ahamove không tốn tiền mặt, driver tiết kiệm 2–4 triệu/tháng</strong>
+          <span>Xăng/EV, Bảo dưỡng, F&B, Sức khoẻ đều là deal đối tác. Điểm đổi Free rẻ hơn Paid 10 lần → chi phí chương trình thấp, giá trị cảm nhận cao.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout co">
+      <span class="callout-icon">📋</span>
+      <div><strong>Decision Required:</strong> Phê duyệt (1) Budget Paid items & Partnership setup, (2) Authority ký kết đối tác Free, (3) IT roadmap priority Q3/2026 để build Ranking + Point engine.</div>
+    </div>
+  </section>
+
+  <!-- S1: WHY NOW -->
+  <section id="s1">
+    <div class="sec-hdr">
+      <div class="sec-num">01</div>
+      <div class="sec-title">
+        <h2>Tại sao phải thay đổi ngay?</h2>
+        <p>3 áp lực buộc phải hành động trong Q3/2026</p>
+      </div>
+    </div>
+
+    <div class="problem-grid">
+      <div class="prob-card pc-red">
+        <div class="label">AR Peak giờ</div>
+        <div class="metric">&lt;72%</div>
+        <div class="desc">Acceptance Rate tại Ca Sáng & Chiều chưa đạt ngưỡng vận hành. Nguồn cung R1/R2 tại layer tốt không đủ để cover demand.</div>
+      </div>
+      <div class="prob-card pc-yellow">
+        <div class="label">Incentive vs Performance</div>
+        <div class="metric">0 link</div>
+        <div class="desc">Chi phí incentive phân bổ đều — tài xế hoàn thành 80 đơn/tuần nhận cùng ưu đãi với tài xế 20 đơn. Không có ROI trên từng đồng spend.</div>
+      </div>
+      <div class="prob-card pc-blue">
+        <div class="label">Cạnh tranh thị trường</div>
+        <div class="metric">+3 đối thủ</div>
+        <div class="desc">Grab Express, Be Delivery, XanhSM đang tăng promo cash. Cuộc đua giá ngắn hạn không thể thắng — cần moat dài hạn bằng ecosystem.</div>
+      </div>
+    </div>
+
+    <div class="callout cw">
+      <span class="callout-icon">⚠️</span>
+      <div><strong>Cửa sổ hành động:</strong> Nếu không triển khai Q3/2026, Grab Express sẽ lock in tài xế chất lượng cao bằng Grab Pro Points trước mùa Mega Sales Q4. Rủi ro mất 15–20% fleet R1/R2 trong H2/2026.</div>
+    </div>
+  </section>
+
+  <!-- S2: S-C-R -->
+  <section id="s2">
+    <div class="sec-hdr">
+      <div class="sec-num">02</div>
+      <div class="sec-title">
+        <h2>Bối cảnh & Đề xuất Giải pháp</h2>
+        <p>Situation · Complication · Resolution</p>
+      </div>
+    </div>
+
+    <div class="scr-row">
+      <div class="scr-card scr-s">
+        <div class="scr-tag">Situation</div>
+        <h4>Incentive là cost center, không tạo differentiation</h4>
+        <p>Hệ thống hiện tại distribute đồng đều ưu đãi cho mọi tài xế — không phân biệt rank, hiệu suất, hay độ gắn bó. Tài xế chất lượng cao không được reward xứng đáng so với effort bỏ ra.</p>
+      </div>
+      <div class="scr-card scr-c">
+        <div class="scr-tag">Complication</div>
+        <h4>Đối thủ cash burn ngắn hạn; Ahamove cần moat dài hạn</h4>
+        <p>Grab/Be dùng promo để mua loyalty tạm thời — Ahamove không thể và không nên chạy đua giá. Nếu không tạo được ecosystem giá trị, driver tốt sẽ migrate sang platform trả nhiều tiền hơn.</p>
+      </div>
+      <div class="scr-card scr-r">
+        <div class="scr-tag">Resolution</div>
+        <h4>Tái thiết AhaBenefits = Ranking engine + Partnership ecosystem</h4>
+        <p>Gắn quyền lợi với rank → driver có lý do duy trì KPI. Phần lớn là Free items (partnership) → Ahamove không tốn cash. Layer-based points → driver rank cao earn nhanh hơn tự nhiên.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- S3: RANKING -->
+  <section id="s3">
+    <div class="sec-hdr">
+      <div class="sec-num">03</div>
+      <div class="sec-title">
+        <h2>Cấu trúc Ranking mới & Quyền lợi</h2>
+        <p>4 tầng · Quyền lợi tăng dần theo rank</p>
+      </div>
+    </div>
+
+    <div class="rank-grid">
+      <!-- R1 -->
+      <div class="rank-card rank-card-r1">
+        <div class="rc-badge"><span class="rk1">💎 R1 Elite</span></div>
+        <div class="rc-layer">Layer ưu tiên: L2 Minizone</div>
+        <div class="rc-item"><span class="rc-dot"></span><span>Ca Full-day eligible (08:00–18:00)</span></div>
+        <div class="rc-item"><span class="rc-dot"></span><span>Slot 50% Ca Full-day</span></div>
+        <div class="rc-item"><span class="rc-dot"></span><span>Hệ số điểm ×1.5 tại L2</span></div>
+        <div class="rc-item"><span class="rc-dot"></span><span>Catalog đầy đủ + Bảo hiểm</span></div>
+        <div class="rc-guarantee">💰 Đảm bảo 600k–650k/ngày (SGN/HAN)</div>
+      </div>
+      <!-- R2 -->
+      <div class="rank-card rank-card-r2">
+        <div class="rc-badge"><span class="rk2">🥇 R2 Active</span></div>
+        <div class="rc-layer">Layer ưu tiên: L3 Mediumzone</div>
+        <div class="rc-item"><span class="rc-dot rc-dot-y"></span><span>Ca Full-day eligible (08:00–18:00)</span></div>
+        <div class="rc-item"><span class="rc-dot rc-dot-y"></span><span>Slot 50% Ca Full-day</span></div>
+        <div class="rc-item"><span class="rc-dot rc-dot-y"></span><span>Hệ số điểm ×1.3 tại L3</span></div>
+        <div class="rc-item"><span class="rc-dot rc-dot-y"></span><span>Catalog nâng cao (R3+ và thêm)</span></div>
+        <div class="rc-guarantee">💰 Đảm bảo 550k–600k/ngày (SGN/HAN)</div>
+      </div>
+      <!-- R3 -->
+      <div class="rank-card rank-card-r3">
+        <div class="rc-badge"><span class="rk3">🥈 R3 Standard</span></div>
+        <div class="rc-layer">Layer ưu tiên: L4 Bigzone</div>
+        <div class="rc-item"><span class="rc-dot rc-dot-b"></span><span>Ca 4h only (Sáng/Chiều/Tối)</span></div>
+        <div class="rc-item"><span class="rc-dot rc-dot-b"></span><span>Slot 40–45% theo ca</span></div>
+        <div class="rc-item"><span class="rc-dot rc-dot-b"></span><span>Hệ số điểm ×1.1 tại L4</span></div>
+        <div class="rc-item"><span class="rc-dot rc-dot-b"></span><span>Catalog cơ bản (R3+)</span></div>
+        <div class="rc-no">Không có Đảm bảo thu nhập/ngày</div>
+      </div>
+      <!-- Unranked -->
+      <div class="rank-card">
+        <div class="rc-badge"><span class="rku">Unranked</span></div>
+        <div class="rc-layer">Layer: L6 MASS only</div>
+        <div class="rc-item"><span class="rc-dot rc-dot-m"></span><span>Không có structured slot</span></div>
+        <div class="rc-item"><span class="rc-dot rc-dot-m"></span><span>On-demand khi layer tràn</span></div>
+        <div class="rc-item"><span class="rc-dot rc-dot-m"></span><span>Hệ số điểm ×1.0</span></div>
+        <div class="rc-item"><span class="rc-dot rc-dot-m"></span><span>Không có AhaBenefits access</span></div>
+        <div class="rc-no">Không có quyền lợi chương trình</div>
+      </div>
+    </div>
+
+    <div class="tw">
+      <table>
+        <thead>
+          <tr>
+            <th>Quyền lợi</th>
+            <th style="color:var(--orange);">R1 💎</th>
+            <th style="color:var(--yellow);">R2 🥇</th>
+            <th style="color:var(--blue);">R3 🥈</th>
+            <th>Unranked</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Layer ưu tiên</td>
+            <td><strong style="color:var(--orange);">L2 Minizone</strong></td>
+            <td><strong style="color:var(--yellow);">L3 Mediumzone</strong></td>
+            <td><strong style="color:var(--blue);">L4 Bigzone</strong></td>
+            <td style="color:var(--muted);">L6 MASS</td>
+          </tr>
+          <tr>
+            <td>Ca Full-day (08:00–18:00)</td>
+            <td><span class="chip chip-g">✓ Eligible</span></td>
+            <td><span class="chip chip-g">✓ Eligible</span></td>
+            <td><span class="chip chip-m">✕ 4h only</span></td>
+            <td><span class="chip chip-m">✕ Không</span></td>
+          </tr>
+          <tr>
+            <td>Đảm bảo thu nhập/ngày</td>
+            <td><strong style="color:var(--orange);">600k–650k đ</strong></td>
+            <td><strong style="color:var(--yellow);">550k–600k đ</strong></td>
+            <td style="color:var(--muted);">—</td>
+            <td style="color:var(--muted);">—</td>
+          </tr>
+          <tr>
+            <td>Hệ số điểm (layer ưu tiên)</td>
+            <td><strong style="color:var(--orange);">×1.5</strong></td>
+            <td><strong style="color:var(--yellow);">×1.3</strong></td>
+            <td><strong style="color:var(--blue);">×1.1</strong></td>
+            <td style="color:var(--muted);">×1.0</td>
+          </tr>
+          <tr>
+            <td>AhaBenefits Catalog</td>
+            <td><strong style="color:var(--orange);">Toàn bộ + Bảo hiểm</strong></td>
+            <td><strong style="color:var(--yellow);">Nâng cao</strong></td>
+            <td><strong style="color:var(--blue);">Cơ bản</strong></td>
+            <td style="color:var(--muted);">Không truy cập</td>
+          </tr>
+          <tr>
+            <td>Slot Full-day</td>
+            <td><strong style="color:var(--orange);">50%</strong></td>
+            <td><strong style="color:var(--yellow);">50%</strong></td>
+            <td style="color:var(--muted);">—</td>
+            <td style="color:var(--muted);">✕</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- S4: POINT EARNING -->
+  <section id="s4">
+    <div class="sec-hdr">
+      <div class="sec-num">04</div>
+      <div class="sec-title">
+        <h2>Cơ chế Tích Điểm theo Layer</h2>
+        <p>Rank cao → Layer tốt → Earn nhanh hơn → Đổi nhiều hơn</p>
+      </div>
+    </div>
+
+    <div class="formula">
+      <span style="color:var(--muted);font-size:12px;">Điểm / ca =</span>
+      <span class="fml" style="color:var(--blue);">round(GSV ÷ 5.000)</span>
+      <span style="color:var(--muted);">×</span>
+      <span class="fml" style="color:var(--orange);">Hệ số Layer</span>
+      <span style="color:var(--muted);">+</span>
+      <span class="fml" style="color:var(--green);">Bonus hoàn ca</span>
+    </div>
+
+    <div class="layer-row">
+      <div class="layer-card lc-l2">
+        <div class="lc-name">L2 · Minizone</div>
+        <div class="lc-mult">×1.5</div>
+        <div class="lc-bonus">+30 pts / ca</div>
+        <div class="lc-rank">R1 priority zone</div>
+      </div>
+      <div class="layer-card lc-l3">
+        <div class="lc-name">L3 · Mediumzone</div>
+        <div class="lc-mult">×1.3</div>
+        <div class="lc-bonus">+25 pts / ca</div>
+        <div class="lc-rank">R2 priority zone</div>
+      </div>
+      <div class="layer-card lc-l4">
+        <div class="lc-name">L4 · Bigzone</div>
+        <div class="lc-mult">×1.1</div>
+        <div class="lc-bonus">+20 pts / ca</div>
+        <div class="lc-rank">R3 priority zone</div>
+      </div>
+    </div>
+
+    <div class="callout ci">
+      <span class="callout-icon">💡</span>
+      <div><strong>Ví dụ:</strong> Driver R1 tại L2, GSV/ca = 200.000đ → <strong>round(200.000 ÷ 5.000) × 1.5 + 30 = 60 + 30 = 90 pts/ca</strong>. Driver Unranked tại L6 cùng GSV → 40 pts/ca. R1 earn gấp 2.25× so với Unranked.</div>
+    </div>
+  </section>
+
+  <!-- S5: CATALOG -->
+  <section id="s5">
+    <div class="sec-hdr">
+      <div class="sec-num">05</div>
+      <div class="sec-title">
+        <h2>AhaBenefits Catalog — Free vs Paid</h2>
+        <p>Phần lớn là Free (partnership) — Ahamove không tốn tiền mặt</p>
+      </div>
+    </div>
+
+    <div class="catalog-split">
+      <!-- FREE -->
+      <div class="cs-card">
+        <div class="cs-header cs-free-h">
+          <span>🤝</span>
+          <h4>Free — Partnership Deal</h4>
+          <span class="cs-tag cs-free-tag">0 cash cost</span>
+        </div>
+        <div class="cs-item"><span class="cs-emoji">⛽</span><span>Giảm xăng 5–15% / lần</span><span class="cs-pts pts-free">30–170 pts</span></div>
+        <div class="cs-item"><span class="cs-emoji">⚡</span><span>Sạc EV 10–20% / lần & tháng</span><span class="cs-pts pts-free">45–170 pts</span></div>
+        <div class="cs-item"><span class="cs-emoji">🔧</span><span>Bảo dưỡng vá lốp, dầu nhớt 15–30%</span><span class="cs-pts pts-free">65–255 pts</span></div>
+        <div class="cs-item"><span class="cs-emoji">🍜</span><span>F&B combo, voucher đối tác</span><span class="cs-pts pts-free">55–285 pts</span></div>
+        <div class="cs-item"><span class="cs-emoji">🏥</span><span>Sức khoẻ: thuốc, khám tổng quát</span><span class="cs-pts pts-free">40–170 pts</span></div>
+      </div>
+      <!-- PAID -->
+      <div class="cs-card">
+        <div class="cs-header cs-paid-h">
+          <span>💳</span>
+          <h4>Paid — Ahamove chi trả</h4>
+          <span class="cs-tag cs-paid-tag">Có chi phí</span>
+        </div>
+        <div class="cs-item"><span class="cs-emoji">📱</span><span>Data mobile 5–20GB / tháng</span><span class="cs-pts pts-paid">400–1.400 pts</span></div>
+        <div class="cs-item"><span class="cs-emoji">🎽</span><span>Túi giữ nhiệt, Đồng phục</span><span class="cs-pts pts-paid">1.400–2.300 pts</span></div>
+        <div class="cs-item"><span class="cs-emoji">🛵</span><span>Baga & phụ kiện xe</span><span class="cs-pts pts-paid">3.400 pts</span></div>
+        <div class="cs-item"><span class="cs-emoji">🛡</span><span>Bảo hiểm tai nạn Mini (R1 only)</span><span class="cs-pts pts-paid">285–857 pts</span></div>
+        <div class="cs-item" style="background:rgba(139,148,158,0.04);"><span class="cs-emoji" style="opacity:0.4;">+</span><span style="color:var(--muted);font-size:11px;font-style:italic;">Mở rộng thêm Q1/2027</span><span></span></div>
+      </div>
+    </div>
+
+    <div class="callout cs">
+      <span class="callout-icon">📌</span>
+      <div><strong>Cơ chế điểm Free:</strong> Điểm đổi Free items rẻ hơn Paid <strong>10 lần</strong> — cùng mức quyền lợi, driver có thể earn và redeem nhanh hơn nhiều, tạo cảm giác chương trình generous mà Ahamove không tốn thêm cash.</div>
+    </div>
+  </section>
+
+  <!-- S6: VIRTUOUS CYCLE -->
+  <section id="s6">
+    <div class="sec-hdr">
+      <div class="sec-num">06</div>
+      <div class="sec-title">
+        <h2>Giá trị AhaBenefits khi Rank cao</h2>
+        <p>Vòng lặp tự duy trì — Virtuous Cycle</p>
+      </div>
+    </div>
+
+    <!-- Virtuous Cycle -->
+    <div class="cycle-wrap">
+      <div class="cycle-title">Virtuous Cycle — Driver Retention Loop</div>
+      <!-- Row 1 -->
+      <div style="display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+        <div style="text-align:center;width:110px;">
+          <div style="font-size:18px;margin-bottom:4px;">🏆</div>
+          <div style="background:rgba(255,127,50,0.15);border:2px solid rgba(255,127,50,0.4);border-radius:10px;padding:10px 8px;font-size:11.5px;font-weight:700;color:var(--orange);line-height:1.3;">Rank cao<br>(R1 / R2)</div>
+        </div>
+        <div style="font-size:20px;color:rgba(255,127,50,0.6);">→</div>
+        <div style="text-align:center;width:110px;">
+          <div style="font-size:18px;margin-bottom:4px;">📍</div>
+          <div style="background:var(--bg-card2);border:1px solid var(--border-sm);border-radius:10px;padding:10px 8px;font-size:11.5px;font-weight:600;color:var(--prime);line-height:1.3;">Layer tốt<br>(L2 / L3)</div>
+        </div>
+        <div style="font-size:20px;color:rgba(255,127,50,0.6);">→</div>
+        <div style="text-align:center;width:110px;">
+          <div style="font-size:18px;margin-bottom:4px;">⚡</div>
+          <div style="background:var(--bg-card2);border:1px solid var(--border-sm);border-radius:10px;padding:10px 8px;font-size:11.5px;font-weight:600;color:var(--prime);line-height:1.3;">Earn điểm<br>nhanh hơn</div>
+        </div>
+        <div style="font-size:20px;color:rgba(255,127,50,0.6);">→</div>
+        <div style="text-align:center;width:110px;">
+          <div style="font-size:18px;margin-bottom:4px;">🎁</div>
+          <div style="background:var(--bg-card2);border:1px solid var(--border-sm);border-radius:10px;padding:10px 8px;font-size:11.5px;font-weight:600;color:var(--prime);line-height:1.3;">Đổi nhiều<br>quyền lợi</div>
+        </div>
+      </div>
+      <!-- Arrows down / up -->
+      <div style="display:flex;justify-content:space-between;padding:0 55px;color:rgba(255,127,50,0.4);font-size:20px;">
+        <span style="transform:rotate(180deg);display:inline-block;">↑</span>
+        <span>↓</span>
+      </div>
+      <!-- Row 2 (reversed) -->
+      <div style="display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px;">
+        <div style="text-align:center;width:110px;">
+          <div style="background:rgba(255,127,50,0.15);border:2px solid rgba(255,127,50,0.4);border-radius:10px;padding:10px 8px;font-size:11.5px;font-weight:700;color:var(--orange);line-height:1.3;">Giữ rank<br>cao</div>
+          <div style="font-size:18px;margin-top:4px;">🔄</div>
+        </div>
+        <div style="font-size:20px;color:rgba(255,127,50,0.6);">←</div>
+        <div style="text-align:center;width:110px;">
+          <div style="background:var(--bg-card2);border:1px solid var(--border-sm);border-radius:10px;padding:10px 8px;font-size:11.5px;font-weight:600;color:var(--prime);line-height:1.3;">Duy trì<br>KPI tốt</div>
+          <div style="font-size:18px;margin-top:4px;">📊</div>
+        </div>
+        <div style="font-size:20px;color:rgba(255,127,50,0.6);">←</div>
+        <div style="text-align:center;width:110px;">
+          <div style="background:var(--bg-card2);border:1px solid var(--border-sm);border-radius:10px;padding:10px 8px;font-size:11.5px;font-weight:600;color:var(--prime);line-height:1.3;">Gắn bó<br>Ahamove</div>
+          <div style="font-size:18px;margin-top:4px;">❤️</div>
+        </div>
+        <div style="font-size:20px;color:rgba(255,127,50,0.6);">←</div>
+        <div style="text-align:center;width:110px;">
+          <div style="background:var(--bg-card2);border:1px solid var(--border-sm);border-radius:10px;padding:10px 8px;font-size:11.5px;font-weight:600;color:var(--prime);line-height:1.3;">Chi phí sống<br>thấp hơn</div>
+          <div style="font-size:18px;margin-top:4px;">💸</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Savings Comparison -->
+    <div style="font-size:12px;font-weight:700;color:var(--sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">So sánh tiết kiệm hàng tháng: R1 vs Unranked</div>
+    <div class="savings-grid">
+      <div class="sav-card sav-r1">
+        <div class="sav-label">💎 Driver R1 Elite</div>
+        <div class="sav-amount">~3.5tr</div>
+        <div class="sav-sub">tiết kiệm / tháng từ quyền lợi Free</div>
+        <div class="sav-items">
+          <div class="sav-item"><span class="sav-dot"></span><span>Xăng/EV: ~400k–800k (đổ 200k × 4 lần/tuần)</span></div>
+          <div class="sav-item"><span class="sav-dot"></span><span>Bảo dưỡng xe: ~300k–500k</span></div>
+          <div class="sav-item"><span class="sav-dot"></span><span>F&B combo bữa trưa: ~600k–1tr</span></div>
+          <div class="sav-item"><span class="sav-dot"></span><span>Sức khoẻ (khám, thuốc): ~200k–400k</span></div>
+          <div class="sav-item"><span class="sav-dot"></span><span>Data mobile: ~80k</span></div>
+        </div>
+      </div>
+      <div class="sav-card sav-un">
+        <div class="sav-label">Unranked Driver</div>
+        <div class="sav-amount" style="color:var(--muted);">0đ</div>
+        <div class="sav-sub">không có quyền truy cập AhaBenefits</div>
+        <div class="sav-items">
+          <div class="sav-item"><span class="sav-dot sav-dot-x"></span><span>Không có xăng/EV discount</span></div>
+          <div class="sav-item"><span class="sav-dot sav-dot-x"></span><span>Không có bảo dưỡng ưu đãi</span></div>
+          <div class="sav-item"><span class="sav-dot sav-dot-x"></span><span>Không có F&B benefit</span></div>
+          <div class="sav-item"><span class="sav-dot sav-dot-x"></span><span>Không có đảm bảo thu nhập</span></div>
+          <div class="sav-item"><span class="sav-dot sav-dot-x"></span><span>Chi phí vận hành toàn phần</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout cs">
+      <span class="callout-icon">📈</span>
+      <div><strong>Kết luận:</strong> Với driver chạy full-time, AhaBenefits R1 tương đương <strong>tăng thu nhập thực ~3–4 triệu/tháng</strong> — mà Ahamove không tốn cash vì phần lớn là Free items. Đây là lý do driver giỏi không rời Ahamove.</div>
+    </div>
+  </section>
+
+  <!-- S7: TIMELINE -->
+  <section id="s7">
+    <div class="sec-hdr">
+      <div class="sec-num">07</div>
+      <div class="sec-title">
+        <h2>Lộ trình Triển khai</h2>
+        <p>3 phases · Q3/2026 – Q1/2027</p>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot tl-p1">P1</div>
+        <div class="tl-body">
+          <div class="tl-header">
+            <span class="tl-phase">Phase 1</span>
+            <span class="tl-title">Pilot Ranking + Ca Full-day</span>
+            <span class="tl-period tl-p1-tag">Q3/2026</span>
+          </div>
+          <div class="tl-items">
+            <div class="tl-line">Launch Ranking Engine (R1/R2/R3/Unranked) tại SGN & HAN — 2 thành phố trọng điểm</div>
+            <div class="tl-line">Triển khai Ca Full-day (08:00–18:00) cho R1 & R2, kích hoạt Đảm bảo thu nhập/ngày</div>
+            <div class="tl-line">Build Point Engine theo công thức Layer multiplier — test với cohort 500 driver R1</div>
+            <div class="tl-line">KPI theo dõi: AR peak, Full-day fill rate, driver satisfaction score</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot tl-p2">P2</div>
+        <div class="tl-body">
+          <div class="tl-header">
+            <span class="tl-phase">Phase 2</span>
+            <span class="tl-title">Launch AhaBenefits Catalog</span>
+            <span class="tl-period tl-p2-tag">Q4/2026</span>
+          </div>
+          <div class="tl-items">
+            <div class="tl-line">Ký kết đối tác Free: chuỗi xăng/EV, garage bảo dưỡng, F&B chains, pharmacy</div>
+            <div class="tl-line">Open catalog cho R3+ (cơ bản), R2+ (nâng cao), R1 (đầy đủ)</div>
+            <div class="tl-line">Trong app: mục AhaBenefits, điểm hiển thị real-time, lịch sử đổi quà</div>
+            <div class="tl-line">Timing: trước Mega Sales Q4 để tận dụng peak demand driver</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot tl-p3">P3</div>
+        <div class="tl-body">
+          <div class="tl-header">
+            <span class="tl-phase">Phase 3</span>
+            <span class="tl-title">Mở rộng & Tối ưu hóa</span>
+            <span class="tl-period tl-p3-tag">Q1/2027</span>
+          </div>
+          <div class="tl-items">
+            <div class="tl-line">Thêm: Bảo hiểm tai nạn nâng cao, Gói SIM ưu tiên, CCDC cao cấp cho R1</div>
+            <div class="tl-line">Mở rộng ranking xuống các thành phố tier 2 (ĐÀ, CT, HP)</div>
+            <div class="tl-line">Data-driven optimization: A/B test multiplier, catalog mix, điểm threshold</div>
+            <div class="tl-line">Tích hợp EV transition: ưu đãi sạc EV cao hơn cho driver chuyển đổi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S8: INVESTMENT & ROI -->
+  <section id="s8">
+    <div class="sec-hdr">
+      <div class="sec-num">08</div>
+      <div class="sec-title">
+        <h2>Investment & Expected ROI</h2>
+        <p>Chi phí thấp — Giá trị tạo ra cao</p>
+      </div>
+    </div>
+
+    <div class="roi-grid">
+      <div class="roi-card">
+        <div class="roi-icon">📈</div>
+        <div class="roi-val" style="color:var(--green);">+5–8%</div>
+        <div class="roi-label">Tăng AR giờ peak</div>
+        <div class="roi-sub">R1/R2 có lý do duy trì online giờ Sáng & Chiều</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">🔒</div>
+        <div class="roi-val" style="color:var(--orange);">-30%</div>
+        <div class="roi-label">Giảm churn R1/R2</div>
+        <div class="roi-sub">Ecosystem lock-in thay vì cash incentive ngắn hạn</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">💰</div>
+        <div class="roi-val" style="color:var(--blue);">~0 cash</div>
+        <div class="roi-label">Chi phí Free items</div>
+        <div class="roi-sub">Partnership deal — Ahamove không thanh toán tiền mặt cho Free catalog</div>
+      </div>
+    </div>
+
+    <div class="tw">
+      <table>
+        <thead>
+          <tr>
+            <th>Chi phí / Đầu tư</th>
+            <th>Mức ước tính</th>
+            <th>Ghi chú</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Partnership setup (Free items)</td>
+            <td><strong style="color:var(--green);">Thấp</strong></td>
+            <td style="font-size:12px;">Negotiation cost, không có tiền mặt trả đối tác</td>
+          </tr>
+          <tr>
+            <td>Paid items budget (Data, CCDC, Bảo hiểm)</td>
+            <td><strong style="color:var(--yellow);">Trung bình</strong></td>
+            <td style="font-size:12px;">Chỉ chi khi driver đổi điểm — không pre-fund</td>
+          </tr>
+          <tr>
+            <td>IT build: Ranking Engine + Point System</td>
+            <td><strong style="color:var(--orange);">Cao nhất</strong></td>
+            <td style="font-size:12px;">One-time investment, Q3/2026 priority</td>
+          </tr>
+          <tr>
+            <td>Full-day Guarantee budget (R1 & R2)</td>
+            <td><strong style="color:var(--yellow);">Trung bình</strong></td>
+            <td style="font-size:12px;">Controlled — chỉ khi driver đạt đủ điều kiện ca</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout ci">
+      <span class="callout-icon">📊</span>
+      <div><strong>So sánh với promo cash burn:</strong> Chi phí AhaBenefits v2.0 (phần lớn partnership) thấp hơn đáng kể so với promo cash trực tiếp, nhưng <strong>perceived value của driver cao hơn</strong> — vì quyền lợi gắn với hành vi dài hạn, không chỉ là "tiền thêm hôm nay".</div>
+    </div>
+  </section>
+
+  <!-- S9: DECISION -->
+  <section id="s9">
+    <div class="sec-hdr">
+      <div class="sec-num">09</div>
+      <div class="sec-title">
+        <h2>Decision Required</h2>
+        <p>3 phê duyệt cần thiết để triển khai Q3/2026</p>
+      </div>
+    </div>
+
+    <div class="decision-box">
+      <h3>🙏 Kính đề nghị Lãnh đạo phê duyệt 3 nội dung sau:</h3>
+      <div class="decision-items">
+        <div class="dec-item">
+          <div class="dec-num">1</div>
+          <div class="dec-text">
+            <strong>Budget: Paid items & Full-day Guarantee</strong>
+            <span>Phê duyệt ngân sách cho Paid catalog (Data, CCDC, Bảo hiểm) và cơ chế Đảm bảo thu nhập Ca Full-day R1/R2. Proposal chi tiết sẽ submit sau khi có approval nguyên tắc.</span>
+          </div>
+        </div>
+        <div class="dec-item">
+          <div class="dec-num">2</div>
+          <div class="dec-text">
+            <strong>Partnership Authority: Ký kết đối tác Free items</strong>
+            <span>Trao quyền cho Driver Management team chủ động tiếp cận và ký MOU với đối tác xăng/EV, garage, F&B, pharmacy. Không phát sinh chi phí tiền mặt từ phía Ahamove.</span>
+          </div>
+        </div>
+        <div class="dec-item">
+          <div class="dec-num">3</div>
+          <div class="dec-text">
+            <strong>IT Roadmap Priority: Ranking Engine + Point System Q3/2026</strong>
+            <span>Xếp ưu tiên build Ranking Engine và Point accumulation system vào roadmap Q3/2026 của Product/Tech. Đây là nền tảng bắt buộc để triển khai toàn bộ AhaBenefits v2.0.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout cs">
+      <span class="callout-icon">✅</span>
+      <div><strong>Cam kết của Driver Management Team:</strong> Sau khi nhận được 3 phê duyệt trên, team sẽ deliver Phase 1 (Pilot Ranking + Ca Full-day) trong vòng <strong>10 tuần</strong> và báo cáo kết quả trước cuối Q3/2026.</div>
+    </div>
+
+    <div style="margin-top:32px;padding:20px 24px;background:var(--bg-card2);border-radius:12px;border:1px solid var(--border);text-align:center;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Prepared by</div>
+      <div style="font-size:16px;font-weight:800;color:var(--prime);">Lê Phương Khanh</div>
+      <div style="font-size:12px;color:var(--sec);margin-top:2px;">Driver Management Leader · Ahamove</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;">2026-05-27 · Version 1.0 · Confidential</div>
+      <div style="margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <span style="font-size:10.5px;background:var(--orange-d);color:var(--orange);padding:3px 10px;border-radius:6px;border:1px solid rgba(255,127,50,0.25);">2026-05-driver-ranking-params.html</span>
+        <span style="font-size:10.5px;background:var(--blue-d);color:var(--blue);padding:3px 10px;border-radius:6px;border:1px solid rgba(77,143,214,0.25);">2026-05-ahabenefits-points-flow.html</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Active sidebar link on scroll
+  const sections = document.querySelectorAll('section[id], .hero');
+  const links = document.querySelectorAll('#sidebar a');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const id = e.target.id;
+        const a = document.querySelector(`#sidebar a[href="#${id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
