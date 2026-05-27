@@ -95,12 +95,15 @@
 | Ca Full-day | 08:00 – 18:00 | Ca 10 tiếng | R1 + R2 only |
 
 ### Slot allocation (% / tổng slot mỗi ca)
-| Ca | R1 | R2 | R3 | Unranked |
-|----|----|----|----|----------|
-| Ca Sáng (Peak) | 20% | 40% | 30% | 10% |
-| Ca Chiều (Peak) | 20% | 40% | 30% | 10% |
-| Ca Tối | 15% | 35% | 35% | 15% |
-| Ca Full-day | 50% R1 / 50% R2 | — | — | — |
+
+| Ca | R1 | R2 | R3 |
+| --- | --- | --- | --- |
+| Ca Sáng (Peak) | 20% | 40% | 40% |
+| Ca Chiều (Peak) | 20% | 40% | 40% |
+| Ca Tối | 15% | 40% | 45% |
+| Ca Full-day | 50% | 50% | — |
+
+> Unranked không có structured slot — nhận đơn on-demand từ L6 MASS khi đơn tràn xuống.
 
 ---
 
