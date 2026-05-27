@@ -245,7 +245,7 @@ Pts tích/tháng (avg, 22 ca):
 | Đối tượng | R1 Elite (💎 Kim Cương) only |
 | Cách mua | Đăng ký trong app trước ngày 25 hàng tháng |
 | Hiệu lực | Từ ngày 01 tháng kế tiếp |
-| Phí | [?] VND/tháng — theo group rate Ahamove đàm phán |
+| Phí | 10.000đ – 30.000đ/tháng (gói Mini, group rate) |
 | Thanh toán | Trừ thẳng vào ví tài xế |
 | Huỷ | Có thể huỷ trước ngày 25, ngừng hiệu lực cuối tháng |
 | Mất R1 | Không được gia hạn tháng tiếp — coverage tháng đã mua vẫn giữ đến hết tháng |
