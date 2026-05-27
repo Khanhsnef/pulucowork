@@ -231,7 +231,7 @@ Pts tích/tháng (avg, 22 ca):
 
 | | 💎 R1 Kim Cương | 🥇 R2 Vàng | 🥈 R3 Bạc |
 | --- | --- | --- | --- |
-| Voucher xăng/EV | 50k/tháng · tự động | 30k/tháng · tự động | — |
+| Voucher xăng/EV | 50k/tháng | 30k/tháng | — |
 | Bảo hiểm tai nạn Mini | 10k–30k/tháng · đổi điểm | — | — |
 | Cost Ahamove | ~59M/tháng (voucher) + biến phí BH | ~83M/tháng | — |
 
@@ -245,22 +245,9 @@ Pts tích/tháng (avg, 22 ca):
 
 ---
 
-## 9. Budget Summary
+## 9. Bảng Tổng Hợp Benefits — Theo Rank & Layer
 
-| Hạng mục | Chi phí/tháng | Ghi chú |
-|----------|--------------|---------|
-| AhaBenefits paid rewards | ~175M | Xem bảng trên |
-| Hourly guarantee | TBD | Tách biệt, cần EPH data |
-| Full-day guarantee | TBD | Tách biệt, cần EPH data |
-| **AhaBenefits budget** | **≤ 200M** | Buffer ~25M |
-
----
-
----
-
-## 10. Bảng Tổng Hợp Benefits — Theo Rank & Layer
-
-### 10.1 Tổng hợp theo Rank
+### 9.1 Tổng hợp theo Rank
 
 | Benefit | 💎 R1 Kim Cương | 🥇 R2 Vàng | 🥈 R3 Bạc | Unranked |
 | --- | --- | --- | --- | --- |
@@ -278,7 +265,7 @@ Pts tích/tháng (avg, 22 ca):
 
 ---
 
-### 10.2 Tổng hợp theo Layer
+### 9.2 Tổng hợp theo Layer
 
 | | **L2 Minizone** | **L3 Mediumzone** | **L4 Bigzone** | **L5 Cityzone** | **L6 MASS** |
 | --- | --- | --- | --- | --- | --- |
@@ -286,13 +273,13 @@ Pts tích/tháng (avg, 22 ca):
 | **AhaBenefits ×** | ×1.5 | ×1.3 | ×1.1 | ×1.0 | ×1.0 |
 | **Bonus/ca** | +30 pts | +25 pts | +20 pts | +20 pts | — |
 | **Overflow** | ×1.0, no bonus | ×1.0, no bonus | ×1.0, no bonus | — | — |
-| **Target earn SGN** | lên đến 65k/h | lên đến 60k/h | lên đến 55k/h | lên đến 55k/h | — |
-| **Target earn HAN** | lên đến 70k/h | lên đến 65k/h | lên đến 60k/h | lên đến 60k/h | — |
+| **Thu nhập mục tiêu SGN** | lên đến 65k/h | lên đến 60k/h | lên đến 55k/h | lên đến 55k/h | — |
+| **Thu nhập mục tiêu HAN** | lên đến 70k/h | lên đến 65k/h | lên đến 60k/h | lên đến 60k/h | — |
 | **Cascade mở khi** | L2 ≥80% fill | L3 ≥80% fill | L4 ≥80% fill | — | luôn mở |
 
 ---
 
-### 10.3 Tổng hợp Ca làm việc
+### 9.3 Tổng hợp Ca làm việc
 
 | | **Ca Sáng** | **Ca Chiều** | **Ca Tối** | **Ca Full-day** |
 | --- | --- | --- | --- | --- |
