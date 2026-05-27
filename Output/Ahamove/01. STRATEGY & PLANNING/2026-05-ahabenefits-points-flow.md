@@ -251,15 +251,34 @@ Driver R2, balance 1.800 pts, ngày 29/6
 ### Scenario B — Driver bị downgrade rank
 
 ```text
-R2 → R3 (sau kỳ xét rank cuối tháng)
+R1 → R2 (sau kỳ xét rank cuối tháng)
 
-Tháng đó: earned 2.046 pts, balance 2.046
-  ├── Điểm giữ nguyên, không mất
-  ├── Catalog access: xuống tier Bạc (mất quyền đổi R2+ items)
-  ├── Items đang RESERVED: giữ, hoàn thành bình thường
-  └── Voucher xăng tháng sau: không nhận (đã mất R2)
-      [Notification: "Rank của bạn đã thay đổi, một số rewards sẽ không khả dụng"]
+Tháng 1 (khi còn R1): đã đổi Gói bảo dưỡng ưu tiên R1 (2.550 pts) → REDEEMED
+Tháng 2: rớt xuống R2
+
+Nguyên tắc: Rewards đã REDEEMED không bị thu hồi khi rớt rank.
+  ├── Reward đã đổi → vẫn được SỬ DỤNG trong thời hạn hiệu lực của reward
+  ├── Hết thời hạn hiệu lực → reward tự expire (không liên quan đến rank)
+  └── KHÔNG được đổi thêm rewards tier R1 kể từ tháng rớt hạng
+
+Ví dụ cụ thể:
+  Voucher bảo dưỡng đổi tháng 1, hiệu lực đến 31/3
+    → Rớt hạng tháng 2 → vẫn dùng voucher được đến 31/3 ✅
+    → Sau 31/3 voucher expire → không dùng được nữa ✅
+
+  Điểm còn lại trong ví:
+    ├── Balance giữ nguyên, không mất
+    ├── Catalog access: xuống tier Vàng (mất quyền đổi R1-only items)
+    └── Voucher xăng tháng sau: 30k (R2), không còn 50k (R1)
+
+[Notification khi rớt rank]:
+  "Rank của bạn thay đổi từ Kim Cương → Vàng.
+   Rewards đã đổi vẫn còn hiệu lực đến hết thời hạn.
+   Một số đặc quyền Kim Cương sẽ không khả dụng từ tháng tới."
 ```
+
+> **Rule tổng quát:** Thời hạn sử dụng reward gắn với **reward**, không với **rank**.
+> Rank chỉ kiểm soát quyền **đổi mới** — không ảnh hưởng reward đã hoàn thành.
 
 ### Scenario C — Driver R1 nhận đơn overflow
 
@@ -269,7 +288,7 @@ R1 đang online, L2 đầy (≥80% fill) → hệ thống cascade → giao đơn
 Trip income: 70.000đ
   ├── Layer của đơn: L2 (đơn xuất phát từ L2)
   ├── Driver là R1 nhưng đang nhận overflow
-  └── Điểm = floor(70.000 ÷ 5.000) × 1.0 = 14 pts (×1.0, no bonus)
+  └── Điểm = round(70.000 ÷ 5.000) × 1.0 = round(14.0) = 14 pts (×1.0, no bonus)
       [Không phải ×1.5 vì đơn overflow]
 
 [⚠️ Cần Product confirm: layer của đơn xác định bằng origin zone hay assigned zone?]
