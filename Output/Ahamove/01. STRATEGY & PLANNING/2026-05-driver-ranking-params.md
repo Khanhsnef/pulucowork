@@ -246,7 +246,7 @@ Pts tích/tháng (avg, 22 ca):
 | Cách mua | Đăng ký trong app trước ngày 25 hàng tháng |
 | Hiệu lực | Từ ngày 01 tháng kế tiếp |
 | Phí | 10.000đ – 30.000đ/tháng (gói Mini, group rate) |
-| Thanh toán | Trừ thẳng vào ví tài xế |
+| Thanh toán | Đổi bằng điểm AhaBenefits (10k = 285 pts · 30k = 857 pts) |
 | Huỷ | Có thể huỷ trước ngày 25, ngừng hiệu lực cuối tháng |
 | Mất R1 | Không được gia hạn tháng tiếp — coverage tháng đã mua vẫn giữ đến hết tháng |
 
