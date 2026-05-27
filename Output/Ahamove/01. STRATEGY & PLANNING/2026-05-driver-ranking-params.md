@@ -120,10 +120,10 @@
 
 | Layer | Hệ số × | Bonus/ca | Ghi chú |
 | --- | --- | --- | --- |
-| L2 Minizone | ×1.5 | +90 pts | R1 priority zone |
-| L3 Mediumzone | ×1.3 | +85 pts | R2 priority zone |
-| L4 Bigzone | ×1.1 | +80 pts | R3 priority zone |
-| L5 Cityzone | ×1.0 | +80 pts | |
+| L2 Minizone | ×1.5 | +30 pts | R1 priority zone |
+| L3 Mediumzone | ×1.3 | +25 pts | R2 priority zone |
+| L4 Bigzone | ×1.1 | +20 pts | R3 priority zone |
+| L5 Cityzone | ×1.0 | +20 pts | |
 | L6 MASS | ×1.0 | — | Unranked on-demand |
 | **Overflow** | **×1.0** | **—** | Đơn L2/L3/L4 cascade ra tài xế ngoài layer → ×1.0, không cộng bonus |
 
@@ -133,10 +133,10 @@
 
 | Rank | EPH giả định | Base pts | × Hệ số | + Bonus | Tổng/ca |
 | --- | --- | --- | --- | --- | --- |
-| R1 · L2 | ~200k/h | 160 | 240 | +90 | **330** |
-| R2 · L3 | ~170k/h | 136 | 177 | +85 | **262** |
-| R3 · L4 | ~140k/h | 112 | 123 | +80 | **203** |
-| L6 MASS | ~110k/h | 88 | 88 | — | **88** |
+| R1 · L2 | ~70k/h → 280k/ca | 56 | 84 | +30 | **114** |
+| R2 · L3 | ~65k/h → 260k/ca | 52 | 68 | +25 | **93** |
+| R3 · L4 | ~60k/h → 240k/ca | 48 | 53 | +20 | **73** |
+| L6 MASS | ~55k/h → 220k/ca | 44 | 44 | — | **44** |
 | Overflow (any) | — | base | ×1.0 | — | base only |
 
 ### Quy tắc điểm
