@@ -139,9 +139,35 @@
 | L6 MASS | ~55k/h → 220k/ca | 44 | 44 | — | **44** |
 | Overflow (any) | — | base | ×1.0 | — | base only |
 
+### Calibration Formula — Mục tiêu đổi điểm/tháng
+
+```text
+Pts tích/tháng (avg, 22 ca):
+  R1: 114 × 22 = 2.508 pts  (15% fleet)
+  R2:  93 × 22 = 2.046 pts  (35% fleet)
+  R3:  73 × 22 = 1.606 pts  (35% fleet)
+  L6:  44 × 22 =   968 pts  (15% fleet)
+  Weighted avg ≈ 1.800 pts/tháng
+
+80% burn → paid reward:  1.800 × 80% = ~1.440 pts ≈ 50.000 VND
+  → 1 pt ≈ 35đ giá trị
+  → Paid reward 50k = 1.500 pts (làm tròn)
+
+20% còn lại → free partner:  ~360 pts/tháng
+  → Free items giá 50–300 pts → đổi được 2–5 món/tháng
+```
+
+| Rank | Pts/tháng | 80% → Paid 50k | 20% → Free items |
+| --- | --- | --- | --- |
+| R1 | 2.508 | ✅ 1.500 pts (dư ~1.000) | ~1.000 pts free |
+| R2 | 2.046 | ✅ 1.500 pts (dư ~550) | ~550 pts free |
+| R3 | 1.606 | ✅ 1.500 pts (~1.1 tháng) | ~100 pts free |
+| L6 | 968 | ❌ cần ~1.6 tháng | — động lực lên R3 |
+
 ### Quy tắc điểm
+
 - Hết hạn: **cuối mỗi Quý** (Q1: 31/3, Q2: 30/6, Q3: 30/9, Q4: 31/12)
-- Phạt ĐBCL: **-200 pts** / vi phạm
+- Phạt ĐBCL: **-50 pts** / vi phạm
 - Điểm tối thiểu để đổi: xem catalog từng item
 
 ---
