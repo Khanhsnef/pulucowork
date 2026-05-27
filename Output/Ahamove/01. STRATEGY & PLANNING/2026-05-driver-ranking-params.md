@@ -277,15 +277,15 @@ Pts tích/tháng (avg, 22 ca):
 | --- | --- | --- | --- | --- |
 | **Điều kiện xét** | DQS ≥80, DCR <10%, Prod ≥280 | DQS ≥75, DCR <10%, Prod ≥210 | DQS ≥70, DCR ≤15%, Prod ≥70 | Dưới R3 |
 | **Primary Layer** | L2 Minizone | L3 Mediumzone | L4 Bigzone | L6 MASS |
-| **AhaBenefits hệ số** | ×1.5 | ×1.3 | ×1.1 | ×1.0 |
-| **Bonus hoàn ca** | +30 pts | +25 pts | +20 pts | — |
-| **Pts tích/tháng (est.)** | ~2.508 pts | ~2.046 pts | ~1.606 pts | ~968 pts |
 | **Ca Full-day** | ✅ 08:00–18:00 | ✅ 08:00–18:00 | ❌ | ❌ |
-| **Thu nhập target/ngày Full-day** | SGN 600k · HAN 650k | SGN 550k · HAN 600k | — | — |
-| **Voucher xăng/EV (tự động)** | 50k/tháng | 30k/tháng | — | — |
-| **Bảo hiểm tai nạn Mini** | ✅ Đổi điểm (285–857 pts) | ❌ | ❌ | ❌ |
+| **Thu nhập target Full-day** | SGN 600k · HAN 650k | SGN 550k · HAN 600k | — | — |
 | **Slot ưu tiên Ca Peak** | 20% | 40% | 40% | on-demand |
-| **Partner Tier** | 💎 Kim Cương | 🥇 Vàng | 🥈 Bạc | — |
+| **AhaBenefits** | 💎 Kim Cương | 🥇 Vàng | 🥈 Bạc | ❌ |
+| ↳ Hệ số AhaPoints | ×1.5 | ×1.3 | ×1.1 | ×1.0 |
+| ↳ Bonus hoàn ca | +30 pts | +25 pts | +20 pts | — |
+| ↳ Voucher xăng/sạc (tự động) | 50k/tháng | 30k/tháng | — | — |
+| ↳ Bảo hiểm tai nạn Mini | ✅ R1 only | ❌ | ❌ | ❌ |
+| ↳ Catalog đặc quyền | Kim Cương + Vàng + Bạc | Vàng + Bạc | Bạc only | ❌ |
 
 ---
 
