@@ -1,5 +1,5 @@
 # Driver Journey Framework — Ahamove
-**Phiên bản:** 1.0 | **Ngày:** 2026-05-28 | **Owner:** Lê Phương Khanh — Driver Management
+**Phiên bản:** 1.1 | **Ngày:** 2026-05-28 | **Owner:** Lê Phương Khanh — Driver Management
 
 ---
 
@@ -7,7 +7,7 @@
 
 > **Vấn đề cốt lõi:** Hầu hết tài xế bỏ cuộc trong 120 ngày đầu không phải vì thu nhập thấp, mà vì *không hình thành được thói quen vận hành*, *không cảm nhận được sự tiến bộ*, và *không thuộc về cộng đồng nào*.
 
-> **Giải pháp:** Xây dựng Driver Journey 5 giai đoạn có mục tiêu rõ ràng — mỗi giai đoạn có trigger can thiệp, milestone kích thích tâm lý, và KPI đo lường chặt chẽ. Ưu tiên 66 ngày đầu (cửa sổ hình thành thói quen khoa học) như chiến trường quyết định retention dài hạn.
+> **Giải pháp:** Xây dựng Driver Journey 5 giai đoạn có mục tiêu rõ ràng — mỗi giai đoạn có trigger can thiệp, milestone kích thích tâm lý, và KPI đo lường chặt chẽ. Ưu tiên 60 ngày đầu (cửa sổ hình thành thói quen) như chiến trường quyết định retention dài hạn.
 
 ---
 
@@ -37,7 +37,7 @@
 **3. Habit Formation (UCL Research — Phillippa Lally):**
 - Trung bình **66 ngày** để hình thành thói quen bền vững (range: 18–254 ngày)
 - Thói quen đơn giản (check app sáng) hình thành nhanh hơn (3–4 tuần)
-- *Implication:* **Ngày 0–66 là cửa sổ chiến lược** — mọi can thiệp phải dồn vào đây
+- *Implication:* **Ngày 0–60 là cửa sổ chiến lược** — mọi can thiệp phải dồn vào đây
 
 ### 1.3 Các mốc churn nguy hiểm (dữ liệu thực tế)
 
@@ -56,7 +56,7 @@
 
 ```
 [Pre-activation] → [KÍCH HOẠT] → [HÌNH THÀNH] → [CAM KẾT] → [CHUYÊN NGHIỆP] → [CỐT LÕI]
-       D-7→D0          D1→D7        D8→D66        D67→D120      D121→D180         D181+
+       D-7→D0          D1→D7        D8→D60        D61→D120      D121→D180         D181+
 ```
 
 ---
@@ -116,13 +116,13 @@ Chuyến   5 chuyến =      10 chuyến = "Activation
 
 ---
 
-### Giai Đoạn 2 — HÌNH THÀNH THÓI QUEN | D8 → D66
+### Giai Đoạn 2 — HÌNH THÀNH THÓI QUEN | D8 → D60
 **Mục tiêu:** Tài xế hình thành thói quen vận hành ổn định — chủ động mở app, có kế hoạch ca làm việc. Đây là **giai đoạn dài và quan trọng nhất**.
 
 | Yếu tố | Chi tiết |
 | :--- | :--- |
 | **Trigger vào** | Hoàn thành ≥7 chuyến trong tuần 1 |
-| **Trigger ra** | Duy trì active ≥4 ngày/tuần trong 8 tuần (D66) |
+| **Trigger ra** | Duy trì active ≥4 ngày/tuần trong 8 tuần (D60) |
 | **Rủi ro** | Hết "honeymoon period" → tỉ lệ từ chối đơn tăng; Income volatility cao |
 | **Tên nhóm** | **Triển Vọng** |
 
@@ -134,7 +134,7 @@ Chuyến   5 chuyến =      10 chuyến = "Activation
 | Bước ngoặt 30 ngày | D30 | ≥20 ngày active trong D1–D30 | Lên tier **Triển Vọng** chính thức + kit đồng phục |
 | Streak-21 | D21 | 21 ngày hoạt động | Micro-reward + Progress notification ("Bạn đang hình thành thói quen!") |
 | Milestone 100 chuyến | ~D40–D50 | 100 chuyến tích luỹ | Badge đặc biệt "100 Chuyến" + Cash reward |
-| Milestone 66 ngày | D66 | ≥50 ngày active trong D1–D66 | Badge "Thói Quen Thành Công" — mốc khoa học habit formation |
+| Milestone 60 ngày | D60 | ≥45 ngày active trong D1–D60 | Badge "Thói Quen Thành Công" — mốc habit formation |
 
 **Cơ chế Streak + Loss Aversion:**
 - Streak đếm ngày active liên tiếp (hiển thị trong app, nổi bật)
@@ -147,8 +147,7 @@ Chuyến   5 chuyến =      10 chuyến = "Activation
 - **D21:** Review điểm giữa chặng — gửi báo cáo cá nhân (thu nhập, số chuyến, khu vực hiệu quả nhất)
 - **D30:** Kết tháng đầu — tổng kết chi tiết + Welcome to "Triển Vọng" tier
 - **D45:** Kiểm tra midpoint — nếu churn risk cao: gọi điện từ khu vực staff
-- **D60:** Preview milestone D66 — "Chỉ còn 6 ngày nữa để hoàn thành thử thách 66 ngày!"
-- **D66:** Ăn mừng mốc habit — notification đặc biệt + reward xứng đáng
+- **D60:** Ăn mừng mốc habit — notification đặc biệt + reward xứng đáng
 
 **Cơ chế Autonomy (SDT):**
 - Cho phép đặt lịch làm việc ưa thích (giờ cao điểm, khu vực)
@@ -156,10 +155,10 @@ Chuyến   5 chuyến =      10 chuyến = "Activation
 
 **KPI giai đoạn:**
 - `D30 Retention Rate` → target ≥45%
-- `D66 Retention Rate` → target ≥35%
+- `D60 Retention Rate` → target ≥35%
 - `Average Active Days / Month` → target ≥18 ngày
 - `Streak Length (avg)` → target ≥10 ngày liên tiếp
-- `Inactivity Alert Rate` = % tài xế kích hoạt cảnh báo 7 ngày không hoạt động → intervene trong vòng 24h
+- `Inactivity Alert Rate` = % tài xế kích hoạt cảnh báo 7 ngày không hoạt động → intervene trong 24h
 
 ---
 
@@ -168,7 +167,7 @@ Chuyến   5 chuyến =      10 chuyến = "Activation
 
 | Yếu tố | Chi tiết |
 | :--- | :--- |
-| **Trigger vào** | Vượt qua D66 với habit đã hình thành |
+| **Trigger vào** | Vượt qua D60 với habit đã hình thành |
 | **Trigger ra** | Đạt D120 với consistent activity |
 | **Rủi ro** | Income so sánh với đối thủ (Grab, Be); cảm giác "trần kính" về tier |
 | **Tên nhóm** | **Thường Trực** |
@@ -276,8 +275,8 @@ cộng đồng
 ```
                     │  THẤP (<5 trips/ngày)   │  TB (5–12 trips/ngày)  │  CAO (>12 trips/ngày)
 ────────────────────┼─────────────────────────┼────────────────────────┼──────────────────────
-D1–D66              │  ⚠️ Tân Binh at-risk     │  ✅ Tân Binh on-track  │  🚀 Tân Binh fast-track
-D67–D120            │  🔴 Đang rời đi          │  🟡 Đang hình thành    │  ✅ Cam kết
+D1–D60              │  ⚠️ Tân Binh at-risk     │  ✅ Tân Binh on-track  │  🚀 Tân Binh fast-track
+D61–D120            │  🔴 Đang rời đi          │  🟡 Đang hình thành    │  ✅ Cam kết
 D121–D180           │  🔴 High churn risk      │  ✅ Chuyên Nghiệp      │  ⭐ Core candidate
 D181+               │  🟡 Casual (giữ nhẹ)    │  ✅ Cốt Lõi            │  🏆 Champion
 ```
@@ -297,15 +296,13 @@ D181+               │  🟡 Casual (giữ nhẹ)    │  ✅ Cốt Lõi       
 ## 4. Bản Đồ Mốc Thời Gian Tổng Thể
 
 ```
-D0    D3    D7    D14   D21   D30   D45   D60   D66   D90   D120  D180  D365
-│     │     │     │     │     │     │     │     │     │     │     │     │
-●─────●─────●─────●─────●─────●─────●─────●─────●─────●─────●─────●─────●
-│     │     │     │     │     │     │     │     │     │     │     │     │
-│     │     │     │     │     │     │     │     │     │     │     │     │
-Chuyến Micro D7   Streak D21  Tháng Mid-  D60   Habit D90   Survival Prof. Champion
-đầu   bonus Activation badge  1    point  prev. form. complete Survival Point  Anniv.
-      +5c   badge  14d   badge done  check  mgt   66d  tier  point  tier  Award
-                                           alert milestone upgrade checked  unlock
+D0    D3    D7    D14   D21   D30   D45   D60   D90   D120  D180  D365
+│     │     │     │     │     │     │     │     │     │     │     │
+●─────●─────●─────●─────●─────●─────●─────●─────●─────●─────●─────●
+│     │     │     │     │     │     │     │     │     │     │     │
+Chuyến Micro D7   Streak D21  Tháng Mid-  HABIT D90   Survival Prof. Champion
+đầu   bonus Act.  badge  badge  1   check  60D   tier  point  tier  Anniv.
+            badge  14d         done        BADGE upgrade        unlock Award
 ```
 
 | Mốc | Ngày | Điều kiện kích hoạt | Loại can thiệp | Mức độ ưu tiên |
@@ -320,8 +317,7 @@ Chuyến Micro D7   Streak D21  Tháng Mid-  D60   Habit D90   Survival Prof. Ch
 | Tháng đầu | D30 | ≥20 ngày active | Tier upgrade + Kit | 🔴 Critical |
 | 100 Chuyến | ~D40 | 100 chuyến tích luỹ | Badge + Cash | 🟠 High |
 | Midpoint check | D45 | Review activity | Personalised report | 🟡 Medium |
-| D60 Preview | D60 | — | Nudge "6 ngày nữa đến D66" | 🟡 Medium |
-| Habit Milestone | D66 | ≥50 ngày active D1–D66 | Special badge + Reward lớn | 🔴 Critical |
+| Habit Milestone | D60 | ≥45 ngày active D1–D60 | Special badge + Reward lớn | 🔴 Critical |
 | Tier Thường Trực | D90 | ≥200 chuyến + active | Tier badge + Quyền lợi | 🔴 Critical |
 | Survival Point | D120 | Active + on-track | Mời Community | 🟠 High |
 | Tier Chuyên Nghiệp | D180 | ≥500 chuyến + rating | Tier + Earning guarantee | 🔴 Critical |
@@ -380,7 +376,7 @@ Detect: D365+ + activity giảm >40% trong 4 tuần
 | :--- | :--- | :--- | :--- |
 | `D7 Activation Rate` | Drivers với ≥7 trips D1–D7 / Total new drivers | ≥40% | <25% |
 | `D30 Retention` | Drivers active D30 / Total new D1 (30 ngày trước) | ≥45% | <30% |
-| `D66 Habit Formation` | Drivers active ≥50 ngày trong D1–D66 / Total | ≥35% | <20% |
+| `D60 Habit Formation` | Drivers active ≥45 ngày trong D1–D60 / Total | ≥35% | <20% |
 | `D90 Retention` | Drivers active D90 / Total new D1 (90 ngày trước) | ≥35% | <20% |
 | `D120 Survival Rate` | Drivers still active D120 / Total new D1 | ≥28% | <15% |
 | `D180 Pro Rate` | Drivers đạt tier Chuyên Nghiệp / Total new D1 | ≥20% | <10% |
@@ -405,9 +401,9 @@ SELECT
              AND days_inactive >= 2          THEN 'CRITICAL_NEW_INACTIVE'
         WHEN driver_age_days BETWEEN 8 AND 30
              AND days_inactive BETWEEN 7 AND 14 THEN 'HABIT_WINDOW_AT_RISK'
-        WHEN driver_age_days BETWEEN 31 AND 66
+        WHEN driver_age_days BETWEEN 31 AND 60
              AND days_inactive >= 7           THEN 'HABIT_FORMING_DROPOUT'
-        WHEN driver_age_days BETWEEN 67 AND 120
+        WHEN driver_age_days BETWEEN 61 AND 120
              AND days_inactive >= 14          THEN 'COMMITMENT_WAVERING'
         ELSE NULL
     END AS intervention_type
