@@ -39,6 +39,19 @@
 
 > Ngưỡng cascade: **80%** slot fill → mở layer kế tiếp
 
+### 3.1 Ưu tiên Đăng ký tại Layer Overlap
+
+Khi nhiều rank cùng được phép đăng ký một layer (spillover + primary), cửa sổ đăng ký mở **sớm hơn 2 tiếng** cho rank cao hơn.
+
+| Layer | Đợt 1 — ưu tiên (mở sớm 2h) | Đợt 2 — còn lại |
+|-------|------------------------------|-----------------|
+| **L3** | R1 spillover (do L2 ≥ 80% fill) | R2 primary |
+| **L4** | R2 spillover (do L3 ≥ 80% fill) | R3 primary |
+| **L5** | R3 spillover (do L4 ≥ 80% fill) | Unranked |
+| **L2** | R1 only | — |
+
+> **Đánh đổi:** R1 đăng ký spillover tại L3 → hưởng ×1.3 + bonus +25 pts của L3, **không phải** ×1.5 của L2. Muốn giữ ×1.5 + bonus +30 pts: phải chủ động đăng ký L2 trong cửa sổ ưu tiên trước khi L2 fill.
+
 ---
 
 ## 4. Thu nhập tối đa / giờ (Target Earning)
