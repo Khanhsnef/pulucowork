@@ -1872,7 +1872,8 @@
       <div class="insight-box">
         <div class="insight-icon">🔑</div>
         <p><strong>Rule of thumb:</strong> Driver hoàn thành ≥7 chuyến trong tuần đầu có tỷ lệ retention 90 ngày cao
-          <strong>gấp 3 lần</strong> nhóm còn lại. Mọi can thiệp phải ưu tiên cửa sổ <strong>D1–D7</strong> trước.</p>
+          <strong>gấp 3 lần</strong> nhóm còn lại. Mọi can thiệp phải ưu tiên cửa sổ <strong>D1–D7</strong> trước.
+        </p>
       </div>
     </div>
   </section>
@@ -2149,4 +2150,774 @@
             <div class="kpi-chips">
               <div class="kpi-row"><span class="kpi-name">Onboarding Completion Rate</span><span
                   class="kpi-target">≥85%</span></div>
-              <div class="kpi-row"><span class="kpi-name">Time-to-First-
+              <div class="kpi-row"><span class="kpi-name">Time-to-First-Trip</span><span
+                  class="kpi-target">&le;24h</span></div>
+              <div class="kpi-row"><span class="kpi-name">D0&rarr;D1 Activation Rate</span><span
+                  class="kpi-target">&ge;70%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 1 -->
+      <div class="phase-panel" id="phase-1">
+        <div class="detail-card">
+          <h4><span class="dot" style="background:#EF4444"></span>GD1 Kích Hoạt (D1-D7)</h4>
+          <div class="info-rows">
+            <div class="info-row"><span class="lbl">Thời gian</span><span class="val">D1 &rarr; D7</span></div>
+            <div class="info-row"><span class="lbl">Nhóm</span><span class="val"><span class="badge badge-red">Tân
+                  Binh</span></span></div>
+            <div class="info-row"><span class="lbl">Mục tiêu</span><span class="val">&ge;7 chuyến trong 7 ngay dau -
+                nguong tam ly hinh thanh thoi quen so bo</span></div>
+            <div class="info-row"><span class="lbl">Trigger vào</span><span class="val">Hoàn thành chuyến đầu
+                tiên</span></div>
+            <div class="info-row"><span class="lbl">Trigger ra</span><span class="val">D7: co &ge;7 chuyến &rarr; len
+                GD2; &lt;3 chuyen &rarr; canh bao do</span></div>
+            <div class="info-row"><span class="lbl">Cơ chế</span><span class="val">Micro-bonus chuyến 1/3/5/7 + streak
+                daily counter hiển thị trong app</span></div>
+          </div>
+        </div>
+        <div class="detail-card">
+          <h4><span class="dot" style="background:#EF4444"></span>Can thiệp &amp; KPI</h4>
+          <ul class="intervention-list">
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num crit">1</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag crit">D1 - NGAY LẬP TỨC</div>
+                <div class="int-text">Welcome message cá nhân hóa + micro-bonus chuyến 1 (+20k). Kèm guide 3 bước tối ưu
+                  thu nhập hôm nay</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num warn">2</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D3 - Cột Mốc</div>
+                <div class="int-text">Badge "5 chuyến đầu tiên" + bonus tích lũy. Hiển thị progress bar đến D7 badge
+                </div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">3</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D5 - Kiểm Tra</div>
+                <div class="int-text">Nếu &lt;4 chuyến &rarr; gọi điện CSR trong 2h. Script: "Anh/chị cần hỗ trợ gì?"
+                </div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">4</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D7 - Huy Hiệu Kích Hoạt</div>
+                <div class="int-text">Trao badge "Tân Binh Xuất Sắc" nếu &ge;7 chuyến. Unlock bonus GD2. Thông báo qua
+                  app + Zalo</div>
+              </div>
+            </li>
+          </ul>
+          <div style="margin-top:16px">
+            <div class="kpi-chips">
+              <div class="kpi-row"><span class="kpi-name">D7 Chuyến Hoàn Thành</span><span class="kpi-target">&ge;7
+                  chuyến</span></div>
+              <div class="kpi-row"><span class="kpi-name">D7 Tỷ Lệ Giữ Chân</span><span
+                  class="kpi-target">&ge;60%</span></div>
+              <div class="kpi-row"><span class="kpi-name">Cảnh báo đỏ</span><span class="kpi-target"
+                  style="color:var(--red)">&lt;3 chuyến D7</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase-panel" id="phase-2">
+        <div class="detail-card">
+          <h4><span class="dot" style="background:#EA580C"></span>GD2 Hình Thành Thói Quen (D8-D60)</h4>
+          <div class="info-rows">
+            <div class="info-row"><span class="lbl">Thời gian</span><span class="val">D8 &rarr; D60</span></div>
+            <div class="info-row"><span class="lbl">Nhóm</span><span class="val"><span class="badge badge-orange">Triển
+                  Vọng</span></span></div>
+            <div class="info-row"><span class="lbl">Mục tiêu</span><span class="val">Đạt ngưỡng 60 ngày (UCL Habit
+                Research) - habit loop tự duy trì</span></div>
+            <div class="info-row"><span class="lbl">Cơ chế</span><span class="val">Weekly streak + monthly kit D30 + D60
+                Habit Badge. Win-Back nếu inactive &ge;7 ngày</span></div>
+            <div class="info-row"><span class="lbl">Trigger ra</span><span class="val">D60 Habit Badge: &ge;4 ngày
+                active/tuần trong 8 tuần liên tiếp</span></div>
+          </div>
+        </div>
+        <div class="detail-card">
+          <h4><span class="dot" style="background:#EA580C"></span>Can thiệp &amp; KPI</h4>
+          <ul class="intervention-list">
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num warn">1</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">Hàng Tuần - Hệ Thống Streak</div>
+                <div class="int-text">Streak counter hàng ngày trong app. Streak &ge;14 ngày &rarr; badge. Streak &ge;21
+                  ngày &rarr; bonus. Mất streak &rarr; recovery prompt ngay</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">2</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D30 - Bộ Kit Tháng</div>
+                <div class="int-text">Trao Starter Kit vật lý (áo mưa, túi giữ nhiệt hoặc voucher) + highlight thu nhập
+                  tháng 1. Kích hoạt cảm giác thuộc về</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num crit">3</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag crit">D7 không hoạt động &rarr; Win-Back</div>
+                <div class="int-text">Cảnh báo tự động &rarr; 24h: gọi CSR. Script chuẩn + income recovery offer (+30k
+                  chuyến kế tiếp nếu active lại trong 48h)</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">4</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D60 - HUY HIỆU THÓI QUEN</div>
+                <div class="int-text">Milestone lớn nhất: trao Habit Badge + unlock Tier Triển Vọng chính thức.
+                  Announcement trong Zalo group cộng đồng</div>
+              </div>
+            </li>
+          </ul>
+          <div style="margin-top:16px">
+            <div class="kpi-chips">
+              <div class="kpi-row"><span class="kpi-name">D30 Giữ Chân</span><span class="kpi-target">&ge;50%</span>
+              </div>
+              <div class="kpi-row"><span class="kpi-name">D60 Tỷ Lệ Huy Hiệu Thói Quen</span><span
+                  class="kpi-target">&ge;35%</span></div>
+              <div class="kpi-row"><span class="kpi-name">Win-Back Thành Công</span><span
+                  class="kpi-target">&ge;40%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase-panel" id="phase-3">
+        <div class="detail-card">
+          <h4><span class="dot" style="background:#D97706"></span>GD3 Cam Kết (D61-D120)</h4>
+          <div class="info-rows">
+            <div class="info-row"><span class="lbl">Thời gian</span><span class="val">D61 &rarr; D120</span></div>
+            <div class="info-row"><span class="lbl">Nhóm</span><span class="val"><span class="badge badge-yellow">Thường
+                  Trực</span></span></div>
+            <div class="info-row"><span class="lbl">Mục tiêu</span><span class="val">Chuyển từ "tài xế thử" sang "tài xế
+                thường trực" với thu nhập ổn định</span></div>
+            <div class="info-row"><span class="lbl">Cơ chế</span><span class="val">Earning Guarantee sơ bộ + Peer
+                Community + Monthly Performance Review</span></div>
+            <div class="info-row"><span class="lbl">Trigger ra</span><span class="val">D90: lên Tier Thường Trực. D120:
+                Survival Point - retention rate thấp nhất</span></div>
+          </div>
+        </div>
+        <div class="detail-card">
+          <h4><span class="dot" style="background:#D97706"></span>Can thiệp &amp; KPI</h4>
+          <ul class="intervention-list">
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">1</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D61-D90 - Cộng Đồng</div>
+                <div class="int-text">Invite vào nhóm Zalo theo khu vực. Giới thiệu với Station Lead. Bắt đầu nhận
+                  mentor từ driver cốt lõi</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">2</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D90 - Tier Thường Trực</div>
+                <div class="int-text">Chính thức lên tier Thường Trực. Nhận thêm quyền lợi ưu tiên đơn. Thông báo
+                  achievement rõ ràng trong app</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num warn">3</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D100 - Kiểm Tra Rủi Ro</div>
+                <div class="int-text">Review tự động: nếu avg trips/week giảm &ge;30% &rarr; trigger CSR call. Đây là
+                  cửa sổ churn D90-D120</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">4</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D120 - Điểm Sinh Tồn</div>
+                <div class="int-text">Driver qua D120 có xác suất ở lại &gt;70%. Trao recognition + preview quyền lợi
+                  GD4</div>
+              </div>
+            </li>
+          </ul>
+          <div style="margin-top:16px">
+            <div class="kpi-chips">
+              <div class="kpi-row"><span class="kpi-name">D90 Tỷ Lệ Giữ Chân</span><span
+                  class="kpi-target">&ge;40%</span></div>
+              <div class="kpi-row"><span class="kpi-name">D120 Tỷ Lệ Giữ Chân</span><span
+                  class="kpi-target">&ge;35%</span></div>
+              <div class="kpi-row"><span class="kpi-name">Avg Chuyến/Tuần</span><span class="kpi-target">&ge;20
+                  chuyến</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="phase-panel" id="phase-4">
+        <div class="detail-card">
+          <h4><span class="dot" style="background:#10B981"></span>GD4 Chuyên Nghiệp (D121-D180)</h4>
+          <div class="info-rows">
+            <div class="info-row"><span class="lbl">Thời gian</span><span class="val">D121 &rarr; D180</span></div>
+            <div class="info-row"><span class="lbl">Nhóm</span><span class="val"><span class="badge badge-green">Chuyên
+                  Nghiệp</span></span></div>
+            <div class="info-row"><span class="lbl">Mục tiêu</span><span class="val">Tối ưu hóa thu nhập, chuyên sâu
+                dịch vụ, xây dựng rating cao</span></div>
+            <div class="info-row"><span class="lbl">Cơ chế</span><span class="val">Income Guarantee 70% + Advanced
+                Training + Referral Program unlock</span></div>
+            <div class="info-row"><span class="lbl">Trigger ra</span><span class="val">D180: đánh giá lên Champion hoặc
+                duy trì Pro tier</span></div>
+          </div>
+        </div>
+        <div class="detail-card">
+          <h4><span class="dot" style="background:#10B981"></span>Can thiệp &amp; KPI</h4>
+          <ul class="intervention-list">
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">1</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D121 - Bảo Đảm Thu Nhập</div>
+                <div class="int-text">Kích hoạt Earning Guarantee 70% target income. Tài xế biết mình được bảo đảm -
+                  giảm lo lắng thu nhập</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">2</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D130-D150 - Nâng Cao Kỹ Năng</div>
+                <div class="int-text">Training nâng cao: tối ưu giờ chạy, khu vực cao điểm, xử lý đơn đặc biệt (bulky,
+                  COD, multi-stop)</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">3</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D160 - Mở Khóa Giới Thiệu</div>
+                <div class="int-text">Unlock chương trình Referral: giới thiệu tài xế mới nhận bonus/chuyến của tài xế
+                  được giới thiệu trong 30 ngày</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">4</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D180 - Đánh Giá Pro</div>
+                <div class="int-text">Đánh giá 6 tháng: trao Pro Badge + preview Champion tier. Cá nhân hóa lộ trình lên
+                  Champion</div>
+              </div>
+            </li>
+          </ul>
+          <div style="margin-top:16px">
+            <div class="kpi-chips">
+              <div class="kpi-row"><span class="kpi-name">D180 Tỷ Lệ Giữ Chân</span><span
+                  class="kpi-target">&ge;55%</span></div>
+              <div class="kpi-row"><span class="kpi-name">Điểm Rating Trung Bình</span><span
+                  class="kpi-target">&ge;4.7/5.0</span></div>
+              <div class="kpi-row"><span class="kpi-name">Chuyển Đổi Referral</span><span class="kpi-target">&ge;1 tài
+                  xế/Pro</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="phase-panel" id="phase-5">
+        <div class="detail-card">
+          <h4><span class="dot" style="background:#2563EB"></span>GD5 Cốt Lõi / Champion (D181+)</h4>
+          <div class="info-rows">
+            <div class="info-row"><span class="lbl">Thời gian</span><span class="val">D181+ (Không giới hạn)</span>
+            </div>
+            <div class="info-row"><span class="lbl">Nhóm</span><span class="val"><span class="badge badge-blue">Cốt Lõi
+                  / Champion</span></span></div>
+            <div class="info-row"><span class="lbl">Mục tiêu</span><span class="val">Giữ chân dài hạn, phát triển
+                ambassador, tối đa hóa LTV</span></div>
+            <div class="info-row"><span class="lbl">Cơ chế</span><span class="val">Ambassador Program + Income Guarantee
+                80% + D365 Anniversary + VIP Support</span></div>
+            <div class="info-row"><span class="lbl">Mục tiêu LTV</span><span class="val">Duy trì hoạt động &ge;24 tháng,
+                giới thiệu &ge;3 tài xế</span></div>
+          </div>
+        </div>
+        <div class="detail-card">
+          <h4><span class="dot" style="background:#2563EB"></span>Can thiệp &amp; KPI</h4>
+          <ul class="intervention-list">
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">1</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">Liên Tục - Ưu Đãi VIP</div>
+                <div class="int-text">Hotline ưu tiên, xử lý khiếu nại trong 2h, ưu tiên đơn quality cao, feedback trực
+                  tiếp đến Product team</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">2</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">Hàng Tháng - Đại Sứ</div>
+                <div class="int-text">Tham gia sự kiện tuyển dụng, chia sẻ kinh nghiệm trong cộng đồng, được quote trong
+                  marketing materials</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num warn">3</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">D365 - Kỷ Niệm</div>
+                <div class="int-text">Kỷ niệm 1 năm: certificate, quà tặng đặc biệt, highlight story trên social. Kích
+                  hoạt năm thứ 2</div>
+              </div>
+            </li>
+            <li class="int-item">
+              <div class="int-line">
+                <div class="int-num">4</div>
+              </div>
+              <div class="int-content">
+                <div class="int-day-tag">Hàng Quý - Review LTV</div>
+                <div class="int-text">Review quarterly: điều chỉnh guarantee, mục tiêu cá nhân hóa. Đảm bảo Champion
+                  không bị neglect</div>
+              </div>
+            </li>
+          </ul>
+          <div style="margin-top:16px">
+            <div class="kpi-chips">
+              <div class="kpi-row"><span class="kpi-name">D365 Tỷ Lệ Hoạt Động</span><span
+                  class="kpi-target">&ge;70%</span></div>
+              <div class="kpi-row"><span class="kpi-name">Đầu Ra Referral</span><span class="kpi-target">&ge;3 tài
+                  xế/Champion</span></div>
+              <div class="kpi-row"><span class="kpi-name">NPS Champion</span><span class="kpi-target">&ge;8/10</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEGMENTATION -->
+  <section id="segment" style="background:#fff">
+    <div class="container">
+      <div class="section-eyebrow">
+        <div class="section-label">Ma trận phân nhóm</div>
+        <div class="eyebrow-line"></div>
+      </div>
+      <div class="section-title">Ma Trận Phân Nhóm Tài Xế</div>
+      <div class="section-sub">Phân loại tài xế theo Frequency &times; Tenure để ưu tiên can thiệp đúng nhóm</div>
+      <div class="seg-grid">
+        <div class="seg-cell seg-header">Nhóm</div>
+        <div class="seg-cell seg-header">Frequency thấp (&lt;3 ngày/tuần)</div>
+        <div class="seg-cell seg-header">Frequency trung (3-5 ngày/tuần)</div>
+        <div class="seg-cell seg-header">Frequency cao (&ge;5 ngày/tuần)</div>
+        <div class="seg-cell seg-row-label">Tân Binh (D1-D60)</div>
+        <div class="seg-cell seg-risk">&#9888; Rủi ro churn - Win-Back ngay</div>
+        <div class="seg-cell seg-ok">&#10003; Đúng lộ trình - duy trì streak</div>
+        <div class="seg-cell seg-fast">&#128640; Fast-tracker - tăng thử thách</div>
+        <div class="seg-cell seg-row-label">Triển Vọng (D61-D120)</div>
+        <div class="seg-cell seg-warn">&#9888; Plateau - Earning Boost</div>
+        <div class="seg-cell seg-ok">&#10003; Ổn định - duy trì community</div>
+        <div class="seg-cell seg-fast">&#11088; Tiềm năng Pro - chuẩn bị GD4</div>
+        <div class="seg-cell seg-row-label">Thường Trực (D121+)</div>
+        <div class="seg-cell seg-churn">&#128308; Rủi ro churn - điều tra nguyên nhân</div>
+        <div class="seg-cell seg-ok">&#10003; Driver cốt lõi - Guarantee lock-in</div>
+        <div class="seg-cell seg-fast">&#127942; Ứng viên Champion</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAYBOOK -->
+  <section id="playbook" style="background:var(--gray-50)">
+    <div class="container">
+      <div class="section-eyebrow">
+        <div class="section-label">Kịch bản can thiệp</div>
+        <div class="eyebrow-line"></div>
+      </div>
+      <div class="section-title">Intervention Playbook - 4 Tình Huống</div>
+      <div class="section-sub">Quy trình chuẩn hóa ứng xử với từng tình huống vận hành thực tế</div>
+      <div class="intervention-cards">
+        <div class="int-card">
+          <div class="int-title">&#128680; Win-Back - Không hoạt động &ge;7 ngày</div>
+          <div class="int-desc">Trigger: không có chuyến nào trong 7 ngày (D1-D120)</div>
+          <div class="flow-steps">
+            <div class="flow-step">
+              <div class="step-num">1</div>
+              <div class="step-txt"><strong>H+0:</strong> Tự động gửi push notification + Zalo message</div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">2</div>
+              <div class="step-txt"><strong>H+24:</strong> CSR gọi điện - script chuẩn, hỏi nguyên nhân, không ép</div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">3</div>
+              <div class="step-txt"><strong>H+48:</strong> Recovery offer: +30k chuyến kế tiếp nếu active lại trong 24h
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">4</div>
+              <div class="step-txt"><strong>D14 inactive:</strong> Chuyển sang inactive pool - chờ seasonal win-back
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="int-card">
+          <div class="int-title">&#128202; Plateau Intervention - Frequency giảm</div>
+          <div class="int-desc">Trigger: avg trips/week giảm &ge;30% so với 2 tuần trước</div>
+          <div class="flow-steps">
+            <div class="flow-step">
+              <div class="step-num">1</div>
+              <div class="step-txt"><strong>Auto-detect:</strong> BI query hàng ngày flag driver plateau</div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">2</div>
+              <div class="step-txt"><strong>D+2:</strong> In-app message "Tuần này anh/chị chạy ít hơn - cần hỗ trợ?"
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">3</div>
+              <div class="step-txt"><strong>D+4:</strong> Nếu không phản hồi -&gt; CSR outreach + Earning Boost offer
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">4</div>
+              <div class="step-txt"><strong>D+7:</strong> Nếu vẫn giảm -&gt; phân tích nguyên nhân (cạnh tranh? giá
+                xăng?)</div>
+            </div>
+          </div>
+        </div>
+        <div class="int-card">
+          <div class="int-title">&#127919; Fast-Track - Driver tiềm năng cao</div>
+          <div class="int-desc">Trigger: &ge;6 ngày active/tuần và rating &ge;4.8 trong D30 đầu</div>
+          <div class="flow-steps">
+            <div class="flow-step">
+              <div class="step-num">1</div>
+              <div class="step-txt"><strong>D30:</strong> Flag Fast-Tracker - thông báo top 10% tài xế mới</div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">2</div>
+              <div class="step-txt"><strong>D35:</strong> Mời tham gia pilot program hoặc thử dịch vụ premium</div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">3</div>
+              <div class="step-txt"><strong>D45:</strong> Connect với Station Lead, hỏi feedback trực tiếp về platform
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">4</div>
+              <div class="step-txt"><strong>D60:</strong> Pre-approve lên Tier Chuyên Nghiệp (bỏ qua điều kiện thời
+                gian)</div>
+            </div>
+          </div>
+        </div>
+        <div class="int-card">
+          <div class="int-title">&#9855; Seasonal Win-Back - Driver đã rời bỏ</div>
+          <div class="int-desc">Trigger: inactive &ge;30 ngày, từng đạt D30+ trước đây</div>
+          <div class="flow-steps">
+            <div class="flow-step">
+              <div class="step-num">1</div>
+              <div class="step-txt"><strong>Segment:</strong> Chi target nhom co lich su &ge;20 chuyến (da co thoi quen)
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">2</div>
+              <div class="step-txt"><strong>Message:</strong> "Ahamove nhớ anh/chị - platform có nhiều cải tiến mới"
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">3</div>
+              <div class="step-txt"><strong>Offer:</strong> Re-activation bonus 3 ngày đầu + preview thu nhập hiện tại
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">4</div>
+              <div class="step-txt"><strong>Cập nhật:</strong> Nếu không phản hồi sau 2 lần -&gt; remove khỏi active
+                list</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPI DASHBOARD -->
+  <section id="kpi" style="background:#fff">
+    <div class="container">
+      <div class="section-eyebrow">
+        <div class="section-label">Đo lường hiệu quả</div>
+        <div class="eyebrow-line"></div>
+      </div>
+      <div class="section-title">KPI Dashboard - Cohort Retention</div>
+      <div class="section-sub">Hệ thống chỉ số theo dõi hiệu quả toàn bộ vòng đời tài xế</div>
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-ok">
+          <div class="kpi-val">85%</div>
+          <div class="kpi-lbl">Onboarding Completion</div>
+          <div class="kpi-sub">Target D0</div>
+        </div>
+        <div class="kpi-card kpi-warn">
+          <div class="kpi-val">60%</div>
+          <div class="kpi-lbl">D7 Retention</div>
+          <div class="kpi-sub">Activation threshold</div>
+        </div>
+        <div class="kpi-card kpi-warn">
+          <div class="kpi-val">35%</div>
+          <div class="kpi-lbl">D60 Habit Badge</div>
+          <div class="kpi-sub">Habit formation</div>
+        </div>
+        <div class="kpi-card kpi-ok">
+          <div class="kpi-val">70%</div>
+          <div class="kpi-lbl">D180+ Retention</div>
+          <div class="kpi-sub">Long-term target</div>
+        </div>
+      </div>
+      <table class="cohort-table">
+        <thead>
+          <tr>
+            <th>Milestone</th>
+            <th>KPI chính</th>
+            <th>Target</th>
+            <th>Mức cảnh báo</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="metric-name">D1</td>
+            <td>Chuyến đầu tiên</td>
+            <td class="target-val">100%</td>
+            <td class="alert-val">&lt;80%</td>
+            <td>Kiểm tra onboarding flow</td>
+          </tr>
+          <tr>
+            <td class="metric-name">D7</td>
+            <td>Activation Rate (&ge;7 chuyến)</td>
+            <td class="target-val">&ge;60%</td>
+            <td class="alert-val">&lt;40%</td>
+            <td>Tăng hỗ trợ CSR D5-D7</td>
+          </tr>
+          <tr>
+            <td class="metric-name">D30</td>
+            <td>Tỷ Lệ Giữ Chân</td>
+            <td class="target-val">&ge;50%</td>
+            <td class="alert-val">&lt;35%</td>
+            <td>Review streak + Win-Back</td>
+          </tr>
+          <tr>
+            <td class="metric-name">D60</td>
+            <td>Tỷ Lệ Huy Hiệu Thói Quen</td>
+            <td class="target-val">&ge;35%</td>
+            <td class="alert-val">&lt;20%</td>
+            <td>Tối ưu streak mechanics</td>
+          </tr>
+          <tr>
+            <td class="metric-name">D90</td>
+            <td>Tỷ Lệ Tier Thường Trực</td>
+            <td class="target-val">&ge;40%</td>
+            <td class="alert-val">&lt;25%</td>
+            <td>Tăng community touchpoints</td>
+          </tr>
+          <tr>
+            <td class="metric-name">D120</td>
+            <td>Tỷ Lệ Điểm Sinh Tồn</td>
+            <td class="target-val">&ge;35%</td>
+            <td class="alert-val">&lt;22%</td>
+            <td>Earning Guarantee sớm hơn</td>
+          </tr>
+          <tr>
+            <td class="metric-name">D180</td>
+            <td>Pro Tier Rate</td>
+            <td class="target-val">&ge;55%</td>
+            <td class="alert-val">&lt;40%</td>
+            <td>Review Referral Program</td>
+          </tr>
+          <tr>
+            <td class="metric-name">D365</td>
+            <td>Tỷ Lệ Champion Hoạt Động</td>
+            <td class="target-val">&ge;70%</td>
+            <td class="alert-val">&lt;55%</td>
+            <td>VIP review + kiểm tra incentive</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TIER SYSTEM -->
+  <section id="tier" style="background:var(--gray-50)">
+    <div class="container">
+      <div class="section-eyebrow">
+        <div class="section-label">Hệ thống tầng bậc</div>
+        <div class="eyebrow-line"></div>
+      </div>
+      <div class="section-title">Hệ Thống Tier Tài Xế - 6 Cấp Bậc</div>
+      <div class="section-sub">Từ Tân Binh đến Champion: mỗi cấp bậc có quyền lợi rõ ràng, điều kiện minh bạch</div>
+      <div class="tier-flow">
+        <div class="tier-card tc0">
+          <span class="tier-badge">&#128203;</span>
+          <div class="tier-name">Tân Binh</div>
+          <div class="tier-range">D0 - D7</div>
+          <div class="tier-incentive">+20k</div>
+          <div class="tier-cond">Điều kiện: Đăng ký + chuyến đầu tiên<br>Quyền lợi: Micro-bonus chuyến 1/3/5/7 + support
+            ưu tiên</div>
+        </div>
+        <div class="tier-arrow">&#8594;</div>
+        <div class="tier-card tc1">
+          <span class="tier-badge">&#128640;</span>
+          <div class="tier-name">Triển Vọng</div>
+          <div class="tier-range">D8 - D60</div>
+          <div class="tier-incentive">+35k/tuan</div>
+          <div class="tier-cond">Dieu kien: D7 badge + &ge;7 chuyến/tuan<br>Quyền lợi: Weekly streak bonus + D30 Starter
+            Kit</div>
+        </div>
+        <div class="tier-arrow">&#8594;</div>
+        <div class="tier-card tc3">
+          <span class="tier-badge">&#128170;</span>
+          <div class="tier-name">Thường Trực</div>
+          <div class="tier-range">D61 - D120</div>
+          <div class="tier-incentive">Guarantee 60%</div>
+          <div class="tier-cond">Điều kiện: D60 Habit Badge + &ge;4 ngày/tuần<br>Quyền lợi: Earning guarantee sơ bộ +
+            Community access</div>
+        </div>
+        <div class="tier-arrow">&#8594;</div>
+        <div class="tier-card tc2">
+          <span class="tier-badge">&#11088;</span>
+          <div class="tier-name">Chuyên Nghiệp</div>
+          <div class="tier-range">D121 - D180</div>
+          <div class="tier-incentive">Guarantee 70%</div>
+          <div class="tier-cond">Điều kiện: D120 Survival + rating &ge;4.7<br>Quyền lợi: Upskill training + Referral
+            program</div>
+        </div>
+        <div class="tier-arrow">&#8594;</div>
+        <div class="tier-card tc4">
+          <span class="tier-badge">&#127942;</span>
+          <div class="tier-name">Champion</div>
+          <div class="tier-range">D181+</div>
+          <div class="tier-incentive">Guarantee 80%</div>
+          <div class="tier-cond">Điều kiện: D180 Pro Review + referee &ge;1<br>Quyền lợi: VIP support + Ambassador
+            status + D365 gift</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section id="roadmap" style="background:#fff">
+    <div class="container">
+      <div class="section-eyebrow">
+        <div class="section-label">Lộ trình triển khai</div>
+        <div class="eyebrow-line"></div>
+      </div>
+      <div class="section-title">Lộ Trình Triển Khai - Q2/Q3 2026</div>
+      <div class="section-sub">Lộ trình 4 giai đoạn triển khai, ưu tiên tác động lớn nhất trước</div>
+      <div class="roadmap">
+        <div class="rm-card rm-p1">
+          <div class="rm-phase">Giai đoạn 1</div>
+          <div class="rm-time">Tháng 6/2026 - Nền Tảng</div>
+          <ul class="rm-items">
+            <li><span class="check">&#10003;</span>Xây dựng trigger system D1/D7/D30 tự động</li>
+            <li><span class="check">&#10003;</span>Chuẩn hóa script CSR Win-Back</li>
+            <li><span class="check">&#10003;</span>Triển khai Onboarding Checklist mới</li>
+            <li><span class="check">&#10003;</span>Bắt đầu đo D7 Activation Rate theo cohort</li>
+          </ul>
+        </div>
+        <div class="rm-card rm-p2">
+          <div class="rm-phase">Giai đoạn 2</div>
+          <div class="rm-time">Tháng 7/2026 - Habit Loop</div>
+          <ul class="rm-items">
+            <li><span class="check">&#10003;</span>Ra mắt Streak System trong app</li>
+            <li><span class="check">&#10003;</span>Triển khai D30 Starter Kit (1 khu vực pilot)</li>
+            <li><span class="check">&#10003;</span>Xây dựng D60 Habit Badge ceremony</li>
+            <li><span class="check">&#10003;</span>Mở Zalo Community theo Station</li>
+          </ul>
+        </div>
+        <div class="rm-card rm-p3">
+          <div class="rm-phase">Giai đoạn 3</div>
+          <div class="rm-time">Tháng 8/2026 - Tier &amp; Guarantee</div>
+          <ul class="rm-items">
+            <li><span class="check">&#10003;</span>Launch Earning Guarantee pilot (Thường Trực+)</li>
+            <li><span class="check">&#10003;</span>Triển khai Referral Program</li>
+            <li><span class="check">&#10003;</span>Mở rộng Starter Kit toàn quốc</li>
+            <li><span class="check">&#10003;</span>Bắt đầu Ambassador Program</li>
+          </ul>
+        </div>
+        <div class="rm-card rm-p4">
+          <div class="rm-phase">Giai đoạn 4</div>
+          <div class="rm-time">Tháng 9+/2026 - Scale</div>
+          <ul class="rm-items">
+            <li><span class="check">&#10003;</span>Full automation trigger system (AI-driven)</li>
+            <li><span class="check">&#10003;</span>Cohort analytics dashboard real-time</li>
+            <li><span class="check">&#10003;</span>D365 Anniversary Program</li>
+            <li><span class="check">&#10003;</span>Review toàn hệ thống và optimize</li>
+          </ul>
+        </div>
+      </div>
+      <div class="insight-box" style="margin-top:32px">
+        <div class="insight-icon">&#128161;</div>
+        <p><strong>Nguyên tắc triển khai:</strong> Đo lường trước khi scale. Mỗi giai đoạn phải có dữ liệu cohort rõ
+          ràng trước khi chuyển sang giai đoạn tiếp theo. <strong>KPI quan trọng nhất: D7 Activation Rate</strong> - nếu
+          chỉ số này tăng, toàn bộ hệ thống sẽ tốt lên.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="report-footer">
+    <div class="container">
+      <strong>Driver Journey Framework v1.2</strong>
+      <div class="footer-divider"></div>
+      <p>Ahamove &bull; Driver Management Team &bull; 28/05/2026</p>
+      <p style="margin-top:8px">Owner: <strong>Le Phuong Khanh</strong> &bull; Reviewed by: DM Leadership</p>
+    </div>
+  </footer>
+
+  <button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
+
+  <script>
+    function showPhase(n) {
+      document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('phase-' + n).classList.add('active');
+      document.querySelectorAll('.tab-btn')[n].classList.add('active');
+    }
+    const btt = document.getElementById('btt');
+    window.addEventListener('scroll', () => {
+      btt.classList.toggle('visible', window.scrollY > 300);
+    });
+  </script>
+
+</body>
+
+</html>

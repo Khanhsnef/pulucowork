@@ -1,0 +1,2479 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Lifecycle Journey Framework v2.0 — Ahamove</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --bg2: #1a1d27;
+            --bg3: #242736;
+            --border: #2e3347;
+            --accent: #f97316;
+            --accent2: #fb923c;
+            --blue: #3b82f6;
+            --green: #22c55e;
+            --purple: #a855f7;
+            --red: #ef4444;
+            --yellow: #eab308;
+            --cyan: #06b6d4;
+            --text: #e2e8f0;
+            --text2: #94a3b8;
+            --text3: #64748b;
+            --gold: #f59e0b;
+            --phase1: #eab308;
+            --phase2: #22c55e;
+            --phase3: #3b82f6;
+            --phase4: #a855f7;
+            --phase5: #ef4444;
+            --phase6: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* HEADER */
+        .hero {
+            background: linear-gradient(135deg, #0f1117 0%, #1a1030 50%, #0f1117 100%);
+            border-bottom: 2px solid var(--accent);
+            padding: 48px 32px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(249, 115, 22, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: rgba(249, 115, 22, 0.15);
+            border: 1px solid rgba(249, 115, 22, 0.4);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, var(--accent2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .hero .sub {
+            font-size: 16px;
+            color: var(--text2);
+            margin-bottom: 20px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta span {
+            font-size: 12px;
+            color: var(--text3);
+            background: var(--bg3);
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        /* LAYOUT */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            border-left: 4px solid var(--accent);
+            padding-left: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title span {
+            font-size: 22px;
+        }
+
+        /* EXEC SUMMARY */
+        .exec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .exec-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: border-color .2s;
+        }
+
+        .exec-card:hover {
+            border-color: var(--accent);
+        }
+
+        .exec-card .label {
+            font-size: 11px;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .exec-card .baseline {
+            font-size: 13px;
+            color: var(--text2);
+            margin-bottom: 4px;
+        }
+
+        .exec-card .arrow {
+            font-size: 20px;
+            color: var(--accent);
+            font-weight: 900;
+        }
+
+        .exec-card .target {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        .exec-card .delta {
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        /* JOURNEY MAP */
+        .journey-map {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 2px;
+            margin-bottom: 32px;
+            overflow-x: auto;
+        }
+
+        .phase-card {
+            border-radius: 12px;
+            padding: 20px 14px;
+            text-align: center;
+            position: relative;
+            transition: transform .2s;
+            cursor: default;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .phase-num {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: .7;
+            margin-bottom: 8px;
+        }
+
+        .phase-emoji {
+            font-size: 28px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .phase-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .phase-subtitle {
+            font-size: 11px;
+            opacity: .75;
+            margin-bottom: 8px;
+        }
+
+        .phase-days {
+            font-size: 11px;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .phase-churn {
+            margin-top: 10px;
+        }
+
+        .phase-churn-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .phase-churn-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .phase-churn-label {
+            font-size: 10px;
+            opacity: .6;
+            margin-top: 3px;
+        }
+
+        .p1 {
+            background: linear-gradient(135deg, rgba(234, 179, 8, .2), rgba(234, 179, 8, .05));
+            border: 1px solid rgba(234, 179, 8, .3);
+        }
+
+        .p2 {
+            background: linear-gradient(135deg, rgba(34, 197, 94, .2), rgba(34, 197, 94, .05));
+            border: 1px solid rgba(34, 197, 94, .3);
+        }
+
+        .p3 {
+            background: linear-gradient(135deg, rgba(59, 130, 246, .2), rgba(59, 130, 246, .05));
+            border: 1px solid rgba(59, 130, 246, .3);
+        }
+
+        .p4 {
+            background: linear-gradient(135deg, rgba(168, 85, 247, .2), rgba(168, 85, 247, .05));
+            border: 1px solid rgba(168, 85, 247, .3);
+        }
+
+        .p5 {
+            background: linear-gradient(135deg, rgba(239, 68, 68, .2), rgba(239, 68, 68, .05));
+            border: 1px solid rgba(239, 68, 68, .3);
+        }
+
+        .p6 {
+            background: linear-gradient(135deg, rgba(245, 158, 11, .2), rgba(245, 158, 11, .05));
+            border: 1px solid rgba(245, 158, 11, .3);
+        }
+
+        /* TIMELINE */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--purple), var(--blue));
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+
+        .timeline-nodes {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+            overflow-x: auto;
+            gap: 8px;
+            padding: 40px 8px;
+        }
+
+        .t-node {
+            text-align: center;
+            flex: 0 0 auto;
+        }
+
+        .t-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            border: 2px solid;
+        }
+
+        .t-dot.critical {
+            background: var(--red);
+            border-color: var(--red);
+            box-shadow: 0 0 8px rgba(239, 68, 68, .5);
+        }
+
+        .t-dot.high {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 8px rgba(249, 115, 22, .5);
+        }
+
+        .t-dot.medium {
+            background: var(--yellow);
+            border-color: var(--yellow);
+        }
+
+        .t-day {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .t-label {
+            font-size: 10px;
+            color: var(--text2);
+            max-width: 70px;
+            line-height: 1.3;
+        }
+
+        /* PHASE DETAIL */
+        .phase-detail {
+            background: var(--bg2);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .phase-header {
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .phase-header-icon {
+            font-size: 32px;
+        }
+
+        .phase-header-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .phase-header-info .phase-range {
+            font-size: 12px;
+            color: var(--text3);
+            font-weight: 600;
+        }
+
+        .phase-header-info .phase-goal {
+            font-size: 13px;
+            color: var(--text2);
+            margin-top: 4px;
+        }
+
+        .phase-body {
+            padding: 24px;
+        }
+
+        .phase-body-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media(max-width:768px) {
+            .phase-body-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .journey-map {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .card-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text3);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-title span {
+            font-size: 14px;
+        }
+
+        /* MILESTONES */
+        .milestone-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+        }
+
+        .milestone-row:last-child {
+            border-bottom: none;
+        }
+
+        .m-day {
+            min-width: 44px;
+            text-align: center;
+            background: rgba(249, 115, 22, .15);
+            border: 1px solid rgba(249, 115, 22, .3);
+            border-radius: 6px;
+            padding: 4px 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .m-content {
+            flex: 1;
+        }
+
+        .m-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        .m-reward {
+            font-size: 11px;
+            color: var(--green);
+        }
+
+        .m-priority {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .m-priority.critical {
+            background: rgba(239, 68, 68, .15);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, .3);
+        }
+
+        .m-priority.high {
+            background: rgba(249, 115, 22, .15);
+            color: var(--accent);
+            border: 1px solid rgba(249, 115, 22, .3);
+        }
+
+        .m-priority.medium {
+            background: rgba(234, 179, 8, .15);
+            color: var(--yellow);
+            border: 1px solid rgba(234, 179, 8, .3);
+        }
+
+        /* KPI TABLE */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
+        }
+
+        .kpi-item {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .kpi-metric {
+            font-size: 11px;
+            color: var(--text3);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .kpi-target {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        .kpi-desc {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 3px;
+        }
+
+        /* SEGMENT CARDS */
+        .segment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .segment-card {
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid;
+        }
+
+        .seg-champion {
+            border-color: rgba(245, 158, 11, .4);
+            background: linear-gradient(135deg, rgba(245, 158, 11, .12), rgba(245, 158, 11, .02));
+        }
+
+        .seg-loyalist {
+            border-color: rgba(168, 85, 247, .4);
+            background: linear-gradient(135deg, rgba(168, 85, 247, .12), rgba(168, 85, 247, .02));
+        }
+
+        .seg-hustler {
+            border-color: rgba(59, 130, 246, .4);
+            background: linear-gradient(135deg, rgba(59, 130, 246, .12), rgba(59, 130, 246, .02));
+        }
+
+        .seg-drifter {
+            border-color: rgba(234, 179, 8, .4);
+            background: linear-gradient(135deg, rgba(234, 179, 8, .12), rgba(234, 179, 8, .02));
+        }
+
+        .seg-dormant {
+            border-color: rgba(239, 68, 68, .4);
+            background: linear-gradient(135deg, rgba(239, 68, 68, .12), rgba(239, 68, 68, .02));
+        }
+
+        .seg-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .seg-pct {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .1);
+        }
+
+        .seg-def {
+            font-size: 12px;
+            color: var(--text2);
+            margin: 10px 0 8px;
+            line-height: 1.5;
+        }
+
+        .seg-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        .seg-tag {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, .07);
+            color: var(--text2);
+        }
+
+        .seg-risk {
+            font-size: 11px;
+            color: var(--red);
+            margin-top: 8px;
+        }
+
+        .seg-strategy {
+            font-size: 11px;
+            color: var(--green);
+            margin-top: 4px;
+        }
+
+        /* BENCHMARK TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background: rgba(249, 115, 22, .1);
+            color: var(--accent);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            color: var(--text2);
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, .02);
+        }
+
+        .platform-tag {
+            display: inline-block;
+            background: rgba(59, 130, 246, .15);
+            border: 1px solid rgba(59, 130, 246, .3);
+            color: #60a5fa;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .platform-tag.vn {
+            background: rgba(239, 68, 68, .15);
+            border-color: rgba(239, 68, 68, .3);
+            color: #f87171;
+        }
+
+        /* INACTIVITY PROTOCOL */
+        .alert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+        }
+
+        .alert-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid;
+        }
+
+        .alert-row.lv1 {
+            border-color: rgba(234, 179, 8, .3);
+            background: rgba(234, 179, 8, .06);
+        }
+
+        .alert-row.lv2 {
+            border-color: rgba(249, 115, 22, .3);
+            background: rgba(249, 115, 22, .06);
+        }
+
+        .alert-row.lv3 {
+            border-color: rgba(239, 68, 68, .3);
+            background: rgba(239, 68, 68, .06);
+        }
+
+        .alert-days {
+            font-size: 20px;
+            font-weight: 900;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .alert-lv1 .alert-days {
+            color: var(--yellow);
+        }
+
+        .alert-lv2 .alert-days {
+            color: var(--accent);
+        }
+
+        .alert-lv3 .alert-days {
+            color: var(--red);
+        }
+
+        .alert-action {
+            font-size: 12px;
+            color: var(--text2);
+            flex: 1;
+        }
+
+        .alert-action strong {
+            display: block;
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        /* ROADMAP */
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .roadmap-phase {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .roadmap-header {
+            padding: 14px 18px;
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .roadmap-header.phase-a {
+            background: rgba(34, 197, 94, .12);
+            border-bottom: 1px solid rgba(34, 197, 94, .2);
+            color: var(--green);
+        }
+
+        .roadmap-header.phase-b {
+            background: rgba(59, 130, 246, .12);
+            border-bottom: 1px solid rgba(59, 130, 246, .2);
+            color: var(--blue);
+        }
+
+        .roadmap-header.phase-c {
+            background: rgba(168, 85, 247, .12);
+            border-bottom: 1px solid rgba(168, 85, 247, .2);
+            color: var(--purple);
+        }
+
+        .roadmap-header.phase-d {
+            background: rgba(249, 115, 22, .12);
+            border-bottom: 1px solid rgba(249, 115, 22, .2);
+            color: var(--accent);
+        }
+
+        .roadmap-timeline {
+            font-size: 11px;
+            opacity: .8;
+        }
+
+        .roadmap-items {
+            padding: 16px 18px;
+        }
+
+        .roadmap-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        .roadmap-item::before {
+            content: '→';
+            color: var(--text3);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* VALUE TABLE */
+        .value-table td:nth-child(3) {
+            font-weight: 700;
+            color: var(--green);
+            font-size: 12px;
+        }
+
+        .before-arrow {
+            text-align: center;
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        /* CHURN TRIGGERS */
+        .trigger-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        @media(max-width:600px) {
+            .trigger-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .trigger-row {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(239, 68, 68, .05);
+            border: 1px solid rgba(239, 68, 68, .15);
+            border-radius: 8px;
+        }
+
+        .trigger-signal {
+            font-size: 12px;
+            color: var(--red);
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .trigger-action {
+            font-size: 11px;
+            color: var(--text2);
+            flex: 1;
+        }
+
+        /* SQL BLOCK */
+        .sql-block {
+            background: #0a0e1a;
+            border: 1px solid rgba(59, 130, 246, .2);
+            border-radius: 10px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.7;
+            color: #94a3b8;
+        }
+
+        .sql-kw {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        .sql-fn {
+            color: #a78bfa;
+        }
+
+        .sql-str {
+            color: #34d399;
+        }
+
+        .sql-cm {
+            color: #475569;
+            font-style: italic;
+        }
+
+        .sql-num {
+            color: #fb923c;
+        }
+
+        /* INTEGRATION MAP */
+        .integration-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            margin-bottom: 8px;
+        }
+
+        .int-phase {
+            min-width: 140px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .int-arrow {
+            color: var(--text3);
+        }
+
+        .int-rank {
+            min-width: 140px;
+            font-size: 12px;
+            color: var(--blue);
+        }
+
+        .int-layer {
+            font-size: 12px;
+            color: var(--green);
+        }
+
+        /* WIN-BACK */
+        .winback-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+        }
+
+        .wb-card {
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid;
+        }
+
+        .wb-high {
+            border-color: rgba(239, 68, 68, .3);
+            background: rgba(239, 68, 68, .06);
+        }
+
+        .wb-mid {
+            border-color: rgba(249, 115, 22, .3);
+            background: rgba(249, 115, 22, .06);
+        }
+
+        .wb-low {
+            border-color: rgba(234, 179, 8, .3);
+            background: rgba(234, 179, 8, .06);
+        }
+
+        .wb-churned {
+            border-color: rgba(100, 116, 139, .3);
+            background: rgba(100, 116, 139, .06);
+        }
+
+        .wb-tier {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .wb-condition {
+            font-size: 11px;
+            color: var(--text2);
+            margin-bottom: 8px;
+        }
+
+        .wb-strategy {
+            font-size: 12px;
+            color: var(--text);
+        }
+
+        .wb-budget {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+
+        .budget-high {
+            background: rgba(239, 68, 68, .2);
+            color: var(--red);
+        }
+
+        .budget-mid {
+            background: rgba(249, 115, 22, .2);
+            color: var(--accent);
+        }
+
+        .budget-low {
+            background: rgba(234, 179, 8, .2);
+            color: var(--yellow);
+        }
+
+        /* BENEFIT LADDER */
+        .benefit-table th {
+            background: rgba(168, 85, 247, .1);
+        }
+
+        .benefit-table td.yes {
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .benefit-table td.no {
+            color: var(--text3);
+        }
+
+        .benefit-table td.rank-r1 {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .benefit-table td.rank-r2 {
+            color: #c0c0c0;
+            font-weight: 700;
+        }
+
+        .benefit-table td.rank-r3 {
+            color: #cd7f32;
+            font-weight: 700;
+        }
+
+        /* TAGS */
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tag-critical {
+            background: rgba(239, 68, 68, .15);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, .3);
+        }
+
+        .tag-high {
+            background: rgba(249, 115, 22, .15);
+            color: var(--accent);
+            border: 1px solid rgba(249, 115, 22, .3);
+        }
+
+        .tag-med {
+            background: rgba(234, 179, 8, .15);
+            color: var(--yellow);
+            border: 1px solid rgba(234, 179, 8, .3);
+        }
+
+        /* RESEARCH CALLOUT */
+        .research-callout {
+            background: rgba(59, 130, 246, .06);
+            border: 1px solid rgba(59, 130, 246, .2);
+            border-left: 4px solid var(--blue);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+        }
+
+        .research-callout .source {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--blue);
+            margin-bottom: 4px;
+        }
+
+        .research-callout .content {
+            font-size: 13px;
+            color: var(--text2);
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 32px 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text3);
+            font-size: 12px;
+            margin-top: 48px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-tag">Driver Management · Ahamove</div>
+        <h1>🧭 Driver Lifecycle Journey Framework</h1>
+        <p class="sub">Khung Hành Trình Vòng Đời Tài Xế — From Onboarding to Professional Retention</p>
+        <div class="hero-meta">
+            <span>📋 Phiên bản: v2.0</span>
+            <span>📅 28/05/2026</span>
+            <span>🏍️ Tài xế 2 bánh — Ahamove Platform</span>
+            <span>👤 Driver Management Team</span>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- EXEC SUMMARY -->
+        <div class="section">
+            <div class="section-title"><span>📊</span> EXECUTIVE SUMMARY — KẾT QUẢ KỲ VỌNG</div>
+            <div
+                style="background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.2);border-radius:12px;padding:16px 20px;margin-bottom:20px;">
+                <p style="font-size:13px;color:var(--text2);line-height:1.7;">
+                    <strong style="color:var(--text);">Vấn đề cốt lõi:</strong> Tỷ lệ rời bỏ của tài xế 2 bánh dao động
+                    <strong style="color:var(--red);">40-65% trong 90 ngày đầu</strong>. Nguyên nhân gốc rễ không phải
+                    thu nhập thấp, mà do <strong style="color:var(--accent);">thiếu lộ trình phát triển rõ ràng</strong>
+                    — tài xế không nhìn thấy tương lai trên nền tảng.<br><br>
+                    <strong style="color:var(--text);">Giải pháp:</strong> Hệ thống <strong
+                        style="color:var(--accent);">6 giai đoạn</strong> với mốc thời gian cụ thể, cơ chế gamification,
+                    và chương trình engagement khác biệt cho từng nhóm tài xế — tổng hợp từ Grab, Uber, Gojek, DoorDash,
+                    Deliveroo và nghiên cứu hành vi gig economy toàn cầu.
+                </p>
+            </div>
+            <div class="exec-grid">
+                <div class="exec-card">
+                    <div class="label">D7 Retention</div>
+                    <div class="baseline">Baseline: ~55%</div>
+                    <div class="arrow">↓</div>
+                    <div class="target">75%</div>
+                    <div class="delta">+20 percentage points</div>
+                </div>
+                <div class="exec-card">
+                    <div class="label">D30 Retention</div>
+                    <div class="baseline">Baseline: ~35%</div>
+                    <div class="arrow">↓</div>
+                    <div class="target">55%</div>
+                    <div class="delta">+20 percentage points</div>
+                </div>
+                <div class="exec-card">
+                    <div class="label">D90 Retention</div>
+                    <div class="baseline">Baseline: ~20%</div>
+                    <div class="arrow">↓</div>
+                    <div class="target">40%</div>
+                    <div class="delta">+20 percentage points</div>
+                </div>
+                <div class="exec-card">
+                    <div class="label">Active Drivers/Tháng</div>
+                    <div class="baseline">Baseline hiện tại</div>
+                    <div class="arrow">↓</div>
+                    <div class="target">+25%</div>
+                    <div class="delta">Tăng trưởng bền vững</div>
+                </div>
+                <div class="exec-card">
+                    <div class="label">Driver LTV</div>
+                    <div class="baseline">Baseline: ~3.5 tháng</div>
+                    <div class="arrow">↓</div>
+                    <div class="target">~7 tháng</div>
+                    <div class="delta">+100% lifetime value</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BENCHMARK -->
+        <div class="section">
+            <div class="section-title"><span>🔬</span> BENCHMARK — MÔ HÌNH VẬN HÀNH TOÀN CẦU</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+                <div>
+                    <div
+                        style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">
+                        🇻🇳 Thị Trường Việt Nam</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nền tảng</th>
+                                <th>Mô hình nổi bật</th>
+                                <th>Insight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="platform-tag vn">Grab</span></td>
+                                <td>4 Tier + Guaranteed Earnings</td>
+                                <td style="color:var(--green);">Gamification mạnh</td>
+                            </tr>
+                            <tr>
+                                <td><span class="platform-tag vn">Be</span></td>
+                                <td>BeAcademy + Bảo hiểm</td>
+                                <td style="color:var(--green);">Community chặt chẽ</td>
+                            </tr>
+                            <tr>
+                                <td><span class="platform-tag vn">XanhSM</span></td>
+                                <td>Salary + KPI</td>
+                                <td style="color:var(--yellow);">Ổn định, không flexible</td>
+                            </tr>
+                            <tr>
+                                <td><span class="platform-tag vn">Lalamove</span></td>
+                                <td>Flat commission</td>
+                                <td style="color:var(--red);">Không có retention</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <div
+                        style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">
+                        🌏 Thị Trường Quốc Tế</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nền tảng</th>
+                                <th>Insight áp dụng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="platform-tag">Uber</span></td>
+                                <td>Guaranteed Earnings + Quest Bonuses</td>
+                            </tr>
+                            <tr>
+                                <td><span class="platform-tag">DoorDash</span></td>
+                                <td>Priority Access cho top performers</td>
+                            </tr>
+                            <tr>
+                                <td><span class="platform-tag">Deliveroo</span></td>
+                                <td>Dynamic Fee Multiplier 1.1x-1.5x</td>
+                            </tr>
+                            <tr>
+                                <td><span class="platform-tag">Gojek ID</span></td>
+                                <td>Hub onboarding + Mentor System</td>
+                            </tr>
+                            <tr>
+                                <td><span class="platform-tag">Swiggy</span></td>
+                                <td>Health insurance → +42% D180 retention</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div class="research-callout">
+                    <div class="source">📌 Uber Research (2023)</div>
+                    <div class="content">47% tài xế mới ngừng hoạt động trước 25 chuyến. Nguyên nhân #1: <strong
+                            style="color:var(--text);">"Không biết phải làm gì tiếp theo"</strong></div>
+                </div>
+                <div class="research-callout">
+                    <div class="source">📌 Grab Internal Study (SEA 2024)</div>
+                    <div class="content">Guaranteed Earnings 14 ngày đầu → D30 Retention cao hơn <strong
+                            style="color:var(--text);">32%</strong> so với nhóm không nhận</div>
+                </div>
+                <div class="research-callout">
+                    <div class="source">📌 ILO Gig Economy Report (2024)</div>
+                    <div class="content">Tài xế ưu tiên: <strong style="color:var(--text);">(1) Thu nhập ổn định > (2)
+                            Linh hoạt > (3) Cơ hội phát triển</strong>. Đáp ứng cả 3 → LTV cao gấp 2.3x</div>
+                </div>
+                <div class="research-callout">
+                    <div class="source">📌 Behavioral Science — Habit Loop</div>
+                    <div class="content">Hoàn thành <strong style="color:var(--text);">21 đơn trong 14 ngày đầu</strong>
+                        → xác suất retention D90 tăng <strong style="color:var(--text);">58%</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JOURNEY MAP -->
+        <div class="section">
+            <div class="section-title"><span>🗺️</span> DRIVER LIFECYCLE JOURNEY — 6 GIAI ĐOẠN</div>
+            <div class="journey-map">
+                <div class="phase-card p1">
+                    <div class="phase-num">Phase 1</div>
+                    <span class="phase-emoji">🟡</span>
+                    <div class="phase-title">ONBOARDING</div>
+                    <div class="phase-subtitle">Warm Up · Khởi Động</div>
+                    <div class="phase-days">D0 → D3</div>
+                    <div class="phase-churn">
+                        <div class="phase-churn-bar">
+                            <div class="phase-churn-fill" style="width:90%"></div>
+                        </div>
+                        <div class="phase-churn-label">Churn Risk: Rất Cao</div>
+                    </div>
+                </div>
+                <div class="phase-card p2">
+                    <div class="phase-num">Phase 2</div>
+                    <span class="phase-emoji">🟢</span>
+                    <div class="phase-title">FIRST WIN</div>
+                    <div class="phase-subtitle">Hook In · Gắn Kết</div>
+                    <div class="phase-days">D4 → D14</div>
+                    <div class="phase-churn">
+                        <div class="phase-churn-bar">
+                            <div class="phase-churn-fill" style="width:75%"></div>
+                        </div>
+                        <div class="phase-churn-label">Churn Risk: Cao</div>
+                    </div>
+                </div>
+                <div class="phase-card p3">
+                    <div class="phase-num">Phase 3</div>
+                    <span class="phase-emoji">🔵</span>
+                    <div class="phase-title">HABIT BUILD</div>
+                    <div class="phase-subtitle">Lock In · Khóa Chặt</div>
+                    <div class="phase-days">D15 → D45</div>
+                    <div class="phase-churn">
+                        <div class="phase-churn-bar">
+                            <div class="phase-churn-fill" style="width:60%"></div>
+                        </div>
+                        <div class="phase-churn-label">Churn Risk: TB-Cao ⚡</div>
+                    </div>
+                </div>
+                <div class="phase-card p4">
+                    <div class="phase-num">Phase 4</div>
+                    <span class="phase-emoji">🟣</span>
+                    <div class="phase-title">GROWTH</div>
+                    <div class="phase-subtitle">Grow Up · Nâng Tầm</div>
+                    <div class="phase-days">D46 → D120</div>
+                    <div class="phase-churn">
+                        <div class="phase-churn-bar">
+                            <div class="phase-churn-fill" style="width:40%"></div>
+                        </div>
+                        <div class="phase-churn-label">Churn Risk: Trung Bình</div>
+                    </div>
+                </div>
+                <div class="phase-card p5">
+                    <div class="phase-num">Phase 5</div>
+                    <span class="phase-emoji">🔴</span>
+                    <div class="phase-title">MASTERY</div>
+                    <div class="phase-subtitle">Master Level · Bậc Thầy</div>
+                    <div class="phase-days">D121 → D365</div>
+                    <div class="phase-churn">
+                        <div class="phase-churn-bar">
+                            <div class="phase-churn-fill" style="width:20%"></div>
+                        </div>
+                        <div class="phase-churn-label">Churn Risk: Thấp</div>
+                    </div>
+                </div>
+                <div class="phase-card p6">
+                    <div class="phase-num">Phase 6</div>
+                    <span class="phase-emoji">⭐</span>
+                    <div class="phase-title">AMBASSADOR</div>
+                    <div class="phase-subtitle">Advocate & Lead</div>
+                    <div class="phase-days">D365+</div>
+                    <div class="phase-churn">
+                        <div class="phase-churn-bar">
+                            <div class="phase-churn-fill" style="width:8%"></div>
+                        </div>
+                        <div class="phase-churn-label">Churn Risk: Rất Thấp</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="section">
+            <div class="section-title"><span>📅</span> MASTER TIMELINE — BẢN ĐỒ MỐC THỜI GIAN</div>
+            <div
+                style="overflow-x:auto;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;">
+                <div style="display:flex;gap:16px;min-width:900px;align-items:flex-end;padding:8px 0;">
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div
+                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D1</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">First Trip</div>
+                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div
+                            style="height:8px;width:8px;background:var(--accent);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(249,115,22,.5);">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D3</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Micro Win 5 đơn</div>
+                        <div style="margin-top:4px;"><span class="tag tag-high">High</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div
+                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D7</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Activation Badge</div>
+                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div style="height:8px;width:8px;background:var(--accent);border-radius:50%;margin:0 auto 6px;">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D14</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Streak 14D</div>
+                        <div style="margin-top:4px;"><span class="tag tag-high">High</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div style="height:8px;width:8px;background:var(--yellow);border-radius:50%;margin:0 auto 6px;">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D21</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Habit Check</div>
+                        <div style="margin-top:4px;"><span class="tag tag-med">Medium</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div
+                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D30</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Month #1 Tier</div>
+                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div style="height:8px;width:8px;background:var(--accent);border-radius:50%;margin:0 auto 6px;">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">~D45</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">100 Orders</div>
+                        <div style="margin-top:4px;"><span class="tag tag-high">High</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div
+                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D60</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Habit Badge</div>
+                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div
+                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D90</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Tier Upgrade</div>
+                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div style="height:8px;width:8px;background:var(--accent);border-radius:50%;margin:0 auto 6px;">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D120</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Survival Point</div>
+                        <div style="margin-top:4px;"><span class="tag tag-high">High</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div
+                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D180</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Pro Tier</div>
+                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div style="height:8px;width:8px;background:var(--yellow);border-radius:50%;margin:0 auto 6px;">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D270</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">9-Month Review</div>
+                        <div style="margin-top:4px;"><span class="tag tag-med">Medium</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div
+                            style="height:8px;width:8px;background:var(--gold);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 8px rgba(245,158,11,.6);">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D365</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">🏆 Anniversary</div>
+                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
+                    </div>
+                    <div style="text-align:center;flex:0 0 auto;">
+                        <div style="height:8px;width:8px;background:var(--accent);border-radius:50%;margin:0 auto 6px;">
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D365+</div>
+                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Ambassador</div>
+                        <div style="margin-top:4px;"><span class="tag tag-high">High</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHASE DETAILS -->
+        <!-- Phase 1 -->
+        <div class="section">
+            <div class="section-title"><span>🟡</span> PHASE 1 — ONBOARDING & ACTIVATION</div>
+            <div class="phase-detail">
+                <div class="phase-header" style="border-left:4px solid var(--phase1);">
+                    <div class="phase-header-icon">🟡</div>
+                    <div class="phase-header-info">
+                        <h3>Warm Up — Khởi Động</h3>
+                        <div class="phase-range">Ngày 0 → Ngày 3 · Churn Risk: RẤT CAO</div>
+                        <div class="phase-goal">🎯 Mục tiêu: Hoàn thành đơn đầu tiên trong 72 giờ sau khi được duyệt tài
+                            khoản</div>
+                    </div>
+                </div>
+                <div class="phase-body">
+                    <div class="phase-body-grid">
+                        <div>
+                            <div class="card" style="margin-bottom:14px;">
+                                <div class="card-title"><span>⚡</span> Cơ chế can thiệp</div>
+                                <div class="milestone-row">
+                                    <div class="m-day">D0</div>
+                                    <div class="m-content">
+                                        <div class="m-title">Welcome Flow — Chào mừng cá nhân hóa</div>
+                                        <div class="m-reward">Video 3 phút + Checklist 5 bước + Progress bar</div>
+                                    </div>
+                                </div>
+                                <div class="milestone-row">
+                                    <div class="m-day">D0</div>
+                                    <div class="m-content">
+                                        <div class="m-title">First Trip Incentive — Declining Reward</div>
+                                        <div class="m-reward">24h → Bonus cao nhất | 48h → Vừa | 72h → Thấp nhất</div>
+                                    </div>
+                                </div>
+                                <div class="milestone-row">
+                                    <div class="m-day">D0</div>
+                                    <div class="m-content">
+                                        <div class="m-title">Buddy System — Gán mentor cùng khu vực</div>
+                                        <div class="m-reward">Buddy nhận thưởng khi mentee hoàn thành 5 đơn đầu</div>
+                                    </div>
+                                </div>
+                                <div class="milestone-row">
+                                    <div class="m-day">D0-3</div>
+                                    <div class="m-content">
+                                        <div class="m-title">Newbie Priority Dispatch</div>
+                                        <div class="m-reward">Ưu tiên đơn gần, dễ cho tài xế mới trong 72h đầu</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title"><span>⚠️</span> Churn Triggers</div>
+                                <div class="trigger-grid">
+                                    <div class="trigger-row">
+                                        <div class="trigger-signal">Không mở app sau 24h</div>
+                                        <div class="trigger-action">Push + SMS kèm incentive nhắc nhở</div>
+                                    </div>
+                                    <div class="trigger-row">
+                                        <div class="trigger-signal">Mở app nhưng không bật online</div>
+                                        <div class="trigger-action">Gọi điện từ Operations trong 48h</div>
+                                    </div>
+                                    <div class="trigger-row">
+                                        <div class="trigger-signal">Từ chối 3 đơn liên tiếp</div>
+                                        <div class="trigger-action">Pop-up hướng dẫn + điều chỉnh dispatch</div>
+                                    </div>
+                                    <div class="trigger-row">
+                                        <div class="trigger-signal">Hủy đơn đầu tiên</div>
+                                        <div class="trigger-action">Callback ngay + hỗ trợ tức thì</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="card">
+                                <div class="card-title"><span>📊</span> KPIs Phase 1</div>
+                                <div class="kpi-grid">
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">Activation Rate</div>
+                                        <div class="kpi-target">≥ 70%</div>
+                                        <div class="kpi-desc">Hoàn thành ≥1 đơn trong 72h</div>
+                                    </div>
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">Time to First Trip</div>
+                                        <div class="kpi-target">≤ 36h</div>
+                                        <div class="kpi-desc">Từ duyệt → chuyến đầu</div>
+                                    </div>
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">App Engagement</div>
+                                        <div class="kpi-target">≥ 3x/ngày</div>
+                                        <div class="kpi-desc">Số lần mở app trong 3 ngày đầu</div>
+                                    </div>
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">Onboarding Completion</div>
+                                        <div class="kpi-target">≥ 85%</div>
+                                        <div class="kpi-desc">Hoàn thành toàn bộ checklist</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="phase-detail" style="margin-top:16px;">
+                <div class="phase-header" style="border-left:4px solid var(--phase2);">
+                    <div class="phase-header-icon">🟢</div>
+                    <div class="phase-header-info">
+                        <h3>Hook In — Gắn Kết (First Win)</h3>
+                        <div class="phase-range">Ngày 4 → Ngày 14 · Churn Risk: CAO</div>
+                        <div class="phase-goal">🎯 Mục tiêu: Hoàn thành ≥15 đơn và đạt thu nhập tích lũy đầu tiên có ý
+                            nghĩa</div>
+                    </div>
+                </div>
+                <div class="phase-body">
+                    <div class="phase-body-grid">
+                        <div>
+                            <div class="card" style="margin-bottom:14px;">
+                                <div class="card-title"><span>🎯</span> Guaranteed Earnings — 10 ngày đầu</div>
+                                <div
+                                    style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:14px;">
+                                    <div style="font-size:13px;color:var(--text);margin-bottom:8px;font-weight:600;">
+                                        Chương Trình Đảm Bảo Thu Nhập Tài Xế Mới</div>
+                                    <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+                                        ✅ Hoàn thành ≥5 đơn/ngày trong 10 ngày đầu<br>
+                                        ✅ Thu nhập thực tế < đảm bảo → Ahamove bù chênh lệch<br>
+                                            ✅ Thu nhập thực tế > đảm bảo → Tài xế giữ toàn bộ<br>
+                                            <strong style="color:var(--green);">⚡ Mục đích: Xóa bỏ nỗi lo "chạy mà không
+                                                có đơn"</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title"><span>🏆</span> Progressive Milestones</div>
+                                <div class="milestone-row">
+                                    <div class="m-day">5 đơn</div>
+                                    <div class="m-content">
+                                        <div class="m-title">Micro Bonus Đầu Tiên</div>
+                                        <div class="m-reward">Tiền mặt + "Tôi làm được!" — Self-efficacy</div>
+                                    </div><span class="m-priority high">High</span>
+                                </div>
+                                <div class="milestone-row">
+                                    <div class="m-day">15 đơn</div>
+                                    <div class="m-content">
+                                        <div class="m-title">Badge 🥉 + Bonus Tiền Mặt</div>
+                                        <div class="m-reward">"Tôi đang tiến bộ" — Progress psychology</div>
+                                    </div><span class="m-priority critical">Critical</span>
+                                </div>
+                                <div class="milestone-row">
+                                    <div class="m-day">25 đơn</div>
+                                    <div class="m-content">
+                                        <div class="m-title">Unlock Tính năng mới</div>
+                                        <div class="m-reward">"Tôi được tin tưởng" — Trust building</div>
+                                    </div><span class="m-priority high">High</span>
+                                </div>
+                                <div class="milestone-row">
+                                    <div class="m-day">D7</div>
+                                    <div class="m-content">
+                                        <div class="m-title">🎁 MEGA BONUS — Streak 7 ngày</div>
+                                        <div class="m-reward">Badge "Tuần Lễ Vàng" + Bonus lớn nhất</div>
+                                    </div><span class="m-priority critical">Critical</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="card">
+                                <div class="card-title"><span>📊</span> KPIs Phase 2</div>
+                                <div class="kpi-grid">
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">D14 Retention</div>
+                                        <div class="kpi-target">≥ 65%</div>
+                                    </div>
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">Avg Orders/Day</div>
+                                        <div class="kpi-target">≥ 4 đơn</div>
+                                    </div>
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">Cumulative D14</div>
+                                        <div class="kpi-target">≥ 15 đơn</div>
+                                    </div>
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">Streak Participation</div>
+                                        <div class="kpi-target">≥ 40%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="phase-detail" style="margin-top:16px;">
+                <div class="phase-header" style="border-left:4px solid var(--phase3);">
+                    <div class="phase-header-icon">🔵</div>
+                    <div class="phase-header-info">
+                        <h3>Lock In — Xây Dựng Thói Quen</h3>
+                        <div class="phase-range">Ngày 15 → Ngày 45 · Churn Risk: TB-CAO ⚡ GIAI ĐOẠN QUAN TRỌNG NHẤT
+                        </div>
+                        <div class="phase-goal">🎯 Mục tiêu: Thói quen ≥4 ngày/tuần, tổng ≥60 đơn. Valley of
+                            Disillusionment — bonus ban đầu giảm, cần chuyển từ external → intrinsic motivation</div>
+                    </div>
+                </div>
+                <div class="phase-body">
+                    <div class="phase-body-grid">
+                        <div>
+                            <div class="card" style="margin-bottom:14px;">
+                                <div class="card-title"><span>📋</span> Weekly Quest System</div>
+                                <div
+                                    style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:14px;">
+                                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;">
+                                        <div style="background:rgba(59,130,246,.1);padding:10px;border-radius:6px;">
+                                            <strong style="color:var(--blue);">🥉 Quest Cơ Bản</strong><br><span
+                                                style="color:var(--text2);">20 đơn/tuần → Thưởng A</span></div>
+                                        <div style="background:rgba(59,130,246,.15);padding:10px;border-radius:6px;">
+                                            <strong style="color:var(--blue);">🥈 Quest Nâng Cao</strong><br><span
+                                                style="color:var(--text2);">30 đơn/tuần → A+B</span></div>
+                                        <div style="background:rgba(59,130,246,.2);padding:10px;border-radius:6px;">
+                                            <strong style="color:var(--blue);">🥇 Quest Siêu Cấp</strong><br><span
+                                                style="color:var(--text2);">40 đơn/tuần → A+B+C</span></div>
+                                        <div style="background:rgba(59,130,246,.08);padding:10px;border-radius:6px;">
+                                            <strong style="color:var(--text3);">📊 Social Proof</strong><br><span
+                                                style="color:var(--text2);">So sánh vs khu vực</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title"><span>🔓</span> Skill Unlocking</div>
+                                <div class="milestone-row">
+                                    <div class="m-day">30 đơn</div>
+                                    <div class="m-content">
+                                        <div class="m-title">Nhận đơn "Đặc biệt" (giá trị cao hơn)</div>
+                                    </div>
+                                </div>
+                                <div class="milestone-row">
+                                    <div class="m-day">50 đơn</div>
+                                    <div class="m-content">
+                                        <div class="m-title">Tự chọn khu vực ưu tiên dispatch</div>
+                                    </div>
+                                </div>
+                                <div class="milestone-row">
+                                    <div class="m-day">Rating 4.7+</div>
+                                    <div class="m-content">
+                                        <div class="m-title">Badge "Tài Xế Chất Lượng" + Ưu tiên đơn</div>
+                                    </div>
+                                </div>
+                                <div class="milestone-row">
+                                    <div class="m-day">4 tuần</div>
+                                    <div class="m-content">
+                                        <div class="m-title">Đăng ký ca ưu tiên (Priority Shift)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="card">
+                                <div class="card-title"><span>📊</span> KPIs Phase 3</div>
+                                <div class="kpi-grid">
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">D45 Retention</div>
+                                        <div class="kpi-target">≥ 50%</div>
+                                    </div>
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">Weekly Active Days</div>
+                                        <div class="kpi-target">≥ 4 ngày</div>
+                                    </div>
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">Quest Completion</div>
+                                        <div class="kpi-target">≥ 45%</div>
+                                    </div>
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">Cumulative D45</div>
+                                        <div class="kpi-target">≥ 60 đơn</div>
+                                    </div>
+                                    <div class="kpi-item">
+                                        <div class="kpi-metric">Acceptance Rate</div>
+                                        <div class="kpi-target">≥ 75%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="phase-detail" style="margin-top:16px;">
+                <div class="phase-header" style="border-left:4px solid var(--phase4);">
+                    <div class="phase-header-icon">🟣</div>
+                    <div class="phase-header-info">
+                        <h3>Grow Up — Phát Triển & Mở Rộng</h3>
+                        <div class="phase-range">Ngày 46 → Ngày 120 · Churn Risk: TRUNG BÌNH</div>
+                        <div class="phase-goal">🎯 Mục tiêu: Đạt hạng R3 Bạc → R2 Vàng, ≥5 ngày/tuần, trở thành nguồn cung
+                            đáng tin cậy</div>
+                    </div>
+                </div>
+                <div class="phase-body">
+                    <div style="margin-bottom:16px;">
+                        <div class="card-title"><span>🏆</span> Benefit Ladder — Quyền Lợi Theo Tier</div>
+                        <table class="benefit-table">
+                            <thead>
+                                <tr>
+                                    <th>Quyền lợi</th>
+                                    <th>Unranked</th>
+                                    <th>🥈 R3 Bạc</th>
+                                    <th>🥇 R2 Vàng</th>
+                                    <th>💎 R1 Kim Cương</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Dispatch Priority</td>
+                                    <td class="no">Cơ bản</td>
+                                    <td>+10%</td>
+                                    <td style="color:var(--green);">+25%</td>
+                                    <td class="rank-r1">+40%</td>
+                                </tr>
+                                <tr>
+                                    <td>Peak Hour Multiplier</td>
+                                    <td class="no">1.0x</td>
+                                    <td class="no">1.0x</td>
+                                    <td style="color:var(--green);">1.1x</td>
+                                    <td class="rank-r1">1.2x</td>
+                                </tr>
+                                <tr>
+                                    <td>Bảo hiểm tai nạn</td>
+                                    <td class="no">❌</td>
+                                    <td class="yes">✅ Cơ bản</td>
+                                    <td class="yes">✅ Mở rộng</td>
+                                    <td class="rank-r1">✅ Premium</td>
+                                </tr>
+                                <tr>
+                                    <td>AhaBenefits Points</td>
+                                    <td class="no">×1.0</td>
+                                    <td>×1.5</td>
+                                    <td style="color:var(--green);">×2.0</td>
+                                    <td class="rank-r1">×3.0</td>
+                                </tr>
+                                <tr>
+                                    <td>Priority Shift Booking</td>
+                                    <td class="no">❌</td>
+                                    <td class="no">❌</td>
+                                    <td class="yes">✅</td>
+                                    <td class="rank-r1">✅ + Early access</td>
+                                </tr>
+                                <tr>
+                                    <td>VIP Orders</td>
+                                    <td class="no">❌</td>
+                                    <td class="no">❌</td>
+                                    <td class="yes">✅</td>
+                                    <td class="rank-r1">✅</td>
+                                </tr>
+                                <tr>
+                                    <td>Mentor Role</td>
+                                    <td class="no">❌</td>
+                                    <td class="no">❌</td>
+                                    <td class="no">❌</td>
+                                    <td class="rank-r1">✅ + Thưởng</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="kpi-grid">
+                        <div class="kpi-item">
+                            <div class="kpi-metric">D120 Retention</div>
+                            <div class="kpi-target">≥ 40%</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-metric">R3 Bạc+ Rate</div>
+                            <div class="kpi-target">≥ 60%</div>
+                            <div class="kpi-desc">(trong số retained)</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-metric">Monthly Orders</div>
+                            <div class="kpi-target">≥ 100</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-metric">Active Days/Month</div>
+                            <div class="kpi-target">≥ 20 ngày</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-metric">Avg Rating</div>
+                            <div class="kpi-target">≥ 4.7</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 5 & 6 compact -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+                <div class="phase-detail">
+                    <div class="phase-header" style="border-left:4px solid var(--phase5);">
+                        <div class="phase-header-icon">🔴</div>
+                        <div class="phase-header-info">
+                            <h3>Master Level — Chuyên Nghiệp Hóa</h3>
+                            <div class="phase-range">D121 → D365 · Churn Risk: THẤP</div>
+                        </div>
+                    </div>
+                    <div class="phase-body">
+                        <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">Tài xế cần <strong
+                                style="color:var(--text);">ý nghĩa và sự công nhận</strong>, không chỉ tiền (Maslow —
+                            Self-Actualization)</div>
+                        <div class="card" style="margin-bottom:12px;">
+                            <div class="card-title"><span>💎</span> Exclusive Benefits</div>
+                            <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+                                🎯 VIP Order Pool — Đơn B2B, định kỳ<br>
+                                🏦 Financial Services — Vay vốn từ earning history<br>
+                                🏥 Extended Insurance — Tài xế + 1 người thân<br>
+                                📚 Học bổng cho con em tài xế R1 Kim Cương<br>
+                                🎁 Anniversary Rewards — 6M, 9M, 12M
+                            </div>
+                        </div>
+                        <div class="kpi-grid">
+                            <div class="kpi-item">
+                                <div class="kpi-metric">D365 Retention</div>
+                                <div class="kpi-target">≥ 30%</div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-metric">R2 Vàng+ Rate</div>
+                                <div class="kpi-target">≥ 40%</div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-metric">NPS</div>
+                                <div class="kpi-target">≥ 40</div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-metric">Monthly Orders</div>
+                                <div class="kpi-target">≥ 140</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="phase-detail">
+                    <div class="phase-header" style="border-left:4px solid var(--phase6);">
+                        <div class="phase-header-icon">⭐</div>
+                        <div class="phase-header-info">
+                            <h3>Ambassador — Đại Sứ & Dẫn Dắt</h3>
+                            <div class="phase-range">D365+ · Churn Risk: RẤT THẤP</div>
+                        </div>
+                    </div>
+                    <div class="phase-body">
+                        <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">Trao <strong
+                                style="color:var(--text);">vai trò và trách nhiệm</strong> để duy trì engagement
+                            (Erikson — Generativity)</div>
+                        <div class="card" style="margin-bottom:12px;">
+                            <div class="card-title"><span>👥</span> Mentor Program</div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Vai trò</th>
+                                        <th>Thưởng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="color:var(--text);">Buddy Mentor</td>
+                                        <td>Thưởng/mentee đạt 20 đơn</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:var(--text);">Area Captain</td>
+                                        <td>Cố định + % performance nhóm</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:var(--text);">Training Host</td>
+                                        <td>Cố định + Recognition</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="kpi-grid">
+                            <div class="kpi-item">
+                                <div class="kpi-metric">Annual Retention</div>
+                                <div class="kpi-target">≥ 25%</div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-metric">Referral/Qtr</div>
+                                <div class="kpi-target">≥ 2 người</div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-metric">NPS</div>
+                                <div class="kpi-target">≥ 55</div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-metric">Ambassador Engage</div>
+                                <div class="kpi-target">≥ 70%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEGMENTATION -->
+        <div class="section">
+            <div class="section-title"><span>👥</span> PHÂN NHÓM TÀI XẾ — 5 SEGMENTS</div>
+            <div class="segment-grid">
+                <div class="segment-card seg-champion">
+                    <div class="seg-title">⭐ CHAMPION <span class="seg-pct">15-20%</span></div>
+                    <div class="seg-def">≥22 ngày/tháng · ≥120 đơn · Rating ≥4.8 · Cancel ≤5%</div>
+                    <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Chiếm ~15% pool nhưng đóng góp
+                        <strong style="color:var(--gold);">~40% tổng đơn</strong></div>
+                    <div class="seg-risk">⚠️ Rủi ro: Burnout, đối thủ lôi kéo bằng signing bonus</div>
+                    <div class="seg-strategy">✅ Chiến lược: Recognition + Exclusive benefits + Financial services +
+                        Mentor role</div>
+                    <div class="seg-tags"><span class="seg-tag">VIP Orders</span><span class="seg-tag">Advisory
+                            Board</span><span class="seg-tag">Anniversary Gift</span></div>
+                </div>
+                <div class="segment-card seg-loyalist">
+                    <div class="seg-title">🟣 LOYALIST <span class="seg-pct">20-25%</span></div>
+                    <div class="seg-def">15-21 ngày/tháng · 60-119 đơn · Rating ≥4.5 · Cancel ≤10%</div>
+                    <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Nguồn cung ổn định, tiềm năng
+                        upgrade thành Champion</div>
+                    <div class="seg-risk">⚠️ Rủi ro: Dần giảm active days nếu không có intervention</div>
+                    <div class="seg-strategy">✅ Chiến lược: Upgrade path rõ ràng + Benefits gap R3 Bạc→R2 Vàng +
+                        Goal-setting</div>
+                    <div class="seg-tags"><span class="seg-tag">Progress Tracker</span><span class="seg-tag">Tier
+                            Upgrade Push</span></div>
+                </div>
+                <div class="segment-card seg-hustler">
+                    <div class="seg-title">🔵 HUSTLER <span class="seg-pct">20-25%</span></div>
+                    <div class="seg-def">≥18 ngày/tháng · ≥100 đơn · Multi-platform · Rating 4.3-4.7</div>
+                    <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Chạy nhiều nền tảng cùng lúc, chọn
+                        promo tốt nhất</div>
+                    <div class="seg-risk">⚠️ Rủi ro: Rời đi ngay khi đối thủ có promo tốt hơn</div>
+                    <div class="seg-strategy">✅ Chiến lược: Lock-in bằng switching cost, exclusive order pool, streak
+                        bonus</div>
+                    <div class="seg-tags"><span class="seg-tag">Lock-in Benefits</span><span class="seg-tag">Streak
+                            Bonus</span></div>
+                </div>
+                <div class="segment-card seg-drifter">
+                    <div class="seg-title">🟡 DRIFTER <span class="seg-pct">15-20%</span></div>
+                    <div class="seg-def">5-14 ngày/tháng · 20-59 đơn · Không ổn định</div>
+                    <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Supply buffer quan trọng cho peak
+                        hour</div>
+                    <div class="seg-risk">⚠️ Rủi ro: Dần ngừng hoạt động hoàn toàn</div>
+                    <div class="seg-strategy">✅ Chiến lược: Flexible quest part-time + Peak hour incentive + Dễ quay lại
+                    </div>
+                    <div class="seg-tags"><span class="seg-tag">Flexible Quest</span><span class="seg-tag">Peak
+                            Incentive</span></div>
+                </div>
+                <div class="segment-card seg-dormant">
+                    <div class="seg-title">🔴 DORMANT <span class="seg-pct">
+                            <20%< /span>
+                    </div>
+                    <div class="seg-def">Inactive ≥14 ngày liên tiếp</div>
+                    <div style="font-size:12px;color:var(--text2);margin-bottom:6px;"><strong>Early Dormant</strong> (
+                        <30 đơn): Win-back khó | <strong>Late Dormant</strong> (≥30 đơn): Khả thi</div>
+                    <div class="seg-risk">⚠️ Target: Giảm tối thiểu, win-back rate <30%< /div>
+                            <div class="seg-strategy">✅ Chiến lược: Tiered win-back phân loại High/Mid/Low value</div>
+                            <div class="seg-tags"><span class="seg-tag">Win-back Campaign</span><span
+                                    class="seg-tag">Exit Survey</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INACTIVITY PROTOCOL -->
+            <div class="section">
+                <div class="section-title"><span>🚨</span> INACTIVITY ALERT PROTOCOL</div>
+                <div class="alert-grid">
+                    <div class="alert-row lv1">
+                        <div class="alert-days alert-lv1">2N</div>
+                        <div class="alert-action"><strong>Phase 1-2 (D0-D14)</strong>Push notification + Milestone
+                            reminder</div>
+                    </div>
+                    <div class="alert-row lv1">
+                        <div class="alert-days alert-lv1">3N</div>
+                        <div class="alert-action"><strong>Phase 1-2 (D0-D14)</strong>SMS/Zalo + Bonus offer</div>
+                    </div>
+                    <div class="alert-row lv2">
+                        <div class="alert-days alert-lv2">5N</div>
+                        <div class="alert-action"><strong>Phase 1-2 (D0-D14) — URGENT</strong>📞 Gọi điện trực tiếp —
+                            tìm hiểu lý do</div>
+                    </div>
+                    <div class="alert-row lv1">
+                        <div class="alert-days alert-lv1">7N</div>
+                        <div class="alert-action"><strong>Phase 3-4 (D15-D120)</strong>Push + Income projection cá nhân
+                            hóa</div>
+                    </div>
+                    <div class="alert-row lv2">
+                        <div class="alert-days alert-lv2">10N</div>
+                        <div class="alert-action"><strong>Phase 3-4 (D15-D120)</strong>📞 Gọi điện + Re-activation quest
+                        </div>
+                    </div>
+                    <div class="alert-row lv3">
+                        <div class="alert-days alert-lv3">14N</div>
+                        <div class="alert-action"><strong>Tất cả giai đoạn — DORMANT FLAG</strong>Chuyển vào Win-back
+                            flow</div>
+                    </div>
+                    <div class="alert-row lv2">
+                        <div class="alert-days alert-lv2">21N</div>
+                        <div class="alert-action"><strong>Phase 5-6 (D121+)</strong>Nhắn từ quản lý khu vực + Exit
+                            survey</div>
+                    </div>
+                    <div class="alert-row lv3">
+                        <div class="alert-days alert-lv3">30N</div>
+                        <div class="alert-action"><strong>Tất cả — ARCHIVE</strong>Win-back campaign định kỳ monthly
+                            batch</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WIN-BACK -->
+            <div class="section">
+                <div class="section-title"><span>🔄</span> CƠ CHẾ WIN-BACK — KHÔI PHỤC TÀI XẾ</div>
+                <div class="winback-grid">
+                    <div class="wb-card wb-high">
+                        <div class="wb-tier" style="color:var(--red);">🔴 High-Value Dormant</div>
+                        <div class="wb-condition">≥100 đơn lifetime · Rating ≥4.5 · Inactive 14-60 ngày</div>
+                        <div class="wb-strategy">Callback cá nhân + Welcome-back bonus mạnh + Fast-track tier restore
+                        </div>
+                        <span class="wb-budget budget-high">Budget Ưu Tiên: CAO</span>
+                    </div>
+                    <div class="wb-card wb-mid">
+                        <div class="wb-tier" style="color:var(--accent);">🟠 Mid-Value Dormant</div>
+                        <div class="wb-condition">30-99 đơn lifetime · Inactive 14-60 ngày</div>
+                        <div class="wb-strategy">Push + SMS + Moderate welcome-back bonus</div>
+                        <span class="wb-budget budget-mid">Budget: TRUNG BÌNH</span>
+                    </div>
+                    <div class="wb-card wb-low">
+                        <div class="wb-tier" style="color:var(--yellow);">🟡 Low-Value Dormant</div>
+                        <div class="wb-condition">
+                            <30 đơn lifetime · Inactive 14-90 ngày</div>
+                                <div class="wb-strategy">Push notification đơn giản + Generic re-activation offer</div>
+                                <span class="wb-budget budget-low">Budget: THẤP</span>
+                        </div>
+                        <div class="wb-card wb-churned">
+                            <div class="wb-tier" style="color:var(--text3);">⚫ Churned</div>
+                            <div class="wb-condition">Inactive >90 ngày</div>
+                            <div class="wb-strategy">Quarterly win-back campaign batch</div>
+                            <span class="wb-budget" style="background:rgba(100,116,139,.2);color:var(--text3);">Budget:
+                                RẤT THẤP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DASHBOARD KPIs -->
+                <div class="section">
+                    <div class="section-title"><span>📊</span> COHORT HEALTH DASHBOARD</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Công thức</th>
+                                <th>Target</th>
+                                <th>Alert Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code
+                                        style="color:var(--cyan);background:rgba(6,182,212,.1);padding:2px 6px;border-radius:4px;">D7 Activation Rate</code>
+                                </td>
+                                <td>Drivers ≥7 đơn D1-D7 / Total new</td>
+                                <td style="color:var(--green);font-weight:700;">≥ 40%</td>
+                                <td><span class="tag tag-critical">
+                                        <25% 🔴</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code
+                                        style="color:var(--cyan);background:rgba(6,182,212,.1);padding:2px 6px;border-radius:4px;">D14 Retention</code>
+                                </td>
+                                <td>Drivers active D14 / Total new (14d trước)</td>
+                                <td style="color:var(--green);font-weight:700;">≥ 65%</td>
+                                <td><span class="tag tag-critical">
+                                        <45% 🔴</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code
+                                        style="color:var(--cyan);background:rgba(6,182,212,.1);padding:2px 6px;border-radius:4px;">D30 Retention</code>
+                                </td>
+                                <td>Drivers active D30 / Total new (30d trước)</td>
+                                <td style="color:var(--green);font-weight:700;">≥ 55%</td>
+                                <td><span class="tag tag-critical">
+                                        <35% 🔴</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code
+                                        style="color:var(--cyan);background:rgba(6,182,212,.1);padding:2px 6px;border-radius:4px;">D60 Retention</code>
+                                </td>
+                                <td>Drivers active D60 / Total new</td>
+                                <td style="color:var(--green);font-weight:700;">≥ 45%</td>
+                                <td><span class="tag tag-critical">
+                                        <25% 🔴</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code
+                                        style="color:var(--cyan);background:rgba(6,182,212,.1);padding:2px 6px;border-radius:4px;">D90 Retention</code>
+                                </td>
+                                <td>Drivers active D90 / Total new</td>
+                                <td style="color:var(--green);font-weight:700;">≥ 40%</td>
+                                <td><span class="tag tag-critical">
+                                        <20% 🔴</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code
+                                        style="color:var(--cyan);background:rgba(6,182,212,.1);padding:2px 6px;border-radius:4px;">D120 Survival Rate</code>
+                                </td>
+                                <td>Drivers active D120 / Total new</td>
+                                <td style="color:var(--green);font-weight:700;">≥ 35%</td>
+                                <td><span class="tag tag-critical">
+                                        <18% 🔴</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code
+                                        style="color:var(--cyan);background:rgba(6,182,212,.1);padding:2px 6px;border-radius:4px;">D180 Pro Rate</code>
+                                </td>
+                                <td>Drivers đạt Chuyên Nghiệp / Total</td>
+                                <td style="color:var(--green);font-weight:700;">≥ 25%</td>
+                                <td><span class="tag tag-critical">
+                                        <12% 🔴</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code
+                                        style="color:var(--cyan);background:rgba(6,182,212,.1);padding:2px 6px;border-radius:4px;">D365 Champion Rate</code>
+                                </td>
+                                <td>Drivers active D365 / Total new</td>
+                                <td style="color:var(--green);font-weight:700;">≥ 20%</td>
+                                <td><span class="tag tag-critical">
+                                        <10% 🔴</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top:20px;">
+                        <div class="card-title"
+                            style="font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">
+                            <span style="font-size:16px;">🔍</span> At-Risk Daily Monitor — SQL</div>
+                        <div class="sql-block"><span class="sql-cm">-- Tài xế cần can thiệp khẩn trong 24h</span>
+                            <span class="sql-kw">SELECT</span>
+                            driver_id, city, register_date,
+                            <span class="sql-fn">DATEDIFF</span>(<span class="sql-fn">CURDATE</span>(), register_date)
+                            <span class="sql-kw">AS</span> driver_age_days,
+                            last_active_date,
+                            <span class="sql-fn">DATEDIFF</span>(<span class="sql-fn">CURDATE</span>(),
+                            last_active_date) <span class="sql-kw">AS</span> days_inactive,
+                            total_trips, current_tier, current_segment,
+                            <span class="sql-kw">CASE</span>
+                            <span class="sql-kw">WHEN</span> driver_age_days <= <span class="sql-num">3</span> <span
+                                    class="sql-kw">AND</span> days_inactive >= <span class="sql-num">1</span>
+                                <span class="sql-kw">THEN</span> <span class="sql-str">'PHASE1_ACTIVATION_RISK'</span>
+                                <span class="sql-kw">WHEN</span> driver_age_days <span class="sql-kw">BETWEEN</span>
+                                <span class="sql-num">4</span> <span class="sql-kw">AND</span> <span
+                                    class="sql-num">14</span> <span class="sql-kw">AND</span> days_inactive >= <span
+                                    class="sql-num">2</span>
+                                <span class="sql-kw">THEN</span> <span class="sql-str">'PHASE2_FIRST_WIN_RISK'</span>
+                                <span class="sql-kw">WHEN</span> driver_age_days <span class="sql-kw">BETWEEN</span>
+                                <span class="sql-num">15</span> <span class="sql-kw">AND</span> <span
+                                    class="sql-num">45</span> <span class="sql-kw">AND</span> days_inactive >= <span
+                                    class="sql-num">7</span>
+                                <span class="sql-kw">THEN</span> <span class="sql-str">'PHASE3_HABIT_BREAKING'</span>
+                                <span class="sql-kw">WHEN</span> driver_age_days <span class="sql-kw">BETWEEN</span>
+                                <span class="sql-num">46</span> <span class="sql-kw">AND</span> <span
+                                    class="sql-num">120</span> <span class="sql-kw">AND</span> days_inactive >= <span
+                                    class="sql-num">10</span>
+                                <span class="sql-kw">THEN</span> <span class="sql-str">'PHASE4_GROWTH_STALLING'</span>
+                                <span class="sql-kw">WHEN</span> driver_age_days <span class="sql-kw">BETWEEN</span>
+                                <span class="sql-num">121</span> <span class="sql-kw">AND</span> <span
+                                    class="sql-num">365</span> <span class="sql-kw">AND</span> days_inactive >= <span
+                                    class="sql-num">14</span>
+                                <span class="sql-kw">THEN</span> <span class="sql-str">'PHASE5_MASTERY_WAVERING'</span>
+                                <span class="sql-kw">WHEN</span> driver_age_days > <span class="sql-num">365</span>
+                                <span class="sql-kw">AND</span> days_inactive >= <span class="sql-num">21</span>
+                                <span class="sql-kw">THEN</span> <span
+                                    class="sql-str">'PHASE6_AMBASSADOR_DECLINING'</span>
+                                <span class="sql-kw">END AS</span> intervention_type,
+                                <span class="sql-kw">CASE</span>
+                                <span class="sql-kw">WHEN</span> current_segment = <span
+                                    class="sql-str">'Champion'</span> <span class="sql-kw">THEN</span> <span
+                                    class="sql-str">'HIGH_PRIORITY'</span>
+                                <span class="sql-kw">WHEN</span> current_segment = <span
+                                    class="sql-str">'Loyalist'</span> <span class="sql-kw">THEN</span> <span
+                                    class="sql-str">'HIGH_PRIORITY'</span>
+                                <span class="sql-kw">WHEN</span> current_segment = <span
+                                    class="sql-str">'Hustler'</span> <span class="sql-kw">THEN</span> <span
+                                    class="sql-str">'MEDIUM_PRIORITY'</span>
+                                <span class="sql-kw">ELSE</span> <span class="sql-str">'STANDARD'</span>
+                                <span class="sql-kw">END AS</span> priority_level
+                                <span class="sql-kw">FROM</span> drivers
+                                <span class="sql-kw">WHERE</span> intervention_type <span class="sql-kw">IS NOT
+                                    NULL</span>
+                                <span class="sql-kw">ORDER BY</span> priority_level, days_inactive <span
+                                    class="sql-kw">DESC</span>;
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INTEGRATION -->
+                <div class="section">
+                    <div class="section-title"><span>🔗</span> TÍCH HỢP — JOURNEY × RANKING × AHABENEFITS</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                        <div>
+                            <div
+                                style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">
+                                Journey Phase → Ranking</div>
+                            <div class="integration-row">
+                                <div class="int-phase">🟡 Phase 1-2 (D0-D14)</div>
+                                <div class="int-arrow">→</div>
+                                <div class="int-rank">Chưa xếp hạng</div>
+                                <div class="int-layer">L6 MASS</div>
+                            </div>
+                            <div class="integration-row">
+                                <div class="int-phase">🔵 Phase 3 (D15-D45)</div>
+                                <div class="int-arrow">→</div>
+                                <div class="int-rank">R3 Standard</div>
+                                <div class="int-layer">L4 Bigzone</div>
+                            </div>
+                            <div class="integration-row">
+                                <div class="int-phase">🟣 Phase 4 (D46-D120)</div>
+                                <div class="int-arrow">→</div>
+                                <div class="int-rank">R3 → R2 Active</div>
+                                <div class="int-layer">L4 → L3</div>
+                            </div>
+                            <div class="integration-row">
+                                <div class="int-phase">🔴 Phase 5 (D121-D365)</div>
+                                <div class="int-arrow">→</div>
+                                <div class="int-rank">R2 → R1 Elite</div>
+                                <div class="int-layer">L3 → L2</div>
+                            </div>
+                            <div class="integration-row">
+                                <div class="int-phase">⭐ Phase 6 (D365+)</div>
+                                <div class="int-arrow">→</div>
+                                <div class="int-rank">R1 Elite</div>
+                                <div class="int-layer">L2 + L1 KA/MP</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div
+                                style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">
+                                Segment → AhaBenefits</div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Segment</th>
+                                        <th>AhaBenefits</th>
+                                        <th>Points ×</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>⭐ Champion</td>
+                                        <td style="color:var(--gold);">💎 Kim Cương</td>
+                                        <td style="color:var(--green);">×1.5</td>
+                                    </tr>
+                                    <tr>
+                                        <td>🟣 Loyalist</td>
+                                        <td style="color:#c0c0c0;">🥇 Vàng</td>
+                                        <td style="color:var(--green);">×1.3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>🔵 Hustler</td>
+                                        <td style="color:#cd7f32;">🥈 Bạc/Vàng</td>
+                                        <td>×1.1-1.3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>🟡 Drifter</td>
+                                        <td style="color:#cd7f32;">🥈 Bạc</td>
+                                        <td>×1.0-1.1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>🔴 Dormant</td>
+                                        <td style="color:var(--text3);">Đóng băng</td>
+                                        <td style="color:var(--text3);">—</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VALUE REALIZATION -->
+                <div class="section">
+                    <div class="section-title"><span>📈</span> HIỆN THỰC HÓA GIÁ TRỊ (BEFORE → AFTER)</div>
+                    <table class="value-table">
+                        <thead>
+                            <tr>
+                                <th>Hiện Trạng (Current State)</th>
+                                <th class="before-arrow">→</th>
+                                <th>Trạng Thái Mục Tiêu</th>
+                                <th>Tác Động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tài xế mới onboard → không có hướng dẫn → 45% churn D30</td>
+                                <td class="before-arrow">↓ 6-PHASE ↓</td>
+                                <td>Lộ trình rõ ràng với milestone, reward, mentor từ D0</td>
+                                <td>Giảm D30 churn từ 45% → 25%</td>
+                            </tr>
+                            <tr>
+                                <td>Không phân biệt tài xế mới vs cũ trong dispatch/incentive</td>
+                                <td class="before-arrow">↓ SEGMENT ↓</td>
+                                <td>5 nhóm tài xế với chiến lược riêng biệt, can thiệp tự động</td>
+                                <td>Tăng 25% Active Drivers/tháng</td>
+                            </tr>
+                            <tr>
+                                <td>Tài xế lâu năm không có vai trò/recognition → burnout + rời đi</td>
+                                <td class="before-arrow">↓ AMBASSADOR ↓</td>
+                                <td>Mentor program + Advisory Board + Recognition hàng tháng</td>
+                                <td>Tăng Driver LTV từ 3.5 → 7 tháng</td>
+                            </tr>
+                            <tr>
+                                <td>Phát hiện churn chậm (sau khi đã mất tài xế)</td>
+                                <td class="before-arrow">↓ ALERTS ↓</td>
+                                <td>Hệ thống cảnh báo sớm theo phase + segment, can thiệp 24h</td>
+                                <td>Giảm 35% tỷ lệ Dormant</td>
+                            </tr>
+                            <tr>
+                                <td>Win-back không phân loại, chi phí cao, hiệu quả thấp</td>
+                                <td class="before-arrow">↓ WIN-BACK ↓</td>
+                                <td>Win-back phân loại High/Mid/Low value, budget tối ưu</td>
+                                <td>Tăng win-back rate 10% → 25%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ROADMAP -->
+                <div class="section">
+                    <div class="section-title"><span>🚀</span> LỘ TRÌNH TRIỂN KHAI — T6 → T12/2026</div>
+                    <div class="roadmap-grid">
+                        <div class="roadmap-phase">
+                            <div class="roadmap-header phase-a"><span>Phase A — Foundation</span><span
+                                    class="roadmap-timeline">T6-T7/2026</span></div>
+                            <div class="roadmap-items">
+                                <div class="roadmap-item">Cohort Dashboard D7/D14/D30/D60/D90/D120/D365</div>
+                                <div class="roadmap-item">Inactivity Alert System (2/3/5/7/10/14/21 ngày)</div>
+                                <div class="roadmap-item">Milestone Rewards D3/D7/D14/D30</div>
+                                <div class="roadmap-item">Buddy System pilot (SGN → HAN)</div>
+                                <div style="font-size:11px;color:var(--text3);margin-top:8px;">Owner: DM + BI + Product
+                                </div>
+                            </div>
+                        </div>
+                        <div class="roadmap-phase">
+                            <div class="roadmap-header phase-b"><span>Phase B — Gamification</span><span
+                                    class="roadmap-timeline">T7-T8/2026</span></div>
+                            <div class="roadmap-items">
+                                <div class="roadmap-item">Streak System trong app</div>
+                                <div class="roadmap-item">Weekly Quest System</div>
+                                <div class="roadmap-item">Progress Bar & Tier Badge hiển thị</div>
+                                <div class="roadmap-item">Income Dashboard cho tài xế</div>
+                                <div style="font-size:11px;color:var(--text3);margin-top:8px;">Owner: Product + S&P
+                                </div>
+                            </div>
+                        </div>
+                        <div class="roadmap-phase">
+                            <div class="roadmap-header phase-c"><span>Phase C — Segmentation</span><span
+                                    class="roadmap-timeline">T8-T9/2026</span></div>
+                            <div class="roadmap-items">
+                                <div class="roadmap-item">Deploy 5-segment classification model</div>
+                                <div class="roadmap-item">Segment-based intervention automation</div>
+                                <div class="roadmap-item">Win-back flow phân loại (High/Mid/Low)</div>
+                                <div class="roadmap-item">Community program theo khu vực</div>
+                                <div style="font-size:11px;color:var(--text3);margin-top:8px;">Owner: BI + DM + CS</div>
+                            </div>
+                        </div>
+                        <div class="roadmap-phase">
+                            <div class="roadmap-header phase-d"><span>Phase D — Advanced</span><span
+                                    class="roadmap-timeline">T9-T12/2026</span></div>
+                            <div class="roadmap-items">
+                                <div class="roadmap-item">Earning Guarantee cho Pro tier</div>
+                                <div class="roadmap-item">Ambassador & Mentor Program chính thức</div>
+                                <div class="roadmap-item">Driver Advisory Board</div>
+                                <div class="roadmap-item">Churn Prediction ML Model</div>
+                                <div class="roadmap-item">Performance Optimization Tools</div>
+                                <div style="font-size:11px;color:var(--text3);margin-top:8px;">Owner: BI + DS + Product
+                                    + DM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <footer>
+                <div style="margin-bottom:8px;font-size:13px;color:var(--text2);">🧭 Driver Lifecycle Journey Framework
+                    v2.0 — Ahamove Driver Management</div>
+                <div>Cập nhật: 28/05/2026 · Tổng hợp từ: Uber, Grab, Gojek, DoorDash, Deliveroo, Swiggy, ILO Research,
+                    Behavioral Science</div>
+            </footer>
+
+</body>
+
+</html>
