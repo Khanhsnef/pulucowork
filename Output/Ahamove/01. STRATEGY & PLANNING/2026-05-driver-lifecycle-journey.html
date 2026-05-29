@@ -1993,61 +1993,86 @@
         <!-- SEGMENTATION -->
         <div class="section">
             <div class="section-title"><span>👥</span> PHÂN NHÓM TÀI XẾ — 5 SEGMENTS</div>
-            <div class="segment-grid">
-                <div class="segment-card seg-champion">
-                    <div class="seg-title">⭐ CHAMPION <span class="seg-pct">15-20%</span></div>
-                    <div class="seg-def">≥22 ngày/tháng · ≥120 đơn · Rating ≥4.8 · Cancel ≤5%</div>
-                    <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Chiếm ~15% pool nhưng đóng góp
-                        <strong style="color:var(--gold);">~40% tổng đơn</strong></div>
-                    <div class="seg-risk">⚠️ Rủi ro: Burnout, đối thủ lôi kéo bằng signing bonus</div>
-                    <div class="seg-strategy">✅ Chiến lược: Recognition + Exclusive benefits + Financial services +
-                        Mentor role</div>
-                    <div class="seg-tags"><span class="seg-tag">VIP Orders</span><span class="seg-tag">Advisory
-                            Board</span><span class="seg-tag">Anniversary Gift</span></div>
+
+            <!-- Segment ↔ Ranking Mapping Table -->
+            <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+                <table style="font-size:12px;">
+                    <thead>
+                        <tr>
+                            <th style="width:130px;">Segment</th>
+                            <th style="width:50px;">%</th>
+                            <th>Định nghĩa</th>
+                            <th style="width:80px;">Rank</th>
+                            <th>Rủi ro chính</th>
+                            <th>Chiến lược</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-left:3px solid var(--gold);">
+                            <td><strong style="color:var(--gold);">⭐ CHAMPION</strong></td>
+                            <td style="color:var(--gold);font-weight:800;">15-20%</td>
+                            <td style="font-size:11px;">≥22 ngày · ≥120 đơn · Rating ≥4.8 · Cancel ≤5%<br><span style="color:var(--gold);font-weight:600;">~15% pool → ~40% tổng đơn</span></td>
+                            <td><span style="color:var(--gold);font-weight:700;">R1 💎</span></td>
+                            <td style="font-size:11px;color:var(--red);">Burnout · Đối thủ lôi kéo signing bonus</td>
+                            <td style="font-size:11px;">Recognition + Gold Insurance + Mentor + Advisory Board</td>
+                        </tr>
+                        <tr style="border-left:3px solid var(--purple);">
+                            <td><strong style="color:var(--purple);">🟣 LOYALIST</strong></td>
+                            <td style="color:var(--purple);font-weight:800;">20-25%</td>
+                            <td style="font-size:11px;">15-21 ngày · 60-119 đơn · Rating ≥4.5 · Cancel ≤10%<br><span style="color:var(--text2);">Ổn định, tiềm năng → Champion</span></td>
+                            <td><span style="color:var(--purple);font-weight:700;">R2 🥇</span></td>
+                            <td style="font-size:11px;color:var(--yellow);">Giảm active days dần</td>
+                            <td style="font-size:11px;">Upgrade path R2→R1 + Silver Insurance + Goal-setting</td>
+                        </tr>
+                        <tr style="border-left:3px solid var(--blue);">
+                            <td><strong style="color:var(--blue);">🔵 HUSTLER</strong></td>
+                            <td style="color:var(--blue);font-weight:800;">20-25%</td>
+                            <td style="font-size:11px;">≥18 ngày · ≥100 đơn · Multi-platform · Rating 4.3-4.7<br><span style="color:var(--text2);">Chạy nhiều app, chọn promo tốt nhất</span></td>
+                            <td><span style="color:var(--blue);font-weight:700;">R3-R2</span></td>
+                            <td style="font-size:11px;color:var(--accent);">Rời đi khi đối thủ promo tốt hơn</td>
+                            <td style="font-size:11px;">Lock-in switching cost + Bronze/Silver Insurance + Streak bonus</td>
+                        </tr>
+                        <tr style="border-left:3px solid var(--yellow);">
+                            <td><strong style="color:var(--yellow);">🟡 DRIFTER</strong></td>
+                            <td style="color:var(--yellow);font-weight:800;">15-20%</td>
+                            <td style="font-size:11px;">5-14 ngày · 20-59 đơn · Không ổn định<br><span style="color:var(--text2);">Supply buffer cho peak hour</span></td>
+                            <td><span style="font-weight:700;">R3/Un</span></td>
+                            <td style="font-size:11px;color:var(--yellow);">Ngừng hoạt động hoàn toàn</td>
+                            <td style="font-size:11px;">Flexible quest part-time + Peak hour incentive</td>
+                        </tr>
+                        <tr style="border-left:3px solid var(--red);">
+                            <td><strong style="color:var(--red);">🔴 DORMANT</strong></td>
+                            <td style="color:var(--red);font-weight:800;">&lt;20%</td>
+                            <td style="font-size:11px;">Inactive ≥14 ngày liên tiếp<br><span style="color:var(--text2);">Early (&lt;30 đơn): khó · Late (≥30): khả thi</span></td>
+                            <td><span style="color:var(--text3);font-weight:700;">Frozen</span></td>
+                            <td style="font-size:11px;color:var(--red);">Đã mất — cost win-back cao</td>
+                            <td style="font-size:11px;">Tiered win-back (High/Mid/Low) + Exit survey</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Segment Transition Flow -->
+            <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-top:16px;">
+                <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Mục tiêu chuyển đổi nhóm</div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;">
+                    <span style="color:var(--red);font-weight:700;">🔴 DORMANT</span>
+                    <span style="color:var(--text3);">→ win-back →</span>
+                    <span style="color:var(--yellow);font-weight:700;">🟡 DRIFTER</span>
+                    <span style="color:var(--text3);">→ nurture →</span>
+                    <span style="color:var(--blue);font-weight:700;">🔵 HUSTLER</span>
+                    <span style="color:var(--text3);">→ lock-in →</span>
+                    <span style="color:var(--purple);font-weight:700;">🟣 LOYALIST</span>
+                    <span style="color:var(--text3);">→ upgrade →</span>
+                    <span style="color:var(--gold);font-weight:700;">⭐ CHAMPION</span>
                 </div>
-                <div class="segment-card seg-loyalist">
-                    <div class="seg-title">🟣 LOYALIST <span class="seg-pct">20-25%</span></div>
-                    <div class="seg-def">15-21 ngày/tháng · 60-119 đơn · Rating ≥4.5 · Cancel ≤10%</div>
-                    <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Nguồn cung ổn định, tiềm năng
-                        upgrade thành Champion</div>
-                    <div class="seg-risk">⚠️ Rủi ro: Dần giảm active days nếu không có intervention</div>
-                    <div class="seg-strategy">✅ Chiến lược: Upgrade path rõ ràng + Benefits gap R3 Bạc→R2 Vàng +
-                        Goal-setting</div>
-                    <div class="seg-tags"><span class="seg-tag">Progress Tracker</span><span class="seg-tag">Tier
-                            Upgrade Push</span></div>
-                </div>
-                <div class="segment-card seg-hustler">
-                    <div class="seg-title">🔵 HUSTLER <span class="seg-pct">20-25%</span></div>
-                    <div class="seg-def">≥18 ngày/tháng · ≥100 đơn · Multi-platform · Rating 4.3-4.7</div>
-                    <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Chạy nhiều nền tảng cùng lúc, chọn
-                        promo tốt nhất</div>
-                    <div class="seg-risk">⚠️ Rủi ro: Rời đi ngay khi đối thủ có promo tốt hơn</div>
-                    <div class="seg-strategy">✅ Chiến lược: Lock-in bằng switching cost, exclusive order pool, streak
-                        bonus</div>
-                    <div class="seg-tags"><span class="seg-tag">Lock-in Benefits</span><span class="seg-tag">Streak
-                            Bonus</span></div>
-                </div>
-                <div class="segment-card seg-drifter">
-                    <div class="seg-title">🟡 DRIFTER <span class="seg-pct">15-20%</span></div>
-                    <div class="seg-def">5-14 ngày/tháng · 20-59 đơn · Không ổn định</div>
-                    <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Supply buffer quan trọng cho peak
-                        hour</div>
-                    <div class="seg-risk">⚠️ Rủi ro: Dần ngừng hoạt động hoàn toàn</div>
-                    <div class="seg-strategy">✅ Chiến lược: Flexible quest part-time + Peak hour incentive + Dễ quay lại
-                    </div>
-                    <div class="seg-tags"><span class="seg-tag">Flexible Quest</span><span class="seg-tag">Peak
-                            Incentive</span></div>
-                </div>
-                <div class="segment-card seg-dormant">
-                    <div class="seg-title">🔴 DORMANT <span class="seg-pct">&lt;20%</span></div>
-                    <div class="seg-def">Inactive ≥14 ngày liên tiếp</div>
-                    <div style="font-size:12px;color:var(--text2);margin-bottom:6px;"><strong>Early Dormant</strong> (&lt;30 đơn): Win-back khó | <strong>Late Dormant</strong> (≥30 đơn): Khả thi</div>
-                    <div class="seg-risk">⚠️ Target: Giảm tối thiểu, win-back rate &lt;30%</div>
-                    <div class="seg-strategy">✅ Chiến lược: Tiered win-back phân loại High/Mid/Low value</div>
-                    <div class="seg-tags"><span class="seg-tag">Win-back Campaign</span><span class="seg-tag">Exit Survey</span></div>
+                <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--text2);">
+                    <div>🛡️ <strong style="color:var(--text);">Champion</strong> → prevent burnout (giữ, không để rớt)</div>
+                    <div>🛡️ <strong style="color:var(--text);">Loyalist</strong> → prevent drift (Grace Period + Loss Aversion)</div>
+                    <div>🛡️ <strong style="color:var(--text);">Hustler</strong> → prevent exit (Insurance lock-in)</div>
                 </div>
             </div>
-            </div>
+        </div>
 
             <!-- INACTIVITY PROTOCOL -->
             <div class="section">
