@@ -1311,204 +1311,90 @@
             </div>
         </div>
 
-        <!-- JOURNEY MAP -->
+        <!-- JOURNEY MAP + TIMELINE COMBINED -->
         <div class="section">
             <div class="section-title"><span>🗺️</span> DRIVER LIFECYCLE JOURNEY — 6 GIAI ĐOẠN</div>
-            <div class="journey-map">
-                <div class="phase-card p1">
-                    <div class="phase-num">Phase 1</div>
-                    <span class="phase-emoji">🟡</span>
-                    <div class="phase-title">ONBOARDING</div>
-                    <div class="phase-subtitle">Warm Up · Khởi Động</div>
-                    <div class="phase-days">D0 → D3</div>
-                    <div class="phase-churn">
-                        <div class="phase-churn-bar">
-                            <div class="phase-churn-fill" style="width:90%"></div>
-                        </div>
-                        <div class="phase-churn-label">Churn Risk: Rất Cao</div>
-                    </div>
-                </div>
-                <div class="phase-card p2">
-                    <div class="phase-num">Phase 2</div>
-                    <span class="phase-emoji">🟢</span>
-                    <div class="phase-title">FIRST WIN</div>
-                    <div class="phase-subtitle">Hook In · Gắn Kết</div>
-                    <div class="phase-days">D4 → D14</div>
-                    <div class="phase-churn">
-                        <div class="phase-churn-bar">
-                            <div class="phase-churn-fill" style="width:75%"></div>
-                        </div>
-                        <div class="phase-churn-label">Churn Risk: Cao</div>
-                    </div>
-                </div>
-                <div class="phase-card p3">
-                    <div class="phase-num">Phase 3</div>
-                    <span class="phase-emoji">🔵</span>
-                    <div class="phase-title">HABIT BUILD</div>
-                    <div class="phase-subtitle">Lock In · Khóa Chặt</div>
-                    <div class="phase-days">D15 → D45</div>
-                    <div class="phase-churn">
-                        <div class="phase-churn-bar">
-                            <div class="phase-churn-fill" style="width:60%"></div>
-                        </div>
-                        <div class="phase-churn-label">Churn Risk: TB-Cao ⚡</div>
-                    </div>
-                </div>
-                <div class="phase-card p4">
-                    <div class="phase-num">Phase 4</div>
-                    <span class="phase-emoji">🟣</span>
-                    <div class="phase-title">GROWTH</div>
-                    <div class="phase-subtitle">Grow Up · Nâng Tầm</div>
-                    <div class="phase-days">D46 → D120</div>
-                    <div class="phase-churn">
-                        <div class="phase-churn-bar">
-                            <div class="phase-churn-fill" style="width:40%"></div>
-                        </div>
-                        <div class="phase-churn-label">Churn Risk: Trung Bình</div>
-                    </div>
-                </div>
-                <div class="phase-card p5">
-                    <div class="phase-num">Phase 5</div>
-                    <span class="phase-emoji">🔴</span>
-                    <div class="phase-title">MASTERY</div>
-                    <div class="phase-subtitle">Master Level · Bậc Thầy</div>
-                    <div class="phase-days">D121 → D365</div>
-                    <div class="phase-churn">
-                        <div class="phase-churn-bar">
-                            <div class="phase-churn-fill" style="width:20%"></div>
-                        </div>
-                        <div class="phase-churn-label">Churn Risk: Thấp</div>
-                    </div>
-                </div>
-                <div class="phase-card p6">
-                    <div class="phase-num">Phase 6</div>
-                    <span class="phase-emoji">⭐</span>
-                    <div class="phase-title">AMBASSADOR</div>
-                    <div class="phase-subtitle">Advocate & Lead</div>
-                    <div class="phase-days">D365+</div>
-                    <div class="phase-churn">
-                        <div class="phase-churn-bar">
-                            <div class="phase-churn-fill" style="width:8%"></div>
-                        </div>
-                        <div class="phase-churn-label">Churn Risk: Rất Thấp</div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- TIMELINE -->
-        <div class="section">
-            <div class="section-title"><span>📅</span> MASTER TIMELINE — BẢN ĐỒ MỐC THỜI GIAN</div>
-            <div
-                style="overflow-x:auto;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;">
-                <div style="display:flex;gap:16px;min-width:900px;align-items:flex-end;padding:8px 0;">
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div
-                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D1</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">First Trip</div>
-                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
+            <!-- Compact phase flow -->
+            <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;">
+                <!-- Phase strip -->
+                <div style="display:flex;align-items:stretch;gap:3px;margin-bottom:20px;">
+                    <div style="flex:1;background:linear-gradient(135deg,rgba(234,179,8,.25),rgba(234,179,8,.08));border:1px solid rgba(234,179,8,.3);border-radius:10px;padding:12px 8px;text-align:center;">
+                        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--phase1);opacity:.7;">Phase 1</div>
+                        <div style="font-size:14px;font-weight:800;color:var(--text);margin:4px 0 2px;">ONBOARD</div>
+                        <div style="font-size:10px;color:var(--text2);">Khởi Động</div>
+                        <div style="font-size:10px;font-weight:700;color:var(--phase1);background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;display:inline-block;margin-top:6px;">D0–D3</div>
+                        <div style="margin-top:6px;height:4px;background:rgba(0,0,0,.3);border-radius:2px;overflow:hidden;"><div style="height:100%;width:90%;background:rgba(234,179,8,.7);border-radius:2px;"></div></div>
+                        <div style="font-size:8px;color:var(--text3);margin-top:2px;">Rất Cao</div>
                     </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div
-                            style="height:8px;width:8px;background:var(--accent);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(249,115,22,.5);">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D3</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Micro Win 5 đơn</div>
-                        <div style="margin-top:4px;"><span class="tag tag-high">High</span></div>
+                    <div style="flex:1;background:linear-gradient(135deg,rgba(34,197,94,.25),rgba(34,197,94,.08));border:1px solid rgba(34,197,94,.3);border-radius:10px;padding:12px 8px;text-align:center;">
+                        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--phase2);opacity:.7;">Phase 2</div>
+                        <div style="font-size:14px;font-weight:800;color:var(--text);margin:4px 0 2px;">FIRST WIN</div>
+                        <div style="font-size:10px;color:var(--text2);">Gắn Kết</div>
+                        <div style="font-size:10px;font-weight:700;color:var(--phase2);background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;display:inline-block;margin-top:6px;">D4–D14</div>
+                        <div style="margin-top:6px;height:4px;background:rgba(0,0,0,.3);border-radius:2px;overflow:hidden;"><div style="height:100%;width:75%;background:rgba(34,197,94,.7);border-radius:2px;"></div></div>
+                        <div style="font-size:8px;color:var(--text3);margin-top:2px;">Cao</div>
                     </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div
-                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D7</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Activation Badge</div>
-                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
+                    <div style="flex:1;background:linear-gradient(135deg,rgba(59,130,246,.25),rgba(59,130,246,.08));border:1px solid rgba(59,130,246,.3);border-radius:10px;padding:12px 8px;text-align:center;">
+                        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--phase3);opacity:.7;">Phase 3</div>
+                        <div style="font-size:14px;font-weight:800;color:var(--text);margin:4px 0 2px;">HABIT</div>
+                        <div style="font-size:10px;color:var(--text2);">Khóa Chặt</div>
+                        <div style="font-size:10px;font-weight:700;color:var(--phase3);background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;display:inline-block;margin-top:6px;">D15–D45</div>
+                        <div style="margin-top:6px;height:4px;background:rgba(0,0,0,.3);border-radius:2px;overflow:hidden;"><div style="height:100%;width:55%;background:rgba(59,130,246,.7);border-radius:2px;"></div></div>
+                        <div style="font-size:8px;color:var(--text3);margin-top:2px;">TB-Cao ⚡</div>
                     </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div style="height:8px;width:8px;background:var(--accent);border-radius:50%;margin:0 auto 6px;">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D14</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Streak 14D</div>
-                        <div style="margin-top:4px;"><span class="tag tag-high">High</span></div>
+                    <div style="flex:1;background:linear-gradient(135deg,rgba(168,85,247,.25),rgba(168,85,247,.08));border:1px solid rgba(168,85,247,.3);border-radius:10px;padding:12px 8px;text-align:center;">
+                        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--phase4);opacity:.7;">Phase 4</div>
+                        <div style="font-size:14px;font-weight:800;color:var(--text);margin:4px 0 2px;">GROWTH</div>
+                        <div style="font-size:10px;color:var(--text2);">Nâng Tầm</div>
+                        <div style="font-size:10px;font-weight:700;color:var(--phase4);background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;display:inline-block;margin-top:6px;">D46–D120</div>
+                        <div style="margin-top:6px;height:4px;background:rgba(0,0,0,.3);border-radius:2px;overflow:hidden;"><div style="height:100%;width:35%;background:rgba(168,85,247,.7);border-radius:2px;"></div></div>
+                        <div style="font-size:8px;color:var(--text3);margin-top:2px;">Trung Bình</div>
                     </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div style="height:8px;width:8px;background:var(--yellow);border-radius:50%;margin:0 auto 6px;">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D21</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Habit Check</div>
-                        <div style="margin-top:4px;"><span class="tag tag-med">Medium</span></div>
+                    <div style="flex:1;background:linear-gradient(135deg,rgba(239,68,68,.25),rgba(239,68,68,.08));border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:12px 8px;text-align:center;">
+                        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--phase5);opacity:.7;">Phase 5</div>
+                        <div style="font-size:14px;font-weight:800;color:var(--text);margin:4px 0 2px;">MASTERY</div>
+                        <div style="font-size:10px;color:var(--text2);">Bậc Thầy</div>
+                        <div style="font-size:10px;font-weight:700;color:var(--phase5);background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;display:inline-block;margin-top:6px;">D121–D365</div>
+                        <div style="margin-top:6px;height:4px;background:rgba(0,0,0,.3);border-radius:2px;overflow:hidden;"><div style="height:100%;width:18%;background:rgba(239,68,68,.7);border-radius:2px;"></div></div>
+                        <div style="font-size:8px;color:var(--text3);margin-top:2px;">Thấp</div>
                     </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div
-                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D30</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Month #1 Tier</div>
-                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
-                    </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div style="height:8px;width:8px;background:var(--accent);border-radius:50%;margin:0 auto 6px;">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">~D45</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">100 Orders</div>
-                        <div style="margin-top:4px;"><span class="tag tag-high">High</span></div>
-                    </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div
-                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D60</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Habit Badge</div>
-                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
-                    </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div
-                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D90</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Tier Upgrade</div>
-                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
-                    </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div style="height:8px;width:8px;background:var(--accent);border-radius:50%;margin:0 auto 6px;">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D120</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Survival Point</div>
-                        <div style="margin-top:4px;"><span class="tag tag-high">High</span></div>
-                    </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div
-                            style="height:8px;width:8px;background:var(--red);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 6px rgba(239,68,68,.5);">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D180</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Pro Tier</div>
-                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
-                    </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div style="height:8px;width:8px;background:var(--yellow);border-radius:50%;margin:0 auto 6px;">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D270</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">9-Month Review</div>
-                        <div style="margin-top:4px;"><span class="tag tag-med">Medium</span></div>
-                    </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div
-                            style="height:8px;width:8px;background:var(--gold);border-radius:50%;margin:0 auto 6px;box-shadow:0 0 8px rgba(245,158,11,.6);">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D365</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">🏆 Anniversary</div>
-                        <div style="margin-top:4px;"><span class="tag tag-critical">Critical</span></div>
-                    </div>
-                    <div style="text-align:center;flex:0 0 auto;">
-                        <div style="height:8px;width:8px;background:var(--accent);border-radius:50%;margin:0 auto 6px;">
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:var(--accent);">D365+</div>
-                        <div style="font-size:10px;color:var(--text2);max-width:60px;">Ambassador</div>
-                        <div style="margin-top:4px;"><span class="tag tag-high">High</span></div>
+                    <div style="flex:1;background:linear-gradient(135deg,rgba(245,158,11,.25),rgba(245,158,11,.08));border:1px solid rgba(245,158,11,.3);border-radius:10px;padding:12px 8px;text-align:center;">
+                        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--phase6);opacity:.7;">Phase 6</div>
+                        <div style="font-size:14px;font-weight:800;color:var(--text);margin:4px 0 2px;">AMBASS.</div>
+                        <div style="font-size:10px;color:var(--text2);">Đại Sứ</div>
+                        <div style="font-size:10px;font-weight:700;color:var(--phase6);background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;display:inline-block;margin-top:6px;">D365+</div>
+                        <div style="margin-top:6px;height:4px;background:rgba(0,0,0,.3);border-radius:2px;overflow:hidden;"><div style="height:100%;width:6%;background:rgba(245,158,11,.7);border-radius:2px;"></div></div>
+                        <div style="font-size:8px;color:var(--text3);margin-top:2px;">Rất Thấp</div>
                     </div>
                 </div>
+
+                <!-- Integrated timeline table -->
+                <table style="width:100%;font-size:12px;">
+                    <thead>
+                        <tr>
+                            <th style="width:60px;">Mốc</th>
+                            <th>Sự kiện</th>
+                            <th style="width:70px;">Phase</th>
+                            <th style="width:70px;">Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td style="color:var(--accent);font-weight:800;">D1</td><td>First Trip + Instant Payout + Earnings Transparency</td><td style="color:var(--phase1);">P1</td><td><span class="tag tag-critical">Critical</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D3</td><td>Micro Win 5 đơn</td><td style="color:var(--phase1);">P1</td><td><span class="tag tag-high">High</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D7</td><td>Activation Badge + Mega Streak Bonus</td><td style="color:var(--phase2);">P2</td><td><span class="tag tag-critical">Critical</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D14</td><td>Streak 14D + Instant Payout lock-in + Guarantee Bậc 2</td><td style="color:var(--phase2);">P2</td><td><span class="tag tag-critical">Critical</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D21</td><td>Habit Check (21 đơn = habit loop)</td><td style="color:var(--phase3);">P3</td><td><span class="tag tag-med">Medium</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D30</td><td>Month #1 · Guarantee kết thúc → Quest System</td><td style="color:var(--phase3);">P3</td><td><span class="tag tag-critical">Critical</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D45</td><td>100 Orders · Unlock Enterprise/SME</td><td style="color:var(--phase3);">P3</td><td><span class="tag tag-high">High</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D60</td><td>Habit Badge + Ranking Activation (DQS)</td><td style="color:var(--phase4);">P4</td><td><span class="tag tag-critical">Critical</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D90</td><td>Tier Upgrade (R3 Bạc) + Bronze Insurance</td><td style="color:var(--phase4);">P4</td><td><span class="tag tag-critical">Critical</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D120</td><td>Survival Point + Community Invite</td><td style="color:var(--phase4);">P4</td><td><span class="tag tag-high">High</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D180</td><td>Pro Tier (R2 Vàng) + Silver Insurance</td><td style="color:var(--phase5);">P5</td><td><span class="tag tag-critical">Critical</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D365</td><td>🏆 Anniversary + Gold Insurance (R1)</td><td style="color:var(--phase5);">P5</td><td><span class="tag tag-critical">Critical</span></td></tr>
+                        <tr><td style="color:var(--accent);font-weight:800;">D365+</td><td>Ambassador Program + Mentor + Advisory Board</td><td style="color:var(--phase6);">P6</td><td><span class="tag tag-high">High</span></td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -1858,6 +1744,7 @@
                 <div class="phase-body">
                     <div style="margin-bottom:16px;">
                         <div class="card-title"><span>🏆</span> Benefit Ladder — Quyền Lợi Theo Tier</div>
+                        <div style="font-size:10px;color:var(--blue);margin-bottom:8px;padding:4px 8px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:6px;">📌 Source of Truth: <code style="color:var(--cyan);background:rgba(6,182,212,.1);padding:1px 5px;border-radius:3px;">2026-05-driver-ranking-params.html</code> · Dữ liệu đồng bộ Ranking &amp; AhaBenefits v2.0</div>
                         <table class="benefit-table">
                             <thead>
                                 <tr>
@@ -1870,53 +1757,67 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Dispatch Priority</td>
-                                    <td class="no">Cơ bản</td>
-                                    <td>+10%</td>
-                                    <td style="color:var(--green);">+25%</td>
-                                    <td class="rank-r1">+40%</td>
+                                    <td>Primary Layer</td>
+                                    <td class="no">L6 MASS</td>
+                                    <td>L4 Bigzone</td>
+                                    <td style="color:var(--green);">L3 Mediumzone</td>
+                                    <td class="rank-r1">L2 Minizone</td>
                                 </tr>
                                 <tr>
-                                    <td>Peak Hour Multiplier</td>
-                                    <td class="no">1.0x</td>
-                                    <td class="no">1.0x</td>
-                                    <td style="color:var(--green);">1.1x</td>
-                                    <td class="rank-r1">1.2x</td>
-                                </tr>
-                                <tr>
-                                    <td>Bảo hiểm tai nạn</td>
-                                    <td class="no">❌</td>
-                                    <td class="yes">✅ Cơ bản</td>
-                                    <td class="yes">✅ Mở rộng</td>
-                                    <td class="rank-r1">✅ Premium</td>
-                                </tr>
-                                <tr>
-                                    <td>AhaBenefits Points</td>
-                                    <td class="no">×1.0</td>
-                                    <td>×1.5</td>
-                                    <td style="color:var(--green);">×2.0</td>
-                                    <td class="rank-r1">×3.0</td>
-                                </tr>
-                                <tr>
-                                    <td>Priority Shift Booking</td>
-                                    <td class="no">❌</td>
-                                    <td class="no">❌</td>
-                                    <td class="yes">✅</td>
-                                    <td class="rank-r1">✅ + Early access</td>
-                                </tr>
-                                <tr>
-                                    <td>VIP Orders</td>
+                                    <td>Ca Full-day (08–18h)</td>
                                     <td class="no">❌</td>
                                     <td class="no">❌</td>
                                     <td class="yes">✅</td>
                                     <td class="rank-r1">✅</td>
                                 </tr>
                                 <tr>
-                                    <td>Mentor Role</td>
+                                    <td>Thu nhập target Full-day</td>
+                                    <td class="no">—</td>
+                                    <td class="no">—</td>
+                                    <td style="color:var(--green);">550k · 600k</td>
+                                    <td class="rank-r1">600k · 650k</td>
+                                </tr>
+                                <tr>
+                                    <td>Slot Ca Peak</td>
+                                    <td class="no">on-demand</td>
+                                    <td>40%</td>
+                                    <td style="color:var(--green);">40%</td>
+                                    <td class="rank-r1">20%</td>
+                                </tr>
+                                <tr>
+                                    <td>AhaPoints Hệ số</td>
+                                    <td class="no">×1.0</td>
+                                    <td>×1.1</td>
+                                    <td style="color:var(--green);">×1.3</td>
+                                    <td class="rank-r1">×1.5</td>
+                                </tr>
+                                <tr>
+                                    <td>Bonus hoàn ca</td>
+                                    <td class="no">—</td>
+                                    <td>+20 pts</td>
+                                    <td style="color:var(--green);">+25 pts</td>
+                                    <td class="rank-r1">+30 pts</td>
+                                </tr>
+                                <tr>
+                                    <td>Voucher xăng/sạc</td>
+                                    <td class="no">—</td>
+                                    <td class="no">—</td>
+                                    <td style="color:var(--green);">30k/tháng</td>
+                                    <td class="rank-r1">50k/tháng</td>
+                                </tr>
+                                <tr>
+                                    <td>BH tai nạn Mini</td>
                                     <td class="no">❌</td>
                                     <td class="no">❌</td>
                                     <td class="no">❌</td>
-                                    <td class="rank-r1">✅ + Thưởng</td>
+                                    <td class="rank-r1">✅ đổi điểm</td>
+                                </tr>
+                                <tr>
+                                    <td>AhaBenefits Catalog</td>
+                                    <td class="no">❌</td>
+                                    <td>Bạc only</td>
+                                    <td style="color:var(--green);">Vàng + Bạc</td>
+                                    <td class="rank-r1">KC + Vàng + Bạc</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1924,8 +1825,8 @@
 
                     <!-- TIERED INSURANCE -->
                     <div style="margin:16px 0;">
-                        <div class="card-title"><span>🛡️</span> Tiered Insurance — Moat Cạnh Tranh</div>
-                        <div style="font-size:11px;color:var(--blue);margin-bottom:10px;padding:6px 10px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:6px;">📌 Swiggy tiered insurance → D180 retention <strong>+42%</strong>. Deliveroo BH cho tất cả riders. XanhSM dùng BH đầy đủ làm vũ khí chiêu mộ #1</div>
+                        <div class="card-title"><span>🛡️</span> Tiered Insurance — Moat Cạnh Tranh <span style="font-size:10px;font-weight:600;color:var(--accent);background:rgba(249,115,22,.12);padding:2px 8px;border-radius:4px;border:1px solid rgba(249,115,22,.3);margin-left:8px;">ĐỀ XUẤT MỚI</span></div>
+                        <div style="font-size:11px;color:var(--blue);margin-bottom:10px;padding:6px 10px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:6px;">📌 Hiện tại: Chỉ R1 có BH tai nạn Mini (đổi điểm). <strong>Đề xuất mở rộng</strong> theo mô hình Swiggy tiered insurance → D180 retention <strong>+42%</strong>. Deliveroo BH cho tất cả riders. XanhSM dùng BH đầy đủ làm vũ khí #1</div>
                         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
                             <div style="background:rgba(205,127,50,.08);border:1px solid rgba(205,127,50,.25);border-radius:8px;padding:12px;">
                                 <div style="font-size:12px;font-weight:700;color:#cd7f32;margin-bottom:6px;">🥈 Bronze (R3 Bạc)</div>
