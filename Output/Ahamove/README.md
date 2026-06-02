@@ -71,7 +71,8 @@ Output/Ahamove/
 | `2026-05-ao-khi-comms-drafts.md` | 02. CAMPAIGNS | Draft nội dung post/push/Lark sẵn sàng gửi — đủ 5 ngày Phase 2, form cấu trúc, message kết quả cá nhân. |
 | `2026-05-ao-khi-campaign-tracker.xlsx` | 02. CAMPAIGNS | **Master tracker 6 sheets**: Plan timeline, Nội dung truyền thông copy-paste, Google Form setup, Slot tracking (công thức tự tính), Track B EV gift, Checklist 31 items. |
 | `2026-05-ao-khi-gantt-plan.xlsx` | 02. CAMPAIGNS | **Gantt-style plan 3 sheets**: Timeline Gantt 4 tuần (19/05–10/06), Phân tích 2 nhóm SC/CN vs TL/MiniHub, Nội dung 5 bài đăng rút gọn. |
+| `2026-06-global-driver-lifecycle-benchmark.md` | 06. COMPETITIVE_INTEL | **Nghiên cứu toàn cầu 15+ nền tảng** (Meituan, Uber, DoorDash, Swiggy, Grab, Gojek, Deliveroo, Rappi, iFood, Be, XanhSM...): mô hình vận hành tài xế 2 bánh, benchmark churn rate, phân chia lifecycle khoa học, gap analysis cho Ahamove. |
 
 ---
 
-*Last updated: 2026-05-19*
+*Last updated: 2026-06-02*
