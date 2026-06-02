@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver Journey v4.0 — 5 Phase × 25 Milestones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #0D1117;
+      --bg-card: #161B22;
+      --bg-card2: #1C2430;
+      --bg-code: #0A0F15;
+      --bg-hover: #1F2937;
+      --border: rgba(255, 255, 255, 0.07);
+      --text-prime: #F0F6FC;
+      --text-sec: #B1BAC4;
+      --text-muted: #8B949E;
+      --orange: #FF7F32;
+      --orange-dim: rgba(255, 127, 50, 0.12);
+      --yellow: #F59E0B;
+      --yellow-dim: rgba(245, 158, 11, 0.12);
+      --blue: #58A6FF;
+      --blue-dim: rgba(88, 166, 255, 0.12);
+      --teal: #22D3EE;
+      --teal-dim: rgba(34, 211, 238, 0.1);
+      --green: #10B981;
+      --green-dim: rgba(16, 185, 129, 0.12);
+      --red: #EF4444;
+      --red-dim: rgba(239, 68, 68, 0.12);
+      --purple: #A78BFA;
+      --gray-dim: rgba(139, 148, 158, 0.1)
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: var(--bg-base);
+      color: var(--text-prime);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      display: flex;
+      min-height: 100vh
+    }
+
+    #sidebar {
+      width: 240px;
+      min-width: 240px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 24px 0;
+      flex-shrink: 0
+    }
+
+    #sidebar::-webkit-scrollbar {
+      width: 3px
+    }
+
+    #sidebar::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px
+    }
+
+    .sb-logo {
+      padding: 0 18px 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 14px
+    }
+
+    .sb-tag {
+      display: inline-block;
+      background: var(--orange-dim);
+      color: var(--orange);
+      border: 1px solid rgba(255, 127, 50, 0.25);
+      border-radius: 6px;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 3px 8px;
+      margin-bottom: 8px;
+      text-transform: uppercase
+    }
+
+    .sb-logo h2 {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-prime);
+      line-height: 1.45
+    }
+
+    .sb-logo p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px
+    }
+
+    .sb-group {
+      padding: 8px 18px 2px;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: .1em;
+      text-transform: uppercase
+    }
+
+    #sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 18px;
+      color: var(--text-sec);
+      text-decoration: none;
+      font-size: 12px;
+      border-left: 2px solid transparent;
+      transition: all .15s
+    }
+
+    #sidebar a:hover {
+      color: var(--text-prime);
+      background: var(--bg-hover);
+      border-left-color: var(--orange)
+    }
+
+    .sb-num {
+      font-family: 'Montserrat', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      min-width: 18px
+    }
+
+    .sb-footer {
+      padding: 14px 18px;
+      margin-top: 8px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted)
+    }
+
+    .sb-footer strong {
+      color: var(--text-sec)
+    }
+
+    #main {
+      flex: 1;
+      padding: 36px 44px;
+      max-width: 980px;
+      overflow-x: hidden
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0D1A2B 0%, #172030 60%, #0F1620 100%);
+      border: 1px solid rgba(255, 127, 50, 0.12);
+      border-radius: 16px;
+      padding: 32px 36px;
+      margin-bottom: 36px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -40px;
+      right: -40px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(255, 127, 50, 0.07) 0%, transparent 70%);
+      pointer-events: none
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--orange-dim);
+      color: var(--orange);
+      border: 1px solid rgba(255, 127, 50, 0.25);
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      padding: 4px 12px;
+      margin-bottom: 14px;
+      text-transform: uppercase
+    }
+
+    .hero h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-prime);
+      letter-spacing: -.02em;
+      line-height: 1.3;
+      margin-bottom: 8px
+    }
+
+    .hero h1 span {
+      color: var(--orange)
+    }
+
+    .hero-sub {
+      font-size: 13px;
+      color: var(--text-sec);
+      margin-bottom: 20px;
+      line-height: 1.8
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap
+    }
+
+    .hm-item .label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 600;
+      display: block
+    }
+
+    .hm-item .value {
+      font-size: 12px;
+      font-family: 'Montserrat', monospace;
+      color: var(--text-sec)
+    }
+
+    .rank-r1 {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 127, 50, 0.12);
+      color: var(--orange);
+      border: 1px solid rgba(255, 127, 50, 0.25);
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap
+    }
+
+    .rank-r2 {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--yellow);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap
+    }
+
+    .rank-r3 {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--blue-dim);
+      color: var(--blue);
+      border: 1px solid rgba(88, 166, 255, 0.25);
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap
+    }
+
+    .rank-un {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--gray-dim);
+      color: var(--text-sec);
+      border: 1px solid rgba(139, 148, 158, 0.2);
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap
+    }
+
+    .rank-new {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--teal-dim);
+      color: var(--teal);
+      border: 1px solid rgba(34, 211, 238, 0.25);
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap
+    }
+
+    .layer-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 20px;
+      border-radius: 6px;
+      font-family: 'Montserrat', monospace;
+      font-size: 10px;
+      font-weight: 700
+    }
+
+    .l2 {
+      background: rgba(255, 127, 50, 0.15);
+      color: var(--orange);
+      border: 1px solid rgba(255, 127, 50, 0.3)
+    }
+
+    .l3 {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--yellow);
+      border: 1px solid rgba(245, 158, 11, 0.3)
+    }
+
+    .l4 {
+      background: var(--blue-dim);
+      color: var(--blue);
+      border: 1px solid rgba(88, 166, 255, 0.3)
+    }
+
+    .l6 {
+      background: var(--gray-dim);
+      color: var(--text-sec);
+      border: 1px solid rgba(139, 148, 158, 0.2)
+    }
+
+    section {
+      margin-bottom: 48px;
+      scroll-margin-top: 24px
+    }
+
+    .sec-hdr {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .sec-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      background: var(--orange-dim);
+      border: 1px solid rgba(255, 127, 50, 0.25);
+      border-radius: 11px;
+      font-family: 'Montserrat', monospace;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--orange)
+    }
+
+    .sec-title h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-prime);
+      letter-spacing: -.01em
+    }
+
+    .sec-title p {
+      font-size: 12px;
+      color: var(--text-sec);
+      margin-top: 2px
+    }
+
+    .tw {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 14px;
+      background: var(--bg-card);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 1px 6px rgba(0, 0, 0, 0.3)
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    thead tr {
+      background: #0C1624;
+      border-bottom: 2px solid rgba(255, 127, 50, 0.25)
+    }
+
+    th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 800;
+      color: #D0D8E4;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border-bottom: none;
+      white-space: nowrap
+    }
+
+    td {
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #C8D3DC;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle
+    }
+
+    tr:last-child td {
+      border-bottom: none
+    }
+
+    tbody tr:hover {
+      background: var(--bg-hover)
+    }
+
+    td strong {
+      color: var(--text-prime);
+      font-weight: 700
+    }
+
+    td.num {
+      font-family: 'Montserrat', monospace;
+      font-size: 12px
+    }
+
+    td.good {
+      color: var(--green);
+      font-weight: 600
+    }
+
+    td.na {
+      color: var(--text-muted)
+    }
+
+    .callout {
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border: 1px solid;
+      font-size: 12.5px
+    }
+
+    .ci {
+      background: var(--blue-dim);
+      border-color: rgba(88, 166, 255, 0.2);
+      color: #93C5FD
+    }
+
+    .cw {
+      background: var(--yellow-dim);
+      border-color: rgba(245, 158, 11, 0.25);
+      color: #FCD34D
+    }
+
+    .cs {
+      background: var(--green-dim);
+      border-color: rgba(16, 185, 129, 0.25);
+      color: #6EE7B7
+    }
+
+    .co {
+      background: var(--orange-dim);
+      border-color: rgba(255, 127, 50, 0.25);
+      color: #FDB68F
+    }
+
+    .cr {
+      background: var(--red-dim);
+      border-color: rgba(239, 68, 68, 0.25);
+      color: #FCA5A5
+    }
+
+    .callout-body strong {
+      font-weight: 700
+    }
+
+    .kpi-pill {
+      display: inline-block;
+      font-family: 'Montserrat', monospace;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 8px
+    }
+
+    .kpi-green {
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid rgba(16, 185, 129, 0.3)
+    }
+
+    .kpi-orange {
+      background: var(--orange-dim);
+      color: var(--orange);
+      border: 1px solid rgba(255, 127, 50, 0.3)
+    }
+
+    .kpi-blue {
+      background: var(--blue-dim);
+      color: var(--blue);
+      border: 1px solid rgba(88, 166, 255, 0.3)
+    }
+
+    .kpi-red {
+      background: var(--red-dim);
+      color: var(--red);
+      border: 1px solid rgba(239, 68, 68, 0.3)
+    }
+
+    .kpi-gray {
+      background: var(--gray-dim);
+      color: var(--text-sec);
+      border: 1px solid rgba(139, 148, 158, 0.2)
+    }
+
+    .kpi-yellow {
+      background: var(--yellow-dim);
+      color: var(--yellow);
+      border: 1px solid rgba(245, 158, 11, 0.3)
+    }
+
+    .kpi-teal {
+      background: var(--teal-dim);
+      color: var(--teal);
+      border: 1px solid rgba(34, 211, 238, 0.3)
+    }
+
+    .sev-crit {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--red-dim);
+      color: var(--red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 700
+    }
+
+    .sev-high {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--orange-dim);
+      color: var(--orange);
+      border: 1px solid rgba(255, 127, 50, 0.3);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 700
+    }
+
+    .sev-med {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--yellow-dim);
+      color: var(--yellow);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 700
+    }
+
+    .pbar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .pbar {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 3px;
+      overflow: hidden
+    }
+
+    .pbar-fill {
+      height: 100%;
+      border-radius: 3px
+    }
+
+    .pbar-val {
+      font-family: 'Montserrat', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 32px;
+      text-align: right
+    }
+
+    .tl-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
+      overflow-x: auto
+    }
+
+    .tl-bar {
+      display: flex;
+      gap: 0;
+      min-width: 700px;
+      margin-bottom: 16px
+    }
+
+    .tl-seg {
+      flex: 1;
+      padding: 14px 12px 10px;
+      border-radius: 0;
+      position: relative;
+      text-align: center
+    }
+
+    .tl-seg:first-child {
+      border-radius: 10px 0 0 10px
+    }
+
+    .tl-seg:last-child {
+      border-radius: 0 10px 10px 0
+    }
+
+    .tl-seg-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 4px
+    }
+
+    .tl-seg-name {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 2px
+    }
+
+    .tl-seg-days {
+      font-size: 10.5px;
+      opacity: .7;
+      font-family: 'Montserrat', monospace
+    }
+
+    .tl-row {
+      display: flex;
+      gap: 0;
+      min-width: 700px;
+      margin-bottom: 6px
+    }
+
+    .tl-cell {
+      flex: 1;
+      padding: 6px 12px;
+      font-size: 11px;
+      text-align: center;
+      border-right: 1px solid rgba(255, 255, 255, 0.04)
+    }
+
+    .tl-cell:last-child {
+      border-right: none
+    }
+
+    .tl-row-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      width: 80px;
+      min-width: 80px;
+      padding: 6px 0;
+      display: flex;
+      align-items: center
+    }
+
+    .ph-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid
+    }
+
+    .ph-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      flex-wrap: wrap
+    }
+
+    .ph-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Montserrat', monospace;
+      font-size: 15px;
+      font-weight: 800
+    }
+
+    .ph-info {
+      flex: 1;
+      min-width: 200px
+    }
+
+    .ph-name {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 2px
+    }
+
+    .ph-days {
+      font-size: 11px;
+      font-family: 'Montserrat', monospace;
+      color: var(--text-muted)
+    }
+
+    .ph-quote {
+      font-size: 12px;
+      color: var(--text-sec);
+      font-style: italic;
+      padding: 10px 16px;
+      background: var(--bg-card2);
+      border-radius: 8px;
+      border-left: 3px solid;
+      margin-bottom: 16px
+    }
+
+    .ph-sub {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sec);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin: 16px 0 10px
+    }
+
+    .ins-ladder {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 16px 0
+    }
+
+    .ins-step {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      position: relative
+    }
+
+    .ins-step:first-child {
+      border-radius: 12px 12px 0 0
+    }
+
+    .ins-step:last-child {
+      border-radius: 0 0 12px 12px
+    }
+
+    .ins-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      flex-shrink: 0
+    }
+
+    .ins-info {
+      flex: 1
+    }
+
+    .ins-name {
+      font-size: 13px;
+      font-weight: 700
+    }
+
+    .ins-desc {
+      font-size: 11.5px;
+      color: var(--text-sec);
+      margin-top: 2px
+    }
+
+    .ins-cond {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      white-space: nowrap
+    }
+
+    .stack-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 16px 0
+    }
+
+    .stack-layer {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid var(--border);
+      border-bottom: none
+    }
+
+    .stack-layer:last-child {
+      border-bottom: 1px solid var(--border);
+      border-radius: 0 0 12px 12px
+    }
+
+    .stack-layer:first-child {
+      border-radius: 12px 12px 0 0
+    }
+
+    .stack-ph {
+      font-family: 'Montserrat', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      min-width: 70px;
+      text-transform: uppercase;
+      letter-spacing: .04em
+    }
+
+    .stack-items {
+      font-size: 12px;
+      color: var(--text-sec);
+      flex: 1
+    }
+
+    .stack-bar {
+      height: 8px;
+      border-radius: 4px;
+      min-width: 40px
+    }
+
+    .rm-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 16px 0
+    }
+
+    .rm-step {
+      display: flex;
+      gap: 20px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .rm-step:last-child {
+      border-bottom: none
+    }
+
+    .rm-dot-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 48px;
+      flex-shrink: 0
+    }
+
+    .rm-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      font-family: 'Montserrat', monospace
+    }
+
+    .rm-line {
+      flex: 1;
+      width: 2px;
+      background: var(--border);
+      margin-top: 6px
+    }
+
+    .rm-body {
+      flex: 1
+    }
+
+    .rm-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 2px
+    }
+
+    .rm-time {
+      font-size: 11px;
+      font-family: 'Montserrat', monospace;
+      color: var(--text-muted);
+      margin-bottom: 8px
+    }
+
+    .rm-items {
+      font-size: 12px;
+      color: var(--text-sec);
+      line-height: 2
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px
+    }
+
+    code {
+      font-family: 'Montserrat', monospace;
+      font-size: 11.5px;
+      background: rgba(255, 127, 50, 0.1);
+      color: var(--orange);
+      padding: 1px 5px;
+      border-radius: 4px
+    }
+
+    .mg {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px
+    }
+
+    @media(max-width:680px) {
+      .mg {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .mg-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center
+    }
+
+    .mg-val {
+      font-family: 'Montserrat', monospace;
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.1
+    }
+
+    .mg-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted);
+      margin-top: 6px
+    }
+
+    .mg-sub {
+      font-size: 11px;
+      color: var(--text-sec);
+      margin-top: 4px
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-tag">Proposal v4.0</div>
+      <h2>Driver Journey<br>5 Phase × 25 Milestones</h2>
+      <p>Driver Management · 2026</p>
+    </div>
+    <div class="sb-group">Tổng Quan</div>
+    <a href="#hero"><span class="sb-num">00</span>Tóm Tắt Thực Thi</a>
+    <div class="sb-group">S — C — R</div>
+    <a href="#s1"><span class="sb-num">01</span>Tình Huống</a>
+    <a href="#s2"><span class="sb-num">02</span>5 Điểm Nghẽn</a>
+    <a href="#s3"><span class="sb-num">03</span>Hành Trình 5 Pha</a>
+    <div class="sb-group">Chi Tiết</div>
+    <a href="#p1"><span class="sb-num">P1</span>Kích Hoạt</a>
+    <a href="#p2"><span class="sb-num">P2</span>Xây Thói Quen</a>
+    <a href="#p3"><span class="sb-num">P3</span>Leo Hạng</a>
+    <a href="#p4"><span class="sb-num">P4</span>Thành Thạo</a>
+    <a href="#p5"><span class="sb-num">P5</span>Di Sản</a>
+    <div class="sb-group">Tác Động</div>
+    <a href="#s4"><span class="sb-num">04</span>Chi Phí Chuyển Đổi</a>
+    <a href="#s5"><span class="sb-num">05</span>Thay Đổi Params</a>
+    <a href="#s6"><span class="sb-num">06</span>Lộ Trình</a>
+    <a href="#s7"><span class="sb-num">07</span>Nguồn Tham Khảo</a>
+    <div class="sb-footer"><strong>Tham chiếu</strong><br>driver-ranking-params.html<br>global-lifecycle-benchmark.md
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <div class="hero" id="hero">
+      <div class="hero-tag">Đề Xuất</div>
+      <h1>Driver Journey <span>v4.0</span><br>5 Pha × 25 Cột Mốc</h1>
+      <p class="hero-sub">Thiết kế lộ trình hành vi tài xế gắn chặt Ranking Params v2.0 — dựa trên benchmark 15 nền tảng
+        toàn cầu và nghiên cứu behavioral science. Giải quyết 5 điểm nghẽn, tạo switching cost tích lũy, target overall
+        retention 85%.</p>
+      <div class="hero-meta">
+        <div class="hm-item"><span class="label">Ngày</span><span class="value">02/06/2026</span></div>
+        <div class="hm-item"><span class="label">Chủ sở hữu</span><span class="value">Driver Management</span></div>
+        <div class="hm-item"><span class="label">Phạm vi</span><span class="value">SGN + HAN · Bike · ~10.5k
+            actives</span></div>
+        <div class="hm-item"><span class="label">Phiên bản</span><span class="value"
+            style="color:var(--orange)">v4.0</span></div>
+      </div>
+    </div>
+
+    <div class="mg" style="grid-template-columns:repeat(6,1fr);margin-bottom:28px">
+      <div class="mg-item">
+        <div class="mg-val" style="color:var(--teal)">80%</div>
+        <div class="mg-lbl">D14 Retention</div>
+        <div class="mg-sub">từ ~55%</div>
+      </div>
+      <div class="mg-item">
+        <div class="mg-val" style="color:var(--blue)">72%</div>
+        <div class="mg-lbl">D30 Retention</div>
+        <div class="mg-sub">từ ~35%</div>
+      </div>
+      <div class="mg-item">
+        <div class="mg-val" style="color:var(--blue)">55%</div>
+        <div class="mg-lbl">D60 · Tỷ lệ R3</div>
+        <div class="mg-sub">từ ~25%</div>
+      </div>
+      <div class="mg-item">
+        <div class="mg-val" style="color:var(--yellow)">40%</div>
+        <div class="mg-lbl">D150 · Tỷ lệ R2</div>
+        <div class="mg-sub">từ ~15%</div>
+      </div>
+      <div class="mg-item">
+        <div class="mg-val" style="color:var(--orange)">35%</div>
+        <div class="mg-lbl">D365 Retention</div>
+        <div class="mg-sub">từ ~8%</div>
+      </div>
+      <div class="mg-item">
+        <div class="mg-val" style="color:var(--green)">12<span style="font-size:14px">th</span></div>
+        <div class="mg-lbl">Driver LTV</div>
+        <div class="mg-sub">từ ~3.5 tháng</div>
+      </div>
+    </div>
+
+    <!-- S1 -->
+    <section id="s1">
+      <div class="sec-hdr">
+        <div class="sec-num">01</div>
+        <div class="sec-title">
+          <h2>Tình Huống — Ranking Params v2.0</h2>
+          <p>Hệ thống hiện tại đã có nền tảng vững chắc</p>
+        </div>
+      </div>
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>Hạng</th>
+              <th>DQS</th>
+              <th>DCR</th>
+              <th>Sản lượng (stp/tháng)</th>
+              <th>Layer</th>
+              <th>Điểm ×</th>
+              <th>EPH mục tiêu</th>
+              <th>Đặc quyền chính</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="rank-r1">R1 Kim Cương</span></td>
+              <td><span class="kpi-pill kpi-green">≥ 80</span></td>
+              <td><span class="kpi-pill kpi-orange">≤ 10%</span></td>
+              <td><span class="kpi-pill kpi-blue">≥ 280</span></td>
+              <td><span class="layer-badge l2">L2</span></td>
+              <td style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--orange)">×1.5
+              </td>
+              <td class="num" style="color:var(--orange)">65-70k/h</td>
+              <td style="font-size:12px">Full-day Guarantee 600-650k, Voucher 50k, BH Mini</td>
+            </tr>
+            <tr>
+              <td><span class="rank-r2">R2 Vàng</span></td>
+              <td><span class="kpi-pill kpi-green">≥ 75</span></td>
+              <td><span class="kpi-pill kpi-orange">≤ 10%</span></td>
+              <td><span class="kpi-pill kpi-blue">≥ 210</span></td>
+              <td><span class="layer-badge l3">L3</span></td>
+              <td style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--yellow)">×1.3
+              </td>
+              <td class="num" style="color:var(--yellow)">60-65k/h</td>
+              <td style="font-size:12px">Full-day Guarantee 550-600k, Voucher 30k</td>
+            </tr>
+            <tr>
+              <td><span class="rank-r3">R3 Bạc</span></td>
+              <td><span class="kpi-pill kpi-green">≥ 75</span></td>
+              <td><span class="kpi-pill kpi-orange">≤ 15%</span></td>
+              <td><span class="kpi-pill kpi-blue">≥ 70</span></td>
+              <td><span class="layer-badge l4">L4</span></td>
+              <td style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--blue)">×1.1</td>
+              <td class="num" style="color:var(--blue)">55-60k/h</td>
+              <td style="font-size:12px">Ca 4h có cấu trúc, Catalog Bạc</td>
+            </tr>
+            <tr>
+              <td><span class="rank-un">Chưa xếp hạng</span></td>
+              <td><span class="kpi-pill kpi-gray">
+                  < 75</span>
+              </td>
+              <td class="na">—</td>
+              <td class="na">—</td>
+              <td><span class="layer-badge l6">L6</span></td>
+              <td style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--text-muted)">×1.0
+              </td>
+              <td class="na">—</td>
+              <td style="font-size:12px;color:var(--text-muted)">On-demand, không có benefits</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout cs"><span style="font-size:15px;flex-shrink:0">✓</span>
+        <div class="callout-body"><strong>So với toàn cầu:</strong> Tier + DQS composite + AhaPoints multiplier + Layer
+          cascade đặt Ahamove ngang Uber Pro và DoorDash Dasher Rewards. Vượt Deliveroo/Rappi (không tier). Tiệm cận
+          Grab/Gojek về benefits.</div>
+      </div>
+      <div class="callout cr"><span style="font-size:15px;flex-shrink:0">!</span>
+        <div class="callout-body"><strong>Thiếu:</strong> Ranking trả lời "tài xế ở đâu?" nhưng chưa trả lời
+          <strong>"tài xế nên làm gì tiếp theo?"</strong>. Tài xế mới đăng ký hôm nay sẽ thấy mình là Unranked — giống
+          hệt tài xế rớt hạng — không hướng dẫn, không safety net, không đường đi.</div>
+      </div>
+    </section>
+
+    <!-- S2 -->
+    <section id="s2">
+      <div class="sec-hdr">
+        <div class="sec-num">02</div>
+        <div class="sec-title">
+          <h2>Thách Thức — 5 Điểm Nghẽn</h2>
+          <p>Từ nghiên cứu 15 nền tảng toàn cầu & đối chiếu Ranking Params</p>
+        </div>
+      </div>
+      <div class="callout ci" style="margin-bottom:20px"><span style="font-size:15px;flex-shrink:0">i</span>
+        <div class="callout-body">Đã phân tích <strong>15 nền tảng</strong>: Meituan (7M riders), Ele.me, Grab, Gojek,
+          Uber, DoorDash, Deliveroo, Swiggy, Zomato, Rappi, iFood, Be, XanhSM, Bolt Food, Wolt. Ahamove ở mô hình
+          <strong>Structured Gig</strong> — đúng positioning, churn 30-50%/năm.</div>
+      </div>
+
+      <div
+        style="background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--red);border-radius:12px;padding:20px 22px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><span class="sev-crit">NGHIÊM
+            TRỌNG</span><span style="font-size:15px;font-weight:800;color:var(--text-prime)">T1: "Mới Chưa Xếp Hạng" =
+            "Rớt Hạng"</span></div>
+        <p style="font-size:12.5px;color:var(--text-sec);margin-bottom:12px">Hệ thống không phân biệt tài xế <strong
+            style="color:var(--teal)">mới đăng ký</strong> (chưa có data) với tài xế <strong
+            style="color:var(--red)">rớt hạng</strong> (performance kém). Cả hai đều ở L6 MASS, không benefits, không
+          structured slot. Tài xế mới bị "phạt" trước khi có cơ hội chứng minh.</p>
+        <div
+          style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">
+          Benchmark toàn cầu</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+          <div
+            style="background:var(--bg-card2);border-radius:8px;padding:8px 12px;font-size:11.5px;color:var(--text-sec)">
+            <strong style="color:var(--text-prime)">DoorDash:</strong> "50 đơn đầu tiên" = giai đoạn được bảo vệ</div>
+          <div
+            style="background:var(--bg-card2);border-radius:8px;padding:8px 12px;font-size:11.5px;color:var(--text-sec)">
+            <strong style="color:var(--text-prime)">Uber:</strong> Blue tier có sẵn gas cashback 6%</div>
+          <div
+            style="background:var(--bg-card2);border-radius:8px;padding:8px 12px;font-size:11.5px;color:var(--text-sec)">
+            <strong style="color:var(--text-prime)">Meituan:</strong> Đào tạo + onboarding trước khi chấm điểm</div>
+          <div
+            style="background:var(--bg-card2);border-radius:8px;padding:8px 12px;font-size:11.5px;color:var(--text-sec)">
+            <strong style="color:var(--text-prime)">Gojek:</strong> GoPartner phân biệt "mới" vs "đang hoạt động"</div>
+        </div>
+      </div>
+
+      <div
+        style="background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--red);border-radius:12px;padding:20px 22px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><span class="sev-crit">NGHIÊM
+            TRỌNG</span><span style="font-size:15px;font-weight:800;color:var(--text-prime)">T2: Vực R3 → R2 (70 → 210
+            stp = khoảng cách 3x)</span></div>
+        <div class="tw" style="margin-bottom:12px">
+          <table>
+            <thead>
+              <tr>
+                <th>Hạng</th>
+                <th>stp/tháng</th>
+                <th>stp/ngày (22d)</th>
+                <th>Hành vi thực tế</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="rank-r3">R3 Bạc</span></td>
+                <td class="num">70</td>
+                <td class="num" style="color:var(--blue)">~3.2</td>
+                <td style="font-size:12px">Part-time: 4-5 đơn/ngày × 4-5 ngày/tuần</td>
+              </tr>
+              <tr>
+                <td><span class="rank-r2">R2 Vàng</span></td>
+                <td class="num">210</td>
+                <td class="num" style="color:var(--yellow)">~9.5</td>
+                <td style="font-size:12px">Full-time: ~10 đơn/ngày × 5-6 ngày/tuần</td>
+              </tr>
+              <tr style="background:rgba(239,68,68,0.06)">
+                <td style="font-weight:700;color:var(--red)">KHOẢNG CÁCH</td>
+                <td style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--red)">3×</td>
+                <td style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--red)">3×</td>
+                <td style="font-size:12px;color:var(--red);font-weight:700">Chuyển hoàn toàn từ part-time sang full-time
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:12px;color:var(--text-sec)">Không nền tảng nào yêu cầu bước nhảy <strong
+            style="color:var(--red)">3x</strong> giữa 2 tier liền kề. Uber Pro tăng 30-50%/bậc. Gojek tăng 40-70%/bậc.
+          Meituan Silver→Gold chỉ +43%.</p>
+      </div>
+
+      <div
+        style="background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--orange);border-radius:12px;padding:20px 22px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><span class="sev-high">CAO</span><span
+            style="font-size:15px;font-weight:800;color:var(--text-prime)">T3: BH chỉ cho R1, trả bằng Points</span>
+        </div>
+        <div class="tw" style="margin-bottom:10px">
+          <table>
+            <thead>
+              <tr>
+                <th>Nền tảng</th>
+                <th>BH cho ai</th>
+                <th>Kết quả</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Swiggy StepUp</strong></td>
+                <td style="font-size:12px">Gold (gia đình), Silver (cá nhân), Bronze (tai nạn)</td>
+                <td class="good" style="font-size:12px">Churn 60-70% → 10-15%. D180 +42%</td>
+              </tr>
+              <tr>
+                <td><strong>Deliveroo</strong></td>
+                <td style="font-size:12px">Tất cả riders — miễn phí</td>
+                <td style="font-size:12px;color:var(--text-sec)">BH tai nạn + £35/ngày ốm + £1,000 sinh con</td>
+              </tr>
+              <tr>
+                <td><strong>XanhSM</strong></td>
+                <td style="font-size:12px">Tất cả (hợp đồng LĐ) — BHXH đầy đủ</td>
+                <td class="good" style="font-size:12px">Churn 15-20%/năm — thấp nhất VN</td>
+              </tr>
+              <tr style="background:rgba(239,68,68,0.04)">
+                <td><strong style="color:var(--red)">Ahamove</strong></td>
+                <td style="font-size:12px;color:var(--red)">Chỉ R1, trả bằng points</td>
+                <td style="font-size:12px;color:var(--red);font-weight:600">Khoảng cách lớn nhất vs đối thủ</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div
+        style="background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--orange);border-radius:12px;padding:20px 22px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><span class="sev-high">CAO</span><span
+            style="font-size:15px;font-weight:800;color:var(--text-prime)">T4: Không có Guarantee cho tài xế mới</span>
+        </div>
+        <div class="tw" style="margin-bottom:10px">
+          <table>
+            <thead>
+              <tr>
+                <th>Nền tảng</th>
+                <th>Guarantee tài xế mới</th>
+                <th>Kết quả</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Grab</strong></td>
+                <td style="font-size:12px">14 ngày Guaranteed Earnings</td>
+                <td class="good" style="font-size:12px">D30 retention <strong>+32%</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Uber</strong></td>
+                <td style="font-size:12px">30 ngày guarantee (thị trường chọn lọc)</td>
+                <td class="good" style="font-size:12px">Early churn <strong>-15-20%</strong></td>
+              </tr>
+              <tr style="background:rgba(239,68,68,0.04)">
+                <td><strong style="color:var(--red)">Ahamove</strong></td>
+                <td style="font-size:12px;color:var(--red)">Không có</td>
+                <td style="font-size:12px;color:var(--red)">Độ bất định cao = churn cao</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div
+        style="background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--yellow);border-radius:12px;padding:20px 22px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><span class="sev-med">TRUNG
+            BÌNH</span><span style="font-size:15px;font-weight:800;color:var(--text-prime)">T5: Points hết hạn cuối
+            quý</span></div>
+        <p style="font-size:12.5px;color:var(--text-sec)">Tài xế đăng ký giữa tháng 3 (gần cuối Q1) sẽ bị reset points
+          vào 31/3 trước khi tích đủ đổi. <strong style="color:var(--text-prime)">Giải pháp:</strong> Points của tài xế
+          mới (< 60 ngày) không expire trong quý đầu tiên đăng ký.</p>
+      </div>
+    </section>
+
+    <!-- S3 -->
+    <section id="s3">
+      <div class="sec-hdr">
+        <div class="sec-num">03</div>
+        <div class="sec-title">
+          <h2>Giải Pháp — Driver Journey 5 Pha</h2>
+          <p>Gộp Phase 1+2 cũ thành 1. Thêm Phase "Leo Hạng" giải quyết vực 3x.</p>
+        </div>
+      </div>
+      <div class="callout ci" style="margin-bottom:20px"><span style="font-size:15px;flex-shrink:0">?</span>
+        <div class="callout-body"><strong>Tại sao 5 pha thay vì 6?</strong> (1) Ranking params không có trạng thái trung
+          gian D0-D14 — đều Unranked. (2) Không nền tảng nào dùng D3 làm ranh giới. (3) Gộp lại cho phép "Protected
+          Window" 14 ngày mạch lạc. (4) Thêm phase "Leo Hạng" chuyên giải quyết vực R3→R2.</div>
+      </div>
+
+      <div class="tl-wrap">
+        <div
+          style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">
+          Dòng Thời Gian Hành Trình</div>
+        <div class="tl-bar">
+          <div class="tl-seg" style="background:rgba(34,211,238,0.12);border:1px solid rgba(34,211,238,0.25);flex:1">
+            <div class="tl-seg-label" style="color:var(--teal)">Pha 1</div>
+            <div class="tl-seg-name" style="color:var(--teal)">Kích Hoạt</div>
+            <div class="tl-seg-days">D0 — D14</div>
+          </div>
+          <div class="tl-seg" style="background:var(--blue-dim);border:1px solid rgba(88,166,255,0.25);flex:2">
+            <div class="tl-seg-label" style="color:var(--blue)">Pha 2</div>
+            <div class="tl-seg-name" style="color:var(--blue)">Xây Thói Quen</div>
+            <div class="tl-seg-days">D15 — D60</div>
+          </div>
+          <div class="tl-seg" style="background:var(--yellow-dim);border:1px solid rgba(245,158,11,0.25);flex:3">
+            <div class="tl-seg-label" style="color:var(--yellow)">Pha 3</div>
+            <div class="tl-seg-name" style="color:var(--yellow)">Leo Hạng</div>
+            <div class="tl-seg-days">D61 — D150</div>
+          </div>
+          <div class="tl-seg" style="background:var(--orange-dim);border:1px solid rgba(255,127,50,0.25);flex:4">
+            <div class="tl-seg-label" style="color:var(--orange)">Pha 4</div>
+            <div class="tl-seg-name" style="color:var(--orange)">Thành Thạo</div>
+            <div class="tl-seg-days">D151 — D365</div>
+          </div>
+          <div class="tl-seg" style="background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.25);flex:2">
+            <div class="tl-seg-label" style="color:var(--purple)">Pha 5</div>
+            <div class="tl-seg-name" style="color:var(--purple)">Di Sản</div>
+            <div class="tl-seg-days">D365+</div>
+          </div>
+        </div>
+        <div style="display:flex;min-width:700px;margin-bottom:4px">
+          <div class="tl-row-label">Hạng</div>
+          <div class="tl-cell" style="flex:1"><span class="rank-new">Mới</span></div>
+          <div class="tl-cell" style="flex:2"><span class="rank-un">Chưa XH</span> → <span class="rank-r3">R3</span>
+          </div>
+          <div class="tl-cell" style="flex:3"><span class="rank-r3">R3</span> → <span class="rank-r2">R2</span></div>
+          <div class="tl-cell" style="flex:4"><span class="rank-r2">R2</span> → <span class="rank-r1">R1</span></div>
+          <div class="tl-cell" style="flex:2"><span class="rank-r1">R1</span> duy trì</div>
+        </div>
+        <div style="display:flex;min-width:700px;margin-bottom:4px">
+          <div class="tl-row-label">Layer</div>
+          <div class="tl-cell" style="flex:1"><span class="layer-badge l6">L6</span></div>
+          <div class="tl-cell" style="flex:2"><span class="layer-badge l6">L6</span> → <span
+              class="layer-badge l4">L4</span></div>
+          <div class="tl-cell" style="flex:3"><span class="layer-badge l4">L4</span> → <span
+              class="layer-badge l3">L3</span></div>
+          <div class="tl-cell" style="flex:4"><span class="layer-badge l3">L3</span> → <span
+              class="layer-badge l2">L2</span></div>
+          <div class="tl-cell" style="flex:2"><span class="layer-badge l2">L2</span></div>
+        </div>
+        <div style="display:flex;min-width:700px">
+          <div class="tl-row-label">Churn</div>
+          <div class="tl-cell" style="flex:1">
+            <div style="height:12px;background:var(--red);border-radius:3px;width:100%"></div>
+          </div>
+          <div class="tl-cell" style="flex:2">
+            <div style="height:12px;background:var(--orange);border-radius:3px;width:80%"></div>
+          </div>
+          <div class="tl-cell" style="flex:3">
+            <div style="height:12px;background:var(--yellow);border-radius:3px;width:55%"></div>
+          </div>
+          <div class="tl-cell" style="flex:4">
+            <div style="height:12px;background:var(--blue);border-radius:3px;width:30%"></div>
+          </div>
+          <div class="tl-cell" style="flex:2">
+            <div style="height:12px;background:var(--green);border-radius:3px;width:12%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">
+        Tại sao mỗi ranh giới được chọn?</div>
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>Ranh giới</th>
+              <th>Churn cliff (toàn cầu)</th>
+              <th>Gắn Ranking Params</th>
+              <th>Cơ sở khoa học</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="kpi-pill kpi-teal">D14</span></td>
+              <td style="font-size:12px">Uber: 47% bỏ trước 25 trips. Grab: 14d là turning point</td>
+              <td style="font-size:12px">Unranked, đã tích 21+ đơn</td>
+              <td style="font-size:12px">Fogg: 21 lần lặp lại = habit loop</td>
+            </tr>
+            <tr>
+              <td><span class="kpi-pill kpi-blue">D60</span></td>
+              <td style="font-size:12px">Lally (2010): 66 ngày trung bình hình thành thói quen</td>
+              <td style="font-size:12px"><strong style="color:var(--blue)">R3 Bạc đạt được</strong> (70 stp/tháng)</td>
+              <td style="font-size:12px">SDT: External → Identified motivation</td>
+            </tr>
+            <tr>
+              <td><span class="kpi-pill kpi-yellow">D150</span></td>
+              <td style="font-size:12px">Rusbult: 5 tháng = switching cost đáng kể</td>
+              <td style="font-size:12px"><strong style="color:var(--yellow)">R2 Vàng đạt được</strong> (ramp 70→210)
+              </td>
+              <td style="font-size:12px">Zwettler (2024): Positioning Challenge kết thúc</td>
+            </tr>
+            <tr>
+              <td><span class="kpi-pill kpi-orange">D365</span></td>
+              <td style="font-size:12px">Uber: Chỉ 4% rider sống sót 1 năm</td>
+              <td style="font-size:12px"><strong style="color:var(--orange)">R1 Kim Cương đạt/duy trì</strong></td>
+              <td style="font-size:12px">Erikson: Generativity — nhu cầu "truyền lại"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- P1 -->
+    <section id="p1">
+      <div class="ph-card" style="border-left-color:var(--teal)">
+        <div class="ph-card-header">
+          <div class="ph-num" style="background:var(--teal-dim);color:var(--teal)">P1</div>
+          <div class="ph-info">
+            <div class="ph-name" style="color:var(--teal)">Kích Hoạt & Chiến Thắng Đầu Tiên</div>
+            <div class="ph-days">D0 — D14 · <span class="rank-new">Mới Chưa XH</span> · <span
+                class="layer-badge l6">L6</span> + Ưu tiên Tài xế mới</div>
+          </div>
+        </div>
+        <div class="ph-quote" style="border-color:var(--teal)">"Liệu app này có đáng để tôi bỏ thời gian không?" — Mục
+          tiêu: ≥ 21 đơn trong 14 ngày</div>
+        <div class="ph-sub">4 cơ chế đặc biệt (giải quyết T1 + T4)</div>
+        <div class="tw">
+          <table>
+            <thead>
+              <tr>
+                <th>Cơ chế</th>
+                <th>Chi tiết</th>
+                <th>Benchmark</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Guarantee Tài xế mới 14 ngày</strong></td>
+                <td style="font-size:12px">≥ 3 đơn/ngày → đảm bảo tối thiểu. D1-D7 mức cao, D8-D14 -20%</td>
+                <td style="font-size:12px;color:var(--green)">Grab: D30 +32%</td>
+              </tr>
+              <tr>
+                <td><strong>Ưu tiên Dispatch Tài xế mới</strong></td>
+                <td style="font-size:12px">Ưu tiên đơn <3km, đơn đơn giản</td>
+                <td style="font-size:12px;color:var(--green)">Uber: D7 +41%</td>
+              </tr>
+              <tr>
+                <td><strong>Rút tiền tức thì miễn phí</strong></td>
+                <td style="font-size:12px">Nhận tiền sau mỗi đơn/cuối ngày. Miễn phí 30 ngày</td>
+                <td style="font-size:12px;color:var(--green)">44% rời đi nếu payout chậm</td>
+              </tr>
+              <tr>
+                <td><strong>Hệ thống Buddy</strong></td>
+                <td style="font-size:12px">1 tài xế R2+/R1 cùng khu vực làm mentor</td>
+                <td style="font-size:12px;color:var(--green)">Gojek GoPartner, Be beAcademy</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ph-sub">Cột mốc</div>
+        <div class="tw">
+          <table>
+            <thead>
+              <tr>
+                <th>Mốc</th>
+                <th>Thời điểm</th>
+                <th>Trigger</th>
+                <th>Phần thưởng</th>
+                <th>Tâm lý</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>M1</strong></td>
+                <td class="num">D0-D1</td>
+                <td>1 đơn</td>
+                <td style="font-size:12px">Thưởng tiền mặt (giảm dần)</td>
+                <td style="font-size:11px;color:var(--teal)">Tự tin bản thân</td>
+              </tr>
+              <tr>
+                <td><strong>M2</strong></td>
+                <td class="num">D2-D3</td>
+                <td>5 đơn</td>
+                <td style="font-size:12px">Tiền mặt + Thanh tiến trình "5/21"</td>
+                <td style="font-size:11px;color:var(--teal)">Tiến trình được tặng</td>
+              </tr>
+              <tr>
+                <td><strong>M3</strong></td>
+                <td class="num">D7</td>
+                <td>10 đơn</td>
+                <td style="font-size:12px">Huy hiệu + Mở khóa EPH tracker</td>
+                <td style="font-size:11px;color:var(--teal)">Hiểu rõ hệ thống</td>
+              </tr>
+              <tr>
+                <td><strong>M4</strong></td>
+                <td class="num">D14</td>
+                <td>21 đơn</td>
+                <td style="font-size:12px"><strong>Cổng vào Pha 2:</strong> Đăng ký ca 4h, Streak</td>
+                <td style="font-size:11px;color:var(--teal)">Cam kết</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ph-sub">KPIs</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+          <div class="mg-item">
+            <div class="mg-val" style="color:var(--teal);font-size:20px">85%</div>
+            <div class="mg-lbl">Tỷ lệ Kích hoạt</div>
+          </div>
+          <div class="mg-item">
+            <div class="mg-val" style="color:var(--teal);font-size:20px">65%</div>
+            <div class="mg-lbl">Tỷ lệ 21 đơn</div>
+          </div>
+          <div class="mg-item">
+            <div class="mg-val" style="color:var(--teal);font-size:20px">80%</div>
+            <div class="mg-lbl">D14 Retention</div>
+          </div>
+          <div class="mg-item">
+            <div class="mg-val" style="color:var(--teal);font-size:20px">55%</div>
+            <div class="mg-lbl">Sử dụng Guarantee</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- P2 -->
+    <section id="p2">
+      <div class="
