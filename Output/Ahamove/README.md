@@ -73,8 +73,10 @@ Output/Ahamove/
 | `2026-05-ao-khi-gantt-plan.xlsx` | 02. CAMPAIGNS | **Gantt-style plan 3 sheets**: Timeline Gantt 4 tuần (19/05–10/06), Phân tích 2 nhóm SC/CN vs TL/MiniHub, Nội dung 5 bài đăng rút gọn. |
 | `2026-06-global-driver-lifecycle-benchmark.md` | 06. COMPETITIVE_INTEL | **Nghiên cứu toàn cầu 15+ nền tảng** (Meituan, Uber, DoorDash, Swiggy, Grab, Gojek, Deliveroo, Rappi, iFood, Be, XanhSM...): mô hình vận hành tài xế 2 bánh, benchmark churn rate, phân chia lifecycle khoa học, gap analysis cho Ahamove. |
 | `2026-06-driver-journey-milestones.md` | 01. STRATEGY | **Driver Journey v4.0 — 5 Phase × 25 Milestones** gắn chặt Ranking Params v2.0. Đối chiếu ranking KPI, giải quyết 5 tensions (New vs Bad Unranked, vực R3→R2, BH mở rộng, Guarantee tài xế mới, Points expire). |
-| `2026-06-driver-journey-proposal.md` | 01. STRATEGY | **PROPOSAL chính thức** — SCR format: Situation (Ranking Params v2.0 đã có gì) → Complication (5 tensions từ benchmark 15 nền tảng) → Resolution (5 Phase × 25 Milestones + Insurance ladder + Ramp-up R3→R2). Bài để trình bày/propose. |
+| `2026-06-driver-journey-proposal.md` | 01. STRATEGY | **PROPOSAL chính thức** — SCR format: Situation (Ranking Params v2.0 đã có gì) → Complication (5 tensions từ benchmark 15 nền tảng) → Resolution (5 Phase × 25 Milestones + Insurance ladder + Ramp-up R3→R2). Bao gồm **Cohort Retention Baseline** Jan 2025–Apr 2026 (16 cohorts). |
+| `2026-06-driver-journey-proposal.html` | 01. STRATEGY | **HTML report tương tác** — dark theme, sidebar nav, Timeline SVG, Cohort heatmap interactive (JS-rendered), 25 milestones đầy đủ. |
+| `2026-06-driver-journey-presenter-guide.html` | 01. STRATEGY | **Presenter guide** — narrative walkthrough giải thích tại sao proposal được cấu trúc như vậy, talking points từng section, objection handling, 3 closing asks. Dùng khi trình bày với Ban lãnh đạo. |
 
 ---
 
-*Last updated: 2026-06-02*
+*Last updated: 2026-06-03*
