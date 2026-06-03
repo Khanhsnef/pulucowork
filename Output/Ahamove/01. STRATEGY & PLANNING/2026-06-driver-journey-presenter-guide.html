@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presenter Guide — Driver Journey v4.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0D1117;
+      --card: #161B22;
+      --card2: #1C2430;
+      --border: rgba(255,255,255,.07);
+      --t1: #F0F6FC;
+      --t2: #B1BAC4;
+      --t3: #8B949E;
+      --orange: #FF7F32;
+      --orange-d: rgba(255,127,50,.12);
+      --blue: #58A6FF;
+      --blue-d: rgba(88,166,255,.12);
+      --teal: #22D3EE;
+      --teal-d: rgba(34,211,238,.10);
+      --yellow: #F59E0B;
+      --yellow-d: rgba(245,158,11,.12);
+      --green: #10B981;
+      --green-d: rgba(16,185,129,.12);
+      --red: #EF4444;
+      --red-d: rgba(239,68,68,.12);
+      --purple: #A78BFA;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--t1);font-family:'Lexend',sans-serif;font-size:14px;line-height:1.75;padding:0 0 80px}
+
+    /* ── Header ── */
+    .pg-hero{background:var(--card);border-bottom:1px solid var(--border);padding:40px 48px 32px;position:relative;overflow:hidden}
+    .pg-hero::before{content:'';position:absolute;top:-60px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(255,127,50,.06) 0%,transparent 70%);pointer-events:none}
+    .pg-tag{display:inline-flex;align-items:center;gap:6px;background:var(--orange-d);color:var(--orange);border:1px solid rgba(255,127,50,.25);border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.1em;padding:4px 12px;text-transform:uppercase;margin-bottom:14px}
+    .pg-tag::before{content:'📋';font-size:11px}
+    .pg-title{font-size:28px;font-weight:800;line-height:1.25;margin-bottom:8px}
+    .pg-sub{color:var(--t2);font-size:14px;max-width:640px;font-weight:300}
+    .pg-meta{display:flex;gap:24px;margin-top:20px;flex-wrap:wrap}
+    .pg-meta span{font-size:12px;color:var(--t3);display:flex;align-items:center;gap:5px}
+    .pg-meta b{color:var(--t2);font-weight:600}
+
+    /* ── Layout ── */
+    .pg-wrap{max-width:900px;margin:0 auto;padding:40px 32px 0}
+
+    /* ── Narrative arc ── */
+    .arc-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 28px;margin-bottom:40px}
+    .arc-title{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+    .arc-steps{display:flex;gap:0;overflow:hidden;border-radius:10px}
+    .arc-step{flex:1;padding:12px 8px;text-align:center;font-size:11px;font-weight:700;line-height:1.35;border-right:1px solid var(--bg);cursor:default}
+    .arc-step:last-child{border-right:none}
+    .arc-step .lbl{font-size:9.5px;font-weight:400;opacity:.7;display:block;margin-top:3px}
+    .arc-s1{background:#1a2033;color:var(--blue)}
+    .arc-s2{background:#1e1616;color:var(--red)}
+    .arc-s3{background:#0d1e1e;color:var(--teal)}
+    .arc-p{background:#12180d;color:var(--green)}
+    .arc-s4{background:#1a1400;color:var(--yellow)}
+    .arc-s5{background:#1a1000;color:var(--orange)}
+    .arc-s6{background:#150e26;color:var(--purple)}
+    .arc-s7{background:#1a1a1a;color:var(--t3)}
+    .arc-note{margin-top:14px;font-size:12.5px;color:var(--t2);background:var(--card2);border-radius:8px;padding:12px 16px;border-left:3px solid var(--orange)}
+
+    /* ── Section card ── */
+    .sec-card{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:24px;overflow:hidden}
+    .sec-card-hdr{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;gap:16px;align-items:flex-start}
+    .sec-num{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;border:1.5px solid}
+    .sec-card-body{padding:20px 24px}
+
+    /* ── Parts inside card ── */
+    .part{margin-bottom:18px}
+    .part:last-child{margin-bottom:0}
+    .part-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+    .part-label::before{content:'';width:3px;height:14px;border-radius:2px;display:inline-block}
+    .key-msg{background:rgba(255,255,255,.04);border-radius:10px;padding:14px 16px;font-size:13.5px;font-weight:600;line-height:1.6;border-left:3px solid}
+    .talking-pts{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .talking-pts li{padding-left:18px;position:relative;color:var(--t2);font-size:13px;line-height:1.65}
+    .talking-pts li::before{content:'▸';position:absolute;left:0;color:var(--t3);font-size:10px;top:3px}
+    .talking-pts li b{color:var(--t1);font-weight:600}
+    .transition{display:flex;align-items:flex-start;gap:10px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.1);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--t2);margin-top:14px}
+    .transition::before{content:'→';color:var(--t3);flex-shrink:0;font-weight:700;margin-top:1px}
+
+    /* ── Tip box ── */
+    .tip{background:var(--orange-d);border:1px solid rgba(255,127,50,.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--t2);margin-top:10px;display:flex;gap:8px}
+    .tip::before{content:'💡';flex-shrink:0}
+    .tip-red{background:var(--red-d);border-color:rgba(239,68,68,.2);color:var(--t2)}
+    .tip-red::before{content:'⚠️'}
+    .tip-green{background:var(--green-d);border-color:rgba(16,185,129,.2)}
+    .tip-green::before{content:'✓'}
+
+    /* ── Evidence chips ── */
+    .ev-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+    .ev{display:inline-flex;align-items:center;gap:5px;background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--t2)}
+    .ev b{color:var(--t1);font-weight:600}
+
+    /* ── Phase mini strip ── */
+    .phase-strip{display:flex;gap:3px;margin-top:10px}
+    .ph-c{flex:1;border-radius:6px;padding:8px 6px;font-size:10px;font-weight:700;text-align:center;line-height:1.4}
+
+    /* ── Objection handling ── */
+    .obj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+    .obj{background:var(--card2);border-radius:8px;padding:12px 14px}
+    .obj-q{font-size:12px;color:var(--t3);margin-bottom:6px;font-style:italic}
+    .obj-a{font-size:12px;color:var(--t2);line-height:1.55}
+    .obj-a b{color:var(--t1)}
+
+    /* ── Closing ── */
+    .closing{background:linear-gradient(135deg,rgba(255,127,50,.08),rgba(88,166,255,.05));border:1px solid rgba(255,127,50,.2);border-radius:16px;padding:28px 32px;margin-top:32px;text-align:center}
+    .closing h3{font-size:17px;font-weight:700;margin-bottom:10px}
+    .closing p{color:var(--t2);font-size:13px;max-width:560px;margin:0 auto 16px}
+    .ask-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .ask-chip{background:var(--orange-d);border:1px solid rgba(255,127,50,.3);color:var(--orange);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600}
+
+    @media(max-width:640px){
+      .pg-hero{padding:28px 20px 24px}
+      .pg-wrap{padding:24px 16px 0}
+      .sec-card-hdr,.sec-card-body{padding:16px}
+      .arc-steps{flex-wrap:wrap}
+      .arc-step{flex-basis:calc(25% - 3px)}
+      .obj-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── PAGE HERO ─────────────────────────────────────────────────────────── -->
+<div class="pg-hero">
+  <div class="pg-tag">Presenter Guide</div>
+  <div class="pg-title">Tại sao Proposal này được cấu trúc như vậy?</div>
+  <div class="pg-sub">Narrative walkthrough · Driver Journey v4.0 · 5 Phases × 25 Milestones — Tài liệu nội bộ để trình bày với Ban lãnh đạo</div>
+  <div class="pg-meta">
+    <span>📅 <b>2026-06</b></span>
+    <span>👤 <b>Driver Management — Lê Phương Khanh</b></span>
+    <span>🎯 <b>Audience: C-level / VP / Department Heads</b></span>
+    <span>⏱ <b>~30–45 phút trình bày</b></span>
+  </div>
+</div>
+
+<div class="pg-wrap">
+
+  <!-- ── NARRATIVE ARC ─────────────────────────────────────────────────── -->
+  <div class="arc-box">
+    <div class="arc-title">Mạch lập luận tổng thể — "Why this order?"</div>
+    <div class="arc-steps">
+      <div class="arc-step arc-s1">S1<br><span class="lbl">Nền tảng hiện tại</span></div>
+      <div class="arc-step arc-s2">S2<br><span class="lbl">5 vấn đề tồn tại</span></div>
+      <div class="arc-step arc-s3">S3<br><span class="lbl">Khung giải pháp</span></div>
+      <div class="arc-step arc-p">P1–P5<br><span class="lbl">Chi tiết từng phase</span></div>
+      <div class="arc-step arc-s4">S4<br><span class="lbl">Tại sao bền vững</span></div>
+      <div class="arc-step arc-s5">S5<br><span class="lbl">Thay đổi tối thiểu</span></div>
+      <div class="arc-step arc-s6">S6<br><span class="lbl">Kế hoạch thực thi</span></div>
+      <div class="arc-step arc-s7">S7<br><span class="lbl">Bằng chứng tham khảo</span></div>
+    </div>
+    <div class="arc-note">
+      Toàn bộ proposal theo cấu trúc <b>SCQA (Situation → Complication → Question → Answer)</b> — một framework lập luận chuẩn tư vấn chiến lược. Mỗi section không phải "thêm thông tin" mà là <b>một bước logic</b> buộc phải có để kết luận ở section tiếp theo không bị bác bỏ.
+    </div>
+  </div>
+
+  <!-- ── OPENING FRAME ─────────────────────────────────────────────────── -->
+  <div class="sec-card">
+    <div class="sec-card-hdr">
+      <div class="sec-num" style="color:var(--orange);border-color:var(--orange);background:var(--orange-d)">0</div>
+      <div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Framing mở đầu — Trước khi vào slide đầu tiên</div>
+        <div style="color:var(--t3);font-size:12.5px">Đặt kỳ vọng cho audience</div>
+      </div>
+    </div>
+    <div class="sec-card-body">
+      <div class="part">
+        <div class="part-label" style="color:var(--orange)"><span style="background:var(--orange)"></span>Câu mở đầu gợi ý</div>
+        <div class="key-msg" style="border-color:var(--orange);color:var(--t1)">
+          "Ranking Params v2.0 của chúng ta đã tốt — ngang tầm Uber Pro, hơn Deliveroo. Nhưng nó chỉ trả lời được câu hỏi <b>'tài xế đang ở đâu trong hệ thống'</b>, chứ chưa trả lời được <b>'tài xế cần làm gì tiếp theo'</b>. Proposal này là cầu nối giữa hai câu hỏi đó."
+        </div>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--orange)"><span style="background:var(--orange)"></span>Tại sao mở bằng câu này?</div>
+        <ul class="talking-pts">
+          <li>Tránh ngay phản xạ "cái cũ không tốt à?" từ ai đã build Ranking Params v2.0 — <b>bảo vệ nền tảng, không phủ nhận</b></li>
+          <li>Xác lập rằng đây là <b>một lớp mới đặt lên trên</b>, không phải thay thế</li>
+          <li>Dùng metaphor "câu hỏi" để audience dễ hình dung gap về UX tài xế</li>
+        </ul>
+      </div>
+      <div class="tip">
+        Nếu có người hỏi ngay "retention hiện tại đang ở đâu?" — trả lời: "D365 retention ~8%, D30 ~35%. Tôi sẽ trình bày KPI target ở slide sau."
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S1 ──────────────────────────────────────────────────────────────── -->
+  <div class="sec-card">
+    <div class="sec-card-hdr">
+      <div class="sec-num" style="color:var(--blue);border-color:var(--blue);background:var(--blue-d)">S1</div>
+      <div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Situation — Ranking Params v2.0</div>
+        <div style="color:var(--t3);font-size:12.5px">Mục đích: Xác lập "nền tảng hiện tại là tốt" — không ai có lý do bác bỏ phần tiếp theo</div>
+      </div>
+    </div>
+    <div class="sec-card-body">
+      <div class="part">
+        <div class="part-label" style="color:var(--blue)"><span style="background:var(--blue)"></span>Vì sao S1 phải đứng đầu?</div>
+        <ul class="talking-pts">
+          <li>Nếu tôi vào thẳng "vấn đề", audience sẽ hỏi "bạn có hiểu hệ thống hiện tại không?" — S1 chứng minh tôi hiểu sâu</li>
+          <li>S1 <b>tạo common ground</b>: nếu ai có đóng góp vào Ranking Params v2.0, họ cảm thấy được ghi nhận, không bị tấn công</li>
+          <li>Benchmark 15 platform ngay từ đầu — cho thấy <b>research depth</b>, tăng credibility cho toàn proposal</li>
+        </ul>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--blue)"><span style="background:var(--blue)"></span>Key message cần truyền đạt</div>
+        <div class="key-msg" style="border-color:var(--blue)">
+          "Ranking Params v2.0 — Tier + DQS composite + AhaPoints multiplier + Layer cascade — đã đặt Ahamove ngang tầm Uber Pro và DoorDash Dasher Rewards. Đây là nền tảng <b>đúng hướng</b>. Vấn đề không phải là hệ thống sai, mà là hệ thống chưa đủ."
+        </div>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--blue)"><span style="background:var(--blue)"></span>Critical gap — câu dẫn sang S2</div>
+        <ul class="talking-pts">
+          <li>Nhấn mạnh một điểm: <b>"Một tài xế mới đăng ký hôm nay — họ thấy gì? Unranked. Một tài xế bị demote vì vi phạm — họ thấy gì? Cũng Unranked."</b></li>
+          <li>Hệ thống không phân biệt hai trường hợp này — và đây là <b>tension đầu tiên</b> trong số 5</li>
+        </ul>
+      </div>
+      <div class="transition">Audience hiểu nền tảng tốt → tự đặt câu hỏi "vậy thì tại sao retention vẫn thấp?" → S2 trả lời đúng lúc</div>
+    </div>
+  </div>
+
+  <!-- ── S2 ──────────────────────────────────────────────────────────────── -->
+  <div class="sec-card">
+    <div class="sec-card-hdr">
+      <div class="sec-num" style="color:var(--red);border-color:var(--red);background:var(--red-d)">S2</div>
+      <div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Complication — 5 Key Tensions</div>
+        <div style="color:var(--t3);font-size:12.5px">Mục đích: Chứng minh vấn đề là thật, có số liệu, không phải cảm tính</div>
+      </div>
+    </div>
+    <div class="sec-card-body">
+      <div class="part">
+        <div class="part-label" style="color:var(--red)"><span style="background:var(--red)"></span>Vì sao cần đúng 5 tensions, không phải 3 hay 10?</div>
+        <ul class="talking-pts">
+          <li><b>5 là số đủ để nghiêm trọng, không quá nhiều để bị overwhelm</b> — mỗi tension được phân loại mức độ (Critical / High / Medium) để audience biết cái nào cần xử lý ngay</li>
+          <li>Mỗi tension được <b>đối chiếu với benchmark cụ thể</b> (không phải ý kiến chủ quan) — đây là lý do audience tin vào "complication" thay vì dismiss</li>
+          <li>T1 và T2 (Critical) mở đầu để set urgency — T5 (Medium) đóng lại để không bị sa vào chi tiết nhỏ</li>
+        </ul>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--red)"><span style="background:var(--red)"></span>Tension nào cần nhấn mạnh nhất khi trình bày?</div>
+        <ul class="talking-pts">
+          <li><b>T2 — 3x Cliff (R3→R2):</b> Đây là tension dễ nhất để visualize — "R3 cần 70 stp, R2 cần 210 stp, không một platform nào trên thế giới yêu cầu tăng 3x trong một bước." Audience sẽ wow.</li>
+          <li><b>T3 — Insurance chỉ có R1:</b> So sánh thẳng với XanhSM — đối thủ direct, churn của họ 15-20%/năm vì có bảo hiểm toàn bộ đội. Con số này có tác động mạnh với C-level.</li>
+          <li><b>T4 — No new driver guarantee:</b> Grab có guarantee 14 ngày, D30 retention tăng 32%. Đây là "low-hanging fruit" mà chúng ta đang bỏ sót.</li>
+        </ul>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--red)"><span style="background:var(--red)"></span>Câu hỏi thường gặp và cách trả lời</div>
+        <div class="obj-grid">
+          <div class="obj">
+            <div class="obj-q">"Số liệu retention hiện tại mình có chắc không?"</div>
+            <div class="obj-a">D30 ~35%, D365 ~8% — lấy từ Ahamove BI. Nếu chưa có số chính xác, <b>dùng range "low 30s / sub-10%"</b> và đề xuất đây là một KPI cần track ngay.</div>
+          </div>
+          <div class="obj">
+            <div class="obj-q">"Tại sao 15 platform? Nhiều quá không?"</div>
+            <div class="obj-a">15 platform bao gồm cả direct competitor SEA (Grab, Gojek, Be, XanhSM) và global leaders (Uber, DoorDash, Meituan). <b>Kết luận rút ra từ pattern chung</b>, không phải sao chép 1 platform.</div>
+          </div>
+          <div class="obj">
+            <div class="obj-q">"T5 (points expire) có quan trọng không?"</div>
+            <div class="obj-a">T5 là Medium — impact thấp nhất trong 5. <b>Fix đơn giản</b> (points của new driver không expire trong 60 ngày đầu), nên đưa vào để proposal hoàn chỉnh.</div>
+          </div>
+          <div class="obj">
+            <div class="obj-q">"Sao không đề xuất fix ngay trong S2?"</div>
+            <div class="obj-a">Cố ý không — S2 chỉ chẩn đoán bệnh. <b>Kê đơn ở S3</b>. Tách biệt giúp audience đồng ý với "có vấn đề" trước khi phải đánh giá "giải pháp".</div>
+          </div>
+        </div>
+      </div>
+      <div class="transition">Sau S2, audience phải đồng ý: "Ừ, có 5 vấn đề thật, và chúng có data backup." → S3 mới có quyền đề xuất giải pháp</div>
+    </div>
+  </div>
+
+  <!-- ── S3 ──────────────────────────────────────────────────────────────── -->
+  <div class="sec-card">
+    <div class="sec-card-hdr">
+      <div class="sec-num" style="color:var(--teal);border-color:var(--teal);background:var(--teal-d)">S3</div>
+      <div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Resolution — 5-Phase Framework</div>
+        <div style="color:var(--t3);font-size:12.5px">Mục đích: Giới thiệu "bản đồ" tổng thể — không vào chi tiết ngay</div>
+      </div>
+    </div>
+    <div class="sec-card-body">
+      <div class="part">
+        <div class="part-label" style="color:var(--teal)"><span style="background:var(--teal)"></span>Tại sao 5 phases, không phải 4 hay 6?</div>
+        <ul class="talking-pts">
+          <li><b>Mỗi phase boundary dựa trên "churn cliff" có data:</b> D14 (Uber: 47% tài xế bỏ trước 25 đơn), D60 (Lally 2010: 66 ngày hình thành habit), D150 (Rusbult: 5 tháng switching cost đáng kể), D365 (chỉ 4% tài xế Uber survive 1 năm)</li>
+          <li><b>Không có ranh giới "tùy tiện"</b> — mỗi số đều có scientific basis được cite trong S7</li>
+          <li>6 phases là từ version cũ — đã <b>merge Phase 1+2</b> vì Ranking Params không có intermediate state ở D3, và thêm "Ranking Climb" phase riêng để giải quyết đặc thù T2</li>
+        </ul>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--teal)"><span style="background:var(--teal)"></span>Mapping tensions → phases — điểm then chốt để thuyết phục</div>
+        <div class="phase-strip">
+          <div class="ph-c" style="background:#0a1e1e;color:#22D3EE;border:1px solid #22D3EE">P1<br>giải T1+T4</div>
+          <div class="ph-c" style="background:#0a1626;color:#58A6FF;border:1px solid #58A6FF">P2<br>giải T5</div>
+          <div class="ph-c" style="background:#1e1400;color:#F59E0B;border:1px solid #F59E0B">P3<br>giải T2</div>
+          <div class="ph-c" style="background:#1a1000;color:#FF7F32;border:1px solid #FF7F32">P4<br>giải T3</div>
+          <div class="ph-c" style="background:#120b30;color:#A78BFA;border:1px solid #A78BFA">P5<br>moat</div>
+        </div>
+        <div style="margin-top:10px;font-size:12.5px;color:var(--t2)">Mỗi phase giải đúng một nhóm tension — không phase nào thừa, không tension nào bị bỏ qua. Đây là logic để bảo vệ cấu trúc 5 phases khi bị hỏi.</div>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--teal)"><span style="background:var(--teal)"></span>KPI targets — trình bày ở đây hay ở Hero?</div>
+        <ul class="talking-pts">
+          <li>Trong proposal, KPI đặt ở Hero (Executive Summary) để C-level đọc trước → biết <b>outcome cần đạt</b> trước khi đọc "how"</li>
+          <li>Khi trình bày, bạn có thể nhắc lại targets ở S3: <b>"5 phases này được thiết kế để đưa D365 retention từ 8% lên 35%, driver LTV từ 3.5 tháng lên 12 tháng."</b></li>
+        </ul>
+      </div>
+      <div class="transition">S3 là "executive summary of the solution" — sau đây là chi tiết từng phase. Hỏi audience: "Anh/chị muốn tôi đi sâu vào phase nào trước không, hay đi theo thứ tự?"</div>
+    </div>
+  </div>
+
+  <!-- ── P1–P5 ─────────────────────────────────────────────────────────── -->
+  <div class="sec-card">
+    <div class="sec-card-hdr">
+      <div class="sec-num" style="color:var(--green);border-color:var(--green);background:var(--green-d)">P1–P5</div>
+      <div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">5 Phase Sections — Chi tiết</div>
+        <div style="color:var(--t3);font-size:12.5px">Mục đích: Chứng minh từng phase là cụ thể, có thể thực thi, không phải lý thuyết</div>
+      </div>
+    </div>
+    <div class="sec-card-body">
+      <div class="part">
+        <div class="part-label" style="color:var(--green)"><span style="background:var(--green)"></span>Tại sao mỗi phase được cấu trúc giống nhau (4 thành phần)?</div>
+        <ul class="talking-pts">
+          <li><b>Driver Mindset</b> — bắt đầu bằng góc nhìn tài xế, không phải góc nhìn công ty → audience hiểu "chúng ta đang thiết kế cho ai"</li>
+          <li><b>Mechanisms</b> — cụ thể, có benchmark số liệu (Grab +32%, Swiggy +42%...) → không phải wishful thinking</li>
+          <li><b>Milestones</b> — timeline rõ ràng (M1 D1, M2 D3...) → có thể product spec hóa ngay</li>
+          <li><b>KPIs + Alert thresholds</b> — biết khi nào cần can thiệp, không phải đợi đến cuối tháng mới biết fail</li>
+        </ul>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--green)"><span style="background:var(--green)"></span>Phase nào dễ bị hỏi nhiều nhất?</div>
+        <div class="obj-grid">
+          <div class="obj">
+            <div class="obj-q">P1: "14-day guarantee — cost bao nhiêu?"</div>
+            <div class="obj-a">Proposal chưa có số, đây là item cần Finance phối hợp tính. <b>Framing:</b> "Grab D30 retention tăng 32% nhờ guarantee — tôi đề xuất A/B test trong SGN tháng 7 để có số cụ thể trước khi scale."</div>
+          </div>
+          <div class="obj">
+            <div class="obj-q">P3: "Sao phải ramp 70→100→150→210, không thẳng lên 210?"</div>
+            <div class="obj-a"><b>3x jump là không có platform nào làm.</b> Uber Pro tăng 30-50%/tier, Meituan Silver→Gold +43%. Ramp-Up Ladder chia thành +43%, +50%, +40% — mỗi bước tương đương global benchmark, tài xế có thể đạt được.</div>
+          </div>
+          <div class="obj">
+            <div class="obj-q">P4: "Insurance free hết? Ai trả?"</div>
+            <div class="obj-a">Ahamove sponsor — nhưng đây là <b>investment vào switching cost, không phải expense</b>. Swiggy kéo churn từ 60-70% xuống 10-15% nhờ tiered insurance. Cost-of-insurance vs cost-of-churn cần Finance mô hình hóa.</div>
+          </div>
+          <div class="obj">
+            <div class="obj-q">P5: "Ambassador Program có cần không — tài xế có care không?"</div>
+            <div class="obj-a">P5 target tài xế >1 năm (top ~4% survival rate). Erikson 1963: sau mastery, người cần <b>role và responsibility</b>, không chỉ tiền. Area Captain có fixed bonus + % group performance — đây là retention tool cho cohort quan trọng nhất.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tip">
+        Nếu thời gian limited, có thể skip detail P2, P4 và focus vào <b>P1 (new driver onboarding), P3 (3x cliff — điểm sáng tạo nhất), P5 (moat concept)</b>. Ba phases này minh họa đủ logic của toàn bộ framework.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S4 ──────────────────────────────────────────────────────────────── -->
+  <div class="sec-card">
+    <div class="sec-card-hdr">
+      <div class="sec-num" style="color:var(--yellow);border-color:var(--yellow);background:var(--yellow-d)">S4</div>
+      <div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Cumulative Switching Cost — Driver Moat</div>
+        <div style="color:var(--t3);font-size:12.5px">Mục đích: Kết nối proposal với Chiến lược 2026 #2 (Driver Moat) — nâng tầm từ "ops plan" lên "strategic initiative"</div>
+      </div>
+    </div>
+    <div class="sec-card-body">
+      <div class="part">
+        <div class="part-label" style="color:var(--yellow)"><span style="background:var(--yellow)"></span>Tại sao S4 cần một section riêng?</div>
+        <ul class="talking-pts">
+          <li>Nếu không có S4, proposal nhìn như "thêm tính năng, thêm benefit" — C-level sẽ hỏi "tại sao tài xế không bỏ mình sau khi nhận benefit?"</li>
+          <li>S4 trả lời câu hỏi đó: <b>benefits được thiết kế có chủ ý để tích lũy thành switching cost</b> — càng ở lâu, càng khó bỏ</li>
+          <li>Đây là sự khác biệt giữa "loyalty program" thông thường và "moat strategy" — <b>Grab/Be dùng tiền, Ahamove dùng tier + insurance + identity</b></li>
+        </ul>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--yellow)"><span style="background:var(--yellow)"></span>Key message cần truyền đạt</div>
+        <div class="key-msg" style="border-color:var(--yellow)">
+          "Grab và Be có thể match bất kỳ promo nào của chúng ta. Nhưng họ không thể match <b>tier của tài xế, insurance Bronze/Silver/Gold miễn phí, danh tiếng Area Captain, hay family BH Gold</b> — vì những thứ này chỉ có được sau hàng chục đơn, hàng tháng tích lũy, trong hệ sinh thái Ahamove. Đây là switching cost không thể mua bằng tiền."
+        </div>
+      </div>
+      <div class="ev-row">
+        <div class="ev">P1 · D14 — <b>12%</b> switching cost</div>
+        <div class="ev">P2 · D60 — <b>28%</b></div>
+        <div class="ev">P3 · D150 — <b>52%</b></div>
+        <div class="ev">P4 · D365 — <b>78%</b></div>
+        <div class="ev">P5 · D365+ — <b>100%</b></div>
+      </div>
+      <div class="tip tip-green" style="margin-top:12px">
+        Dùng metaphor: "Switching cost như đất phù sa bồi dần. Tháng đầu tài xế có thể bỏ dễ dàng. Nhưng sau 1 năm, họ mang theo cả tier, insurance, cộng đồng, danh tính. Bỏ Ahamove lúc này không phải bỏ app — là bỏ một phần thu nhập và bảo vệ gia đình."
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S5 ──────────────────────────────────────────────────────────────── -->
+  <div class="sec-card">
+    <div class="sec-card-hdr">
+      <div class="sec-num" style="color:var(--orange);border-color:var(--orange);background:var(--orange-d)">S5</div>
+      <div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Proposed Ranking Params Changes</div>
+        <div style="color:var(--t3);font-size:12.5px">Mục đích: Cho thấy thay đổi là <b>tối thiểu và phẫu thuật</b>, không phải rebuild từ đầu</div>
+      </div>
+    </div>
+    <div class="sec-card-body">
+      <div class="part">
+        <div class="part-label" style="color:var(--orange)"><span style="background:var(--orange)"></span>Tại sao S5 quan trọng về mặt trình bày?</div>
+        <ul class="talking-pts">
+          <li>Đây là section <b>"reassurance"</b> — sau khi audience đồng ý với vấn đề và giải pháp, họ lo ngại "implement thế này có phức tạp không, có xáo trộn system không?"</li>
+          <li>Cấu trúc "5 changes + what stays" cho thấy <b>tôi đã cân nhắc kỹ cái gì giữ, cái gì đổi</b> — không phải đề xuất mơ hồ</li>
+          <li>Column "Effort" (Low/Medium/High) giúp audience và tech team đánh giá feasibility ngay tại buổi họp</li>
+        </ul>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--orange)"><span style="background:var(--orange)"></span>Cách trình bày 5 changes</div>
+        <ul class="talking-pts">
+          <li><b>Change 1 (New Driver Flag) — Low effort:</b> "Chỉ cần thêm một attribute vào profile tài xế. Product có thể làm trong 1 sprint."</li>
+          <li><b>Change 2 (14-day Guarantee) — Medium:</b> "Logic dispatch + payout rule. Cần Finance để tính mức guarantee phù hợp."</li>
+          <li><b>Change 3 (BH Expansion) — High:</b> "Đây là item lớn nhất — cần đàm phán với BH partner, build eligibility logic. Đề xuất pilot Q3 SGN trước." </li>
+          <li><b>Change 4+5 (Sub-milestones + Trial) — Low/Medium:</b> "Thêm badge triggers và mở dispatch logic cho R3 Plus — tương đối clean về tech."</li>
+        </ul>
+      </div>
+      <div class="tip tip-red">
+        Đừng nói "chỉ cần thay đổi nhỏ" với Change 3 (BH). Nếu bị hỏi, thừa nhận đây là investment lớn nhưng kết quả ROI từ Swiggy (churn 60-70% → 10-15%) justify được cost.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S6 ──────────────────────────────────────────────────────────────── -->
+  <div class="sec-card">
+    <div class="sec-card-hdr">
+      <div class="sec-num" style="color:var(--purple);border-color:var(--purple);background:rgba(167,139,250,.1)">S6</div>
+      <div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Implementation Roadmap</div>
+        <div style="color:var(--t3);font-size:12.5px">Mục đích: Chuyển "proposal" thành "plan" — có timeline, có owner, có risk mitigation</div>
+      </div>
+    </div>
+    <div class="sec-card-body">
+      <div class="part">
+        <div class="part-label" style="color:var(--purple)"><span style="background:var(--purple)"></span>Logic đằng sau 4 stages</div>
+        <ul class="talking-pts">
+          <li><b>Stage A (July) — Quick Wins:</b> Tất cả Low-effort items, zero/near-zero cost. Mục đích: tạo momentum và early signal trước khi invest vào items lớn hơn</li>
+          <li><b>Stage B (Jul–Aug) — Foundation:</b> Quest system, Dashboard, Community — build habit loop infrastructure trước khi tài xế reach R3</li>
+          <li><b>Stage C (Aug–Sep) — Insurance Pilot:</b> Chỉ SGN, chỉ BH Bronze → thu thập data retention impact trước khi commit toàn quốc</li>
+          <li><b>Stage D (Oct–Dec) — Scale:</b> Rollout sau khi có pilot data → giảm rủi ro, tăng confidence khi present với leadership</li>
+        </ul>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--purple)"><span style="background:var(--purple)"></span>Câu hỏi "H2 còn 6 tháng — có kịp không?"</div>
+        <div class="key-msg" style="border-color:var(--purple)">
+          "Stage A và B là nội lực — DM + Product, không cần external vendor. Stage C cần BH partner, đang tìm hiểu. Stage D scale sau khi có pilot data. <b>Chúng ta có thể có early signal của A+B trong 6-8 tuần đầu.</b>"
+        </div>
+      </div>
+      <div class="tip">
+        Nếu bị hỏi về resource, nhấn mạnh: Stage A chỉ cần DM Ops + 1-2 engineer (algorithm tweak). Stage B cần Product team nhưng là feature development thông thường. Chỉ Stage C mới cần cross-department coordination.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S7 ──────────────────────────────────────────────────────────────── -->
+  <div class="sec-card">
+    <div class="sec-card-hdr">
+      <div class="sec-num" style="color:var(--t3);border-color:var(--t3);background:var(--gray-dim)">S7</div>
+      <div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">References</div>
+        <div style="color:var(--t3);font-size:12.5px">Mục đích: Credibility anchor — "tôi không tự nghĩ ra, tôi học từ người tốt nhất thế giới"</div>
+      </div>
+    </div>
+    <div class="sec-card-body">
+      <div class="part">
+        <div class="part-label" style="color:var(--t3)"><span style="background:var(--t3)"></span>Tại sao S7 cần ở cuối, không phải đầu?</div>
+        <ul class="talking-pts">
+          <li>Nếu đặt ở đầu, proposal nhìn như "academic paper" — quá nặng về lý thuyết</li>
+          <li>Đặt ở cuối: audience đã đồng ý với logic → S7 đóng vai trò <b>"we did the homework"</b>, không phải "here's why we think this works"</li>
+          <li>Trong buổi họp, không cần trình bày S7 chi tiết — chỉ cần nói: <b>"Toàn bộ proposals được back bởi 15 platform benchmarks và 10 academic sources — chi tiết trong phần References."</b></li>
+        </ul>
+      </div>
+      <div class="part">
+        <div class="part-label" style="color:var(--t3)"><span style="background:var(--t3)"></span>Academic sources dùng khi nào?</div>
+        <ul class="talking-pts">
+          <li><b>Bị hỏi "tại sao D60?"</b> → Lally et al. (2010): 66 ngày average để hình thành habit</li>
+          <li><b>Bị hỏi "tại sao Grace Period 14 ngày?"</b> → Kahneman: loss aversion 2x — driver sẽ nỗ lực gấp đôi để tránh mất rank</li>
+          <li><b>Bị hỏi "P5 có cần thiết không?"</b> → Erikson (1963): Generativity — sau mastery, người cần vai trò truyền đạt</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── OBJECTION HANDLING TỔNG HỢP ──────────────────────────────────── -->
+  <div class="sec-card" style="border-color:rgba(239,68,68,.2)">
+    <div class="sec-card-hdr" style="border-color:rgba(239,68,68,.15)">
+      <div class="sec-num" style="color:var(--red);border-color:var(--red);background:var(--red-d)">⚠</div>
+      <div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Objections thường gặp từ Ban lãnh đạo</div>
+        <div style="color:var(--t3);font-size:12.5px">Chuẩn bị sẵn — không bị bất ngờ khi bị hỏi khó</div>
+      </div>
+    </div>
+    <div class="sec-card-body">
+      <div class="obj-grid" style="grid-template-columns:1fr 1fr">
+        <div class="obj">
+          <div class="obj-q">"ROI cụ thể là bao nhiêu? Cost tổng thế nào?"</div>
+          <div class="obj-a">Proposal chưa có cost model — đây là gap cần Finance. <b>Framing:</b> "D365 retention từ 8% → 35% = mỗi driver active thêm ~8.5 tháng × EPH. Tôi đề xuất Finance và tôi cùng model hóa trong 2 tuần tới."</div>
+        </div>
+        <div class="obj">
+          <div class="obj-q">"Sao không focus vào acquisition thay vì retention?"</div>
+          <div class="obj-a">Acquisition cost tiếp tục tăng. <b>LTV từ 3.5 → 12 tháng = driver hiện tại worth 3.4x hơn.</b> Retention ROI gần như luôn tốt hơn acquisition — đây là lý do mọi platform mature đều shift sang retention.</div>
+        </div>
+        <div class="obj">
+          <div class="obj-q">"Grab và Be không có journey như này mà vẫn ổn?"</div>
+          <div class="obj-a">Grab có 14-day Guarantee, GrabBenefits 2.0, structured onboarding. <b>Họ đang làm journey — chỉ không gọi tên rõ ràng.</b> XanhSM có toàn bộ BHXH — churn 15-20% vs của chúng ta còn cao hơn nhiều.</div>
+        </div>
+        <div class="obj">
+          <div class="obj-q">"25 milestones có phức tạp quá không cho tài xế?"</div>
+          <div class="obj-a">25 milestones là internal framework để <b>chúng ta track và trigger</b>, không phải tài xế cần biết hết. Tài xế chỉ thấy "next action" — hoàn thành 21 đơn đầu, đạt R3, giữ R2... Progress bar đơn giản, không phức tạp.</div>
+        </div>
+        <div class="obj">
+          <div class="obj-q">"Tại sao cần đến 5 phases? Đơn giản hơn không?"</div>
+          <div class="obj-a">5 phases tương ứng 5 churn cliffs có data — không phải 5 vì muốn phức tạp. <b>Rút xuống 3 phases = bỏ qua T2 (3x cliff) và T4 (new driver gap)</b> — hai tensions quan trọng nhất.</div>
+        </div>
+        <div class="obj">
+          <div class="obj-q">"Khi nào có thể thấy kết quả đầu tiên?"</div>
+          <div class="obj-a">Stage A (July) — D14 retention signal trong 4-6 tuần. <b>Nếu Newbie Priority Dispatch + Buddy System không tăng D14 retention, chúng ta biết và adjust trước khi invest vào items lớn hơn.</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CLOSING CALL TO ACTION ──────────────────────────────────────── -->
+  <div class="closing">
+    <h3>Kết buổi — 3 Ask cần confirm</h3>
+    <p>Kết thúc trình bày bằng một ask rõ ràng, không phải "ý kiến của anh/chị thế nào?" — hỏi cụ thể để buổi họp có output hành động.</p>
+    <div class="ask-row">
+      <div class="ask-chip">✓ Approve phương hướng tổng thể</div>
+      <div class="ask-chip">✓ Assign Finance để model hóa cost (2 tuần)</div>
+      <div class="ask-chip">✓ Green light Stage A (July) để bắt đầu</div>
+    </div>
+    <div style="margin-top:18px;font-size:12px;color:var(--t3)">
+      Nếu chưa approve toàn bộ, hỏi: <i>"Phần nào anh/chị cần thêm data trước khi quyết định?"</i> — giúp bạn biết chính xác cần làm gì tiếp theo.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
