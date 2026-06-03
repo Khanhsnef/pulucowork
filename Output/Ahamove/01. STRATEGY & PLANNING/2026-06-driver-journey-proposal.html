@@ -1021,6 +1021,7 @@
     <div class="sb-group">Overview</div>
     <a href="#hero"><span class="sb-num">00</span>Executive Summary</a>
     <a href="#tl"><span class="sb-num">TL</span>Timeline</a>
+    <a href="#cohort"><span class="sb-num">CD</span>Cohort Data</a>
     <div class="sb-group">S — C — R</div>
     <a href="#s1"><span class="sb-num">01</span>Situation</a>
     <a href="#s2"><span class="sb-num">02</span>5 Tensions</a>
@@ -1226,6 +1227,176 @@
         </svg>
       </div>
     </section>
+
+    <!-- Cohort Data -->
+    <section id="cohort">
+      <div class="sec-hdr">
+        <div class="sec-num" style="color:var(--green);border-color:rgba(16,185,129,0.3);background:var(--green-dim)">CD</div>
+        <div class="sec-title">
+          <h2>Cohort Retention — Baseline Data</h2>
+          <p>Monthly active retention · Jan 2025 – Apr 2026 · 16 cohorts · first_complete_time basis</p>
+        </div>
+      </div>
+
+      <!-- 4 insight metrics -->
+      <div class="mg" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
+        <div class="mg-item">
+          <div class="mg-val" style="color:var(--red)">−51<span style="font-size:14px">%</span></div>
+          <div class="mg-lbl">Drop in 2 months</div>
+          <div class="mg-sub">M00 → M02, avg across all cohorts</div>
+        </div>
+        <div class="mg-item">
+          <div class="mg-val" style="color:var(--yellow)">M05</div>
+          <div class="mg-lbl">Stabilization point</div>
+          <div class="mg-sub">Monthly decay slows to &lt;2%/mo after M05</div>
+        </div>
+        <div class="mg-item">
+          <div class="mg-val" style="color:var(--green)">~17<span style="font-size:14px">%</span></div>
+          <div class="mg-lbl">M12 actual retention</div>
+          <div class="mg-sub">vs ~8% proposal baseline (def. gap, see note)</div>
+        </div>
+        <div class="mg-item">
+          <div class="mg-val" style="color:var(--blue)">75<span style="font-size:14px">%</span></div>
+          <div class="mg-lbl">M01 avg retention</div>
+          <div class="mg-sub">H2 2025 trending up to ~78%</div>
+        </div>
+      </div>
+
+      <!-- Definition note -->
+      <div class="callout ci" style="margin-bottom:14px">
+        <span>ℹ</span>
+        <div><strong>Note về định nghĩa (quan trọng):</strong> Cohort table đo % tài xế <strong>đã complete ≥1 đơn trong tháng 0</strong> còn active tháng N. Proposal baseline (~8% D365, ~35% D30) tính từ <strong>toàn bộ registered drivers</strong> — bao gồm cả những tài xế chưa bao giờ hoàn thành đơn đầu tiên. Cohort data = "activated driver retention" — view lạc quan hơn vì đã filter bỏ never-activated. Hai số không so sánh trực tiếp được, nhưng cùng xác nhận: <strong style="color:var(--teal)">early churn (M00→M02) là vấn đề lớn nhất cần giải quyết.</strong></div>
+      </div>
+
+      <!-- Comparison table -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:0;overflow:hidden;margin-bottom:16px">
+        <div style="padding:10px 16px 8px;font-size:10px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border)">Actual vs Proposal Baselines &amp; Targets</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Checkpoint</th>
+              <th>Cohort Actual (avg)</th>
+              <th>Proposal Baseline †</th>
+              <th>Proposal Target</th>
+              <th>Gap to Target</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>M01</strong> <span style="color:var(--text-muted);font-size:11px">≈ D30–D60</span></td>
+              <td class="num" style="color:var(--green);font-weight:700">~75%</td>
+              <td class="num">~35% †</td>
+              <td class="num" style="color:var(--teal)">72%</td>
+              <td class="num good">Already near target</td>
+            </tr>
+            <tr>
+              <td><strong>M02</strong> <span style="color:var(--text-muted);font-size:11px">≈ D60–D90</span></td>
+              <td class="num" style="color:var(--yellow);font-weight:700">~49%</td>
+              <td class="num">~25% †</td>
+              <td class="num" style="color:var(--teal)">55%</td>
+              <td class="num" style="color:var(--yellow)">+6pp needed</td>
+            </tr>
+            <tr>
+              <td><strong>M06</strong> <span style="color:var(--text-muted);font-size:11px">≈ D180</span></td>
+              <td class="num" style="color:var(--orange);font-weight:700">~26%</td>
+              <td class="num na">—</td>
+              <td class="num na">—</td>
+              <td class="num na">—</td>
+            </tr>
+            <tr>
+              <td><strong>M12</strong> <span style="color:var(--text-muted);font-size:11px">≈ D365</span></td>
+              <td class="num" style="color:var(--orange);font-weight:700">~17%</td>
+              <td class="num">~8% †</td>
+              <td class="num" style="color:var(--teal)">35%</td>
+              <td class="num" style="color:var(--red)">+18pp needed</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="padding:7px 14px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border)">† Proposal baseline = tính từ all registered drivers (incl. never-activated). Cohort data = first-complete drivers only — different denominators.</div>
+      </div>
+
+      <!-- Heatmap table -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:16px 20px;overflow-x:auto">
+        <div style="font-size:10.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Monthly Retention Heatmap — % still active (≥1 order) N months after first complete</div>
+        <table id="cohort-tbl" style="border-collapse:collapse;min-width:1160px;width:100%"></table>
+        <div style="margin-top:10px;font-size:11px;color:var(--text-muted);display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:2px;background:rgba(16,185,129,0.18);display:inline-block"></span>≥70%</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:2px;background:rgba(234,179,8,0.18);display:inline-block"></span>50–69%</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:2px;background:rgba(239,68,68,0.18);display:inline-block"></span>30–49%</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:2px;background:rgba(239,68,68,0.32);display:inline-block"></span>&lt;30%</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:2px;border:1px dashed rgba(255,255,255,0.25);display:inline-block;opacity:0.55"></span>* Partial month (June 2026)</span>
+        </div>
+      </div>
+
+      <!-- Warning notes -->
+      <div class="callout cw" style="margin-top:14px">
+        <span>⚠</span>
+        <div>
+          <strong>Partial month:</strong> Số cuối của mọi cohort đều là dữ liệu tháng 6/2026 (chỉ có 3 ngày) — thấp hơn thực tế, được đánh dấu * và hiển thị mờ hơn. Không dùng để đánh giá xu hướng.
+          &nbsp;·&nbsp; <strong style="color:var(--yellow)">Tết 2026:</strong> Cohort 2025-12 tại M02 (Feb 2026) = 40.24% thấp hơn mức trung bình ~50% — likely seasonal dip quanh dịp Tết Nguyên Đán (29/01/2026).
+        </div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var data=[
+        {l:"2025-01",v:[100,70.88,52.08,33.61,29.95,27.95,23.96,22.13,19.13,18.14,17.3,17.47,16.81,15.64,14.81,13.14,12.65,7.99],p:[17]},
+        {l:"2025-02",v:[100,77.73,50.13,40.7,35.63,30.04,26.55,24.28,22.79,20.61,20.17,18.34,16.16,16.94,15.02,15.2,8.03],p:[16]},
+        {l:"2025-03",v:[100,73.33,50.18,39.6,34.09,30.47,26.49,24.86,22.06,20.61,18.17,16.82,17.72,16.27,15.19,9.76],p:[15]},
+        {l:"2025-04",v:[100,72.53,47.75,40.24,34.12,28.65,25.11,21.24,20.82,19.64,17.17,17.27,16.42,15.99,9.33],p:[14]},
+        {l:"2025-05",v:[100,75.09,44.8,35.96,29.7,28.45,25.72,23.14,21.59,18.42,19.45,17.83,17.83,11.57],p:[13]},
+        {l:"2025-06",v:[100,70.6,43.11,35.16,31.61,27.2,25.14,21.45,19.74,20.53,18.25,16.83,11.01],p:[12]},
+        {l:"2025-07",v:[100,74.66,50.38,42.03,34.83,30.96,29.36,25.64,26.71,22,21.47,12.67],p:[11]},
+        {l:"2025-08",v:[100,76.42,52.53,43.83,38.16,33.5,27.63,28.44,24.9,22.47,11.64],p:[10]},
+        {l:"2025-09",v:[100,78.42,51.57,43.6,35.54,30.71,29.81,25.69,23.28,13.88],p:[9]},
+        {l:"2025-10",v:[100,78.28,50.15,40.67,31.49,31.12,27.24,24.03,13.81],p:[8]},
+        {l:"2025-11",v:[100,79.18,50.06,33.8,30.72,27.38,24.36,12.79],p:[7]},
+        {l:"2025-12",v:[100,74.23,40.24,30.32,26.38,23.28,11.91],p:[6]},
+        {l:"2026-01",v:[100,70.92,50.59,31.65,27.58,15.5],p:[5]},
+        {l:"2026-02",v:[100,83.82,53.42,41.05,21.05],p:[4]},
+        {l:"2026-03",v:[100,72.46,49.72,20.84],p:[3]},
+        {l:"2026-04",v:[100,77.83,29.47],p:[2]}
+      ];
+      var months=18;
+      var tbl=document.getElementById('cohort-tbl');
+      if(!tbl)return;
+      var hdr='<thead><tr><th style="background:#0C1624;text-align:left;padding:7px 10px;font-size:10px;font-weight:800;color:#D0D8E4;letter-spacing:.06em;white-space:nowrap;position:sticky;left:0;z-index:1;min-width:78px">Cohort</th>';
+      for(var i=0;i<months;i++){
+        var hl=(i===1||i===2||i===6||i===12)?'color:#FF7F32;':'color:#D0D8E4;';
+        hdr+='<th style="background:#0C1624;text-align:center;padding:7px 7px;font-size:10px;font-weight:800;'+hl+'letter-spacing:.04em;white-space:nowrap;min-width:60px">M'+('0'+i).slice(-2)+'</th>';
+      }
+      hdr+='</tr></thead>';
+      function bg(p,partial){
+        var b,c;
+        if(p>=100){b='rgba(16,185,129,0.18)';c='#86efac';}
+        else if(p>=70){b='rgba(16,185,129,0.10)';c='#6ee7b7';}
+        else if(p>=50){b='rgba(234,179,8,0.13)';c='#fde68a';}
+        else if(p>=30){b='rgba(239,68,68,0.15)';c='#fca5a5';}
+        else{b='rgba(239,68,68,0.28)';c='#fca5a5';}
+        var op=partial?'opacity:0.55;outline:1px dashed rgba(255,255,255,0.18);outline-offset:-1px;':'';
+        return 'background:'+b+';color:'+c+';'+op;
+      }
+      var tbody='<tbody>';
+      data.forEach(function(row){
+        tbody+='<tr><td style="padding:5px 10px;font-size:11.5px;font-weight:700;color:#B1BAC4;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,0.05);position:sticky;left:0;background:var(--bg-card)">'+row.l+'</td>';
+        for(var i=0;i<months;i++){
+          if(i<row.v.length){
+            var isP=row.p.indexOf(i)>=0;
+            var pct=row.v[i];
+            var disp=pct===100?'100%':pct.toFixed(2)+'%';
+            if(isP)disp+='*';
+            tbody+='<td style="padding:5px 6px;text-align:center;font-size:11px;font-weight:600;font-family:\'Montserrat\',monospace;border-bottom:1px solid rgba(255,255,255,0.05);'+bg(pct,isP)+'">'+disp+'</td>';
+          }else{
+            tbody+='<td style="padding:5px 6px;border-bottom:1px solid rgba(255,255,255,0.05)"></td>';
+          }
+        }
+        tbody+='</tr>';
+      });
+      tbody+='</tbody>';
+      tbl.innerHTML=hdr+tbody;
+    })();
+    </script>
 
     <!-- S1 -->
     <section id="s1">
