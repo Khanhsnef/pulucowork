@@ -65,13 +65,14 @@ Terminal sẽ báo lỗi nhẹ, nhưng ngay lập tức **tự động chuyển 
 
 ---
 
-## 6. ⚠️ LƯU Ý QUAN TRỌNG: THANH TIẾN TRÌNH VÀ CHẠY TOOL
+## 6. 🔥 TÍNH NĂNG ĐỘC QUYỀN: HYBRID MODE (CHẠY TOOL TỰ ĐỘNG MƯỢT MÀ)
 
-Có một sự đánh đổi (Trade-off) về mặt kỹ thuật trên Terminal như sau:
+Trong lệnh `chat` có một chế độ cực kỳ thông minh gọi là **Hybrid Mode**:
 
-- **Khi dùng lệnh `chat` hoặc `ai`:** Hệ thống có khả năng tự động đổi Model mượt mà ở mỗi câu. Tuy nhiên, nó bị ép chạy ở chế độ ẩn (`-p`), nên **KHÔNG hiển thị được thanh tiến trình (Progress bar) và KHÔNG thể chạy công cụ (như tự viết file, xuất docx)**.
-- **Khi muốn chạy Tool (Có thanh tiến trình, tự xuất file, tự code):** Bạn phải sử dụng các lệnh ở Mục 4 kèm theo câu lệnh (Ví dụ: `c-sonnet "xuất docx file báo cáo này"`). Lúc này, giao diện tương tác (Interactive) của Claude sẽ mở ra, hiển thị quá trình chạy Tool và có giao diện hỏi Yes/No để bạn phê duyệt. Nhược điểm là nó sẽ bị khoá vào duy nhất 1 model đó cho tới khi bạn gõ `/exit` để thoát.
+- **Luồng 1 (Hỏi đáp, Phân tích, Viết lách):** Hệ thống tự động đẩy vào chế độ Ẩn (Text Mode). Lúc này chữ sẽ được sinh ra siêu mượt mà, đổi Model ngầm theo nội dung, không có thanh Loading phức tạp cản trở tốc độ.
+- **Luồng 2 (Tạo file, Xuất Docx, Viết Code, Chạy Script):** Khi hệ thống quét thấy các từ khóa như `tạo file`, `xuất`, `docx`, `lưu file`... nó sẽ **tự động chuyển sang Chế độ Tool (Tool Mode)**. Màn hình sẽ hiện dòng cảnh báo màu vàng, và toàn bộ Giao diện Gốc của Claude (Thanh tiến trình, Progress Bar, Form hỏi Yes/No cấp quyền) sẽ bung ra để phục vụ bạn.
 
-**Tóm lại Workflow chuẩn:**
-👉 Hỏi đáp, viết nháp, phân tích, dịch thuật -> Dùng lệnh `chat` (Auto-routing).
-👉 Tạo file, xuất docx, chạy script tự động -> Dùng lệnh `c-sonnet "nội dung"` (Bật giao diện Tool).
+⚠️ **Lưu ý nhỏ ở Chế độ Tool:** Sau khi tạo file / chạy Tool xong, màn hình sẽ dừng ở dấu nhắc `> `. Bạn chỉ cần gõ `/exit` để thoát khỏi giao diện Tool và trở lại tiếp tục trò chuyện trong lệnh `chat`.
+
+**Tóm lại Workflow Chuẩn nhất:** 
+Bạn chỉ cần nhớ 1 chữ duy nhất: gõ `chat`. Mọi việc còn lại (chọn model gì, dùng chế độ nào) hãy để hệ thống tự động lo liệu giúp bạn!
