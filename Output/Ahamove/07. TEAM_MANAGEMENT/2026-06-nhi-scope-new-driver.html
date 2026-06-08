@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scope — Nhi: Quản lý Tài xế mới (Driver Journey D0–D60)</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #0E4174;
+  --blue-light: #1a5fa8;
+  --blue-pale: #EFF6FF;
+  --orange: #FF7F32;
+  --orange-pale: #FFF4ED;
+  --success: #10B981;
+  --success-pale: #ECFDF5;
+  --danger: #EF4444;
+  --danger-pale: #FEF2F2;
+  --warn: #F59E0B;
+  --warn-pale: #FFFBEB;
+  --info: #3B82F6;
+  --info-pale: #EFF6FF;
+  --purple: #8B5CF6;
+  --purple-pale: #F5F3FF;
+  --teal: #14B8A6;
+  --teal-pale: #F0FDFA;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --white: #FFFFFF;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Lexend', sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-800);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.mono { font-family: 'Space Mono', monospace; }
+
+/* HEADER */
+.report-header {
+  background: var(--blue);
+  padding: 28px 40px 24px;
+  color: white;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.report-header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
+.report-header .subtitle { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 5px; }
+.report-header .meta { text-align: right; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.header-badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.header-badge.outline { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.85); }
+.header-badge.orange { background: var(--orange); color: white; }
+.header-accent { height: 3px; background: linear-gradient(90deg, var(--orange) 0%, rgba(255,127,50,0.3) 60%, transparent 100%); }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 32px 32px 64px; }
+
+/* SECTION */
+.section { margin-bottom: 48px; }
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-200); }
+.section-num { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: var(--blue); background: var(--blue-pale); border: 1px solid rgba(14,65,116,0.15); border-radius: 4px; padding: 2px 8px; letter-spacing: 0.5px; }
+.section-title { font-size: 16px; font-weight: 700; color: var(--gray-800); }
+.section-title span { font-size: 12px; font-weight: 400; color: var(--gray-400); margin-left: 8px; }
+
+.card { background: var(--white); border: 1px solid var(--gray-100); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+
+/* JOURNEY MAP */
+.journey-container { position: relative; padding: 24px 0; }
+
+.journey-track {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: relative;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.journey-phase {
+  flex: 1;
+  min-width: 180px;
+  position: relative;
+}
+
+.phase-bar {
+  height: 8px;
+  border-radius: 4px;
+  margin: 0 2px;
+  position: relative;
+}
+
+.phase-header {
+  text-align: center;
+  padding: 12px 8px 8px;
+}
+.phase-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  font-size: 16px;
+  font-weight: 800;
+  color: white;
+}
+.phase-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 2px;
+}
+.phase-time {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gray-400);
+  font-family: 'Space Mono', monospace;
+}
+
+.phase-body {
+  padding: 12px;
+  margin: 4px;
+  border-radius: 10px;
+  min-height: 120px;
+}
+.phase-body ul {
+  list-style: none;
+  padding: 0;
+}
+.phase-body li {
+  font-size: 11px;
+  color: var(--gray-600);
+  padding: 3px 0;
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.4;
+}
+.phase-body li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* Phase colors */
+.phase-register .phase-bar { background: var(--gray-300); }
+.phase-register .phase-icon { background: var(--gray-500); }
+.phase-register .phase-body { background: var(--gray-50); }
+.phase-register li::before { color: var(--gray-400); }
+
+.phase-activate .phase-bar { background: var(--purple); }
+.phase-activate .phase-icon { background: var(--purple); }
+.phase-activate .phase-body { background: var(--purple-pale); }
+.phase-activate li::before { color: var(--purple); }
+
+.phase-first .phase-bar { background: var(--orange); }
+.phase-first .phase-icon { background: var(--orange); }
+.phase-first .phase-body { background: var(--orange-pale); }
+.phase-first li::before { color: var(--orange); }
+
+.phase-ramp .phase-bar { background: var(--info); }
+.phase-ramp .phase-icon { background: var(--info); }
+.phase-ramp .phase-body { background: var(--info-pale); }
+.phase-ramp li::before { color: var(--info); }
+
+.phase-nurture .phase-bar { background: var(--teal); }
+.phase-nurture .phase-icon { background: var(--teal); }
+.phase-nurture .phase-body { background: var(--teal-pale); }
+.phase-nurture li::before { color: var(--teal); }
+
+.phase-stable .phase-bar { background: var(--success); }
+.phase-stable .phase-icon { background: var(--success); }
+.phase-stable .phase-body { background: var(--success-pale); }
+.phase-stable li::before { color: var(--success); }
+
+/* Arrow connectors */
+.journey-phase::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 4px;
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid var(--gray-300);
+  z-index: 1;
+}
+.journey-phase:last-child::after { display: none; }
+
+/* GRADUATION ARROW */
+.graduation-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, var(--success-pale) 0%, #D1FAE5 100%);
+  border: 2px solid var(--success);
+  border-radius: 12px;
+}
+.graduation-box .icon {
+  font-size: 24px;
+  width: 44px;
+  height: 44px;
+  background: var(--success);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+.graduation-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--success);
+}
+.graduation-text span {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+
+/* SCOPE TABLE */
+.scope-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+}
+.scope-table thead th {
+  background: var(--blue);
+  color: white;
+  padding: 10px 12px;
+  font-weight: 600;
+  font-size: 11px;
+  text-align: left;
+  border-bottom: 2px solid rgba(255,127,50,0.4);
+}
+.scope-table tbody tr { transition: background 0.1s; }
+.scope-table tbody tr:hover { background: var(--blue-pale); }
+.scope-table tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.scope-table tbody tr.group-row td {
+  background: var(--gray-50);
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--blue);
+  letter-spacing: 0.5px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+/* KPI Cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.kpi-item {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.kpi-item .kpi-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.kpi-item .kpi-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gray-800);
+}
+.kpi-item .kpi-desc {
+  font-size: 11px;
+  color: var(--gray-400);
+}
+.kpi-item .kpi-formula {
+  font-size: 10px;
+  color: var(--gray-500);
+  font-family: 'Space Mono', monospace;
+  background: var(--gray-50);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+.kpi-item.blue { border-left: 3px solid var(--blue); }
+.kpi-item.orange { border-left: 3px solid var(--orange); }
+.kpi-item.green { border-left: 3px solid var(--success); }
+.kpi-item.purple { border-left: 3px solid var(--purple); }
+.kpi-item.teal { border-left: 3px solid var(--teal); }
+.kpi-item.red { border-left: 3px solid var(--danger); }
+
+/* Badges */
+.badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.3px;
+}
+.badge-blue { background: var(--blue-pale); color: var(--blue); }
+.badge-orange { background: var(--orange-pale); color: var(--orange); }
+.badge-green { background: var(--success-pale); color: var(--success); }
+.badge-purple { background: var(--purple-pale); color: var(--purple); }
+.badge-red { background: var(--danger-pale); color: var(--danger); }
+.badge-gray { background: var(--gray-100); color: var(--gray-500); }
+.badge-teal { background: var(--teal-pale); color: var(--teal); }
+
+/* Insight boxes */
+.insight { padding: 12px 16px; border-radius: 8px; font-size: 12px; margin-bottom: 10px; border-left: 3px solid; }
+.insight.blue { background: var(--blue-pale); border-color: var(--blue); color: var(--gray-700); }
+.insight.orange { background: var(--orange-pale); border-color: var(--orange); color: var(--gray-700); }
+.insight.warn { background: var(--warn-pale); border-color: var(--warn); color: var(--gray-700); }
+.insight.danger { background: var(--danger-pale); border-color: var(--danger); color: var(--gray-700); }
+.insight.ok { background: var(--success-pale); border-color: var(--success); color: var(--gray-700); }
+.insight strong { font-weight: 700; }
+
+/* Note box */
+.note-box {
+  background: var(--blue-pale);
+  border-left: 3px solid var(--blue);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 12px;
+  color: var(--gray-700);
+  margin-top: 16px;
+}
+.note-box strong { color: var(--blue); }
+
+/* Footer */
+.report-footer {
+  text-align: center;
+  padding: 24px;
+  color: var(--gray-400);
+  font-size: 11px;
+  border-top: 1px solid var(--gray-100);
+  margin-top: 40px;
+}
+
+/* Two-column grid */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 800px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* Handoff checklist */
+.checklist { list-style: none; padding: 0; }
+.checklist li {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.checklist li .check {
+  width: 18px; height: 18px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="report-header">
+  <div>
+    <h1>Scope: Quản lý Tài xế mới</h1>
+    <div class="subtitle">Nhi — New Driver Journey (Registration → D60 Graduation)</div>
+  </div>
+  <div class="meta">
+    <span class="header-badge orange">JOB SCOPE</span>
+    <span class="header-badge outline">2026-06-08</span>
+  </div>
+</div>
+<div class="header-accent"></div>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════
+     SECTION 01: DRIVER JOURNEY MAP
+═══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num mono">01</span>
+    <h2 class="section-title">New Driver Journey Map <span>Hành trình Tài xế mới — Phạm vi quản lý của Nhi</span></h2>
+  </div>
+
+  <div class="card" style="overflow-x: auto;">
+    <div class="journey-container">
+      <div class="journey-track">
+
+        <!-- Phase 1: Registration -->
+        <div class="journey-phase phase-register">
+          <div class="phase-header">
+            <div class="phase-icon">1</div>
+            <div class="phase-name">Đăng ký</div>
+            <div class="phase-time">PRE-D0</div>
+          </div>
+          <div class="phase-bar"></div>
+          <div class="phase-body">
+            <ul>
+              <li>Tài xế tải app & đăng ký</li>
+              <li>Submit hồ sơ (CCCD, GPLX, ĐKXE)</li>
+              <li>Chờ duyệt hồ sơ</li>
+              <li>Theo dõi funnel đăng ký</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phase 2: Activation -->
+        <div class="journey-phase phase-activate">
+          <div class="phase-header">
+            <div class="phase-icon">2</div>
+            <div class="phase-name">Kích hoạt</div>
+            <div class="phase-time">D0</div>
+          </div>
+          <div class="phase-bar"></div>
+          <div class="phase-body">
+            <ul>
+              <li>Hồ sơ được duyệt</li>
+              <li>Hoàn tất training cơ bản</li>
+              <li>Kích hoạt tài khoản</li>
+              <li>Bật online lần đầu</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phase 3: First Order -->
+        <div class="journey-phase phase-first">
+          <div class="phase-header">
+            <div class="phase-icon">3</div>
+            <div class="phase-name">Đơn đầu tiên</div>
+            <div class="phase-time">D0–D3</div>
+          </div>
+          <div class="phase-bar"></div>
+          <div class="phase-body">
+            <ul>
+              <li>Nhận & hoàn thành đơn đầu tiên</li>
+              <li>Newbie incentive kick-in</li>
+              <li>Hướng dẫn sử dụng app</li>
+              <li>Xử lý issues đơn đầu</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phase 4: Ramp-up -->
+        <div class="journey-phase phase-ramp">
+          <div class="phase-header">
+            <div class="phase-icon">4</div>
+            <div class="phase-name">Làm quen</div>
+            <div class="phase-time">D1–D14</div>
+          </div>
+          <div class="phase-bar"></div>
+          <div class="phase-body">
+            <ul>
+              <li>Hình thành thói quen online</li>
+              <li>Newbie bonus/quest program</li>
+              <li>Monitor daily active & order count</li>
+              <li>Early churn detection</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phase 5: Nurture -->
+        <div class="journey-phase phase-nurture">
+          <div class="phase-header">
+            <div class="phase-icon">5</div>
+            <div class="phase-name">Nuôi dưỡng</div>
+            <div class="phase-time">D15–D30</div>
+          </div>
+          <div class="phase-bar"></div>
+          <div class="phase-body">
+            <ul>
+              <li>Weaning off newbie incentive</li>
+              <li>Giới thiệu tiering system</li>
+              <li>Tăng tần suất & EPH</li>
+              <li>Phát hiện driver at-risk</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phase 6: Stabilize -->
+        <div class="journey-phase phase-stable">
+          <div class="phase-header">
+            <div class="phase-icon">6</div>
+            <div class="phase-name">Ổn định</div>
+            <div class="phase-time">D31–D60</div>
+          </div>
+          <div class="phase-bar"></div>
+          <div class="phase-body">
+            <ul>
+              <li>Self-sustain không cần newbie incentive</li>
+              <li>Đạt baseline performance</li>
+              <li>Đánh giá tier phân loại</li>
+              <li>Chuẩn bị handoff</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Graduation -->
+      <div class="graduation-box">
+        <div class="icon">✓</div>
+        <div class="graduation-text">
+          D60 GRADUATION → Chuyển sang quản lý của Tiên (Operations Squad)
+          <span>Handoff khi tài xế đạt đủ tiêu chí graduation hoặc hết 60 ngày</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 02: SCOPE CHI TIẾT
+═══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num mono">02</span>
+    <h2 class="section-title">Scope công việc chi tiết <span>Theo từng giai đoạn Driver Journey</span></h2>
+  </div>
+
+  <div class="card" style="padding:0; overflow-x:auto;">
+    <table class="scope-table">
+      <thead>
+        <tr>
+          <th style="width:140px;">Giai đoạn</th>
+          <th style="width:260px;">Công việc cụ thể</th>
+          <th style="width:200px;">Trách nhiệm Nhi</th>
+          <th style="width:160px;">Output / Deliverable</th>
+          <th>Phối hợp</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- REGISTRATION -->
+        <tr class="group-row"><td colspan="5">PHASE 1 — ĐĂNG KÝ (Pre-D0)</td></tr>
+        <tr>
+          <td><span class="badge badge-gray">PRE-D0</span><br>Đăng ký</td>
+          <td>
+            Theo dõi funnel đăng ký hàng ngày<br>
+            Phân tích tỷ lệ drop-off từng bước (submit → duyệt)<br>
+            Phối hợp với team duyệt hồ sơ để rút ngắn thời gian xử lý
+          </td>
+          <td>
+            Monitor số lượng đăng ký mới hàng ngày/tuần<br>
+            Flag nếu volume đăng ký bất thường (giảm >20%)<br>
+            Đề xuất cải thiện conversion funnel
+          </td>
+          <td>Daily registration tracker<br>Weekly funnel report</td>
+          <td>Team duyệt hồ sơ, Product (app flow)</td>
+        </tr>
+
+        <!-- ACTIVATION -->
+        <tr class="group-row"><td colspan="5">PHASE 2 — KÍCH HOẠT (D0)</td></tr>
+        <tr>
+          <td><span class="badge badge-purple">D0</span><br>Kích hoạt</td>
+          <td>
+            Đảm bảo tài xế được duyệt hoàn tất training<br>
+            Theo dõi tỷ lệ kích hoạt (approved → active)<br>
+            Gửi welcome message & hướng dẫn sử dụng<br>
+            Phân tích tài xế đã duyệt nhưng chưa bật online
+          </td>
+          <td>
+            Own toàn bộ activation process<br>
+            Giảm thời gian từ duyệt → bật online lần đầu<br>
+            Triển khai welcome communication sequence
+          </td>
+          <td>Activation rate tracker<br>Dormant-after-approval list (hàng tuần)</td>
+          <td>Training team, CX (gửi thông báo)</td>
+        </tr>
+
+        <!-- FIRST ORDER -->
+        <tr class="group-row"><td colspan="5">PHASE 3 — ĐƠN ĐẦU TIÊN (D0–D3)</td></tr>
+        <tr>
+          <td><span class="badge badge-orange">D0–D3</span><br>Đơn đầu tiên</td>
+          <td>
+            Theo dõi Time-to-First-Order (TTFO)<br>
+            Thiết kế & vận hành newbie incentive cho đơn đầu<br>
+            Hỗ trợ xử lý issues tài xế gặp khi nhận đơn đầu<br>
+            Push notification / SMS nudge cho TX chưa có đơn sau 24h/48h/72h
+          </td>
+          <td>
+            Own chỉ số First Order Rate<br>
+            Phối hợp thiết kế nudge sequence (24h/48h/72h)<br>
+            Escalate nếu TTFO trung bình > 3 ngày
+          </td>
+          <td>First Order Rate daily<br>TTFO distribution report<br>Nudge sequence performance</td>
+          <td>CX, Product (matching algo), Tiên (incentive budget)</td>
+        </tr>
+
+        <!-- RAMP-UP -->
+        <tr class="group-row"><td colspan="5">PHASE 4 — LÀM QUEN (D1–D14)</td></tr>
+        <tr>
+          <td><span class="badge badge-blue">D1–D7</span><br>Tuần đầu tiên</td>
+          <td>
+            Monitor D1/D3/D7 retention rate<br>
+            Vận hành Newbie Quest (hoàn thành X đơn trong 7 ngày)<br>
+            Theo dõi daily online hours & order count<br>
+            Phát hiện sớm tài xế có dấu hiệu churn (0 đơn 3 ngày liên tiếp)
+          </td>
+          <td>
+            Own D7 retention & newbie quest completion<br>
+            Trigger re-engagement cho TX inactive ≥3 ngày<br>
+            Báo cáo tuần về cohort D7
+          </td>
+          <td>D7 cohort retention report<br>Early churn alert list</td>
+          <td>Tiên (performance baseline), Vân (engagement comms)</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">D8–D14</span><br>Tuần thứ 2</td>
+          <td>
+            Monitor D14 retention rate<br>
+            Đánh giá thói quen online (giờ peak, zone hoạt động)<br>
+            Điều chỉnh incentive nếu retention thấp<br>
+            Gợi ý zone/giờ cao điểm để tối ưu EPH cho TX mới
+          </td>
+          <td>
+            Own D14 retention<br>
+            Phân tích pattern hành vi TX theo cohort<br>
+            Đề xuất điều chỉnh newbie incentive
+          </td>
+          <td>D14 cohort report<br>Zone/time heatmap cho TX mới</td>
+          <td>Tiên (incentive budget), Hoàng (zone data)</td>
+        </tr>
+
+        <!-- NURTURE -->
+        <tr class="group-row"><td colspan="5">PHASE 5 — NUÔI DƯỠNG (D15–D30)</td></tr>
+        <tr>
+          <td><span class="badge badge-teal">D15–D30</span><br>Nuôi dưỡng</td>
+          <td>
+            Giảm dần newbie incentive (weaning schedule)<br>
+            Monitor D30 retention rate<br>
+            Giới thiệu Driver Tiering & cách lên tier<br>
+            Theo dõi EPH progression (TX mới vs baseline)<br>
+            Phát hiện at-risk drivers (giảm >30% orders vs tuần trước)<br>
+            Kết nối TX mới với Captain (nếu có)
+          </td>
+          <td>
+            Own D30 retention & weaning plan<br>
+            Đảm bảo TX mới hiểu tiering system<br>
+            Run at-risk intervention (call/message)<br>
+            Phối hợp Captain giữ chân TX có risk
+          </td>
+          <td>D30 cohort report<br>Weaning schedule & impact<br>At-risk intervention log</td>
+          <td>Tiên (tier criteria), Lượng (Captain), Vân (community)</td>
+        </tr>
+
+        <!-- STABILIZE -->
+        <tr class="group-row"><td colspan="5">PHASE 6 — ỔN ĐỊNH (D31–D60)</td></tr>
+        <tr>
+          <td><span class="badge badge-green">D31–D60</span><br>Ổn định</td>
+          <td>
+            Đánh giá TX đạt self-sustain (hoạt động ổn định không cần newbie incentive)<br>
+            Monitor D60 retention rate<br>
+            Chuẩn bị Graduation Checklist<br>
+            Phân loại tier ban đầu cho TX<br>
+            Handoff data & profile cho Tiên (Ops Squad)
+          </td>
+          <td>
+            Own D60 retention & graduation rate<br>
+            Đảm bảo handoff clean (đủ data, đủ tier)<br>
+            Báo cáo monthly graduation summary<br>
+            Flag TX chưa đạt graduation criteria
+          </td>
+          <td>D60 cohort report<br>Graduation checklist per driver<br>Monthly graduation summary</td>
+          <td>Tiên (nhận handoff), Khanh (review graduation criteria)</td>
+        </tr>
+
+        <!-- CROSS-PHASE -->
+        <tr class="group-row"><td colspan="5">CROSS-PHASE — Xuyên suốt</td></tr>
+        <tr>
+          <td><span class="badge badge-red">ONGOING</span><br>Churn Prevention</td>
+          <td>
+            Xây dựng & duy trì Early Warning System cho TX mới<br>
+            Root-cause analysis cho từng cohort bị churn cao<br>
+            A/B test incentive schemes cho TX mới<br>
+            Feedback loop từ churned drivers (survey/call)
+          </td>
+          <td>
+            Own newbie churn rate toàn bộ<br>
+            Đề xuất & test intervention methods<br>
+            Monthly churn analysis report
+          </td>
+          <td>Churn analysis report (monthly)<br>A/B test results<br>Intervention playbook</td>
+          <td>Data team (churn model), CX (survey)</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-gray">ONGOING</span><br>Newbie Incentive Mgmt</td>
+          <td>
+            Thiết kế cấu trúc incentive cho TX mới (welcome bonus, quest, milestone)<br>
+            Monitor ROI & CPO của newbie incentive<br>
+            Đề xuất budget hàng tháng<br>
+            So sánh benchmark với đối thủ
+          </td>
+          <td>
+            Own thiết kế incentive scheme<br>
+            Theo dõi spend vs budget<br>
+            Báo cáo ROI cho Khanh duyệt
+          </td>
+          <td>Incentive proposal (monthly)<br>ROI report<br>Competitive benchmark</td>
+          <td>Tiên (tổng budget), Khanh (approve)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 03: KPIs & METRICS
+═══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num mono">03</span>
+    <h2 class="section-title">KPIs & Metrics Framework <span>Chỉ số theo dõi & công thức tính</span></h2>
+  </div>
+
+  <div class="insight blue" style="margin-bottom:20px;">
+    <strong>Nguyên tắc:</strong> Tất cả metrics được tính theo <strong>cohort tháng</strong> — nhóm tài xế có đơn đầu tiên trong cùng 1 tháng. So sánh MoM giữa các cohort để đo hiệu quả cải thiện.
+  </div>
+
+  <!-- Primary KPIs -->
+  <h3 style="font-size:14px; font-weight:700; margin-bottom:12px; color:var(--blue);">Primary KPIs (Nhi chịu trách nhiệm chính)</h3>
+  <div class="kpi-grid">
+    <div class="kpi-item orange">
+      <div class="kpi-label">Activation Rate</div>
+      <div class="kpi-desc">Tỷ lệ TX được duyệt → bật online lần đầu</div>
+      <div class="kpi-formula">= TX bật online / TX được duyệt × 100%</div>
+    </div>
+    <div class="kpi-item orange">
+      <div class="kpi-label">First Order Rate</div>
+      <div class="kpi-desc">Tỷ lệ TX activated → hoàn thành đơn đầu tiên</div>
+      <div class="kpi-formula">= TX có ≥1 đơn / TX activated × 100%</div>
+    </div>
+    <div class="kpi-item orange">
+      <div class="kpi-label">Time-to-First-Order (TTFO)</div>
+      <div class="kpi-desc">Thời gian trung bình từ activated → đơn đầu</div>
+      <div class="kpi-formula">= AVG(ngày đơn đầu - ngày activated)</div>
+    </div>
+    <div class="kpi-item blue">
+      <div class="kpi-label">D7 Retention Rate</div>
+      <div class="kpi-desc">% TX còn active (≥1 đơn) sau 7 ngày kể từ đơn đầu</div>
+      <div class="kpi-formula">= TX active D7 / TX cohort × 100%</div>
+    </div>
+    <div class="kpi-item blue">
+      <div class="kpi-label">D14 Retention Rate</div>
+      <div class="kpi-desc">% TX còn active sau 14 ngày</div>
+      <div class="kpi-formula">= TX active D14 / TX cohort × 100%</div>
+    </div>
+    <div class="kpi-item teal">
+      <div class="kpi-label">D30 Retention Rate</div>
+      <div class="kpi-desc">% TX còn active sau 30 ngày</div>
+      <div class="kpi-formula">= TX active D30 / TX cohort × 100%</div>
+    </div>
+    <div class="kpi-item green">
+      <div class="kpi-label">D60 Retention Rate</div>
+      <div class="kpi-desc">% TX còn active sau 60 ngày (graduation milestone)</div>
+      <div class="kpi-formula">= TX active D60 / TX cohort × 100%</div>
+    </div>
+    <div class="kpi-item green">
+      <div class="kpi-label">Graduation Rate</div>
+      <div class="kpi-desc">% TX đạt đủ tiêu chí handoff sang Ops</div>
+      <div class="kpi-formula">= TX graduated / TX cohort × 100%</div>
+    </div>
+  </div>
+
+  <!-- Secondary KPIs -->
+  <h3 style="font-size:14px; font-weight:700; margin-bottom:12px; margin-top:24px; color:var(--gray-600);">Secondary KPIs (Nhi theo dõi & báo cáo)</h3>
+  <div class="kpi-grid">
+    <div class="kpi-item purple">
+      <div class="kpi-label">Newbie Churn Rate</div>
+      <div class="kpi-desc">% TX mới ngừng hoạt động trong 60 ngày đầu</div>
+      <div class="kpi-formula">= TX inactive ≥14 ngày / TX cohort × 100%</div>
+    </div>
+    <div class="kpi-item purple">
+      <div class="kpi-label">Avg Orders/Day (Newbie)</div>
+      <div class="kpi-desc">Số đơn trung bình/ngày của TX mới (ngày active)</div>
+      <div class="kpi-formula">= Tổng đơn newbie / Tổng ngày active</div>
+    </div>
+    <div class="kpi-item purple">
+      <div class="kpi-label">EPH Newbie vs Baseline</div>
+      <div class="kpi-desc">So sánh thu nhập/giờ TX mới vs TX hiện hữu</div>
+      <div class="kpi-formula">= EPH newbie / EPH baseline × 100%</div>
+    </div>
+    <div class="kpi-item red">
+      <div class="kpi-label">Newbie CPO</div>
+      <div class="kpi-desc">Chi phí incentive/đơn cho nhóm TX mới</div>
+      <div class="kpi-formula">= Newbie incentive spend / Newbie orders</div>
+    </div>
+    <div class="kpi-item red">
+      <div class="kpi-label">Newbie Incentive ROI</div>
+      <div class="kpi-desc">Revenue từ TX graduated / Tổng incentive đã chi</div>
+      <div class="kpi-formula">= Revenue (D61–D120) / Total newbie incentive</div>
+    </div>
+    <div class="kpi-item purple">
+      <div class="kpi-label">Quest Completion Rate</div>
+      <div class="kpi-desc">% TX hoàn thành newbie quest/milestone</div>
+      <div class="kpi-formula">= TX completed quest / TX eligible × 100%</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 04: RETENTION FUNNEL
+═══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num mono">04</span>
+    <h2 class="section-title">Retention Funnel <span>Mô hình phễu chuyển đổi & điểm can thiệp</span></h2>
+  </div>
+
+  <div class="card">
+    <!-- SVG Funnel -->
+    <svg viewBox="0 0 800 340" style="width:100%; max-width:800px; display:block; margin:0 auto;">
+      <!-- Funnel bars -->
+      <rect x="40" y="10" width="720" height="36" rx="6" fill="#E5E7EB"/>
+      <rect x="40" y="10" width="720" height="36" rx="6" fill="var(--gray-500)" opacity="0.9"/>
+      <text x="400" y="33" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">Đăng ký mới — 100%</text>
+
+      <rect x="80" y="58" width="640" height="36" rx="6" fill="var(--purple)" opacity="0.9"/>
+      <text x="400" y="81" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">Activated (duyệt + bật online)</text>
+      <text x="730" y="81" fill="var(--purple)" font-family="Space Mono" font-size="11" font-weight="700">TARGET</text>
+
+      <rect x="120" y="106" width="560" height="36" rx="6" fill="var(--orange)" opacity="0.9"/>
+      <text x="400" y="129" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">First Order (≥1 đơn hoàn thành)</text>
+
+      <rect x="160" y="154" width="480" height="36" rx="6" fill="var(--info)" opacity="0.9"/>
+      <text x="400" y="177" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D7 Retained</text>
+
+      <rect x="200" y="202" width="400" height="36" rx="6" fill="var(--blue-light)" opacity="0.9"/>
+      <text x="400" y="225" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D14 Retained</text>
+
+      <rect x="240" y="250" width="320" height="36" rx="6" fill="var(--teal)" opacity="0.9"/>
+      <text x="400" y="273" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D30 Retained</text>
+
+      <rect x="280" y="298" width="240" height="36" rx="6" fill="var(--success)" opacity="0.9"/>
+      <text x="400" y="321" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D60 Graduated ✓</text>
+
+      <!-- Drop-off annotations -->
+      <line x1="730" y1="46" x2="730" y2="58" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
+      <text x="745" y="56" fill="var(--danger)" font-family="Space Mono" font-size="9" font-weight="700">DROP</text>
+
+      <line x1="690" y1="94" x2="690" y2="106" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
+      <text x="705" y="104" fill="var(--danger)" font-family="Space Mono" font-size="9" font-weight="700">DROP</text>
+
+      <line x1="650" y1="142" x2="650" y2="154" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
+      <text x="665" y="152" fill="var(--danger)" font-family="Space Mono" font-size="9" font-weight="700">DROP</text>
+
+      <line x1="610" y1="190" x2="610" y2="202" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
+
+      <line x1="570" y1="238" x2="570" y2="250" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
+
+      <line x1="530" y1="286" x2="530" y2="298" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
+    </svg>
+
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:20px;">
+      <div class="insight danger">
+        <strong>Critical drop #1:</strong> Activated → First Order. Nhiều TX bật online nhưng không nhận được đơn hoặc không biết cách vận hành. <em>Can thiệp: nudge 24h/48h/72h + hotline hỗ trợ.</em>
+      </div>
+      <div class="insight warn">
+        <strong>Critical drop #2:</strong> D7 → D14. TX sau "mùi mật" tuần đầu bắt đầu giảm tần suất. <em>Can thiệp: quest tuần 2 + zone guidance.</em>
+      </div>
+      <div class="insight orange">
+        <strong>Critical drop #3:</strong> D30 → D60. Weaning incentive là giai đoạn nguy hiểm nhất. <em>Can thiệp: tier preview + Captain kết nối + community.</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 05: GRADUATION CRITERIA & HANDOFF
+═══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num mono">05</span>
+    <h2 class="section-title">Graduation Criteria & Handoff <span>Tiêu chí tốt nghiệp & bàn giao</span></h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4 style="font-size:14px; font-weight:700; color:var(--success); margin-bottom:12px;">Graduation Criteria (đề xuất)</h4>
+      <p style="font-size:11px; color:var(--gray-500); margin-bottom:12px;">TX phải đạt <strong>tất cả</strong> tiêu chí sau để được graduation:</p>
+      <table style="width:100%; font-size:12px; border-collapse:collapse;">
+        <tr style="border-bottom:1px solid var(--gray-100);">
+          <td style="padding:8px 0; font-weight:600;">Thời gian hoạt động</td>
+          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">≥ 60 ngày</span> kể từ đơn đầu</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-100);">
+          <td style="padding:8px 0; font-weight:600;">Tổng đơn hoàn thành</td>
+          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">≥ X đơn</span> (tuỳ baseline)</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-100);">
+          <td style="padding:8px 0; font-weight:600;">Active days trong 14 ngày gần nhất</td>
+          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">≥ 7/14 ngày</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-100);">
+          <td style="padding:8px 0; font-weight:600;">Fulfillment Rate</td>
+          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">≥ 85%</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-100);">
+          <td style="padding:8px 0; font-weight:600;">Rating trung bình</td>
+          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">≥ 4.5★</span></td>
+        </tr>
+        <tr>
+          <td style="padding:8px 0; font-weight:600;">Không vi phạm nghiêm trọng</td>
+          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">0 strikes</span></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h4 style="font-size:14px; font-weight:700; color:var(--blue); margin-bottom:12px;">Handoff Checklist (Nhi → Tiên)</h4>
+      <p style="font-size:11px; color:var(--gray-500); margin-bottom:12px;">Bàn giao vào đầu mỗi tháng cho cohort tốt nghiệp:</p>
+      <ul class="checklist">
+        <li><div class="check"></div> Danh sách TX graduated (ID, tier, zone chính)</li>
+        <li><div class="check"></div> Performance summary 60 ngày (orders, EPH, FR, rating)</li>
+        <li><div class="check"></div> Tier phân loại ban đầu (Hub/Core/Flex/Casual)</li>
+        <li><div class="check"></div> Flag TX cần theo dõi đặc biệt (borderline criteria)</li>
+        <li><div class="check"></div> Incentive history & dependency level</li>
+        <li><div class="check"></div> TX chưa graduate — lý do & action plan</li>
+        <li><div class="check"></div> Feedback định tính (nếu có từ survey/call)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="insight warn" style="margin-top:8px;">
+    <strong>TX chưa đạt graduation sau D60:</strong> Nhi tiếp tục theo dõi thêm 14 ngày (grace period). Nếu vẫn không đạt → classify là at-risk / potential churn → chuyển Tiên với flag đặc biệt hoặc deactivate recommendation.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 06: REPORTING CADENCE
+═══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num mono">06</span>
+    <h2 class="section-title">Reporting Cadence <span>Tần suất báo cáo & người nhận</span></h2>
+  </div>
+
+  <div class="card" style="padding:0; overflow-x:auto;">
+    <table class="scope-table">
+      <thead>
+        <tr>
+          <th>Tần suất</th>
+          <th>Báo cáo</th>
+          <th>Nội dung chính</th>
+          <th>Report to</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-red">DAILY</span></td>
+          <td>New Driver Daily Tracker</td>
+          <td>Số đăng ký, activated, first order hôm nay. Alert nếu bất thường.</td>
+          <td>Tự monitor + escalate Tiên nếu cần</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-orange">WEEKLY</span></td>
+          <td>Cohort Weekly Update</td>
+          <td>D7/D14 retention theo cohort tuần. Funnel conversion. Quest completion. At-risk list.</td>
+          <td>Tiên (Ops Lead)</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">MONTHLY</span></td>
+          <td>New Driver Monthly Report</td>
+          <td>D30/D60 retention. Graduation summary. Churn analysis. Incentive ROI. MoM comparison. Competitive benchmark.</td>
+          <td>Khanh (Leader)</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">MONTHLY</span></td>
+          <td>Graduation Handoff Package</td>
+          <td>Danh sách TX graduated + profile + tier + performance data.</td>
+          <td>Tiên (nhận handoff)</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-purple">AD-HOC</span></td>
+          <td>Churn Deep Dive</td>
+          <td>Root-cause analysis khi churn rate tăng đột biến hoặc theo yêu cầu.</td>
+          <td>Khanh + Tiên</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 07: RACI (NHI-SPECIFIC)
+═══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num mono">07</span>
+    <h2 class="section-title">RACI cho scope Nhi <span>Ai làm gì trong New Driver Journey</span></h2>
+  </div>
+
+  <div style="display:flex; gap:16px; margin-bottom:16px; flex-wrap:wrap;">
+    <div style="display:flex; align-items:center; gap:6px; font-size:12px;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span> Responsible</div>
+    <div style="display:flex; align-items:center; gap:6px; font-size:12px;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--orange); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">A</span> Accountable</div>
+    <div style="display:flex; align-items:center; gap:6px; font-size:12px;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span> Consulted</div>
+    <div style="display:flex; align-items:center; gap:6px; font-size:12px;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span> Informed</div>
+  </div>
+
+  <div class="card" style="padding:0; overflow-x:auto;">
+    <table class="scope-table" style="font-size:11px;">
+      <thead>
+        <tr>
+          <th>Hoạt động</th>
+          <th style="text-align:center;">Khanh</th>
+          <th style="text-align:center;">Tiên</th>
+          <th style="text-align:center; background:var(--orange);">Nhi</th>
+          <th style="text-align:center;">Lượng</th>
+          <th style="text-align:center;">Hoàng</th>
+          <th style="text-align:center;">Vân</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Theo dõi Registration Funnel</td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span></td>
+          <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+        </tr>
+        <tr>
+          <td>Activation & Welcome Sequence</td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span></td>
+          <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span></td>
+        </tr>
+        <tr>
+          <td>Newbie Incentive Design</td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--orange); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">A</span></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span></td>
+          <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+        </tr>
+        <tr>
+          <td>D7/D14/D30 Retention Tracking</td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--orange); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">A</span></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span></td>
+          <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+        </tr>
+        <tr>
+          <td>Early Churn Detection & Intervention</td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span></td>
+          <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span></td>
+        </tr>
+        <tr>
+          <td>Incentive Weaning (D15–D30)</td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--orange); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">A</span></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span></td>
+          <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+        </tr>
+        <tr>
+          <td>Zone Guidance cho TX mới</td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span></td>
+          <td style="text-align:center;"></td>
+        </tr>
+        <tr>
+          <td>Captain Kết nối TX mới</td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+        </tr>
+        <tr>
+          <td>D60 Graduation & Handoff</td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--orange); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">A</span></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span></td>
+          <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+        </tr>
+        <tr>
+          <td>Monthly Churn Analysis & Report</td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--orange); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">A</span></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span></td>
+          <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+          <td style="text-align:center;"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="report-footer">
+  Ahamove — Driver Management Team · Nhi Scope Definition · 2026-06-08 · Confidential
+</div>
+
+</div>
+</body>
+</html>
