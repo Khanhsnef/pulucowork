@@ -399,7 +399,7 @@ body {
 <div class="report-header">
   <div>
     <h1>Scope: Quản lý Tài xế mới</h1>
-    <div class="subtitle">Nhi — New Driver Journey (Registration → D60 Graduation)</div>
+    <div class="subtitle">Nhi — New Driver Journey (Post-DFD → D60 Graduation) · Nhận bàn giao từ Growth sau Driver First Delivery</div>
   </div>
   <div class="meta">
     <span class="header-badge orange">JOB SCOPE</span>
@@ -416,91 +416,105 @@ body {
 <div class="section">
   <div class="section-header">
     <span class="section-num mono">01</span>
-    <h2 class="section-title">New Driver Journey Map <span>Hành trình Tài xế mới — Phạm vi quản lý của Nhi</span></h2>
+    <h2 class="section-title">New Driver Journey Map <span>Phân vùng trách nhiệm Growth vs DM (Nhi)</span></h2>
   </div>
 
   <div class="card" style="overflow-x: auto;">
+    <!-- Ownership labels -->
+    <div style="display:flex; gap:16px; margin-bottom:16px; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:6px; font-size:12px;">
+        <div style="width:14px; height:14px; border-radius:3px; background:var(--gray-300); opacity:0.6;"></div>
+        <span style="color:var(--gray-500); font-weight:500;">Growth Team (không thuộc scope Nhi)</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px; font-size:12px;">
+        <div style="width:14px; height:14px; border-radius:3px; background:var(--orange);"></div>
+        <span style="color:var(--orange); font-weight:700;">HANDOFF POINT — DFD (Driver First Delivery)</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px; font-size:12px;">
+        <div style="width:14px; height:14px; border-radius:3px; background:var(--blue);"></div>
+        <span style="color:var(--blue); font-weight:700;">DM Team — Nhi owns</span>
+      </div>
+    </div>
+
     <div class="journey-container">
       <div class="journey-track">
 
-        <!-- Phase 1: Registration -->
-        <div class="journey-phase phase-register">
+        <!-- Phase 1: Registration (GROWTH — greyed out) -->
+        <div class="journey-phase phase-register" style="opacity:0.45;">
           <div class="phase-header">
-            <div class="phase-icon">1</div>
-            <div class="phase-name">Đăng ký</div>
-            <div class="phase-time">PRE-D0</div>
+            <div class="phase-icon" style="background:var(--gray-400);">1</div>
+            <div class="phase-name" style="color:var(--gray-400);">Đăng ký</div>
+            <div class="phase-time">GROWTH</div>
           </div>
-          <div class="phase-bar"></div>
-          <div class="phase-body">
+          <div class="phase-bar" style="background:var(--gray-300);"></div>
+          <div class="phase-body" style="background:var(--gray-50);">
             <ul>
-              <li>Tài xế tải app & đăng ký</li>
-              <li>Submit hồ sơ (CCCD, GPLX, ĐKXE)</li>
-              <li>Chờ duyệt hồ sơ</li>
-              <li>Theo dõi funnel đăng ký</li>
+              <li>Tải app & đăng ký</li>
+              <li>Submit hồ sơ</li>
+              <li>Duyệt hồ sơ</li>
             </ul>
           </div>
         </div>
 
-        <!-- Phase 2: Activation -->
-        <div class="journey-phase phase-activate">
+        <!-- Phase 2: Activation (GROWTH — greyed out) -->
+        <div class="journey-phase" style="opacity:0.45;">
           <div class="phase-header">
-            <div class="phase-icon">2</div>
-            <div class="phase-name">Kích hoạt</div>
-            <div class="phase-time">D0</div>
+            <div class="phase-icon" style="background:var(--gray-400);">2</div>
+            <div class="phase-name" style="color:var(--gray-400);">Kích hoạt</div>
+            <div class="phase-time">GROWTH</div>
           </div>
-          <div class="phase-bar"></div>
-          <div class="phase-body">
+          <div class="phase-bar" style="background:var(--gray-300);"></div>
+          <div class="phase-body" style="background:var(--gray-50);">
             <ul>
-              <li>Hồ sơ được duyệt</li>
-              <li>Hoàn tất training cơ bản</li>
+              <li>Training cơ bản</li>
               <li>Kích hoạt tài khoản</li>
               <li>Bật online lần đầu</li>
             </ul>
           </div>
         </div>
 
-        <!-- Phase 3: First Order -->
-        <div class="journey-phase phase-first">
+        <!-- Phase 3: DFD — Driver First Delivery (GROWTH → HANDOFF) -->
+        <div class="journey-phase">
           <div class="phase-header">
-            <div class="phase-icon">3</div>
-            <div class="phase-name">Đơn đầu tiên</div>
-            <div class="phase-time">D0–D3</div>
+            <div class="phase-icon" style="background:var(--orange);">DFD</div>
+            <div class="phase-name" style="color:var(--orange);">Đơn đầu tiên</div>
+            <div class="phase-time" style="color:var(--orange); font-weight:700;">HANDOFF POINT</div>
           </div>
-          <div class="phase-bar"></div>
-          <div class="phase-body">
+          <div class="phase-bar" style="background: linear-gradient(90deg, var(--gray-300) 0%, var(--orange) 50%, var(--blue) 100%);"></div>
+          <div class="phase-body" style="background:var(--orange-pale); border:1.5px dashed var(--orange); border-radius:10px;">
             <ul>
-              <li>Nhận & hoàn thành đơn đầu tiên</li>
-              <li>Newbie incentive kick-in</li>
-              <li>Hướng dẫn sử dụng app</li>
-              <li>Xử lý issues đơn đầu</li>
+              <li style="font-weight:600; color:var(--orange);">Growth hoàn thành DFD</li>
+              <li style="font-weight:600; color:var(--blue);">→ Nhi nhận bàn giao</li>
+              <li>TX có ≥1 đơn hoàn thành</li>
+              <li>Bắt đầu tính D0 cho Nhi</li>
             </ul>
           </div>
         </div>
 
-        <!-- Phase 4: Ramp-up -->
+        <!-- Phase 4: Ramp-up (NHI OWNS) -->
         <div class="journey-phase phase-ramp">
           <div class="phase-header">
-            <div class="phase-icon">4</div>
+            <div class="phase-icon">1</div>
             <div class="phase-name">Làm quen</div>
-            <div class="phase-time">D1–D14</div>
+            <div class="phase-time">D1–D14 post-DFD</div>
           </div>
           <div class="phase-bar"></div>
           <div class="phase-body">
             <ul>
               <li>Hình thành thói quen online</li>
               <li>Newbie bonus/quest program</li>
-              <li>Monitor daily active & order count</li>
+              <li>Monitor daily active & orders</li>
               <li>Early churn detection</li>
             </ul>
           </div>
         </div>
 
-        <!-- Phase 5: Nurture -->
+        <!-- Phase 5: Nurture (NHI OWNS) -->
         <div class="journey-phase phase-nurture">
           <div class="phase-header">
-            <div class="phase-icon">5</div>
+            <div class="phase-icon">2</div>
             <div class="phase-name">Nuôi dưỡng</div>
-            <div class="phase-time">D15–D30</div>
+            <div class="phase-time">D15–D30 post-DFD</div>
           </div>
           <div class="phase-bar"></div>
           <div class="phase-body">
@@ -513,32 +527,41 @@ body {
           </div>
         </div>
 
-        <!-- Phase 6: Stabilize -->
+        <!-- Phase 6: Stabilize (NHI OWNS) -->
         <div class="journey-phase phase-stable">
           <div class="phase-header">
-            <div class="phase-icon">6</div>
+            <div class="phase-icon">3</div>
             <div class="phase-name">Ổn định</div>
-            <div class="phase-time">D31–D60</div>
+            <div class="phase-time">D31–D60 post-DFD</div>
           </div>
           <div class="phase-bar"></div>
           <div class="phase-body">
             <ul>
-              <li>Self-sustain không cần newbie incentive</li>
+              <li>Self-sustain không cần incentive</li>
               <li>Đạt baseline performance</li>
               <li>Đánh giá tier phân loại</li>
-              <li>Chuẩn bị handoff</li>
+              <li>Chuẩn bị handoff → Tiên</li>
             </ul>
           </div>
         </div>
 
       </div>
 
-      <!-- Graduation -->
-      <div class="graduation-box">
-        <div class="icon">✓</div>
-        <div class="graduation-text">
-          D60 GRADUATION → Chuyển sang quản lý của Tiên (Operations Squad)
-          <span>Handoff khi tài xế đạt đủ tiêu chí graduation hoặc hết 60 ngày</span>
+      <!-- Handoff arrows -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; gap:12px;">
+        <div style="flex:1; padding:12px 16px; background:var(--gray-100); border-radius:10px; text-align:center; border:1.5px dashed var(--gray-300);">
+          <div style="font-size:11px; font-weight:700; color:var(--gray-500);">GROWTH → Nhi</div>
+          <div style="font-size:10px; color:var(--gray-400);">Bàn giao sau DFD</div>
+        </div>
+        <svg width="40" height="20"><polygon points="0,0 40,10 0,20" fill="var(--orange)"/></svg>
+        <div style="flex:2; padding:12px 16px; background:var(--blue-pale); border-radius:10px; text-align:center; border:1.5px solid var(--blue);">
+          <div style="font-size:11px; font-weight:700; color:var(--blue);">NHI OWNS: Post-DFD → D60</div>
+          <div style="font-size:10px; color:var(--gray-500);">Ramp-up → Nuôi dưỡng → Ổn định</div>
+        </div>
+        <svg width="40" height="20"><polygon points="0,0 40,10 0,20" fill="var(--success)"/></svg>
+        <div style="flex:1; padding:12px 16px; background:var(--success-pale); border-radius:10px; text-align:center; border:1.5px solid var(--success);">
+          <div style="font-size:11px; font-weight:700; color:var(--success);">Nhi → Tiên</div>
+          <div style="font-size:10px; color:var(--gray-400);">Graduation D60</div>
         </div>
       </div>
     </div>
@@ -567,64 +590,27 @@ body {
       </thead>
       <tbody>
 
-        <!-- REGISTRATION -->
-        <tr class="group-row"><td colspan="5">PHASE 1 — ĐĂNG KÝ (Pre-D0)</td></tr>
+        <!-- HANDOFF FROM GROWTH -->
+        <tr class="group-row"><td colspan="5" style="background:var(--orange-pale); color:var(--orange);">HANDOFF — Nhận bàn giao từ Growth (sau DFD)</td></tr>
         <tr>
-          <td><span class="badge badge-gray">PRE-D0</span><br>Đăng ký</td>
+          <td><span class="badge badge-orange">DFD</span><br>Bàn giao</td>
           <td>
-            Theo dõi funnel đăng ký hàng ngày<br>
-            Phân tích tỷ lệ drop-off từng bước (submit → duyệt)<br>
-            Phối hợp với team duyệt hồ sơ để rút ngắn thời gian xử lý
+            Nhận danh sách TX mới có DFD từ Growth (hàng ngày/tuần)<br>
+            Verify data handoff: driver ID, ngày DFD, zone, loại xe<br>
+            Welcome message post-DFD từ DM team<br>
+            Phối hợp Growth nếu data bất thường hoặc thiếu
           </td>
           <td>
-            Monitor số lượng đăng ký mới hàng ngày/tuần<br>
-            Flag nếu volume đăng ký bất thường (giảm >20%)<br>
-            Đề xuất cải thiện conversion funnel
+            Đảm bảo nhận đủ & đúng danh sách TX từ Growth<br>
+            Gửi DM welcome message trong 24h sau DFD<br>
+            Flag nếu volume DFD giảm bất thường (→ escalate Khanh + Growth)
           </td>
-          <td>Daily registration tracker<br>Weekly funnel report</td>
-          <td>Team duyệt hồ sơ, Product (app flow)</td>
-        </tr>
-
-        <!-- ACTIVATION -->
-        <tr class="group-row"><td colspan="5">PHASE 2 — KÍCH HOẠT (D0)</td></tr>
-        <tr>
-          <td><span class="badge badge-purple">D0</span><br>Kích hoạt</td>
-          <td>
-            Đảm bảo tài xế được duyệt hoàn tất training<br>
-            Theo dõi tỷ lệ kích hoạt (approved → active)<br>
-            Gửi welcome message & hướng dẫn sử dụng<br>
-            Phân tích tài xế đã duyệt nhưng chưa bật online
-          </td>
-          <td>
-            Own toàn bộ activation process<br>
-            Giảm thời gian từ duyệt → bật online lần đầu<br>
-            Triển khai welcome communication sequence
-          </td>
-          <td>Activation rate tracker<br>Dormant-after-approval list (hàng tuần)</td>
-          <td>Training team, CX (gửi thông báo)</td>
-        </tr>
-
-        <!-- FIRST ORDER -->
-        <tr class="group-row"><td colspan="5">PHASE 3 — ĐƠN ĐẦU TIÊN (D0–D3)</td></tr>
-        <tr>
-          <td><span class="badge badge-orange">D0–D3</span><br>Đơn đầu tiên</td>
-          <td>
-            Theo dõi Time-to-First-Order (TTFO)<br>
-            Thiết kế & vận hành newbie incentive cho đơn đầu<br>
-            Hỗ trợ xử lý issues tài xế gặp khi nhận đơn đầu<br>
-            Push notification / SMS nudge cho TX chưa có đơn sau 24h/48h/72h
-          </td>
-          <td>
-            Own chỉ số First Order Rate<br>
-            Phối hợp thiết kế nudge sequence (24h/48h/72h)<br>
-            Escalate nếu TTFO trung bình > 3 ngày
-          </td>
-          <td>First Order Rate daily<br>TTFO distribution report<br>Nudge sequence performance</td>
-          <td>CX, Product (matching algo), Tiên (incentive budget)</td>
+          <td>DFD intake tracker (daily)<br>Welcome message delivery rate</td>
+          <td>Growth team (bàn giao), CX (gửi thông báo)</td>
         </tr>
 
         <!-- RAMP-UP -->
-        <tr class="group-row"><td colspan="5">PHASE 4 — LÀM QUEN (D1–D14)</td></tr>
+        <tr class="group-row"><td colspan="5">PHASE 1 — LÀM QUEN (D1–D14 post-DFD)</td></tr>
         <tr>
           <td><span class="badge badge-blue">D1–D7</span><br>Tuần đầu tiên</td>
           <td>
@@ -659,7 +645,7 @@ body {
         </tr>
 
         <!-- NURTURE -->
-        <tr class="group-row"><td colspan="5">PHASE 5 — NUÔI DƯỠNG (D15–D30)</td></tr>
+        <tr class="group-row"><td colspan="5">PHASE 2 — NUÔI DƯỠNG (D15–D30 post-DFD)</td></tr>
         <tr>
           <td><span class="badge badge-teal">D15–D30</span><br>Nuôi dưỡng</td>
           <td>
@@ -681,7 +667,7 @@ body {
         </tr>
 
         <!-- STABILIZE -->
-        <tr class="group-row"><td colspan="5">PHASE 6 — ỔN ĐỊNH (D31–D60)</td></tr>
+        <tr class="group-row"><td colspan="5">PHASE 3 — ỔN ĐỊNH (D31–D60 post-DFD)</td></tr>
         <tr>
           <td><span class="badge badge-green">D31–D60</span><br>Ổn định</td>
           <td>
@@ -750,30 +736,25 @@ body {
   </div>
 
   <div class="insight blue" style="margin-bottom:20px;">
-    <strong>Nguyên tắc:</strong> Tất cả metrics được tính theo <strong>cohort tháng</strong> — nhóm tài xế có đơn đầu tiên trong cùng 1 tháng. So sánh MoM giữa các cohort để đo hiệu quả cải thiện.
+    <strong>Nguyên tắc:</strong> D0 = ngày DFD (Driver First Delivery). Tất cả metrics được tính theo <strong>cohort tháng</strong> — nhóm tài xế có DFD trong cùng 1 tháng. Activation Rate, First Order Rate, TTFO thuộc <strong>Growth team</strong>, không nằm trong scope Nhi.
   </div>
 
   <!-- Primary KPIs -->
   <h3 style="font-size:14px; font-weight:700; margin-bottom:12px; color:var(--blue);">Primary KPIs (Nhi chịu trách nhiệm chính)</h3>
   <div class="kpi-grid">
     <div class="kpi-item orange">
-      <div class="kpi-label">Activation Rate</div>
-      <div class="kpi-desc">Tỷ lệ TX được duyệt → bật online lần đầu</div>
-      <div class="kpi-formula">= TX bật online / TX được duyệt × 100%</div>
+      <div class="kpi-label">DFD Intake Volume</div>
+      <div class="kpi-desc">Số TX mới nhận bàn giao từ Growth mỗi tuần/tháng</div>
+      <div class="kpi-formula">= COUNT(TX có DFD trong kỳ)</div>
     </div>
     <div class="kpi-item orange">
-      <div class="kpi-label">First Order Rate</div>
-      <div class="kpi-desc">Tỷ lệ TX activated → hoàn thành đơn đầu tiên</div>
-      <div class="kpi-formula">= TX có ≥1 đơn / TX activated × 100%</div>
-    </div>
-    <div class="kpi-item orange">
-      <div class="kpi-label">Time-to-First-Order (TTFO)</div>
-      <div class="kpi-desc">Thời gian trung bình từ activated → đơn đầu</div>
-      <div class="kpi-formula">= AVG(ngày đơn đầu - ngày activated)</div>
+      <div class="kpi-label">Post-DFD D3 Activity Rate</div>
+      <div class="kpi-desc">% TX có ≥1 đơn trong 3 ngày sau DFD (momentum check)</div>
+      <div class="kpi-formula">= TX active D1–D3 / TX DFD cohort × 100%</div>
     </div>
     <div class="kpi-item blue">
       <div class="kpi-label">D7 Retention Rate</div>
-      <div class="kpi-desc">% TX còn active (≥1 đơn) sau 7 ngày kể từ đơn đầu</div>
+      <div class="kpi-desc">% TX còn active (≥1 đơn) sau 7 ngày kể từ DFD</div>
       <div class="kpi-formula">= TX active D7 / TX cohort × 100%</div>
     </div>
     <div class="kpi-item blue">
@@ -840,59 +821,54 @@ body {
 <div class="section">
   <div class="section-header">
     <span class="section-num mono">04</span>
-    <h2 class="section-title">Retention Funnel <span>Mô hình phễu chuyển đổi & điểm can thiệp</span></h2>
+    <h2 class="section-title">Post-DFD Retention Funnel <span>Phễu giữ chân từ DFD — Phạm vi Nhi</span></h2>
   </div>
 
   <div class="card">
+    <div class="insight blue" style="margin-bottom:16px;">
+      <strong>Baseline:</strong> DFD cohort = 100%. Tất cả TX đã hoàn thành đơn đầu tiên (Growth chịu trách nhiệm đến DFD). Nhi đo retention từ đây.
+    </div>
+
     <!-- SVG Funnel -->
-    <svg viewBox="0 0 800 340" style="width:100%; max-width:800px; display:block; margin:0 auto;">
-      <!-- Funnel bars -->
-      <rect x="40" y="10" width="720" height="36" rx="6" fill="#E5E7EB"/>
-      <rect x="40" y="10" width="720" height="36" rx="6" fill="var(--gray-500)" opacity="0.9"/>
-      <text x="400" y="33" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">Đăng ký mới — 100%</text>
+    <svg viewBox="0 0 800 300" style="width:100%; max-width:800px; display:block; margin:0 auto;">
+      <!-- DFD Baseline -->
+      <rect x="40" y="10" width="720" height="40" rx="8" fill="var(--orange)" opacity="0.95"/>
+      <text x="400" y="36" text-anchor="middle" fill="white" font-family="Lexend" font-size="13" font-weight="800">DFD Cohort — 100% (nhận từ Growth)</text>
 
-      <rect x="80" y="58" width="640" height="36" rx="6" fill="var(--purple)" opacity="0.9"/>
-      <text x="400" y="81" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">Activated (duyệt + bật online)</text>
-      <text x="730" y="81" fill="var(--purple)" font-family="Space Mono" font-size="11" font-weight="700">TARGET</text>
+      <!-- D3 Active -->
+      <rect x="70" y="62" width="660" height="36" rx="6" fill="var(--info)" opacity="0.9"/>
+      <text x="400" y="85" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D3 Active (≥1 đơn trong 3 ngày sau DFD)</text>
+      <line x1="700" y1="50" x2="700" y2="62" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
+      <text x="715" y="60" fill="var(--danger)" font-family="Space Mono" font-size="9" font-weight="700">DROP</text>
 
-      <rect x="120" y="106" width="560" height="36" rx="6" fill="var(--orange)" opacity="0.9"/>
-      <text x="400" y="129" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">First Order (≥1 đơn hoàn thành)</text>
+      <!-- D7 Retained -->
+      <rect x="110" y="110" width="580" height="36" rx="6" fill="var(--blue)" opacity="0.9"/>
+      <text x="400" y="133" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D7 Retained</text>
+      <line x1="660" y1="98" x2="660" y2="110" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
+      <text x="675" y="108" fill="var(--danger)" font-family="Space Mono" font-size="9" font-weight="700">DROP</text>
 
-      <rect x="160" y="154" width="480" height="36" rx="6" fill="var(--info)" opacity="0.9"/>
-      <text x="400" y="177" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D7 Retained</text>
+      <!-- D14 Retained -->
+      <rect x="150" y="158" width="500" height="36" rx="6" fill="var(--blue-light)" opacity="0.9"/>
+      <text x="400" y="181" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D14 Retained</text>
+      <line x1="620" y1="146" x2="620" y2="158" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
 
-      <rect x="200" y="202" width="400" height="36" rx="6" fill="var(--blue-light)" opacity="0.9"/>
-      <text x="400" y="225" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D14 Retained</text>
+      <!-- D30 Retained -->
+      <rect x="200" y="206" width="400" height="36" rx="6" fill="var(--teal)" opacity="0.9"/>
+      <text x="400" y="229" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D30 Retained</text>
+      <line x1="570" y1="194" x2="570" y2="206" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
 
-      <rect x="240" y="250" width="320" height="36" rx="6" fill="var(--teal)" opacity="0.9"/>
-      <text x="400" y="273" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D30 Retained</text>
-
-      <rect x="280" y="298" width="240" height="36" rx="6" fill="var(--success)" opacity="0.9"/>
-      <text x="400" y="321" text-anchor="middle" fill="white" font-family="Lexend" font-size="12" font-weight="700">D60 Graduated ✓</text>
-
-      <!-- Drop-off annotations -->
-      <line x1="730" y1="46" x2="730" y2="58" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
-      <text x="745" y="56" fill="var(--danger)" font-family="Space Mono" font-size="9" font-weight="700">DROP</text>
-
-      <line x1="690" y1="94" x2="690" y2="106" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
-      <text x="705" y="104" fill="var(--danger)" font-family="Space Mono" font-size="9" font-weight="700">DROP</text>
-
-      <line x1="650" y1="142" x2="650" y2="154" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
-      <text x="665" y="152" fill="var(--danger)" font-family="Space Mono" font-size="9" font-weight="700">DROP</text>
-
-      <line x1="610" y1="190" x2="610" y2="202" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
-
-      <line x1="570" y1="238" x2="570" y2="250" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
-
-      <line x1="530" y1="286" x2="530" y2="298" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
+      <!-- D60 Graduated -->
+      <rect x="260" y="254" width="280" height="40" rx="8" fill="var(--success)" opacity="0.95"/>
+      <text x="400" y="280" text-anchor="middle" fill="white" font-family="Lexend" font-size="13" font-weight="800">D60 Graduated ✓ → Tiên</text>
+      <line x1="520" y1="242" x2="520" y2="254" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="3"/>
     </svg>
 
     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:20px;">
       <div class="insight danger">
-        <strong>Critical drop #1:</strong> Activated → First Order. Nhiều TX bật online nhưng không nhận được đơn hoặc không biết cách vận hành. <em>Can thiệp: nudge 24h/48h/72h + hotline hỗ trợ.</em>
+        <strong>Critical drop #1:</strong> DFD → D7. TX mất momentum sau đơn đầu, không quay lại. <em>Can thiệp: newbie quest D1–D7 + nudge nếu inactive ≥3 ngày.</em>
       </div>
       <div class="insight warn">
-        <strong>Critical drop #2:</strong> D7 → D14. TX sau "mùi mật" tuần đầu bắt đầu giảm tần suất. <em>Can thiệp: quest tuần 2 + zone guidance.</em>
+        <strong>Critical drop #2:</strong> D7 → D14. TX sau "mùi mật" tuần đầu bắt đầu giảm tần suất. <em>Can thiệp: quest tuần 2 + zone/giờ peak guidance.</em>
       </div>
       <div class="insight orange">
         <strong>Critical drop #3:</strong> D30 → D60. Weaning incentive là giai đoạn nguy hiểm nhất. <em>Can thiệp: tier preview + Captain kết nối + community.</em>
@@ -917,7 +893,7 @@ body {
       <table style="width:100%; font-size:12px; border-collapse:collapse;">
         <tr style="border-bottom:1px solid var(--gray-100);">
           <td style="padding:8px 0; font-weight:600;">Thời gian hoạt động</td>
-          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">≥ 60 ngày</span> kể từ đơn đầu</td>
+          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">≥ 60 ngày</span> kể từ DFD</td>
         </tr>
         <tr style="border-bottom:1px solid var(--gray-100);">
           <td style="padding:8px 0; font-weight:600;">Tổng đơn hoàn thành</td>
@@ -984,8 +960,8 @@ body {
       <tbody>
         <tr>
           <td><span class="badge badge-red">DAILY</span></td>
-          <td>New Driver Daily Tracker</td>
-          <td>Số đăng ký, activated, first order hôm nay. Alert nếu bất thường.</td>
+          <td>Post-DFD Daily Tracker</td>
+          <td>Số TX nhận từ Growth (DFD), D3 activity, at-risk alerts. Không bao gồm registration/activation (thuộc Growth).</td>
           <td>Tự monitor + escalate Tiên nếu cần</td>
         </tr>
         <tr>
@@ -1048,18 +1024,18 @@ body {
       </thead>
       <tbody>
         <tr>
-          <td>Theo dõi Registration Funnel</td>
+          <td>Nhận bàn giao DFD từ Growth</td>
           <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span></td>
-          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span></td>
+          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span></td>
           <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
           <td style="text-align:center;"></td>
           <td style="text-align:center;"></td>
           <td style="text-align:center;"></td>
         </tr>
         <tr>
-          <td>Activation & Welcome Sequence</td>
+          <td>Post-DFD Welcome & Onboarding DM</td>
           <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--gray-100); color:var(--gray-500); align-items:center; justify-content:center; font-weight:700; font-size:11px;">I</span></td>
-          <td style="text-align:center;"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--success-pale); color:var(--success); align-items:center; justify-content:center; font-weight:700; font-size:11px; border:1px solid rgba(16,185,129,0.2);">C</span></td>
+          <td style="text-align:center;"></td>
           <td style="text-align:center; background:var(--orange-pale);"><span style="display:inline-flex; width:24px; height:24px; border-radius:6px; background:var(--blue); color:white; align-items:center; justify-content:center; font-weight:700; font-size:11px;">R</span></td>
           <td style="text-align:center;"></td>
           <td style="text-align:center;"></td>
