@@ -883,24 +883,90 @@ body {
 <div class="section">
   <div class="section-header">
     <span class="section-num mono">05</span>
-    <h2 class="section-title">Graduation Criteria & Handoff <span>Tiêu chí tốt nghiệp & bàn giao</span></h2>
+    <h2 class="section-title">Graduation: A/B Test & Handoff <span>Chưa chốt thời gian — cần test để xác định</span></h2>
   </div>
 
-  <div class="grid-2">
+  <div class="insight warn" style="margin-bottom:16px;">
+    <strong>Status:</strong> Chưa có đủ data cost để chốt thời gian graduation. Sẽ A/B test 2 nhóm (30 ngày vs 60 ngày) để xác định thời gian tối ưu đảm bảo thu nhập TX mới.
+  </div>
+
+  <!-- A/B Test Design -->
+  <div class="card">
+    <h4 style="font-size:14px; font-weight:700; color:var(--purple); margin-bottom:12px;">A/B Test Design: Thời gian Graduation</h4>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+      <div style="padding:16px; background:var(--blue-pale); border-radius:10px; border:1.5px solid var(--blue);">
+        <div style="font-size:12px; font-weight:700; color:var(--blue); margin-bottom:8px;">NHÓM A — 30 ngày</div>
+        <div style="font-size:11px; color:var(--gray-600); line-height:1.6;">
+          TX mới được hỗ trợ incentive trong <strong>30 ngày</strong> post-DFD<br>
+          Graduation sớm hơn → tiết kiệm incentive budget<br>
+          Risk: TX chưa đủ self-sustain, churn cao sau graduation
+        </div>
+      </div>
+      <div style="padding:16px; background:var(--purple-pale); border-radius:10px; border:1.5px solid var(--purple);">
+        <div style="font-size:12px; font-weight:700; color:var(--purple); margin-bottom:8px;">NHÓM B — 60 ngày</div>
+        <div style="font-size:11px; color:var(--gray-600); line-height:1.6;">
+          TX mới được hỗ trợ incentive trong <strong>60 ngày</strong> post-DFD<br>
+          Thời gian dài hơn → TX ổn định hơn<br>
+          Risk: Chi phí incentive cao hơn, ROI có thể không tương xứng
+        </div>
+      </div>
+    </div>
+
+    <h4 style="font-size:13px; font-weight:700; color:var(--gray-700); margin-bottom:8px;">Metrics so sánh giữa 2 nhóm</h4>
+    <table style="width:100%; font-size:12px; border-collapse:collapse;">
+      <tr style="border-bottom:1px solid var(--gray-200); background:var(--gray-50);">
+        <td style="padding:8px 12px; font-weight:700; color:var(--gray-500); font-size:10px; text-transform:uppercase;">Metric</td>
+        <td style="padding:8px 12px; font-weight:700; color:var(--gray-500); font-size:10px; text-transform:uppercase;">Đo cái gì</td>
+        <td style="padding:8px 12px; font-weight:700; color:var(--gray-500); font-size:10px; text-transform:uppercase;">Mốc đo</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--gray-100);">
+        <td style="padding:8px 12px; font-weight:600;">Post-grad Retention</td>
+        <td style="padding:8px 12px;">% TX vẫn active 30 ngày SAU graduation</td>
+        <td style="padding:8px 12px;"><span class="mono" style="font-size:11px;">D30 post-grad</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--gray-100);">
+        <td style="padding:8px 12px; font-weight:600;">EPH post-grad</td>
+        <td style="padding:8px 12px;">Thu nhập/giờ sau khi hết newbie incentive</td>
+        <td style="padding:8px 12px;"><span class="mono" style="font-size:11px;">Tuần 1–4 post-grad</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--gray-100);">
+        <td style="padding:8px 12px; font-weight:600;">Self-sustain Rate</td>
+        <td style="padding:8px 12px;">% TX duy trì ≥X đơn/tuần không cần incentive</td>
+        <td style="padding:8px 12px;"><span class="mono" style="font-size:11px;">D14–D30 post-grad</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--gray-100);">
+        <td style="padding:8px 12px; font-weight:600;">Total Incentive/TX</td>
+        <td style="padding:8px 12px;">Tổng chi phí incentive per driver trong lộ trình</td>
+        <td style="padding:8px 12px;"><span class="mono" style="font-size:11px;">End of program</span></td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px; font-weight:600;">LTV-to-CAC Ratio</td>
+        <td style="padding:8px 12px;">Revenue 90 ngày post-grad / Tổng incentive đã chi</td>
+        <td style="padding:8px 12px;"><span class="mono" style="font-size:11px;">D90 post-grad</span></td>
+      </tr>
+    </table>
+
+    <div class="insight blue" style="margin-top:12px;">
+      <strong>Kết luận kỳ vọng:</strong> Nhóm nào có <strong>Post-grad Retention cao hơn</strong> VÀ <strong>LTV-to-CAC tốt hơn</strong> → chọn làm graduation timeline chuẩn. Nếu 2 nhóm tương đương → chọn 30 ngày (tiết kiệm cost).
+    </div>
+  </div>
+
+  <!-- Graduation Criteria -->
+  <div class="grid-2" style="margin-top:16px;">
     <div class="card">
-      <h4 style="font-size:14px; font-weight:700; color:var(--success); margin-bottom:12px;">Graduation Criteria (đề xuất)</h4>
-      <p style="font-size:11px; color:var(--gray-500); margin-bottom:12px;">TX phải đạt <strong>tất cả</strong> tiêu chí sau để được graduation:</p>
+      <h4 style="font-size:14px; font-weight:700; color:var(--success); margin-bottom:12px;">Graduation Criteria (draft — chờ A/B test)</h4>
+      <p style="font-size:11px; color:var(--gray-500); margin-bottom:12px;">TX phải đạt <strong>tất cả</strong> tiêu chí sau:</p>
       <table style="width:100%; font-size:12px; border-collapse:collapse;">
         <tr style="border-bottom:1px solid var(--gray-100);">
           <td style="padding:8px 0; font-weight:600;">Thời gian hoạt động</td>
-          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">≥ 60 ngày</span> kể từ DFD</td>
+          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--warn); font-weight:700;">30 hoặc 60 ngày</span> <span style="font-size:10px; color:var(--gray-400);">(chờ A/B)</span></td>
         </tr>
         <tr style="border-bottom:1px solid var(--gray-100);">
           <td style="padding:8px 0; font-weight:600;">Tổng đơn hoàn thành</td>
-          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">≥ X đơn</span> (tuỳ baseline)</td>
+          <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">≥ X đơn</span> <span style="font-size:10px; color:var(--gray-400);">(tuỳ baseline)</span></td>
         </tr>
         <tr style="border-bottom:1px solid var(--gray-100);">
-          <td style="padding:8px 0; font-weight:600;">Active days trong 14 ngày gần nhất</td>
+          <td style="padding:8px 0; font-weight:600;">Active days (14 ngày gần nhất)</td>
           <td style="padding:8px 0; text-align:right;"><span class="mono" style="color:var(--blue); font-weight:700;">≥ 7/14 ngày</span></td>
         </tr>
         <tr style="border-bottom:1px solid var(--gray-100);">
@@ -923,7 +989,7 @@ body {
       <p style="font-size:11px; color:var(--gray-500); margin-bottom:12px;">Bàn giao vào đầu mỗi tháng cho cohort tốt nghiệp:</p>
       <ul class="checklist">
         <li><div class="check"></div> Danh sách TX graduated (ID, tier, zone chính)</li>
-        <li><div class="check"></div> Performance summary 60 ngày (orders, EPH, FR, rating)</li>
+        <li><div class="check"></div> Performance summary (orders, EPH, FR, rating)</li>
         <li><div class="check"></div> Tier phân loại ban đầu (Hub/Core/Flex/Casual)</li>
         <li><div class="check"></div> Flag TX cần theo dõi đặc biệt (borderline criteria)</li>
         <li><div class="check"></div> Incentive history & dependency level</li>
@@ -932,18 +998,188 @@ body {
       </ul>
     </div>
   </div>
-
-  <div class="insight warn" style="margin-top:8px;">
-    <strong>TX chưa đạt graduation sau D60:</strong> Nhi tiếp tục theo dõi thêm 14 ngày (grace period). Nếu vẫn không đạt → classify là at-risk / potential churn → chuyển Tiên với flag đặc biệt hoặc deactivate recommendation.
-  </div>
 </div>
 
 <!-- ═══════════════════════════════════════
-     SECTION 06: REPORTING CADENCE
+     SECTION 06: INCENTIVE POLICY PROPOSAL & PA DEBATE
 ═══════════════════════════════════════ -->
 <div class="section">
   <div class="section-header">
     <span class="section-num mono">06</span>
+    <h2 class="section-title">Incentive Policy Proposal & PA Debate <span>Xây dựng business case để thuyết phục PA</span></h2>
+  </div>
+
+  <div class="insight orange" style="margin-bottom:16px;">
+    <strong>Quy trình:</strong> Sau khi hoàn thành lộ trình TX mới + có kết quả A/B test → Review incentive policy riêng cho TX mới → Xây dựng proposal có dẫn chứng + success metrics → Đề xuất nội bộ → Debate với PA team để triển khai.
+  </div>
+
+  <!-- Step-by-step flow -->
+  <div class="card">
+    <h4 style="font-size:14px; font-weight:700; color:var(--blue); margin-bottom:16px;">Quy trình đề xuất Incentive Policy mới</h4>
+
+    <div style="display:flex; gap:8px; align-items:stretch; flex-wrap:wrap;">
+      <!-- Step 1 -->
+      <div style="flex:1; min-width:160px; padding:14px; background:var(--gray-50); border-radius:10px; border-left:3px solid var(--gray-400); position:relative;">
+        <div style="font-size:10px; font-weight:700; color:var(--gray-400); margin-bottom:4px;" class="mono">STEP 1</div>
+        <div style="font-size:12px; font-weight:700; color:var(--gray-700); margin-bottom:4px;">Hoàn thành lộ trình</div>
+        <div style="font-size:10px; color:var(--gray-500);">Chạy xong A/B test graduation timeline. Có kết quả D30 vs D60.</div>
+      </div>
+      <div style="display:flex; align-items:center;"><svg width="20" height="16"><polygon points="0,0 20,8 0,16" fill="var(--gray-300)"/></svg></div>
+      <!-- Step 2 -->
+      <div style="flex:1; min-width:160px; padding:14px; background:var(--blue-pale); border-radius:10px; border-left:3px solid var(--blue); position:relative;">
+        <div style="font-size:10px; font-weight:700; color:var(--blue); margin-bottom:4px;" class="mono">STEP 2</div>
+        <div style="font-size:12px; font-weight:700; color:var(--gray-700); margin-bottom:4px;">Review policy gaps</div>
+        <div style="font-size:10px; color:var(--gray-500);">Identify incentive policies riêng cần cho TX mới mà PA chưa có.</div>
+      </div>
+      <div style="display:flex; align-items:center;"><svg width="20" height="16"><polygon points="0,0 20,8 0,16" fill="var(--gray-300)"/></svg></div>
+      <!-- Step 3 -->
+      <div style="flex:1; min-width:160px; padding:14px; background:var(--orange-pale); border-radius:10px; border-left:3px solid var(--orange); position:relative;">
+        <div style="font-size:10px; font-weight:700; color:var(--orange); margin-bottom:4px;" class="mono">STEP 3</div>
+        <div style="font-size:12px; font-weight:700; color:var(--gray-700); margin-bottom:4px;">Build business case</div>
+        <div style="font-size:10px; color:var(--gray-500);">Data + success metrics + ROI projection đủ mạnh để thuyết phục PA.</div>
+      </div>
+      <div style="display:flex; align-items:center;"><svg width="20" height="16"><polygon points="0,0 20,8 0,16" fill="var(--gray-300)"/></svg></div>
+      <!-- Step 4 -->
+      <div style="flex:1; min-width:160px; padding:14px; background:var(--purple-pale); border-radius:10px; border-left:3px solid var(--purple); position:relative;">
+        <div style="font-size:10px; font-weight:700; color:var(--purple); margin-bottom:4px;" class="mono">STEP 4</div>
+        <div style="font-size:12px; font-weight:700; color:var(--gray-700); margin-bottom:4px;">Đề xuất & Debate PA</div>
+        <div style="font-size:10px; color:var(--gray-500);">Present proposal → debate → align → PA triển khai policy.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Business Case Framework -->
+  <div class="card" style="margin-top:16px;">
+    <h4 style="font-size:14px; font-weight:700; color:var(--orange); margin-bottom:16px;">Business Case Framework — Cần chuẩn bị gì cho PA Debate</h4>
+
+    <div class="card" style="padding:0; overflow-x:auto; margin-bottom:0; border:1px solid var(--gray-200);">
+      <table class="scope-table">
+        <thead>
+          <tr>
+            <th style="width:180px;">Thành phần</th>
+            <th>Nội dung cần có</th>
+            <th style="width:200px;">Data source / Cách tính</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group-row"><td colspan="3">DẪN CHỨNG (Evidence)</td></tr>
+          <tr>
+            <td style="font-weight:600;">Current State Analysis</td>
+            <td>Churn rate TX mới hiện tại theo cohort. Churn xảy ra ở phase nào? Bao nhiêu % TX churn vì thiếu incentive vs lý do khác?</td>
+            <td><span class="mono" style="font-size:10px;">Cohort analysis D7/D14/D30/D60 + churn survey</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">A/B Test Results</td>
+            <td>So sánh 30d vs 60d: retention, EPH, self-sustain rate, total cost/TX. Statistical significance.</td>
+            <td><span class="mono" style="font-size:10px;">A/B test data + confidence interval</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Competitive Benchmark</td>
+            <td>Đối thủ (Grab, Be, XanhSM) có newbie incentive như thế nào? Thời gian bao lâu? Mức hỗ trợ?</td>
+            <td><span class="mono" style="font-size:10px;">Competitive intel + driver survey</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Driver Voice</td>
+            <td>Feedback định tính từ TX mới: lý do churn, kỳ vọng thu nhập, pain points giai đoạn đầu.</td>
+            <td><span class="mono" style="font-size:10px;">Survey + hotline logs + Captain feedback</span></td>
+          </tr>
+
+          <tr class="group-row"><td colspan="3">SUCCESS METRICS (Cam kết đầu ra)</td></tr>
+          <tr>
+            <td style="font-weight:600;">Retention Impact</td>
+            <td>Policy mới sẽ tăng D60 retention thêm bao nhiêu %? (dựa trên A/B test)</td>
+            <td><span class="mono" style="font-size:10px;">= (Retention nhóm test - Retention hiện tại) / Retention hiện tại</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">CPO Impact</td>
+            <td>CPO tổng sẽ thay đổi thế nào? Incentive tăng nhưng volume đơn cũng tăng → CPO có thể giảm.</td>
+            <td><span class="mono" style="font-size:10px;">= (Incentive + incremental orders) → projected CPO</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Net Revenue Impact</td>
+            <td>Thêm bao nhiêu TX retained × avg orders/tháng × avg revenue/đơn = incremental revenue vs incremental cost.</td>
+            <td><span class="mono" style="font-size:10px;">= Incremental retained TX × avg monthly GMV/TX - Total incremental incentive</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Payback Period</td>
+            <td>Bao lâu để thu hồi chi phí incentive mới từ revenue của TX retained?</td>
+            <td><span class="mono" style="font-size:10px;">= Total incentive cost / Monthly net revenue per retained TX</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Capacity Impact</td>
+            <td>Thêm bao nhiêu TX active → cải thiện supply gap bao nhiêu % ở các zone thiếu cung?</td>
+            <td><span class="mono" style="font-size:10px;">= Retained TX × avg online hours → supply hours gained</span></td>
+          </tr>
+
+          <tr class="group-row"><td colspan="3">RISK & MITIGATION (PA sẽ hỏi)</td></tr>
+          <tr>
+            <td style="font-weight:600;">Budget Overrun Risk</td>
+            <td>Worst-case scenario: nếu churn không giảm thì total spend là bao nhiêu? Có cap không?</td>
+            <td><span class="mono" style="font-size:10px;">Max spend = DFD volume × max incentive/TX × duration</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Incentive Dependency</td>
+            <td>TX có bị "nghiện" incentive không? Sau khi hết policy, churn spike bao nhiêu?</td>
+            <td><span class="mono" style="font-size:10px;">Post-program churn rate (từ A/B test data)</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Fraud Risk</td>
+            <td>TX mới có thể abuse incentive (multi-account, fake orders)? Cần safeguard gì?</td>
+            <td><span class="mono" style="font-size:10px;">Fraud detection rules + velocity cap</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Debate Playbook -->
+  <div class="card" style="margin-top:16px;">
+    <h4 style="font-size:14px; font-weight:700; color:var(--purple); margin-bottom:12px;">PA Debate Playbook — Câu hỏi PA sẽ hỏi & cách trả lời</h4>
+    <table style="width:100%; font-size:12px; border-collapse:collapse;">
+      <tr style="border-bottom:1px solid var(--gray-200); background:var(--gray-50);">
+        <td style="padding:10px 12px; font-weight:700; color:var(--gray-500); font-size:10px; width:35%;">PA SẼ HỎI</td>
+        <td style="padding:10px 12px; font-weight:700; color:var(--gray-500); font-size:10px;">DM CẦN TRẢ LỜI</td>
+        <td style="padding:10px 12px; font-weight:700; color:var(--gray-500); font-size:10px; width:25%;">EVIDENCE CẦN CÓ</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--gray-100);">
+        <td style="padding:10px 12px; font-weight:600;">"Tại sao TX mới cần incentive riêng? Policy hiện tại không đủ à?"</td>
+        <td style="padding:10px 12px;">Churn rate TX mới cao hơn X% so với TX hiện hữu. Giai đoạn post-DFD là critical — nếu không giữ ở đây, cost tuyển mới sẽ cao hơn cost incentive.</td>
+        <td style="padding:10px 12px;"><span class="badge badge-blue">Churn by cohort</span> <span class="badge badge-red">CAC vs retention cost</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--gray-100);">
+        <td style="padding:10px 12px; font-weight:600;">"Budget bao nhiêu? ROI ra sao?"</td>
+        <td style="padding:10px 12px;">X VND/TX × Y TX/tháng = Z VND total. ROI = incremental revenue / incentive cost. Payback period = N tháng.</td>
+        <td style="padding:10px 12px;"><span class="badge badge-green">ROI calculation</span> <span class="badge badge-orange">A/B test data</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--gray-100);">
+        <td style="padding:10px 12px; font-weight:600;">"Grab/Be có làm không? Benchmark thế nào?"</td>
+        <td style="padding:10px 12px;">Grab có X tuần newbie bonus, Be có Y program. Ahamove cần cạnh tranh ít nhất ngang hoặc smart hơn (targeted vs blanket).</td>
+        <td style="padding:10px 12px;"><span class="badge badge-purple">Competitive intel</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--gray-100);">
+        <td style="padding:10px 12px; font-weight:600;">"TX có bị nghiện incentive không? Hết incentive sẽ churn?"</td>
+        <td style="padding:10px 12px;">A/B test cho thấy post-program retention là X%. Thiết kế weaning giảm dần, không cắt đột ngột. Self-sustain rate đạt Y%.</td>
+        <td style="padding:10px 12px;"><span class="badge badge-orange">Post-program retention</span> <span class="badge badge-teal">Weaning curve</span></td>
+      </tr>
+      <tr>
+        <td style="padding:10px 12px; font-weight:600;">"Nếu không hiệu quả thì sao? Exit plan?"</td>
+        <td style="padding:10px 12px;">Chạy pilot 1 tháng, review sau 2 tuần. KPI gate: nếu D14 retention < X% thì pause. Budget cap = Z VND, không overrun.</td>
+        <td style="padding:10px 12px;"><span class="badge badge-red">Kill criteria</span> <span class="badge badge-gray">Budget cap</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="insight ok" style="margin-top:12px;">
+    <strong>Timeline dự kiến:</strong> Hoàn thành lộ trình TX mới (hiện tại) → Chạy A/B test graduation (1–2 tháng) → Tổng hợp data & build proposal (2 tuần) → Đề xuất nội bộ review Khanh (1 tuần) → Debate PA → Triển khai.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 07: REPORTING CADENCE
+═══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num mono">07</span>
     <h2 class="section-title">Reporting Cadence <span>Tần suất báo cáo & người nhận</span></h2>
   </div>
 
@@ -994,11 +1230,11 @@ body {
 </div>
 
 <!-- ═══════════════════════════════════════
-     SECTION 07: RACI (NHI-SPECIFIC)
+     SECTION 08: RACI (NHI-SPECIFIC)
 ═══════════════════════════════════════ -->
 <div class="section">
   <div class="section-header">
-    <span class="section-num mono">07</span>
+    <span class="section-num mono">08</span>
     <h2 class="section-title">RACI cho scope Nhi <span>Ai làm gì trong New Driver Journey</span></h2>
   </div>
 
