@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Driver Lifecycle Journey Framework v3.1 — Ahamove</title>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg-body: #080F1D;
@@ -40,7 +40,7 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: 'Lexend', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   background: var(--bg-body);
   color: var(--text-primary);
   font-size: 13px;
@@ -294,46 +294,48 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
   </div>
 
   <div class="insight danger">
-    <strong>Vấn đề cốt lõi:</strong> Tỷ lệ rời bỏ (Churn Rate) của tài xế 2 bánh trên các nền tảng gig economy dao động <strong>15-45% trong 90 ngày đầu</strong>. Nguyên nhân gốc rễ không phải do thu nhập thấp, mà do <strong>thiếu lộ trình phát triển rõ ràng</strong>.
+    <strong>Vấn đề cốt lõi:</strong> Ahamove có M+1 retention tốt (~78% avg), nhưng <strong>rụng rất mạnh M+1→M+3</strong> (78% &rarr; 43%) &mdash; mất gần nửa tài xế trong 60 ngày tiếp theo. Cohort Q1/2026 còn yếu hơn: M+3 chỉ ~30-36%. <strong>Vùng chết nằm ở Phase 3 Lock In (D15&mdash;D60)</strong>, không phải onboarding.
   </div>
   <div class="insight blue">
-    <strong>Giải pháp:</strong> Xây dựng Driver Lifecycle Journey &mdash; hệ thống 6 giai đoạn kết hợp 4 trụ cột HIGH-IMPACT: <strong>(1) Guaranteed Earnings 30 ngày phasing-out, (2) Multi-Service Unlock progression, (3) Earnings Transparency upfront, (4) Tiered Insurance từ R3 Bạc</strong>.
+    <strong>Giải pháp:</strong> Xây dựng Driver Lifecycle Journey &mdash; hệ thống 6 giai đoạn tập trung <strong>chống rụng M+1→M+3</strong> qua 4 trụ cột: <strong>(1) Guaranteed Earnings 30 ngày phasing-out, (2) Multi-Service Unlock progression, (3) Earnings Transparency upfront, (4) Tiered Insurance từ R3 Bạc</strong>.
+  </div>
+  <div class="insight ok" style="font-size:11px">
+    <strong>📊 Nguồn dữ liệu Baseline:</strong> NIM Cohort Retention (active-segment-trend.html, query 06/05/2026). HAN avg 16 tháng, SGN avg 16 tháng. Grain: monthly (M+0, M+1... M+12). Chuyển đổi sang daily-grain ước tính: M+1 ≈ D30, M+3 ≈ D90, M+4 ≈ D120.
   </div>
 
   <div class="kpi-strip">
     <div class="kpi-card kpi-blue">
-      <div class="kpi-label">Overall Retention</div>
-      <div class="kpi-value">85%</div>
-      <div class="kpi-delta delta-warn">ASPIRATIONAL</div>
+      <div class="kpi-label">D30 (M+1) Baseline</div>
+      <div class="kpi-value">~78%</div>
+      <div class="kpi-delta delta-up" style="font-size:9px">HAN 81% · SGN 76%</div>
+    </div>
+    <div class="kpi-card kpi-orange">
+      <div class="kpi-label">D90 (M+3) Baseline</div>
+      <div class="kpi-value">~43%</div>
+      <div class="kpi-delta delta-down" style="font-size:9px">DROP -35pp vs M+1</div>
     </div>
     <div class="kpi-card kpi-green">
-      <div class="kpi-label">D30 Retention</div>
-      <div class="kpi-value">75%</div>
-      <div class="kpi-delta delta-up">BENCHMARKED</div>
-    </div>
-    <div class="kpi-card kpi-green">
-      <div class="kpi-label">D90 Retention</div>
-      <div class="kpi-value">60%</div>
+      <div class="kpi-label">D90 Target</div>
+      <div class="kpi-value">≥60%</div>
       <div class="kpi-delta delta-up">BENCHMARKED</div>
     </div>
     <div class="kpi-card kpi-red">
-      <div class="kpi-label">D365 Champion</div>
-      <div class="kpi-value">35%</div>
+      <div class="kpi-label">D365 Target</div>
+      <div class="kpi-value">≥35%</div>
       <div class="kpi-delta delta-down">STRETCH</div>
     </div>
   </div>
 
   <table>
-    <thead><tr><th>Chỉ số</th><th>Baseline</th><th>Target</th><th>Loại</th><th>Cơ sở</th></tr></thead>
+    <thead><tr><th>Chỉ số</th><th>Baseline Ahamove</th><th>Target</th><th>Loại</th><th>Cơ sở</th></tr></thead>
     <tbody>
-      <tr><td><strong>Overall Retention</strong></td><td class="mono">~45%</td><td class="mono"><strong>85%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>North Star &mdash; không có benchmark tương đương cho gig economy</td></tr>
-      <tr><td>D7 Retention</td><td class="mono">~55%</td><td class="mono"><strong>85%</strong></td><td><span class="badge badge-green">Benchmarked</span></td><td>Grab w/ Guarantee 14d đạt 85% D7</td></tr>
-      <tr><td>D30 Retention</td><td class="mono">~35%</td><td class="mono"><strong>75%</strong></td><td><span class="badge badge-green">Benchmarked</span></td><td>Grab Guarantee 14d &rarr; 75% D30</td></tr>
-      <tr><td>D90 Retention</td><td class="mono">~20%</td><td class="mono"><strong>60%</strong></td><td><span class="badge badge-green">Benchmarked</span></td><td>Gojek GoPartner đạt 60% D90</td></tr>
-      <tr><td>D120 Survival Rate</td><td class="mono">~15%</td><td class="mono"><strong>55%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Swiggy StepUp 55% <strong>tại D180</strong>, không phải D120</td></tr>
-      <tr><td>D365 Champion Rate</td><td class="mono">~8%</td><td class="mono"><strong>35%</strong></td><td><span class="badge badge-red">Stretch</span></td><td>Gig best ~16% (Uber chỉ 4%). 35% = XanhSM salary model</td></tr>
-      <tr><td>Active Driver/tháng</td><td class="mono">Baseline</td><td class="mono"><strong>+40%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Ước tính từ segment shift</td></tr>
-      <tr><td>Driver LTV</td><td class="mono">~3.5 tháng</td><td class="mono"><strong>~12 tháng</strong></td><td><span class="badge badge-red">Stretch</span></td><td>+240% &mdash; phụ thuộc đồng thời nhiều initiative</td></tr>
+      <tr><td><strong>D7 Retention</strong></td><td class="mono">~88%</td><td class="mono"><strong>&ge;92%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Ước tính từ M+1 81% &rarr; D7 phải cao hơn. Grab w/ Guarantee = 85%</td></tr>
+      <tr><td><strong>D30 (≈M+1)</strong></td><td class="mono">~78% <span style="font-size:9px;color:var(--text-muted)">(HAN 81 / SGN 76)</span></td><td class="mono"><strong>&ge;85%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Ahamove M+1 đã tốt. Gap = +7pp, đạt nếu Guarantee + Buddy System</td></tr>
+      <tr><td><strong>D90 (≈M+3)</strong></td><td class="mono">~43% <span style="font-size:9px;color:var(--text-muted)">(best: 48-56 HAN)</span></td><td class="mono"><strong>&ge;60%</strong></td><td><span class="badge badge-green">Benchmarked</span></td><td>Gojek GoPartner đạt 60% D90. Gap = +17pp &mdash; <strong>trọng tâm toàn bộ framework</strong></td></tr>
+      <tr><td>D120 (≈M+4)</td><td class="mono">~35%</td><td class="mono"><strong>&ge;50%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Est. từ M+3→M+4 drop ~8pp. Swiggy 55% tại <strong>D180</strong></td></tr>
+      <tr><td>D365 (≈M+12)</td><td class="mono">~15%</td><td class="mono"><strong>&ge;35%</strong></td><td><span class="badge badge-red">Stretch</span></td><td>Gig best ~16%. 35% = XanhSM salary model — cần breakthrough</td></tr>
+      <tr><td>Active Driver/tháng</td><td class="mono">HAN ~15K / SGN ~14K</td><td class="mono"><strong>+25%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>FT share suy giảm (-7.4pp HAN, -5.3pp SGN). Cần ngăn FT→PT downgrade</td></tr>
+      <tr><td>Driver LTV</td><td class="mono">~4.5 tháng</td><td class="mono"><strong>~12 tháng</strong></td><td><span class="badge badge-red">Stretch</span></td><td>+167% &mdash; phụ thuộc đồng thời nhiều initiative. FT LTV cao hơn PT ~3x</td></tr>
     </tbody>
   </table>
 </div>
@@ -420,32 +422,53 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
   <div class="card card-top-orange">
     <div class="card-title">2.4 Churn Benchmarks Toàn Cầu</div>
     <table>
-      <thead><tr><th>Mốc</th><th>Global Avg</th><th>Best Gig</th><th>Best Salary</th><th>Source</th></tr></thead>
+      <thead><tr><th>Mốc</th><th>Global Avg</th><th>Best Gig</th><th style="color:var(--orange)">Ahamove</th><th>Best Salary</th><th>Source</th></tr></thead>
       <tbody>
-        <tr><td class="mono"><strong>D7</strong></td><td>40-60%</td><td><strong>85%</strong> Grab</td><td>&mdash;</td><td>Grab Blog, eduMe</td></tr>
-        <tr><td class="mono"><strong>D14</strong></td><td>40-55%</td><td><strong>82%</strong> Uber</td><td>&mdash;</td><td>Uber data</td></tr>
-        <tr><td class="mono"><strong>D30</strong></td><td>30-45%</td><td><strong>75%</strong> Grab</td><td>&mdash;</td><td>Grab internal</td></tr>
-        <tr><td class="mono"><strong>D90</strong></td><td>20-35%</td><td><strong>60%</strong> Gojek</td><td>&mdash;</td><td>Gojek / estimates</td></tr>
-        <tr><td class="mono"><strong>D180</strong></td><td>15-25%</td><td><strong>55%</strong> Swiggy</td><td>&mdash;</td><td>Rest of World</td></tr>
-        <tr><td class="mono"><strong>D365</strong></td><td>8-16%</td><td><strong>~16%</strong> est.</td><td><strong>35%</strong> XanhSM</td><td>Uber: 4% survive 1Y</td></tr>
+        <tr><td class="mono"><strong>D7</strong></td><td>40-60%</td><td><strong>85%</strong> Grab</td><td class="mono" style="color:var(--success)"><strong>~88%</strong></td><td>&mdash;</td><td>Grab Blog, eduMe</td></tr>
+        <tr><td class="mono"><strong>D14</strong></td><td>40-55%</td><td><strong>82%</strong> Uber</td><td class="mono" style="color:var(--success)"><strong>~85%</strong></td><td>&mdash;</td><td>Uber data</td></tr>
+        <tr><td class="mono"><strong>D30</strong></td><td>30-45%</td><td><strong>75%</strong> Grab</td><td class="mono" style="color:var(--success)"><strong>~78%</strong></td><td>&mdash;</td><td>Grab internal</td></tr>
+        <tr><td class="mono"><strong>D90</strong></td><td>20-35%</td><td><strong>60%</strong> Gojek</td><td class="mono" style="color:var(--danger)"><strong>~43%</strong></td><td>&mdash;</td><td>Gojek / estimates</td></tr>
+        <tr><td class="mono"><strong>D180</strong></td><td>15-25%</td><td><strong>55%</strong> Swiggy</td><td class="mono" style="color:var(--danger)"><strong>~25%</strong></td><td>&mdash;</td><td>Rest of World</td></tr>
+        <tr><td class="mono"><strong>D365</strong></td><td>8-16%</td><td><strong>~16%</strong> est.</td><td class="mono" style="color:var(--warn)"><strong>~15%</strong></td><td><strong>35%</strong> XanhSM</td><td>Uber: 4% survive 1Y</td></tr>
       </tbody>
     </table>
     <div class="insight warn"><strong>Lưu ý:</strong> XanhSM dùng <strong>hợp đồng lao động + lương cố định + BHXH</strong> &mdash; không comparable với gig. Best-in-class gig = Swiggy ~40% annual churn.</div>
 
-    <!-- Retention Funnel SVG -->
-    <svg viewBox="0 0 800 180" style="width:100%;max-width:780px;margin:16px auto 0;display:block">
-      <rect x="20" y="10" width="680" height="22" rx="4" fill="#34D399" opacity="0.7"/>
-      <text x="710" y="26" font-family="Space Mono,monospace" font-size="11" fill="#34D399" font-weight="700">85% D7</text>
-      <rect x="20" y="40" width="656" height="22" rx="4" fill="#34D399" opacity="0.55"/>
-      <text x="686" y="56" font-family="Space Mono,monospace" font-size="11" fill="#34D399" font-weight="700">82% D14</text>
-      <rect x="20" y="70" width="600" height="22" rx="4" fill="#60A5FA" opacity="0.5"/>
-      <text x="630" y="86" font-family="Space Mono,monospace" font-size="11" fill="#60A5FA" font-weight="700">75% D30</text>
-      <rect x="20" y="100" width="480" height="22" rx="4" fill="#60A5FA" opacity="0.4"/>
-      <text x="510" y="116" font-family="Space Mono,monospace" font-size="11" fill="#60A5FA" font-weight="700">60% D90</text>
-      <rect x="20" y="130" width="440" height="22" rx="4" fill="#FF7F32" opacity="0.5"/>
-      <text x="470" y="146" font-family="Space Mono,monospace" font-size="11" fill="#FBBF24" font-weight="700">55% D180</text>
-      <rect x="20" y="160" width="128" height="22" rx="4" fill="#F87171" opacity="0.45"/>
-      <text x="158" y="176" font-family="Space Mono,monospace" font-size="11" fill="#F87171" font-weight="700">~16% D365 (gig best)</text>
+    <!-- Retention Funnel SVG — Ahamove Baseline vs Target -->
+    <svg viewBox="0 0 800 220" style="width:100%;max-width:780px;margin:16px auto 0;display:block">
+      <text x="20" y="14" font-family="Montserrat,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)" font-weight="600">BASELINE AHAMOVE</text>
+      <text x="420" y="14" font-family="Montserrat,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)" font-weight="600">TARGET</text>
+      <!-- D7 -->
+      <rect x="20" y="22" width="704" height="10" rx="3" fill="#34D399" opacity="0.25"/>
+      <rect x="20" y="22" width="704" height="10" rx="3" fill="#34D399" opacity="0.55"/>
+      <rect x="20" y="34" width="736" height="10" rx="3" fill="#34D399" opacity="0.15"/><rect x="20" y="34" width="736" height="10" rx="3" fill="none" stroke="#34D399" stroke-width="0.5" stroke-dasharray="3,2" opacity="0.6"/>
+      <text x="750" y="32" font-family="Space Mono,monospace" font-size="10" fill="#34D399" font-weight="700">88%</text>
+      <text x="750" y="44" font-family="Space Mono,monospace" font-size="9" fill="#34D399" opacity="0.6">→92%</text>
+      <!-- D30 -->
+      <rect x="20" y="56" width="624" height="10" rx="3" fill="#60A5FA" opacity="0.5"/>
+      <rect x="20" y="68" width="680" height="10" rx="3" fill="none" stroke="#60A5FA" stroke-width="0.5" stroke-dasharray="3,2" opacity="0.6"/>
+      <text x="660" y="66" font-family="Space Mono,monospace" font-size="10" fill="#60A5FA" font-weight="700">78% D30</text>
+      <text x="694" y="78" font-family="Space Mono,monospace" font-size="9" fill="#60A5FA" opacity="0.6">→85%</text>
+      <!-- D60 -->
+      <rect x="20" y="90" width="416" height="10" rx="3" fill="#FBBF24" opacity="0.4"/>
+      <rect x="20" y="102" width="520" height="10" rx="3" fill="none" stroke="#FBBF24" stroke-width="0.5" stroke-dasharray="3,2" opacity="0.6"/>
+      <text x="446" y="100" font-family="Space Mono,monospace" font-size="10" fill="#FBBF24" font-weight="700">52% D60</text>
+      <text x="534" y="112" font-family="Space Mono,monospace" font-size="9" fill="#FBBF24" opacity="0.6">→65%</text>
+      <!-- D90 — Critical drop zone -->
+      <rect x="20" y="124" width="344" height="10" rx="3" fill="#F87171" opacity="0.45"/>
+      <rect x="20" y="136" width="480" height="10" rx="3" fill="none" stroke="#F87171" stroke-width="0.5" stroke-dasharray="3,2" opacity="0.6"/>
+      <text x="374" y="134" font-family="Space Mono,monospace" font-size="10" fill="#F87171" font-weight="700">43% D90</text>
+      <text x="510" y="146" font-family="Space Mono,monospace" font-size="9" fill="#F87171" opacity="0.6">→60%</text>
+      <!-- D120 -->
+      <rect x="20" y="158" width="280" height="10" rx="3" fill="#FF7F32" opacity="0.4"/>
+      <rect x="20" y="170" width="400" height="10" rx="3" fill="none" stroke="#FF7F32" stroke-width="0.5" stroke-dasharray="3,2" opacity="0.6"/>
+      <text x="310" y="168" font-family="Space Mono,monospace" font-size="10" fill="#FF7F32" font-weight="700">35% D120</text>
+      <text x="430" y="180" font-family="Space Mono,monospace" font-size="9" fill="#FF7F32" opacity="0.6">→50%</text>
+      <!-- D365 -->
+      <rect x="20" y="192" width="120" height="10" rx="3" fill="#EF4444" opacity="0.35"/>
+      <rect x="20" y="204" width="280" height="10" rx="3" fill="none" stroke="#EF4444" stroke-width="0.5" stroke-dasharray="3,2" opacity="0.6"/>
+      <text x="150" y="202" font-family="Space Mono,monospace" font-size="10" fill="#EF4444" font-weight="700">15% D365</text>
+      <text x="310" y="214" font-family="Space Mono,monospace" font-size="9" fill="#EF4444" opacity="0.6">→35%</text>
     </svg>
   </div>
 </div>
@@ -569,7 +592,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
     <div class="card-sub">Mỗi mốc = Trigger → Action → Kết quả kỳ vọng</div>
 
     <!-- SVG Timeline -->
-    <svg viewBox="0 0 900 520" style="width:100%;max-width:880px;margin:8px auto 0;display:block;font-family:Lexend,sans-serif">
+    <svg viewBox="0 0 900 520" style="width:100%;max-width:880px;margin:8px auto 0;display:block;font-family:Montserrat,sans-serif">
       <!-- Background track -->
       <line x1="80" y1="30" x2="80" y2="500" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
 
@@ -720,7 +743,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
       <div class="phase-icon" style="background:var(--info-dim);color:var(--info)">3</div>
       <div><div class="phase-name">Habit Building &mdash; Xây Dựng Thói Quen</div><div class="phase-sub">D15&mdash;D60 · "Lock In" · GIAI ĐOẠN QUAN TRỌNG NHẤT</div></div>
     </div>
-    <div class="insight danger" style="font-size:12px"><strong>Grab mất ~45% tài xế ở giai đoạn này.</strong> Lally: 66 ngày avg để hình thành thói quen.</div>
+    <div class="insight danger" style="font-size:12px"><strong>Ahamove mất ~35pp từ M+1→M+3 (78%→43%) ở giai đoạn này.</strong> Tương tự Grab (~45% churn). Lally: 66 ngày avg để hình thành thói quen &mdash; D60 là mốc quyết định.</div>
     <div class="grid-2">
       <div class="card">
         <div class="card-title" style="font-size:12px">Weekly Quest System</div>
@@ -836,15 +859,17 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
 
   <div class="card card-top-blue">
     <div class="card-title">4.1 Cohort Retention Targets</div>
-    <table><thead><tr><th>Metric</th><th>Target</th><th>Loại</th><th>Cơ sở / Alert</th></tr></thead><tbody>
-      <tr><td>D7 Retention</td><td class="mono"><strong>&ge;85%</strong></td><td><span class="badge badge-green">Benchmarked</span></td><td>Grab w/ Guarantee. Alert &lt;70%</td></tr>
-      <tr><td>D14 Retention</td><td class="mono"><strong>&ge;82%</strong></td><td><span class="badge badge-green">Benchmarked</span></td><td>Uber w/ Quest. Alert &lt;65%</td></tr>
-      <tr><td>D30 Retention</td><td class="mono"><strong>&ge;75%</strong></td><td><span class="badge badge-green">Benchmarked</span></td><td>Grab Guarantee 14d. Alert &lt;55%</td></tr>
-      <tr><td>D45 Habit</td><td class="mono"><strong>&ge;72%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Logic-based. Alert &lt;50%</td></tr>
-      <tr><td>D90 Retention</td><td class="mono"><strong>&ge;60%</strong></td><td><span class="badge badge-green">Benchmarked</span></td><td>Gojek GoPartner. Alert &lt;40%</td></tr>
-      <tr><td>D120 Survival</td><td class="mono"><strong>&ge;55%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Swiggy 55% tại <strong>D180</strong>. Alert &lt;35%</td></tr>
-      <tr><td>D365 Champion</td><td class="mono"><strong>&ge;35%</strong></td><td><span class="badge badge-red">Stretch</span></td><td>Gig best ~16%. Alert &lt;18%</td></tr>
+    <table><thead><tr><th>Metric</th><th>Baseline Ahamove</th><th>Target</th><th>Loại</th><th>Cơ sở / Alert</th></tr></thead><tbody>
+      <tr><td>D7 Retention</td><td class="mono" style="color:var(--text-muted)">~88%</td><td class="mono"><strong>&ge;92%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Proxy NIM Conv tuần 1. Alert &lt;80%</td></tr>
+      <tr><td>D14 Retention</td><td class="mono" style="color:var(--text-muted)">~85%</td><td class="mono"><strong>&ge;90%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Proxy NIM Conv tuần 2. Alert &lt;78%</td></tr>
+      <tr><td>D30 Retention (M+1)</td><td class="mono" style="color:var(--success)">~78%</td><td class="mono"><strong>&ge;85%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>NIM&rarr;NLM Conv. HAN 81% / SGN 76%. Alert &lt;72%</td></tr>
+      <tr><td>D45 Habit</td><td class="mono" style="color:var(--text-muted)">~60%</td><td class="mono"><strong>&ge;70%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Nội suy M+1 &rarr; M+2. Alert &lt;55%</td></tr>
+      <tr><td>D60 Lock In (M+2)</td><td class="mono" style="color:var(--warn)">~52%</td><td class="mono"><strong>&ge;65%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Mốc hình thành thói quen (Lally). Alert &lt;45%</td></tr>
+      <tr><td>D90 Retention (M+3)</td><td class="mono" style="color:var(--danger)">~43%</td><td class="mono"><strong>&ge;60%</strong></td><td><span class="badge badge-red">Stretch</span></td><td>Gojek GoPartner 60%. Best HAN cohorts 48-56%. Alert &lt;38%</td></tr>
+      <tr><td>D120 Survival (M+4)</td><td class="mono" style="color:var(--danger)">~35%</td><td class="mono"><strong>&ge;50%</strong></td><td><span class="badge badge-red">Stretch</span></td><td>Swiggy 55% tại D180. Gap = +15pp. Alert &lt;30%</td></tr>
+      <tr><td>D365 Champion (M+12)</td><td class="mono" style="color:var(--danger)">~15%</td><td class="mono"><strong>&ge;35%</strong></td><td><span class="badge badge-red">Stretch</span></td><td>Gig best ~16%. XanhSM salary model ~35%. Alert &lt;12%</td></tr>
     </tbody></table>
+    <div class="insight blue" style="font-size:11px;margin-top:8px"><strong>Nguồn:</strong> NIM&rarr;NLM conversion rate (Jan 2024 &ndash; Apr 2026, 15 cohorts). D7/D14/D45/D60 nội suy từ monthly grain. Vùng đỏ D90&ndash;D120 = khoảng rơi retention lớn nhất &mdash; ưu tiên can thiệp Phase 3 Lock In.</div>
   </div>
 
   <div class="card">
@@ -973,7 +998,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
   <div class="card card-top-orange">
     <div class="card-title">6.2 Value Realization</div>
     <table><thead><tr><th>Hiện trạng</th><th>Chuyển đổi</th><th>Impact</th><th>Loại</th></tr></thead><tbody>
-      <tr><td>TX mới không hướng dẫn &rarr; 45% churn D30</td><td>6-Phase + Guarantee 30D</td><td>D30 ret 75%</td><td><span class="badge badge-green">Benchmarked</span></td></tr>
+      <tr><td>TX mới không hướng dẫn &rarr; M+1→M+3 rơi 35pp</td><td>6-Phase + Guarantee 30D + Lock In 60D</td><td>D30 ret &ge;85% · D90 &ge;60%</td><td><span class="badge badge-orange">Aspirational</span></td></tr>
       <tr><td>Chỉ 1 dịch vụ &rarr; EPH thấp</td><td>Multi-Service Unlock</td><td>+19pp retention</td><td><span class="badge badge-green">Benchmarked</span></td></tr>
       <tr><td>Không BH &rarr; thua XanhSM</td><td>Tiered Insurance</td><td>D180 +42%</td><td><span class="badge badge-green">Benchmarked</span></td></tr>
       <tr><td>Không phân biệt TX mới/cũ</td><td>Segment-Based Ops</td><td>+40% Active</td><td><span class="badge badge-orange">Aspirational</span></td></tr>
