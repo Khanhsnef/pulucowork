@@ -1343,6 +1343,137 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
       <strong style="color:var(--orange)">Logic &ldquo;Cohort T&#7889;t Nghi&#7879;p&rdquo;</strong> &mdash; M&#7851;u s&#7889; = TX ch&#7841;m &#273;&uacute;ng milestone trong th&aacute;ng (v&iacute; d&#7909;: D60 th&aacute;ng 8 = TX c&oacute; DFD t&#7915; 3/6&rarr;2/7). M&#7895;i TX xu&#7845;t hi&#7879;n &#273;&uacute;ng 1 l&#7847;n, kh&ocirc;ng tr&ugrave;ng, kh&ocirc;ng thi&#7871;u. Graduation l&#7845;y tr&#7921;c ti&#7871;p t&#7915; ranking system ch&#7889;t &#273;&#7847;u th&aacute;ng &mdash; kh&ocirc;ng t&#7921; t&iacute;nh.
     </div>
   </div>
+
+  <!-- 5.6 Weekly Health Dashboard -->
+  <div class="card card-top-blue" style="margin-top:12px">
+    <div class="card-title">&#x1F4CA; 5.6 Weekly Health Dashboard &mdash; PIC: Nhi</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px">B&aacute;o c&aacute;o h&agrave;ng tu&#7847;n: &#273;o s&#7913;c kh&#7887;e TX m&#7899;i theo 4 m&#7889;c D3 / D7 / D14 / D21. M&#7851;u s&#7889; = TX ch&#7841;m m&#7889;c trong tu&#7847;n &#273;&oacute;.</div>
+
+    <!-- Concept Explanation -->
+    <div style="background:var(--info-dim);border:1px solid rgba(96,165,250,0.15);border-radius:10px;padding:14px 16px;margin-bottom:14px;font-size:11.5px;color:var(--text-secondary)">
+      <strong style="color:var(--info)">C&aacute;ch t&iacute;nh: &ldquo;Ai ch&#7841;m m&#7889;c tu&#7847;n n&agrave;y?&rdquo;</strong>
+      <div style="margin-top:8px">V&iacute; d&#7909; tu&#7847;n 5&ndash;11/8/2026:</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px">
+        <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-weight:700;color:var(--text-primary)">D3</div>
+          <div style="font-size:10px;color:var(--text-muted);margin:4px 0">DFD t&#7915; <strong>2/8 &rarr; 8/8</strong></div>
+          <div style="font-size:10px;color:var(--text-muted)">&#273;&#7875; D3 r&#417;i v&agrave;o 5&ndash;11/8</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-weight:700;color:var(--text-primary)">D7</div>
+          <div style="font-size:10px;color:var(--text-muted);margin:4px 0">DFD t&#7915; <strong>29/7 &rarr; 4/8</strong></div>
+          <div style="font-size:10px;color:var(--text-muted)">&#273;&#7875; D7 r&#417;i v&agrave;o 5&ndash;11/8</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-weight:700;color:var(--text-primary)">D14</div>
+          <div style="font-size:10px;color:var(--text-muted);margin:4px 0">DFD t&#7915; <strong>22/7 &rarr; 28/7</strong></div>
+          <div style="font-size:10px;color:var(--text-muted)">&#273;&#7875; D14 r&#417;i v&agrave;o 5&ndash;11/8</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-weight:700;color:var(--text-primary)">D21</div>
+          <div style="font-size:10px;color:var(--text-muted);margin:4px 0">DFD t&#7915; <strong>15/7 &rarr; 21/7</strong></div>
+          <div style="font-size:10px;color:var(--text-muted)">&#273;&#7875; D21 r&#417;i v&agrave;o 5&ndash;11/8</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metric Definition -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:8px">&#272;&#7883;nh ngh&#297;a Metric m&#7895;i m&#7889;c</div>
+    <table><thead><tr><th>Milestone</th><th>Retention = ?</th><th>Target</th><th>At-Risk = ?</th><th>&#221; ngh&#297;a</th></tr></thead><tbody>
+      <tr><td style="font-weight:700;color:var(--success)">D3</td><td>C&oacute; &ge;2 &#273;&#417;n trong 3 ng&agrave;y &#273;&#7847;u</td><td class="mono" style="font-weight:700">&ge;95%</td><td>0 &#273;&#417;n sau DFD</td><td>TX c&oacute; quay l&#7841;i sau &#273;&#417;n &#273;&#7847;u ti&ecirc;n?</td></tr>
+      <tr><td style="font-weight:700;color:var(--success)">D7</td><td>C&oacute; &ge;1 &#273;&#417;n trong 3 ng&agrave;y g&#7847;n nh&#7845;t (D5&ndash;D7)</td><td class="mono" style="font-weight:700">&ge;90%</td><td>Inactive &ge;3 ng&agrave;y</td><td>TX c&ograve;n online sau tu&#7847;n 1?</td></tr>
+      <tr><td style="font-weight:700;color:var(--info)">D14</td><td>C&oacute; &ge;1 &#273;&#417;n trong 3 ng&agrave;y g&#7847;n nh&#7845;t (D12&ndash;D14)</td><td class="mono" style="font-weight:700">&ge;88%</td><td>Inactive &ge;5 ng&agrave;y</td><td>V&#432;&#7907;t qua &ldquo;tu&#7847;n ch&aacute;n n&#7843;n&rdquo;?</td></tr>
+      <tr><td style="font-weight:700;color:var(--orange)">D21</td><td>C&oacute; &ge;1 &#273;&#417;n trong 5 ng&agrave;y g&#7847;n nh&#7845;t (D17&ndash;D21)</td><td class="mono" style="font-weight:700">&ge;85%</td><td>Inactive &ge;7 ng&agrave;y</td><td>B&#7855;t &#273;&#7847;u h&igrave;nh th&agrave;nh th&oacute;i quen?</td></tr>
+    </tbody></table>
+
+    <!-- Example Weekly Report -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin:16px 0 8px">V&iacute; d&#7909;: Weekly Report tu&#7847;n 5&ndash;11/8/2026</div>
+
+    <!-- 4 Milestone Cards -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
+      <div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.15);border-radius:12px;padding:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="mono" style="font-size:20px;font-weight:800;color:var(--success)">D3</div>
+          <div class="mono" style="font-size:18px;font-weight:800;color:var(--success)">93%</div>
+        </div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:6px">45 TX ch&#7841;m m&#7889;c &rarr; 42 c&ograve;n active</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Avg: 3.1 &#273;&#417;n/TX</div>
+        <div style="font-size:10px;color:var(--warn);margin-top:4px;font-weight:600">&#x26A0; 3 TX at-risk (0 &#273;&#417;n)</div>
+      </div>
+      <div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.15);border-radius:12px;padding:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="mono" style="font-size:20px;font-weight:800;color:var(--success)">D7</div>
+          <div class="mono" style="font-size:18px;font-weight:800;color:var(--warn)">87%</div>
+        </div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:6px">38 TX ch&#7841;m m&#7889;c &rarr; 33 c&ograve;n active</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Avg: 7.5 &#273;&#417;n/TX</div>
+        <div style="font-size:10px;color:var(--danger);margin-top:4px;font-weight:600">&#x1F534; 5 TX at-risk &mdash; d&#432;&#7899;i target 90%</div>
+      </div>
+      <div style="background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.15);border-radius:12px;padding:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="mono" style="font-size:20px;font-weight:800;color:var(--info)">D14</div>
+          <div class="mono" style="font-size:18px;font-weight:800;color:var(--success)">88%</div>
+        </div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:6px">41 TX ch&#7841;m m&#7889;c &rarr; 36 c&ograve;n active</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Avg: 16 &#273;&#417;n/TX</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:4px">&#x2705; &#272;&#7841;t target</div>
+      </div>
+      <div style="background:rgba(255,127,50,0.06);border:1px solid rgba(255,127,50,0.15);border-radius:12px;padding:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="mono" style="font-size:20px;font-weight:800;color:var(--orange)">D21</div>
+          <div class="mono" style="font-size:18px;font-weight:800;color:var(--warn)">81%</div>
+        </div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:6px">36 TX ch&#7841;m m&#7889;c &rarr; 29 c&ograve;n active</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Avg: 22 &#273;&#417;n/TX</div>
+        <div style="font-size:10px;color:var(--danger);margin-top:4px;font-weight:600">&#x1F534; 7 TX at-risk &mdash; d&#432;&#7899;i target 85%</div>
+      </div>
+    </div>
+
+    <!-- Trend Row -->
+    <div style="background:var(--bg-card-alt);border:1px solid var(--border-card);border-radius:10px;padding:12px 16px;margin-bottom:12px">
+      <div style="font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:6px">Trend vs tu&#7847;n tr&#432;&#7899;c</div>
+      <div style="display:flex;gap:20px;font-size:12px">
+        <span>D3 <span class="mono" style="font-weight:700;color:var(--text-muted)">93% (=)</span></span>
+        <span>D7 <span class="mono" style="font-weight:700;color:var(--danger)">87% (&minus;2pp &#x26A0;)</span></span>
+        <span>D14 <span class="mono" style="font-weight:700;color:var(--success)">88% (+1pp)</span></span>
+        <span>D21 <span class="mono" style="font-weight:700;color:var(--danger)">81% (&minus;3pp &#x26A0;)</span></span>
+      </div>
+    </div>
+
+    <!-- Worked Example: How to calculate D7 -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin:16px 0 8px">V&iacute; d&#7909; c&#7909; th&#7875;: T&iacute;nh D7 Retention tu&#7847;n 5&ndash;11/8</div>
+    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-card);border-radius:10px;padding:16px;font-size:11.5px;color:var(--text-secondary)">
+      <div><strong style="color:var(--text-primary)">B&#432;&#7899;c 1:</strong> X&aacute;c &#273;&#7883;nh m&#7851;u s&#7889;</div>
+      <div style="margin:4px 0 0 12px;color:var(--text-muted)">TX ch&#7841;m D7 trong tu&#7847;n 5&ndash;11/8 = TX c&oacute; DFD t&#7915; 29/7 &rarr; 4/8</div>
+      <div style="margin:2px 0 0 12px;color:var(--text-muted)">T&igrave;m &#273;&#432;&#7907;c <strong style="color:var(--text-primary)">38 TX</strong></div>
+
+      <div style="margin-top:10px"><strong style="color:var(--text-primary)">B&#432;&#7899;c 2:</strong> Check active t&#7841;i ng&agrave;y D7</div>
+      <div style="margin:4px 0 0 12px;color:var(--text-muted)">V&#7899;i m&#7895;i TX: c&oacute; &ge;1 &#273;&#417;n ho&agrave;n th&agrave;nh trong 3 ng&agrave;y g&#7847;n nh&#7845;t (D5&ndash;D7)?</div>
+      <div style="margin:2px 0 0 12px;color:var(--text-muted)">V&iacute; d&#7909;: TX Minh (DFD 1/8) &rarr; D7 = 8/8 &rarr; check &#273;&#417;n t&#7915; 6&ndash;8/8 &rarr; c&oacute; 2 &#273;&#417;n &rarr; <span style="color:var(--success);font-weight:600">&#x2705; Active</span></div>
+      <div style="margin:2px 0 0 12px;color:var(--text-muted)">V&iacute; d&#7909;: TX H&#432;ng (DFD 30/7) &rarr; D7 = 6/8 &rarr; check &#273;&#417;n t&#7915; 4&ndash;6/8 &rarr; 0 &#273;&#417;n &rarr; <span style="color:var(--danger);font-weight:600">&#x1F534; At-risk</span></div>
+
+      <div style="margin-top:10px"><strong style="color:var(--text-primary)">B&#432;&#7899;c 3:</strong> T&iacute;nh</div>
+      <div style="margin:4px 0 0 12px">
+        <span class="mono" style="font-size:13px;font-weight:700;color:var(--info)">D7 Retention = 33 / 38 = 87%</span>
+        <span style="margin-left:8px;font-size:10px;color:var(--danger);font-weight:600">&lt; target 90% &#x26A0;</span>
+      </div>
+      <div style="margin:2px 0 0 12px;color:var(--text-muted)">At-risk list: 5 TX &rarr; Nhi g&#7885;i &#273;i&#7879;n / push notification rescue ngay</div>
+    </div>
+
+    <!-- Action Protocol -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin:16px 0 8px">Nhi l&agrave;m g&igrave; khi ch&#7881; s&#7889; d&#432;&#7899;i target?</div>
+    <table><thead><tr><th>Milestone</th><th>D&#432;&#7899;i target</th><th>H&agrave;nh &#273;&#7897;ng ngay</th></tr></thead><tbody>
+      <tr><td style="font-weight:700;color:var(--success)">D3 &lt;95%</td><td>TX kh&ocirc;ng quay l&#7841;i sau &#273;&#417;n &#273;&#7847;u</td><td>Push notification + SMS nh&#7855;c nh&#7903; trong 24h</td></tr>
+      <tr><td style="font-weight:700;color:var(--success)">D7 &lt;90%</td><td>M&#7845;t TX s&#7899;m tu&#7847;n 1</td><td>&#x1F4DE; G&#7885;i &#273;i&#7879;n tr&#7921;c ti&#7871;p + Bonus &#273;&#417;n ti&#7871;p theo</td></tr>
+      <tr><td style="font-weight:700;color:var(--info)">D14 &lt;88%</td><td>TX b&#7887; qua &ldquo;tu&#7847;n ch&aacute;n n&#7843;n&rdquo;</td><td>Zalo c&aacute; nh&acirc;n h&oacute;a + Quest nh&#7887; (5 &#273;&#417;n = th&#432;&#7903;ng)</td></tr>
+      <tr><td style="font-weight:700;color:var(--orange)">D21 &lt;85%</td><td>Ch&#432;a h&igrave;nh th&agrave;nh th&oacute;i quen</td><td>Buddy call + Review l&#7897; tr&igrave;nh &#273;&#7841;t R3</td></tr>
+    </tbody></table>
+
+    <!-- Summary Box -->
+    <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:12px 16px;margin-top:12px;font-size:11px;color:var(--text-secondary)">
+      <strong style="color:var(--info)">T&#7893;ng k&#7871;t</strong> &mdash; Weekly = &#273;o s&#7913;c kh&#7887;e s&#7899;m &#273;&#7875; can thi&#7879;p. Monthly = &#273;o KPI &#273;&aacute;nh gi&aacute; hi&#7879;u qu&#7843;. 4 m&#7889;c D3/D7/D14/D21 l&agrave; leading indicators cho D30/D60 Retention v&agrave; Graduation Rate.
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
