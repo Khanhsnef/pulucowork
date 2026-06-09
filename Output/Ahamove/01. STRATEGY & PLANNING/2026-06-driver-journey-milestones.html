@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driver Journey & Milestone Framework v4.0 — Ahamove</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:        #0E4174;
+  --blue-light:  #1a5fa8;
+  --blue-pale:   #EFF6FF;
+  --orange:      #FF7F32;
+  --orange-pale: #FFF4ED;
+  --success:     #10B981;
+  --success-pale:#ECFDF5;
+  --danger:      #EF4444;
+  --danger-pale: #FEF2F2;
+  --warn:        #F59E0B;
+  --warn-pale:   #FFFBEB;
+  --info:        #3B82F6;
+  --info-pale:   #EFF6FF;
+  --purple:      #8B5CF6;
+  --purple-pale: #F5F3FF;
+  --gray-50:  #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --white:    #FFFFFF;
+  --diamond:  #7C3AED;
+  --diamond-pale: #F5F3FF;
+  --gold:     #D97706;
+  --gold-pale:#FFFBEB;
+  --silver:   #6B7280;
+  --silver-pale:#F3F4F6;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Lexend', sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-800);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.mono { font-family: 'Space Mono', monospace; }
+
+/* HEADER */
+.report-header {
+  background: var(--blue);
+  padding: 32px 40px 28px;
+  color: white;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.report-header h1 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.report-header .subtitle {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  margin-top: 6px;
+  line-height: 1.6;
+}
+.report-header .meta {
+  text-align: right;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+.header-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.header-badge.outline {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.85);
+}
+.header-badge.orange {
+  background: var(--orange);
+  color: white;
+}
+.header-accent {
+  height: 3px;
+  background: linear-gradient(90deg, var(--orange) 0%, rgba(255,127,50,0.3) 60%, transparent 100%);
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 32px 64px;
+}
+
+/* SECTION */
+.section { margin-bottom: 48px; }
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--gray-200);
+}
+.section-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--blue);
+  background: var(--blue-pale);
+  border: 1px solid rgba(14,65,116,0.15);
+  border-radius: 4px;
+  padding: 2px 8px;
+  letter-spacing: 0.5px;
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray-800);
+}
+.section-title span {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--gray-400);
+  margin-left: 8px;
+}
+
+/* SUBSECTION */
+.subsection {
+  margin-bottom: 28px;
+}
+.subsection-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.subsection-title .sub-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--gray-400);
+  background: var(--gray-100);
+  border-radius: 3px;
+  padding: 1px 6px;
+}
+
+/* KPI STRIP */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 16px;
+  padding: 16px 18px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 0 0 16px 16px;
+}
+.kpi-blue::after   { background: var(--blue); }
+.kpi-orange::after { background: var(--orange); }
+.kpi-green::after  { background: var(--success); }
+.kpi-red::after    { background: var(--danger); }
+.kpi-purple::after { background: var(--purple); }
+.kpi-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gray-800);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.kpi-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  margin-top: 6px;
+}
+.delta-up     { background: var(--success-pale); color: var(--success); }
+.delta-down   { background: var(--danger-pale);  color: var(--danger); }
+.delta-warn   { background: var(--warn-pale);    color: var(--warn); }
+
+/* CARD */
+.card {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 4px;
+}
+.card-sub {
+  font-size: 10.5px;
+  color: var(--gray-400);
+  margin-bottom: 14px;
+}
+.card-top-blue   { border-top: 3px solid var(--blue); }
+.card-top-orange { border-top: 3px solid var(--orange); }
+.card-top-green  { border-top: 3px solid var(--success); }
+.card-top-red    { border-top: 3px solid var(--danger); }
+.card-top-purple { border-top: 3px solid var(--purple); }
+
+/* INSIGHT */
+.insight {
+  border-left: 3px solid var(--info);
+  background: var(--info-pale);
+  border-radius: 0 10px 10px 0;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.insight.ok     { border-left-color: var(--success); background: var(--success-pale); }
+.insight.warn   { border-left-color: var(--warn);    background: var(--warn-pale); }
+.insight.danger { border-left-color: var(--danger);  background: var(--danger-pale); }
+.insight.blue   { border-left-color: var(--blue);    background: var(--blue-pale); }
+.insight.orange { border-left-color: var(--orange);  background: var(--orange-pale); }
+.insight.purple { border-left-color: var(--purple);  background: var(--purple-pale); }
+.insight strong { font-weight: 700; color: var(--gray-800); }
+.insight p { margin-top: 4px; font-size: 12px; color: var(--gray-600); }
+
+/* TABLE */
+.table-wrap {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.table-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.table-header .title { font-size: 13px; font-weight: 700; color: var(--blue); }
+.table-header .note  { font-size: 10.5px; color: var(--gray-400); }
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+table.data th {
+  padding: 9px 14px;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-400);
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-100);
+  text-align: left;
+  white-space: nowrap;
+}
+table.data th.right { text-align: right; }
+table.data th.center { text-align: center; }
+table.data td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+}
+table.data tr:last-child td { border-bottom: none; }
+table.data td.right { text-align: right; }
+table.data td.center { text-align: center; }
+table.data td.mono  { font-family: 'Space Mono', monospace; font-size: 11px; }
+table.data .row-group td {
+  background: var(--gray-50);
+  font-weight: 700;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-500);
+}
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.badge-red    { background: #FEE2E2; color: #B91C1C; }
+.badge-orange { background: #FEF3C7; color: #B45309; }
+.badge-green  { background: #D1FAE5; color: #065F46; }
+.badge-blue   { background: #DBEAFE; color: #1D4ED8; }
+.badge-purple { background: #EDE9FE; color: #6D28D9; }
+.badge-gray   { background: var(--gray-100); color: var(--gray-600); }
+
+/* PROGRESS BAR */
+.prog-row { margin-bottom: 10px; }
+.prog-label-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 11.5px;
+}
+.prog-name { font-weight: 600; color: var(--gray-700); }
+.prog-val  { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--gray-600); }
+.prog-track {
+  height: 8px;
+  background: var(--gray-100);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+.prog-blue   .prog-fill { background: var(--blue); }
+.prog-orange .prog-fill { background: var(--orange); }
+.prog-green  .prog-fill { background: var(--success); }
+.prog-red    .prog-fill { background: var(--danger); }
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+.grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 14px; }
+.mb-4  { margin-bottom: 16px; }
+.mb-6  { margin-bottom: 24px; }
+.mb-10 { margin-bottom: 40px; }
+
+/* PHASE BANNER */
+.phase-banner {
+  border-radius: 20px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.phase-banner .phase-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.phase-banner .phase-info { flex: 1; }
+.phase-banner .phase-name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+.phase-banner .phase-detail {
+  font-size: 12px;
+  opacity: 0.75;
+}
+.phase-banner .phase-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.phase-1 { background: linear-gradient(135deg, #FFF7ED 0%, #FEF3C7 100%); color: #92400E; }
+.phase-1 .phase-icon { background: #FDE68A; }
+.phase-1 .phase-tag { background: rgba(146,64,14,0.12); color: #92400E; }
+.phase-2 { background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); color: #1E40AF; }
+.phase-2 .phase-icon { background: #BFDBFE; }
+.phase-2 .phase-tag { background: rgba(30,64,175,0.12); color: #1E40AF; }
+.phase-3 { background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%); color: #5B21B6; }
+.phase-3 .phase-icon { background: #DDD6FE; }
+.phase-3 .phase-tag { background: rgba(91,33,182,0.12); color: #5B21B6; }
+.phase-4 { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); color: #065F46; }
+.phase-4 .phase-icon { background: #A7F3D0; }
+.phase-4 .phase-tag { background: rgba(6,95,70,0.12); color: #065F46; }
+.phase-5 { background: linear-gradient(135deg, #FFF4ED 0%, #FED7AA 100%); color: #9A3412; }
+.phase-5 .phase-icon { background: #FDBA74; }
+.phase-5 .phase-tag { background: rgba(154,52,18,0.12); color: #9A3412; }
+
+/* TENSION ROW */
+.tension-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 18px;
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 14px;
+  margin-bottom: 10px;
+}
+.tension-id {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--white);
+  background: var(--blue);
+  border-radius: 6px;
+  padding: 2px 8px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.tension-body { flex: 1; }
+.tension-title { font-weight: 700; font-size: 13px; color: var(--gray-800); margin-bottom: 4px; }
+.tension-desc { font-size: 12px; color: var(--gray-500); line-height: 1.6; }
+.severity-critical { background: var(--danger); }
+.severity-high { background: var(--warn); }
+.severity-medium { background: var(--gray-400); }
+
+/* MILESTONE ROW */
+.milestone-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.milestone-row:last-child { border-bottom: none; }
+.milestone-id {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-top: 2px;
+}
+.milestone-body { flex: 1; }
+.milestone-name { font-weight: 700; font-size: 12.5px; color: var(--gray-800); }
+.milestone-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--gray-400);
+  flex-wrap: wrap;
+}
+.milestone-meta strong { color: var(--gray-600); font-weight: 600; }
+.milestone-desc { font-size: 12px; color: var(--gray-500); margin-top: 4px; line-height: 1.55; }
+
+/* MECHANISM BOX */
+.mech-box {
+  background: var(--gray-50);
+  border: 1px dashed var(--gray-200);
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 14px;
+}
+.mech-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mech-item {
+  margin-bottom: 10px;
+  padding-left: 14px;
+  border-left: 2px solid var(--gray-200);
+}
+.mech-item-title {
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--gray-700);
+  margin-bottom: 2px;
+}
+.mech-item-desc {
+  font-size: 11.5px;
+  color: var(--gray-500);
+  line-height: 1.55;
+}
+
+/* JOURNEY SVG */
+.journey-visual {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+/* FOOTER */
+.report-footer {
+  margin-top: 48px;
+  padding: 14px 0 6px;
+  border-top: 1px solid var(--gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10.5px;
+  color: var(--gray-400);
+}
+.report-footer strong { color: var(--gray-500); }
+
+@media (max-width: 900px) {
+  .grid-2, .grid-3, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr; }
+  .kpi-strip { grid-template-columns: 1fr 1fr; }
+  .report-header { flex-direction: column; align-items: flex-start; }
+  .phase-banner { flex-direction: column; gap: 12px; }
+}
+@media print {
+  body { font-size: 11px; }
+  .container { padding: 16px; }
+  .section { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="report-header">
+  <div>
+    <h1>Driver Journey & Milestone Framework v4.0</h1>
+    <div class="subtitle">
+      Hành Trình Tài Xế 5 Phase &mdash; Gắn Chặt Ranking Params v2.0<br>
+      Benchmark: 15+ nền tảng toàn cầu &middot; Behavioral Science Foundation
+    </div>
+  </div>
+  <div class="meta">
+    <span class="header-badge orange">v4.0</span>
+    <span class="header-badge outline">02/06/2026</span>
+    <span class="header-badge outline">Driver Management</span>
+  </div>
+</div>
+<div class="header-accent"></div>
+
+<div class="container">
+
+<!-- ═══ SECTION 1: TENSIONS & GAPS ═══ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Đối Chiếu: Ranking Params vs Lifecycle <span>Tensions & Gaps</span></h2>
+  </div>
+
+  <!-- 1.1 Ranking Params -->
+  <div class="subsection">
+    <div class="subsection-title"><span class="sub-num">1.1</span> Ranking Params Hiện Tại</div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <span class="title">Ranking Tiers & Benefits</span>
+        <span class="note">Fleet Target: R1 15% &middot; R2 35% &middot; R3 35% &middot; Unranked 15%</span>
+      </div>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Rank</th><th>DQS</th><th>DCR</th><th>Prod (stp/tháng)</th><th>Layer</th><th>EPH SGN</th><th>EPH HAN</th><th>Full-day Guarantee</th><th>AhaPoints</th><th>Voucher xăng</th><th>BH</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-purple">R1 Kim Cương</span></td>
+            <td class="mono">&ge; 80</td><td class="mono">&le; 10%</td><td class="mono">&ge; 280</td>
+            <td>L2 Minizone</td><td class="mono">65k/h</td><td class="mono">70k/h</td>
+            <td class="mono">600-650k/d</td><td class="mono">&times;1.5 +30</td><td class="mono">50k</td><td>Mini (pts)</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-orange">R2 Vàng</span></td>
+            <td class="mono">&ge; 75</td><td class="mono">&le; 10%</td><td class="mono">&ge; 210</td>
+            <td>L3 Mediumzone</td><td class="mono">60k/h</td><td class="mono">65k/h</td>
+            <td class="mono">550-600k/d</td><td class="mono">&times;1.3 +25</td><td class="mono">30k</td><td>&mdash;</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-gray">R3 Bạc</span></td>
+            <td class="mono">&ge; 75</td><td class="mono">&le; 15%</td><td class="mono">&ge; 70</td>
+            <td>L4 Bigzone</td><td class="mono">55k/h</td><td class="mono">60k/h</td>
+            <td>&mdash;</td><td class="mono">&times;1.1 +20</td><td>&mdash;</td><td>&mdash;</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">Unranked</span></td>
+            <td class="mono">&lt; 75</td><td>&mdash;</td><td>&mdash;</td>
+            <td>L6 MASS</td><td>&mdash;</td><td>&mdash;</td>
+            <td>&mdash;</td><td class="mono">&times;1.0</td><td>&mdash;</td><td>&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 1.2 Quy đổi -->
+  <div class="subsection">
+    <div class="subsection-title"><span class="sub-num">1.2</span> Quy Đổi Productivity Sang Hành Vi Hàng Ngày</div>
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr><th>Rank</th><th>stp/tháng</th><th>&divide; 22 ngày</th><th>&divide; 26 ngày</th><th>Ý nghĩa</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-gray">R3</span></td>
+            <td class="mono">&ge; 70</td><td class="mono">~3.2 stp/ngày</td><td class="mono">~2.7 stp/ngày</td>
+            <td>Part-time khả thi &mdash; 4-5 đơn/ngày &times; 4-5 ngày/tuần</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-orange">R2</span></td>
+            <td class="mono">&ge; 210</td><td class="mono">~9.5 stp/ngày</td><td class="mono">~8.1 stp/ngày</td>
+            <td>Full-time commitment &mdash; ~10 đơn/ngày &times; 5-6 ngày/tuần</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-purple">R1</span></td>
+            <td class="mono">&ge; 280</td><td class="mono">~12.7 stp/ngày</td><td class="mono">~10.8 stp/ngày</td>
+            <td>Chuyên nghiệp &mdash; ca full-day ~13 đơn/ngày &times; 5-6 ngày</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="insight warn">
+      <strong>Khoảng cách R3 &rarr; R2 rất lớn (70 &rarr; 210 = gấp 3x).</strong>
+      <p>Đây là "death zone" &mdash; nơi nhiều tài xế sẽ mắc kẹt ở R3 và không thấy đường lên R2. Framework lifecycle cần thiết kế cụ thể cách "leo qua vực" này.</p>
+    </div>
+  </div>
+
+  <!-- 1.3 Tensions -->
+  <div class="subsection">
+    <div class="subsection-title"><span class="sub-num">1.3</span> 5 Tensions Chính Khi Đối Chiếu</div>
+
+    <div class="tension-card">
+      <span class="tension-id severity-critical">T1</span>
+      <div class="tension-body">
+        <div class="tension-title">"New Unranked" = "Bad Unranked" <span class="badge badge-red">CRITICAL</span></div>
+        <div class="tension-desc">Hệ thống hiện tại không phân biệt tài xế mới đăng ký (chưa có data) với tài xế rớt hạng (performance kém). Cả hai đều ở L6 MASS, không có benefits. Tài xế mới bị "phạt" trước khi có cơ hội chứng minh.</div>
+      </div>
+    </div>
+    <div class="tension-card">
+      <span class="tension-id severity-critical">T2</span>
+      <div class="tension-body">
+        <div class="tension-title">Vực R3 &rarr; R2 (70 &rarr; 210 stp) <span class="badge badge-red">CRITICAL</span></div>
+        <div class="tension-desc">Gấp 3x productivity. Tài xế R3 part-time (~3 stp/ngày) phải nhảy sang full-time (~10 stp/ngày) để lên R2. Không có bậc trung gian.</div>
+      </div>
+    </div>
+    <div class="tension-card">
+      <span class="tension-id severity-high">T3</span>
+      <div class="tension-body">
+        <div class="tension-title">BH chỉ cho R1, trả bằng points <span class="badge badge-orange">HIGH</span></div>
+        <div class="tension-desc">Nghiên cứu (Swiggy, Deliveroo, XanhSM) cho thấy BH là moat retention mạnh nhất. Hiện tại chỉ R1 được BH mini, phải dùng points. Bỏ lỡ cơ hội tạo switching cost cho R3/R2.</div>
+      </div>
+    </div>
+    <div class="tension-card">
+      <span class="tension-id severity-high">T4</span>
+      <div class="tension-body">
+        <div class="tension-title">Không có Guarantee cho tài xế mới <span class="badge badge-orange">HIGH</span></div>
+        <div class="tension-desc">Full-day guarantee chỉ R1+R2. Tài xế mới (Unranked) không có safety net nào. Benchmark: Grab guarantee 14 ngày &rarr; D30 retention +32%.</div>
+      </div>
+    </div>
+    <div class="tension-card">
+      <span class="tension-id severity-medium">T5</span>
+      <div class="tension-body">
+        <div class="tension-title">Points expire cuối quý <span class="badge badge-gray">MEDIUM</span></div>
+        <div class="tension-desc">Tài xế mới đăng ký gần cuối quý sẽ mất points trước khi tích đủ. Tạo unfairness cảm nhận.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 2: 5 PHASE OVERVIEW ═══ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Đề Xuất: 5 Phase Driver Journey <span>Thiết kế lại</span></h2>
+  </div>
+
+  <!-- 2.1 Tại sao 5 Phase -->
+  <div class="subsection">
+    <div class="subsection-title"><span class="sub-num">2.1</span> Tại Sao 5 Phase Thay Vì 6?</div>
+    <div class="card">
+      <div class="card-title">Gộp Phase 1 + Phase 2 cũ thành 1 phase duy nhất</div>
+      <div style="display:grid; grid-template-columns: auto 1fr; gap: 8px 12px; font-size: 12px; color: var(--gray-600); margin-top:10px;">
+        <span class="badge badge-blue">1</span><span>Ranking params không có trạng thái trung gian giữa "vừa đăng ký" và "chưa xếp hạng" &mdash; cả hai đều Unranked/L6</span>
+        <span class="badge badge-blue">2</span><span>Mốc D3 quá ngắn để đo lường có ý nghĩa. Grab dùng 14 ngày, Uber dùng 30 ngày, DoorDash dùng 50 đơn</span>
+        <span class="badge badge-blue">3</span><span>Mục tiêu hành vi D0-D14 là một khối liên tục: Kích hoạt &rarr; Tạo thói quen ban đầu &rarr; Chứng minh thu nhập</span>
+        <span class="badge badge-blue">4</span><span>Gộp lại cho phép "Protected Window" 14 ngày mạch lạc &mdash; tương đương Grab Guarantee 14 ngày</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.2 Journey Visual -->
+  <div class="subsection">
+    <div class="subsection-title"><span class="sub-num">2.2</span> Framework 5 Phase &mdash; Tổng Quan</div>
+    <div class="journey-visual">
+      <svg viewBox="0 0 1140 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <!-- Phase blocks -->
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#FBBF24"/></linearGradient>
+          <linearGradient id="g2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#BFDBFE"/><stop offset="100%" stop-color="#60A5FA"/></linearGradient>
+          <linearGradient id="g3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#DDD6FE"/><stop offset="100%" stop-color="#A78BFA"/></linearGradient>
+          <linearGradient id="g4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#A7F3D0"/><stop offset="100%" stop-color="#34D399"/></linearGradient>
+          <linearGradient id="g5" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#FDBA74"/><stop offset="100%" stop-color="#FB923C"/></linearGradient>
+        </defs>
+
+        <!-- Phase 1 -->
+        <rect x="10" y="20" width="200" height="100" rx="16" fill="url(#g1)" opacity="0.5"/>
+        <rect x="10" y="20" width="200" height="100" rx="16" fill="none" stroke="#D97706" stroke-width="1.5"/>
+        <text x="110" y="48" text-anchor="middle" font-family="Lexend" font-size="11" font-weight="800" fill="#92400E">PHASE 1</text>
+        <text x="110" y="65" text-anchor="middle" font-family="Lexend" font-size="9" font-weight="600" fill="#92400E">ACTIVATION</text>
+        <text x="110" y="78" text-anchor="middle" font-family="Lexend" font-size="9" font-weight="600" fill="#92400E">& FIRST WIN</text>
+        <text x="110" y="100" text-anchor="middle" font-family="Space Mono" font-size="9" font-weight="700" fill="#B45309">D0 — D14</text>
+
+        <!-- Phase 2 -->
+        <rect x="230" y="20" width="200" height="100" rx="16" fill="url(#g2)" opacity="0.5"/>
+        <rect x="230" y="20" width="200" height="100" rx="16" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+        <text x="330" y="48" text-anchor="middle" font-family="Lexend" font-size="11" font-weight="800" fill="#1E40AF">PHASE 2</text>
+        <text x="330" y="65" text-anchor="middle" font-family="Lexend" font-size="9" font-weight="600" fill="#1E40AF">HABIT</text>
+        <text x="330" y="78" text-anchor="middle" font-family="Lexend" font-size="9" font-weight="600" fill="#1E40AF">BUILDING</text>
+        <text x="330" y="100" text-anchor="middle" font-family="Space Mono" font-size="9" font-weight="700" fill="#1D4ED8">D15 — D60</text>
+
+        <!-- Phase 3 -->
+        <rect x="450" y="20" width="200" height="100" rx="16" fill="url(#g3)" opacity="0.5"/>
+        <rect x="450" y="20" width="200" height="100" rx="16" fill="none" stroke="#7C3AED" stroke-width="1.5"/>
+        <text x="550" y="48" text-anchor="middle" font-family="Lexend" font-size="11" font-weight="800" fill="#5B21B6">PHASE 3</text>
+        <text x="550" y="65" text-anchor="middle" font-family="Lexend" font-size="9" font-weight="600" fill="#5B21B6">RANKING</text>
+        <text x="550" y="78" text-anchor="middle" font-family="Lexend" font-size="9" font-weight="600" fill="#5B21B6">CLIMB</text>
+        <text x="550" y="100" text-anchor="middle" font-family="Space Mono" font-size="9" font-weight="700" fill="#6D28D9">D61 — D150</text>
+
+        <!-- Phase 4 -->
+        <rect x="670" y="20" width="220" height="100" rx="16" fill="url(#g4)" opacity="0.5"/>
+        <rect x="670" y="20" width="220" height="100" rx="16" fill="none" stroke="#059669" stroke-width="1.5"/>
+        <text x="780" y="48" text-anchor="middle" font-family="Lexend" font-size="11" font-weight="800" fill="#065F46">PHASE 4</text>
+        <text x="780" y="65" text-anchor="middle" font-family="Lexend" font-size="9" font-weight="600" fill="#065F46">MASTERY</text>
+        <text x="780" y="78" text-anchor="middle" font-family="Lexend" font-size="9" font-weight="600" fill="#065F46">& OPTIMIZATION</text>
+        <text x="780" y="100" text-anchor="middle" font-family="Space Mono" font-size="9" font-weight="700" fill="#047857">D151 — D365</text>
+
+        <!-- Phase 5 -->
+        <rect x="910" y="20" width="220" height="100" rx="16" fill="url(#g5)" opacity="0.5"/>
+        <rect x="910" y="20" width="220" height="100" rx="16" fill="none" stroke="#EA580C" stroke-width="1.5"/>
+        <text x="1020" y="48" text-anchor="middle" font-family="Lexend" font-size="11" font-weight="800" fill="#9A3412">PHASE 5</text>
+        <text x="1020" y="65" text-anchor="middle" font-family="Lexend" font-size="9" font-weight="600" fill="#9A3412">LEGACY</text>
+        <text x="1020" y="78" text-anchor="middle" font-family="Lexend" font-size="9" font-weight="600" fill="#9A3412">& INFLUENCE</text>
+        <text x="1020" y="100" text-anchor="middle" font-family="Space Mono" font-size="9" font-weight="700" fill="#C2410C">D365+</text>
+
+        <!-- Arrows -->
+        <path d="M210 70 L230 70" stroke="#9CA3AF" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <path d="M430 70 L450 70" stroke="#9CA3AF" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <path d="M650 70 L670 70" stroke="#9CA3AF" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <path d="M890 70 L910 70" stroke="#9CA3AF" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,1 L8,5 L0,9" fill="none" stroke="#9CA3AF" stroke-width="1.5"/></marker></defs>
+
+        <!-- Ranking track -->
+        <text x="10" y="150" font-family="Lexend" font-size="9" font-weight="700" fill="#9CA3AF" text-transform="uppercase" letter-spacing="1">RANKING</text>
+        <text x="110" y="170" text-anchor="middle" font-family="Lexend" font-size="10" font-weight="600" fill="#92400E">Unranked (New)</text>
+        <text x="330" y="170" text-anchor="middle" font-family="Lexend" font-size="10" font-weight="600" fill="#1E40AF">Unranked &rarr; R3</text>
+        <text x="550" y="170" text-anchor="middle" font-family="Lexend" font-size="10" font-weight="600" fill="#5B21B6">R3 &rarr; R2</text>
+        <text x="780" y="170" text-anchor="middle" font-family="Lexend" font-size="10" font-weight="600" fill="#065F46">R2 &rarr; R1</text>
+        <text x="1020" y="170" text-anchor="middle" font-family="Lexend" font-size="10" font-weight="600" fill="#9A3412">R1 duy trì</text>
+
+        <!-- Mindset track -->
+        <text x="10" y="200" font-family="Lexend" font-size="9" font-weight="700" fill="#9CA3AF" text-transform="uppercase" letter-spacing="1">TÂM LÝ</text>
+        <text x="110" y="220" text-anchor="middle" font-family="Lexend" font-size="9" fill="#6B7280" font-style="italic">"Tôi thử xem"</text>
+        <text x="330" y="220" text-anchor="middle" font-family="Lexend" font-size="9" fill="#6B7280" font-style="italic">"Tôi quen rồi"</text>
+        <text x="550" y="220" text-anchor="middle" font-family="Lexend" font-size="9" fill="#6B7280" font-style="italic">"Tôi leo hạng"</text>
+        <text x="780" y="220" text-anchor="middle" font-family="Lexend" font-size="9" fill="#6B7280" font-style="italic">"Tôi tối ưu"</text>
+        <text x="1020" y="220" text-anchor="middle" font-family="Lexend" font-size="9" fill="#6B7280" font-style="italic">"Tôi dẫn dắt"</text>
+
+        <!-- Churn risk bar -->
+        <text x="10" y="248" font-family="Lexend" font-size="9" font-weight="700" fill="#9CA3AF" text-transform="uppercase" letter-spacing="1">CHURN RISK</text>
+        <rect x="80" y="240" width="130" height="10" rx="3" fill="#EF4444" opacity="0.7"/>
+        <rect x="300" y="240" width="100" height="10" rx="3" fill="#F59E0B" opacity="0.7"/>
+        <rect x="520" y="240" width="70" height="10" rx="3" fill="#FBBF24" opacity="0.5"/>
+        <rect x="750" y="240" width="40" height="10" rx="3" fill="#34D399" opacity="0.5"/>
+        <rect x="1000" y="240" width="20" height="10" rx="3" fill="#10B981" opacity="0.3"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 3: PHASE DETAILS ═══ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Chi Tiết Từng Phase <span>Milestones & Mechanisms</span></h2>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase-banner phase-1">
+    <div class="phase-icon">&#x1F680;</div>
+    <div class="phase-info">
+      <div class="phase-name">Phase 1: Activation & First Win</div>
+      <div class="phase-detail">D0 &rarr; D14 &middot; "Thử Thách Đầu Tiên" &middot; Unranked (New Driver flag) &middot; L6 MASS + Newbie Priority Dispatch</div>
+    </div>
+    <span class="phase-tag">Target: &ge; 21 đơn / 14 ngày</span>
+  </div>
+
+  <div class="insight blue">
+    <strong>Tại sao D14 là ranh giới?</strong>
+    <p>Grab Guarantee 14 ngày &rarr; D30 retention +32% &middot; Uber: 47% tài xế quit trước 25 đơn &middot; "21 repetitions" = bắt đầu hình thành habit loop (Lally, 2010) &middot; DoorDash: "First 50 deliveries" = protected window</p>
+  </div>
+
+  <!-- Milestones -->
+  <div class="card mb-4">
+    <div class="card-title">Milestones</div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#FEF3C7;color:#92400E;">M1</span>
+      <div class="milestone-body">
+        <div class="milestone-name">First Trip</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> D0-D1</span><span><strong>Điều kiện:</strong> 1 đơn hoàn thành</span></div>
+        <div class="milestone-desc">First Trip Bonus (declining: 24h > 48h > 72h) + Instant Payout miễn phí. Benchmark: Grab +27% activation.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#FEF3C7;color:#92400E;">M2</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Quick 5</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> ~D2-D3</span><span><strong>Điều kiện:</strong> 5 đơn</span></div>
+        <div class="milestone-desc">Cash bonus nhỏ + Progress bar "5/21" hiển thị. DoorDash Progress bar +23% completion.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#FEF3C7;color:#92400E;">M3</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Habit Seed</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> ~D7</span><span><strong>Điều kiện:</strong> 10 đơn</span></div>
+        <div class="milestone-desc">Badge "Tuần Đầu Tiên" + Unlock xem EPH real-time. Uber: transparency &rarr; trust.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#FDE68A;color:#78350F;">M4</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Activation Complete &mdash; Gateway Phase 2</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> D14</span><span><strong>Điều kiện:</strong> &ge; 21 đơn</span></div>
+        <div class="milestone-desc">Unlock đăng ký ca 4h (L4 Bigzone) + Streak system bắt đầu.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mechanisms -->
+  <div class="mech-box">
+    <div class="mech-title">&#x1F6E1;&#xFE0F; Protected Window &mdash; 14 Ngày Đầu Tiên</div>
+    <div class="mech-item">
+      <div class="mech-item-title">1. New Driver Guarantee</div>
+      <div class="mech-item-desc">&ge; 3 đơn/ngày &rarr; đảm bảo tối thiểu XXXk/ngày. Phasing: D1-D7 mức cao, D8-D14 giảm 20%. Cost ceiling: chỉ bù khi earning thực thấp hơn. <strong>Benchmark: Grab +32% D30 retention.</strong></div>
+    </div>
+    <div class="mech-item">
+      <div class="mech-item-title">2. Newbie Priority Dispatch</div>
+      <div class="mech-item-desc">Ưu tiên đơn ngắn (&lt;3km), đơn đơn giản. Giảm friction, tạo trải nghiệm thành công.</div>
+    </div>
+    <div class="mech-item">
+      <div class="mech-item-title">3. Instant Payout Miễn Phí</div>
+      <div class="mech-item-desc">Nhận tiền sau mỗi đơn hoàn thành. <strong>44% tài xế rời đi nếu payout chậm.</strong></div>
+    </div>
+    <div class="mech-item">
+      <div class="mech-item-title">4. Buddy System</div>
+      <div class="mech-item-desc">Gán 1 tài xế R2+/R1 cùng khu vực làm mentor. Buddy thưởng khi mentee đạt 21 đơn. Zalo group 5-10 người cùng batch.</div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="table-wrap mb-10">
+    <div class="table-header">
+      <span class="title">KPIs Phase 1</span>
+    </div>
+    <table class="data">
+      <thead><tr><th>Chỉ số</th><th>Target</th><th>Alert</th><th>Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td>Activation Rate (&ge;1 đơn / 72h)</td><td class="mono">&ge; 85%</td><td><span class="badge badge-red">&lt; 60%</span></td><td></td></tr>
+        <tr><td>Time-to-First-Trip</td><td class="mono">&le; 24h</td><td><span class="badge badge-red">&gt; 48h</span></td><td></td></tr>
+        <tr><td>D14 Retention</td><td class="mono">&ge; 80%</td><td><span class="badge badge-red">&lt; 65%</span></td><td></td></tr>
+        <tr><td>21-Trip Achievement Rate</td><td class="mono">&ge; 65%</td><td><span class="badge badge-red">&lt; 45%</span></td><td>% tài xế đạt 21 đơn trong D14</td></tr>
+        <tr><td>Guarantee Utilization</td><td class="mono">&ge; 55% tự vượt</td><td><span class="badge badge-orange">&lt; 40%</span></td><td>% tài xế tự earn trên guarantee</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-banner phase-2">
+    <div class="phase-icon">&#x1F4C8;</div>
+    <div class="phase-info">
+      <div class="phase-name">Phase 2: Habit Building</div>
+      <div class="phase-detail">D15 &rarr; D60 &middot; "Xây Nền" &middot; Unranked &rarr; Target R3 Bạc &middot; L6 &rarr; L4 Bigzone</div>
+    </div>
+    <span class="phase-tag">&ge; 4 ngày/tuần active</span>
+  </div>
+
+  <div class="insight blue">
+    <strong>Tại sao D60?</strong>
+    <p>Lally (2010): Trung bình 66 ngày hình thành thói quen. R3 cần 70 stp/tháng &mdash; tài xế cần ít nhất 1 tháng đầy đủ sau Phase 1. Tài xế cần ~45-60 ngày để ổn định pattern.</p>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-title">Con Đường Lên R3</div>
+    <div class="card-sub">R3 yêu cầu: DQS &ge; 75 + DCR &le; 15% + Prod &ge; 70 stp/tháng</div>
+    <div class="prog-row prog-blue">
+      <div class="prog-label-row"><span class="prog-name">D15-D30: Tìm nhịp</span><span class="prog-val">~3-5 stp/ngày &rarr; 45-90 stp</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:40%"></div></div>
+    </div>
+    <div class="prog-row prog-blue">
+      <div class="prog-label-row"><span class="prog-name">D31-D60: Ổn định</span><span class="prog-val">~4-6 stp/ngày &rarr; 72-132 stp</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:70%"></div></div>
+    </div>
+    <div class="insight ok" style="margin-top:12px;">
+      <strong>Tài xế sớm nhất có thể đạt R3 vào cuối tháng thứ 2 (~D45-D60).</strong>
+    </div>
+  </div>
+
+  <!-- Milestones Phase 2 -->
+  <div class="card mb-4">
+    <div class="card-title">Milestones</div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#DBEAFE;color:#1E40AF;">M5</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Week 3 Quest</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> D15-D21</span><span><strong>Điều kiện:</strong> 15 đơn/tuần</span></div>
+        <div class="milestone-desc">Weekly Quest thay Guarantee (bridge mượt). Preparation cho 70 stp/tháng (R3).</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#DBEAFE;color:#1E40AF;">M6</span>
+      <div class="milestone-body">
+        <div class="milestone-name">First Month</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> D30</span><span><strong>Điều kiện:</strong> &ge; 60 đơn tổng</span></div>
+        <div class="milestone-desc">Báo cáo thu nhập tháng đầu tiên. Calibration: 60 đơn &asymp; 2.7 stp/ngày &times; 22d &mdash; gần ngưỡng R3.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#DBEAFE;color:#1E40AF;">M7</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Service Unlock</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> ~D30</span><span><strong>Điều kiện:</strong> 30 đơn + DQS &ge; 70</span></div>
+        <div class="milestone-desc">Unlock Siêu Tốc + Ghép Đơn. Uber: multi-service +19pp retention, zero cost.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#93C5FD;color:#1E3A8A;">M8</span>
+      <div class="milestone-body">
+        <div class="milestone-name">R3 Qualification &mdash; RANK UP R3 Bạc!</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> D45-D60</span><span><strong>Điều kiện:</strong> DQS &ge; 75, DCR &le; 15%, Prod &ge; 70</span></div>
+        <div class="milestone-desc">Layer L4 Bigzone, AhaPoints &times;1.1, Catalog Bạc, Ca 4h structured.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#DBEAFE;color:#1E40AF;">M9</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Habit Confirmation</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> D60</span><span><strong>Điều kiện:</strong> &ge; 4 ngày/tuần active &times; 4 tuần liên tiếp</span></div>
+        <div class="milestone-desc">Badge "Thói Quen Vàng" + AhaPoints bonus +20/ca.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mechanisms Phase 2 -->
+  <div class="grid-2 mb-4">
+    <div class="mech-box">
+      <div class="mech-title">&#x1F4C8; Weekly Quest System</div>
+      <div class="mech-item"><div class="mech-item-title">Quest Cơ Bản</div><div class="mech-item-desc">15 đơn/tuần &rarr; Thưởng nhỏ</div></div>
+      <div class="mech-item"><div class="mech-item-title">Quest Nâng Cao</div><div class="mech-item-desc">25 đơn/tuần &rarr; Thưởng + Badge</div></div>
+      <div class="mech-item"><div class="mech-item-title">Quest Siêu Cấp</div><div class="mech-item-desc">35 đơn/tuần &rarr; Thưởng lớn + Unlock tính năng</div></div>
+      <div style="font-size:11px;color:var(--gray-500);margin-top:10px;">Bridge từ external motivation (guarantee) &rarr; identified motivation (quest). Benchmark: Uber Quest + DoorDash Challenges (+23% completion)</div>
+    </div>
+    <div class="mech-box">
+      <div class="mech-title">&#x1F513; Progressive Service Unlock</div>
+      <div class="mech-item"><div class="mech-item-title">21 đơn (D14)</div><div class="mech-item-desc">App full features (EPH tracker, heat map)</div></div>
+      <div class="mech-item"><div class="mech-item-title">30 đơn (~D20)</div><div class="mech-item-desc">Siêu Tốc (đơn premium, phí cao hơn)</div></div>
+      <div class="mech-item"><div class="mech-item-title">50 đơn (~D30)</div><div class="mech-item-desc">Ghép Đơn (batch delivery &rarr; tăng EPH)</div></div>
+      <div class="mech-item"><div class="mech-item-title">70 đơn (~D45)</div><div class="mech-item-desc">4H Delivery (scheduled, thu nhập ổn định)</div></div>
+      <div class="mech-item"><div class="mech-item-title">100 đơn (R3)</div><div class="mech-item-desc">Enterprise/SME API (Shopee, TikTok Shop)</div></div>
+    </div>
+  </div>
+
+  <!-- KPIs Phase 2 -->
+  <div class="table-wrap mb-10">
+    <div class="table-header"><span class="title">KPIs Phase 2</span></div>
+    <table class="data">
+      <thead><tr><th>Chỉ số</th><th>Target</th><th>Alert</th><th>Gắn Ranking</th></tr></thead>
+      <tbody>
+        <tr><td>D30 Retention</td><td class="mono">&ge; 72%</td><td><span class="badge badge-red">&lt; 55%</span></td><td></td></tr>
+        <tr><td>D60 Retention</td><td class="mono">&ge; 62%</td><td><span class="badge badge-red">&lt; 45%</span></td><td></td></tr>
+        <tr><td>R3 Qualification Rate (cuối D60)</td><td class="mono">&ge; 55%</td><td><span class="badge badge-red">&lt; 35%</span></td><td>% tài xế đạt R3 Bạc trước D60</td></tr>
+        <tr><td>Weekly Active Days</td><td class="mono">&ge; 4 ngày</td><td><span class="badge badge-orange">&lt; 3 ngày</span></td><td>R3 cần ~3.2 stp/ngày &times; 22d</td></tr>
+        <tr><td>Quest Completion Rate</td><td class="mono">&ge; 55%</td><td><span class="badge badge-orange">&lt; 35%</span></td><td></td></tr>
+        <tr><td>Multi-service Unlock Rate</td><td class="mono">&ge; 50%</td><td><span class="badge badge-orange">&lt; 30%</span></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-banner phase-3">
+    <div class="phase-icon">&#x1F3D4;&#xFE0F;</div>
+    <div class="phase-info">
+      <div class="phase-name">Phase 3: Ranking Climb</div>
+      <div class="phase-detail">D61 &rarr; D150 &middot; "Leo Hạng" &middot; R3 Bạc &rarr; Target R2 Vàng &middot; L4 &rarr; L3</div>
+    </div>
+    <span class="phase-tag">70 &rarr; 210 stp &middot; Vượt Vực</span>
+  </div>
+
+  <div class="insight danger">
+    <strong>Phase khó nhất: "Vượt vực" R3 &rarr; R2 = Gấp 3x productivity.</strong>
+    <p>Cần thời gian ramp-up dần: 70 &rarr; 100 &rarr; 150 &rarr; 210 stp qua 3 chu kỳ. Rusbult Investment Model: Đến D150, tài xế đã đầu tư 5 tháng &mdash; switching cost đáng kể.</p>
+  </div>
+
+  <!-- Ramp-up Ladder -->
+  <div class="card mb-4">
+    <div class="card-title">Ramp-Up Ladder &mdash; 3 Bậc Trong 3 Tháng</div>
+    <div class="prog-row prog-blue" style="margin-top:12px;">
+      <div class="prog-label-row"><span class="prog-name">Tháng 3 (D61-D90): "R3 Solid"</span><span class="prog-val">100 stp (~4.5/ngày)</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:35%"></div></div>
+    </div>
+    <div class="prog-row prog-orange">
+      <div class="prog-label-row"><span class="prog-name">Tháng 4 (D91-D120): "R3 Plus"</span><span class="prog-val">150 stp (~6.8/ngày)</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:55%"></div></div>
+    </div>
+    <div class="prog-row prog-green">
+      <div class="prog-label-row"><span class="prog-name">Tháng 5 (D121-D150): "R2 Ready"</span><span class="prog-val">210 stp (~9.5/ngày)</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:78%"></div></div>
+    </div>
+  </div>
+
+  <!-- Milestones Phase 3 -->
+  <div class="card mb-4">
+    <div class="card-title">Milestones</div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#EDE9FE;color:#5B21B6;">M10</span>
+      <div class="milestone-body">
+        <div class="milestone-name">R3 Solid</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> ~D90</span><span><strong>Điều kiện:</strong> 100 stp/tháng</span></div>
+        <div class="milestone-desc">Badge "R3 Vững Chắc" + Gợi ý lên ca nhiều hơn.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#EDE9FE;color:#5B21B6;">M11</span>
+      <div class="milestone-body">
+        <div class="milestone-name">200 Orders</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> ~D90-D100</span><span><strong>Điều kiện:</strong> 200 đơn tổng</span></div>
+        <div class="milestone-desc">Unlock "Đơn Đặc Biệt" (giá trị cao) + Badge "200 Club".</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#EDE9FE;color:#5B21B6;">M12</span>
+      <div class="milestone-body">
+        <div class="milestone-name">R3 Plus</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> ~D120</span><span><strong>Điều kiện:</strong> 150 stp/tháng + DQS &ge; 75</span></div>
+        <div class="milestone-desc">Unlock đăng ký Ca Full-day thử nghiệm (1 ngày/tuần, không guarantee). Cho R3 "nếm" Ca Full-day trước khi chính thức R2.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#DDD6FE;color:#4C1D95;">M13</span>
+      <div class="milestone-body">
+        <div class="milestone-name">R2 Qualification &mdash; RANK UP R2 Vàng!</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> D120-D150</span><span><strong>Điều kiện:</strong> DQS &ge; 75, DCR &le; 10%, Prod &ge; 210</span></div>
+        <div class="milestone-desc">L3 Mediumzone, &times;1.3, Ca Full-day + Guarantee 550-600k, Catalog Vàng, Voucher xăng 30k.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#EDE9FE;color:#5B21B6;">M14</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Insurance Bronze</div>
+        <div class="milestone-meta"><span><strong>Khi:</strong> R2 mới đạt</span><span><strong>Điều kiện:</strong> R2 &ge; 1 chu kỳ</span></div>
+        <div class="milestone-desc">BH tai nạn cơ bản (Ahamove sponsored, MIỄN PHÍ). Mở rộng BH xuống R2 thay vì chỉ R1.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mechanisms Phase 3 -->
+  <div class="grid-2 mb-4">
+    <div class="mech-box">
+      <div class="mech-title">&#x1F3D4;&#xFE0F; Giải Pháp "Vượt Vực"</div>
+      <div class="mech-item"><div class="mech-item-title">Sub-milestone System</div><div class="mech-item-desc">R3(70) &rarr; R3 Solid(100) &rarr; R3 Plus(150) &rarr; R2(210). Mỗi sub có reward riêng &rarr; "small wins" liên tục.</div></div>
+      <div class="mech-item"><div class="mech-item-title">Ca Full-day Thử Nghiệm</div><div class="mech-item-desc">R3 đạt 150 stp &rarr; 1 ca Full-day/tuần (không guarantee). Cho tài xế "nếm" thu nhập &rarr; motivation lên R2.</div></div>
+    </div>
+    <div class="mech-box">
+      <div class="mech-title">&#x1F6E1;&#xFE0F; BH Mở Rộng & Community</div>
+      <div class="mech-item"><div class="mech-item-title">BH xuống R2 (Đề xuất mới)</div><div class="mech-item-desc">R2 được BH tai nạn cơ bản MIỄN PHÍ. Swiggy StepUp: churn 60-70% &rarr; 10-15%. Loss aversion cực đại.</div></div>
+      <div class="mech-item"><div class="mech-item-title">Community Escalation</div><div class="mech-item-desc">D61+: Monthly meetup. D90+: Eligible Buddy Mentor cho tài xế mới (nếu R3+). Benchmark: Gojek GoPartner Hub.</div></div>
+    </div>
+  </div>
+
+  <!-- KPIs Phase 3 -->
+  <div class="table-wrap mb-10">
+    <div class="table-header"><span class="title">KPIs Phase 3</span></div>
+    <table class="data">
+      <thead><tr><th>Chỉ số</th><th>Target</th><th>Alert</th><th>Gắn Ranking</th></tr></thead>
+      <tbody>
+        <tr><td>D90 Retention</td><td class="mono">&ge; 55%</td><td><span class="badge badge-red">&lt; 38%</span></td><td></td></tr>
+        <tr><td>D150 Retention</td><td class="mono">&ge; 45%</td><td><span class="badge badge-red">&lt; 30%</span></td><td></td></tr>
+        <tr><td>R2 Qualification Rate</td><td class="mono">&ge; 40%</td><td><span class="badge badge-red">&lt; 25%</span></td><td>% R3 lên R2 trong 3 chu kỳ</td></tr>
+        <tr><td>Avg Productivity Growth</td><td class="mono">+30 stp/tháng</td><td><span class="badge badge-orange">&lt; +15 stp</span></td><td>Ramp-up 70 &rarr; 210</td></tr>
+        <tr><td>Grace Period Recovery</td><td class="mono">&ge; 60%</td><td><span class="badge badge-orange">&lt; 40%</span></td><td>% cứu hạng thành công</td></tr>
+        <tr><td>Insurance Enrollment (R2)</td><td class="mono">&ge; 80%</td><td><span class="badge badge-orange">&lt; 60%</span></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase-banner phase-4">
+    <div class="phase-icon">&#x1F3AF;</div>
+    <div class="phase-info">
+      <div class="phase-name">Phase 4: Mastery & Optimization</div>
+      <div class="phase-detail">D151 &rarr; D365 &middot; "Bậc Thầy" &middot; R2 Vàng &rarr; Target R1 Kim Cương &middot; L3 &rarr; L2</div>
+    </div>
+    <span class="phase-tag">210 &rarr; 280 stp &middot; +33%</span>
+  </div>
+
+  <div class="insight ok">
+    <strong>R2 &rarr; R1: Không phải nhảy productivity mà là tối ưu.</strong>
+    <p>Ca Full-day (08-18h) = 10h active &rarr; 12-14 stp/ngày tự nhiên. L3 dispatch tốt hơn &rarr; ít idle. Multi-service Enterprise/SME &rarr; đơn giá trị cao. DQS &ge; 80 = discipline: AR cao, DCR thấp.</p>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-title">Milestones</div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#D1FAE5;color:#065F46;">M15</span>
+      <div class="milestone-body">
+        <div class="milestone-name">R2 Stable &mdash; Insurance Silver</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> ~D180</span><span><strong>Điều kiện:</strong> R2 &ge; 2 chu kỳ</span></div>
+        <div class="milestone-desc">Unlock BH mở rộng (cá nhân + nha khoa) + VIP Order Pool.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#D1FAE5;color:#065F46;">M16</span>
+      <div class="milestone-body">
+        <div class="milestone-name">500 Orders</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> ~D180-D210</span><span><strong>Điều kiện:</strong> 500 đơn tổng</span></div>
+        <div class="milestone-desc">Badge "500 Club" + Mời tham gia Beta Testing tính năng mới.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#A7F3D0;color:#064E3B;">M17</span>
+      <div class="milestone-body">
+        <div class="milestone-name">R1 Qualification &mdash; RANK UP R1 Kim Cương!</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> D180-D300</span><span><strong>Điều kiện:</strong> DQS &ge; 80, DCR &le; 10%, Prod &ge; 280</span></div>
+        <div class="milestone-desc">L2 Minizone, &times;1.5, Guarantee 600-650k, Catalog full, BH Mini.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#D1FAE5;color:#065F46;">M18</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Insurance Gold</div>
+        <div class="milestone-meta"><span><strong>Khi:</strong> R1 &ge; 2 chu kỳ</span></div>
+        <div class="milestone-desc">BH Premium: cá nhân + 1 người thân (Ahamove sponsor). Loss aversion CỰC ĐẠI.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#D1FAE5;color:#065F46;">M19</span>
+      <div class="milestone-body">
+        <div class="milestone-name">1000 Orders &mdash; Millennium</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> ~D300-D365</span></div>
+        <div class="milestone-desc">Badge "Millennium" + Quà tặng vật lý + Feature trên kênh truyền thông.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#D1FAE5;color:#065F46;">M20</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Anniversary &mdash; 1 Năm</div>
+        <div class="milestone-meta"><span><strong>Ngày:</strong> D365</span><span><strong>Điều kiện:</strong> Active + &ge; R2</span></div>
+        <div class="milestone-desc">Celebration event + Quà đặc biệt + Mời vào Ambassador Program.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Insurance Ladder -->
+  <div class="mech-box mb-4">
+    <div class="mech-title">&#x1F6E1;&#xFE0F; Tiered Insurance Ladder (Đề Xuất Mở Rộng)</div>
+    <div class="grid-3" style="margin-top:8px;">
+      <div class="card card-top-orange" style="margin-bottom:0;">
+        <div class="card-title" style="color:var(--warn);">Bronze</div>
+        <div class="card-sub">R2 mới đạt</div>
+        <div style="font-size:12px;color:var(--gray-600);">BH tai nạn cá nhân cơ bản<br>Ahamove sponsor (miễn phí)<br><strong>Tạo switching cost ngay khi lên R2</strong></div>
+      </div>
+      <div class="card card-top-blue" style="margin-bottom:0;">
+        <div class="card-title" style="color:var(--blue);">Silver</div>
+        <div class="card-sub">R2 &ge; 2 chu kỳ (~D180)</div>
+        <div style="font-size:12px;color:var(--gray-600);">BH mở rộng: tai nạn + nha khoa + khám SK<br>Ahamove sponsor<br><strong>"Rớt R2 = mất BH Silver"</strong></div>
+      </div>
+      <div class="card card-top-purple" style="margin-bottom:0;">
+        <div class="card-title" style="color:var(--purple);">Gold</div>
+        <div class="card-sub">R1 &ge; 2 chu kỳ</div>
+        <div style="font-size:12px;color:var(--gray-600);">BH Premium: cá nhân + 1 người thân<br>Ahamove sponsor<br><strong>"Rớt R1 = mất BH gia đình"</strong></div>
+      </div>
+    </div>
+    <div class="insight ok" style="margin-top:14px;">
+      <strong>Expected impact: D180 retention +42% (Swiggy actual result).</strong>
+      <p>Cost estimate: Cần Finance validate. Budget ~47M/tháng (max) &mdash; đã dự trù trong Params S8.</p>
+    </div>
+  </div>
+
+  <!-- KPIs Phase 4 -->
+  <div class="table-wrap mb-10">
+    <div class="table-header"><span class="title">KPIs Phase 4</span></div>
+    <table class="data">
+      <thead><tr><th>Chỉ số</th><th>Target</th><th>Alert</th><th>Gắn Ranking</th></tr></thead>
+      <tbody>
+        <tr><td>D365 Retention</td><td class="mono">&ge; 35%</td><td><span class="badge badge-red">&lt; 20%</span></td><td></td></tr>
+        <tr><td>R1 Qualification Rate</td><td class="mono">&ge; 30%</td><td><span class="badge badge-red">&lt; 15%</span></td><td>% R2 lên R1</td></tr>
+        <tr><td>Avg Productivity (R2)</td><td class="mono">&ge; 210 stp</td><td><span class="badge badge-orange">&lt; 190 stp</span></td><td>Ranking params S1</td></tr>
+        <tr><td>Full-day Utilization</td><td class="mono">&ge; 70% R2+</td><td><span class="badge badge-orange">&lt; 50%</span></td><td>Ranking params S6</td></tr>
+        <tr><td>Insurance Enrollment</td><td class="mono">&ge; 85% R2+</td><td><span class="badge badge-red">&lt; 60%</span></td><td></td></tr>
+        <tr><td>NPS</td><td class="mono">&ge; 50</td><td><span class="badge badge-orange">&lt; 30</span></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase-banner phase-5">
+    <div class="phase-icon">&#x1F451;</div>
+    <div class="phase-info">
+      <div class="phase-name">Phase 5: Legacy & Influence</div>
+      <div class="phase-detail">D365+ &middot; "Di Sản" &middot; R1 Kim Cương duy trì &middot; L2 Minizone</div>
+    </div>
+    <span class="phase-tag">Nhận &rarr; Tạo giá trị</span>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-title">Milestones</div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#FED7AA;color:#9A3412;">M21</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Ambassador Invite</div>
+        <div class="milestone-meta"><span><strong>Điều kiện:</strong> D365 + R2+ + Rating &ge; 4.8</span></div>
+        <div class="milestone-desc">Mời chính thức vào Ambassador Program. Status + Recognition.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#FED7AA;color:#9A3412;">M22</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Mentor Certified</div>
+        <div class="milestone-meta"><span><strong>Điều kiện:</strong> Training + 5 mentee thành công (đạt R3)</span></div>
+        <div class="milestone-desc">Badge "Certified Mentor" + Thưởng per mentee. Teaching = deepest lock-in.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#FED7AA;color:#9A3412;">M23</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Area Captain</div>
+        <div class="milestone-meta"><span><strong>Điều kiện:</strong> D365+ + R1 + NPS nhóm &ge; 40</span></div>
+        <div class="milestone-desc">Quản lý nhóm 20-30 tài xế/khu vực. Thưởng theo performance nhóm. Leadership role.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#FED7AA;color:#9A3412;">M24</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Advisory Board</div>
+        <div class="milestone-meta"><span><strong>Mời từ:</strong> DM Leadership</span></div>
+        <div class="milestone-desc">Tham vấn chính sách, beta testing, voice cho cộng đồng. Influence & Ownership.</div>
+      </div>
+    </div>
+    <div class="milestone-row">
+      <span class="milestone-id" style="background:#FED7AA;color:#9A3412;">M25</span>
+      <div class="milestone-body">
+        <div class="milestone-name">Legacy Milestones</div>
+        <div class="milestone-meta"><span>18M, 24M, 36M...</span></div>
+        <div class="milestone-desc">Anniversary reward escalating + Certificate of Excellence.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPIs Phase 5 -->
+  <div class="table-wrap">
+    <div class="table-header"><span class="title">KPIs Phase 5</span></div>
+    <table class="data">
+      <thead><tr><th>Chỉ số</th><th>Target</th><th>Gắn Ranking</th></tr></thead>
+      <tbody>
+        <tr><td>Annual Retention (D365+)</td><td class="mono">&ge; 85%</td><td>R1 duy trì</td></tr>
+        <tr><td>Referral Rate</td><td class="mono">&ge; 3 TX/quý/Ambassador</td><td></td></tr>
+        <tr><td>Mentee D30 Retention</td><td class="mono">&ge; 80%</td><td>Impact on Phase 1 KPI</td></tr>
+        <tr><td>Ambassador Engagement</td><td class="mono">&ge; 80%</td><td></td></tr>
+        <tr><td>Community Leader Ratio</td><td class="mono">&ge; 50%</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ SECTION 4: 25 MILESTONES MASTER TABLE ═══ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Bảng Tổng Hợp <span>25 Milestones &times; Ranking Integration</span></h2>
+  </div>
+
+  <div class="table-wrap" style="overflow-x:auto;">
+    <table class="data" style="min-width:1100px;">
+      <thead>
+        <tr>
+          <th>#</th><th>Milestone</th><th>Ngày</th><th>Phase</th><th>Ranking</th><th>Điều kiện</th><th>Reward chính</th><th>Switching Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-group"><td colspan="8">Phase 1: Activation & First Win (D0-D14)</td></tr>
+        <tr><td class="mono">M1</td><td>First Trip</td><td class="mono">D0-D1</td><td>1</td><td><span class="badge badge-gray">Unranked</span></td><td>1 đơn</td><td>Cash bonus + Instant Payout</td><td>&mdash;</td></tr>
+        <tr><td class="mono">M2</td><td>Quick 5</td><td class="mono">D2-D3</td><td>1</td><td><span class="badge badge-gray">Unranked</span></td><td>5 đơn</td><td>Cash + Progress bar</td><td>Endowed progress</td></tr>
+        <tr><td class="mono">M3</td><td>Habit Seed</td><td class="mono">D7</td><td>1</td><td><span class="badge badge-gray">Unranked</span></td><td>10 đơn</td><td>Badge + EPH unlock</td><td>Sunk cost</td></tr>
+        <tr><td class="mono">M4</td><td>Activation</td><td class="mono">D14</td><td>1&rarr;2</td><td><span class="badge badge-gray">Eligible</span></td><td>21 đơn</td><td>Ca + Streak</td><td>Feature unlock</td></tr>
+
+        <tr class="row-group"><td colspan="8">Phase 2: Habit Building (D15-D60)</td></tr>
+        <tr><td class="mono">M5</td><td>Week 3 Quest</td><td class="mono">D15-21</td><td>2</td><td><span class="badge badge-gray">Unranked</span></td><td>15 đơn/tuần</td><td>Quest reward</td><td>Habit formation</td></tr>
+        <tr><td class="mono">M6</td><td>First Month</td><td class="mono">D30</td><td>2</td><td><span class="badge badge-gray">Unranked</span></td><td>60 đơn tổng</td><td>Income report</td><td>Earnings visibility</td></tr>
+        <tr><td class="mono">M7</td><td>Service Unlock</td><td class="mono">~D30</td><td>2</td><td><span class="badge badge-gray">Unranked</span></td><td>30đ + DQS&ge;70</td><td>Siêu Tốc + Ghép Đơn</td><td>Multi-service</td></tr>
+        <tr style="background:#EFF6FF;"><td class="mono" style="font-weight:700;">M8</td><td style="font-weight:700;">R3 Rank Up</td><td class="mono">D45-60</td><td>2</td><td><span class="badge badge-blue">R3 Bạc</span></td><td>DQS&ge;75, DCR&le;15%, 70stp</td><td>L4 + &times;1.1 + Catalog + Ca 4h</td><td style="font-weight:700;">Layer + Points + Benefits</td></tr>
+        <tr><td class="mono">M9</td><td>Habit Confirm</td><td class="mono">D60</td><td>2&rarr;3</td><td><span class="badge badge-blue">R3</span></td><td>4d/tuần &times; 4 tuần</td><td>Badge + Bonus +20pts</td><td>Community entry</td></tr>
+
+        <tr class="row-group"><td colspan="8">Phase 3: Ranking Climb (D61-D150)</td></tr>
+        <tr><td class="mono">M10</td><td>R3 Solid</td><td class="mono">~D90</td><td>3</td><td><span class="badge badge-blue">R3</span></td><td>100 stp/tháng</td><td>Badge + Gợi ý</td><td>Intermediate</td></tr>
+        <tr><td class="mono">M11</td><td>200 Orders</td><td class="mono">~D100</td><td>3</td><td><span class="badge badge-blue">R3</span></td><td>200 đơn tổng</td><td>Badge + Đơn ĐB</td><td>Order pool</td></tr>
+        <tr><td class="mono">M12</td><td>R3 Plus</td><td class="mono">~D120</td><td>3</td><td><span class="badge badge-blue">R3 adv</span></td><td>150 stp/tháng</td><td>Full-day thử 1d/tuần</td><td>Taste R2</td></tr>
+        <tr style="background:#F5F3FF;"><td class="mono" style="font-weight:700;">M13</td><td style="font-weight:700;">R2 Rank Up</td><td class="mono">D120-150</td><td>3</td><td><span class="badge badge-orange">R2 Vàng</span></td><td>DQS&ge;75, DCR&le;10%, 210stp</td><td>L3 + &times;1.3 + Guarantee + 30k</td><td style="font-weight:700;">Guarantee + Voucher + Layer</td></tr>
+        <tr><td class="mono">M14</td><td>Insurance Bronze</td><td class="mono">R2 mới</td><td>3&rarr;4</td><td><span class="badge badge-orange">R2</span></td><td>R2 &ge; 1 chu kỳ</td><td>BH tai nạn free</td><td style="font-weight:700;">Insurance = loss aversion</td></tr>
+
+        <tr class="row-group"><td colspan="8">Phase 4: Mastery & Optimization (D151-D365)</td></tr>
+        <tr><td class="mono">M15</td><td>Insurance Silver</td><td class="mono">~D180</td><td>4</td><td><span class="badge badge-orange">R2 stable</span></td><td>R2 &ge; 2 chu kỳ</td><td>BH mở rộng + VIP Pool</td><td style="font-weight:700;">Insurance escalation</td></tr>
+        <tr><td class="mono">M16</td><td>500 Orders</td><td class="mono">~D200</td><td>4</td><td><span class="badge badge-orange">R2</span></td><td>500 đơn tổng</td><td>Badge + Beta Testing</td><td>Status + Influence</td></tr>
+        <tr style="background:#ECFDF5;"><td class="mono" style="font-weight:700;">M17</td><td style="font-weight:700;">R1 Rank Up</td><td class="mono">D180-300</td><td>4</td><td><span class="badge badge-purple">R1 Kim Cương</span></td><td>DQS&ge;80, DCR&le;10%, 280stp</td><td>L2 + &times;1.5 + 600-650k + Full</td><td style="font-weight:700;">Full switching cost stack</td></tr>
+        <tr><td class="mono">M18</td><td>Insurance Gold</td><td class="mono">R1 stable</td><td>4</td><td><span class="badge badge-purple">R1</span></td><td>R1 &ge; 2 chu kỳ</td><td>BH Premium + gia đình</td><td style="font-weight:700;">Ultimate loss aversion</td></tr>
+        <tr><td class="mono">M19</td><td>1000 Orders</td><td class="mono">~D300</td><td>4</td><td><span class="badge badge-purple">R1</span></td><td>1000 đơn tổng</td><td>Badge + Quà + Media</td><td>Emotional investment</td></tr>
+        <tr><td class="mono">M20</td><td>Anniversary</td><td class="mono">D365</td><td>4&rarr;5</td><td><span class="badge badge-purple">R1</span></td><td>Active 12 tháng</td><td>Celebration + Ambassador</td><td>Identity attachment</td></tr>
+
+        <tr class="row-group"><td colspan="8">Phase 5: Legacy & Influence (D365+)</td></tr>
+        <tr><td class="mono">M21</td><td>Ambassador</td><td class="mono">D365+</td><td>5</td><td><span class="badge badge-purple">R2+</span></td><td>Rating &ge; 4.8</td><td>Ambassador Program</td><td>Role & purpose</td></tr>
+        <tr><td class="mono">M22</td><td>Mentor Certified</td><td class="mono">D365+</td><td>5</td><td><span class="badge badge-purple">R1</span></td><td>5 mentee OK</td><td>Certified Mentor + income</td><td>Teaching lock-in</td></tr>
+        <tr><td class="mono">M23</td><td>Area Captain</td><td class="mono">D365+</td><td>5</td><td><span class="badge badge-purple">R1</span></td><td>NPS nhóm &ge; 40</td><td>Leadership + group bonus</td><td>Responsibility</td></tr>
+        <tr><td class="mono">M24</td><td>Advisory Board</td><td class="mono">Invite</td><td>5</td><td><span class="badge badge-purple">R1</span></td><td>DM Leadership mời</td><td>Policy influence</td><td>Ownership</td></tr>
+        <tr><td class="mono">M25</td><td>Legacy</td><td class="mono">18M+</td><td>5</td><td><span class="badge badge-purple">R1</span></td><td>Ongoing</td><td>Escalating rewards</td><td>Time investment</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ SECTION 5: PROPOSED CHANGES ═══ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Đề Xuất Thay Đổi <span>Ranking Params Hiện Tại</span></h2>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title"><span class="sub-num">5.1</span> Thay Đổi Cần Thiết</div>
+    <div class="table-wrap">
+      <div class="table-header"><span class="title">5 Thay Đổi Cần Update Params</span></div>
+      <table class="data">
+        <thead><tr><th>#</th><th>Thay đổi</th><th>Hiện tại</th><th>Đề xuất</th><th>Lý do</th><th>Impact</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="mono">1</td><td style="font-weight:700;">New Driver flag</td>
+            <td>Unranked = 1 nhóm</td><td>Tách "New Unranked" vs "Performance Unranked"</td>
+            <td>TX mới không nên bị đối xử như TX rớt hạng</td><td><span class="badge badge-blue">Product</span></td>
+          </tr>
+          <tr>
+            <td class="mono">2</td><td style="font-weight:700;">New Driver Guarantee</td>
+            <td>Không guarantee cho Unranked</td><td>14 ngày guarantee (D0-D14)</td>
+            <td>Grab: +32% D30 retention</td><td><span class="badge badge-orange">Budget</span></td>
+          </tr>
+          <tr>
+            <td class="mono">3</td><td style="font-weight:700;">BH mở rộng xuống R2</td>
+            <td>BH chỉ R1, trả bằng points</td><td>Bronze (R2 mới) + Silver (R2 stable) miễn phí</td>
+            <td>Swiggy: churn 60-70% &rarr; 10-15%</td><td><span class="badge badge-orange">Budget</span></td>
+          </tr>
+          <tr>
+            <td class="mono">4</td><td style="font-weight:700;">Sub-milestone R3&rarr;R2</td>
+            <td>Chỉ 2 ngưỡng: 70 và 210</td><td>Thêm: 100 (Solid), 150 (Plus)</td>
+            <td>Vực 3x quá lớn</td><td><span class="badge badge-blue">Product + Ops</span></td>
+          </tr>
+          <tr>
+            <td class="mono">5</td><td style="font-weight:700;">Full-day thử R3 Plus</td>
+            <td>Full-day chỉ R1+R2</td><td>R3 đạt 150 stp &rarr; 1 ca/tuần</td>
+            <td>Taste of benefits = motivation</td><td><span class="badge badge-gray">Slot allocation</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title"><span class="sub-num">5.2</span> Giữ Nguyên (Params Tốt)</div>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>Params</th><th>Lý do giữ</th></tr></thead>
+        <tbody>
+          <tr><td>KPI thresholds (DQS, DCR, Productivity)</td><td>Đã align global benchmark. R3=70 phù hợp part-time, R1=280 phù hợp elite.</td></tr>
+          <tr><td>Fleet ratio 15/35/35/15</td><td>Kim tự tháp hợp lý &mdash; đủ R1/R2 cho supply quality.</td></tr>
+          <tr><td>Layer cascade (80% fill trigger)</td><td>Dispatch thông minh, đảm bảo utilization.</td></tr>
+          <tr><td>AhaPoints formula</td><td>Đơn giản, công bằng, gắn với layer.</td></tr>
+          <tr><td>Points expire cuối quý</td><td>Tạo urgency &rarr; engagement with catalog.</td></tr>
+          <tr><td>Ca 4h + Full-day structure</td><td>Phù hợp thực tế. Thêm thử nghiệm Full-day cho R3 Plus là đủ.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 6: INACTIVITY PROTOCOL ═══ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Inactivity Protocol <span>Gắn với Phase & Ranking</span></h2>
+  </div>
+
+  <div class="insight warn">
+    <strong>Nguyên tắc:</strong> Phase càng cao + Rank càng cao = can thiệp càng mạnh và càng sớm.
+    <p>R1 inactive 7 ngày = R3 inactive 14 ngày về mức ưu tiên.</p>
+  </div>
+
+  <div class="table-wrap" style="overflow-x:auto;">
+    <table class="data" style="min-width:900px;">
+      <thead>
+        <tr>
+          <th>Inactive</th>
+          <th>Phase 1 (D0-D14)</th>
+          <th>Phase 2 (D15-D60)</th>
+          <th>Phase 3 (D61-D150)</th>
+          <th>Phase 4 (D151-D365)</th>
+          <th>Phase 5 (D365+)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mono" style="font-weight:700;">2 ngày</td>
+          <td>Push + Milestone reminder</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td>
+        </tr>
+        <tr>
+          <td class="mono" style="font-weight:700;">3 ngày</td>
+          <td><span class="badge badge-orange">SMS</span> + Bonus offer</td><td>Push + Quest reminder</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td>
+        </tr>
+        <tr>
+          <td class="mono" style="font-weight:700;">5 ngày</td>
+          <td><span class="badge badge-red">Gọi điện</span></td><td>Push + Income projection</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td>
+        </tr>
+        <tr>
+          <td class="mono" style="font-weight:700;">7 ngày</td>
+          <td>Escalate DM Ops</td><td><span class="badge badge-orange">Quest win-back</span></td><td>Push + "Sắp mất R3"</td><td>&mdash;</td><td>&mdash;</td>
+        </tr>
+        <tr>
+          <td class="mono" style="font-weight:700;">10 ngày</td>
+          <td>&mdash;</td><td><span class="badge badge-red">Gọi điện</span> + Re-activation</td><td>Push + Grace Period warning</td><td>Push + "Sắp mất R2 + BH"</td><td>&mdash;</td>
+        </tr>
+        <tr>
+          <td class="mono" style="font-weight:700;">14 ngày</td>
+          <td><span class="badge badge-gray">Dormant</span></td><td><span class="badge badge-gray">Dormant</span></td><td><span class="badge badge-red">Gọi điện</span> + Grace Period</td><td><span class="badge badge-red">Gọi điện</span> + "Mất BH Silver!"</td><td>Push + QL khu vực nhắn</td>
+        </tr>
+        <tr>
+          <td class="mono" style="font-weight:700;">21 ngày</td>
+          <td>Archive</td><td>Win-back campaign</td><td>Win-back (Mid-value)</td><td>Win-back (High-value)</td><td><span class="badge badge-red">Gọi điện</span> + Exit survey</td>
+        </tr>
+        <tr>
+          <td class="mono" style="font-weight:700;">30 ngày</td>
+          <td>Archive</td><td>Archive</td><td>Monthly win-back batch</td><td>Monthly win-back (priority)</td><td>Monthly win-back</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ SECTION 7: CROSS-REFERENCE ═══ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Cross-Reference</h2>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>File</th><th>Nội dung liên quan</th></tr></thead>
+      <tbody>
+        <tr><td style="font-family:'Space Mono',monospace;font-size:11px;">01. STRATEGY/2026-05-driver-ranking-params.html</td><td>Source of truth: KPI thresholds, layer, ca, AhaPoints, catalog</td></tr>
+        <tr><td style="font-family:'Space Mono',monospace;font-size:11px;">01. STRATEGY/2026-05-driver-lifecycle-journey.md</td><td>Framework v3.0 (6 phase) &mdash; phiên bản trước</td></tr>
+        <tr><td style="font-family:'Space Mono',monospace;font-size:11px;">06. COMPETITIVE_INTEL/2026-06-global-driver-lifecycle-benchmark.md</td><td>Nghiên cứu 15+ nền tảng toàn cầu, benchmark, behavioral science</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="report-footer">
+  <span><strong>Driver Management Team</strong> &middot; Ahamove</span>
+  <span>v4.0 &mdash; 5-Phase Journey g&#7855;n ch&#7863;t Ranking Params v2.0 &middot; 02/06/2026</span>
+</div>
+
+</div><!-- /container -->
+</body>
+</html>
