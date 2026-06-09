@@ -675,249 +675,114 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
     </svg>
   </div>
 
-  <!-- FISHBONE DIAGRAM — Action by Milestone × Type -->
-  <div class="card" style="margin-top:4px;padding:24px;overflow-x:auto">
+  <!-- FISHBONE DIAGRAM — Action by Milestone × Type (v2 — table layout) -->
+  <div class="card" style="margin-top:4px;padding:20px;overflow-x:auto">
     <div class="card-title" style="font-size:14px">&#x1F9B4; Sơ Đồ Xương Cá &mdash; Action Map theo Milestone</div>
-    <div class="card-sub">Trục chính = Milestone ngày &middot; Nhánh trên/dưới = Loại action &middot; Hover để đọc chi tiết</div>
+    <div class="card-sub">Mỗi cột = 1 Milestone &middot; Mỗi hàng = 1 loại Action &middot; Ô sáng = có action tại milestone đó</div>
 
-    <svg viewBox="0 0 1200 700" style="width:100%;min-width:900px;margin-top:16px;display:block" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="spine-grad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.8"/>
-          <stop offset="20%" stop-color="#34D399" stop-opacity="0.8"/>
-          <stop offset="50%" stop-color="#60A5FA" stop-opacity="0.8"/>
-          <stop offset="80%" stop-color="#8B5CF6" stop-opacity="0.8"/>
-          <stop offset="100%" stop-color="#FF7F32" stop-opacity="0.9"/>
-        </linearGradient>
-        <filter id="fb-glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
+    <!-- Legend -->
+    <div style="display:flex;gap:16px;margin:12px 0 16px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:2px;background:#FF7F32"></div><span style="font-size:10px;color:rgba(255,255,255,0.55)">Push / Comms</span></div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:2px;background:#34D399"></div><span style="font-size:10px;color:rgba(255,255,255,0.55)">Thưởng / Incentive</span></div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:2px;background:#60A5FA"></div><span style="font-size:10px;color:rgba(255,255,255,0.55)">Unlock / Feature</span></div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:2px;background:#8B5CF6"></div><span style="font-size:10px;color:rgba(255,255,255,0.55)">Graduate / Tier</span></div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:2px;background:#F87171"></div><span style="font-size:10px;color:rgba(255,255,255,0.55)">Alert / Rescue</span></div>
+    </div>
 
-      <!-- ═══ LEGEND ═══ -->
-      <g transform="translate(40,12)">
-        <rect x="0" y="0" width="12" height="12" rx="2" fill="#FF7F32" opacity="0.8"/><text x="18" y="10" font-size="9" fill="rgba(255,255,255,0.6)" font-family="Montserrat,sans-serif">Push / Comms</text>
-        <rect x="130" y="0" width="12" height="12" rx="2" fill="#34D399" opacity="0.8"/><text x="148" y="10" font-size="9" fill="rgba(255,255,255,0.6)" font-family="Montserrat,sans-serif">Thưởng / Incentive</text>
-        <rect x="285" y="0" width="12" height="12" rx="2" fill="#60A5FA" opacity="0.8"/><text x="303" y="10" font-size="9" fill="rgba(255,255,255,0.6)" font-family="Montserrat,sans-serif">Unlock / Feature</text>
-        <rect x="430" y="0" width="12" height="12" rx="2" fill="#8B5CF6" opacity="0.8"/><text x="448" y="10" font-size="9" fill="rgba(255,255,255,0.6)" font-family="Montserrat,sans-serif">Graduate / Tier</text>
-        <rect x="575" y="0" width="12" height="12" rx="2" fill="#F87171" opacity="0.8"/><text x="593" y="10" font-size="9" fill="rgba(255,255,255,0.6)" font-family="Montserrat,sans-serif">Alert / Rescue</text>
-      </g>
+    <!-- Spine bar -->
+    <div style="height:4px;border-radius:2px;background:linear-gradient(90deg,#FBBF24 0%,#34D399 20%,#60A5FA 50%,#8B5CF6 80%,#FF7F32 100%);margin-bottom:2px;opacity:0.6"></div>
 
-      <!-- ═══ MAIN SPINE ═══ -->
-      <line x1="60" y1="350" x2="1160" y2="350" stroke="url(#spine-grad)" stroke-width="4" stroke-linecap="round" filter="url(#fb-glow)"/>
+    <table style="width:100%;table-layout:fixed;border-collapse:separate;border-spacing:3px">
+      <thead>
+        <tr>
+          <th style="width:110px;text-align:left;font-size:9px;padding:6px 8px;color:var(--text-muted)">ACTION TYPE</th>
+          <th style="text-align:center;padding:6px 2px"><div class="mono" style="font-size:13px;font-weight:800;color:#FBBF24">D0</div><div style="font-size:7px;color:rgba(255,255,255,0.3);margin-top:1px">WARM UP</div></th>
+          <th style="text-align:center;padding:6px 2px"><div class="mono" style="font-size:13px;font-weight:800;color:#FBBF24">D3</div><div style="font-size:7px;color:rgba(255,255,255,0.3);margin-top:1px">WARM UP</div></th>
+          <th style="text-align:center;padding:6px 2px"><div class="mono" style="font-size:13px;font-weight:800;color:#34D399">D7</div><div style="font-size:7px;color:rgba(255,255,255,0.3);margin-top:1px">HOOK IN</div></th>
+          <th style="text-align:center;padding:6px 2px"><div class="mono" style="font-size:13px;font-weight:800;color:#34D399">D14</div><div style="font-size:7px;color:rgba(255,255,255,0.3);margin-top:1px">HOOK IN</div></th>
+          <th style="text-align:center;padding:6px 2px"><div class="mono" style="font-size:13px;font-weight:800;color:#60A5FA">D21</div><div style="font-size:7px;color:rgba(255,255,255,0.3);margin-top:1px">LOCK IN</div></th>
+          <th style="text-align:center;padding:6px 2px"><div class="mono" style="font-size:13px;font-weight:800;color:#60A5FA">D30</div><div style="font-size:7px;color:rgba(255,255,255,0.3);margin-top:1px">LOCK IN</div></th>
+          <th style="text-align:center;padding:6px 2px"><div class="mono" style="font-size:13px;font-weight:800;color:#60A5FA">D45</div><div style="font-size:7px;color:rgba(255,255,255,0.3);margin-top:1px">LOCK IN</div></th>
+          <th style="text-align:center;padding:6px 2px"><div class="mono" style="font-size:13px;font-weight:800;color:#FF7F32">D60</div><div style="font-size:7px;color:rgba(255,255,255,0.3);margin-top:1px">GRADUATE</div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ROW 1: Push / Comms -->
+        <tr>
+          <td style="font-size:10px;font-weight:700;color:#FF7F32;padding:6px 8px;vertical-align:top;border-left:3px solid #FF7F32">&#x1F4E3; Push<br><span style="font-weight:400;color:var(--text-muted);font-size:8.5px">Comms</span></td>
+          <td style="background:rgba(255,127,50,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#FF7F32;font-weight:600">Welcome Flow</span><br><span style="font-size:8px;color:var(--text-muted)">Video 3' + Checklist</span></td>
+          <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
+          <td style="background:rgba(255,127,50,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#FF7F32;font-weight:600">Mega Streak</span><br><span style="font-size:8px;color:var(--text-muted)">bắt đầu</span></td>
+          <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
+          <td style="background:rgba(255,127,50,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#FF7F32;font-weight:600">Progress Bar</span><br><span style="font-size:8px;color:var(--text-muted)">"% đến R3 Bạc"</span></td>
+          <td style="background:rgba(255,127,50,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#FF7F32;font-weight:600">Income Report</span><br><span style="font-size:8px;color:var(--text-muted)">Tổng kết tháng 1</span></td>
+          <td style="background:rgba(255,127,50,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#FF7F32;font-weight:600">"Sắp đạt R3!"</span><br><span style="font-size:8px;color:var(--text-muted)">&ge;3w đạt Quest</span></td>
+          <td style="background:rgba(255,127,50,0.15);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#FF7F32;font-weight:600">"BH đã kích hoạt!"</span><br><span style="font-size:8px;color:var(--text-muted)">Chúc mừng TX CŨ</span></td>
+        </tr>
+        <!-- ROW 2: Thưởng / Incentive -->
+        <tr>
+          <td style="font-size:10px;font-weight:700;color:#34D399;padding:6px 8px;vertical-align:top;border-left:3px solid #34D399">&#x1F3C6; Thưởng<br><span style="font-weight:400;color:var(--text-muted);font-size:8.5px">Incentive</span></td>
+          <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Guarantee Bậc 1</span><br><span style="font-size:8px;color:var(--text-muted)">MỨC CAO</span></td>
+          <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Micro Win 5 đơn</span><br><span style="font-size:8px;color:var(--text-muted)">Progress noti</span></td>
+          <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Badge + Cash</span><br><span style="font-size:8px;color:var(--text-muted)">"Tuần Đầu Tiên"</span></td>
+          <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Badge Fortnight</span><br><span style="font-size:8px;color:var(--text-muted)">Guarantee Bậc 2</span></td>
+          <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Weekly Quest</span><br><span style="font-size:8px;color:var(--text-muted)">20/30/40 &middot; 3 bậc</span></td>
+          <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
+          <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
+          <td style="background:rgba(52,211,153,0.12);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">"Thói Quen Vàng"</span><br><span style="font-size:8px;color:var(--text-muted)">Cash + AhaPoints &times;1.1</span></td>
+        </tr>
+        <!-- ROW 3: Unlock / Feature -->
+        <tr>
+          <td style="font-size:10px;font-weight:700;color:#60A5FA;padding:6px 8px;vertical-align:top;border-left:3px solid #60A5FA">&#x1F513; Unlock<br><span style="font-weight:400;color:var(--text-muted);font-size:8.5px">Feature</span></td>
+          <td style="background:rgba(96,165,250,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#60A5FA;font-weight:600">Smart Dispatch</span><br><span style="font-size:8px;color:var(--text-muted)">Đơn gần/dễ 72h</span></td>
+          <td style="background:rgba(96,165,250,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#60A5FA;font-weight:600">Buddy Mentor</span><br><span style="font-size:8px;color:var(--text-muted)">Gán TX kinh nghiệm</span></td>
+          <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
+          <td style="background:rgba(96,165,250,0.12);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#60A5FA;font-weight:600">2H-4H-TMDT</span><br><span style="font-size:8px;color:var(--text-muted)">&ge;25 đơn</span></td>
+          <td style="background:rgba(96,165,250,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#60A5FA;font-weight:600">Đơn giá trị cao</span><br><span style="font-size:8px;color:var(--text-muted)">&ge;40 đơn</span></td>
+          <td style="background:rgba(96,165,250,0.12);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#60A5FA;font-weight:600">Toàn bộ DV</span><br><span style="font-size:8px;color:var(--text-muted)">&ge;60 đơn</span></td>
+          <td style="background:rgba(96,165,250,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#60A5FA;font-weight:600">Enterprise/SME</span><br><span style="font-size:8px;color:var(--text-muted)">&ge;100 đơn</span></td>
+          <td style="background:rgba(96,165,250,0.15);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#60A5FA;font-weight:600">BH Bronze</span><br><span style="font-size:8px;color:var(--text-muted)">L4 Bigzone</span></td>
+        </tr>
+        <!-- ROW 4: Graduate / Tier -->
+        <tr>
+          <td style="font-size:10px;font-weight:700;color:#8B5CF6;padding:6px 8px;vertical-align:top;border-left:3px solid #8B5CF6">&#x1F393; Graduate<br><span style="font-weight:400;color:var(--text-muted);font-size:8.5px">Tier</span></td>
+          <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
+          <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
+          <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
+          <td style="background:rgba(139,92,246,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#8B5CF6;font-weight:600">Guarantee Bậc 2</span><br><span style="font-size:8px;color:var(--text-muted)">-20% mức thưởng</span></td>
+          <td style="background:rgba(139,92,246,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#8B5CF6;font-weight:600">Guarantee Bậc 3</span><br><span style="font-size:8px;color:var(--text-muted)">-40% mức thưởng</span></td>
+          <td style="background:rgba(139,92,246,0.12);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#8B5CF6;font-weight:600">Guarantee HẾT</span><br><span style="font-size:8px;color:var(--text-muted)">&rarr; Weekly policy</span></td>
+          <td style="background:rgba(139,92,246,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#8B5CF6;font-weight:600">Tier path mở</span><br><span style="font-size:8px;color:var(--text-muted)">Quest &rarr; R3 Bạc</span></td>
+          <td style="background:rgba(139,92,246,0.18);border-radius:8px;padding:6px;text-align:center;vertical-align:top;border:1px solid rgba(139,92,246,0.3)"><span style="font-size:9.5px;color:#8B5CF6;font-weight:700">TỐT NGHIỆP</span><br><span style="font-size:8px;color:var(--text-muted)">R3 Bạc + Grace 14d</span></td>
+        </tr>
+        <!-- ROW 5: Alert / Rescue -->
+        <tr>
+          <td style="font-size:10px;font-weight:700;color:#F87171;padding:6px 8px;vertical-align:top;border-left:3px solid #F87171">&#x1F6A8; Alert<br><span style="font-weight:400;color:var(--text-muted);font-size:8.5px">Rescue</span></td>
+          <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
+          <td style="background:rgba(248,113,113,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#F87171;font-weight:600">&#x1F4DE; Gọi điện</span><br><span style="font-size:8px;color:var(--text-muted)">Chưa online &ge;48h</span></td>
+          <td style="background:rgba(248,113,113,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#F87171;font-weight:600">Push nudge</span><br><span style="font-size:8px;color:var(--text-muted)">"Còn X đơn!"</span></td>
+          <td style="background:rgba(248,113,113,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#F87171;font-weight:600">&#x1F4DE; Buddy call</span><br><span style="font-size:8px;color:var(--text-muted)">+ Quest cá nhân</span></td>
+          <td style="background:rgba(248,113,113,0.08);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#F87171;font-weight:600">Income Proj.</span><br><span style="font-size:8px;color:var(--text-muted)">Inactive &ge;5d</span></td>
+          <td style="background:rgba(248,113,113,0.12);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#F87171;font-weight:600">&#x1F4DE; Gọi điện</span><br><span style="font-size:8px;color:var(--text-muted)">Inactive &ge;7d</span></td>
+          <td style="background:rgba(248,113,113,0.12);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#F87171;font-weight:600">&#x1F4DE; + Quest</span><br><span style="font-size:8px;color:var(--text-muted)">Drop &ge;10d</span></td>
+          <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
+        </tr>
+      </tbody>
+    </table>
 
-      <!-- Arrow head -->
-      <polygon points="1160,350 1148,344 1148,356" fill="#FF7F32" opacity="0.9"/>
-
-      <!-- ═══════ D0 ═══════ -->
-      <circle cx="100" cy="350" r="8" fill="#FBBF24" opacity="0.9"/>
-      <text x="100" y="375" text-anchor="middle" font-family="Space Mono,monospace" font-size="12" font-weight="700" fill="#FBBF24">D0</text>
-
-      <!-- UP: Push -->
-      <line x1="100" y1="342" x2="100" y2="280" stroke="#FF7F32" stroke-width="1.5" opacity="0.5"/>
-      <rect x="40" y="255" width="120" height="28" rx="6" fill="rgba(255,127,50,0.12)" stroke="#FF7F32" stroke-width="0.8" opacity="0.7"/>
-      <text x="100" y="273" text-anchor="middle" font-size="9" fill="#FF7F32" font-family="Montserrat,sans-serif" font-weight="600">Welcome Flow</text>
-      <text x="100" y="284" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">Video 3' + Checklist</text>
-
-      <!-- UP2: Incentive -->
-      <line x1="100" y1="255" x2="100" y2="210" stroke="#34D399" stroke-width="1" opacity="0.4"/>
-      <rect x="30" y="188" width="140" height="24" rx="6" fill="rgba(52,211,153,0.1)" stroke="#34D399" stroke-width="0.8" opacity="0.6"/>
-      <text x="100" y="204" text-anchor="middle" font-size="9" fill="#34D399" font-family="Montserrat,sans-serif" font-weight="600">Guarantee Bậc 1 (MỨC CAO)</text>
-
-      <!-- DOWN: Feature -->
-      <line x1="100" y1="358" x2="100" y2="410" stroke="#60A5FA" stroke-width="1.5" opacity="0.5"/>
-      <rect x="30" y="410" width="140" height="28" rx="6" fill="rgba(96,165,250,0.1)" stroke="#60A5FA" stroke-width="0.8" opacity="0.7"/>
-      <text x="100" y="428" text-anchor="middle" font-size="9" fill="#60A5FA" font-family="Montserrat,sans-serif" font-weight="600">Smart Dispatch ưu tiên</text>
-      <text x="100" y="439" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">Đơn gần + Đơn dễ 72h</text>
-
-      <!-- DOWN2: Feature -->
-      <line x1="100" y1="438" x2="100" y2="470" stroke="#60A5FA" stroke-width="1" opacity="0.3"/>
-      <rect x="35" y="470" width="130" height="24" rx="6" fill="rgba(96,165,250,0.08)" stroke="#60A5FA" stroke-width="0.8" opacity="0.5"/>
-      <text x="100" y="486" text-anchor="middle" font-size="9" fill="#60A5FA" font-family="Montserrat,sans-serif" font-weight="600">Gán Buddy Mentor</text>
-
-      <!-- ═══════ D3 ═══════ -->
-      <circle cx="230" cy="350" r="7" fill="#FBBF24" opacity="0.8"/>
-      <text x="230" y="375" text-anchor="middle" font-family="Space Mono,monospace" font-size="12" font-weight="700" fill="#FBBF24">D3</text>
-
-      <!-- UP: Incentive -->
-      <line x1="230" y1="342" x2="230" y2="280" stroke="#34D399" stroke-width="1.5" opacity="0.5"/>
-      <rect x="165" y="255" width="130" height="28" rx="6" fill="rgba(52,211,153,0.1)" stroke="#34D399" stroke-width="0.8" opacity="0.7"/>
-      <text x="230" y="273" text-anchor="middle" font-size="9" fill="#34D399" font-family="Montserrat,sans-serif" font-weight="600">Micro Win: 5 đơn</text>
-      <text x="230" y="284" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">Progress notification</text>
-
-      <!-- DOWN: Alert -->
-      <line x1="230" y1="358" x2="230" y2="410" stroke="#F87171" stroke-width="1.5" opacity="0.5"/>
-      <rect x="160" y="410" width="140" height="28" rx="6" fill="rgba(248,113,113,0.1)" stroke="#F87171" stroke-width="0.8" opacity="0.7"/>
-      <text x="230" y="428" text-anchor="middle" font-size="9" fill="#F87171" font-family="Montserrat,sans-serif" font-weight="600">Chưa online &ge;48h</text>
-      <text x="230" y="439" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">&#x1F4DE; Gọi điện trực tiếp</text>
-
-      <!-- ═══════ D7 ═══════ -->
-      <circle cx="370" cy="350" r="8" fill="#34D399" opacity="0.9"/>
-      <text x="370" y="375" text-anchor="middle" font-family="Space Mono,monospace" font-size="12" font-weight="700" fill="#34D399">D7</text>
-
-      <!-- UP: Incentive -->
-      <line x1="370" y1="342" x2="370" y2="270" stroke="#34D399" stroke-width="1.5" opacity="0.5"/>
-      <rect x="300" y="245" width="140" height="28" rx="6" fill="rgba(52,211,153,0.12)" stroke="#34D399" stroke-width="0.8" opacity="0.7"/>
-      <text x="370" y="263" text-anchor="middle" font-size="9" fill="#34D399" font-family="Montserrat,sans-serif" font-weight="600">Badge "Tuần Đầu" + Cash</text>
-      <text x="370" y="274" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">&ge;7 đơn hoàn thành</text>
-
-      <!-- UP2: Push -->
-      <line x1="370" y1="245" x2="370" y2="205" stroke="#FF7F32" stroke-width="1" opacity="0.4"/>
-      <rect x="305" y="183" width="130" height="24" rx="6" fill="rgba(255,127,50,0.1)" stroke="#FF7F32" stroke-width="0.8" opacity="0.6"/>
-      <text x="370" y="199" text-anchor="middle" font-size="9" fill="#FF7F32" font-family="Montserrat,sans-serif" font-weight="600">Mega Streak bắt đầu</text>
-
-      <!-- DOWN: Alert -->
-      <line x1="370" y1="358" x2="370" y2="410" stroke="#F87171" stroke-width="1.5" opacity="0.5"/>
-      <rect x="300" y="410" width="140" height="28" rx="6" fill="rgba(248,113,113,0.1)" stroke="#F87171" stroke-width="0.8" opacity="0.7"/>
-      <text x="370" y="428" text-anchor="middle" font-size="9" fill="#F87171" font-family="Montserrat,sans-serif" font-weight="600">Chưa đạt 7 đơn</text>
-      <text x="370" y="439" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">Push "Chỉ còn X đơn!"</text>
-
-      <!-- ═══════ D14 ═══════ -->
-      <circle cx="500" cy="350" r="8" fill="#34D399" opacity="0.9"/>
-      <text x="500" y="375" text-anchor="middle" font-family="Space Mono,monospace" font-size="12" font-weight="700" fill="#34D399">D14</text>
-
-      <!-- UP: Incentive -->
-      <line x1="500" y1="342" x2="500" y2="280" stroke="#34D399" stroke-width="1.5" opacity="0.5"/>
-      <rect x="435" y="255" width="130" height="28" rx="6" fill="rgba(52,211,153,0.12)" stroke="#34D399" stroke-width="0.8" opacity="0.7"/>
-      <text x="500" y="273" text-anchor="middle" font-size="9" fill="#34D399" font-family="Montserrat,sans-serif" font-weight="600">Badge Fortnight</text>
-      <text x="500" y="284" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">Guarantee &rarr; Bậc 2 (-20%)</text>
-
-      <!-- UP2: Unlock -->
-      <line x1="500" y1="255" x2="500" y2="210" stroke="#60A5FA" stroke-width="1" opacity="0.4"/>
-      <rect x="435" y="188" width="130" height="24" rx="6" fill="rgba(96,165,250,0.1)" stroke="#60A5FA" stroke-width="0.8" opacity="0.6"/>
-      <text x="500" y="204" text-anchor="middle" font-size="9" fill="#60A5FA" font-family="Montserrat,sans-serif" font-weight="600">Unlock 2H-4H-TMDT</text>
-
-      <!-- DOWN: Alert -->
-      <line x1="500" y1="358" x2="500" y2="410" stroke="#F87171" stroke-width="1.5" opacity="0.5"/>
-      <rect x="430" y="410" width="140" height="28" rx="6" fill="rgba(248,113,113,0.1)" stroke="#F87171" stroke-width="0.8" opacity="0.7"/>
-      <text x="500" y="428" text-anchor="middle" font-size="9" fill="#F87171" font-family="Montserrat,sans-serif" font-weight="600">Chưa đạt streak</text>
-      <text x="500" y="439" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">&#x1F4DE; Buddy call + Quest</text>
-
-      <!-- ═══════ D21 ═══════ -->
-      <circle cx="620" cy="350" r="7" fill="#60A5FA" opacity="0.85"/>
-      <text x="620" y="375" text-anchor="middle" font-family="Space Mono,monospace" font-size="12" font-weight="700" fill="#60A5FA">D21</text>
-
-      <!-- UP: Incentive -->
-      <line x1="620" y1="342" x2="620" y2="280" stroke="#34D399" stroke-width="1.5" opacity="0.5"/>
-      <rect x="555" y="255" width="130" height="28" rx="6" fill="rgba(52,211,153,0.1)" stroke="#34D399" stroke-width="0.8" opacity="0.7"/>
-      <text x="620" y="273" text-anchor="middle" font-size="9" fill="#34D399" font-family="Montserrat,sans-serif" font-weight="600">Weekly Quest System</text>
-      <text x="620" y="284" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">20/30/40 đơn &middot; 3 bậc</text>
-
-      <!-- UP2: Unlock -->
-      <line x1="620" y1="255" x2="620" y2="210" stroke="#60A5FA" stroke-width="1" opacity="0.4"/>
-      <rect x="545" y="188" width="150" height="24" rx="6" fill="rgba(96,165,250,0.1)" stroke="#60A5FA" stroke-width="0.8" opacity="0.6"/>
-      <text x="620" y="204" text-anchor="middle" font-size="9" fill="#60A5FA" font-family="Montserrat,sans-serif" font-weight="600">Nhóm đơn giá trị cao (&ge;40)</text>
-
-      <!-- DOWN: Push -->
-      <line x1="620" y1="358" x2="620" y2="410" stroke="#FF7F32" stroke-width="1.5" opacity="0.5"/>
-      <rect x="555" y="410" width="130" height="28" rx="6" fill="rgba(255,127,50,0.1)" stroke="#FF7F32" stroke-width="0.8" opacity="0.7"/>
-      <text x="620" y="428" text-anchor="middle" font-size="9" fill="#FF7F32" font-family="Montserrat,sans-serif" font-weight="600">Progress Bar</text>
-      <text x="620" y="439" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">"% đến R3 Bạc"</text>
-
-      <!-- ═══════ D30 ═══════ -->
-      <circle cx="740" cy="350" r="9" fill="#60A5FA" opacity="0.9"/>
-      <circle cx="740" cy="350" r="13" fill="none" stroke="#60A5FA" stroke-width="1" opacity="0.3"/>
-      <text x="740" y="375" text-anchor="middle" font-family="Space Mono,monospace" font-size="12" font-weight="700" fill="#60A5FA">D30</text>
-
-      <!-- UP: Graduate -->
-      <line x1="740" y1="341" x2="740" y2="270" stroke="#8B5CF6" stroke-width="1.5" opacity="0.5"/>
-      <rect x="670" y="245" width="140" height="28" rx="6" fill="rgba(139,92,246,0.12)" stroke="#8B5CF6" stroke-width="0.8" opacity="0.7"/>
-      <text x="740" y="263" text-anchor="middle" font-size="9" fill="#8B5CF6" font-family="Montserrat,sans-serif" font-weight="600">Guarantee KẾT THÚC</text>
-      <text x="740" y="274" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">&rarr; Weekly policy bình thường</text>
-
-      <!-- UP2: Push -->
-      <line x1="740" y1="245" x2="740" y2="205" stroke="#FF7F32" stroke-width="1" opacity="0.4"/>
-      <rect x="672" y="183" width="136" height="24" rx="6" fill="rgba(255,127,50,0.1)" stroke="#FF7F32" stroke-width="0.8" opacity="0.6"/>
-      <text x="740" y="199" text-anchor="middle" font-size="9" fill="#FF7F32" font-family="Montserrat,sans-serif" font-weight="600">Income Report tháng 1</text>
-
-      <!-- UP3: Unlock -->
-      <line x1="740" y1="183" x2="740" y2="148" stroke="#60A5FA" stroke-width="1" opacity="0.3"/>
-      <rect x="670" y="126" width="140" height="24" rx="6" fill="rgba(96,165,250,0.1)" stroke="#60A5FA" stroke-width="0.8" opacity="0.5"/>
-      <text x="740" y="142" text-anchor="middle" font-size="9" fill="#60A5FA" font-family="Montserrat,sans-serif" font-weight="600">Unlock toàn bộ DV (&ge;60)</text>
-
-      <!-- DOWN: Alert -->
-      <line x1="740" y1="359" x2="740" y2="410" stroke="#F87171" stroke-width="1.5" opacity="0.5"/>
-      <rect x="670" y="410" width="140" height="28" rx="6" fill="rgba(248,113,113,0.1)" stroke="#F87171" stroke-width="0.8" opacity="0.7"/>
-      <text x="740" y="428" text-anchor="middle" font-size="9" fill="#F87171" font-family="Montserrat,sans-serif" font-weight="600">Inactive &ge;7d</text>
-      <text x="740" y="439" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">&#x1F4DE; Gọi điện + Quest cứu</text>
-
-      <!-- DOWN2: Graduate -->
-      <line x1="740" y1="438" x2="740" y2="470" stroke="#8B5CF6" stroke-width="1" opacity="0.3"/>
-      <rect x="672" y="470" width="136" height="24" rx="6" fill="rgba(139,92,246,0.08)" stroke="#8B5CF6" stroke-width="0.8" opacity="0.5"/>
-      <text x="740" y="486" text-anchor="middle" font-size="9" fill="#8B5CF6" font-family="Montserrat,sans-serif" font-weight="600">Tier upgrade path mở</text>
-
-      <!-- ═══════ D45 ═══════ -->
-      <circle cx="870" cy="350" r="7" fill="#60A5FA" opacity="0.8"/>
-      <text x="870" y="375" text-anchor="middle" font-family="Space Mono,monospace" font-size="12" font-weight="700" fill="#60A5FA">D45</text>
-
-      <!-- UP: Push -->
-      <line x1="870" y1="342" x2="870" y2="280" stroke="#FF7F32" stroke-width="1.5" opacity="0.5"/>
-      <rect x="805" y="255" width="130" height="28" rx="6" fill="rgba(255,127,50,0.1)" stroke="#FF7F32" stroke-width="0.8" opacity="0.7"/>
-      <text x="870" y="273" text-anchor="middle" font-size="9" fill="#FF7F32" font-family="Montserrat,sans-serif" font-weight="600">"Sắp đạt R3 Bạc!"</text>
-      <text x="870" y="284" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">&ge;3 tuần đạt Quest</text>
-
-      <!-- UP2: Unlock -->
-      <line x1="870" y1="255" x2="870" y2="210" stroke="#60A5FA" stroke-width="1" opacity="0.4"/>
-      <rect x="805" y="188" width="130" height="24" rx="6" fill="rgba(96,165,250,0.1)" stroke="#60A5FA" stroke-width="0.8" opacity="0.6"/>
-      <text x="870" y="204" text-anchor="middle" font-size="9" fill="#60A5FA" font-family="Montserrat,sans-serif" font-weight="600">Enterprise/SME (&ge;100)</text>
-
-      <!-- DOWN: Alert -->
-      <line x1="870" y1="358" x2="870" y2="410" stroke="#F87171" stroke-width="1.5" opacity="0.5"/>
-      <rect x="800" y="410" width="140" height="28" rx="6" fill="rgba(248,113,113,0.1)" stroke="#F87171" stroke-width="0.8" opacity="0.7"/>
-      <text x="870" y="428" text-anchor="middle" font-size="9" fill="#F87171" font-family="Montserrat,sans-serif" font-weight="600">Drop &ge;10d</text>
-      <text x="870" y="439" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">&#x1F4DE; Gọi + Quest đặc biệt</text>
-
-      <!-- DOWN2: Feature -->
-      <line x1="870" y1="438" x2="870" y2="470" stroke="#60A5FA" stroke-width="1" opacity="0.3"/>
-      <rect x="800" y="470" width="140" height="24" rx="6" fill="rgba(96,165,250,0.08)" stroke="#60A5FA" stroke-width="0.8" opacity="0.5"/>
-      <text x="870" y="486" text-anchor="middle" font-size="9" fill="#60A5FA" font-family="Montserrat,sans-serif" font-weight="600">Community Zalo Group</text>
-
-      <!-- ═══════ D60 ═══════ -->
-      <circle cx="1040" cy="350" r="10" fill="#FF7F32" opacity="0.95"/>
-      <circle cx="1040" cy="350" r="15" fill="none" stroke="#FF7F32" stroke-width="1.5" opacity="0.4"/>
-      <circle cx="1040" cy="350" r="20" fill="none" stroke="#FF7F32" stroke-width="0.5" opacity="0.2"/>
-      <text x="1040" y="375" text-anchor="middle" font-family="Space Mono,monospace" font-size="12" font-weight="700" fill="#FF7F32">D60</text>
-
-      <!-- UP: Graduate -->
-      <line x1="1040" y1="340" x2="1040" y2="270" stroke="#8B5CF6" stroke-width="1.5" opacity="0.6"/>
-      <rect x="968" y="245" width="144" height="28" rx="6" fill="rgba(139,92,246,0.15)" stroke="#8B5CF6" stroke-width="1" opacity="0.8"/>
-      <text x="1040" y="263" text-anchor="middle" font-size="9" fill="#8B5CF6" font-family="Montserrat,sans-serif" font-weight="700">&#x1F393; TỐT NGHIỆP &rarr; TX CŨ</text>
-      <text x="1040" y="274" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.45)" font-family="Montserrat,sans-serif">R3 Bạc nếu DQS&ge;75</text>
-
-      <!-- UP2: Incentive -->
-      <line x1="1040" y1="245" x2="1040" y2="205" stroke="#34D399" stroke-width="1" opacity="0.4"/>
-      <rect x="968" y="183" width="144" height="24" rx="6" fill="rgba(52,211,153,0.1)" stroke="#34D399" stroke-width="0.8" opacity="0.6"/>
-      <text x="1040" y="199" text-anchor="middle" font-size="9" fill="#34D399" font-family="Montserrat,sans-serif" font-weight="600">Badge "Thói Quen Vàng" + Cash</text>
-
-      <!-- UP3: Unlock -->
-      <line x1="1040" y1="183" x2="1040" y2="148" stroke="#60A5FA" stroke-width="1" opacity="0.3"/>
-      <rect x="970" y="126" width="140" height="24" rx="6" fill="rgba(96,165,250,0.1)" stroke="#60A5FA" stroke-width="0.8" opacity="0.5"/>
-      <text x="1040" y="142" text-anchor="middle" font-size="9" fill="#60A5FA" font-family="Montserrat,sans-serif" font-weight="600">BH Bronze + L4 Bigzone</text>
-
-      <!-- UP4: Incentive -->
-      <line x1="1040" y1="126" x2="1040" y2="96" stroke="#34D399" stroke-width="1" opacity="0.25"/>
-      <rect x="972" y="74" width="136" height="24" rx="6" fill="rgba(52,211,153,0.08)" stroke="#34D399" stroke-width="0.8" opacity="0.4"/>
-      <text x="1040" y="90" text-anchor="middle" font-size="9" fill="#34D399" font-family="Montserrat,sans-serif" font-weight="600">AhaPoints &times;1.1</text>
-
-      <!-- DOWN: Push -->
-      <line x1="1040" y1="360" x2="1040" y2="410" stroke="#FF7F32" stroke-width="1.5" opacity="0.5"/>
-      <rect x="968" y="410" width="144" height="36" rx="6" fill="rgba(255,127,50,0.12)" stroke="#FF7F32" stroke-width="0.8" opacity="0.7"/>
-      <text x="1040" y="427" text-anchor="middle" font-size="8" fill="#FF7F32" font-family="Montserrat,sans-serif" font-weight="600">"Chúc mừng! BH tai nạn</text>
-      <text x="1040" y="438" text-anchor="middle" font-size="8" fill="#FF7F32" font-family="Montserrat,sans-serif" font-weight="600">đã được kích hoạt!"</text>
-
-      <!-- DOWN2: Feature -->
-      <line x1="1040" y1="446" x2="1040" y2="475" stroke="#8B5CF6" stroke-width="1" opacity="0.3"/>
-      <rect x="972" y="475" width="136" height="24" rx="6" fill="rgba(139,92,246,0.08)" stroke="#8B5CF6" stroke-width="0.8" opacity="0.5"/>
-      <text x="1040" y="491" text-anchor="middle" font-size="9" fill="#8B5CF6" font-family="Montserrat,sans-serif" font-weight="600">Grace Period 14d bắt đầu</text>
-
-      <!-- ═══ PHASE LABELS dưới spine ═══ -->
-      <rect x="60" y="392" width="170" height="2" rx="1" fill="#FBBF24" opacity="0.25"/>
-      <text x="145" y="404" text-anchor="middle" font-size="8" fill="#FBBF24" opacity="0.5" font-family="Montserrat,sans-serif" font-weight="700">WARM UP</text>
-
-      <rect x="280" y="392" width="270" height="2" rx="1" fill="#34D399" opacity="0.25"/>
-      <text x="415" y="404" text-anchor="middle" font-size="8" fill="#34D399" opacity="0.5" font-family="Montserrat,sans-serif" font-weight="700">HOOK IN</text>
-
-      <rect x="570" y="392" width="530" height="2" rx="1" fill="#60A5FA" opacity="0.25"/>
-      <text x="835" y="404" text-anchor="middle" font-size="8" fill="#60A5FA" opacity="0.5" font-family="Montserrat,sans-serif" font-weight="700">LOCK IN</text>
-    </svg>
+    <!-- Phase bar dưới bảng -->
+    <div style="display:flex;margin-top:8px;gap:2px">
+      <div style="flex:2.3;height:3px;border-radius:2px;background:#FBBF24;opacity:0.35"></div>
+      <div style="flex:2.3;height:3px;border-radius:2px;background:#34D399;opacity:0.35"></div>
+      <div style="flex:4.4;height:3px;border-radius:2px;background:#60A5FA;opacity:0.35"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:#FF7F32;opacity:0.5"></div>
+    </div>
+    <div style="display:flex;margin-top:2px;gap:2px">
+      <div style="flex:2.3;text-align:center;font-size:8px;font-weight:700;color:#FBBF24;opacity:0.5">WARM UP</div>
+      <div style="flex:2.3;text-align:center;font-size:8px;font-weight:700;color:#34D399;opacity:0.5">HOOK IN</div>
+      <div style="flex:4.4;text-align:center;font-size:8px;font-weight:700;color:#60A5FA;opacity:0.5">LOCK IN</div>
+      <div style="flex:1;text-align:center;font-size:8px;font-weight:700;color:#FF7F32;opacity:0.5">GRAD</div>
+    </div>
   </div>
 
   <!-- PHASE 1 -->
