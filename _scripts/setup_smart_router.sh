@@ -10,7 +10,7 @@ else
     cat >> ~/.zshrc << 'EOF'
 
 # === Claude Aliases for 9Router ===
-alias c-think="claude --model cc/claude-opus-4-7"
+alias c-think="claude --model cc/claude-opus-4-8"
 alias c-code="claude --model cc/claude-sonnet-4-6"
 alias c-fast="claude --model oc/deepseek-v4-flash-free"
 # ============================================
@@ -29,7 +29,7 @@ smart_claude() {
 
     # 1. Phân nhóm Opus (The Brain - Tư duy sâu, chiến lược, phân tích phức tạp)
     if [[ "$lower_prompt" =~ (phân tích|chiến lược|kế hoạch|logic|kiến trúc|hệ thống|quy hoạch|tư duy|chiều sâu|đánh đổi|trade-off|p\&l|sla|nguyên nhân gốc rễ|root cause|insight|quyết định|decision|rủi ro|fraud|cung cầu|supply|demand|tâm lý|hành vi) ]]; then
-        model="cc/claude-opus-4-7"
+        model="cc/claude-opus-4-8"
         echo -e "\n🧠 [Smart Router] Nhận diện Task Tư Duy Sâu -> 🚀 Đang bật OPUS (Max Logic)..."
         
     # 2. Phân nhóm Gemini Pro (The Communicator / Context - Giao tiếp, đọc/xử lý văn bản lớn, thông báo Zalo, dịch thuật)
