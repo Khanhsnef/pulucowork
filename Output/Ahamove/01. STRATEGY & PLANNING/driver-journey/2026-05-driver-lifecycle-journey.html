@@ -904,6 +904,167 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
 </div>
 
 <!-- ═══════════════════════════════════════════
+     04B — DRIVER LIFECYCLE OVERVIEW
+═══════════════════════════════════════════ -->
+<div class="section" id="lifecycle-overview">
+  <div class="section-header">
+    <span class="section-num" style="background:linear-gradient(135deg,var(--orange),var(--info))">&#x1F4CA;</span>
+    <span class="section-title">Driver Lifecycle &mdash; 2 Giai Đoạn <span>Tổng quan vòng đời tài xế</span></span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <!-- TÀI XẾ MỚI -->
+    <div class="card" style="border:1px solid rgba(52,211,153,0.25);padding:0;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:20px 20px 12px">
+        <div>
+          <div style="font-size:16px;font-weight:800;color:var(--success)">&#x1F7E2; TÀI XẾ MỚI</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">D1 &rarr; D60 &middot; Focus: Retention tối đa</div>
+        </div>
+        <div style="text-align:right">
+          <div class="mono" style="font-size:28px;font-weight:800;color:var(--text-primary)">68%</div>
+          <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">D60 Target</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin:0 20px 16px;border-radius:10px;overflow:hidden">
+        <div style="background:var(--orange-dim);padding:10px;text-align:center;border-right:1px solid rgba(255,127,50,0.1)">
+          <div style="font-size:9px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.5px">Activation</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text-primary);margin-top:2px">D1&mdash;D3</div>
+        </div>
+        <div style="background:var(--success-dim);padding:10px;text-align:center;border-right:1px solid rgba(52,211,153,0.1)">
+          <div style="font-size:9px;font-weight:700;color:var(--success);text-transform:uppercase;letter-spacing:0.5px">First Win</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text-primary);margin-top:2px">D4&mdash;D14</div>
+        </div>
+        <div style="background:var(--info-dim);padding:10px;text-align:center;border-bottom:2px solid var(--info)">
+          <div style="font-size:9px;font-weight:700;color:var(--info);text-transform:uppercase;letter-spacing:0.5px">Habit Build</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text-primary);margin-top:2px">D15&mdash;D60</div>
+        </div>
+      </div>
+      <div style="padding:0 20px 16px;display:flex;flex-direction:column;gap:0">
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
+          <span class="mono" style="min-width:44px;font-size:13px;font-weight:700;color:var(--orange)">D1</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">First Trip + Instant Payout + Transparency</span>
+          <span class="badge badge-red" style="font-size:9px">Critical</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
+          <span class="mono" style="min-width:44px;font-size:13px;font-weight:700;color:var(--orange)">D3</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">Micro Win 5 đơn + Buddy match</span>
+          <span class="badge badge-orange" style="font-size:9px">High</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
+          <span class="mono" style="min-width:44px;font-size:13px;font-weight:700;color:var(--orange)">D7</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">Activation Badge + Mega Streak</span>
+          <span class="badge badge-red" style="font-size:9px">Critical</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
+          <span class="mono" style="min-width:44px;font-size:13px;font-weight:700;color:var(--orange)">D14</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">Guarantee Bậc 2 + Payout lock-in</span>
+          <span class="badge badge-red" style="font-size:9px">Critical</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
+          <span class="mono" style="min-width:44px;font-size:13px;font-weight:700;color:var(--orange)">D21</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">Habit Check (21 đơn = habit loop)</span>
+          <span class="badge badge-purple" style="font-size:9px">Medium</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle);background:rgba(255,127,50,0.04);margin:0 -20px;padding-left:20px;padding-right:20px">
+          <span class="mono" style="min-width:44px;font-size:13px;font-weight:700;color:var(--orange)">D30</span>
+          <span style="flex:1;font-size:12px;color:var(--orange);font-weight:600">&#x26A1; Eligible R3 Bạc &middot; Guarantee &rarr; Quest</span>
+          <span class="badge badge-red" style="font-size:9px">Critical</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
+          <span class="mono" style="min-width:44px;font-size:13px;font-weight:700;color:var(--orange)">D45</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">100 Orders + Unlock Enterprise</span>
+          <span class="badge badge-orange" style="font-size:9px">High</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;background:rgba(255,127,50,0.04);margin:0 -20px;padding-left:20px;padding-right:20px">
+          <span class="mono" style="min-width:44px;font-size:13px;font-weight:700;color:var(--orange)">D60</span>
+          <span style="flex:1;font-size:12px;color:var(--success);font-weight:600">&#x1F393; Tốt nghiệp &rarr; Tài xế Cũ (nếu R3+)</span>
+          <span class="badge badge-red" style="font-size:9px">Critical</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TÀI XẾ CŨ -->
+    <div class="card" style="border:1px solid rgba(255,127,50,0.25);padding:0;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:20px 20px 12px">
+        <div>
+          <div style="font-size:16px;font-weight:800;color:var(--orange)">&#x1F7E0; TÀI XẾ CŨ</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">D60+ &middot; Quản lý theo Ranking Tier</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:15px;font-weight:800;color:var(--orange)">R3 &rarr; R2 &rarr; R1</div>
+          <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Thăng hạng + Giữ hạng</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin:0 20px 16px;border-radius:10px;overflow:hidden">
+        <div style="background:rgba(148,163,184,0.08);padding:10px;text-align:center;border-right:1px solid rgba(148,163,184,0.1)">
+          <div style="font-size:10px;font-weight:700;color:#94A3B8">&#x1F6E1; R3 BẠC</div>
+          <div class="mono" style="font-size:10px;color:var(--text-muted);margin-top:3px">DQS &ge;75 &middot; &ge;70 stp</div>
+          <div style="font-size:9px;color:var(--info);margin-top:2px">Bronze Insurance</div>
+        </div>
+        <div style="background:rgba(251,191,36,0.06);padding:10px;text-align:center;border-right:1px solid rgba(251,191,36,0.1)">
+          <div style="font-size:10px;font-weight:700;color:#FBBF24">&#x1F451; R2 VÀNG</div>
+          <div class="mono" style="font-size:10px;color:var(--text-muted);margin-top:3px">DQS &ge;75 &middot; &ge;210 stp</div>
+          <div style="font-size:9px;color:var(--info);margin-top:2px">Silver Insurance</div>
+        </div>
+        <div style="background:rgba(239,68,68,0.06);padding:10px;text-align:center">
+          <div style="font-size:10px;font-weight:700;color:var(--danger)">&#x1F48E; R1 KIM C&#431;&#416;NG</div>
+          <div class="mono" style="font-size:10px;color:var(--text-muted);margin-top:3px">DQS &ge;80 &middot; &ge;280 stp</div>
+          <div style="font-size:9px;color:var(--danger);margin-top:2px">Gold Insurance</div>
+        </div>
+      </div>
+      <div style="padding:0 20px 16px;display:flex;flex-direction:column;gap:0">
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
+          <span class="mono" style="min-width:52px;font-size:13px;font-weight:700;color:var(--orange)">D60</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">Ranking Activation (DQS) &middot; Chính thức R3</span>
+          <span class="badge badge-red" style="font-size:9px">Critical</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
+          <span class="mono" style="min-width:52px;font-size:13px;font-weight:700;color:var(--orange)">D90</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">Bronze Insurance + Quest weekly</span>
+          <span class="badge badge-orange" style="font-size:9px">High</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
+          <span class="mono" style="min-width:52px;font-size:13px;font-weight:700;color:var(--orange)">D120</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">Community Invite + Area Captain</span>
+          <span class="badge badge-orange" style="font-size:9px">High</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle);background:rgba(255,127,50,0.04);margin:0 -20px;padding-left:20px;padding-right:20px">
+          <span class="mono" style="min-width:52px;font-size:13px;font-weight:700;color:var(--orange)">D180</span>
+          <span style="flex:1;font-size:12px;color:var(--warn);font-weight:600">&#x26A1; R2 Vàng target &middot; Silver Insurance &middot; Full-day ca</span>
+          <span class="badge badge-red" style="font-size:9px">Critical</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
+          <span class="mono" style="min-width:52px;font-size:13px;font-weight:700;color:var(--orange)">D270</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">9-Month Performance Review</span>
+          <span class="badge badge-purple" style="font-size:9px">Medium</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle);background:rgba(255,127,50,0.04);margin:0 -20px;padding-left:20px;padding-right:20px">
+          <span class="mono" style="min-width:52px;font-size:13px;font-weight:700;color:var(--orange)">D365</span>
+          <span style="flex:1;font-size:12px;color:var(--orange);font-weight:600">&#x1F3C6; Anniversary &middot; R1 target &middot; Gold Insurance</span>
+          <span class="badge badge-red" style="font-size:9px">Critical</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:10px 0">
+          <span class="mono" style="min-width:52px;font-size:13px;font-weight:700;color:var(--orange)">D365+</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">Ambassador + Mentor + Advisory Board</span>
+          <span class="badge badge-orange" style="font-size:9px">High</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;padding:0 20px 16px">
+        <div style="flex:1;background:var(--danger-dim);border:1px solid rgba(239,68,68,0.12);border-radius:8px;padding:8px 12px;font-size:10.5px;color:var(--text-secondary)">&#x1F6E1; <strong style="color:var(--danger)">Grace Period</strong> &middot; 14 ngày cứu hạng</div>
+        <div style="flex:1;background:var(--info-dim);border:1px solid rgba(59,130,246,0.12);border-radius:8px;padding:8px 12px;font-size:10.5px;color:var(--text-secondary)">&#x1F4C9; <strong style="color:var(--info)">Loss Aversion</strong> &middot; Cảnh báo mất benefits</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DORMANT BAR -->
+  <div class="card" style="border:1px solid rgba(239,68,68,0.2);margin-top:4px;padding:12px 20px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:13px;font-weight:800;color:var(--danger)">&#x1F534; DORMANT</span>
+    <span style="flex:1;font-size:12px;color:var(--text-secondary)">Inactive &ge;14 ngày (cả Mới &amp; Cũ) &rarr; Tiered Win-back: <strong style="color:var(--text-primary)">High</strong> (&ge;100 đơn) &middot; <strong style="color:var(--text-primary)">Mid</strong> (30-99) &middot; <strong style="color:var(--text-primary)">Low</strong> (&lt;30 đơn)</span>
+    <span class="mono" style="font-size:12px;font-weight:700;color:var(--danger)">Target: win-back &ge;35%</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
      05 — VẬN HÀNH
 ═══════════════════════════════════════════ -->
 <div class="section" id="ops">
@@ -923,27 +1084,84 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
     </tbody></table>
   </div>
 
-  <div class="card">
-    <div class="card-title">5.2 Win-Back Flow</div>
-    <table><thead><tr><th>Nhóm</th><th>Điều kiện</th><th>Chiến lược</th><th>Budget</th></tr></thead><tbody>
-      <tr><td><strong>High-Value</strong></td><td>&ge;100 đơn, &ge;4.5, inactive 14-60d</td><td>Callback + Welcome-back bonus + Tier restore</td><td><span class="badge badge-red">Cao</span></td></tr>
-      <tr><td><strong>Mid-Value</strong></td><td>30-99 đơn, inactive 14-60d</td><td>Push + SMS + Moderate bonus</td><td><span class="badge badge-orange">TB</span></td></tr>
-      <tr><td><strong>Low-Value</strong></td><td>&lt;30 đơn, inactive 14-90d</td><td>Push notification</td><td><span class="badge badge-gray">Thấp</span></td></tr>
-      <tr><td><strong>Churned</strong></td><td>Inactive &gt;90d</td><td>Quarterly batch</td><td><span class="badge badge-gray">Thấp</span></td></tr>
-    </tbody></table>
+  <!-- 5.2 Inactivity Alert Protocol — Visual Cards -->
+  <div class="card card-top-red">
+    <div class="card-title">&#x1F6A8; 5.2 Inactivity Alert Protocol</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+      <div class="glass-inner" style="padding:14px">
+        <div class="mono" style="font-size:22px;font-weight:800;color:var(--text-primary)">2N</div>
+        <div style="font-size:11px;font-weight:700;color:var(--orange);margin:4px 0 2px">Phase 1-2 (D0-D14)</div>
+        <div style="font-size:11px;color:var(--text-muted)">Push notification + Milestone reminder</div>
+      </div>
+      <div class="glass-inner" style="padding:14px">
+        <div class="mono" style="font-size:22px;font-weight:800;color:var(--text-primary)">3N</div>
+        <div style="font-size:11px;font-weight:700;color:var(--orange);margin:4px 0 2px">Phase 1-2 (D0-D14)</div>
+        <div style="font-size:11px;color:var(--text-muted)">SMS/Zalo + Bonus offer</div>
+      </div>
+      <div class="glass-inner" style="padding:14px;border:1px solid rgba(239,68,68,0.2)">
+        <div class="mono" style="font-size:22px;font-weight:800;color:var(--text-primary)">5N</div>
+        <div style="font-size:11px;font-weight:700;color:var(--danger);margin:4px 0 2px">Phase 1-2 (D0-D14) &mdash; URGENT</div>
+        <div style="font-size:11px;color:var(--text-muted)">&#x1F4DE; Gọi điện trực tiếp &mdash; tìm hiểu lý do</div>
+      </div>
+      <div class="glass-inner" style="padding:14px">
+        <div class="mono" style="font-size:22px;font-weight:800;color:var(--text-primary)">7N</div>
+        <div style="font-size:11px;font-weight:700;color:var(--info);margin:4px 0 2px">Phase 3-4 (D15-D120)</div>
+        <div style="font-size:11px;color:var(--text-muted)">Push + Income projection cá nhân hóa</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px">
+      <div class="glass-inner" style="padding:14px">
+        <div class="mono" style="font-size:22px;font-weight:800;color:var(--text-primary)">10N</div>
+        <div style="font-size:11px;font-weight:700;color:var(--info);margin:4px 0 2px">Phase 3-4 (D15-D120)</div>
+        <div style="font-size:11px;color:var(--text-muted)">&#x1F4DE; Gọi điện + Re-activation quest</div>
+      </div>
+      <div class="glass-inner" style="padding:14px;border:1px solid rgba(239,68,68,0.2)">
+        <div class="mono" style="font-size:22px;font-weight:800;color:var(--text-primary)">14N</div>
+        <div style="font-size:11px;font-weight:700;color:var(--danger);margin:4px 0 2px">Tất cả giai đoạn &mdash; DORMANT FLAG</div>
+        <div style="font-size:11px;color:var(--text-muted)">Chuyển vào Win-back flow</div>
+      </div>
+      <div class="glass-inner" style="padding:14px">
+        <div class="mono" style="font-size:22px;font-weight:800;color:var(--text-primary)">21N</div>
+        <div style="font-size:11px;font-weight:700;color:var(--purple);margin:4px 0 2px">Phase 5-6 (D121+)</div>
+        <div style="font-size:11px;color:var(--text-muted)">Nhắn từ quản lý khu vực + Exit survey</div>
+      </div>
+      <div class="glass-inner" style="padding:14px">
+        <div class="mono" style="font-size:22px;font-weight:800;color:var(--text-primary)">30N</div>
+        <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin:4px 0 2px">Tất cả &mdash; ARCHIVE</div>
+        <div style="font-size:11px;color:var(--text-muted)">Win-back campaign định kỳ monthly batch</div>
+      </div>
+    </div>
   </div>
 
-  <div class="card card-top-red">
-    <div class="card-title">5.3 Inactivity Alert Protocol</div>
-    <table><thead><tr><th>Inactive</th><th>Phase 1-2 (D0-14)</th><th>Phase 3-4 (D15-120)</th><th>Phase 5-6 (D121+)</th></tr></thead><tbody>
-      <tr><td class="mono">2d</td><td>Push + Milestone reminder</td><td>&mdash;</td><td>&mdash;</td></tr>
-      <tr><td class="mono">3d</td><td>SMS/Zalo + Bonus</td><td>&mdash;</td><td>&mdash;</td></tr>
-      <tr><td class="mono">5d</td><td style="color:var(--danger);font-weight:700">Gọi điện</td><td>&mdash;</td><td>&mdash;</td></tr>
-      <tr><td class="mono">7d</td><td>Escalate DM Ops</td><td>Push + Income projection</td><td>&mdash;</td></tr>
-      <tr><td class="mono">10d</td><td>&mdash;</td><td style="color:var(--danger);font-weight:700">Gọi điện + Quest</td><td>Push "Sắp mất R2+BH"</td></tr>
-      <tr><td class="mono">14d</td><td>Flag Dormant</td><td>Flag + Grace Period</td><td style="color:var(--danger);font-weight:700">Gọi điện "Mất BH!"</td></tr>
-      <tr><td class="mono">21d</td><td>Archive</td><td>Win-back campaign</td><td>Quản lý khu vực</td></tr>
-    </tbody></table>
+  <!-- 5.3 Win-Back — Visual Cards -->
+  <div class="card">
+    <div class="card-title">&#x1F504; 5.3 Cơ Chế Win-back &mdash; Khôi Phục Tài Xế</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+      <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:14px;padding:16px">
+        <div style="font-size:13px;font-weight:800;color:var(--danger)">&#x1F534; High-Value Dormant</div>
+        <div style="font-size:10.5px;color:var(--text-muted);margin:6px 0 10px">&ge;100 đơn lifetime &middot; Rating &ge;4.5 &middot; Inactive 14&ndash;60 ngày</div>
+        <div style="font-size:12px;color:var(--text-secondary);font-weight:600">Callback cá nhân + Welcome-back bonus mạnh + Fast-track tier restore</div>
+        <div style="margin-top:10px"><span class="badge badge-red" style="font-size:9px">Budget &#431;u Tiên: CAO</span></div>
+      </div>
+      <div style="background:rgba(255,127,50,0.06);border:1px solid rgba(255,127,50,0.15);border-radius:14px;padding:16px">
+        <div style="font-size:13px;font-weight:800;color:var(--orange)">&#x1F7E0; Mid-Value Dormant</div>
+        <div style="font-size:10.5px;color:var(--text-muted);margin:6px 0 10px">30-99 đơn lifetime &middot; Inactive 14&ndash;60 ngày</div>
+        <div style="font-size:12px;color:var(--text-secondary);font-weight:600">Push + SMS + Moderate welcome-back bonus</div>
+        <div style="margin-top:10px"><span class="badge badge-orange" style="font-size:9px">Budget: TRUNG B&Igrave;NH</span></div>
+      </div>
+      <div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.15);border-radius:14px;padding:16px">
+        <div style="font-size:13px;font-weight:800;color:var(--warn)">&#x1F7E1; Low-Value Dormant</div>
+        <div style="font-size:10.5px;color:var(--text-muted);margin:6px 0 10px">&lt;30 đơn lifetime &middot; Inactive 14&ndash;90 ngày</div>
+        <div style="font-size:12px;color:var(--text-secondary);font-weight:600">Push notification đơn giản + Generic re-activation offer</div>
+        <div style="margin-top:10px"><span class="badge badge-gray" style="font-size:9px">Budget: TH&#7844;P</span></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:14px;padding:16px">
+        <div style="font-size:13px;font-weight:800;color:var(--text-muted)">&#x26AB; Churned</div>
+        <div style="font-size:10.5px;color:var(--text-muted);margin:6px 0 10px">Inactive &gt;90 ngày</div>
+        <div style="font-size:12px;color:var(--text-secondary);font-weight:600">Quarterly win-back campaign batch</div>
+        <div style="margin-top:10px"><span class="badge badge-gray" style="font-size:9px">Budget: R&#7844;T TH&#7844;P</span></div>
+      </div>
+    </div>
   </div>
 
   <div class="card">
