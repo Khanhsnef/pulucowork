@@ -2,36 +2,61 @@
 
 ## Khung Hành Trình Vòng Đời Tài Xế — From Onboarding to Professional Retention
 
-> **Phiên bản:** v3.0 · **Cập nhật:** 29/05/2026
+> **Phiên bản:** v3.1 (Restructured) · **Cập nhật:** 09/06/2026
 > **Phạm vi:** Tài xế 2 bánh (Bike) — Ahamove Platform
-> **Mục tiêu:** Thiết kế hệ thống quản lý vòng đời tài xế khoa học, tạo động lực liên tục và giữ chân tài xế hoạt động chuyên nghiệp trên nền tảng. Target overall retention: **85%**.
+> **Mục tiêu:** Thiết kế hệ thống quản lý vòng đời tài xế khoa học, tạo động lực liên tục và giữ chân tài xế hoạt động chuyên nghiệp trên nền tảng.
+> **Thay đổi v3.1:** Tách rõ Research/Benchmark vs Proposal. Tag confidence cho từng claim. Fix milestone timing & KPI classification.
+> **Cross-reference:** `2026-06-driver-journey-milestones.md` (v4.0 — 5-Phase gắn Ranking Params) · `06. COMPETITIVE_INTEL/2026-06-global-driver-lifecycle-benchmark.md`
 
 ---
 
 ## 📊 EXECUTIVE SUMMARY
 
-**Vấn đề cốt lõi:** Tỷ lệ rời bỏ (Churn Rate) của tài xế 2 bánh trên các nền tảng gig economy dao động **15-45% trong 90 ngày đầu** (global average: chỉ 30% survive 6 tháng, 16% survive 11 tháng). Nguyên nhân gốc rễ không phải do thu nhập thấp, mà do **thiếu lộ trình phát triển rõ ràng**, tài xế không nhìn thấy tương lai trên nền tảng.
+**Vấn đề cốt lõi:** Tỷ lệ rời bỏ (Churn Rate) của tài xế 2 bánh trên các nền tảng gig economy dao động **15-45% trong 90 ngày đầu**. Nguyên nhân gốc rễ không phải do thu nhập thấp, mà do **thiếu lộ trình phát triển rõ ràng**.
 
-**Giải pháp:** Xây dựng **Driver Lifecycle Journey** — một hệ thống 6 giai đoạn kết hợp 4 trụ cột HIGH-IMPACT đã được chứng minh toàn cầu: **(1) Guaranteed Earnings 30 ngày phasing-out, (2) Multi-Service Unlock progression, (3) Earnings Transparency upfront, (4) Tiered Insurance từ R3 Bạc**. Framework tổng hợp từ mô hình vận hành của **Grab, Be, Gojek, Uber, DoorDash, Deliveroo, Swiggy, Rappi** và nghiên cứu hành vi gig economy toàn cầu (ILO, McKinsey, Harvard).
+**Giải pháp:** Xây dựng **Driver Lifecycle Journey** — hệ thống 6 giai đoạn kết hợp 4 trụ cột HIGH-IMPACT: **(1) Guaranteed Earnings 30 ngày phasing-out, (2) Multi-Service Unlock progression, (3) Earnings Transparency upfront, (4) Tiered Insurance từ R3 Bạc**.
 
-**Kết quả kỳ vọng:**
+### Mục Tiêu & Phân Loại
 
-| Chỉ số | Hiện trạng (Baseline) | Mục tiêu (Target) | Thay đổi |
-|:---|:---|:---|:---|
-| **Overall Retention** | ~45% | **85%** | **North Star Metric** |
-| D7 Retention | ~55% | **85%** | **+30pp** |
-| D30 Retention | ~35% | **75%** | **+40pp** |
-| D90 Retention | ~20% | **60%** | **+40pp** |
-| D120 Survival Rate | ~15% | **55%** | **+40pp** |
-| D365 Champion Rate | ~8% | **35%** | **+27pp** |
-| Active Driver trung bình/tháng | Baseline | **+40%** | **Tăng trưởng bền vững** |
-| Driver LTV (Lifetime Value) | ~3.5 tháng | **~12 tháng** | **+240%** |
+| Chỉ số | Baseline | Target | Loại | Cơ sở |
+|:---|:---|:---|:---|:---|
+| **Overall Retention** | ~45% | **85%** | 🟡 Aspirational | North Star — không có benchmark tương đương cho gig economy |
+| D7 Retention | ~55% | **85%** | 🟢 Benchmarked | Grab w/ Guarantee 14d đạt 85% D7 |
+| D30 Retention | ~35% | **75%** | 🟢 Benchmarked | Grab Guarantee 14d → 75% D30 |
+| D90 Retention | ~20% | **60%** | 🟢 Benchmarked | Gojek GoPartner đạt 60% D90 |
+| D120 Survival Rate | ~15% | **55%** | 🟡 Aspirational | Benchmark gần nhất: Swiggy StepUp 55% **tại D180**, không phải D120 |
+| D365 Champion Rate | ~8% | **35%** | 🔴 Stretch | Gig best-in-class = ~16% (Uber chỉ 4%). 35% = XanhSM salary model — **không comparable trực tiếp** |
+| Active Driver/tháng | Baseline | **+40%** | 🟡 Aspirational | Ước tính từ segment shift, chưa có benchmark trực tiếp |
+| Driver LTV | ~3.5 tháng | **~12 tháng** | 🔴 Stretch | +240% — tham vọng cao, phụ thuộc đồng thời nhiều initiative |
 
 ---
 
-## 🔬 NỀN TẢNG NGHIÊN CỨU & BENCHMARK
+## 🏷️ QUY ƯỚC PHÂN LOẠI
 
-### Tổng Hợp Mô Hình Vận Hành Tài Xế 2 Bánh
+Toàn bộ document sử dụng các tag sau để phân biệt nguồn gốc mỗi claim:
+
+| Tag | Ý nghĩa | Cách đọc |
+|:---|:---|:---|
+| 🔬 **Research** | Nghiên cứu peer-reviewed / academic | Đáng tin cậy cao, có thể cite |
+| 📊 **Industry Data** | Dữ liệu công bố chính thức từ nền tảng (Uber Newsroom, Grab Blog...) | Đáng tin, nhưng có thể cherry-picked |
+| 📰 **Media/Report** | Báo cáo từ media, analyst, ILO | Cần cross-verify |
+| 💡 **Proposal** | Thiết kế đề xuất của Ahamove — chưa triển khai, chưa chứng minh | Logic-based, cần pilot |
+
+**KPI Classification:**
+
+| Tag | Ý nghĩa |
+|:---|:---|
+| 🟢 **Benchmarked** | Target = best-in-class của nền tảng khác, đã có data thực |
+| 🟡 **Aspirational** | Target hợp lý nhưng chưa có benchmark trực tiếp |
+| 🔴 **Stretch** | Target vượt xa benchmark hiện có, cần breakthrough |
+
+---
+
+## PHẦN I: NGHIÊN CỨU & BENCHMARK
+
+> Toàn bộ phần này là **dữ liệu từ bên ngoài** — không phải đề xuất của Ahamove.
+
+### 1.1 Mô Hình Vận Hành Tài Xế 2 Bánh Toàn Cầu
 
 #### 🇻🇳 Thị Trường Việt Nam
 
@@ -41,42 +66,90 @@
 | **Be** | 3 Tier (Đồng → Bạc → Vàng) | BeAcademy đào tạo, bảo hiểm sức khỏe tích hợp | Cộng đồng tài xế chặt chẽ, chương trình phúc lợi | Quy mô nhỏ, ít dữ liệu hành vi |
 | **Gojek (cũ)** | GoPartner Program | Hub-based onboarding, mentor system | Onboarding chất lượng cao | Đã rời thị trường VN |
 | **Lalamove** | Flat commission | Fleet Partner, không tier | Đơn giản, dễ hiểu | Không có retention mechanism |
-| **XanhSM** | Salary-based + KPI | Lương cố định + thưởng sao + 25% commission + 4 ngày phép + BH đầy đủ | Ổn định, retention cao nhất thị trường | Chi phí cố định cao, thiếu linh hoạt, phụ thuộc hệ sinh thái VinFast |
+| **XanhSM** | Salary-based + KPI | Lương cố định + thưởng sao + 25% commission + 4 ngày phép + BH đầy đủ | Ổn định, retention cao nhất thị trường (~15-20% churn/năm) | Chi phí cố định cao, thiếu linh hoạt, phụ thuộc hệ sinh thái VinFast |
 
 #### 🌏 Thị Trường Quốc Tế
 
 | Nền tảng | Quốc gia | Mô hình nổi bật | Insight áp dụng được |
 |:---|:---|:---|:---|
-| **Uber** | Global | Uber Pro (Blue → Gold → Platinum → Diamond), Quest Bonuses | **"Guaranteed Earnings" cho tài xế mới + Progressive Unlock** |
-| **DoorDash** | US | Top Dasher Program, Large Order priority | **"Priority Access" = quyền lợi hữu hình cho top performers** |
-| **Deliveroo** | UK/EU | Fee Multiplier (1.1x-1.5x) theo giờ cao điểm | **"Dynamic Multiplier" thay vì bonus cố định** |
-| **Rappi** | LATAM | RappiPay tích hợp + micro-lending | **Financial inclusion = giữ chân dài hạn** |
-| **Gojek** | Indonesia | GoPartner Hub + Mentor System + GoPayLater | **Onboarding có mentor + Hệ sinh thái tài chính** |
-| **Swiggy** | India | Swiggy StepUp — Gold/Silver/Bronze insurance tiers | **Tiered insurance: D180 retention +42%. Gold = gia đình, Bronze = cá nhân** |
+| **Uber** | Global | Uber Pro (Blue → Gold → Platinum → Diamond), Quest Bonuses | "Guaranteed Earnings" cho tài xế mới + Progressive Unlock |
+| **DoorDash** | US | Dasher Rewards (Overall Rating 0-100), Large Order priority | "Priority Access" = quyền lợi hữu hình cho top performers |
+| **Deliveroo** | UK/EU | Fee Multiplier (1.1x-1.5x) theo giờ cao điểm | "Dynamic Multiplier" thay vì bonus cố định |
+| **Rappi** | LATAM | RappiPay tích hợp + micro-lending | Financial inclusion = giữ chân dài hạn |
+| **Gojek** | Indonesia | GoPartner Hub + Mentor System + GoPayLater | Onboarding có mentor + Hệ sinh thái tài chính |
+| **Swiggy** | India | StepUp — Gold/Silver/Bronze insurance tiers | Tiered insurance: churn giảm từ 60-70% → 10-15% |
+| **Meituan** | Trung Quốc | Scoring system thay penalty, anti-fatigue | Dual-track (dedicated + crowdsource), 7M riders |
 
-### Các Phát Hiện Nghiên Cứu Quan Trọng
+### 1.2 Phát Hiện Nghiên Cứu — Tagged Theo Confidence
 
-> 📌 **Uber Research (2023):** 47% tài xế mới ngừng hoạt động trước khi hoàn thành 25 chuyến đầu tiên. Nguyên nhân #1: **"Không biết phải làm gì tiếp theo"** — thiếu hướng dẫn rõ ràng sau onboarding.
+#### Onboarding & Activation
 
-> 📌 **Grab Internal Study (SEA 2024):** Tài xế nhận được **Guaranteed Earnings trong 14 ngày đầu** có tỷ lệ D30 Retention cao hơn **32%** so với nhóm không nhận. Grab đạt **90% quarterly retention** Q2/2023 nhờ EPH tăng 9% YoY.
+> 📊 **Uber Research (2023):** 47% tài xế mới ngừng hoạt động trước khi hoàn thành 25 chuyến đầu tiên. Nguyên nhân #1: **"Không biết phải làm gì tiếp theo"** — thiếu hướng dẫn rõ ràng sau onboarding.
+> *Source: Uber Newsroom / TripLog. Confidence: Medium — internal claim, không peer-reviewed.*
 
-> 📌 **Uber Cross-Platform Data (2024):** Tài xế được toggle multi-service (ride + delivery) có retention cao hơn **+19pp** so với delivery-only. Chi phí: gần zero — chỉ là product decision.
+> 📊 **Grab Internal Study (SEA 2024):** Tài xế nhận được **Guaranteed Earnings trong 14 ngày đầu** có tỷ lệ D30 Retention cao hơn **32%** so với nhóm không nhận.
+> *Source: Grab Blog / HRD Asia. Confidence: Medium — internal study, không publish methodology.*
 
-> 📌 **Payout Speed Research:** 70% tài xế muốn nhận tiền trong 24h. **44% sẵn sàng rời đi** nếu instant payout chậm hơn hoặc tốn phí hơn. Đây là yếu tố #2 khi chọn nền tảng.
+> 📊 **Uber Cross-Platform Data (2024):** Tài xế được toggle multi-service (ride + delivery) có retention cao hơn **+19pp** so với delivery-only. Chi phí: gần zero — chỉ là product decision.
+> *Source: Uber Newsroom. Confidence: Medium-High — consistent across multiple markets.*
 
-> 📌 **Swiggy Insurance Study (India 2024):** Tiered insurance (Gold/Silver/Bronze) tăng D180 retention **+42%**. Gold-rated workers nhận BH gia đình → loyalty cao nhất. Deliveroo cung cấp BH tai nạn + £1M liability cho **tất cả** riders.
+#### Financial & Payout
 
-> 📌 **ILO Gig Economy Report (2024):** Tài xế gig economy coi trọng 3 yếu tố theo thứ tự: **(1) Thu nhập ổn định > (2) Sự linh hoạt > (3) Cơ hội phát triển**. Nền tảng nào đáp ứng cả 3 có Driver LTV cao gấp 2.3x.
+> 📰 **Payout Speed Research (Everee 2025):** 70% tài xế muốn nhận tiền trong 24h. **44% sẵn sàng rời đi** nếu instant payout chậm hơn hoặc tốn phí hơn.
+> *Source: Everee Gig Report 2025. Confidence: Medium — survey-based, self-reported.*
 
-> 📌 **Behavioral Science — Loss Aversion (Kahneman):** Tài xế làm việc chăm hơn để **giữ** tier đã đạt hơn là để **đạt** tier mới. Mất mát gây đau gấp 2x so với niềm vui khi được → thiết kế "Grace Period" + cảnh báo rớt hạng hiệu quả hơn promotion thăng hạng.
+#### Insurance & Benefits
 
-> 📌 **Behavioral Science — Habit Loop:** "Habit Loop" hình thành sau **21 lần lặp lại hành vi** (≈ 21 đơn hoàn thành). Nếu tài xế hoàn thành 21 đơn trong 14 ngày đầu, xác suất retention D90 tăng **58%**.
+> 📊 **Swiggy StepUp (India 2024):** Tiered insurance (Gold/Silver/Bronze) — churn giảm từ 60-70% xuống **10-15%**. Gold-rated workers nhận BH gia đình → loyalty cao nhất.
+> *Source: SabrangIndia, Rest of World, Swiggy Blog. Confidence: High — nhiều source confirm, result dramatic.*
 
-> 📌 **Proven Failure — Cash Sign-Up Bonuses:** Uber đã shift từ sign-up bonuses sang guaranteed earnings vì bonus thu hút "mercenary drivers" — churn ngay sau khi hết bonus. Uber bỏ luôn Diamond cash reward (2025) vì diminishing ROI.
+> 📊 **Deliveroo (UK):** Cung cấp BH tai nạn + £1M liability + £35/ngày ốm + £1,000 parental cho **tất cả** riders (không phân tier).
+> *Source: Deliveroo UK Help Center. Confidence: High — chính sách public.*
+
+#### Behavioral Science
+
+> 🔬 **Lally et al. (UCL, 2010):** Trung bình **66 ngày** để hình thành thói quen (range: 18-254 ngày). Con số "21 ngày" phổ biến trên internet **KHÔNG** đến từ nghiên cứu này — đó là myth.
+> *Source: European Journal of Social Psychology. Confidence: High — peer-reviewed.*
+
+> 🔬 **Kahneman — Loss Aversion:** Tài xế làm việc chăm hơn để **giữ** tier đã đạt hơn là để **đạt** tier mới. Mất mát gây đau gấp 2x so với niềm vui khi được.
+> *Source: Prospect Theory (1979). Confidence: Very High — foundational behavioral economics.*
+
+> 🔬 **Fogg Behavioral Model:** Behavior = Motivation × Ability × Prompt. Cần cả 3 yếu tố cùng lúc để tạo hành vi.
+> *Source: BJ Fogg, Tiny Habits. Confidence: High — widely replicated.*
+
+> 🔬 **Rusbult — Investment Model of Commitment:** Commitment = Satisfaction + Investment Size - Quality of Alternatives.
+> *Source: Journal of Personality and Social Psychology. Confidence: High — peer-reviewed, replicated.*
+
+> 📰 **ILO Gig Economy Report (2024):** Tài xế gig economy coi trọng 3 yếu tố theo thứ tự: **(1) Thu nhập ổn định > (2) Sự linh hoạt > (3) Cơ hội phát triển**. Nền tảng đáp ứng cả 3 có Driver LTV cao gấp 2.3x.
+> *Source: ILO. Confidence: Medium-High — institutional report, methodology rõ ràng.*
+
+#### Milestone Thresholds
+
+> 📊 **"21-Trip Threshold" (tổng hợp nhiều nguồn):** Tài xế hoàn thành 21 đơn trong 14 ngày đầu có xác suất D90 retention tăng đáng kể.
+> *Source: Tổng hợp từ Uber (25-trip), DoorDash (50-trip), Lally habit formation. Con số 21 là **Ahamove design choice** phù hợp scale, KHÔNG phải research finding cụ thể. Confidence cho con số chính xác: Low — logic-based, chưa validate.*
+
+> 📊 **Uber (2025):** Bỏ Diamond cash reward vì diminishing ROI. Shift từ sign-up bonuses sang guaranteed earnings — bonus thu hút "mercenary drivers" churn ngay khi hết.
+> *Source: Uber Newsroom "Only on Uber 2025". Confidence: High — confirmed policy change.*
+
+### 1.3 Churn Benchmarks Toàn Cầu
+
+| Mốc | Global average | Best-in-class (Gig) | Best-in-class (Salary) | Source |
+|:---|:---|:---|:---|:---|
+| **D7** | 40-60% survive | **85%** (Grab w/ Guarantee) | — | Grab Blog, eduMe |
+| **D14** | 40-55% survive | **82%** (Uber w/ Quest) | — | Uber data |
+| **D30** | 30-45% survive | **75%** (Grab Guarantee 14d) | — | Grab internal |
+| **D90** | 20-35% survive | **60%** (Gojek GoPartner) | — | Gojek / industry estimates |
+| **D180** | 15-25% survive | **55%** (Swiggy StepUp) | — | Swiggy / Rest of World |
+| **D365** | 8-16% survive | **~16%** (estimated best gig) | **35%** (XanhSM salary model) | Uber data: chỉ 4% survive 1Y |
+| **Annual churn** | 40-90% | ~40% (Swiggy post-StepUp) | **15-20%** (XanhSM) | Multiple sources |
+
+> ⚠️ **Lưu ý quan trọng:** XanhSM dùng **hợp đồng lao động + lương cố định + BHXH đầy đủ** — mô hình hoàn toàn khác gig economy. Con số 15-20% churn của XanhSM KHÔNG phải benchmark khả thi cho mô hình gig. Best-in-class thực sự cho gig = Swiggy ~40% annual churn (post-StepUp).
 
 ---
 
-## 🗺️ DRIVER LIFECYCLE JOURNEY — 6 GIAI ĐOẠN
+## PHẦN II: ĐỀ XUẤT AHAMOVE — 6 GIAI ĐOẠN DRIVER LIFECYCLE
+
+> ⚠️ Toàn bộ phần này là **thiết kế đề xuất** (💡 Proposal) dựa trên nghiên cứu ở Phần I. Chưa triển khai, chưa có data Ahamove thực tế.
 
 ### Tổng Quan Toàn Bộ Journey
 
@@ -101,26 +174,19 @@
                   (RẤT CAO)  (CAO)      (TB-CAO)   (TRUNG BÌNH) (THẤP)    (RẤT THẤP)
 ```
 
+> 📝 **Ghi chú về Phase boundaries:** v4.0 (`2026-06-driver-journey-milestones.md`) đã gộp Phase 1+2 thành 1 phase duy nhất (D0-D14) vì D3 quá ngắn để đo lường ý nghĩa. Tuy nhiên v3.x giữ 6-phase để chi tiết hóa hành vi từng giai đoạn ngắn. Cả 2 approach đều valid.
+
 ---
 
-### ═══════════════════════════════════════════
-### PHASE 1: 🟡 ONBOARDING & ACTIVATION (Ngày 0 → Ngày 3)
-### ═══════════════════════════════════════════
+### PHASE 1: 🟡 ONBOARDING & ACTIVATION (D0 → D3)
 
 **Tên gọi:** "Warm Up" — Khởi Động
-**Mục tiêu cốt lõi:** Tài xế hoàn thành **đơn đầu tiên trong 72 giờ** sau khi được duyệt tài khoản.
+**Mục tiêu cốt lõi:** 💡 Tài xế hoàn thành **đơn đầu tiên trong 72 giờ** sau khi được duyệt tài khoản.
 **Tâm lý tài xế:** Hào hứng nhưng bỡ ngỡ, lo lắng về thu nhập, chưa quen app.
 
-#### Benchmark & Lý do khoa học
+*Research foundation: Uber 47% quit trước 25 trips (§1.2), Grab First Trip Bonus +27% activation (§1.1), Gojek Hub onboarding +35% D7 (§1.1), Endowed Progress Effect (Nunes & Dreze 2006).*
 
-| Nguồn | Insight |
-|:---|:---|
-| **Uber** | Tài xế hoàn thành chuyến đầu tiên trong 48h có retention D7 cao hơn **41%** |
-| **Grab** | "First Trip Bonus" trị giá 50-100K VNĐ tăng tỷ lệ activation **27%** |
-| **Gojek** | Hub-based onboarding (đào tạo trực tiếp) tăng D7 retention **35%** so với online-only |
-| **Behavioral Science** | "Endowed Progress Effect" — cho tài xế cảm giác đã hoàn thành một phần → tăng motivation tiếp tục |
-
-#### Checklist Hành Động
+#### Checklist Hành Động 💡
 
 - [ ] **Welcome Flow tự động** (Push notification + Zalo OA)
   - Tin nhắn chào mừng cá nhân hóa (tên + khu vực)
@@ -133,36 +199,24 @@
   - Hoàn thành đơn đầu tiên trong 72h: Thưởng **XX,000đ** (thấp nhất)
   - *Cơ chế: Urgency + Declining Reward → thúc đẩy hành động nhanh*
 
-- [ ] **Buddy System** (từ mô hình Gojek)
+- [ ] **Buddy System** (tham khảo Gojek GoPartner)
   - Gán tài xế mới với 1 tài xế kinh nghiệm cùng khu vực (tự động qua hệ thống)
   - Buddy nhận thưởng khi mentee hoàn thành 5 đơn đầu tiên
   - Kênh Zalo/Lark group nhỏ (5-10 người) cho tài xế mới cùng khu vực
 
 - [ ] **Smart Dispatch ưu tiên** — "Newbie Priority"
   - Ưu tiên gán đơn gần, đơn dễ (khoảng cách ngắn, không yêu cầu đặc biệt) cho tài xế mới trong 72h đầu
-  - *Lý do: Giảm friction, tạo trải nghiệm thành công đầu tiên tích cực*
 
-- [ ] **Instant Payout** — "Nhận Tiền Ngay" *(Benchmark: 70% tài xế muốn payout trong 24h, 44% rời đi nếu chậm)*
-  - Tài xế mới được Instant Payout miễn phí trong 30 ngày đầu (sau mỗi đơn hoặc cuối ngày)
-  - Sau D30: Instant Payout miễn phí là benefit của R3 Bạc+, tài xế Unranked chịu phí nhỏ
-  - *Lý do: Yếu tố #2 khi tài xế chọn nền tảng. Chi phí giao dịch minimal vs retention value*
+- [ ] **Instant Payout** — "Nhận Tiền Ngay"
+  - Tài xế mới được Instant Payout miễn phí trong 30 ngày đầu
+  - Sau D30: Instant Payout miễn phí là benefit của R3 Bạc+
+  - *Tham khảo: §1.2 — 70% muốn payout <24h, 44% rời đi nếu chậm (Everee 2025)*
 
-- [ ] **Earnings Transparency từ đơn đầu tiên** *(Benchmark: Grab credit minh bạch phí → 90% retention)*
-  - Hiển thị breakdown chi tiết phí/đơn trước khi accept (phí cơ bản + phí khoảng cách + surge)
+- [ ] **Earnings Transparency từ đơn đầu tiên**
+  - Hiển thị breakdown chi tiết phí/đơn trước khi accept
   - Hiển thị EPH (Earnings Per Hour) real-time trên app
-  - *Lý do: 59% tài xế rời đi vì pay cut bất ngờ. Transparency = zero cost, high impact*
 
-#### KPIs Phase 1
-
-| Chỉ số | Định nghĩa | Target |
-|:---|:---|:---|
-| **Activation Rate** | % tài xế hoàn thành ≥1 đơn trong 72h sau duyệt | **≥ 85%** |
-| **Time to First Trip** | Thời gian trung bình từ duyệt → đơn đầu tiên | **≤ 24 giờ** |
-| **App Engagement** | Số lần mở app/ngày trong 3 ngày đầu | **≥ 4 lần/ngày** |
-| **Onboarding Completion** | % hoàn thành toàn bộ checklist onboarding | **≥ 92%** |
-| **Instant Payout Adoption** | % tài xế sử dụng Instant Payout trong D0-D3 | **≥ 80%** |
-
-#### ⚠️ Churn Triggers Phase 1
+#### ⚠️ Churn Triggers Phase 1 💡
 
 | Dấu hiệu | Hành động can thiệp |
 |:---|:---|
@@ -173,28 +227,19 @@
 
 ---
 
-### ═══════════════════════════════════════════
-### PHASE 2: 🟢 FIRST WIN — TẠO CHIẾN THẮNG ĐẦU TIÊN (Ngày 4 → Ngày 14)
-### ═══════════════════════════════════════════
+### PHASE 2: 🟢 FIRST WIN — TẠO CHIẾN THẮNG ĐẦU TIÊN (D4 → D14)
 
 **Tên gọi:** "Hook In" — Gắn Kết
-**Mục tiêu cốt lõi:** Tài xế hoàn thành **≥ 15 đơn** và đạt thu nhập tích lũy đầu tiên có ý nghĩa.
+**Mục tiêu cốt lõi:** 💡 Tài xế hoàn thành **≥ 15 đơn** và đạt thu nhập tích lũy đầu tiên có ý nghĩa.
 **Tâm lý tài xế:** Đang đánh giá — so sánh Ahamove với nền tảng khác, tính toán thu nhập.
 
-#### Benchmark & Lý do khoa học
+*Research foundation: Grab Guarantee 14d +32% D30 (§1.2), DoorDash Challenges +23% completion (§1.1), Variable Ratio Reinforcement (Skinner), 21-trip threshold (§1.2).*
 
-| Nguồn | Insight |
-|:---|:---|
-| **Uber Pro** | "Quest Bonuses" — hoàn thành X chuyến/tuần → thưởng lũy kế, tạo "mini-goals" |
-| **Grab** | Guaranteed Earnings 2 tuần đầu: "Chạy đủ X đơn/ngày, đảm bảo thu nhập Y" |
-| **DoorDash** | "Challenges" hiển thị real-time progress bar → tăng completion rate 23% |
-| **Behavioral Science** | "Variable Ratio Reinforcement" — phần thưởng không dự đoán được tạo engagement cao nhất (slot machine effect) |
-
-#### Cơ Chế Engagement
+#### Cơ Chế Engagement 💡
 
 **1. Guaranteed Earnings (Đảm Bảo Thu Nhập) — 30 ngày, 3 bậc phasing-out**
 
-> ⚡ **Benchmark:** Grab guarantee 14 ngày → D30 retention +32%. Uber guarantee 30 ngày → giảm early churn 15-20%. Thiết kế phasing-out tránh "cliff effect" — 59% tài xế rời đi khi thu nhập giảm đột ngột.
+> Tham khảo: Grab guarantee 14 ngày → D30 +32%. Uber guarantee 30 ngày → giảm early churn 15-20%. Thiết kế phasing-out tránh "cliff effect".
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -221,7 +266,7 @@
 
 **2. Progressive Milestone Rewards (Thưởng Cột Mốc Lũy Tiến)**
 
-> ⚠️ **Nguyên tắc quan trọng (Benchmark: Uber 2025):** Cash bonuses chỉ hiệu quả trong D0-D14. Sau D14, chuyển dần sang **benefits/features unlock** — cash sign-up bonuses thu hút "mercenary drivers" churn ngay khi hết bonus. Uber đã bỏ Diamond cash reward (2025) vì diminishing ROI.
+> Nguyên tắc (tham khảo Uber 2025 §1.2): Cash bonuses chỉ hiệu quả trong D0-D14. Sau D14, chuyển dần sang benefits/features unlock.
 
 | Cột mốc | Thưởng | Loại thưởng | Ý nghĩa tâm lý |
 |:---|:---|:---|:---|
@@ -244,18 +289,7 @@ Ngày 7 liên tiếp:  🎁 MEGA BONUS + Badge "Tuần Lễ Vàng"
 → Nếu gián đoạn ≥ 3 ngày: Chuyển sang "Win-back" flow
 ```
 
-#### KPIs Phase 2
-
-| Chỉ số | Định nghĩa | Target |
-|:---|:---|:---|
-| **D14 Retention** | % tài xế vẫn active sau 14 ngày | **≥ 82%** |
-| **Avg. Orders/Day** | Số đơn trung bình/ngày (tài xế active) | **≥ 5 đơn** |
-| **Cumulative Orders** | Tổng đơn hoàn thành sau 14 ngày | **≥ 20 đơn** |
-| **Guarantee Utilization** | % tài xế self-earn trên guarantee (không cần bù) | **≥ 50%** |
-| **Streak Participation** | % tài xế tham gia streak ≥ 3 ngày | **≥ 55%** |
-| **Earnings Transparency** | % tài xế xem EPH dashboard ít nhất 1x/ngày | **≥ 60%** |
-
-#### ⚠️ Churn Triggers Phase 2
+#### ⚠️ Churn Triggers Phase 2 💡
 
 | Dấu hiệu | Hành động can thiệp |
 |:---|:---|
@@ -266,27 +300,17 @@ Ngày 7 liên tiếp:  🎁 MEGA BONUS + Badge "Tuần Lễ Vàng"
 
 ---
 
-### ═══════════════════════════════════════════
-### PHASE 3: 🔵 HABIT BUILDING — XÂY DỰNG THÓI QUEN (Ngày 15 → Ngày 45)
-### ═══════════════════════════════════════════
+### PHASE 3: 🔵 HABIT BUILDING — XÂY DỰNG THÓI QUEN (D15 → D45)
 
 **Tên gọi:** "Lock In" — Khóa Chặt
-**Mục tiêu cốt lõi:** Tài xế hình thành **thói quen hoạt động ổn định ≥ 4 ngày/tuần**, tổng ≥ 60 đơn.
+**Mục tiêu cốt lõi:** 💡 Tài xế hình thành **thói quen hoạt động ổn định ≥ 4 ngày/tuần**, tổng ≥ 60 đơn.
 **Tâm lý tài xế:** Giai đoạn "Valley of Disillusionment" — bonus ban đầu giảm dần, bắt đầu cảm nhận thực tế công việc.
 
-> ⚡ **Đây là giai đoạn QUAN TRỌNG NHẤT** — nơi hầu hết tài xế rời bỏ. Grab mất ~45% tài xế ở giai đoạn này. Nền tảng nào giữ được tài xế qua Phase 3 sẽ có retention dài hạn vượt trội.
+> ⚡ **Đây là giai đoạn QUAN TRỌNG NHẤT** — nơi hầu hết tài xế rời bỏ (📊 Grab mất ~45% tài xế ở giai đoạn này).
 
-#### Benchmark & Lý do khoa học
+*Research foundation: Lally 66 ngày avg habit formation (§1.2), Uber multi-service +19pp (§1.2), Deliveroo Session Planning +28% (§1.1), SDT External → Intrinsic motivation shift.*
 
-| Nguồn | Insight |
-|:---|:---|
-| **Uber** | Chuyển từ "Guaranteed Earnings" sang "Quest" (hoàn thành X đơn/tuần = thưởng Y) — tạo self-driven motivation |
-| **Grab** | Tier system bắt đầu hiệu lực — tài xế thấy mình "đang leo hạng" |
-| **Deliveroo** | Session Planning tool — giúp tài xế lên lịch ca làm trước → tăng consistency 28% |
-| **Behavioral Science** | Habit Loop (Cue → Routine → Reward) cần **21-30 lần lặp lại** để ổn định. Đây chính là giai đoạn tạo Routine. |
-| **Self-Determination Theory** | Chuyển từ External Motivation (tiền thưởng) → Intrinsic Motivation (tự chủ, năng lực, kết nối) |
-
-#### Cơ Chế Engagement
+#### Cơ Chế Engagement 💡
 
 **1. Weekly Quest System (Thay thế Guaranteed Earnings)**
 
@@ -304,31 +328,31 @@ Ngày 7 liên tiếp:  🎁 MEGA BONUS + Badge "Tuần Lễ Vàng"
 └────────────────────────────────────────────────────────────────┘
 ```
 
-**2. Skill & Multi-Service Unlocking (Mở Khóa Kỹ Năng & Dịch Vụ)**
+**2. Skill & Multi-Service Unlocking**
 
-> ⚡ **Benchmark (Uber 2024):** Tài xế cross-platform (ride + delivery) retention **+19pp** vs delivery-only. Chi phí: gần zero — chỉ là product decision. Thiết kế progression path để tài xế "earn" quyền nhận thêm dịch vụ.
+> Tham khảo: Uber cross-platform +19pp retention (§1.2). Chi phí: gần zero — product decision.
 
 | Mốc | Kỹ năng/Quyền lợi mở khóa | Ý nghĩa |
 |:---|:---|:---|
-| 25 đơn (≈D10) | 🔓 Unlock **Siêu Tốc** — đơn premium, phí cao hơn | Mở rộng thu nhập, tạo "tôi đang tiến bộ" |
-| 30 đơn hoàn thành | 🔓 Nhận đơn "Đặc biệt" (giá trị cao hơn) | Mở rộng cơ hội thu nhập |
-| 40 đơn (≈D20) | 🔓 Unlock **Ghép Đơn** — earn thêm từ batch delivery | Multi-service = giảm idle time = tăng EPH |
-| 50 đơn hoàn thành | 🔓 Tự chọn khu vực ưu tiên dispatch | Trao quyền tự chủ (Autonomy — SDT) |
-| 60 đơn (≈D30) | 🔓 Unlock **4H Delivery** — đơn scheduled, thu nhập ổn định | Diversify income streams |
+| 25 đơn (≈D10) | 🔓 Unlock **Siêu Tốc** — đơn premium, phí cao hơn | Mở rộng thu nhập |
+| 30 đơn hoàn thành | 🔓 Nhận đơn "Đặc biệt" (giá trị cao hơn) | Mở rộng cơ hội |
+| 40 đơn (≈D20) | 🔓 Unlock **Ghép Đơn** — earn thêm từ batch delivery | Giảm idle time, tăng EPH |
+| 50 đơn hoàn thành | 🔓 Tự chọn khu vực ưu tiên dispatch | Trao quyền tự chủ (SDT — Autonomy) |
+| 60 đơn (≈D30) | 🔓 Unlock **4H Delivery** — đơn scheduled | Diversify income streams |
 | Rating ≥ 4.7 duy trì 2 tuần | 🔓 Badge "Tài Xế Chất Lượng" + Ưu tiên đơn | Social recognition |
 | 4 tuần liên tiếp active | 🔓 Đăng ký ca ưu tiên (Priority Shift) | Cam kết → Quyền lợi |
-| 100 đơn (≈D45) | 🔓 Unlock **Enterprise/SME API** (Shopee, TikTok Shop) | Gateway vào đơn B2B — thu nhập cao nhất, ổn định nhất |
+| 100 đơn (≈D50-D60) | 🔓 Unlock **Enterprise/SME API** (Shopee, TikTok Shop) | Gateway vào đơn B2B |
 
-**3. Income Dashboard & Goal Setting (Bảng Thu Nhập & Đặt Mục Tiêu)**
+**3. Income Dashboard & Goal Setting**
 
 - Hiển thị thu nhập tích lũy từ ngày 1 (tạo "sunk cost" tích cực)
 - So sánh thu nhập tuần này vs tuần trước (tạo momentum)
 - Tính năng đặt mục tiêu thu nhập cá nhân → app gợi ý số đơn/giờ cần chạy
-- *Áp dụng từ mô hình DoorDash "Earnings Tracker"*
+- *Tham khảo DoorDash "Earnings Tracker"*
 
 **4. Driver Community Program — Xuyên Suốt Lifecycle**
 
-> ⚡ **Benchmark:** Be Vietnam dùng beAcademy tạo training cohorts → social bond → switching cost. Gojek GoFleet groups. Self-Determination Theory: "Relatedness" (thuộc về) là 1 trong 3 nhu cầu tâm lý cốt lõi. Chi phí: **gần zero** so với incentive spend.
+> Tham khảo: Be beAcademy tạo training cohorts → social bond. Gojek GoFleet groups. SDT "Relatedness" là 1 trong 3 nhu cầu tâm lý cốt lõi. Chi phí: **gần zero** so với incentive spend.
 
 | Giai đoạn | Cơ chế cộng đồng | Owner | KPI |
 |:---|:---|:---|:---|
@@ -337,23 +361,7 @@ Ngày 7 liên tiếp:  🎁 MEGA BONUS + Badge "Tuần Lễ Vàng"
 | **D46-D120** (Area Network) | Area Captain quản lý nhóm 20-30 người. Weekly tips trên kênh nội bộ. | Area Captain | Captain NPS ≥ 40 |
 | **D121+** (Community Leaders) | Driver Advisory Board. Training Host. Quality Auditor. | DM + Leadership | Leader retention ≥ 90% |
 
-- *Từ mô hình Gojek: Driver Community Hub tại mỗi thành phố*
-- *Từ mô hình Be: beAcademy training cohorts tạo social bond mạnh*
-- **Area Captain KPI:** % retention nhóm mình quản lý → thưởng theo performance nhóm, không chỉ cá nhân
-
-#### KPIs Phase 3
-
-| Chỉ số | Định nghĩa | Target |
-|:---|:---|:---|
-| **D45 Retention** | % tài xế vẫn active sau 45 ngày | **≥ 72%** |
-| **Weekly Active Days** | Số ngày hoạt động/tuần | **≥ 5 ngày** |
-| **Quest Completion Rate** | % tài xế hoàn thành quest cơ bản/tuần | **≥ 60%** |
-| **Cumulative Orders** | Tổng đơn hoàn thành sau 45 ngày | **≥ 80 đơn** |
-| **Acceptance Rate** | Tỷ lệ chấp nhận đơn | **≥ 82%** |
-| **Multi-Service Unlock** | % tài xế unlock ≥ 2 dịch vụ trước D45 | **≥ 50%** |
-| **Community Engagement** | % tài xế tham gia ≥ 1 meetup/tháng | **≥ 40%** |
-
-#### ⚠️ Churn Triggers Phase 3
+#### ⚠️ Churn Triggers Phase 3 💡
 
 | Dấu hiệu | Hành động can thiệp |
 |:---|:---|
@@ -364,29 +372,19 @@ Ngày 7 liên tiếp:  🎁 MEGA BONUS + Badge "Tuần Lễ Vàng"
 
 ---
 
-### ═══════════════════════════════════════════
-### PHASE 4: 🟣 GROWTH — PHÁT TRIỂN & MỞ RỘNG (Ngày 46 → Ngày 120)
-### ═══════════════════════════════════════════
+### PHASE 4: 🟣 GROWTH — PHÁT TRIỂN & MỞ RỘNG (D46 → D120)
 
 **Tên gọi:** "Grow Up" — Nâng Tầm
-**Mục tiêu cốt lõi:** Tài xế đạt **hạng R3 Bạc → R2 Vàng**, hoạt động ổn định ≥ 5 ngày/tuần, trở thành nguồn cung đáng tin cậy.
-**Tâm lý tài xế:** Đã quen với công việc, bắt đầu tối ưu hóa thu nhập, so sánh với đối thủ, cân nhắc cam kết dài hạn.
+**Mục tiêu cốt lõi:** 💡 Tài xế đạt **hạng R3 Bạc → R2 Vàng**, hoạt động ổn định ≥ 5 ngày/tuần.
+**Tâm lý tài xế:** Đã quen với công việc, bắt đầu tối ưu hóa thu nhập, so sánh với đối thủ.
 
-#### Benchmark & Lý do khoa học
+*Research foundation: Grab Tier Benefits (§1.1), Swiggy tiered insurance +42% D180 (§1.2), Rusbult Investment Model (§1.2), Zwettler "Positioning Challenge" (benchmark file §3.1).*
 
-| Nguồn | Insight |
-|:---|:---|
-| **Grab** | Tier benefits rõ ràng: Gold/Platinum được ưu tiên đơn tốt hơn, bảo hiểm, quà tặng |
-| **Uber Pro** | Tuition reimbursement cho tier cao — đầu tư vào tương lai tài xế |
-| **Deliveroo** | Fee Multiplier 1.2x-1.5x vào peak hour cho tài xế tier cao |
-| **Swiggy (India)** | Health insurance + Accident coverage tăng retention D180 **42%** |
-| **Psychology** | "Investment Model of Commitment" (Rusbult): Commitment = Satisfaction + Investment - Alternatives |
-
-#### Cơ Chế Engagement
+#### Cơ Chế Engagement 💡
 
 **1. Hệ Thống Xếp Hạng Chính Thức — Đồng bộ `driver-ranking-params.md`**
 
-> ⚠️ **Source of Truth:** Toàn bộ ngưỡng KPI, hệ số điểm, và quyền lợi bên dưới được đồng bộ từ `2026-05-driver-ranking-params.md`. Mọi thay đổi phải cập nhật tại file params trước.
+> ⚠️ **Source of Truth:** Toàn bộ ngưỡng KPI đồng bộ từ `2026-05-driver-ranking-params.md`. Mọi thay đổi cập nhật tại file params trước.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -413,16 +411,12 @@ Ngày 7 liên tiếp:  🎁 MEGA BONUS + Badge "Tuần Lễ Vàng"
 
 **2. Tiêu Chí Xếp Hạng — DQS-Based (Driver Quality Score)**
 
-> Sử dụng **DQS** (Driver Quality Score) làm chỉ số tổng hợp duy nhất, kết hợp với DCR và Productivity.
-
 | Rank | DQS yêu cầu | DCR (%) | Productivity (stp/tháng) |
 |:---|:---|:---|:---|
 | 💎 **R1 Kim Cương** (Elite) | ≥ 80 | ≤ 10% | ≥ 280 |
 | 🥇 **R2 Vàng** (Active) | ≥ 75 | ≤ 10% | ≥ 210 |
 | 🥈 **R3 Bạc** (Standard) | ≥ 75 | ≤ 15% | ≥ 70 |
 | **Unranked** | < 75 | — | — |
-
-> **DQS** bao gồm: Acceptance Rate, Fulfillment Rate, Customer Rating, Cancel Rate — được tính tổng hợp thay vì đánh trọng số riêng lẻ.
 
 **3. Phúc Lợi Theo Rank (Benefit Ladder) — Đồng bộ AhaBenefits v2.0**
 
@@ -431,36 +425,30 @@ Ngày 7 liên tiếp:  🎁 MEGA BONUS + Badge "Tuần Lễ Vàng"
 | **Primary Layer** | L6 MASS | L4 Bigzone | L3 Mediumzone | L2 Minizone |
 | **AhaPoints Hệ số** | ×1.0 | ×1.1 | ×1.3 | ×1.5 |
 | **Bonus hoàn ca** | — | +20 pts | +25 pts | +30 pts |
-| **Ước tính pts/ca 4h** | ~44 pts | ~73 pts | ~93 pts | ~114 pts |
 | **Ca Full-day (08–18h)** | ❌ | ❌ | ✅ | ✅ |
 | **Thu nhập đảm bảo Full-day (SGN)** | — | — | 550.000đ/ngày | 600.000đ/ngày |
 | **Thu nhập đảm bảo Full-day (HAN)** | — | — | 600.000đ/ngày | 650.000đ/ngày |
-| **Thu nhập target/h (SGN)** | — | lên đến 55k/h | lên đến 60k/h | lên đến 65k/h |
-| **Thu nhập target/h (HAN)** | — | lên đến 60k/h | lên đến 65k/h | lên đến 70k/h |
 | **Voucher xăng/sạc (tự động)** | — | — | 30k/tháng | 50k/tháng |
 | **Bảo hiểm tai nạn** | ❌ | ✅ Cơ bản (cá nhân) | ✅ Mở rộng (cá nhân + nha khoa) | ✅ Premium (cá nhân + 1 người thân) |
 | **AhaBenefits Catalog** | ❌ | Bạc only | Vàng + Bạc | Kim Cương + Vàng + Bạc |
-| **Slot ưu tiên Ca Peak** | on-demand | 40% | 40% | 20% |
 | **Mentor Program** | ❌ | ❌ | ❌ | ✅ |
 | **Monthly Recognition** | ❌ | ❌ | Bảng vinh danh | 🏆 + Quà tặng |
 
-> **Lưu ý:** Hệ số AhaPoints áp theo **đơn hàng tại layer**, không theo rank tài xế. R1 nhận đơn overflow từ L3 chỉ được ×1.3, không phải ×1.5.
+> **Lưu ý:** Hệ số AhaPoints áp theo **đơn hàng tại layer**, không theo rank tài xế.
 
-**4. Tiered Insurance — Moat Cạnh Tranh**
+**4. Tiered Insurance — Moat Cạnh Tranh 💡**
 
-> ⚡ **Benchmark:** Swiggy tiered insurance (Gold/Silver/Bronze) → D180 retention **+42%**. Deliveroo cung cấp BH tai nạn + £1M liability cho **tất cả** riders. XanhSM dùng BH đầy đủ (BHXH + BHYT + BHTN) làm vũ khí chiêu mộ chính. Chi phí tăng ~15-20% nhưng là competitive moat mạnh nhất vs Grab/Be (hiện không có BH cho tài xế).
+> Tham khảo: Swiggy tiered insurance → churn 60-70% → 10-15% (§1.2). XanhSM BH đầy đủ → churn 15-20% (§1.1). Deliveroo BH cho tất cả riders (§1.2). Chi phí tăng ~15-20% nhưng là competitive moat vs Grab/Be.
 
 | Tier BH | Điều kiện | Quyền lợi | Chi phí ước tính |
 |:---|:---|:---|:---|
-| 🥈 **Bronze** (R3 Bạc) | Active ≥ 30 ngày + đạt R3 | BH tai nạn cá nhân cơ bản (nằm viện + phẫu thuật) | ~XX,000đ/người/tháng |
-| 🥇 **Silver** (R2 Vàng) | Duy trì R2 ≥ 2 chu kỳ | BH mở rộng (cá nhân + nha khoa + khám sức khỏe định kỳ) | ~XX,000đ/người/tháng |
+| 🥈 **Bronze** (R3 Bạc) | Active ≥ 30 ngày + đạt R3 | BH tai nạn cá nhân cơ bản | ~XX,000đ/người/tháng |
+| 🥇 **Silver** (R2 Vàng) | Duy trì R2 ≥ 2 chu kỳ | BH mở rộng (cá nhân + nha khoa + khám sức khỏe) | ~XX,000đ/người/tháng |
 | 💎 **Gold** (R1 Kim Cương) | Duy trì R1 ≥ 2 chu kỳ | BH Premium (cá nhân + 1 người thân + tử tuất) | ~XX,000đ/người/tháng |
 
-> **Loss Aversion design:** Khi tài xế sắp rớt hạng, push: *"Bạn sắp mất Bảo hiểm Silver — chỉ cần thêm X stp để giữ R2 Vàng!"*. Mất BH (đặc biệt nếu có người thân) là loss aversion cực mạnh — hiệu quả hơn bất kỳ cash bonus nào.
+> **Loss Aversion design (🔬 Kahneman):** Khi tài xế sắp rớt hạng, push: *"Bạn sắp mất Bảo hiểm Silver — chỉ cần thêm X stp để giữ R2 Vàng!"*
 
-**5. Loss Aversion & Grace Period — Thiết Kế Giữ Hạng**
-
-> ⚡ **Benchmark (Kahneman):** Mất mát gây đau gấp 2x so với niềm vui khi được. Uber Pro drivers làm việc chăm hơn để **giữ** Diamond hơn là để **đạt** Diamond. Uber thậm chí bỏ Diamond cash reward (2025) vì chỉ status + benefits đã đủ giữ chân.
+**5. Loss Aversion & Grace Period 💡**
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
@@ -470,18 +458,15 @@ Ngày 7 liên tiếp:  🎁 MEGA BONUS + Badge "Tuần Lễ Vàng"
 │  → KHÔNG rớt hạng ngay lập tức                                 │
 │  → Grace Period 14 ngày: Giữ 100% benefits cũ                 │
 │  → Push notification: "Bạn còn 14 ngày để cứu hạng R2 Vàng!" │
-│  → Hiển thị rõ: "Nếu rớt hạng, bạn sẽ mất: Voucher xăng     │
-│    30k/tháng + BH Silver + Ca Full-day + ×1.3 AhaPoints"      │
+│  → Hiển thị rõ: "Nếu rớt hạng, bạn sẽ mất: [list benefits]" │
 │                                                                │
 │  Nếu recover trong 14 ngày → Giữ hạng + Badge "Comeback"      │
 │  Nếu không recover → Rớt 1 bậc (R2 → R3, không rớt thẳng     │
 │    về Unranked) + 30 ngày để leo lại                           │
-│                                                                │
-│  ⚡ Thiết kế quanh NỖI SỢ MẤT, không chỉ niềm vui ĐƯỢC       │
 └────────────────────────────────────────────────────────────────┘
 ```
 
-**6. Monthly Performance Review (Đánh Giá Hiệu Suất Hàng Tháng)**
+**6. Monthly Performance Review 💡**
 
 ```
 📊 BÁO CÁO HIỆU SUẤT THÁNG — Tài xế [Tên]
@@ -499,56 +484,31 @@ Ngày 7 liên tiếp:  🎁 MEGA BONUS + Badge "Tuần Lễ Vàng"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-#### KPIs Phase 4
-
-| Chỉ số | Định nghĩa | Target |
-|:---|:---|:---|
-| **D120 Retention** | % tài xế vẫn active sau 120 ngày | **≥ 55%** |
-| **R3 Bạc+ Rate** | % tài xế đạt hạng R3 Bạc trở lên | **≥ 75%** (trong số retained) |
-| **Productivity** | Số stp/tháng trung bình | **≥ 210 stp** (target R2) |
-| **Active Days/Month** | Ngày hoạt động/tháng | **≥ 22 ngày** |
-| **DQS Average** | DQS trung bình | **≥ 75** (ngưỡng R2) |
-| **Multi-Service Rate** | % tài xế nhận ≥ 3 loại dịch vụ | **≥ 45%** |
-| **Insurance Enrollment** | % R3+ tài xế enrolled BH Bronze+ | **≥ 80%** |
-| **Grace Period Recovery** | % tài xế cứu hạng thành công trong Grace Period | **≥ 60%** |
-
 ---
 
-### ═══════════════════════════════════════════
-### PHASE 5: 🔴 MASTERY — CHUYÊN NGHIỆP HÓA (Ngày 121 → Ngày 365)
-### ═══════════════════════════════════════════
+### PHASE 5: 🔴 MASTERY — CHUYÊN NGHIỆP HÓA (D121 → D365)
 
 **Tên gọi:** "Master Level" — Bậc Thầy
-**Mục tiêu cốt lõi:** Tài xế đạt **hạng R2 Vàng → R1 Kim Cương**, trở thành core supply ổn định, thu nhập tối ưu.
-**Tâm lý tài xế:** Tự tin, có chiến lược riêng, coi Ahamove là nguồn thu nhập chính/phụ ổn định. Rủi ro: burnout hoặc bị đối thủ lôi kéo.
+**Mục tiêu cốt lõi:** 💡 Tài xế đạt **R2 Vàng → R1 Kim Cương**, trở thành core supply ổn định.
+**Tâm lý tài xế:** Tự tin, có chiến lược riêng, coi Ahamove là nguồn thu nhập chính. Rủi ro: burnout hoặc bị đối thủ lôi kéo.
 
-#### Benchmark & Lý do khoa học
+*Research foundation: Uber Diamond status + benefits > cash (§1.2), Rappi financial ecosystem (§1.1), Maslow Self-Actualization, Zwettler "Balancing Challenge" (benchmark file §3.1).*
 
-| Nguồn | Insight |
-|:---|:---|
-| **Uber Diamond** | Preferred Destination feature — tài xế chọn khu vực muốn chạy |
-| **Grab Platinum** | Airport/Mall priority queue — đơn giá trị cao nhất |
-| **DoorDash Top Dasher** | Priority access to high-value orders — "VIP driver gets VIP orders" |
-| **Rappi** | RappiPay micro-lending dựa trên earning history — tài xế lâu năm được vay vốn |
-| **Psychology** | "Self-Actualization" (Maslow) — tại giai đoạn này, tài xế cần **ý nghĩa** và **sự công nhận**, không chỉ tiền |
+#### Cơ Chế Engagement 💡
 
-#### Cơ Chế Engagement
-
-**1. Exclusive Benefits (Quyền Lợi Độc Quyền)**
-
+**1. Exclusive Benefits**
 - 🎯 **VIP Order Pool:** Đơn giá trị cao, khách hàng doanh nghiệp (B2B), đơn định kỳ
 - 🏦 **Financial Services:** Ưu đãi vay vốn/mua xe từ đối tác tài chính (dựa trên earning history)
-- 🏥 **Gold Insurance (R1):** BH Premium cho tài xế + 1 người thân (xem Tiered Insurance ở Phase 4)
-- 📚 **Học bổng/Hỗ trợ giáo dục:** Cho con em tài xế R1 Kim Cương (từ mô hình Uber Tuition)
-- 🎁 **Anniversary Rewards:** Quà tặng/bonus đặc biệt tại các mốc 6 tháng, 9 tháng, 12 tháng
+- 🏥 **Gold Insurance (R1):** BH Premium cho tài xế + 1 người thân
+- 📚 **Học bổng/Hỗ trợ giáo dục:** Cho con em tài xế R1 Kim Cương (tham khảo Uber Tuition)
+- 🎁 **Anniversary Rewards:** Quà tặng/bonus đặc biệt tại các mốc 6, 9, 12 tháng
 
-**2. Performance Optimization Tools (Công Cụ Tối Ưu Hiệu Suất)**
-
-- Heat Map nâng cao — dự báo nhu cầu theo giờ/khu vực (không phải tất cả tài xế đều có)
+**2. Performance Optimization Tools**
+- Heat Map nâng cao — dự báo nhu cầu theo giờ/khu vực (exclusive cho tier cao)
 - Earning Forecast — dự báo thu nhập dựa trên pattern hoạt động
 - Schedule Optimizer — gợi ý lịch chạy tối ưu dựa trên dữ liệu cá nhân
 
-**3. Recognition & Status (Công Nhận & Vị Thế)**
+**3. Recognition & Status**
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
@@ -559,50 +519,28 @@ Ngày 7 liên tiếp:  🎁 MEGA BONUS + Badge "Tuần Lễ Vàng"
 │  #1 Tài Xế/Quốc gia: "Driver of the Month" + Quà tặng VIP    │
 │                                                                │
 │  🎖️ Huy hiệu thành tích: 100 đơn, 500 đơn, 1000 đơn,         │
-│     Rating 5.0 liên tục 30 ngày, 0% Cancel 30 ngày, v.v.      │
+│     Rating 5.0 liên tục 30 ngày, 0% Cancel 30 ngày            │
 └────────────────────────────────────────────────────────────────┘
 ```
 
-**4. Voice & Influence (Tiếng Nói & Ảnh Hưởng)**
-
-- Driver Advisory Board — Nhóm tài xế R2 Vàng / R1 Kim Cương được tham vấn về chính sách mới
-- Beta Testing — Thử nghiệm tính năng mới trước khi rollout
+**4. Voice & Influence**
+- Driver Advisory Board — Nhóm tài xế R2/R1 được tham vấn chính sách mới
+- Beta Testing — Thử nghiệm tính năng mới trước rollout
 - Feedback Channel — Kênh phản hồi trực tiếp đến leadership team
-
-#### KPIs Phase 5
-
-| Chỉ số | Định nghĩa | Target |
-|:---|:---|:---|
-| **D365 Retention** | % tài xế vẫn active sau 365 ngày | **≥ 35%** |
-| **R2 Vàng+ Rate** | % tài xế đạt hạng R2 Vàng / R1 Kim Cương | **≥ 55%** (trong số retained) |
-| **Productivity** | Số stp/tháng trung bình | **≥ 280 stp** (target R1) |
-| **Revenue/Driver/Month** | Doanh thu trung bình/tài xế/tháng | Benchmark + 15% |
-| **NPS (Net Promoter Score)** | Mức độ sẵn sàng giới thiệu nền tảng | **≥ 50** |
-| **Multi-service Rate** | % tài xế nhận ≥ 3 loại dịch vụ | **≥ 55%** |
-| **Gold Insurance Retention** | % R1 drivers giữ Gold Insurance ≥ 2 chu kỳ | **≥ 85%** |
 
 ---
 
-### ═══════════════════════════════════════════
-### PHASE 6: ⭐ AMBASSADOR — ĐẠI SỨ & DẪN DẮT (Ngày 365+)
-### ═══════════════════════════════════════════
+### PHASE 6: ⭐ AMBASSADOR — ĐẠI SỨ & DẪN DẮT (D365+)
 
 **Tên gọi:** "Advocate & Lead" — Đại Sứ
-**Mục tiêu cốt lõi:** Tài xế trở thành **Đại sứ thương hiệu**, mentor cho tài xế mới, đóng góp vào sự phát triển cộng đồng.
-**Tâm lý tài xế:** Gắn bó sâu, coi Ahamove là một phần bản sắc nghề nghiệp. Cần được trao **vai trò** và **trách nhiệm** để duy trì engagement.
+**Mục tiêu cốt lõi:** 💡 Tài xế trở thành **Đại sứ thương hiệu**, mentor cho tài xế mới.
+**Tâm lý tài xế:** Gắn bó sâu, coi Ahamove là một phần bản sắc nghề nghiệp.
 
-#### Benchmark & Lý do khoa học
+*Research foundation: Erikson Generativity (§1.2), Gojek GoPartner Mentor (§1.1), Uber Advisory Council (§1.1).*
 
-| Nguồn | Insight |
-|:---|:---|
-| **Grab** | GrabHero Program — tài xế kỳ cựu tham gia hoạt động cộng đồng |
-| **Gojek** | GoPartner Mentor — tài xế lâu năm đào tạo tài xế mới, nhận thu nhập thêm |
-| **Uber** | Driver Advisory Council — tài xế lâu năm cố vấn cho đội ngũ vận hành |
-| **Psychology** | "Generativity" (Erikson) — nhu cầu "truyền lại" và tạo ảnh hưởng khi đã thành thạo |
+#### Cơ Chế Engagement 💡
 
-#### Cơ Chế Engagement
-
-**1. Mentor Program (Chương Trình Cố Vấn)**
+**1. Mentor Program**
 
 | Vai trò | Nhiệm vụ | Thưởng |
 |:---|:---|:---|
@@ -611,7 +549,7 @@ Ngày 7 liên tiếp:  🎁 MEGA BONUS + Badge "Tuần Lễ Vàng"
 | **Training Host** | Tổ chức buổi đào tạo offline hàng tháng | Thưởng cố định + Recognition |
 | **Quality Auditor** | Review & feedback cho tài xế có rating thấp | Thưởng/case + Badge đặc biệt |
 
-**2. Referral Engine (Cỗ Máy Giới Thiệu)**
+**2. Referral Engine**
 
 ```
 🔗 CHƯƠNG TRÌNH GIỚI THIỆU TÀI XẾ
@@ -625,33 +563,152 @@ Tài xế Ambassador giới thiệu tài xế mới:
 📊 Dashboard theo dõi referral real-time
 ```
 
-**3. Legacy & Impact (Di Sản & Tác Động)**
-
+**3. Legacy & Impact**
 - Tham gia thiết kế chính sách tài xế — Advisory Board chính thức
 - Tham gia sự kiện thương hiệu (PR, media, activation)
 - Nhận "Certificate of Excellence" — chứng nhận chuyên nghiệp
 - Cơ hội chuyển đổi sang vai trò full-time (Operations, Training, QA)
 
-#### KPIs Phase 6
+---
 
-| Chỉ số | Định nghĩa | Target |
+## PHẦN III: KPIs & METRICS
+
+### 3.1 Cohort Retention Targets — Phân Loại
+
+| Metric | Công thức | Target | Loại | Cơ sở / Alert |
+|:---|:---|:---|:---|:---|
+| `D7 Retention` | Active D7 / Total new (7d trước) | **≥ 85%** | 🟢 Benchmarked | Grab w/ Guarantee. Alert < 70% 🔴 |
+| `D14 Retention` | Active D14 / Total new (14d trước) | **≥ 82%** | 🟢 Benchmarked | Uber w/ Quest. Alert < 65% 🔴 |
+| `D30 Retention` | Active D30 / Total new (30d trước) | **≥ 75%** | 🟢 Benchmarked | Grab Guarantee 14d. Alert < 55% 🔴 |
+| `D45 Habit Formation` | ≥ 30 ngày active D1-D45 / Total | **≥ 72%** | 🟡 Aspirational | Logic: nếu D30=75%, habit phase retain thêm ~96%. Alert < 50% 🔴 |
+| `D60 Retention` | Active D60 / Total new | **≥ 68%** | 🟡 Aspirational | Không có benchmark trực tiếp. Alert < 48% 🔴 |
+| `D90 Retention` | Active D90 / Total new | **≥ 60%** | 🟢 Benchmarked | Gojek GoPartner. Alert < 40% 🔴 |
+| `D120 Survival Rate` | Active D120 / Total new | **≥ 55%** | 🟡 Aspirational | Gần nhất: Swiggy 55% **tại D180**. Target D120=55% = stretch. Alert < 35% 🔴 |
+| `D180 Pro Rate` | Tier Chuyên Nghiệp / Total | **≥ 45%** | 🟡 Aspirational | Swiggy StepUp D180=55% survive. Alert < 25% 🔴 |
+| `D365 Champion Rate` | Active D365 / Total new | **≥ 35%** | 🔴 Stretch | **Gig best = ~16%. 35% = XanhSM salary model.** Alert < 18% 🔴 |
+
+### 3.2 Phase KPIs — Tổng Hợp
+
+#### Phase 1: Activation (D0-D3)
+
+| Chỉ số | Target | Loại |
 |:---|:---|:---|
-| **Annual Retention** | % tài xế hoạt động > 12 tháng | **≥ 35%** |
-| **Referral Rate** | Số tài xế mới giới thiệu/Ambassador/quý | **≥ 3 người** |
-| **Mentee D30 Retention** | D30 Retention của tài xế được mentor | **≥ 80%** |
-| **NPS** | Net Promoter Score | **≥ 60** |
-| **Ambassador Engagement** | % Ambassador tham gia ≥ 1 hoạt động/tháng | **≥ 80%** |
-| **Community Leader Ratio** | % Ambassador giữ vai trò Captain/Mentor/Host | **≥ 50%** |
+| Activation Rate (≥1 đơn trong 72h) | ≥ 85% | 🟢 Grab +27% activation |
+| Time to First Trip | ≤ 24 giờ | 🟢 Uber D48 → D7 ret +41% |
+| App Engagement (lần mở/ngày D0-D3) | ≥ 4 lần/ngày | 🟡 Aspirational |
+| Onboarding Completion | ≥ 92% | 🟡 Aspirational |
+| Instant Payout Adoption (D0-D3) | ≥ 80% | 🟡 Aspirational |
+
+#### Phase 2: First Win (D4-D14)
+
+| Chỉ số | Target | Loại |
+|:---|:---|:---|
+| D14 Retention | ≥ 82% | 🟢 Benchmarked |
+| Avg. Orders/Day (active) | ≥ 5 đơn | 🟡 Aspirational |
+| Cumulative Orders after D14 | ≥ 20 đơn | 🟡 Logic: 5/ngày × ~10 active days × 40% |
+| Guarantee Utilization (tự vượt) | ≥ 50% | 🟡 Ước tính từ dispatch density |
+| Streak Participation (≥ 3 ngày) | ≥ 55% | 🟡 Aspirational |
+
+#### Phase 3: Habit Building (D15-D45)
+
+| Chỉ số | Target | Loại |
+|:---|:---|:---|
+| D45 Retention | ≥ 72% | 🟡 Aspirational |
+| Weekly Active Days | ≥ 5 ngày | 🟡 Aspirational |
+| Quest Completion Rate | ≥ 60% | 🟡 DoorDash +23% reference |
+| Cumulative Orders after D45 | ≥ 80 đơn | 🟡 ~4/ngày × 20 active days |
+| Acceptance Rate | ≥ 82% | 🟡 Aspirational |
+| Multi-Service Unlock (≥ 2 dịch vụ trước D45) | ≥ 50% | 🟡 Aspirational |
+| Community Engagement (≥ 1 meetup/tháng) | ≥ 40% | 🟡 Aspirational |
+
+#### Phase 4: Growth (D46-D120)
+
+| Chỉ số | Target | Loại |
+|:---|:---|:---|
+| D120 Retention | ≥ 55% | 🟡 Aspirational (Swiggy 55% = D180) |
+| R3 Bạc+ Rate (trong số retained) | ≥ 75% | 🟡 Aspirational |
+| Productivity avg | ≥ 210 stp (target R2) | 🟡 Đồng bộ ranking params |
+| Active Days/Month | ≥ 22 ngày | 🟡 Aspirational |
+| DQS Average | ≥ 75 (ngưỡng R2) | Đồng bộ ranking params |
+| Multi-Service Rate (≥ 3 dịch vụ) | ≥ 45% | 🟡 Aspirational |
+| Insurance Enrollment (R3+ enrolled BH Bronze+) | ≥ 80% | 🟡 Aspirational |
+| Grace Period Recovery Rate | ≥ 60% | 🟡 Aspirational |
+
+#### Phase 5: Mastery (D121-D365)
+
+| Chỉ số | Target | Loại |
+|:---|:---|:---|
+| D365 Retention | ≥ 35% | 🔴 Stretch (gig best ~16%) |
+| R2 Vàng+ Rate (trong số retained) | ≥ 55% | 🟡 Aspirational |
+| Productivity avg | ≥ 280 stp (target R1) | Đồng bộ ranking params |
+| NPS | ≥ 50 | 🟡 Aspirational |
+| Multi-service Rate (≥ 3 dịch vụ) | ≥ 55% | 🟡 Aspirational |
+| Gold Insurance Retention (R1 giữ ≥ 2 chu kỳ) | ≥ 85% | 🟡 Aspirational |
+
+#### Phase 6: Ambassador (D365+)
+
+| Chỉ số | Target | Loại |
+|:---|:---|:---|
+| Annual Retention (D365+) | ≥ 35% | 🔴 Stretch |
+| Referral Rate | ≥ 3 người/Ambassador/quý | 🟡 Aspirational |
+| Mentee D30 Retention | ≥ 80% | 🟢 Gojek mentor D30 benchmark |
+| NPS | ≥ 60 | 🟡 Aspirational |
+| Ambassador Engagement (≥ 1 activity/tháng) | ≥ 80% | 🟡 Aspirational |
+| Community Leader Ratio | ≥ 50% | 🟡 Aspirational |
+
+### 3.3 Segment Distribution Monitor
+
+| Segment | Target % | Min | Max | Alert nếu |
+|:---|:---|:---|:---|:---|
+| ⭐ Champion | 15-20% | 12% | 25% | < 12% hoặc > 25% |
+| 🟣 Loyalist | 20-25% | 18% | 30% | < 18% |
+| 🔵 Hustler | 20-25% | 15% | 30% | > 30% (quá phụ thuộc promo) |
+| 🟡 Drifter | 15-20% | 10% | 25% | > 25% (supply không ổn định) |
+| 🔴 Dormant | < 20% | — | 25% | > 25% (rò rỉ nghiêm trọng) |
+
+### 3.4 Bản Đồ Mốc Thời Gian
+
+```
+D0   D3   D7   D14  D21  D30  D45  D60  D90  D120 D180 D270 D365  D365+
+│    │    │    │    │    │    │    │    │    │    │    │    │     │
+●────●────●────●────●────●────●────●────●────●────●────●────●─────●
+│    │    │    │    │    │    │    │    │    │    │    │    │     │
+▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼     ▼
+
+First Micro D7   ≥10d  D21  Month Habit  D60   D90  Surv. Prof. 9M   Anniv. Ambas-
+Trip  Win  Act.  active Rev.  #1   Check  Habit Tier  Point Tier  Rev. Award  sador
+            Badge in 14d      Done        Badge  Up          Up        🏆    Program
+```
+
+| Mốc | Ngày | Điều kiện | Loại can thiệp | Phần thưởng | Ưu tiên |
+|:---|:---|:---|:---|:---|:---|
+| **First Trip** | D0-D1 | Hoàn thành đơn đầu tiên | Chúc mừng + Show earnings | Bonus tiền mặt (declining) | 🔴 Critical |
+| **Micro Win** | D3 | 5 đơn hoàn thành | Progress notification | Bonus nhỏ + Progress bar | 🟠 High |
+| **Activation Complete** | D7 | ≥ 7 đơn trong D1-D7 | Badge + Cash reward | Badge 🥉 + Tiền thưởng | 🔴 Critical |
+| **At-Risk Alert** | D7 | < 5 đơn tổng | Outreach cá nhân + Callback | Re-activation bonus | 🔴 Critical |
+| **Fortnight** | D14 | ≥ 10 ngày active trong 14 ngày | Badge + Bonus | Badge "2 Tuần Kiên Trì" | 🟠 High |
+| **Habit Check** | D21 | 21 ngày hoặc 21 đơn | Micro-reward + Notification | "Bạn đang hình thành thói quen!" | 🟡 Medium |
+| **Month #1** | D30 | ≥ 20 ngày active D1-D30 | Tier upgrade + Kit | Lên nhóm "Triển Vọng" | 🔴 Critical |
+| **Quest Midpoint** | D45 | Review activity pattern | Personalized report | Điều chỉnh quest level | 🟡 Medium |
+| **100 Orders** | ~D50-D60 | 100 đơn tích lũy | Special badge | Badge "Centurion" + Cash | 🟠 High |
+| **Habit Milestone** | D60 | ≥ 45 ngày active D1-D60 | Special badge + Reward lớn | Badge "Thói Quen Vàng" | 🔴 Critical |
+| **Ranking Activation** | D60+ | Đủ điều kiện KPI | Xếp hạng chính thức | Tier Badge + Benefits | 🔴 Critical |
+| **Tier Upgrade D90** | D90 | ≥ 200 đơn + active | Tier "Thường Trực" | Priority dispatch + Benefits | 🔴 Critical |
+| **Survival Point** | D120 | Active + on-track | Mời Community + Mentor | "Survival Badge" | 🟠 High |
+| **Pro Tier** | D180 | ≥ 500 đơn + Rating ≥ 4.7 | Tier "Chuyên Nghiệp" | Earning guarantee + Tools | 🔴 Critical |
+| **9-Month Review** | D270 | Ongoing excellence | Performance report + Gift | Quà tặng + Recognition | 🟡 Medium |
+| **Anniversary** | D365 | Active + ≥ 1000 đơn | 🏆 Champion celebration | Quà vật lý + Feature + Event | 🔴 Critical |
+| **Ambassador Invite** | D365+ | D365 + Rating ≥ 4.8 | Mời vào Ambassador Program | Mentor role + Advisory Board | 🟠 High |
+
+> ⚠️ **Thay đổi vs v3.0:** "Streak 14" (14 ngày active liên tiếp) → "Fortnight" (≥ 10 ngày active trong 14 ngày) — 14 ngày liên tiếp không nghỉ là unrealistic. "100 Orders" dời từ D40-D50 → D50-D60 cho phù hợp hơn với pace tài xế mới.
 
 ---
 
-## 👥 PHÂN NHÓM TÀI XẾ (DRIVER SEGMENTATION)
+## PHẦN IV: VẬN HÀNH
 
-### Mô Hình Phân Nhóm Đa Chiều
+### 4.1 Phân Nhóm Tài Xế (Driver Segmentation)
 
-Dựa trên nghiên cứu từ Uber, Grab, và lý thuyết phân khúc hành vi, tài xế được phân thành **5 nhóm chính** theo 2 trục:
-- **Trục X:** Tần suất hoạt động (Active Frequency)
-- **Trục Y:** Mức độ cam kết với nền tảng (Platform Commitment)
+Dựa trên nghiên cứu từ Uber, Grab, và lý thuyết phân khúc hành vi. 5 nhóm chính theo 2 trục: **Tần suất hoạt động** × **Mức độ cam kết**.
 
 ```
             Cam kết CAO
@@ -674,209 +731,78 @@ Dựa trên nghiên cứu từ Uber, Grab, và lý thuyết phân khúc hành vi
     + 🔴 DORMANT (Ngủ đông) — Nằm ngoài ma trận (inactive ≥ 14 ngày)
 ```
 
-### Chi Tiết Từng Nhóm
-
 #### ⭐ CHAMPION — Nhà Vô Địch (Target: 15-20% driver pool)
 
 | Đặc điểm | Chi tiết |
 |:---|:---|
-| **Định nghĩa** | Hoạt động ≥ 22 ngày/tháng, ≥ 120 đơn/tháng, Rating ≥ 4.8, Cancel Rate ≤ 5% |
-| **Hành vi** | Coi Ahamove là thu nhập chính, có chiến lược chạy riêng, tối ưu hóa liên tục |
-| **Tâm lý** | Tự hào về thứ hạng, muốn được công nhận, sẵn sàng hỗ trợ tài xế mới |
-| **Giá trị** | Cao nhất — chiếm ~15% driver pool nhưng đóng góp ~40% tổng đơn |
-| **Rủi ro** | Burnout, bị đối thủ lôi kéo bằng signing bonus |
+| **Định nghĩa** | ≥ 22 ngày/tháng, ≥ 120 đơn/tháng, Rating ≥ 4.8, Cancel Rate ≤ 5% |
+| **Giá trị** | ~15% pool nhưng ~40% tổng đơn |
+| **Rủi ro** | Burnout, bị đối thủ lôi kéo |
 | **Chiến lược** | Recognition + Exclusive benefits + Financial services + Mentor role |
 
-#### 🟣 LOYALIST — Trung Thành (Target: 20-25% driver pool)
+#### 🟣 LOYALIST — Trung Thành (Target: 20-25%)
 
 | Đặc điểm | Chi tiết |
 |:---|:---|
-| **Định nghĩa** | Hoạt động 15-21 ngày/tháng, 60-119 đơn/tháng, Rating ≥ 4.5, Cancel Rate ≤ 10% |
-| **Hành vi** | Hoạt động đều đặn nhưng không tối đa, có thể chạy thêm nền tảng khác |
-| **Tâm lý** | Hài lòng ở mức vừa phải, chưa all-in, cần thêm lý do để tăng commitment |
-| **Giá trị** | Cao — nguồn cung ổn định, tiềm năng upgrade thành Champion |
-| **Rủi ro** | Dần giảm active days nếu không có intervention |
-| **Chiến lược** | Upgrade path rõ ràng + Tăng benefits gap giữa Silver→Gold + Goal-setting |
+| **Định nghĩa** | 15-21 ngày/tháng, 60-119 đơn/tháng, Rating ≥ 4.5, Cancel Rate ≤ 10% |
+| **Giá trị** | Nguồn cung ổn định, tiềm năng upgrade Champion |
+| **Chiến lược** | Upgrade path rõ ràng + Tăng benefits gap Silver→Gold + Goal-setting |
 
-#### 🔵 HUSTLER — Chạy Sô (Target: 20-25% driver pool)
+#### 🔵 HUSTLER — Chạy Sô (Target: 20-25%)
 
 | Đặc điểm | Chi tiết |
 |:---|:---|
-| **Định nghĩa** | Hoạt động ≥ 18 ngày/tháng, ≥ 100 đơn/tháng, nhưng multi-platform, Rating 4.3-4.7 |
-| **Hành vi** | Chạy nhiều nền tảng cùng lúc (Grab + Be + Ahamove), chọn nền tảng nào có promo tốt nhất |
-| **Tâm lý** | Pragmatic, tối đa hóa thu nhập, loyalty thấp, so sánh liên tục |
-| **Giá trị** | Trung bình-Cao về volume, nhưng không đáng tin cậy về commitment |
-| **Rủi ro** | Rời đi ngay khi đối thủ có promo tốt hơn |
-| **Chiến lược** | Lock-in bằng switching cost (benefits tích lũy), exclusive order pool, streak bonus |
+| **Định nghĩa** | ≥ 18 ngày/tháng, ≥ 100 đơn/tháng, nhưng multi-platform, Rating 4.3-4.7 |
+| **Giá trị** | Volume cao nhưng loyalty thấp |
+| **Chiến lược** | Lock-in bằng switching cost (benefits tích lũy), exclusive order pool, streak |
 
-#### 🟡 DRIFTER — Trôi Dạt (Target: 15-20% driver pool)
+#### 🟡 DRIFTER — Trôi Dạt (Target: 15-20%)
 
 | Đặc điểm | Chi tiết |
 |:---|:---|
-| **Định nghĩa** | Hoạt động 5-14 ngày/tháng, 20-59 đơn/tháng, không ổn định |
-| **Hành vi** | Chạy khi rảnh hoặc khi cần tiền, không có pattern cố định |
-| **Tâm lý** | Coi đây là công việc tay trái/tạm thời, commitment thấp |
-| **Giá trị** | Thấp — nhưng là "supply buffer" quan trọng cho peak hour |
-| **Rủi ro** | Dần ngừng hoạt động hoàn toàn |
-| **Chiến lược** | Flexible quest phù hợp part-time + Peak hour incentive + Dễ quay lại sau gián đoạn |
+| **Định nghĩa** | 5-14 ngày/tháng, 20-59 đơn/tháng |
+| **Giá trị** | "Supply buffer" cho peak hour |
+| **Chiến lược** | Flexible quest + Peak hour incentive + Dễ quay lại |
 
-#### 🔴 DORMANT — Ngủ Đông (Target: Giảm tối thiểu, win-back < 30%)
+#### 🔴 DORMANT — Ngủ Đông (Target: < 20%)
 
 | Đặc điểm | Chi tiết |
 |:---|:---|
-| **Định nghĩa** | Không hoạt động ≥ 14 ngày liên tiếp |
-| **Phân loại phụ** | **Early Dormant** (< 30 đơn lifetime): Win-back khó, **Late Dormant** (≥ 30 đơn lifetime): Win-back khả thi |
-| **Tâm lý** | Đã tìm được nguồn thu nhập khác, hoặc trải nghiệm xấu chưa được giải quyết |
-| **Chiến lược** | Win-back campaign phân loại: Early → SMS/Push đơn giản, Late → Callback + Welcome-back bonus |
+| **Định nghĩa** | Inactive ≥ 14 ngày. **Early Dormant** (< 30 đơn): win-back khó. **Late Dormant** (≥ 30 đơn): khả thi. |
+| **Chiến lược** | Win-back phân loại: Early → SMS đơn giản, Late → Callback + Welcome-back bonus |
 
-### Ma Trận Chuyển Đổi Nhóm (Segment Transition Matrix)
+#### Ma Trận Chuyển Đổi
 
 ```
-Mục tiêu chuyển đổi:
-
 🔴 DORMANT ──win-back──→ 🟡 DRIFTER ──nurture──→ 🟣 LOYALIST ──upgrade──→ ⭐ CHAMPION
-                              │                         │                        │
-                              │                         │                        │
-                              ↓                         ↓                        ↓
+                              │                         │
+                              ↓                         ↓
                          🔵 HUSTLER ──lock-in──→ 🟣 LOYALIST ──upgrade──→ ⭐ CHAMPION
-
-Ngăn chặn chuyển đổi ngược:
-
-⭐ CHAMPION ──prevent burnout──→ Duy trì Champion (KHÔNG để rớt)
-🟣 LOYALIST ──prevent drift──→ Duy trì Loyalist (KHÔNG để thành Drifter)
-🔵 HUSTLER  ──prevent exit──→ Chuyển thành Loyalist (KHÔNG để thành Dormant)
 ```
 
-### Chiến Lược Theo Nhóm × Giai Đoạn
+### 4.2 Cơ Chế Win-Back 💡
 
-| Giai đoạn Journey | ⭐ Champion | 🟣 Loyalist | 🔵 Hustler | 🟡 Drifter | 🔴 Dormant |
-|:---|:---|:---|:---|:---|:---|
-| **Phase 1-2** (D0-D14) | N/A (chưa phân loại) | N/A | N/A | N/A | N/A |
-| **Phase 3** (D15-D45) | Fast-track nurture | Standard nurture | Promo-chaser alert | At-risk monitoring | Win-back D14 |
-| **Phase 4** (D46-D120) | Tier upgrade push | Goal-setting + upgrade path | Lock-in campaign | Re-engagement quest | Win-back campaign |
-| **Phase 5** (D121-D365) | VIP benefits + Mentor invite | Upgrade incentive | Exclusive order pool | Flexible quest | Exit survey |
-| **Phase 6** (D365+) | Ambassador program | Champion candidate | Loyalty program | Casual retention | Archive |
-
----
-
-## 📅 BẢN ĐỒ MỐC THỜI GIAN TỔNG THỂ (MASTER TIMELINE)
-
-### Timeline Trực Quan
-
-```
-D0   D3   D7   D14  D21  D30  D45  D60  D90  D120 D180 D270 D365  D365+
-│    │    │    │    │    │    │    │    │    │    │    │    │     │
-●────●────●────●────●────●────●────●────●────●────●────●────●─────●
-│    │    │    │    │    │    │    │    │    │    │    │    │     │
-│    │    │    │    │    │    │    │    │    │    │    │    │     │
-▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼     ▼
-
-First Micro D7   Streak D21  Month Habit  D60   D90  Surv. Prof. 9M   Anniv. Ambas-
-Trip  Win  Act.  14D   Rev.  #1   Check  Habit Tier  Point Tier  Rev. Award  sador
-            Badge Badge      Done        Badge  Up          Up        🏆    Program
-```
-
-### Bảng Mốc Chi Tiết
-
-| Mốc | Ngày | Điều kiện | Loại can thiệp | Phần thưởng | Ưu tiên |
-|:---|:---|:---|:---|:---|:---|
-| **First Trip** | D0-D1 | Hoàn thành đơn đầu tiên | Chúc mừng + Show earnings | Bonus tiền mặt (declining) | 🔴 Critical |
-| **Micro Win** | D3 | 5 đơn hoàn thành | Progress notification | Bonus nhỏ + Progress bar | 🟠 High |
-| **Activation Complete** | D7 | ≥ 7 đơn trong D1-D7 | Badge + Cash reward | Badge 🥉 + Tiền thưởng | 🔴 Critical |
-| **At-Risk Alert** | D7 | < 5 đơn tổng | Outreach cá nhân + Callback | Re-activation bonus | 🔴 Critical |
-| **Streak 14** | D14 | 14 ngày active liên tiếp | Badge + Bonus | Badge "2 Tuần Kiên Trì" | 🟠 High |
-| **Habit Check** | D21 | 21 ngày/đơn liên tiếp | Micro-reward + Notification | "Bạn đang hình thành thói quen!" | 🟡 Medium |
-| **Month #1** | D30 | ≥ 20 ngày active D1-D30 | Tier upgrade + Kit | Lên nhóm "Triển Vọng" | 🔴 Critical |
-| **Quest Midpoint** | D45 | Review activity pattern | Personalized report | Điều chỉnh quest level | 🟡 Medium |
-| **100 Orders** | ~D40-D50 | 100 đơn tích lũy | Special badge | Badge "Centurion" + Cash | 🟠 High |
-| **Habit Milestone** | D60 | ≥ 45 ngày active D1-D60 | Special badge + Reward lớn | Badge "Thói Quen Vàng" | 🔴 Critical |
-| **Ranking Activation** | D60+ | Đủ điều kiện KPI | Xếp hạng chính thức | Tier Badge + Benefits | 🔴 Critical |
-| **Tier Upgrade D90** | D90 | ≥ 200 đơn + active | Tier "Thường Trực" | Priority dispatch + Benefits | 🔴 Critical |
-| **Survival Point** | D120 | Active + on-track | Mời Community + Mentor | "Survival Badge" | 🟠 High |
-| **Pro Tier** | D180 | ≥ 500 đơn + Rating ≥ 4.7 | Tier "Chuyên Nghiệp" | Earning guarantee + Tools | 🔴 Critical |
-| **9-Month Review** | D270 | Ongoing excellence | Performance report + Gift | Quà tặng + Recognition | 🟡 Medium |
-| **Anniversary** | D365 | Active + ≥ 1000 đơn | 🏆 Champion celebration | Quà vật lý + Feature + Event | 🔴 Critical |
-| **Ambassador Invite** | D365+ | D365 + Rating ≥ 4.8 | Mời vào Ambassador Program | Mentor role + Advisory Board | 🟠 High |
-
-### Inactivity Alert Protocol (Áp dụng xuyên suốt)
-
-| Thời gian inactive | Giai đoạn Journey | Hành động |
-|:---|:---|:---|
-| 2 ngày | Phase 1-2 (D0-D14) | Push notification + Milestone reminder |
-| 3 ngày | Phase 1-2 (D0-D14) | SMS/Zalo + Bonus offer |
-| 5 ngày | Phase 1-2 (D0-D14) | **Gọi điện trực tiếp** — tìm hiểu lý do |
-| 7 ngày | Phase 3-4 (D15-D120) | Push + Income projection cá nhân hóa |
-| 10 ngày | Phase 3-4 (D15-D120) | **Gọi điện** + Re-activation quest |
-| 14 ngày | Tất cả giai đoạn | Flag "Dormant" → Chuyển vào Win-back flow |
-| 21 ngày | Phase 5-6 (D121+) | Nhắn từ quản lý khu vực + Exit survey |
-| 30 ngày | Tất cả | Archive → Win-back campaign định kỳ (monthly) |
-
----
-
-## 🔄 CƠ CHẾ WIN-BACK (KHÔI PHỤC TÀI XẾ)
-
-### Phân Loại Win-Back Theo Giá Trị
-
-| Nhóm | Điều kiện | Chiến lược | Budget ưu tiên |
+| Nhóm | Điều kiện | Chiến lược | Budget |
 |:---|:---|:---|:---|
 | **High-Value Dormant** | ≥ 100 đơn lifetime, Rating ≥ 4.5, inactive 14-60 ngày | Callback cá nhân + Welcome-back bonus mạnh + Fast-track tier restore | 🔴 Cao |
-| **Mid-Value Dormant** | 30-99 đơn lifetime, inactive 14-60 ngày | Push + SMS + Moderate welcome-back bonus | 🟠 Trung bình |
-| **Low-Value Dormant** | < 30 đơn lifetime, inactive 14-90 ngày | Push notification đơn giản + Generic re-activation offer | 🟡 Thấp |
+| **Mid-Value Dormant** | 30-99 đơn lifetime, inactive 14-60 ngày | Push + SMS + Moderate bonus | 🟠 TB |
+| **Low-Value Dormant** | < 30 đơn lifetime, inactive 14-90 ngày | Push notification đơn giản | 🟡 Thấp |
 | **Churned** | Inactive > 90 ngày | Quarterly win-back campaign batch | 🟡 Thấp |
 
-### Win-Back Flow
+### 4.3 Inactivity Alert Protocol
 
-```
-[Tài xế inactive 14 ngày]
-        │
-        ▼
-[Phân loại: High / Mid / Low Value]
-        │
-   ┌────┴────────────────────┐────────────────┐
-   │ HIGH VALUE              │ MID VALUE       │ LOW VALUE
-   ▼                         ▼                 ▼
-D14: Callback cá nhân     D14: Push +        D14: Push
-     + Welcome-back            SMS offer       notification
-     bonus XX,000đ
-   │                         │                 │
-D17: Follow-up SMS        D21: Follow-up     D21: 2nd push
-     + Giữ tier cũ 30 ngày    push
-   │                         │                 │
-D21: Nếu quay lại:       D30: Nếu quay lại: D30: Nếu không
-     → Fast-track tier         → Standard       → Archive
-     → Priority dispatch 7d    re-onboard      → Monthly batch
-```
-
----
-
-## 📊 DASHBOARD QUẢN LÝ — KPI TỔNG HỢP
-
-### Cohort Health Dashboard (Theo dõi hàng tuần)
-
-| Metric | Công thức | Target | Alert Level |
+| Thời gian inactive | Phase 1-2 (D0-D14) | Phase 3-4 (D15-D120) | Phase 5-6 (D121+) |
 |:---|:---|:---|:---|
-| `D7 Activation Rate` | Drivers ≥ 7 đơn D1-D7 / Total new | ≥ 60% | < 40% 🔴 |
-| `D7 Retention` | Drivers active D7 / Total new (7d trước) | ≥ 85% | < 70% 🔴 |
-| `D14 Retention` | Drivers active D14 / Total new (14d trước) | ≥ 82% | < 65% 🔴 |
-| `D30 Retention` | Drivers active D30 / Total new (30d trước) | ≥ 75% | < 55% 🔴 |
-| `D45 Habit Formation` | Drivers ≥ 30 ngày active D1-D45 / Total | ≥ 72% | < 50% 🔴 |
-| `D60 Retention` | Drivers active D60 / Total new | ≥ 68% | < 48% 🔴 |
-| `D90 Retention` | Drivers active D90 / Total new | ≥ 60% | < 40% 🔴 |
-| `D120 Survival Rate` | Drivers active D120 / Total new | ≥ 55% | < 35% 🔴 |
-| `D180 Pro Rate` | Drivers đạt tier Chuyên Nghiệp / Total | ≥ 45% | < 25% 🔴 |
-| `D365 Champion Rate` | Drivers active D365 / Total new | ≥ 35% | < 18% 🔴 |
+| 2 ngày | Push + Milestone reminder | — | — |
+| 3 ngày | SMS/Zalo + Bonus offer | — | — |
+| 5 ngày | **Gọi điện trực tiếp** | — | — |
+| 7 ngày | Escalate DM Ops | Push + Income projection | — |
+| 10 ngày | — | **Gọi điện** + Re-activation quest | Push + "Bạn sắp mất R2 + BH" |
+| 14 ngày | Flag "Dormant" | Flag Dormant + Grace Period | **Gọi điện** + "Mất BH!" |
+| 21 ngày | Archive | Win-back campaign | Nhắn từ quản lý khu vực |
+| 30 ngày | Archive | Archive → Monthly batch | Monthly win-back |
 
-### Segment Distribution Monitor (Theo dõi hàng tháng)
-
-| Segment | Target % | Minimum | Maximum | Alert nếu |
-|:---|:---|:---|:---|:---|
-| ⭐ Champion | 15-20% | 12% | 25% | < 12% hoặc > 25% |
-| 🟣 Loyalist | 20-25% | 18% | 30% | < 18% |
-| 🔵 Hustler | 20-25% | 15% | 30% | > 30% (quá phụ thuộc promo) |
-| 🟡 Drifter | 15-20% | 10% | 25% | > 25% (supply không ổn định) |
-| 🔴 Dormant | < 20% | — | 25% | > 25% (rò rỉ nghiêm trọng) |
-
-### At-Risk Daily Monitor
+### 4.4 At-Risk Daily Monitor (SQL)
 
 ```sql
 -- Tài xế cần can thiệp khẩn trong 24h
@@ -914,11 +840,11 @@ ORDER BY priority_level, days_inactive DESC;
 
 ---
 
-## 🔗 TÍCH HỢP VỚI HỆ THỐNG RANKING & AHABENEFITS HIỆN TẠI
+## PHẦN V: TÍCH HỢP & TRIỂN KHAI
 
-### Mapping: Journey Phase → Ranking System
+### 5.1 Mapping: Journey Phase → Ranking System
 
-| Journey Phase | Thâm niên | Ranking Tier tương ứng | Layer Access |
+| Journey Phase | Thâm niên | Ranking Tier | Layer Access |
 |:---|:---|:---|:---|
 | Phase 1-2 (D0-D14) | < 1 tháng | Chưa xếp hạng | L6 MASS |
 | Phase 3 (D15-D45) | ≈ 1 tháng | R3 Standard (nếu đủ KPI) | L4 Bigzone |
@@ -926,7 +852,7 @@ ORDER BY priority_level, days_inactive DESC;
 | Phase 5 (D121-D365) | 4-12 tháng | R2 → R1 Elite | L3 → L2 Minizone |
 | Phase 6 (D365+) | 12+ tháng | R1 Elite (duy trì) | L2 Minizone + L1 KA/MP |
 
-### Mapping: Segment → AhaBenefits Tier
+### 5.2 Mapping: Segment → AhaBenefits
 
 | Segment | AhaBenefits Tier | Hệ số Points | Catalog Access |
 |:---|:---|:---|:---|
@@ -936,79 +862,72 @@ ORDER BY priority_level, days_inactive DESC;
 | 🟡 Drifter | 🥈 Bạc (hoặc không) | ×1.0 - ×1.1 | Bạc basic |
 | 🔴 Dormant | Đóng băng | — | Không truy cập |
 
----
+### 5.3 Value Realization (BEFORE → AFTER)
 
-## 📈 HIỆN THỰC HÓA GIÁ TRỊ (VALUE REALIZATION)
+| Hiện trạng | Chuyển đổi | Target State | Impact | Loại |
+|:---|:---|:---|:---|:---|
+| Tài xế mới không có hướng dẫn → 45% churn D30 | 6-Phase Journey + Guarantee 30D | Lộ trình rõ + Guaranteed Earnings + Instant Payout | D30 retention 75% | 🟢 Benchmarked |
+| Chỉ chạy 1 dịch vụ → EPH thấp | Multi-Service Unlock | Progressive unlock 5 dịch vụ | +19pp retention | 🟢 Benchmarked (Uber) |
+| Không phân biệt tài xế mới vs cũ | Segment-Based Ops | 5 nhóm × chiến lược riêng | +40% Active Driver | 🟡 Aspirational |
+| Không có BH → thua XanhSM | Tiered Insurance | Bronze → Silver → Gold | D180 ret +42% | 🟢 Benchmarked (Swiggy) |
+| Tài xế lâu năm không có role → burnout | Ambassador + Community | Mentor + Captain + Advisory Board | LTV 3.5 → 12 tháng | 🔴 Stretch |
+| Phát hiện churn chậm | Predictive Alerts + Grace Period | Cảnh báo sớm + 14 ngày cứu hạng | Giảm 50% Dormant | 🟡 Aspirational |
+| Win-back không phân loại | Tiered Win-Back | High/Mid/Low value flow | Win-back 10% → 35% | 🟡 Aspirational |
 
-### Tác Động Kinh Doanh Kỳ Vọng (BEFORE → AFTER)
-
-| Hiện trạng (Current State) | Chuyển đổi (Transformation) | Trạng thái Mục tiêu (Target State) | Tác động (Impact) |
-|:---|:---|:---|:---|
-| Tài xế mới onboard → không có hướng dẫn rõ ràng → 45% churn D30 | ↓ 6-PHASE JOURNEY + GUARANTEE 30D ↓ | Lộ trình rõ ràng + Guaranteed Earnings 30 ngày phasing-out + Instant Payout | ***D30 retention đạt 75% (target overall 85%)*** |
-| Tài xế chỉ chạy 1 dịch vụ → EPH thấp → idle time cao → churn | ↓ MULTI-SERVICE UNLOCK ↓ | Progressive unlock 5 dịch vụ theo milestone (Instant → Siêu Tốc → Ghép Đơn → 4H → Enterprise) | ***+19pp retention (Uber benchmark) + tăng EPH 25-35%*** |
-| Không phân biệt tài xế mới vs cũ trong dispatch/incentive | ↓ SEGMENT-BASED OPS ↓ | 5 nhóm tài xế với chiến lược riêng biệt, intervention tự động | ***Tăng 40% Active Driver trung bình/tháng*** |
-| Không có BH → thua XanhSM, không có switching cost phi tài chính | ↓ TIERED INSURANCE ↓ | Bronze (R3) → Silver (R2) → Gold (R1 + gia đình). Loss aversion cực mạnh | ***D180 retention +42% (Swiggy benchmark). Moat vs Grab/Be*** |
-| Tài xế lâu năm không có vai trò/recognition → burnout + rời đi | ↓ AMBASSADOR + COMMUNITY ↓ | Mentor program + Area Captain + Advisory Board + Community program xuyên suốt | ***Tăng Driver LTV từ 3.5 → 12 tháng*** |
-| Phát hiện churn chậm (sau khi đã mất tài xế) | ↓ PREDICTIVE ALERTS + GRACE PERIOD ↓ | Cảnh báo sớm theo phase + Grace Period 14 ngày cứu hạng + Loss Aversion design | ***Giảm 50% tỷ lệ Dormant*** |
-| Win-back không phân loại, chi phí cao, hiệu quả thấp | ↓ TIERED WIN-BACK ↓ | Win-back phân loại High/Mid/Low value, budget tối ưu | ***Tăng win-back rate từ 10% lên 35%*** |
-
----
-
-## 🚀 LỘ TRÌNH TRIỂN KHAI (IMPLEMENTATION ROADMAP)
+### 5.4 Lộ Trình Triển Khai
 
 | Giai đoạn | Timeline | Ưu tiên | Owner |
 |:---|:---|:---|:---|
-| **Phase A — Foundation** | T6-T7/2026 | • Cohort Dashboard (D7/D14/D30/D60/D90/D120/D365) | DM + BI |
-| | | • Inactivity Alert System (2/3/5/7/10/14/21 ngày) | DM + Product |
-| | | • **Guaranteed Earnings 30 ngày** (3-bậc phasing-out) | S&P + Finance |
-| | | • **Instant Payout** miễn phí 30 ngày đầu | Product + Finance |
-| | | • **Earnings Transparency** — EPH real-time + fee breakdown | Product |
-| | | • Buddy System pilot (SGN → HAN) | DM Ops |
-| **Phase B — Gamification & Multi-Service** | T7-T8/2026 | • Streak System + Milestone Rewards D3/D7/D14/D30 | Product + S&P |
-| | | • Weekly Quest System (thay thế Guarantee từ D31) | Product + S&P |
-| | | • **Multi-Service Unlock progression** (Instant → Siêu Tốc → Ghép Đơn → 4H → Enterprise) | Product + DM |
-| | | • Progress Bar & Tier Badge hiển thị | Product |
-| | | • Income Dashboard + Goal Setting cho tài xế | Product + BI |
-| **Phase C — Segmentation & Insurance** | T8-T9/2026 | • Deploy 5-segment classification model | BI + DM |
-| | | • Segment-based intervention automation | Product + DM |
-| | | • **Tiered Insurance pilot** — Bronze (R3) tại SGN | DM + HR + Đối tác BH |
-| | | • **Grace Period + Loss Aversion** notifications | Product + DM |
-| | | • Win-back flow phân loại (High/Mid/Low) | DM + CS |
-| | | • **Community Program** — Zalo cohorts + Monthly meetup + Area Captain | DM Ops |
-| **Phase D — Advanced** | T9-T12/2026 | • **Insurance rollout** Silver (R2) + Gold (R1) toàn quốc | DM + HR + Finance |
-| | | • Ambassador & Mentor Program chính thức | DM |
-| | | • Driver Advisory Board | DM + Leadership |
-| | | • Churn Prediction ML Model | BI + DS |
-| | | • Performance Optimization Tools (Heatmap, Forecast) | Product + BI |
+| **Phase A — Foundation** | T6-T7/2026 | Cohort Dashboard · Inactivity Alert · Guaranteed Earnings 30d · Instant Payout D0-D30 · Earnings Transparency · Buddy System pilot (SGN → HAN) | DM + BI + Product + Finance |
+| **Phase B — Gamification** | T7-T8/2026 | Streak System + Milestone Rewards · Weekly Quest · Multi-Service Unlock progression · Progress Bar & Tier Badge · Income Dashboard + Goal Setting | Product + S&P |
+| **Phase C — Segmentation & Insurance** | T8-T9/2026 | 5-segment model deploy · Segment-based automation · Tiered Insurance pilot Bronze (R3 SGN) · Grace Period + Loss Aversion · Win-back flow · Community Program | BI + DM + HR + Đối tác BH |
+| **Phase D — Advanced** | T9-T12/2026 | Insurance Silver (R2) + Gold (R1) rollout · Ambassador & Mentor Program · Driver Advisory Board · Churn Prediction ML · Performance Optimization Tools | DM + HR + Finance + BI + DS |
 
 ---
 
 ## 📚 NGUỒN THAM KHẢO
 
-Tài liệu này được tổng hợp từ:
+### Nền Tảng & Dữ Liệu Thị Trường (📊 Industry Data)
 
-- **Uber Driver Operations:** Uber Pro tier system (Blue/Gold/Platinum/Diamond), Quest Bonuses, Guaranteed Earnings 30-day model, Upfront Pricing, Diamond cash reward removal (2025), Cross-platform retention data (+19pp multi-service lift)
-- **Grab SEA:** 4-Tier GrabBenefits ($4M annual budget SG), Guaranteed Earnings 14-day (+32% D30 retention), 90% quarterly retention Q2/2023, EPH improvement +9% YoY, GP subsidies for top tiers (2025)
-- **Gojek Indonesia:** GoPartner Hub model, GoFleet community groups, GoalBetter (Classic/Premium/Pro/Elite), GoPayLater financial ecosystem
-- **DoorDash US:** Dasher Rewards (replaced Top Dasher), Large Order Program, Priority Access model
-- **Deliveroo UK/EU:** Fee Multiplier 1.1x-1.5x, Session Planning tool (+28% consistency), Rider Insurance (accident + £1M liability + £35/day + £1,000 parental)
-- **Swiggy India:** StepUp program — Gold/Silver/Bronze tiered insurance → D180 retention **+42%**. Gold = family coverage
-- **Rappi LATAM:** RappiPay integration, micro-lending based on earning history
-- **Be Vietnam:** beAcademy training cohorts, 3-tier (Đồng/Bạc/Vàng), community-driven retention
-- **XanhSM Vietnam:** Salary + KPI hybrid — lương cố định + 25% commission + 4 ngày phép + BHXH/BHYT/BHTN đầy đủ
-- **ILO:** Gig Economy Workers Report 2024 — (1) Thu nhập ổn định > (2) Linh hoạt > (3) Cơ hội phát triển. LTV 2.3x nếu đáp ứng cả 3
-- **Payout Research:** 70% tài xế muốn payout <24h, 44% rời đi nếu instant payout chậm/tốn phí hơn
-- **Academic Research:**
-  - Lally, P. et al. (2010) "How are habits formed" — UCL Habit Formation Study (66-day average)
-  - Deci, E.L. & Ryan, R.M. — Self-Determination Theory (Autonomy, Competence, Relatedness)
-  - Fogg, B.J. — Tiny Habits (Motivation × Ability × Prompt)
-  - Rusbult, C.E. — Investment Model of Commitment
-  - Erikson, E. — Generativity in adult development
-  - Kahneman, D. — Loss Aversion: mất mát gây đau gấp 2x niềm vui khi được
-- **Behavioral Economics:** Endowed Progress Effect, Variable Ratio Reinforcement, Loss Aversion, Sunk Cost Psychology, Cliff Effect (59% churn khi thu nhập giảm đột ngột)
-- **Ahamove Internal:** Cohort retention data (Q1-Q2/2026), Segment transition analysis, Driver ranking v2.0 parameters
+- **Uber:** Uber Pro tier system, Quest Bonuses, Guaranteed Earnings 30-day, Upfront Pricing, Diamond cash reward removal (2025), Cross-platform retention (+19pp)
+- **Grab SEA:** 4-Tier GrabBenefits, Guaranteed Earnings 14-day (+32% D30), 90% quarterly retention Q2/2023
+- **Gojek:** GoPartner Hub, GoFleet, GoalBetter (Classic/Premium/Pro/Elite), GoPayLater
+- **DoorDash:** Dasher Rewards (replaced Top Dasher), Large Order Program, Overall Dasher Rating (composite 0-100)
+- **Deliveroo:** Fee Multiplier 1.1x-1.5x, Session Planning (+28%), Rider Insurance (accident + £1M liability + £35/day + £1,000 parental)
+- **Swiggy:** StepUp — Gold/Silver/Bronze tiered insurance → churn giảm 60-70% → 10-15%
+- **Rappi:** RappiPay (ví + thẻ tín dụng + tiết kiệm + micro-lending)
+- **Meituan:** Scoring system thay penalty (2024-2025), anti-fatigue, BH tai nạn lao động 1.4 tỷ CNY
+- **Be Vietnam:** beAcademy, 3-tier (Đồng/Bạc/Vàng)
+- **XanhSM Vietnam:** Salary + KPI hybrid — lương cố định + 25% commission + BHXH/BHYT/BHTN
+- **iFood Brazil:** Dual model (75% gig + 25% subcontracted), Support Points, 45K EV plan
+
+### Nghiên Cứu Khoa Học (🔬 Peer-Reviewed)
+
+- Lally, P. et al. (2010) "How are habits formed" — UCL, European Journal of Social Psychology. **66 ngày avg (18-254 range)**
+- Zwettler et al. (2024) "Kicking off a Gig Work Career: Career Learning Cycle" — SAGE, Journal of Career Assessment
+- Selcuk & Gokpinar (2025) "Incentivizing Flexible Workers" — SAGE, M&SOM
+- Allon et al. (2019) "Impact of Behavioral and Economic Drivers on Gig Economy Workers" — Wharton/Mack Institute
+- Deci, E.L. & Ryan, R.M. — Self-Determination Theory (Autonomy, Competence, Relatedness)
+- Fogg, B.J. — Tiny Habits (Motivation × Ability × Prompt)
+- Rusbult, C.E. — Investment Model of Commitment (Satisfaction + Investment - Alternatives)
+- Kahneman, D. — Prospect Theory: Loss Aversion (mất gây đau gấp 2x)
+- Nunes, J.C. & Dreze, X. (2006) — Endowed Progress Effect
+- Erikson, E. — Generativity in Adult Development
+
+### Báo Cáo & Media (📰 Reports)
+
+- ILO Gig Economy Report (2024): Thu nhập ổn định > Linh hoạt > Cơ hội phát triển. LTV 2.3x nếu đáp ứng cả 3
+- Everee 2025 Gig Driver Report: 70% muốn payout <24h, 44% rời đi nếu chậm
+- eduMe: Activation Rates in the Gig Economy
+- Abraham et al. (2024) "Driving the Gig Economy" — NBER Working Paper
+
+### Ahamove Internal
+
+- Cohort retention data (Q1-Q2/2026)
+- Segment transition analysis
+- Driver ranking v2.0 parameters (`2026-05-driver-ranking-params.md`)
 
 ---
 
-*Driver Management Team | Ahamove | Cập nhật: 29/05/2026*
-*Phiên bản: v3.0 — Enhanced Lifecycle Framework (Guaranteed Earnings 30D + Multi-Service Unlock + Tiered Insurance + Loss Aversion + Instant Payout + Earnings Transparency + Community Program)*
+*Driver Management Team | Ahamove | Cập nhật: 09/06/2026*
+*Phiên bản: v3.1 — Restructured: Research/Benchmark tách khỏi Proposal, KPIs classified (Benchmarked / Aspirational / Stretch)*
