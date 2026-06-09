@@ -297,7 +297,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
     <strong>Vấn đề cốt lõi:</strong> Ahamove có M+1 retention tốt (~78% avg), nhưng <strong>rụng rất mạnh M+1→M+3</strong> (78% &rarr; 43%) &mdash; mất gần nửa tài xế trong 60 ngày tiếp theo. Cohort Q1/2026 còn yếu hơn: M+3 chỉ ~30-36%. <strong>Vùng chết nằm ở Phase 3 Lock In (D15&mdash;D60)</strong>, không phải onboarding.
   </div>
   <div class="insight blue">
-    <strong>Giải pháp:</strong> Xây dựng Driver Lifecycle Journey &mdash; hệ thống 6 giai đoạn tập trung <strong>chống rụng M+1→M+3</strong> qua 4 trụ cột: <strong>(1) Guaranteed Earnings 30 ngày phasing-out, (2) Multi-Service Unlock progression, (3) Earnings Transparency upfront, (4) Tiered Insurance từ R3 Bạc</strong>.
+    <strong>Giải pháp:</strong> Xây dựng Driver Lifecycle Journey &mdash; hệ thống 6 giai đoạn tập trung <strong>chống rụng M+1→M+3</strong> qua 4 trụ cột: <strong>(1) Guaranteed Earnings 30 ngày phasing-out, (2) Multi-Service Unlock progression, (3) Tiered Insurance từ R3 Bạc</strong>.
   </div>
   <div class="insight ok" style="font-size:11px">
     <strong>📊 Nguồn dữ liệu Baseline:</strong> NIM Cohort Retention (active-segment-trend.html, query 06/05/2026). HAN avg 16 tháng, SGN avg 16 tháng. Grain: monthly (M+0, M+1... M+12). Chuyển đổi sang daily-grain ước tính: M+1 ≈ D30, M+3 ≈ D90, M+4 ≈ D120.
@@ -522,7 +522,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
           <td class="mono" style="font-weight:700;color:var(--warn)">D0</td>
           <td><span class="badge badge-orange" style="background:var(--warn-dim);color:var(--warn);border-color:rgba(251,191,36,0.25)">Warm Up</span></td>
           <td>Kích hoạt ngay</td>
-          <td><strong style="color:var(--text-primary)">Welcome Flow tự động:</strong> Video 3' + Checklist "5 bước đầu". Gán Buddy. Smart Dispatch đơn gần/dễ. Earnings Transparency.</td>
+          <td><strong style="color:var(--text-primary)">Welcome Flow tự động:</strong> Video 3' + Checklist "5 bước đầu". Gán Buddy. Smart Dispatch đơn gần/dễ.</td>
           <td>Push + Zalo OA + In-app</td>
           <td>DM Ops</td>
         </tr>
@@ -616,7 +616,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
       <circle cx="80" cy="40" r="8" fill="#FBBF24" opacity="0.9"/>
       <circle cx="80" cy="40" r="12" fill="none" stroke="#FBBF24" stroke-width="1" opacity="0.3"/>
       <text x="100" y="36" font-size="10" font-weight="700" fill="#FBBF24" font-family="Space Mono,monospace">D0</text>
-      <text x="100" y="50" font-size="9" fill="rgba(255,255,255,0.65)">Welcome Flow + Buddy + Smart Dispatch + Earnings Transparency</text>
+      <text x="100" y="50" font-size="9" fill="rgba(255,255,255,0.65)">Welcome Flow + Buddy + Smart Dispatch</text>
 
       <!-- D1-D3 -->
       <circle cx="80" cy="95" r="8" fill="#F87171" opacity="0.9"/>
@@ -687,8 +687,6 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
       <li><strong>First Trip Incentive</strong><div class="checklist-sub">24h: Thưởng cao | 48h: Vừa | 72h: Thấp nhất &rarr; Urgency + Declining Reward</div></li>
       <li><strong>Buddy System</strong> (tham khảo Gojek)<div class="checklist-sub">Gán TX mới với TX kinh nghiệm. Buddy thưởng khi mentee đạt 5 đơn.</div></li>
       <li><strong>Smart Dispatch ưu tiên</strong><div class="checklist-sub">Đơn gần, đơn dễ cho TX mới trong 72h đầu</div></li>
-      <li><strong>Earnings Transparency</strong><div class="checklist-sub">Breakdown phí/đơn trước accept + EPH dashboard real-time</div></li>
-      <li><strong>Earnings Transparency</strong><div class="checklist-sub">Breakdown phí/đơn trước khi accept + EPH real-time</div></li>
     </ul>
     <div style="margin-top:14px"><div class="card-title" style="color:var(--danger);font-size:11px">Churn Triggers</div>
     <table><thead><tr><th>Dấu hiệu</th><th>Can thiệp</th></tr></thead><tbody>
@@ -941,7 +939,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
       <div style="padding:0 20px 16px;display:flex;flex-direction:column;gap:0">
         <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
           <span class="mono" style="min-width:44px;font-size:13px;font-weight:700;color:var(--orange)">D1</span>
-          <span style="flex:1;font-size:12px;color:var(--text-secondary)">First Trip + Earnings Transparency</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">First Trip + Buddy Match</span>
           <span class="badge badge-red" style="font-size:9px">Critical</span>
         </div>
         <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
@@ -1228,7 +1226,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
       <div style="display:flex;gap:12px;align-items:flex-start">
         <div style="min-width:80px;text-align:center"><div class="mono" style="font-size:11px;font-weight:700;color:var(--info)">PHASE A</div><div style="font-size:10px;color:var(--text-muted)">T6-T7/2026</div><div class="pbar-wrap"><div class="pbar pbar-blue" style="width:25%"></div></div></div>
-        <div style="flex:1;background:var(--blue-dim);padding:12px 16px;border-radius:10px;font-size:12px;color:var(--text-secondary);border:1px solid rgba(59,130,246,0.1)"><strong style="color:var(--text-primary)">Foundation:</strong> Cohort Dashboard, Inactivity Alert, Guaranteed Earnings 30d, Earnings Transparency, Buddy System pilot<div style="font-size:10px;color:var(--text-muted);margin-top:4px">DM + BI + Product + Finance</div></div>
+        <div style="flex:1;background:var(--blue-dim);padding:12px 16px;border-radius:10px;font-size:12px;color:var(--text-secondary);border:1px solid rgba(59,130,246,0.1)"><strong style="color:var(--text-primary)">Foundation:</strong> Cohort Dashboard, Inactivity Alert, Guaranteed Earnings 30d, Buddy System pilot<div style="font-size:10px;color:var(--text-muted);margin-top:4px">DM + BI + Product + Finance</div></div>
       </div>
       <div style="display:flex;gap:12px;align-items:flex-start">
         <div style="min-width:80px;text-align:center"><div class="mono" style="font-size:11px;font-weight:700;color:var(--success)">PHASE B</div><div style="font-size:10px;color:var(--text-muted)">T7-T8/2026</div><div class="pbar-wrap"><div class="pbar pbar-green" style="width:50%"></div></div></div>
