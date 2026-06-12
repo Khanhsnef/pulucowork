@@ -73,7 +73,8 @@ Output/Ahamove/
 | `2026-05-driver-journey-framework.md` | Framework Driver Journey v3 (markdown) |
 | `2026-05-driver-journey-framework.html` | Framework — bản HTML |
 | `2026-05-driver-lifecycle-journey.md` | Full lifecycle deep-dive (68KB) |
-| `2026-05-driver-lifecycle-journey.html` | Lifecycle — bản HTML tương tác |
+| `2026-05-driver-lifecycle-journey.html` | Lifecycle — bản HTML tương tác (gồm KPI Nhi, Weekly Health, Execution Roadmap by Milestone) |
+| `2026-05-driver-journey-summary.md` | **One-pager tóm tắt** — Journey 2 giai đoạn, KPI Nhi (monthly), Weekly Health, Next Actions theo PIC (Ops/Product/PA) |
 | `2026-06-driver-journey-milestones.md` | **Driver Journey v4.0 — 5 Phase × 25 Milestones** gắn Ranking Params v2.0 |
 | `2026-06-driver-journey-proposal.md` | **PROPOSAL SCR format** — Situation/Complication/Resolution + Cohort Retention Baseline Jan 2025–Apr 2026 |
 | `2026-06-driver-journey-proposal.html` | HTML report tương tác — dark theme, sidebar nav, Timeline SVG, Cohort heatmap |
