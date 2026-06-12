@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driver Journey — Tóm Tắt & Next Actions | Ahamove</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-body: #080F1D;
+  --bg-card: rgba(255,255,255,0.04);
+  --bg-card-alt: rgba(255,255,255,0.06);
+  --border-card: rgba(255,255,255,0.08);
+  --border-subtle: rgba(255,255,255,0.05);
+  --sep: rgba(255,255,255,0.07);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255,255,255,0.65);
+  --text-muted: rgba(255,255,255,0.35);
+  --blue: #0E4174;
+  --blue-bright: #3B82F6;
+  --blue-glow: rgba(14,65,116,0.5);
+  --orange: #FF7F32;
+  --orange-glow: rgba(255,127,50,0.13);
+  --success: #34D399;
+  --success-dim: rgba(16,185,129,0.1);
+  --danger: #F87171;
+  --danger-dim: rgba(239,68,68,0.1);
+  --warn: #FBBF24;
+  --warn-dim: rgba(245,158,11,0.1);
+  --info: #60A5FA;
+  --info-dim: rgba(59,130,246,0.1);
+  --purple: #A78BFA;
+  --purple-dim: rgba(139,92,246,0.1);
+  --orange-dim: rgba(255,127,50,0.1);
+  --blue-dim: rgba(14,65,116,0.2);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg-body);
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.55;
+  position: relative;
+  min-height: 100vh;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, var(--orange-glow), transparent),
+    radial-gradient(ellipse 60% 60% at 80% 90%, var(--blue-glow), transparent);
+  pointer-events: none; z-index: 0;
+}
+.mono { font-family: 'Space Mono', monospace; }
+.wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px 60px; }
+
+/* HEADER */
+.report-header {
+  position: relative; z-index: 1;
+  background: linear-gradient(135deg, #0a1628 0%, #0E4174 60%, #0a2a55 100%);
+  padding: 28px 40px 24px;
+  color: white;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 28px;
+}
+.report-header .tag { display:inline-block; font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--orange); background:rgba(255,127,50,0.12); padding:4px 10px; border-radius:6px; margin-bottom:10px; }
+.report-header h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
+.report-header .subtitle { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 6px; }
+
+/* SECTION */
+.section { margin-bottom: 26px; }
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.section-num { font-family:'Space Mono',monospace; font-size: 13px; font-weight: 700; color: var(--orange); background: var(--orange-dim); width: 30px; height: 30px; display:flex; align-items:center; justify-content:center; border-radius: 9px; }
+.section-title { font-size: 17px; font-weight: 700; }
+
+/* CARD */
+.card { background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 18px; padding: 20px 22px; }
+.card + .card { margin-top: 12px; }
+.card-top-orange { border-top: 3px solid var(--orange); }
+.card-top-blue { border-top: 3px solid var(--info); }
+.card-top-green { border-top: 3px solid var(--success); }
+.card-top-red { border-top: 3px solid var(--danger); }
+.card-top-purple { border-top: 3px solid var(--purple); }
+.card-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+
+/* TABLE */
+table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+th { text-align: left; font-weight: 700; color: var(--text-secondary); padding: 8px 10px; border-bottom: 1px solid var(--sep); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.3px; }
+td { padding: 8px 10px; border-bottom: 1px solid var(--border-subtle); color: var(--text-secondary); vertical-align: top; }
+td strong { color: var(--text-primary); }
+tr:last-child td { border-bottom: none; }
+
+/* INSIGHT BOX */
+.insight { border-radius: 12px; padding: 14px 18px; font-size: 12.5px; color: var(--text-secondary); }
+.insight.danger { background: var(--danger-dim); border: 1px solid rgba(239,68,68,0.18); }
+.insight.blue { background: var(--info-dim); border: 1px solid rgba(59,130,246,0.15); }
+.insight.orange { background: var(--orange-dim); border: 1px solid rgba(255,127,50,0.18); }
+.insight strong { color: var(--text-primary); }
+
+/* BADGE */
+.badge { display:inline-block; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+.badge-red { background: var(--danger-dim); color: var(--danger); }
+.badge-orange { background: var(--orange-dim); color: var(--orange); }
+.badge-green { background: var(--success-dim); color: var(--success); }
+.badge-blue { background: var(--info-dim); color: var(--info); }
+.badge-purple { background: var(--purple-dim); color: var(--purple); }
+
+/* JOURNEY FLOW */
+.flow { display:flex; align-items:center; gap:0; margin: 4px 0; flex-wrap:wrap; }
+.flow-node { flex:1; min-width:180px; background: var(--bg-card-alt); border:1px solid var(--border-card); border-radius:14px; padding:14px 16px; }
+.flow-arrow { color: var(--orange); font-size:20px; font-weight:700; padding: 0 10px; }
+.flow-node.new { border-top: 3px solid var(--success); }
+.flow-node.old { border-top: 3px solid var(--purple); }
+.flow-node .pic { font-size:10px; font-weight:700; color:var(--orange); text-transform:uppercase; letter-spacing:0.5px; }
+.flow-node .ph { font-size:11px; color:var(--text-muted); margin-top:4px; }
+
+/* KPI cards */
+.kpi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.kpi-card { border-radius:14px; padding:16px; text-align:center; }
+.kpi-card .lbl { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+.kpi-card .val { font-family:'Space Mono',monospace; font-size:30px; font-weight:800; margin:6px 0 2px; }
+.kpi-card .name { font-size:12px; font-weight:700; color:var(--text-primary); }
+.kpi-card .sub { font-size:10px; color:var(--text-muted); margin-top:5px; }
+
+/* FOOTER */
+.report-footer { position:relative; z-index:1; max-width:1080px; margin: 0 auto; padding: 18px 24px; border-top: 1px solid var(--sep); display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); }
+a { color: var(--info); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.note { font-size:11px; color:var(--text-muted); margin-top:10px; padding:10px 14px; background:rgba(255,127,50,0.06); border:1px solid rgba(255,127,50,0.13); border-radius:10px; }
+.note strong { color: var(--orange); }
+@media (max-width:720px){ .kpi-grid{grid-template-columns:1fr;} .flow-arrow{transform:rotate(90deg);} }
+</style>
+</head>
+<body>
+
+<div class="report-header">
+  <div class="tag">One-Pager · Tóm Tắt</div>
+  <h1>Driver Lifecycle Journey — Tóm Tắt &amp; Next Actions</h1>
+  <div class="subtitle">Driver Management Team · Ahamove · 2026-06 &nbsp;|&nbsp; Chi tiết: <a href="2026-05-driver-lifecycle-journey.html">2026-05-driver-lifecycle-journey.html</a></div>
+</div>
+
+<div class="wrap">
+
+  <!-- 1 — VẤN ĐỀ -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">01</span><span class="section-title">Vấn Đề Cốt Lõi</span></div>
+    <div class="insight danger" style="margin-bottom:12px">
+      Ahamove <strong>không</strong> rụng tài xế ở onboarding. Vùng chết nằm ở <strong>Lock In (D15–D60)</strong> &mdash; mất ~35pp chỉ trong 60 ngày.
+    </div>
+    <div class="card">
+      <table><thead><tr><th>Mốc</th><th>Baseline</th><th>Nhận định</th></tr></thead><tbody>
+        <tr><td><strong>M+1 (≈D30)</strong></td><td class="mono">~78% <span style="color:var(--text-muted);font-size:9px">(HAN 81 / SGN 76)</span></td><td><span style="color:var(--success)">✅ Tốt — giữ chân tuần đầu ổn</span></td></tr>
+        <tr><td><strong>M+3 (≈D90)</strong></td><td class="mono">~43%</td><td><span style="color:var(--danger)">🔴 Rơi ~35pp trong 60 ngày tiếp</span></td></tr>
+      </tbody></table>
+      <div style="margin-top:10px;font-size:12px;color:var(--orange);font-weight:700">→ Trọng tâm framework: chống rụng M+1 → M+3.</div>
+    </div>
+  </div>
+
+  <!-- 2 — JOURNEY 2 GIAI ĐOẠN -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">02</span><span class="section-title">Driver Journey — 2 Giai Đoạn</span></div>
+    <div class="flow" style="margin-bottom:14px">
+      <div class="flow-node new">
+        <div class="pic">PIC: Nhi</div>
+        <div style="font-size:14px;font-weight:800;margin-top:2px">TX MỚI (D0–D60)</div>
+        <div class="ph">Warm Up · Hook In · Lock In</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div style="text-align:center;padding:0 8px"><div class="mono" style="font-size:11px;font-weight:700;color:var(--orange)">HANDOVER</div><div style="font-size:10px;color:var(--text-muted)">D60</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node old">
+        <div class="pic" style="color:var(--purple)">PIC: Tiên</div>
+        <div style="font-size:14px;font-weight:800;margin-top:2px">TX CŨ (D60+)</div>
+        <div class="ph">Grow Up · Master · Ambassador</div>
+      </div>
+    </div>
+
+    <div class="card card-top-green">
+      <div class="card-title">TX Mới (D0–D60) — Nhi quản lý toàn bộ (gồm Dormant &amp; Win-back &lt;D60)</div>
+      <table><thead><tr><th>Mốc</th><th>Giai đoạn</th><th>Sự kiện chính</th><th>Incentive (Thưởng Cột Mốc Đơn)</th></tr></thead><tbody>
+        <tr><td class="mono" style="color:var(--success);font-weight:700">D0</td><td>Warm Up</td><td>Nhận handover từ Growth, đơn đầu (DFD)</td><td>Thưởng 3 đơn đầu</td></tr>
+        <tr><td class="mono" style="color:var(--success);font-weight:700">D3</td><td>Warm Up</td><td>Micro Win</td><td>Cash mốc 5 đơn</td></tr>
+        <tr><td class="mono" style="color:var(--success);font-weight:700">D7</td><td>Hook In</td><td>First Win — Badge "Tuần Đầu"</td><td>Cash mốc 7 đơn</td></tr>
+        <tr><td class="mono" style="color:var(--info);font-weight:700">D14</td><td>Hook In</td><td>Fortnight — Unlock 2H-4H-TMDT (≥25 đơn)</td><td>Cash mốc 25 đơn</td></tr>
+        <tr><td class="mono" style="color:var(--info);font-weight:700">D21</td><td>Lock In</td><td>Weekly Quest bắt đầu (20/30/40)</td><td>Quest bonus 3 bậc</td></tr>
+        <tr><td class="mono" style="color:var(--info);font-weight:700">D30</td><td>Lock In</td><td>Review tháng 1 → Weekly policy bình thường</td><td>Hết milestone bonus</td></tr>
+        <tr style="background:rgba(255,127,50,0.05)"><td class="mono" style="color:var(--orange);font-weight:700">D60</td><td>Lock In</td><td><strong>Graduation → R3 Bạc</strong> + handover Tiên</td><td>Policy R3 + BH Bronze</td></tr>
+      </tbody></table>
+      <div class="note"><strong>Nguyên tắc Incentive mới:</strong> Hoàn thành X đơn → nhận Y cash (pay-per-performance). <strong>KHÔNG</strong> áp dụng chương trình đảm bảo thu nhập (Guarantee).</div>
+    </div>
+  </div>
+
+  <!-- 3 — KPI NHI -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">03</span><span class="section-title">KPI Framework cho Nhi — chốt Monthly</span></div>
+    <div class="insight blue" style="margin-bottom:12px">
+      Logic <strong>"Cohort Tốt Nghiệp"</strong>: mẫu số = TX chạm đúng milestone trong tháng (vd D60 tháng 8 = DFD từ 3/6→2/7).
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card" style="background:linear-gradient(135deg,rgba(255,127,50,0.12),rgba(255,127,50,0.04));border:1px solid rgba(255,127,50,0.25)">
+        <div class="lbl" style="color:var(--orange)">⭐ North Star</div>
+        <div class="val" style="color:var(--orange)">≥45%</div>
+        <div class="name">Graduation Rate → R3</div>
+        <div class="sub">Baseline ~35% · HAN ≥48% · SGN ≥42%</div>
+      </div>
+      <div class="kpi-card" style="background:var(--success-dim);border:1px solid rgba(52,211,153,0.2)">
+        <div class="lbl" style="color:var(--success)">Retention</div>
+        <div class="val" style="color:var(--success)">≥62%</div>
+        <div class="name">D60 Retention</div>
+        <div class="sub">Baseline ~52% · Alert &lt;48%</div>
+      </div>
+      <div class="kpi-card" style="background:var(--danger-dim);border:1px solid rgba(248,113,113,0.2)">
+        <div class="lbl" style="color:var(--danger)">Cliff Control</div>
+        <div class="val" style="color:var(--danger)">≤20pp</div>
+        <div class="name">D30→D60 Drop</div>
+        <div class="sub">Baseline ~26pp · Alert &gt;25pp</div>
+      </div>
+    </div>
+    <div class="card">
+      <table><thead><tr><th>#</th><th>KPI</th><th>Baseline</th><th>Target</th><th>Nguồn</th></tr></thead><tbody>
+        <tr style="background:rgba(255,127,50,0.05)"><td>1 ⭐</td><td><strong>Graduation Rate → R3</strong></td><td class="mono">~35%</td><td class="mono" style="color:var(--orange);font-weight:700">≥45%</td><td>Ranking system (chốt đầu tháng)</td></tr>
+        <tr><td>2</td><td><strong>D60 Retention</strong></td><td class="mono">~52%</td><td class="mono" style="color:var(--success);font-weight:700">≥62%</td><td>≥1 đơn / 7 ngày gần nhất</td></tr>
+        <tr><td>3</td><td><strong>D30 Retention</strong></td><td class="mono">~78%</td><td class="mono" style="color:var(--success);font-weight:700">≥83%</td><td>Leading indicator</td></tr>
+        <tr><td>4</td><td><strong>D30→D60 Drop</strong></td><td class="mono" style="color:var(--danger)">~26pp</td><td class="mono" style="color:var(--danger);font-weight:700">≤20pp</td><td>Cùng cohort, so 2 mốc</td></tr>
+        <tr><td>5</td><td>Win-back Rate (&lt;D60)</td><td class="mono">Chưa đo</td><td class="mono" style="color:var(--purple);font-weight:700">≥40%</td><td>Dormant ≥14N quay lại</td></tr>
+      </tbody></table>
+      <div class="note"><strong>Graduation Rate = North Star.</strong> Luôn ≤ D60 Retention (TX active nhưng có thể chưa đủ R3).</div>
+    </div>
+  </div>
+
+  <!-- 4 — WEEKLY HEALTH -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">04</span><span class="section-title">Weekly Health Check — Nhi theo dõi mỗi tuần</span></div>
+    <div class="card card-top-blue">
+      <div class="card-title">Đo sức khỏe sớm 4 mốc — leading indicators cho KPI monthly</div>
+      <table><thead><tr><th>Milestone</th><th>Retention = ?</th><th>Target</th><th>At-Risk = ?</th></tr></thead><tbody>
+        <tr><td class="mono" style="color:var(--success);font-weight:700">D3</td><td>≥2 đơn trong 3 ngày đầu</td><td class="mono" style="font-weight:700">≥95%</td><td>0 đơn sau DFD</td></tr>
+        <tr><td class="mono" style="color:var(--success);font-weight:700">D7</td><td>≥1 đơn (D5–D7)</td><td class="mono" style="font-weight:700">≥90%</td><td>Inactive ≥3N</td></tr>
+        <tr><td class="mono" style="color:var(--info);font-weight:700">D14</td><td>≥1 đơn (D12–D14)</td><td class="mono" style="font-weight:700">≥88%</td><td>Inactive ≥5N</td></tr>
+        <tr><td class="mono" style="color:var(--orange);font-weight:700">D21</td><td>≥1 đơn (D17–D21)</td><td class="mono" style="font-weight:700">≥85%</td><td>Inactive ≥7N</td></tr>
+      </tbody></table>
+      <div style="margin-top:10px;font-size:11.5px;color:var(--text-secondary)"><strong style="color:var(--text-primary)">Khi dưới target → hành động ngay:</strong> Push/SMS (D3) · 📞 Gọi điện (D7) · Zalo + Quest nhỏ (D14) · Buddy call (D21).</div>
+    </div>
+  </div>
+
+  <!-- 5 — NEXT ACTIONS -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">05</span><span class="section-title">Next Actions — theo PIC</span></div>
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px">Mỗi milestone phối hợp 3 bên: <strong style="color:var(--success)">Ops (Nhi)</strong> · <strong style="color:var(--info)">Product (Dev)</strong> · <strong style="color:var(--orange)">PA (Payment Analyst)</strong>.</div>
+
+    <div class="card card-top-red">
+      <div class="card-title">Ưu tiên <span class="badge badge-red">P0</span> — bắt buộc trước rollout</div>
+      <table><thead><tr><th>Milestone</th><th><span style="color:var(--success)">Ops (Nhi)</span></th><th><span style="color:var(--info)">Product</span></th><th><span style="color:var(--orange)">PA</span></th></tr></thead><tbody>
+        <tr><td class="mono" style="font-weight:700">D0</td><td>Nhận handover, verify đơn đầu, chào mừng Zalo</td><td>Welcome flow, gán Buddy, Smart Dispatch</td><td>Thưởng 3 đơn đầu + tính cost/TX</td></tr>
+        <tr><td class="mono" style="font-weight:700">D3</td><td>Flag TX 0 đơn → push/SMS 24h</td><td>Trigger noti, progress bar</td><td>Thưởng mốc 5 đơn, A/B test cash</td></tr>
+        <tr><td class="mono" style="font-weight:700">D7</td><td>Auto-flag inactive ≥3N → gọi rescue</td><td>Push D5, dashboard at-risk, Badge</td><td>Cash mốc 7 đơn, tính cost</td></tr>
+        <tr><td class="mono" style="font-weight:700">D30</td><td>Flag inactive ≥7N, review DQS &lt;75</td><td>Income Dashboard, unlock toàn bộ DV</td><td>Chuyển Weekly policy, tính CPO</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="card card-top-orange">
+      <div class="card-title">Ưu tiên <span class="badge badge-orange">P1</span></div>
+      <table><thead><tr><th>Milestone</th><th><span style="color:var(--success)">Ops</span></th><th><span style="color:var(--info)">Product</span></th><th><span style="color:var(--orange)">PA</span></th></tr></thead><tbody>
+        <tr><td class="mono" style="font-weight:700">D14</td><td>Buddy call inactive ≥5N</td><td>Badge Fortnight, unlock 2H-4H-TMDT</td><td>Cash mốc 25 đơn, policy giá cước</td></tr>
+        <tr><td class="mono" style="font-weight:700">D21</td><td>Rescue inactive ≥7N</td><td>Weekly Quest, Progress Bar</td><td>Quest bonus 3 bậc</td></tr>
+        <tr><td class="mono" style="font-weight:700">D60</td><td>Check Graduation, handover Tiên, Grace 14d</td><td>Ranking chốt, unlock BH Bronze</td><td>Policy R3, cost BH Bronze</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="card card-top-blue">
+      <div class="card-title">Hạng mục xuyên suốt</div>
+      <table><thead><tr><th>Hạng mục</th><th>Pri</th><th>Chủ trì</th></tr></thead><tbody>
+        <tr><td>Cohort Dashboard (theo DFD)</td><td><span class="badge badge-red">P0</span></td><td>Product + BI</td></tr>
+        <tr><td>At-Risk Daily Monitor (SQL)</td><td><span class="badge badge-red">P0</span></td><td>Product → push list cho Nhi</td></tr>
+        <tr><td>Win-back Engine (&lt;D60)</td><td><span class="badge badge-orange">P1</span></td><td>Product + PA + Nhi</td></tr>
+      </tbody></table>
+      <div class="note"><strong>PA cần điền:</strong> mức cash cụ thể vào các ô <span class="mono">XX,000đ</span> sau khi tính cost từng milestone.</div>
+    </div>
+  </div>
+
+  <!-- 6 — SCOPE -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">06</span><span class="section-title">Scope rõ ràng</span></div>
+    <div class="card card-top-purple">
+      <table><thead><tr><th>Người</th><th>Scope</th><th>Trách nhiệm</th></tr></thead><tbody>
+        <tr><td><strong>Growth</strong></td><td>Đăng ký → Kích hoạt → DFD</td><td>Bàn giao TX sau đơn đầu</td></tr>
+        <tr><td><strong style="color:var(--success)">Nhi</strong></td><td>TX lifetime <strong>&lt;D60</strong> (gồm Dormant &amp; tự win-back)</td><td>Onboarding → Graduation R3</td></tr>
+        <tr><td><strong style="color:var(--purple)">Tiên</strong></td><td>TX <strong>≥D60</strong></td><td>Grow Up → Master → Ambassador</td></tr>
+      </tbody></table>
+      <div style="margin-top:10px;font-size:11.5px;color:var(--text-secondary)"><strong style="color:var(--text-primary)">Edge case:</strong> TX chạm đúng D60 (calendar) → handover sang Tiên.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="report-footer">
+  <div>Driver Management Team · Ahamove · 2026-06</div>
+  <div>One-Pager — Driver Journey Summary &amp; Next Actions</div>
+</div>
+
+</body>
+</html>
