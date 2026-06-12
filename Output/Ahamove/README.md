@@ -85,7 +85,8 @@ Output/Ahamove/
 | File | Mô tả |
 |------|-------|
 | `2026-05-driver-ranking-params.md` | Ranking params spec (markdown) |
-| `2026-05-driver-ranking-params.html` | Ranking params — bản HTML |
+| `2026-05-driver-ranking-params.html` | Ranking params — bản HTML (sheet chi tiết 9 mục) |
+| `2026-05-driver-ranking-diagram.html` | Sơ đồ tổng quan 1 trang (card flow) — dùng để present |
 | `2026-05-driver-ranking-layer-benefits.html` | Layer benefits visualization |
 | `2026-05-driver-ranking-finalized.html` | Finalized ranking system |
 | `2026-05-driver-ranking-priority-registration.md` | Priority registration spec |
