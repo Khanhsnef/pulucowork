@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sơ đồ Trực quan hóa - Driver Ranking & AhaBenefits v2.0</title>
+<style>
+    /* ============ FONT (an toàn offline: thử Montserrat, fallback hệ thống) ============ */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+    :root {
+        --bg:#0f172a; --card:#1e293b; --line:#334155;
+        --s300:#cbd5e1; --s400:#94a3b8; --s500:#64748b; --s600:#475569;
+        --orange:#FF7F32; --amber:#F59E0B; --blue:#58A6FF;
+        --emerald:#34d399; --amber4:#fbbf24; --blue4:#60a5fa;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+        font-family:'Montserrat','Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;
+        background:var(--bg); color:#f8fafc;
+        padding:32px 16px; min-height:100vh; line-height:1.4;
+    }
+    .wrap { max-width:1152px; margin:0 auto; }
+    .mono { font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace; }
+
+    /* ============ HEADER ============ */
+    .header {
+        text-align:center; background:var(--card); padding:32px;
+        border-radius:16px; border:1px solid var(--line);
+        box-shadow:0 20px 25px -5px rgba(0,0,0,.4); position:relative; overflow:hidden;
+        margin-bottom:48px;
+    }
+    .header .bar {
+        position:absolute; top:0; left:0; width:100%; height:4px;
+        background:linear-gradient(to right,var(--orange),var(--amber),var(--blue));
+    }
+    .header h1 { font-size:2.25rem; font-weight:800; margin-bottom:12px; letter-spacing:-.02em; }
+    .header h1 .v { color:var(--orange); }
+    .header p { color:var(--s400); font-size:.95rem; font-weight:500; }
+
+    /* ============ SECTION ============ */
+    section { margin-bottom:48px; }
+    .sec-head { display:flex; align-items:center; gap:12px; margin-bottom:24px; }
+    .sec-num {
+        width:40px; height:40px; border-radius:10px; display:flex;
+        align-items:center; justify-content:center; font-weight:700; font-size:1.25rem;
+    }
+    .sec-num.n1 { background:rgba(99,102,241,.2); color:#818cf8; border:1px solid rgba(99,102,241,.3); }
+    .sec-num.n2 { background:rgba(16,185,129,.2); color:var(--emerald); border:1px solid rgba(16,185,129,.3); }
+    .sec-num.n3 { background:rgba(236,72,153,.2); color:#f472b6; border:1px solid rgba(236,72,153,.3); }
+    .sec-head h2 { font-size:1.5rem; font-weight:700; color:#fff; }
+
+    /* ============ 1. RANK CARDS ============ */
+    .rank-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .rcard {
+        border-radius:12px; border:1px solid; padding:20px; position:relative; overflow:hidden;
+        transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .rcard:hover { transform:translateY(-5px); box-shadow:0 10px 25px -5px rgba(0,0,0,.5); }
+    .rank-r1 { background:linear-gradient(135deg,rgba(255,127,50,.1),rgba(255,127,50,.2)); border-color:rgba(255,127,50,.5); }
+    .rank-r2 { background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.2)); border-color:rgba(245,158,11,.5); }
+    .rank-r3 { background:linear-gradient(135deg,rgba(88,166,255,.1),rgba(88,166,255,.2)); border-color:rgba(88,166,255,.5); }
+    .rank-un { background:linear-gradient(135deg,rgba(148,163,184,.1),rgba(148,163,184,.2)); border-color:rgba(148,163,184,.5); }
+    .badge {
+        position:absolute; top:0; right:0; font-size:.7rem; font-weight:700;
+        padding:4px 12px; border-bottom-left-radius:8px;
+    }
+    .b-r1 { background:rgba(255,127,50,.2); color:var(--orange); }
+    .b-r2 { background:rgba(245,158,11,.2); color:var(--amber); }
+    .b-r3 { background:rgba(88,166,255,.2); color:var(--blue); }
+    .b-un { background:rgba(100,116,139,.2); color:var(--s400); }
+    .emoji { font-size:1.875rem; margin-bottom:8px; }
+    .rcard h3 { font-size:1.125rem; font-weight:700; margin-bottom:4px; }
+    .text-r1 { color:var(--orange); } .text-r2 { color:var(--amber); } .text-r3 { color:var(--blue); }
+    .kpi-list { margin-top:16px; display:flex; flex-direction:column; gap:8px; font-size:.875rem; color:var(--s300); }
+    .kpi-row { display:flex; justify-content:space-between; align-items:center; }
+    .kpi-row .lbl { color:var(--s400); }
+    .v-emerald { color:var(--emerald); font-weight:600; } .v-amber { color:var(--amber4); font-weight:600; }
+    .v-blue { color:var(--blue4); font-weight:600; } .v-mute { color:var(--s500); }
+
+    /* ============ CONNECTOR ============ */
+    .connector { display:flex; justify-content:center; color:var(--s600); font-size:1.5rem; padding:8px 0; }
+    .bounce { animation:bounce 1.2s infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(8px);} }
+
+    /* ============ 2. ZONE LAYER ============ */
+    .panel { background:var(--card); border-radius:12px; border:1px solid var(--line); overflow:hidden; box-shadow:0 10px 15px -3px rgba(0,0,0,.3); }
+    .zone-grid { display:grid; grid-template-columns:repeat(5,1fr); }
+    .zone-col { padding:20px; display:flex; flex-direction:column; align-items:center; text-align:center; border-right:1px solid var(--line); transition:background .2s; }
+    .zone-col:last-child { border-right:none; }
+    .zone-col:hover { background:rgba(51,65,85,.4); }
+    .zone-tag { padding:4px 12px; border-radius:6px; font-weight:700; font-size:.85rem; margin-bottom:12px; }
+    .zt-o { background:rgba(255,127,50,.1); border:1px solid rgba(255,127,50,.3); color:var(--orange); }
+    .zt-a { background:rgba(245,158,11,.1); border:1px solid rgba(245,158,11,.3); color:var(--amber); }
+    .zt-b { background:rgba(88,166,255,.1); border:1px solid rgba(88,166,255,.3); color:var(--blue); }
+    .zt-t { background:rgba(20,184,166,.1); border:1px solid rgba(20,184,166,.3); color:#2dd4bf; }
+    .zone-col .sub { font-size:.875rem; color:var(--s400); margin-bottom:4px; }
+    .zone-col .rank { font-weight:700; margin-bottom:16px; }
+    .zone-foot { margin-top:auto; width:100%; padding-top:16px; border-top:1px solid rgba(51,65,85,.5); }
+    .zone-foot .cap { font-size:.7rem; color:var(--s500); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+    .zone-foot .num { font-weight:700; color:#fff; }
+    .zone-income { padding:20px; display:flex; flex-direction:column; justify-content:center; background:rgba(49,46,129,.2); }
+    .inc-head { display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
+    .inc-head h4 { font-weight:700; color:#fff; font-size:.875rem; }
+    .inc-head p { font-size:.75rem; color:var(--s400); }
+    .inc-row { display:flex; justify-content:space-between; align-items:center; font-size:.875rem; padding-bottom:4px; }
+    .inc-row.bd { border-bottom:1px solid rgba(99,102,241,.2); margin-bottom:8px; }
+    .cascade { background:rgba(15,23,42,.5); padding:12px; text-align:center; border-top:1px solid var(--line); font-size:.75rem; color:var(--s400); }
+    .cascade b { color:var(--amber); }
+
+    /* ============ 3. AHABENEFITS ============ */
+    .benefits-grid { display:grid; grid-template-columns:1fr 2fr; gap:24px; }
+    .bcard { background:var(--card); border-radius:12px; border:1px solid var(--line); box-shadow:0 10px 15px -3px rgba(0,0,0,.3); }
+    .bcard.pad { padding:20px; }
+    .bcard-title { font-size:.8rem; font-weight:700; color:var(--s400); text-transform:uppercase; letter-spacing:.05em; margin-bottom:16px; border-bottom:1px solid var(--line); padding-bottom:8px; }
+    .formula { background:var(--bg); border-radius:8px; padding:16px; font-size:.9rem; border:1px solid rgba(51,65,85,.5); margin-bottom:24px; text-align:center; box-shadow:inset 0 2px 4px rgba(0,0,0,.3); }
+    .formula .f-blue { color:var(--blue4); font-weight:700; } .formula .f-amber { color:var(--amber4); font-weight:700; }
+    .formula .f-em { color:var(--emerald); font-weight:700; } .formula .op { color:var(--s500); }
+    .layer-row { display:flex; justify-content:space-between; align-items:center; padding:8px; border-radius:6px; background:rgba(51,65,85,.3); border-left:3px solid; margin-bottom:12px; font-size:.875rem; }
+    .layer-row .mult { font-weight:700; } .layer-row .add { color:var(--s500); font-size:.75rem; margin-left:4px; }
+    .point-note { margin-top:24px; text-align:center; font-size:.75rem; color:var(--s400); background:rgba(15,23,42,.5); padding:8px; border-radius:6px; }
+
+    .bcard.col { display:flex; flex-direction:column; overflow:hidden; }
+    .catalog-head { padding:16px; background:rgba(15,23,42,.5); border-bottom:1px solid var(--line); }
+    .catalog-head h3 { font-size:.8rem; font-weight:700; color:var(--s300); text-transform:uppercase; letter-spacing:.05em; }
+    .catalog-body { padding:20px; display:flex; flex-direction:column; gap:16px; }
+    .tier-row { display:flex; align-items:flex-start; gap:16px; padding:12px; border-radius:8px; border:1px solid; }
+    .tier-circle { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.25rem; flex-shrink:0; }
+    .tier-row h4 { font-weight:700; }
+    .tier-un { border-color:rgba(51,65,85,.5); background:rgba(15,23,42,.3); opacity:.7; }
+    .tier-un .tier-circle { background:var(--line); }
+    .tier-un .locked { font-size:.875rem; color:#f87171; margin-top:4px; }
+    .tier-r3 { border-color:rgba(88,166,255,.3); background:rgba(88,166,255,.05); }
+    .tier-r3 .tier-circle { background:var(--card); border:1px solid var(--blue); }
+    .tier-r2 { border-color:rgba(245,158,11,.3); background:rgba(245,158,11,.05); }
+    .tier-r2 .tier-circle { background:var(--card); border:1px solid var(--amber); }
+    .tier-r1 { border-color:rgba(255,127,50,.5); background:rgba(255,127,50,.1); box-shadow:0 0 15px rgba(255,127,50,.1); }
+    .tier-r1 .tier-circle { background:var(--card); border:2px solid var(--orange); box-shadow:0 0 10px rgba(255,127,50,.5); }
+    .tier-row .inc-note { font-size:.75rem; color:var(--s400); margin:8px 0; }
+    .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .chip { font-size:.75rem; padding:4px 8px; border-radius:4px; }
+    .chip-base { background:var(--card); border:1px solid var(--s600); color:var(--s300); }
+    .chip-r2 { background:var(--card); border:1px solid rgba(245,158,11,.5); color:var(--amber); }
+    .chip-r1 { background:var(--card); border:1px solid var(--orange); color:#fff; }
+    .chip-ins { background:rgba(88,28,135,.5); border:1px solid #a855f7; color:#e9d5ff; font-weight:600; }
+
+    .footer { margin-top:48px; text-align:center; color:var(--s500); font-size:.75rem; }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width:900px) {
+        .rank-grid { grid-template-columns:repeat(2,1fr); }
+        .zone-grid { grid-template-columns:1fr; }
+        .zone-col { border-right:none; border-bottom:1px solid var(--line); }
+        .benefits-grid { grid-template-columns:1fr; }
+        .header h1 { font-size:1.75rem; }
+    }
+    @media (max-width:520px) {
+        .rank-grid { grid-template-columns:1fr; }
+    }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="bar"></div>
+        <h1>Driver Ranking & AhaBenefits <span class="v">v2.0</span></h1>
+        <p>Sơ đồ tổng quan cơ chế Xếp hạng, Thu nhập và Điểm thưởng (SGN & HAN)</p>
+    </div>
+
+    <!-- 1. HỆ THỐNG XẾP HẠNG -->
+    <section>
+        <div class="sec-head">
+            <div class="sec-num n1">1</div>
+            <h2>Xếp Hạng Tài Xế (KPI & Phân Bổ)</h2>
+        </div>
+        <div class="rank-grid">
+            <!-- R1 -->
+            <div class="rcard rank-r1">
+                <div class="badge b-r1">15% Fleet</div>
+                <div class="emoji">💎</div>
+                <h3 class="text-r1">R1 Elite</h3>
+                <div class="kpi-list">
+                    <div class="kpi-row"><span class="lbl">DQS</span><span class="mono v-emerald">≥ 80</span></div>
+                    <div class="kpi-row"><span class="lbl">Hủy đơn (DCR)</span><span class="mono v-amber">≤ 10%</span></div>
+                    <div class="kpi-row"><span class="lbl">Năng suất</span><span class="mono v-blue">≥ 280</span></div>
+                </div>
+            </div>
+            <!-- R2 -->
+            <div class="rcard rank-r2">
+                <div class="badge b-r2">35% Fleet</div>
+                <div class="emoji">🥇</div>
+                <h3 class="text-r2">R2 Active</h3>
+                <div class="kpi-list">
+                    <div class="kpi-row"><span class="lbl">DQS</span><span class="mono v-emerald">≥ 75</span></div>
+                    <div class="kpi-row"><span class="lbl">Hủy đơn (DCR)</span><span class="mono v-amber">≤ 10%</span></div>
+                    <div class="kpi-row"><span class="lbl">Năng suất</span><span class="mono v-blue">≥ 210</span></div>
+                </div>
+            </div>
+            <!-- R3 -->
+            <div class="rcard rank-r3">
+                <div class="badge b-r3">35% Fleet</div>
+                <div class="emoji">🥈</div>
+                <h3 class="text-r3">R3 Standard</h3>
+                <div class="kpi-list">
+                    <div class="kpi-row"><span class="lbl">DQS</span><span class="mono v-emerald">≥ 75</span></div>
+                    <div class="kpi-row"><span class="lbl">Hủy đơn (DCR)</span><span class="mono v-amber">≤ 15%</span></div>
+                    <div class="kpi-row"><span class="lbl">Năng suất</span><span class="mono v-blue">≥ 70</span></div>
+                </div>
+            </div>
+            <!-- Unranked -->
+            <div class="rcard rank-un">
+                <div class="badge b-un">15% Fleet</div>
+                <div class="emoji">⚪</div>
+                <h3 style="color:var(--s300)">Unranked</h3>
+                <div class="kpi-list">
+                    <div class="kpi-row"><span class="lbl">DQS</span><span class="mono v-mute">&lt; 75</span></div>
+                    <div class="kpi-row"><span class="lbl">Hủy đơn</span><span class="mono v-mute">—</span></div>
+                    <div class="kpi-row"><span class="lbl">Năng suất</span><span class="mono v-mute">—</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="connector"><span class="bounce">⌄</span></div>
+
+    <!-- 2. PHÂN TẦNG KHU VỰC -->
+    <section>
+        <div class="sec-head">
+            <div class="sec-num n2">2</div>
+            <h2>Layer Khu Vực & Thu Nhập</h2>
+        </div>
+        <div class="panel">
+            <div class="zone-grid">
+                <!-- L2 -->
+                <div class="zone-col">
+                    <div class="zone-tag zt-o">L2 Minizone</div>
+                    <div class="sub">Ưu tiên Rank</div>
+                    <div class="rank text-r1">💎 R1 Elite</div>
+                    <div class="zone-foot"><div class="cap">Mục tiêu / Giờ</div><div class="num mono">65k - 70k</div></div>
+                </div>
+                <!-- L3 -->
+                <div class="zone-col">
+                    <div class="zone-tag zt-a">L3 Mediumzone</div>
+                    <div class="sub">Ưu tiên Rank</div>
+                    <div class="rank text-r2">🥇 R2 Active</div>
+                    <div class="zone-foot"><div class="cap">Mục tiêu / Giờ</div><div class="num mono">60k - 65k</div></div>
+                </div>
+                <!-- L4 -->
+                <div class="zone-col">
+                    <div class="zone-tag zt-b">L4 Bigzone</div>
+                    <div class="sub">Ưu tiên Rank</div>
+                    <div class="rank text-r3">🥈 R3 Standard</div>
+                    <div class="zone-foot"><div class="cap">Mục tiêu / Giờ</div><div class="num mono">55k - 60k</div></div>
+                </div>
+                <!-- L5 & L6 -->
+                <div class="zone-col" style="background:rgba(30,41,59,.8)">
+                    <div class="zone-tag zt-t">L5 City / L6 Mass</div>
+                    <div class="sub">Dành cho</div>
+                    <div class="rank" style="color:var(--s300)">Unranked / Tràn đơn</div>
+                    <div class="zone-foot"><div class="cap">Mục tiêu / Giờ</div><div class="num mono" style="color:var(--s400)">~ 55k</div></div>
+                </div>
+                <!-- Full Day Info -->
+                <div class="zone-income">
+                    <div class="inc-head">
+                        <span style="color:var(--emerald)">📈</span>
+                        <div>
+                            <h4>Đảm bảo Thu Nhập Ngày</h4>
+                            <p>Chỉ áp dụng ca 8:00-18:00</p>
+                        </div>
+                    </div>
+                    <div class="inc-row bd"><span class="text-r1" style="font-weight:600">💎 R1</span><span class="mono" style="color:#fff">600k - 650k</span></div>
+                    <div class="inc-row"><span class="text-r2" style="font-weight:600">🥇 R2</span><span class="mono" style="color:#fff">550k - 600k</span></div>
+                </div>
+            </div>
+            <div class="cascade">
+                ⇄ <b>Cơ chế Cascade:</b> Layer mở cho hạng dưới khi lấp đầy <strong>≥ 80%</strong> slot đăng ký.
+            </div>
+        </div>
+    </section>
+
+    <div class="connector"><span class="bounce">⌄</span></div>
+
+    <!-- 3. AHABENEFITS -->
+    <section>
+        <div class="sec-head">
+            <div class="sec-num n3">3</div>
+            <h2>Quyền Lợi & Điểm Thưởng (AhaBenefits)</h2>
+        </div>
+        <div class="benefits-grid">
+            <!-- Point Formula -->
+            <div class="bcard pad">
+                <h3 class="bcard-title">🧮 Công thức tính điểm</h3>
+                <div class="formula">
+                    <span style="color:var(--s300)">Điểm/ca =</span><br>
+                    <span class="f-blue">(GSV ÷ 5k)</span>
+                    <span class="op">×</span>
+                    <span class="f-amber">Hệ số</span>
+                    <span class="op">+</span>
+                    <span class="f-em">Bonus</span>
+                </div>
+                <div class="layer-row" style="border-left-color:var(--orange)"><span>Layer 2</span><span><span class="mult" style="color:var(--orange)">x1.5</span><span class="add">(+30đ)</span></span></div>
+                <div class="layer-row" style="border-left-color:var(--amber)"><span>Layer 3</span><span><span class="mult" style="color:var(--amber)">x1.3</span><span class="add">(+25đ)</span></span></div>
+                <div class="layer-row" style="border-left-color:var(--blue)"><span>Layer 4</span><span><span class="mult" style="color:var(--blue)">x1.1</span><span class="add">(+20đ)</span></span></div>
+                <div class="layer-row" style="border-left-color:var(--s500)"><span style="color:var(--s400)">Đơn tràn / L6</span><span><span class="mult" style="color:var(--s400)">x1.0</span><span class="add">(0đ)</span></span></div>
+                <div class="point-note">🪙 1 Điểm ≈ 35 VNĐ (Hết hạn cuối Quý)</div>
+            </div>
+
+            <!-- Catalog -->
+            <div class="bcard col">
+                <div class="catalog-head"><h3>🎁 Cửa Hàng Đổi Điểm (Catalog)</h3></div>
+                <div class="catalog-body">
+                    <!-- Unranked -->
+                    <div class="tier-row tier-un">
+                        <div class="tier-circle">⚪</div>
+                        <div>
+                            <h4 style="color:var(--s400)">Unranked</h4>
+                            <p class="locked">🔒 Không có quyền truy cập cửa hàng</p>
+                        </div>
+                    </div>
+                    <!-- R3 -->
+                    <div class="tier-row tier-r3">
+                        <div class="tier-circle">🥈</div>
+                        <div style="width:100%">
+                            <h4 class="text-r3">Quyền lợi Cơ bản (R3+)</h4>
+                            <div class="chips">
+                                <span class="chip chip-base">⛽ Giảm giá Xăng/Sạc EV</span>
+                                <span class="chip chip-base">🔧 Bảo dưỡng xe</span>
+                                <span class="chip chip-base">🍽️ F&B, Sức khỏe</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- R2 -->
+                    <div class="tier-row tier-r2">
+                        <div class="tier-circle">🥇</div>
+                        <div style="width:100%">
+                            <h4 class="text-r2">Quyền lợi Nâng cao (R2+)</h4>
+                            <p class="inc-note">Bao gồm R3 + bổ sung:</p>
+                            <div class="chips">
+                                <span class="chip chip-r2">👕 Đồng phục</span>
+                                <span class="chip chip-r2">🧳 Túi giữ nhiệt</span>
+                                <span class="chip chip-r2">📶 Gói Data lớn</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- R1 -->
+                    <div class="tier-row tier-r1">
+                        <div class="tier-circle">💎</div>
+                        <div style="width:100%">
+                            <h4 class="text-r1">Đặc quyền Cao cấp (R1)</h4>
+                            <p class="inc-note">Bao gồm R2 + bổ sung:</p>
+                            <div class="chips">
+                                <span class="chip chip-r1">⚡ Gói Sạc/Bảo dưỡng Ưu tiên</span>
+                                <span class="chip chip-r1">📲 SIM Cao tốc</span>
+                                <span class="chip chip-ins">🛡️ Bảo hiểm tai nạn (Mua bằng điểm)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer">
+        Dữ liệu được tóm tắt từ tài liệu Driver Ranking & AhaBenefits v2.0 - SGN & HAN
+    </div>
+</div>
+</body>
+</html>
