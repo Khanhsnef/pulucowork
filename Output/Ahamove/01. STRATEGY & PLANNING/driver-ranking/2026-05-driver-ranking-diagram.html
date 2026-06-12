@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sơ đồ Trực quan hóa - Driver Ranking & AhaBenefits v2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .rank-r1 { background: linear-gradient(135deg, rgba(255,127,50,0.1) 0%, rgba(255,127,50,0.2) 100%); border-color: rgba(255,127,50,0.5); }
+        .rank-r2 { background: linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(245,158,11,0.2) 100%); border-color: rgba(245,158,11,0.5); }
+        .rank-r3 { background: linear-gradient(135deg, rgba(88,166,255,0.1) 0%, rgba(88,166,255,0.2) 100%); border-color: rgba(88,166,255,0.5); }
+        .rank-un { background: linear-gradient(135deg, rgba(148,163,184,0.1) 0%, rgba(148,163,184,0.2) 100%); border-color: rgba(148,163,184,0.5); }
+
+        .text-r1 { color: #FF7F32; }
+        .text-r2 { color: #F59E0B; }
+        .text-r3 { color: #58A6FF; }
+
+        .connection-line {
+            position: relative;
+        }
+        .connection-line::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -24px;
+            width: 2px;
+            height: 24px;
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-50%);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Header Section -->
+        <div class="text-center mb-12 bg-slate-800 p-8 rounded-2xl border border-slate-700 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF7F32] via-[#F59E0B] to-[#58A6FF]"></div>
+            <h1 class="text-3xl md:text-4xl font-extrabold mb-3 tracking-tight">Driver Ranking & AhaBenefits <span class="text-[#FF7F32]">v2.0</span></h1>
+            <p class="text-slate-400 text-sm md:text-base font-medium">Sơ đồ tổng quan cơ chế Xếp hạng, Thu nhập và Điểm thưởng (SGN & HAN)</p>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="space-y-12">
+
+            <!-- 1. HỆ THỐNG XẾP HẠNG -->
+            <section>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xl border border-indigo-500/30">1</div>
+                    <h2 class="text-2xl font-bold text-white">Xếp Hạng Tài Xế (KPI & Phân Bổ)</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- R1 -->
+                    <div class="card-hover rounded-xl border p-5 rank-r1 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-[#FF7F32]/20 text-[#FF7F32] text-xs font-bold px-3 py-1 rounded-bl-lg">15% Fleet</div>
+                        <div class="text-3xl mb-2">💎</div>
+                        <h3 class="text-lg font-bold text-r1 mb-1">R1 Elite</h3>
+                        <div class="space-y-2 mt-4 text-sm text-slate-300">
+                            <div class="flex justify-between items-center"><span class="text-slate-400">DQS</span> <span class="font-mono font-semibold text-emerald-400">≥ 80</span></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-400">Hủy đơn (DCR)</span> <span class="font-mono font-semibold text-amber-400">≤ 10%</span></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-400">Năng suất</span> <span class="font-mono font-semibold text-blue-400">≥ 280</span></div>
+                        </div>
+                    </div>
+
+                    <!-- R2 -->
+                    <div class="card-hover rounded-xl border p-5 rank-r2 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-[#F59E0B]/20 text-[#F59E0B] text-xs font-bold px-3 py-1 rounded-bl-lg">35% Fleet</div>
+                        <div class="text-3xl mb-2">🥇</div>
+                        <h3 class="text-lg font-bold text-r2 mb-1">R2 Active</h3>
+                        <div class="space-y-2 mt-4 text-sm text-slate-300">
+                            <div class="flex justify-between items-center"><span class="text-slate-400">DQS</span> <span class="font-mono font-semibold text-emerald-400">≥ 75</span></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-400">Hủy đơn (DCR)</span> <span class="font-mono font-semibold text-amber-400">≤ 10%</span></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-400">Năng suất</span> <span class="font-mono font-semibold text-blue-400">≥ 210</span></div>
+                        </div>
+                    </div>
+
+                    <!-- R3 -->
+                    <div class="card-hover rounded-xl border p-5 rank-r3 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-[#58A6FF]/20 text-[#58A6FF] text-xs font-bold px-3 py-1 rounded-bl-lg">35% Fleet</div>
+                        <div class="text-3xl mb-2">🥈</div>
+                        <h3 class="text-lg font-bold text-r3 mb-1">R3 Standard</h3>
+                        <div class="space-y-2 mt-4 text-sm text-slate-300">
+                            <div class="flex justify-between items-center"><span class="text-slate-400">DQS</span> <span class="font-mono font-semibold text-emerald-400">≥ 75</span></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-400">Hủy đơn (DCR)</span> <span class="font-mono font-semibold text-amber-400">≤ 15%</span></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-400">Năng suất</span> <span class="font-mono font-semibold text-blue-400">≥ 70</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Unranked -->
+                    <div class="card-hover rounded-xl border p-5 rank-un relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-slate-500/20 text-slate-400 text-xs font-bold px-3 py-1 rounded-bl-lg">15% Fleet</div>
+                        <div class="text-3xl mb-2">⚪</div>
+                        <h3 class="text-lg font-bold text-slate-300 mb-1">Unranked</h3>
+                        <div class="space-y-2 mt-4 text-sm text-slate-300">
+                            <div class="flex justify-between items-center"><span class="text-slate-400">DQS</span> <span class="font-mono font-semibold text-slate-400">&lt; 75</span></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-400">Hủy đơn</span> <span class="font-mono text-slate-500">—</span></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-400">Năng suất</span> <span class="font-mono text-slate-500">—</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONNECTOR -->
+            <div class="flex justify-center text-slate-600 text-2xl py-2">
+                <i class="fa-solid fa-angles-down animate-bounce"></i>
+            </div>
+
+            <!-- 2. PHÂN TẦNG KHU VỰC -->
+            <section>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xl border border-emerald-500/30">2</div>
+                    <h2 class="text-2xl font-bold text-white">Layer Khu Vực & Thu Nhập</h2>
+                </div>
+
+                <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg">
+                    <div class="grid grid-cols-1 lg:grid-cols-5 divide-y lg:divide-y-0 lg:divide-x divide-slate-700">
+
+                        <!-- L2 -->
+                        <div class="p-5 flex flex-col items-center text-center hover:bg-slate-700/50 transition-colors">
+                            <div class="px-3 py-1 rounded-md bg-[#FF7F32]/10 border border-[#FF7F32]/30 text-[#FF7F32] font-bold text-sm mb-3">L2 Minizone</div>
+                            <div class="text-sm text-slate-400 mb-1">Ưu tiên Rank</div>
+                            <div class="font-bold text-r1 mb-4">💎 R1 Elite</div>
+                            <div class="mt-auto w-full pt-4 border-t border-slate-700/50">
+                                <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Mục tiêu / Giờ</div>
+                                <div class="font-mono font-bold text-white">65k - 70k</div>
+                            </div>
+                        </div>
+
+                        <!-- L3 -->
+                        <div class="p-5 flex flex-col items-center text-center hover:bg-slate-700/50 transition-colors">
+                            <div class="px-3 py-1 rounded-md bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-[#F59E0B] font-bold text-sm mb-3">L3 Mediumzone</div>
+                            <div class="text-sm text-slate-400 mb-1">Ưu tiên Rank</div>
+                            <div class="font-bold text-r2 mb-4">🥇 R2 Active</div>
+                            <div class="mt-auto w-full pt-4 border-t border-slate-700/50">
+                                <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Mục tiêu / Giờ</div>
+                                <div class="font-mono font-bold text-white">60k - 65k</div>
+                            </div>
+                        </div>
+
+                        <!-- L4 -->
+                        <div class="p-5 flex flex-col items-center text-center hover:bg-slate-700/50 transition-colors">
+                            <div class="px-3 py-1 rounded-md bg-[#58A6FF]/10 border border-[#58A6FF]/30 text-[#58A6FF] font-bold text-sm mb-3">L4 Bigzone</div>
+                            <div class="text-sm text-slate-400 mb-1">Ưu tiên Rank</div>
+                            <div class="font-bold text-r3 mb-4">🥈 R3 Standard</div>
+                            <div class="mt-auto w-full pt-4 border-t border-slate-700/50">
+                                <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Mục tiêu / Giờ</div>
+                                <div class="font-mono font-bold text-white">55k - 60k</div>
+                            </div>
+                        </div>
+
+                        <!-- L5 & L6 -->
+                        <div class="p-5 flex flex-col items-center text-center hover:bg-slate-700/50 transition-colors bg-slate-800/80">
+                            <div class="px-3 py-1 rounded-md bg-teal-500/10 border border-teal-500/30 text-teal-400 font-bold text-sm mb-3">L5 City / L6 Mass</div>
+                            <div class="text-sm text-slate-400 mb-1">Dành cho</div>
+                            <div class="font-bold text-slate-300 mb-4">Unranked / Tràn đơn</div>
+                            <div class="mt-auto w-full pt-4 border-t border-slate-700/50">
+                                <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Mục tiêu / Giờ</div>
+                                <div class="font-mono font-bold text-slate-400">~ 55k</div>
+                            </div>
+                        </div>
+
+                        <!-- Full Day Info -->
+                        <div class="p-5 flex flex-col justify-center bg-indigo-900/20">
+                            <div class="flex items-start gap-3 mb-3">
+                                <i class="fa-solid fa-money-bill-trend-up text-emerald-400 mt-1"></i>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm">Đảm bảo Thu Nhập Ngày</h4>
+                                    <p class="text-xs text-slate-400">Chỉ áp dụng ca 8:00-18:00</p>
+                                </div>
+                            </div>
+                            <div class="space-y-2 mt-2">
+                                <div class="flex justify-between items-center text-sm border-b border-indigo-500/20 pb-1">
+                                    <span class="text-r1 font-semibold">💎 R1</span>
+                                    <span class="font-mono text-white">600k - 650k</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-r2 font-semibold">🥇 R2</span>
+                                    <span class="font-mono text-white">550k - 600k</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Cascade Note -->
+                    <div class="bg-slate-900/50 p-3 text-center border-t border-slate-700 text-xs text-slate-400">
+                        <i class="fa-solid fa-arrow-right-arrow-left text-amber-500 mr-2"></i>
+                        <span class="font-semibold text-amber-500">Cơ chế Cascade:</span> Layer mở cho hạng dưới khi lấp đầy <strong>≥ 80%</strong> slot đăng ký.
+                    </div>
+                </div>
+            </section>
+
+             <!-- CONNECTOR -->
+             <div class="flex justify-center text-slate-600 text-2xl py-2">
+                <i class="fa-solid fa-angles-down animate-bounce"></i>
+            </div>
+
+            <!-- 3. AHABENEFITS -->
+            <section>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center font-bold text-xl border border-pink-500/30">3</div>
+                    <h2 class="text-2xl font-bold text-white">Quyền Lợi & Điểm Thưởng (AhaBenefits)</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- Point Formula -->
+                    <div class="lg:col-span-1 bg-slate-800 rounded-xl border border-slate-700 p-5 shadow-lg">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-700 pb-2"><i class="fa-solid fa-calculator mr-2"></i>Công thức tính điểm</h3>
+
+                        <div class="bg-slate-900 rounded-lg p-4 font-mono text-sm border border-slate-700/50 mb-6 text-center shadow-inner">
+                            <span class="text-slate-300">Điểm/ca =</span><br>
+                            <span class="text-blue-400 font-bold">(GSV ÷ 5k)</span>
+                            <span class="text-slate-500">×</span>
+                            <span class="text-amber-400 font-bold">Hệ số</span>
+                            <span class="text-slate-500">+</span>
+                            <span class="text-emerald-400 font-bold">Bonus</span>
+                        </div>
+
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between items-center p-2 rounded bg-slate-700/30 border-l-2 border-[#FF7F32]">
+                                <span>Layer 2</span>
+                                <div class="text-right"><span class="text-[#FF7F32] font-bold">x1.5</span> <span class="text-slate-500 text-xs ml-1">(+30đ)</span></div>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded bg-slate-700/30 border-l-2 border-[#F59E0B]">
+                                <span>Layer 3</span>
+                                <div class="text-right"><span class="text-[#F59E0B] font-bold">x1.3</span> <span class="text-slate-500 text-xs ml-1">(+25đ)</span></div>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded bg-slate-700/30 border-l-2 border-[#58A6FF]">
+                                <span>Layer 4</span>
+                                <div class="text-right"><span class="text-[#58A6FF] font-bold">x1.1</span> <span class="text-slate-500 text-xs ml-1">(+20đ)</span></div>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded bg-slate-700/30 border-l-2 border-slate-500">
+                                <span class="text-slate-400">Đơn tràn / L6</span>
+                                <div class="text-right"><span class="text-slate-400 font-bold">x1.0</span> <span class="text-slate-600 text-xs ml-1">(0đ)</span></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 text-center text-xs text-slate-400 bg-slate-900/50 py-2 rounded">
+                            <i class="fa-solid fa-coins text-yellow-500 mr-1"></i> 1 Điểm ≈ 35 VNĐ (Hết hạn cuối Quý)
+                        </div>
+                    </div>
+
+                    <!-- Catalog -->
+                    <div class="lg:col-span-2 bg-slate-800 rounded-xl border border-slate-700 shadow-lg overflow-hidden flex flex-col">
+                        <div class="p-4 bg-slate-900/50 border-b border-slate-700">
+                            <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider"><i class="fa-solid fa-gift mr-2"></i>Cửa Hàng Đổi Điểm (Catalog)</h3>
+                        </div>
+
+                        <div class="flex-1 p-5 space-y-4">
+
+                            <!-- Unranked (Blocked) -->
+                            <div class="flex items-start gap-4 p-3 rounded-lg border border-slate-700/50 bg-slate-900/30 opacity-70">
+                                <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-xl shrink-0">⚪</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-400">Unranked</h4>
+                                    <p class="text-sm text-red-400 mt-1"><i class="fa-solid fa-lock mr-1"></i> Không có quyền truy cập cửa hàng</p>
+                                </div>
+                            </div>
+
+                            <!-- R3 Base -->
+                            <div class="flex items-start gap-4 p-3 rounded-lg border border-[#58A6FF]/30 bg-[#58A6FF]/5">
+                                <div class="w-12 h-12 rounded-full bg-slate-800 border border-[#58A6FF] flex items-center justify-center text-xl shrink-0">🥈</div>
+                                <div class="w-full">
+                                    <h4 class="font-bold text-[#58A6FF]">Quyền lợi Cơ bản (R3+)</h4>
+                                    <div class="flex flex-wrap gap-2 mt-2">
+                                        <span class="text-xs bg-slate-800 border border-slate-600 px-2 py-1 rounded text-slate-300"><i class="fa-solid fa-gas-pump mr-1"></i>Giảm giá Xăng/Sạc EV</span>
+                                        <span class="text-xs bg-slate-800 border border-slate-600 px-2 py-1 rounded text-slate-300"><i class="fa-solid fa-wrench mr-1"></i>Bảo dưỡng xe</span>
+                                        <span class="text-xs bg-slate-800 border border-slate-600 px-2 py-1 rounded text-slate-300"><i class="fa-solid fa-utensils mr-1"></i>F&B, Sức khỏe</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- R2 Advanced -->
+                            <div class="flex items-start gap-4 p-3 rounded-lg border border-[#F59E0B]/30 bg-[#F59E0B]/5 relative">
+                                <div class="absolute -left-[11px] top-1/2 -translate-y-1/2 w-[2px] h-8 bg-[#F59E0B]/50 hidden sm:block"></div>
+                                <div class="w-12 h-12 rounded-full bg-slate-800 border border-[#F59E0B] flex items-center justify-center text-xl shrink-0">🥇</div>
+                                <div class="w-full">
+                                    <h4 class="font-bold text-[#F59E0B]">Quyền lợi Nâng cao (R2+)</h4>
+                                    <p class="text-xs text-slate-400 mb-2">Bao gồm R3 + bổ sung:</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="text-xs bg-slate-800 border border-[#F59E0B]/50 px-2 py-1 rounded text-[#F59E0B]/90"><i class="fa-solid fa-shirt mr-1"></i>Đồng phục</span>
+                                        <span class="text-xs bg-slate-800 border border-[#F59E0B]/50 px-2 py-1 rounded text-[#F59E0B]/90"><i class="fa-solid fa-box mr-1"></i>Túi giữ nhiệt</span>
+                                        <span class="text-xs bg-slate-800 border border-[#F59E0B]/50 px-2 py-1 rounded text-[#F59E0B]/90"><i class="fa-solid fa-wifi mr-1"></i>Gói Data lớn</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- R1 Premium -->
+                            <div class="flex items-start gap-4 p-3 rounded-lg border border-[#FF7F32]/50 bg-[#FF7F32]/10 relative shadow-[0_0_15px_rgba(255,127,50,0.1)]">
+                                <div class="w-12 h-12 rounded-full bg-slate-800 border-2 border-[#FF7F32] flex items-center justify-center text-xl shrink-0 shadow-[0_0_10px_rgba(255,127,50,0.5)]">💎</div>
+                                <div class="w-full">
+                                    <h4 class="font-bold text-[#FF7F32]">Đặc quyền Cao cấp (R1)</h4>
+                                    <p class="text-xs text-slate-400 mb-2">Bao gồm R2 + bổ sung:</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="text-xs bg-slate-800 border border-[#FF7F32] px-2 py-1 rounded text-white shadow-sm"><i class="fa-solid fa-bolt mr-1 text-yellow-400"></i>Gói Sạc/Bảo dưỡng Ưu tiên</span>
+                                        <span class="text-xs bg-slate-800 border border-[#FF7F32] px-2 py-1 rounded text-white shadow-sm"><i class="fa-solid fa-sim-card mr-1 text-blue-400"></i>SIM Cao tốc</span>
+                                        <span class="text-xs bg-purple-900/50 border border-purple-500 px-2 py-1 rounded text-purple-200 font-semibold"><i class="fa-solid fa-shield-heart mr-1"></i>Bảo hiểm tai nạn (Mua bằng điểm)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="mt-12 text-center text-slate-500 text-xs">
+            Dữ liệu được tóm tắt từ tài liệu Driver Ranking & AhaBenefits v2.0 - SGN & HAN
+        </div>
+    </div>
+
+</body>
+</html>

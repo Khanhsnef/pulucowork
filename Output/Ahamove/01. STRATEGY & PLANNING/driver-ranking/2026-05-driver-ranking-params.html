@@ -17,9 +17,9 @@
       --bg-code: #0A0F15;
       --bg-hover: #1F2937;
       --border: rgba(255, 255, 255, 0.07);
-      --text-prime: #F0F6FC;
-      --text-sec: #B1BAC4;
-      --text-muted: #8B949E;
+      --text-prime: #F4F8FD;
+      --text-sec: #C4CDD8;
+      --text-muted: #9DA7B3;
       --orange: #FF7F32;
       --orange-dim: rgba(255, 127, 50, 0.12);
       --yellow: #F59E0B;
@@ -379,16 +379,16 @@
     }
 
     .sec-title h2 {
-      font-size: 17px;
+      font-size: 18.5px;
       font-weight: 700;
       color: var(--text-prime);
       letter-spacing: -0.01em;
     }
 
     .sec-title p {
-      font-size: 12px;
+      font-size: 12.5px;
       color: var(--text-sec);
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     /* ── TABLES ── */
@@ -412,11 +412,11 @@
     }
 
     th {
-      padding: 10px 14px;
+      padding: 12px 16px;
       text-align: left;
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 800;
-      color: #D0D8E4;
+      color: #E2E8F1;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       border-bottom: none;
@@ -424,11 +424,15 @@
     }
 
     td {
-      padding: 10px 14px;
-      font-size: 13px;
-      color: #C8D3DC;
+      padding: 12px 16px;
+      font-size: 13.5px;
+      color: #D2DBE4;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.018);
     }
 
     tr:last-child td {
@@ -446,7 +450,8 @@
 
     td.num {
       font-family: 'Montserrat', monospace;
-      font-size: 12px;
+      font-size: 12.5px;
+      color: var(--text-prime);
     }
 
     td.good {
@@ -1277,7 +1282,7 @@
           </tbody>
         </table>
       </div>
-      <p style="font-size:11.5px;color:var(--text-muted);">Unranked không có structured slot — nhận đơn on-demand khi đơn từ các layer tràn xuống.</p>
+      <p style="font-size:12.5px;color:var(--text-sec);">Unranked không có structured slot — nhận đơn on-demand khi đơn từ các layer tràn xuống.</p>
     </section>
 
     <!-- ── S7: POINT ECONOMY ── -->
@@ -1874,28 +1879,28 @@
           </thead>
           <tbody>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Điều kiện xét</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Điều kiện xét</td>
               <td style="font-size:11.5px;">DQS ≥80 · DCR &lt;10% · Prod ≥280</td>
               <td style="font-size:11.5px;">DQS ≥75 · DCR &lt;10% · Prod ≥210</td>
               <td style="font-size:11.5px;">DQS ≥75 · DCR ≤15% · Prod ≥70</td>
               <td class="na">Dưới R3</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Primary Layer</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Primary Layer</td>
               <td><span class="layer-badge l2">L2</span> Minizone</td>
               <td><span class="layer-badge l3">L3</span> Mediumzone</td>
               <td><span class="layer-badge l4">L4</span> Bigzone</td>
               <td><span class="layer-badge l6">L6</span> MASS</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Ca Full-day</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Ca Full-day</td>
               <td class="good">✅ 08:00–18:00</td>
               <td class="good">✅ 08:00–18:00</td>
               <td class="na">❌</td>
               <td class="na">❌</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Thu nhập target Full-day</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Thu nhập target Full-day</td>
               <td><span
                   style="font-family:'Montserrat',monospace;font-size:12px;font-weight:700;color:var(--orange);">600k ·
                   650k</span></td>
@@ -1906,42 +1911,42 @@
               <td class="na">—</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Slot Ca Peak</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Slot Ca Peak</td>
               <td class="num" style="color:var(--orange);">20%</td>
               <td class="num" style="color:var(--yellow);">40%</td>
               <td class="num" style="color:var(--blue);">40%</td>
               <td class="na">on-demand</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Hệ số AhaPoints</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Hệ số AhaPoints</td>
               <td><span class="mult-big" style="color:var(--orange);font-size:18px;">×1.5</span></td>
               <td><span class="mult-big" style="color:var(--yellow);font-size:18px;">×1.3</span></td>
               <td><span class="mult-big" style="color:var(--blue);font-size:18px;">×1.1</span></td>
               <td><span class="mult-big" style="font-size:18px;">×1.0</span></td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Bonus hoàn ca</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Bonus hoàn ca</td>
               <td class="good">+30 pts</td>
               <td class="good">+25 pts</td>
               <td class="good">+20 pts</td>
               <td class="na">—</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Voucher xăng/sạc</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Voucher xăng/sạc</td>
               <td style="color:var(--orange);">50k/tháng</td>
               <td style="color:var(--yellow);">30k/tháng</td>
               <td class="na">—</td>
               <td class="na">—</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Bảo hiểm tai nạn Mini</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Bảo hiểm tai nạn Mini</td>
               <td style="color:var(--purple);">✅ R1 only · đổi điểm</td>
               <td class="na">❌</td>
               <td class="na">❌</td>
               <td class="na">❌</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Catalog đặc quyền</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Catalog đặc quyền</td>
               <td style="font-size:11.5px;color:var(--orange);">Kim Cương + Vàng + Bạc</td>
               <td style="font-size:11.5px;color:var(--yellow);">Vàng + Bạc</td>
               <td style="font-size:11.5px;color:var(--blue);">Bạc only</td>
@@ -1969,7 +1974,7 @@
           </thead>
           <tbody>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Rank ưu tiên</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Rank ưu tiên</td>
               <td><span class="rank-r1">R1</span></td>
               <td><span class="rank-r2">R2</span></td>
               <td><span class="rank-r3">R3</span></td>
@@ -1977,7 +1982,7 @@
               <td><span class="rank-un">Unranked</span></td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">AhaPoints ×</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">AhaPoints ×</td>
               <td><span class="mult-big" style="color:var(--orange);font-size:18px;">×1.5</span></td>
               <td><span class="mult-big" style="color:var(--yellow);font-size:18px;">×1.3</span></td>
               <td><span class="mult-big" style="color:var(--blue);font-size:18px;">×1.1</span></td>
@@ -1985,7 +1990,7 @@
               <td><span class="mult-big" style="font-size:18px;">×1.0</span></td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Bonus/ca</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Bonus/ca</td>
               <td class="good">+30 pts</td>
               <td class="good">+25 pts</td>
               <td class="good">+20 pts</td>
@@ -1993,15 +1998,15 @@
               <td class="na">—</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Overflow</td>
-              <td style="font-size:11.5px;color:var(--text-muted);">×1.0 · no bonus</td>
-              <td style="font-size:11.5px;color:var(--text-muted);">×1.0 · no bonus</td>
-              <td style="font-size:11.5px;color:var(--text-muted);">×1.0 · no bonus</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Overflow</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">×1.0 · no bonus</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">×1.0 · no bonus</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">×1.0 · no bonus</td>
               <td class="na">—</td>
               <td class="na">—</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Target SGN</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Target SGN</td>
               <td class="num" style="color:var(--orange);">lên đến 65k/h</td>
               <td class="num" style="color:var(--yellow);">lên đến 60k/h</td>
               <td class="num" style="color:var(--blue);">lên đến 55k/h</td>
@@ -2009,7 +2014,7 @@
               <td class="na">—</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Target HAN</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Target HAN</td>
               <td class="num" style="color:var(--orange);">lên đến 70k/h</td>
               <td class="num" style="color:var(--yellow);">lên đến 65k/h</td>
               <td class="num" style="color:var(--blue);">lên đến 60k/h</td>
@@ -2017,7 +2022,7 @@
               <td class="na">—</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Cascade mở khi</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Cascade mở khi</td>
               <td style="font-size:11.5px;color:var(--yellow);">L2 ≥ 80% fill</td>
               <td style="font-size:11.5px;color:var(--yellow);">L3 ≥ 80% fill</td>
               <td style="font-size:11.5px;color:var(--yellow);">L4 ≥ 80% fill</td>
@@ -2045,49 +2050,49 @@
           </thead>
           <tbody>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Giờ</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Giờ</td>
               <td class="num">08:00–12:00</td>
               <td class="num">13:00–17:00</td>
               <td class="num">17:00–21:00</td>
               <td class="num" style="color:var(--orange);">08:00–18:00</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Loại</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Loại</td>
               <td><span style="color:var(--yellow);font-weight:700;font-size:11.5px;">⚡ Peak · 4h</span></td>
               <td><span style="color:var(--yellow);font-weight:700;font-size:11.5px;">⚡ Peak · 4h</span></td>
               <td style="font-size:11.5px;">4h</td>
               <td style="font-size:11.5px;color:var(--orange);">10h · R1+R2</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Slot R1</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Slot R1</td>
               <td class="num" style="color:var(--orange);">20%</td>
               <td class="num" style="color:var(--orange);">20%</td>
               <td class="num" style="color:var(--orange);">15%</td>
               <td class="num" style="color:var(--orange);">50%</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Slot R2</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Slot R2</td>
               <td class="num" style="color:var(--yellow);">40%</td>
               <td class="num" style="color:var(--yellow);">40%</td>
               <td class="num" style="color:var(--yellow);">40%</td>
               <td class="num" style="color:var(--yellow);">50%</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Slot R3</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Slot R3</td>
               <td class="num" style="color:var(--blue);">40%</td>
               <td class="num" style="color:var(--blue);">40%</td>
               <td class="num" style="color:var(--blue);">45%</td>
               <td class="na">—</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Unranked</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Unranked</td>
               <td class="na">on-demand</td>
               <td class="na">on-demand</td>
               <td class="na">on-demand</td>
               <td class="na">❌</td>
             </tr>
             <tr>
-              <td style="font-size:11.5px;color:var(--text-muted);">Thu nhập target</td>
+              <td style="font-size:12.5px;color:var(--text-sec);">Thu nhập target</td>
               <td style="font-size:11.5px;color:var(--text-sec);">Theo Layer</td>
               <td style="font-size:11.5px;color:var(--text-sec);">Theo Layer</td>
               <td style="font-size:11.5px;color:var(--text-sec);">Theo Layer</td>
@@ -2103,7 +2108,7 @@
         <div>
           <div style="font-size:13px;font-weight:600;color:var(--text-prime);">Driver Ranking & AhaBenefits v2.0 —
             Params Sheet</div>
-          <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">Driver Management Team · Cập nhật:
+          <div style="font-size:12.5px;color:var(--text-sec);margin-top:2px;">Driver Management Team · Cập nhật:
             2026-05-27</div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
