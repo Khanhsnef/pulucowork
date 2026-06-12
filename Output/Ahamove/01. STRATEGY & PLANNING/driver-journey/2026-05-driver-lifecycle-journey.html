@@ -297,7 +297,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
     <strong>Vấn đề cốt lõi:</strong> Ahamove có M+1 retention tốt (~78% avg), nhưng <strong>rụng rất mạnh M+1→M+3</strong> (78% &rarr; 43%) &mdash; mất gần nửa tài xế trong 60 ngày tiếp theo. Cohort Q1/2026 còn yếu hơn: M+3 chỉ ~30-36%. <strong>Vùng chết nằm ở Phase 3 Lock In (D15&mdash;D60)</strong>, không phải onboarding.
   </div>
   <div class="insight blue">
-    <strong>Giải pháp:</strong> Xây dựng Driver Lifecycle Journey &mdash; hệ thống 6 giai đoạn tập trung <strong>chống rụng M+1→M+3</strong> qua 4 trụ cột: <strong>(1) Guaranteed Earnings 30 ngày phasing-out, (2) Multi-Service Unlock progression, (3) Tiered Insurance từ R3 Bạc</strong>.
+    <strong>Giải pháp:</strong> Xây dựng Driver Lifecycle Journey &mdash; hệ thống 6 giai đoạn tập trung <strong>chống rụng M+1→M+3</strong> qua 3 trụ cột: <strong>(1) Thưởng Cột Mốc Đơn Hàng (milestone cash đơn giản), (2) Multi-Service Unlock progression, (3) Tiered Insurance từ R3 Bạc</strong>.
   </div>
   <div class="insight ok" style="font-size:11px">
     <strong>📊 Nguồn dữ liệu Baseline:</strong> NIM Cohort Retention (active-segment-trend.html, query 06/05/2026). HAN avg 16 tháng, SGN avg 16 tháng. Grain: monthly (M+0, M+1... M+12). Chuyển đổi sang daily-grain ước tính: M+1 ≈ D30, M+3 ≈ D90, M+4 ≈ D120.
@@ -330,7 +330,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
     <thead><tr><th>Chỉ số</th><th>Baseline Ahamove</th><th>Target</th><th>Loại</th><th>Cơ sở</th></tr></thead>
     <tbody>
       <tr><td><strong>D7 Retention</strong></td><td class="mono">~88%</td><td class="mono"><strong>&ge;92%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Ước tính từ M+1 81% &rarr; D7 phải cao hơn. Grab w/ Guarantee = 85%</td></tr>
-      <tr><td><strong>D30 (≈M+1)</strong></td><td class="mono">~78% <span style="font-size:9px;color:var(--text-muted)">(HAN 81 / SGN 76)</span></td><td class="mono"><strong>&ge;85%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Ahamove M+1 đã tốt. Gap = +7pp, đạt nếu Guarantee + Buddy System</td></tr>
+      <tr><td><strong>D30 (≈M+1)</strong></td><td class="mono">~78% <span style="font-size:9px;color:var(--text-muted)">(HAN 81 / SGN 76)</span></td><td class="mono"><strong>&ge;85%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Ahamove M+1 đã tốt. Gap = +7pp, đạt nếu Milestone Bonus + Buddy System</td></tr>
       <tr><td><strong>D90 (≈M+3)</strong></td><td class="mono">~43% <span style="font-size:9px;color:var(--text-muted)">(best: 48-56 HAN)</span></td><td class="mono"><strong>&ge;60%</strong></td><td><span class="badge badge-green">Benchmarked</span></td><td>Gojek GoPartner đạt 60% D90. Gap = +17pp &mdash; <strong>trọng tâm toàn bộ framework</strong></td></tr>
       <tr><td>D120 (≈M+4)</td><td class="mono">~35%</td><td class="mono"><strong>&ge;50%</strong></td><td><span class="badge badge-orange">Aspirational</span></td><td>Est. từ M+3→M+4 drop ~8pp. Swiggy 55% tại <strong>D180</strong></td></tr>
       <tr><td>D365 (≈M+12)</td><td class="mono">~15%</td><td class="mono"><strong>&ge;35%</strong></td><td><span class="badge badge-red">Stretch</span></td><td>Gig best ~16%. 35% = XanhSM salary model — cần breakthrough</td></tr>
@@ -538,7 +538,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
           <td class="mono" style="font-weight:700;color:var(--success)">D7</td>
           <td><span class="badge badge-green">Hook In</span></td>
           <td>&ge;7 đơn hoàn thành</td>
-          <td><strong style="color:var(--text-primary)">Activation Check:</strong> Đạt → Badge "Tuần Đầu Tiên" + Cash bonus. Chưa đạt → Push "Chỉ còn X đơn để nhận thưởng!" + Buddy nhắc. Guarantee Bậc 1 đang chạy. Earnings Breakdown hiển thị EPH.</td>
+          <td><strong style="color:var(--text-primary)">Activation Check:</strong> Đạt → Badge "Tuần Đầu Tiên" + Cash bonus mốc 7 đơn. Chưa đạt → Push "Chỉ còn X đơn để nhận thưởng!" + Buddy nhắc. Earnings Breakdown hiển thị EPH.</td>
           <td>In-app + Push + Zalo</td>
           <td>Product + DM</td>
         </tr>
@@ -546,7 +546,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
           <td class="mono" style="font-weight:700;color:var(--success)">D14</td>
           <td><span class="badge badge-green">Hook In</span></td>
           <td>&ge;10d active / 14d<br>&ge;15 đơn</td>
-          <td><strong style="color:var(--text-primary)">Fortnight Milestone:</strong> Đạt streak &rarr; Badge. Unlock <strong>2H-4H-TMDT</strong> nếu &ge;25 đơn. Guarantee chuyển Bậc 2 (-20%). Chưa đạt &rarr; Cuộc gọi Buddy + Quest cá nhân hóa.</td>
+          <td><strong style="color:var(--text-primary)">Fortnight Milestone:</strong> Đạt streak &rarr; Badge + Cash mốc 25 đơn. Unlock <strong>2H-4H-TMDT</strong> nếu &ge;25 đơn. Chưa đạt &rarr; Cuộc gọi Buddy + Quest cá nhân hóa.</td>
           <td>In-app + Push + Buddy call</td>
           <td>Product + DM</td>
         </tr>
@@ -554,15 +554,15 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
           <td class="mono" style="font-weight:700;color:var(--info)">D21</td>
           <td><span class="badge badge-blue">Lock In</span></td>
           <td>Hình thành nhịp tuần</td>
-          <td><strong style="color:var(--text-primary)">Weekly Quest System bắt đầu:</strong> 20 đơn/tuần (Cơ bản) → 30 (Nâng cao) → 40 (Siêu cấp). Guarantee Bậc 3 (-40%). Unlock <strong>Nhóm đơn giá trị cao</strong> nếu &ge;40 đơn. Progress Bar hiển thị "% đến R3 Bạc". Nếu inactive &ge;5d → Push Income Projection.</td>
+          <td><strong style="color:var(--text-primary)">Weekly Quest System bắt đầu:</strong> 20 đơn/tuần (Cơ bản) → 30 (Nâng cao) → 40 (Siêu cấp). Unlock <strong>Nhóm đơn giá trị cao</strong> nếu &ge;40 đơn. Progress Bar hiển thị "% đến R3 Bạc". Nếu inactive &ge;5d → Push Income Projection.</td>
           <td>In-app + Push</td>
           <td>Product + S&amp;P</td>
         </tr>
         <tr style="border-left:3px solid var(--info)">
           <td class="mono" style="font-weight:700;color:var(--info)">D30</td>
           <td><span class="badge badge-blue">Lock In</span></td>
-          <td>&ge;20d active<br>Guarantee kết thúc</td>
-          <td><strong style="color:var(--text-primary)">Month #1 Review:</strong> Guarantee hết &rarr; Chuyển sang Weekly policy bình thường. Đạt &ge;20d active &rarr; Tier upgrade path mở. Income Dashboard tổng kết tháng 1 ("Bạn đã kiếm X, top Y% khu vực"). Unlock <strong>toàn bộ dịch vụ</strong> nếu &ge;60 đơn. Nếu inactive &ge;7d &rarr; <span style="color:var(--danger);font-weight:700">Gọi điện</span> + Quest cứu.</td>
+          <td>&ge;20d active</td>
+          <td><strong style="color:var(--text-primary)">Month #1 Review:</strong> Chuyển sang Weekly policy bình thường. Đạt &ge;20d active &rarr; Tier upgrade path mở. Income Dashboard tổng kết tháng 1 ("Bạn đã kiếm X, top Y% khu vực"). Unlock <strong>toàn bộ dịch vụ</strong> nếu &ge;60 đơn. Nếu inactive &ge;7d &rarr; <span style="color:var(--danger);font-weight:700">Gọi điện</span> + Quest cứu.</td>
           <td>In-app + Zalo + Call</td>
           <td>DM Ops + BI</td>
         </tr>
@@ -628,25 +628,25 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
       <circle cx="80" cy="160" r="8" fill="#34D399" opacity="0.9"/>
       <circle cx="80" cy="160" r="12" fill="none" stroke="#34D399" stroke-width="1" opacity="0.3"/>
       <text x="100" y="156" font-size="10" font-weight="700" fill="#34D399" font-family="Space Mono,monospace">D7</text>
-      <text x="100" y="170" font-size="9" fill="rgba(255,255,255,0.65)">≥7 đơn → Badge "Tuần Đầu" + Cash · Guarantee Bậc 1 · EPH Dashboard</text>
+      <text x="100" y="170" font-size="9" fill="rgba(255,255,255,0.65)">≥7 đơn → Badge "Tuần Đầu" + Cash mốc 7 đơn · EPH Dashboard</text>
 
       <!-- D14 -->
       <circle cx="80" cy="215" r="8" fill="#34D399" opacity="0.9"/>
       <circle cx="80" cy="215" r="12" fill="none" stroke="#34D399" stroke-width="1" opacity="0.3"/>
       <text x="100" y="211" font-size="10" font-weight="700" fill="#34D399" font-family="Space Mono,monospace">D14</text>
-      <text x="100" y="225" font-size="9" fill="rgba(255,255,255,0.65)">&ge;10d active &rarr; Badge Lock-in &middot; Unlock 2H-4H-TMDT &middot; Guarantee &rarr; Bậc 2</text>
+      <text x="100" y="225" font-size="9" fill="rgba(255,255,255,0.65)">&ge;10d active &rarr; Badge Lock-in &middot; Unlock 2H-4H-TMDT &middot; Cash mốc 25 đơn</text>
 
       <!-- D21 -->
       <circle cx="80" cy="290" r="8" fill="#60A5FA" opacity="0.9"/>
       <circle cx="80" cy="290" r="12" fill="none" stroke="#60A5FA" stroke-width="1" opacity="0.3"/>
       <text x="100" y="286" font-size="10" font-weight="700" fill="#60A5FA" font-family="Space Mono,monospace">D21</text>
-      <text x="100" y="300" font-size="9" fill="rgba(255,255,255,0.65)">Weekly Quest bắt đầu &middot; Guarantee Bậc 3 &middot; Unlock Nhóm đơn giá trị cao nếu &ge;40 đơn</text>
+      <text x="100" y="300" font-size="9" fill="rgba(255,255,255,0.65)">Weekly Quest bắt đầu &middot; Unlock Nhóm đơn giá trị cao nếu &ge;40 đơn</text>
 
       <!-- D30 -->
       <circle cx="80" cy="345" r="8" fill="#60A5FA" opacity="0.9"/>
       <circle cx="80" cy="345" r="12" fill="none" stroke="#60A5FA" stroke-width="1" opacity="0.3"/>
       <text x="100" y="341" font-size="10" font-weight="700" fill="#60A5FA" font-family="Space Mono,monospace">D30</text>
-      <text x="100" y="355" font-size="9" fill="rgba(255,255,255,0.65)">Guarantee KẾT THÚC &rarr; Weekly policy &middot; Income Report tháng 1 &middot; Unlock toàn bộ DV nếu &ge;60 đơn</text>
+      <text x="100" y="355" font-size="9" fill="rgba(255,255,255,0.65)">Weekly policy bình thường &middot; Income Report tháng 1 &middot; Unlock toàn bộ DV nếu &ge;60 đơn</text>
 
       <!-- D45 -->
       <circle cx="80" cy="405" r="8" fill="#60A5FA" opacity="0.9"/>
@@ -722,10 +722,10 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
         <!-- ROW 2: Thưởng / Incentive -->
         <tr>
           <td style="font-size:10px;font-weight:700;color:#34D399;padding:6px 8px;vertical-align:top;border-left:3px solid #34D399">&#x1F3C6; Thưởng<br><span style="font-weight:400;color:var(--text-muted);font-size:8.5px">Incentive</span></td>
-          <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Guarantee Bậc 1</span><br><span style="font-size:8px;color:var(--text-muted)">MỨC CAO</span></td>
+          <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Thưởng đơn đầu</span><br><span style="font-size:8px;color:var(--text-muted)">3 đơn đầu → Cash</span></td>
           <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Micro Win 5 đơn</span><br><span style="font-size:8px;color:var(--text-muted)">Progress noti</span></td>
           <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Badge + Cash</span><br><span style="font-size:8px;color:var(--text-muted)">"Tuần Đầu Tiên"</span></td>
-          <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Badge Fortnight</span><br><span style="font-size:8px;color:var(--text-muted)">Guarantee Bậc 2</span></td>
+          <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Badge Fortnight</span><br><span style="font-size:8px;color:var(--text-muted)">+ Cash mốc 25 đơn</span></td>
           <td style="background:rgba(52,211,153,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#34D399;font-weight:600">Weekly Quest</span><br><span style="font-size:8px;color:var(--text-muted)">20/30/40 &middot; 3 bậc</span></td>
           <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
           <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
@@ -749,9 +749,9 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
           <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
           <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
           <td style="padding:6px;text-align:center;vertical-align:top"><span style="font-size:8px;color:var(--text-muted)">&mdash;</span></td>
-          <td style="background:rgba(139,92,246,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#8B5CF6;font-weight:600">Guarantee Bậc 2</span><br><span style="font-size:8px;color:var(--text-muted)">-20% mức thưởng</span></td>
-          <td style="background:rgba(139,92,246,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#8B5CF6;font-weight:600">Guarantee Bậc 3</span><br><span style="font-size:8px;color:var(--text-muted)">-40% mức thưởng</span></td>
-          <td style="background:rgba(139,92,246,0.12);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#8B5CF6;font-weight:600">Guarantee HẾT</span><br><span style="font-size:8px;color:var(--text-muted)">&rarr; Weekly policy</span></td>
+          <td style="background:rgba(139,92,246,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#8B5CF6;font-weight:600">Pre-rank track</span><br><span style="font-size:8px;color:var(--text-muted)">DQS bắt đầu tính</span></td>
+          <td style="background:rgba(139,92,246,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#8B5CF6;font-weight:600">Progress R3</span><br><span style="font-size:8px;color:var(--text-muted)">"% đến R3 Bạc"</span></td>
+          <td style="background:rgba(139,92,246,0.12);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#8B5CF6;font-weight:600">Ranking chốt</span><br><span style="font-size:8px;color:var(--text-muted)">Đầu tháng → xét R3</span></td>
           <td style="background:rgba(139,92,246,0.1);border-radius:8px;padding:6px;text-align:center;vertical-align:top"><span style="font-size:9.5px;color:#8B5CF6;font-weight:600">Tier path mở</span><br><span style="font-size:8px;color:var(--text-muted)">Quest &rarr; R3 Bạc</span></td>
           <td style="background:rgba(139,92,246,0.18);border-radius:8px;padding:6px;text-align:center;vertical-align:top;border:1px solid rgba(139,92,246,0.3)"><span style="font-size:9.5px;color:#8B5CF6;font-weight:700">TỐT NGHIỆP</span><br><span style="font-size:8px;color:var(--text-muted)">R3 Bạc + Grace 14d</span></td>
         </tr>
@@ -816,31 +816,33 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
     <div class="insight blue" style="font-size:12px"><strong>Mục tiêu:</strong> &ge; 15 đơn + thu nhập tích luỹ có ý nghĩa.</div>
 
     <div class="card" style="background:var(--blue-dim);border-color:rgba(59,130,246,0.15)">
-      <div class="card-title" style="font-size:12px">Guaranteed Earnings &mdash; 30 ngày, 3 bậc</div>
+      <div class="card-title" style="font-size:12px">Thưởng Cột Mốc Đơn Hàng &mdash; đơn giản, theo số đơn</div>
+      <div style="font-size:10.5px;color:var(--text-muted);margin:4px 0 10px">Hoàn thành X đơn → nhận Y cash. Không cam kết mức thu nhập (không Guarantee). Dễ tính cost, dễ truyền thông cho TX.</div>
       <div class="grid-3" style="margin-top:10px">
         <div class="glass-inner" style="text-align:center;padding:12px">
-          <div class="mono" style="font-size:10px;color:var(--success);font-weight:700">BẬC 1</div>
-          <div style="font-size:18px;font-weight:800;color:var(--text-primary)">D1&mdash;D10</div>
-          <div style="font-size:10.5px;color:var(--text-muted)">Guarantee MỨC CAO</div>
+          <div class="mono" style="font-size:10px;color:var(--success);font-weight:700">MỐC 1</div>
+          <div style="font-size:18px;font-weight:800;color:var(--text-primary)">3 đơn đầu</div>
+          <div style="font-size:10.5px;color:var(--text-muted)">Cash thưởng đơn đầu</div>
         </div>
         <div class="glass-inner" style="text-align:center;padding:12px">
-          <div class="mono" style="font-size:10px;color:var(--warn);font-weight:700">BẬC 2</div>
-          <div style="font-size:18px;font-weight:800;color:var(--text-primary)">D11&mdash;D20</div>
-          <div style="font-size:10.5px;color:var(--text-muted)">MỨC VỪA (-20%)</div>
+          <div class="mono" style="font-size:10px;color:var(--warn);font-weight:700">MỐC 2</div>
+          <div style="font-size:18px;font-weight:800;color:var(--text-primary)">7 đơn</div>
+          <div style="font-size:10.5px;color:var(--text-muted)">Badge "Tuần Đầu" + Cash</div>
         </div>
         <div class="glass-inner" style="text-align:center;padding:12px">
-          <div class="mono" style="font-size:10px;color:var(--orange);font-weight:700">BẬC 3</div>
-          <div style="font-size:18px;font-weight:800;color:var(--text-primary)">D21&mdash;D30</div>
-          <div style="font-size:10.5px;color:var(--text-muted)">MỨC THẤP (-40%)</div>
+          <div class="mono" style="font-size:10px;color:var(--orange);font-weight:700">MỐC 3</div>
+          <div style="font-size:18px;font-weight:800;color:var(--text-primary)">25 đơn</div>
+          <div style="font-size:10.5px;color:var(--text-muted)">Cash + Unlock 2H-4H-TMDT</div>
         </div>
       </div>
     </div>
 
     <div class="card-title" style="font-size:12px;margin-top:12px">Progressive Milestone Rewards</div>
     <table><thead><tr><th>Cột mốc</th><th>Thưởng</th><th>Loại</th><th>Ý nghĩa</th></tr></thead><tbody>
-      <tr><td class="mono">5 đơn</td><td>XX,000đ</td><td><span class="badge badge-green">Cash</span></td><td>Self-efficacy</td></tr>
-      <tr><td class="mono">15 đơn</td><td>XX,000đ + Badge</td><td><span class="badge badge-green">Cash+Game</span></td><td>Progress</td></tr>
-      <tr><td class="mono">25 đơn</td><td>Unlock 2H-4H-TMDT</td><td><span class="badge badge-blue">Feature</span></td><td>Trust</td></tr>
+      <tr><td class="mono">3 đơn</td><td>XX,000đ</td><td><span class="badge badge-green">Cash</span></td><td>Đơn đầu &mdash; Self-efficacy</td></tr>
+      <tr><td class="mono">7 đơn</td><td>XX,000đ + Badge</td><td><span class="badge badge-green">Cash+Game</span></td><td>Tuần đầu &mdash; Progress</td></tr>
+      <tr><td class="mono">15 đơn</td><td>XX,000đ + Badge Fortnight</td><td><span class="badge badge-green">Cash+Game</span></td><td>2 tuần &mdash; Streak</td></tr>
+      <tr><td class="mono">25 đơn</td><td>XX,000đ + Unlock 2H-4H-TMDT</td><td><span class="badge badge-blue">Cash+Feature</span></td><td>Trust + Mở dịch vụ</td></tr>
     </tbody></table>
   </div>
 
@@ -1064,7 +1066,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
         </div>
         <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
           <span class="mono" style="min-width:44px;font-size:13px;font-weight:700;color:var(--orange)">D14</span>
-          <span style="flex:1;font-size:12px;color:var(--text-secondary)">Guarantee Bậc 2 + Unlock 2H-4H-TMDT</span>
+          <span style="flex:1;font-size:12px;color:var(--text-secondary)">Cash mốc 25 đơn + Unlock 2H-4H-TMDT</span>
           <span class="badge badge-red" style="font-size:9px">Critical</span>
         </div>
         <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
@@ -1074,7 +1076,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
         </div>
         <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle);background:rgba(255,127,50,0.04);margin:0 -20px;padding-left:20px;padding-right:20px">
           <span class="mono" style="min-width:44px;font-size:13px;font-weight:700;color:var(--orange)">D30</span>
-          <span style="flex:1;font-size:12px;color:var(--orange);font-weight:600">&#x26A1; Eligible R3 Bạc &middot; Guarantee &rarr; Quest</span>
+          <span style="flex:1;font-size:12px;color:var(--orange);font-weight:600">&#x26A1; Eligible R3 Bạc &middot; Weekly policy</span>
           <span class="badge badge-red" style="font-size:9px">Critical</span>
         </div>
         <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle)">
@@ -1474,6 +1476,94 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
       <strong style="color:var(--info)">T&#7893;ng k&#7871;t</strong> &mdash; Weekly = &#273;o s&#7913;c kh&#7887;e s&#7899;m &#273;&#7875; can thi&#7879;p. Monthly = &#273;o KPI &#273;&aacute;nh gi&aacute; hi&#7879;u qu&#7843;. 4 m&#7889;c D3/D7/D14/D21 l&agrave; leading indicators cho D30/D60 Retention v&agrave; Graduation Rate.
     </div>
   </div>
+
+  <!-- 5.7 Execution Roadmap by Milestone -->
+  <div class="card card-top-orange" style="margin-top:12px">
+    <div class="card-title">&#x1F6E0;&#xFE0F; 5.7 Execution Roadmap by Milestone &mdash; Next Actions theo PIC</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">M&#7895;i milestone c&#7847;n ph&#7889;i h&#7907;p 3 b&ecirc;n: <strong style="color:var(--success)">Ops (Nhi)</strong> &mdash; v&#7853;n h&agrave;nh &amp; rescue &middot; <strong style="color:var(--info)">Product</strong> &mdash; feature/tech &middot; <strong style="color:var(--orange)">PA</strong> (Payment Analyst) &mdash; thi&#7871;t k&#7871; incentive/policy &amp; t&iacute;nh cost.</div>
+    <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px"><span style="color:var(--danger);font-weight:700">P0</span> = b&#7855;t bu&#7897;c c&oacute; tr&#432;&#7899;c rollout &middot; <span style="color:var(--warn);font-weight:700">P1</span> = quan tr&#7885;ng &middot; <span style="color:var(--text-muted);font-weight:700">P2</span> = nice-to-have. Incentive theo nguy&ecirc;n t&#7855;c <strong>Th&#432;&#7903;ng C&#7897;t M&#7889;c &#272;&#417;n H&agrave;ng &mdash; kh&ocirc;ng &#273;&#7843;m b&#7843;o thu nh&#7853;p.</strong></div>
+
+    <table style="font-size:11px">
+      <thead><tr>
+        <th style="width:9%">Milestone</th>
+        <th style="width:27%"><span style="color:var(--success)">&#x1F3C3; Next Action (Ops &mdash; Nhi)</span></th>
+        <th style="width:27%"><span style="color:var(--info)">&#x1F4F1; Product (Dev)</span></th>
+        <th style="width:27%"><span style="color:var(--orange)">&#x1F4B0; PA (Payment Analyst)</span></th>
+        <th style="width:5%">Pri</th>
+        <th style="width:5%">Status</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700;color:var(--success)">D0<br><span style="font-size:9px;color:var(--text-muted);font-weight:400">DFD</span></td>
+          <td>Nh&#7853;n handover t&#7915; Growth; verify TX c&oacute; &#273;&#417;n &#273;&#7847;u; ch&agrave;o m&#7915;ng qua Zalo</td>
+          <td>Welcome flow in-app; g&aacute;n Buddy Mentor; Smart Dispatch &#273;&#417;n g&#7847;n/d&#7877; 72h</td>
+          <td>Thi&#7871;t k&#7871; <strong>th&#432;&#7903;ng 3 &#273;&#417;n &#273;&#7847;u</strong> + t&iacute;nh cost/TX; set ng&acirc;n s&aacute;ch onboarding</td>
+          <td><span style="color:var(--danger);font-weight:700">P0</span></td>
+          <td>&#x1F534;</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--success)">D3</td>
+          <td>Flag TX 0 &#273;&#417;n sau DFD &rarr; push/SMS trong 24h</td>
+          <td>Trigger noti "Micro Win 5 &#273;&#417;n"; progress bar in-app</td>
+          <td>Thi&#7871;t k&#7871; <strong>th&#432;&#7903;ng m&#7889;c 5 &#273;&#417;n</strong>; A/B test m&#7913;c cash</td>
+          <td><span style="color:var(--danger);font-weight:700">P0</span></td>
+          <td>&#x1F534;</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--success)">D7<br><span style="font-size:9px;color:var(--text-muted);font-weight:400">First Win</span></td>
+          <td>Auto-flag inactive &ge;3N &rarr; Nhi g&#7885;i rescue; track D7 ret weekly</td>
+          <td>Trigger push D5; dashboard at-risk D7; Badge "Tu&#7847;n &#272;&#7847;u Ti&ecirc;n"; EPH Dashboard</td>
+          <td>Thi&#7871;t k&#7871; <strong>Cash m&#7889;c 7 &#273;&#417;n</strong>; t&iacute;nh cost theo s&#7889; TX d&#7921; ki&#7871;n</td>
+          <td><span style="color:var(--danger);font-weight:700">P0</span></td>
+          <td>&#x1F534;</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--info)">D14<br><span style="font-size:9px;color:var(--text-muted);font-weight:400">Fortnight</span></td>
+          <td>Flag inactive &ge;5N &rarr; Buddy call; review TX ch&#432;a &ge;15 &#273;&#417;n</td>
+          <td>Badge Fortnight; logic unlock 2H-4H-TMDT (&ge;25 &#273;&#417;n); Quest c&aacute; nh&acirc;n h&oacute;a</td>
+          <td>Thi&#7871;t k&#7871; <strong>Cash m&#7889;c 25 &#273;&#417;n</strong>; policy unlock d&#7883;ch v&#7909; m&#7899;i (gi&aacute; c&#432;&#7899;c)</td>
+          <td><span style="color:var(--warn);font-weight:700">P1</span></td>
+          <td>&#x1F534;</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--info)">D21</td>
+          <td>Flag inactive &ge;7N &rarr; rescue; review nh&#7883;p tu&#7847;n c&#7911;a TX</td>
+          <td>Weekly Quest System (20/30/40); Progress Bar "% &#273;&#7871;n R3 B&#7841;c"; Push Income Projection</td>
+          <td>Thi&#7871;t k&#7871; <strong>Quest bonus 3 b&#7853;c</strong>; t&iacute;nh cost theo t&#7927; l&#7879; ho&agrave;n th&agrave;nh</td>
+          <td><span style="color:var(--warn);font-weight:700">P1</span></td>
+          <td>&#x1F534;</td>
+        </tr>
+        <tr style="background:rgba(255,127,50,0.05)">
+          <td style="font-weight:700;color:var(--orange)">D30<br><span style="font-size:9px;color:var(--text-muted);font-weight:400">Review</span></td>
+          <td>Flag inactive &ge;7N &rarr; g&#7885;i; review TX c&oacute; DQS &lt;75 (risk R3)</td>
+          <td>Income Dashboard t&#7893;ng k&#7871;t th&aacute;ng 1; unlock to&agrave;n b&#7897; DV (&ge;60 &#273;&#417;n); chuy&#7875;n Weekly policy</td>
+          <td>Chuy&#7875;n t&#7915; milestone bonus sang <strong>Weekly policy b&igrave;nh th&#432;&#7901;ng</strong>; t&iacute;nh CPO th&aacute;ng 1</td>
+          <td><span style="color:var(--danger);font-weight:700">P0</span></td>
+          <td>&#x1F534;</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--purple)">D60<br><span style="font-size:9px;color:var(--text-muted);font-weight:400">Graduate</span></td>
+          <td>Check Graduation Rate &rarr; R3; handover TX &#273;&#7841;t D60 cho Ti&ecirc;n; Grace Period 14d cho TX ch&#432;a &#273;&#7841;t</td>
+          <td>Ranking system ch&#7889;t &#273;&#7847;u th&aacute;ng; th&ocirc;ng b&aacute;o "BH &#273;&atilde; k&iacute;ch ho&#7841;t"; unlock BH Bronze</td>
+          <td>Thi&#7871;t k&#7871; <strong>policy R3 B&#7841;c</strong> (quy&#7873;n l&#7907;i/incentive); cost BH Bronze t&#7915; R3</td>
+          <td><span style="color:var(--warn);font-weight:700">P1</span></td>
+          <td>&#x1F534;</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Cross-cutting actions -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin:16px 0 8px">H&#7841;ng m&#7909;c xuy&ecirc;n su&#7889;t (kh&ocirc;ng theo milestone c&#7909; th&#7875;)</div>
+    <table style="font-size:11px"><thead><tr><th>H&#7841;ng m&#7909;c</th><th><span style="color:var(--success)">Ops</span></th><th><span style="color:var(--info)">Product</span></th><th><span style="color:var(--orange)">PA</span></th><th>Pri</th></tr></thead><tbody>
+      <tr><td><strong>Cohort Dashboard</strong></td><td>&#272;&#7883;nh ngh&#297;a metric, review weekly/monthly</td><td>Build dashboard cohort theo DFD; auto-cohort assignment</td><td>Hi&#7875;n th&#7883; cost/CPO theo cohort</td><td><span style="color:var(--danger);font-weight:700">P0</span></td></tr>
+      <tr><td><strong>Win-back Engine</strong></td><td>Contact Dormant &lt;D60; track win-back rate</td><td>Auto-flag Dormant theo b&#7853;c (2N&rarr;30N); win-back flow</td><td>Thi&#7871;t k&#7871; welcome-back bonus theo segment value</td><td><span style="color:var(--warn);font-weight:700">P1</span></td></tr>
+      <tr><td><strong>At-Risk Daily Monitor</strong></td><td>Nh&#7853;n list h&agrave;ng ng&agrave;y &rarr; rescue</td><td>SQL job ch&#7841;y daily (xem 5.4); push list cho Nhi</td><td>&mdash;</td><td><span style="color:var(--danger);font-weight:700">P0</span></td></tr>
+    </tbody></table>
+
+    <div style="background:rgba(255,127,50,0.08);border:1px solid rgba(255,127,50,0.15);border-radius:10px;padding:12px 16px;margin-top:12px;font-size:11px;color:var(--text-secondary)">
+      <strong style="color:var(--orange)">&#x1F4CC; L&#432;u &yacute; cho PA</strong> &mdash; T&#7845;t c&#7843; incentive theo m&ocirc; h&igrave;nh <strong>ho&agrave;n th&agrave;nh X &#273;&#417;n &rarr; nh&#7853;n Y cash</strong> (pay-per-performance). Kh&ocirc;ng &aacute;p d&#7909;ng ch&#432;&#417;ng tr&igrave;nh &#273;&#7843;m b&#7843;o thu nh&#7853;p (Guarantee). C&aacute;c &ocirc; XX,000&#273; trong section 03 c&#7847;n PA &#273;i&#7873;n m&#7913;c c&#7909; th&#7875; sau khi t&iacute;nh cost.
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
@@ -1499,7 +1589,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
   <div class="card card-top-orange">
     <div class="card-title">6.2 Value Realization</div>
     <table><thead><tr><th>Hiện trạng</th><th>Chuyển đổi</th><th>Impact</th><th>Loại</th></tr></thead><tbody>
-      <tr><td>TX mới không hướng dẫn &rarr; M+1→M+3 rơi 35pp</td><td>6-Phase + Guarantee 30D + Lock In 60D</td><td>D30 ret &ge;85% · D90 &ge;60%</td><td><span class="badge badge-orange">Aspirational</span></td></tr>
+      <tr><td>TX mới không hướng dẫn &rarr; M+1→M+3 rơi 35pp</td><td>6-Phase + Milestone Bonus + Lock In 60D</td><td>D30 ret &ge;85% · D90 &ge;60%</td><td><span class="badge badge-orange">Aspirational</span></td></tr>
       <tr><td>Chỉ 1 dịch vụ &rarr; EPH thấp</td><td>Multi-Service Unlock</td><td>+19pp retention</td><td><span class="badge badge-green">Benchmarked</span></td></tr>
       <tr><td>Không BH &rarr; thua XanhSM</td><td>Tiered Insurance</td><td>D180 +42%</td><td><span class="badge badge-green">Benchmarked</span></td></tr>
       <tr><td>Không phân biệt TX mới/cũ</td><td>Segment-Based Ops</td><td>+40% Active</td><td><span class="badge badge-orange">Aspirational</span></td></tr>
@@ -1512,7 +1602,7 @@ pre.sql .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
       <div style="display:flex;gap:12px;align-items:flex-start">
         <div style="min-width:80px;text-align:center"><div class="mono" style="font-size:11px;font-weight:700;color:var(--info)">PHASE A</div><div style="font-size:10px;color:var(--text-muted)">T6-T7/2026</div><div class="pbar-wrap"><div class="pbar pbar-blue" style="width:25%"></div></div></div>
-        <div style="flex:1;background:var(--blue-dim);padding:12px 16px;border-radius:10px;font-size:12px;color:var(--text-secondary);border:1px solid rgba(59,130,246,0.1)"><strong style="color:var(--text-primary)">Foundation:</strong> Cohort Dashboard, Inactivity Alert, Guaranteed Earnings 30d, Buddy System pilot<div style="font-size:10px;color:var(--text-muted);margin-top:4px">DM + BI + Product + Finance</div></div>
+        <div style="flex:1;background:var(--blue-dim);padding:12px 16px;border-radius:10px;font-size:12px;color:var(--text-secondary);border:1px solid rgba(59,130,246,0.1)"><strong style="color:var(--text-primary)">Foundation:</strong> Cohort Dashboard, Inactivity Alert, Milestone Cash Bonus, Buddy System pilot<div style="font-size:10px;color:var(--text-muted);margin-top:4px">DM + BI + Product + Finance</div></div>
       </div>
       <div style="display:flex;gap:12px;align-items:flex-start">
         <div style="min-width:80px;text-align:center"><div class="mono" style="font-size:11px;font-weight:700;color:var(--success)">PHASE B</div><div style="font-size:10px;color:var(--text-muted)">T7-T8/2026</div><div class="pbar-wrap"><div class="pbar pbar-green" style="width:50%"></div></div></div>
