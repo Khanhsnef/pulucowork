@@ -1,0 +1,167 @@
+#!/usr/bin/env python3
+# _scripts/vproc — Trực quan hóa cây tiến trình hoạt động của workspace và hệ thống
+
+import subprocess
+import sys
+import os
+
+# ANSI Colors for premium visual aesthetic
+COLOR_RESET = "\033[0m"
+COLOR_BOLD = "\033[1m"
+COLOR_DIM = "\033[2m"
+COLOR_CYAN = "\033[96m"    # Shells (zsh, bash)
+COLOR_GREEN = "\033[92m"   # Background Servers / Node
+COLOR_YELLOW = "\033[93m"  # AI / Claude Processes
+COLOR_MAGENTA = "\033[95m" # Main IDE Process
+COLOR_RED = "\033[91m"     # High usage / Warn
+COLOR_BLUE = "\033[94m"    # Global related processes
+
+def run_ps():
+    try:
+        result = subprocess.run(
+            ['ps', '-ax', '-o', 'pid,ppid,pcpu,pmem,command'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        if result.returncode != 0:
+            print(f"Error running ps: {result.stderr}")
+            sys.exit(1)
+        return result.stdout
+    except Exception as e:
+        print(f"Failed to execute ps command: {e}")
+        sys.exit(1)
+
+def parse_ps_output(output):
+    lines = output.strip().split('\n')
+    process_map = {}
+    
+    for line in lines[1:]:
+        parts = line.strip().split(None, 4)
+        if len(parts) < 5:
+            continue
+        pid_str, ppid_str, cpu_str, mem_str, cmd = parts
+        try:
+            pid = int(pid_str)
+            ppid = int(ppid_str)
+            cpu = float(cpu_str)
+            mem = float(mem_str)
+            process_map[pid] = {
+                'pid': pid,
+                'ppid': ppid,
+                'cpu': cpu,
+                'mem': mem,
+                'cmd': cmd,
+                'children': []
+            }
+        except ValueError:
+            continue
+            
+    for pid, info in process_map.items():
+        ppid = info['ppid']
+        if ppid in process_map:
+            process_map[ppid]['children'].append(pid)
+            
+    return process_map
+
+def get_color_for_cmd(cmd):
+    cmd_lower = cmd.lower()
+    if "antigravity ide" in cmd_lower and "helper" not in cmd_lower:
+        return COLOR_MAGENTA + COLOR_BOLD
+    elif "claude" in cmd_lower:
+        return COLOR_YELLOW + COLOR_BOLD
+    elif "zsh" in cmd_lower or "bash" in cmd_lower:
+        return COLOR_CYAN
+    elif "node" in cmd_lower or "openclaw" in cmd_lower or "9router" in cmd_lower or "agentmemory" in cmd_lower:
+        return COLOR_GREEN
+    elif "git" in cmd_lower or "sync" in cmd_lower:
+        return COLOR_BLUE
+    return ""
+
+def format_cmd_name(cmd):
+    basename = os.path.basename(cmd.split()[0])
+    args = cmd.split()[1:]
+    arg_str = ""
+    if args:
+        filtered_args = []
+        for arg in args:
+            if arg.startswith('-') or len(filtered_args) < 2:
+                if len(arg) > 25:
+                    arg = arg[:22] + "..."
+                filtered_args.append(arg)
+        arg_str = " " + " ".join(filtered_args)
+    
+    return f"{basename}{COLOR_DIM}{arg_str}{COLOR_RESET}"
+
+def print_tree(pid, process_map, prefix="", is_last=True):
+    if pid not in process_map:
+        return
+        
+    info = process_map[pid]
+    cmd_color = get_color_for_cmd(info['cmd'])
+    formatted_cmd = format_cmd_name(info['cmd'])
+    
+    stats = ""
+    if info['cpu'] > 0.1 or info['mem'] > 0.1:
+        cpu_color = COLOR_RED if info['cpu'] > 10 else COLOR_YELLOW
+        stats = f" ({cpu_color}CPU: {info['cpu']}%{COLOR_RESET}, {COLOR_DIM}MEM: {info['mem']}%{COLOR_RESET})"
+        
+    connector = "└── " if is_last else "├── "
+    print(f"{prefix}{connector}{COLOR_BOLD}[{pid}]{COLOR_RESET} {cmd_color}{formatted_cmd}{stats}")
+    
+    children = sorted(info['children'])
+    for i, child_pid in enumerate(children):
+        new_prefix = prefix + ("    " if is_last else "│   ")
+        print_tree(child_pid, process_map, new_prefix, i == len(children) - 1)
+
+def find_ide_roots(process_map):
+    roots = []
+    for pid, info in process_map.items():
+        if "Antigravity IDE.app/Contents/MacOS/Antigravity IDE" in info['cmd'] and "Helper" not in info['cmd']:
+            roots.append(pid)
+    return roots
+
+def find_independent_related(process_map):
+    related = []
+    for pid, info in process_map.items():
+        if info['ppid'] == 1:
+            cmd = info['cmd'].lower()
+            if any(x in cmd for x in ["openclaw", "9router", "agentmemory"]):
+                related.append(pid)
+    return related
+
+def main():
+    print(f"\n{COLOR_BOLD}🔍 ĐANG PHÂN TÍCH VÀ TRỰC QUAN HÓA CÁC TIẾN TRÌNH TRÊN TERMINAL...{COLOR_RESET}\n")
+    
+    stdout = run_ps()
+    process_map = parse_ps_output(stdout)
+    
+    ide_roots = find_ide_roots(process_map)
+    independent_related = find_independent_related(process_map)
+    
+    if ide_roots:
+        print(f"{COLOR_MAGENTA}{COLOR_BOLD}⚡ CÂY TIẾN TRÌNH HOẠT ĐỘNG CỦA ANTIGRAVITY IDE & TERMINAL TABS:{COLOR_RESET}")
+        for root in ide_roots:
+            print_tree(root, process_map)
+            print()
+    else:
+        my_pid = os.getpid()
+        curr = my_pid
+        lineage = []
+        while curr in process_map and curr != 0:
+            lineage.append(curr)
+            curr = process_map[curr]['ppid']
+        
+        ancestor = lineage[-2] if len(lineage) >= 2 else my_pid
+        print(f"{COLOR_CYAN}{COLOR_BOLD}⚡ CÂY TIẾN TRÌNH HOẠT ĐỘNG CỦA SHELL HIỆN TẠI:{COLOR_RESET}")
+        print_tree(ancestor, process_map)
+        print()
+
+    if independent_related:
+        print(f"{COLOR_BLUE}{COLOR_BOLD}⚙️ CÁC TIẾN TRÌNH VẬN HÀNH NỀN LIÊN QUAN (GLOBAL SERVICES):{COLOR_RESET}")
+        for root in independent_related:
+            print_tree(root, process_map)
+            print()
+
+if __name__ == "__main__":
+    main()
