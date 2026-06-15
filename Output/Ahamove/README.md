@@ -188,6 +188,7 @@ Output/Ahamove/
 | `2026-05-biweekly-hod-report.md` | Bi-weekly HoD report template |
 | `2026-05-fr-decline-all-services-analysis.html` | FR decline — full services breakdown |
 | `2026-05-fr-decline-root-cause-analysis.html` | FR decline root cause analysis |
+| `2026-06-pulu-smartflow-risk-assessment.md` | **Đánh giá rủi ro & đề xuất bảo mật/hiệu năng** hệ thống PuluSmartFlow |
 | `data-spec-driver-analysis.html` | Data spec cho driver analysis queries |
 
 ---
