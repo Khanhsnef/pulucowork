@@ -86,8 +86,11 @@ smart_claude() {
 }
 ```
 
-#### Bước 3: Áp dụng Cơ chế Bảo vệ Quyền hạn Cho Lệnh Phá Hủy (Safe Permissions)
-Tách biệt các tác vụ chỉ đọc (Read-only) và tác vụ ghi/chạy mã (Read-Write). Chỉ cho phép tự động cấp quyền đối với các thư mục an toàn được chỉ định (như `/tmp` hoặc `Output/`). Đối với các thư mục hệ thống quan trọng, buộc phải hiển thị hộp thoại cảnh báo.
+#### Bước 3: Thu hồi Cơ chế Tự động Cấp Quyền & Khắc Phục Popup Hỏi Quyền (Phương án 2)
+*   **Chi tiết:** Ngăn chặn AI tự ý chạy script bash độc hại hoặc xóa nhầm dữ liệu cục bộ, đồng thời sửa lỗi Terminal không hiển thị popup hỏi quyền (do TTY non-interactive mode khi có cờ `-p`).
+*   **Thực thi:**
+    *   **Loại bỏ cờ `-p` / `--print`:** Loại bỏ cờ `-p` trong hàm `smart_chat` ở chế độ **SAFE MODE**. Việc này cho phép Claude CLI chạy trong môi trường TTY tương tác đầy đủ, hiển thị popup yêu cầu xác nhận quyền (y/N) thay vì âm thầm bỏ qua/từ chối do không tương tác.
+    *   **Tách biệt chế độ Danger:** Thêm bí danh `chat!` (Danger Mode) sử dụng cờ `--dangerously-skip-permissions` để bỏ qua các câu hỏi quyền chỉ khi người dùng chủ động yêu cầu.
 
 #### Bước 4: Thiết lập Circuit Breaker cho Command Not Found Handler
 Thêm biến kiểm soát độ sâu đệ quy vào handler để tránh lặp vô hạn.
@@ -118,5 +121,5 @@ command_not_found_handler() {
 | :--- | :--- | :--- | :--- |
 | **API Key phơi nhiễm plain-text** trong file [.zshrc](file:///Users/ts-1148/.zshrc) công khai. | ↓ MÃ HÓA/TÁCH BIỆT FILE MÔI TRƯỜNG ↓ | API Key được đưa vào `~/.config/pulu/env` bảo mật và thêm vào `.gitignore`. | ***Loại bỏ 100% rủi ro rò rỉ thông tin đăng nhập khi chia sẻ mã nguồn.*** |
 | **Độ trễ đầu vào 1.5s - 3s** cho mỗi lần gõ phím do HTTP Classifier đồng bộ. | ↓ HAI GIAI ĐOẠN (REGEXP FIRST) ↓ | Ưu tiên định tuyến từ khóa trước, chỉ gọi AI Classifier khi prompt phức tạp. | ***Giảm 95% độ trễ nhập liệu (Latency < 150ms), cải thiện SLA vận hành terminal.*** |
-| **Tự động bỏ qua xác nhận quyền** (`--dangerously-skip-permissions`) trên toàn bộ thư mục hệ thống. | ↓ PHÂN VÙNG AN TOÀN (SAFE ZONE) ↓ | Giới hạn quyền tự động ghi/chạy lệnh chỉ trong thư mục dự án và `/tmp`. | ***Ngăn chặn 100% rủi ro AI xóa nhầm tệp tin hệ thống hoặc bị Prompt Injection.*** |
+| **Không hiển thị popup hỏi quyền** trong Terminal do cờ `-p` chạy ở chế độ non-interactive. | ↓ LOẠI BỎ `-p` TRONG SAFE MODE (PA 2) ↓ | Chạy Claude CLI ở chế độ tương tác TTY để hiển thị popup xin quyền (y/N) trong Safe Mode. | ***Sửa lỗi không nhận diện được quyền tương tác, tăng cường tính chủ động kiểm soát của User.*** |
 | **Nguy cơ lặp vô hạn** trong `command_not_found_handler` gây treo máy và tốn chi phí token. | ↓ THIẾT LẬP CIRCUIT BREAKER ↓ | Thêm biến đếm độ sâu đệ quy để ngắt vòng lặp ngay lập tức khi phát hiện lỗi liên hoàn. | ***Ngăn ngừa rủi ro cạn kiệt tài khoản 9Router và bảo vệ tính ổn định của macOS.*** |
