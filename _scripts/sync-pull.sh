@@ -11,7 +11,7 @@ if [ -z "$DRIVE" ]; then
   exit 1
 fi
 
-SOURCE="$DRIVE/My Drive/Cowork/.claude-config"
+SOURCE="$DRIVE/My Drive/Pulu-workspace/.claude-config"
 DEST="$HOME/.claude"
 
 if [ ! -d "$SOURCE" ]; then
@@ -50,4 +50,4 @@ echo "   - Memory & context từ văn phòng"
 echo "   - Settings, skills, plans"
 echo ""
 echo "👉 Mở Claude Code và trỏ vào folder:"
-echo "   $DRIVE/My Drive/Cowork"
+echo "   $DRIVE/My Drive/Pulu-workspace"

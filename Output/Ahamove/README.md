@@ -211,7 +211,7 @@ Output/Ahamove/
 | `2026-05-claude-guide-for-team.pdf` | Bản PDF để share |
 | `2026-05-claude-complete-training-guide.html` | Complete training guide — HTML format |
 | `2026-05-claude-training-presenter-guide.html` | Presenter guide cho buổi training Claude |
-| `2026-05-cowork-architecture-guide.html` | Hướng dẫn kiến trúc workspace Cowork |
+| `2026-05-pulu-workspace-architecture-guide.html` | Hướng dẫn kiến trúc workspace Pulu-workspace |
 | `2026-06-dm-org-chart-raci.html` | Org chart & RACI matrix DM team |
 | `2026-06-nhi-scope-new-driver.html` | Scope tuyển dụng tài xế mới (Nhi) |
 | `2026-Q2-DM-OKR-assignment.xlsx` | OKR assignment từng member DM team |

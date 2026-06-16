@@ -381,7 +381,7 @@ def section4():
         "│       ├── CLI (terminal)\n"
         "│       ├── Web: claude.ai/code\n"
         "│       └── IDE Extension (VS Code, JetBrains)\n"
-        "└── Cowork            → Môi trường làm việc đầy đủ xây trên Claude Code"
+        "└── Pulu-workspace            → Môi trường làm việc đầy đủ xây trên Claude Code"
     ))
 
     # claude.ai web
@@ -429,10 +429,10 @@ def section4():
         "Chạy script xử lý 1000 dòng CSV mà không cần copy-paste từng phần",
     ])
 
-    # Cowork
-    el.append(sub2_header("Cowork — Môi Trường Làm Việc Đầy Đủ"))
-    el.append(p("<b>Là gì:</b> Cowork là một <b>bộ cấu hình và mở rộng</b> xây trên nền Claude Code, biến Claude từ 'chatbot thông minh' thành một <b>trợ lý làm việc thực thụ</b> được kết nối với toàn bộ công cụ văn phòng."))
-    el.append(callout("Hình dung đơn giản: claude.ai = xe máy đi được. Cowork = xe máy đã được lắp thêm GPS, hộp chứa đồ, kết nối Bluetooth, camera hành trình, tích hợp app giao hàng — cùng một 'động cơ' nhưng mạnh hơn nhiều."))
+    # Pulu-workspace
+    el.append(sub2_header("Pulu-workspace — Môi Trường Làm Việc Đầy Đủ"))
+    el.append(p("<b>Là gì:</b> Pulu-workspace là một <b>bộ cấu hình và mở rộng</b> xây trên nền Claude Code, biến Claude từ 'chatbot thông minh' thành một <b>trợ lý làm việc thực thụ</b> được kết nối với toàn bộ công cụ văn phòng."))
+    el.append(callout("Hình dung đơn giản: claude.ai = xe máy đi được. Pulu-workspace = xe máy đã được lắp thêm GPS, hộp chứa đồ, kết nối Bluetooth, camera hành trình, tích hợp app giao hàng — cùng một 'động cơ' nhưng mạnh hơn nhiều."))
     rows = [
         ["Chat hỏi đáp",                "Có",       "Có",       "Có"],
         ["Đọc/viết file trên máy",      "Không",    "Không",    "Có"],
@@ -443,14 +443,14 @@ def section4():
         ["Skills (lệnh tắt)",           "Không",    "Không",    "Có"],
         ["Chạy task tự động",           "Không",    "Không",    "Có"],
     ]
-    el.append(make_table(["Tính năng", "claude.ai", "Claude Desktop", "Cowork"], rows,
+    el.append(make_table(["Tính năng", "claude.ai", "Claude Desktop", "Pulu-workspace"], rows,
                          col_widths=[68*mm, (w-68*mm)/3, (w-68*mm)/3, (w-68*mm)/3]))
 
-    el.append(sub2_header("Memory trong Cowork — Claude 'nhớ' bạn"))
-    el.append(p("Khi dùng Cowork, Claude có hệ thống <b>memory file</b> — mỗi lần làm việc, Claude học thêm về bạn và lưu lại: bạn là ai, làm gì, cần gì / feedback và sở thích làm việc / các dự án đang chạy / nguồn tài liệu tham khảo."))
+    el.append(sub2_header("Memory trong Pulu-workspace — Claude 'nhớ' bạn"))
+    el.append(p("Khi dùng Pulu-workspace, Claude có hệ thống <b>memory file</b> — mỗi lần làm việc, Claude học thêm về bạn và lưu lại: bạn là ai, làm gì, cần gì / feedback và sở thích làm việc / các dự án đang chạy / nguồn tài liệu tham khảo."))
     el.append(p("→ Lần sau mở lại, Claude <b>không cần bạn giải thích lại từ đầu</b>."))
 
-    el.append(sub2_header("Skills trong Cowork — Lệnh tắt thông minh"))
+    el.append(sub2_header("Skills trong Pulu-workspace — Lệnh tắt thông minh"))
     el.append(p("<b>Skills</b> là các 'lệnh chuyên dụng' được lập trình sẵn để làm những việc phức tạp với 1 lệnh ngắn. Gõ <b>/tên-skill</b> là Claude tự biết cần làm gì."))
     rows = [
         ["xlsx",     "/xlsx",     "Tạo/sửa file Excel chuyên nghiệp"],
@@ -463,7 +463,7 @@ def section4():
     el.append(make_table(["Skill", "Lệnh", "Làm gì"], rows,
                          col_widths=[35*mm, 30*mm, w-65*mm-4*mm]))
 
-    # Projects vs Cowork
+    # Projects vs Pulu-workspace
     el.append(sub2_header("Projects / Workspace trong claude.ai"))
     el.append(p("Bên trong claude.ai, bạn có thể tạo <b>Projects</b> — một không gian riêng cho từng mảng công việc. Project cho phép: đặt System Prompt cố định, upload tài liệu nền (SOP, brand guide), tất cả hội thoại trong Project đều kế thừa ngữ cảnh đó."))
     rows = [
@@ -475,9 +475,9 @@ def section4():
         ["Thao tác file","Claude đọc file bạn upload",           "Claude đọc/ghi file thẳng trên máy bạn"],
         ["Độ phức tạp",  "Đơn giản, dùng ngay",                  "Cần setup, nhưng mạnh hơn nhiều"],
     ]
-    el.append(make_table(["Tiêu chí", "Projects (claude.ai)", "Cowork"], rows,
+    el.append(make_table(["Tiêu chí", "Projects (claude.ai)", "Pulu-workspace"], rows,
                          col_widths=[38*mm, (w-38*mm)/2, (w-38*mm)/2]))
-    el.append(callout("Tóm lại: Projects là <b>nâng cấp nhỏ</b> của claude.ai thông thường. Cowork là <b>bước nhảy vọt</b> — từ chatbot thành trợ lý làm việc tích hợp thực sự."))
+    el.append(callout("Tóm lại: Projects là <b>nâng cấp nhỏ</b> của claude.ai thông thường. Pulu-workspace là <b>bước nhảy vọt</b> — từ chatbot thành trợ lý làm việc tích hợp thực sự."))
 
     el.append(sub_header("Chọn nền tảng nào?"))
     el.append(code_block(
@@ -490,7 +490,7 @@ def section4():
         "Tôi là developer hoặc muốn Claude thao tác file trực tiếp\n"
         "→ Claude Code (CLI)\n\n"
         "Tôi muốn Claude kết nối Gmail/Calendar/Drive, nhớ tôi, chạy task tự động\n"
-        "→ Cowork (liên hệ Khanh để được hướng dẫn setup)"
+        "→ Pulu-workspace (liên hệ Khanh để được hướng dẫn setup)"
     ))
     return el
 
@@ -761,11 +761,11 @@ def section10():
         ("API",                             "Cách kết nối Claude vào phần mềm/app khác (dành cho developer)"),
         ("Claude Code",                     "Phiên bản Claude chạy trong terminal/IDE, có thể đọc/ghi file thật trên máy tính"),
         ("Claude Desktop",                  "App cài đặt trên máy Mac/Windows, giao diện như claude.ai nhưng hỗ trợ kết nối MCP"),
-        ("Cowork",                          "Môi trường làm việc đầy đủ xây trên Claude Code — có Memory, Skills, kết nối Gmail/Calendar/Drive"),
+        ("Pulu-workspace",                          "Môi trường làm việc đầy đủ xây trên Claude Code — có Memory, Skills, kết nối Gmail/Calendar/Drive"),
         ("Projects (Workspace)",            "Không gian làm việc trong claude.ai — lưu system prompt và tài liệu nền để dùng lại nhiều lần"),
         ("MCP (Model Context Protocol)",    "Chuẩn kết nối cho phép Claude 'với tay' sang app khác: Google Workspace, Notion, Slack..."),
-        ("Skills",                          "Lệnh tắt chuyên dụng trong Cowork — gõ /tên-skill để Claude thực hiện task phức tạp theo quy trình định sẵn"),
-        ("Memory",                          "Hệ thống lưu trữ thông tin qua nhiều session trong Cowork — Claude nhớ bạn là ai, sở thích, dự án đang chạy"),
+        ("Skills",                          "Lệnh tắt chuyên dụng trong Pulu-workspace — gõ /tên-skill để Claude thực hiện task phức tạp theo quy trình định sẵn"),
+        ("Memory",                          "Hệ thống lưu trữ thông tin qua nhiều session trong Pulu-workspace — Claude nhớ bạn là ai, sở thích, dự án đang chạy"),
         ("Anthropic",                       "Công ty tạo ra Claude, thành lập 2021 tại Mỹ, tập trung vào AI an toàn"),
         ("System Prompt",                   "Lệnh nền được cài sẵn để định hình cách Claude phản hồi (bạn thường không thấy)"),
     ]

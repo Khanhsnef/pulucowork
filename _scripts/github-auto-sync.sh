@@ -1,7 +1,7 @@
 #!/bin/bash
 # github-auto-sync.sh — Chạy ngầm để tự động push code lên Github
 
-PROJECT_DIR="/Users/ts-1148/Desktop/Cowork"
+PROJECT_DIR="/Users/ts-1148/Desktop/Pulu-workspace"
 cd "$PROJECT_DIR" || exit 1
 
 echo "======================================"

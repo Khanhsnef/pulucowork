@@ -10,7 +10,7 @@ from openpyxl.formatting.rule import ColorScaleRule, CellIsRule
 warnings.filterwarnings('ignore')
 
 SRC = '/Users/ts-1148/Downloads/[S&P] Supply data report - Weekly.xlsx'
-OUT = '/Users/ts-1148/Desktop/Cowork/output/Ahamove/04. OPS_METRICS/weekly-ops-dashboard.xlsx'
+OUT = '/Users/ts-1148/Desktop/Pulu-workspace/output/Ahamove/04. OPS_METRICS/weekly-ops-dashboard.xlsx'
 
 # ── COLORS ────────────────────────────────────────────────────────────────────
 BLUE='0E4174'; ORANGE='FF7F32'; GREEN='10B981'; RED='EF4444'

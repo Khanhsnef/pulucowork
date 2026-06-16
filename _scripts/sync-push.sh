@@ -2,7 +2,7 @@
 # sync-push.sh — Chạy trên máy VĂN PHÒNG
 # Đẩy Claude Code config lên Google Drive để dùng ở nhà
 
-DRIVE="$HOME/Library/CloudStorage/GoogleDrive-lephuongkhanh1995@gmail.com/My Drive/Cowork"
+DRIVE="$HOME/Library/CloudStorage/GoogleDrive-lephuongkhanh1995@gmail.com/My Drive/Pulu-workspace"
 DEST="$DRIVE/.claude-config"
 SOURCE="$HOME/.claude"
 
