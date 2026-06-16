@@ -124,6 +124,7 @@ Output/Ahamove/
 | File | Mô tả |
 |------|-------|
 | `2026-06-driver-journey-milestones.html` | Milestones HTML standalone (77KB) |
+| `2026-06-open-source-repos-application.md` | Tài liệu chiến lược ứng dụng open-source repositories vào tối ưu vận hành |
 
 ---
 
@@ -156,6 +157,11 @@ Output/Ahamove/
 | `weekly-ops-dashboard.xlsx` | Dashboard vận hành tuần (master) |
 | `copyweekly-ops-dashboard.xlsx` | Copy backup dashboard |
 | `daily-ops-report-template.xlsx` | Template báo cáo ops hàng ngày |
+
+#### `dashboards/`
+| File | Mô tả |
+|------|-------|
+| `incentive_simulation_app.py` | App Streamlit giả lập incentive giờ cao điểm & tối ưu nguồn cung |
 
 #### `sql/`
 | File | Mô tả |
@@ -199,6 +205,10 @@ Output/Ahamove/
 | File | Mô tả |
 |------|-------|
 | `2026-06-global-driver-lifecycle-benchmark.md` | **Nghiên cứu 15+ nền tảng toàn cầu** (Meituan, Uber, DoorDash, Swiggy, Grab, Gojek, Deliveroo, Rappi, iFood, Be, XanhSM...): benchmark churn rate, lifecycle models, gap analysis |
+| `2026-06-16-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 16/06: GSM thay CEO toàn cầu & Be Group PR campaign |
+| `2026-06-16-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 16/06 |
+| `2026-06-16-weekly-market-brief.md` | Bản tin vận hành & thị trường đầu tuần ngày 16/06: Grab EV, XanhSM thắt chặt P&L, luật ILO mới |
+| `2026-06-16-weekly-market-brief.html` | Bản HTML tương tác của bản tin vận hành & thị trường đầu tuần ngày 16/06 |
 
 ---
 
@@ -214,6 +224,7 @@ Output/Ahamove/
 | `2026-05-pulu-workspace-architecture-guide.html` | Hướng dẫn kiến trúc workspace Pulu-workspace |
 | `2026-06-dm-org-chart-raci.html` | Org chart & RACI matrix DM team |
 | `2026-06-nhi-scope-new-driver.html` | Scope tuyển dụng tài xế mới (Nhi) |
+| `2026-06-new-dashboard-sop.md` | SOP quy trình xây dựng Dashboard mới bằng DuckDB & Streamlit |
 | `2026-Q2-DM-OKR-assignment.xlsx` | OKR assignment từng member DM team |
 | `dm-weekly-review-template.pptx` | Template weekly review DM team |
 | `gen_pdf.py` | Script tạo PDF từ markdown |
