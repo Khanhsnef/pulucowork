@@ -27,7 +27,7 @@
 - [Cách viết Prompt hiệu quả](#9-cách-viết-prompt)
 - [Use cases thực tế cho công việc](#10-áp-dụng-vào-công-việc)
 
-### PHẦN 4 — CẤU TRÚC COWORK (Nâng cao)
+### PHẦN 4 — CẤU TRÚC PULU-WORKSPACE (Nâng cao)
 
 - [Pulu-workspace là gì và tại sao cần?](#11-pulu-workspace--cấu-trúc-đầy-đủ)
 - [Các file Markdown quan trọng cần tạo](#12-các-markdown-file-quan-trọng)
@@ -385,7 +385,7 @@ mỗi cái tối đa 1 dòng.
 
 ---
 
-# PHẦN 4 — CẤU TRÚC COWORK (NÂNG CAO)
+# PHẦN 4 — CẤU TRÚC PULU-WORKSPACE (NÂNG CAO)
 
 ## 11. Pulu-workspace — Cấu Trúc Đầy Đủ
 
@@ -574,7 +574,7 @@ Cập nhật: 2026-05-08
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                  MỞ SESSION COWORK                       │
+│                MỞ SESSION PULU-WORKSPACE                │
 └─────────────────────────────────────────────────────────┘
          │
          ▼
