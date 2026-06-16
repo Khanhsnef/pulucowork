@@ -1,5 +1,17 @@
 {
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '$CLAUDE_TOOL_INPUT' | python3 -c \"import json,sys; p=json.load(sys.stdin).get('file_path',''); exit(1 if '_scripts/' in p else 0)\"",
+            "statusMessage": "Checking protected files..."
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
@@ -12,6 +24,23 @@
         ]
       }
     ]
+  },
+  "mcpServers": {
+    "google-sheets": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@gongrzhe/server-google-sheets-mcp"
+      ]
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sqlite",
+        "data/state_store.db"
+      ]
+    }
   },
   "enabledPlugins": {
     "claude-code-setup@claude-plugins-official": true
