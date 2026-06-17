@@ -207,6 +207,8 @@ Output/Ahamove/
 | `2026-06-global-driver-lifecycle-benchmark.md` | **Nghiên cứu 15+ nền tảng toàn cầu** (Meituan, Uber, DoorDash, Swiggy, Grab, Gojek, Deliveroo, Rappi, iFood, Be, XanhSM...): benchmark churn rate, lifecycle models, gap analysis |
 | `2026-06-16-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 16/06: GSM thay CEO toàn cầu & Be Group PR campaign |
 | `2026-06-16-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 16/06 |
+| `2026-06-17-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 17/06: GSM ký Taxi Quê Lụa, GrabBenefits & Be Group EV lobby |
+| `2026-06-17-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 17/06 |
 | `2026-06-16-weekly-market-brief.md` | Bản tin vận hành & thị trường đầu tuần ngày 16/06: Grab EV, XanhSM thắt chặt P&L, luật ILO mới |
 | `2026-06-16-weekly-market-brief.html` | Bản HTML tương tác của bản tin vận hành & thị trường đầu tuần ngày 16/06 |
 
