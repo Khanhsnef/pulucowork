@@ -24,301 +24,134 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
 
-    /* Global styles forcing dark background */
-    .stApp, html, body, [class*="css"], [data-testid="stAppViewContainer"] {
-        font-family: 'Lexend', sans-serif;
+    /* Global — Montserrat throughout */
+    .stApp, html, body, [class*="css"], [data-testid="stAppViewContainer"],
+    table, th, td, input, select, button, div, span, p {
+        font-family: 'Montserrat', sans-serif !important;
         background-color: #0F172A !important;
         color: #F8FAFC !important;
     }
-    
-    /* Sidebar styling */
-    [data-testid="stSidebar"] {
-        background-color: #1E293B !important;
-        border-right: 1px solid #334155;
-    }
-    [data-testid="stSidebar"] * {
-        color: #F8FAFC !important;
-    }
-    [data-testid="stSidebar"] .stButton button {
-        background-color: #334155 !important;
-        color: #F8FAFC !important;
-        border: 1px solid #475569 !important;
-    }
-    [data-testid="stSidebar"] .stButton button:hover {
-        background-color: #475569 !important;
-        border-color: #FF7F32 !important;
-    }
+
+    /* Sidebar */
+    [data-testid="stSidebar"] { background-color: #1E293B !important; border-right: 1px solid #334155; }
+    [data-testid="stSidebar"] * { color: #F8FAFC !important; }
+    [data-testid="stSidebar"] .stButton button { background-color: #334155 !important; color: #F8FAFC !important; border: 1px solid #475569 !important; }
+    [data-testid="stSidebar"] .stButton button:hover { background-color: #475569 !important; border-color: #FF7F32 !important; }
 
     /* Main Typography */
     .main-title {
-        color: #F8FAFC;
-        font-weight: 800;
-        font-size: 2.5rem;
-        margin-bottom: 0.2rem;
-        letter-spacing: -0.04em;
+        color: #F8FAFC; font-weight: 800; font-size: 2.4rem;
+        margin-bottom: 0.15rem; letter-spacing: -0.03em;
         background: linear-gradient(90deg, #F8FAFC 0%, #FF7F32 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .subtitle {
-        color: #94A3B8;
-        font-weight: 500;
-        font-size: 1.05rem;
-        margin-bottom: 1.5rem;
-    }
+    .subtitle { color: #94A3B8; font-weight: 600; font-size: 1rem; margin-bottom: 1rem; }
     .section-header {
-        color: #38BDF8;
-        font-weight: 800;
-        font-size: 1.4rem;
-        border-left: 6px solid #FF7F32;
-        padding-left: 0.8rem;
-        margin: 1.8rem 0 1rem 0;
-        letter-spacing: -0.02em;
+        color: #38BDF8; font-weight: 800; font-size: 1.25rem;
+        border-left: 5px solid #FF7F32; padding-left: 0.75rem;
+        margin: 1.2rem 0 0.6rem 0; letter-spacing: -0.01em;
     }
 
-    /* Metric Cards */
+    /* Metric Cards — tighter padding */
     .metric-card {
-        background-color: #1E293B;
-        border: 1px solid #334155;
-        border-radius: 1.25rem;
-        padding: 1.2rem;
-        box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.5);
-        text-align: center;
-        min-height: 142px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        background-color: #1E293B; border: 1px solid #334155;
+        border-radius: 1rem; padding: 0.85rem 1rem;
+        box-shadow: 0 8px 24px -12px rgba(0,0,0,0.5);
+        text-align: center; min-height: 120px;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-    .metric-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.6);
-        border-color: #475569;
-    }
-    .metric-card-accent {
-        border-color: #FF7F32 !important;
-        background: linear-gradient(135deg, #1E293B 0%, #1a2235 100%) !important;
-    }
-    .metric-card-green {
-        border-color: #10B981 !important;
-    }
-    .metric-card-blue {
-        border-color: #38BDF8 !important;
-    }
-    .metric-label {
-        font-size: 0.75rem;
-        color: #94A3B8;
-        text-transform: uppercase;
-        font-weight: 700;
-        margin-bottom: 0.35rem;
-        letter-spacing: 0.05em;
-    }
-    .metric-value {
-        font-size: 2.15rem;
-        font-weight: 800;
-        color: #F8FAFC;
-        letter-spacing: -0.04em;
-    }
-    .metric-value-lg {
-        font-size: 2.5rem;
-        font-weight: 800;
-        letter-spacing: -0.04em;
-    }
-    .metric-delta {
-        font-size: 0.88rem;
-        font-weight: 700;
-        margin-top: 0.25rem;
-    }
-    .metric-context {
-        color: #64748B;
-        font-size: 0.75rem;
-        margin-top: 0.15rem;
-    }
+    .metric-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(0,0,0,0.6); border-color: #475569; }
+    .metric-card-accent { border-color: #FF7F32 !important; background: linear-gradient(135deg, #1E293B 0%, #1a2235 100%) !important; }
+    .metric-card-green { border-color: #10B981 !important; }
+    .metric-card-blue  { border-color: #38BDF8 !important; }
+    .metric-label  { font-size: 0.72rem; color: #94A3B8; text-transform: uppercase; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: 0.06em; }
+    .metric-value  { font-size: 1.9rem; font-weight: 800; color: #F8FAFC; letter-spacing: -0.03em; }
+    .metric-value-lg { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; }
+    .metric-delta  { font-size: 0.85rem; font-weight: 700; margin-top: 0.2rem; }
+    .metric-context { color: #64748B; font-size: 0.72rem; margin-top: 0.1rem; }
     .status-pill {
-        display: inline-block;
-        background: #064E3B;
-        color: #34D399;
-        border: 1px solid #059669;
-        border-radius: 999px;
-        padding: 0.25rem 0.7rem;
-        font-weight: 700;
-        font-size: 0.8rem;
+        display: inline-block; background: #064E3B; color: #34D399;
+        border: 1px solid #059669; border-radius: 999px;
+        padding: 0.2rem 0.6rem; font-weight: 700; font-size: 0.78rem;
     }
-    .footer-note {
-        color: #64748B;
-        font-size: 0.82rem;
-        padding-top: 1rem;
-        border-top: 1px solid #334155;
-        margin-top: 2.5rem;
-    }
-    .footer-note a {
-        color: #FF7F32;
-        text-decoration: none;
-    }
-    .footer-note a:hover {
-        text-decoration: underline;
-    }
+    .footer-note { color: #64748B; font-size: 0.8rem; padding-top: 0.75rem; border-top: 1px solid #334155; margin-top: 2rem; }
+    .footer-note a { color: #FF7F32; text-decoration: none; }
+    .footer-note a:hover { text-decoration: underline; }
 
-    /* Custom CSS Table for Cockpit Grid */
+    /* Cockpit Table */
     .cockpit-table-container {
-        overflow-x: auto;
-        margin: 1.5rem 0;
-        border-radius: 0.75rem;
-        border: 1px solid #334155;
+        overflow-x: auto; margin: 0.75rem 0;
+        border-radius: 0.6rem; border: 1px solid #334155;
         background-color: #1E293B;
     }
     .cockpit-table {
-        width: 100%;
-        border-collapse: collapse;
-        color: #F8FAFC;
-        font-size: 0.85rem;
-        text-align: left;
+        width: 100%; border-collapse: collapse;
+        color: #F8FAFC; font-size: 0.88rem; text-align: left;
+        font-family: 'Montserrat', sans-serif !important;
     }
     .cockpit-table th {
-        background-color: #0F172A;
-        color: #94A3B8;
-        font-weight: 700;
-        padding: 0.75rem 1rem;
-        border-bottom: 2px solid #334155;
-        text-transform: uppercase;
-        font-size: 0.72rem;
-        letter-spacing: 0.05em;
+        background-color: #0F172A; color: #94A3B8; font-weight: 700;
+        padding: 0.45rem 0.65rem; border-bottom: 2px solid #334155;
+        text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.05em;
+        font-family: 'Montserrat', sans-serif !important;
     }
     .cockpit-table td {
-        padding: 0.65rem 1rem;
-        border-bottom: 1px solid #334155;
-        font-weight: 500;
+        padding: 0.42rem 0.65rem; border-bottom: 1px solid #334155; font-weight: 500;
+        font-family: 'Montserrat', sans-serif !important;
     }
-    .cockpit-table tr:hover {
-        background-color: #1E293B !important;
-        filter: brightness(1.15);
-    }
-    .cockpit-table .row-header {
-        font-weight: 700;
-        color: #38BDF8;
-        background-color: #1A202C;
-    }
-    .cockpit-table .row-header td {
-        border-bottom: 2px solid #475569;
-        font-size: 0.9rem;
-    }
-    .cockpit-table .sub-row-header {
-        font-weight: 500;
-        color: #E2E8F0;
-        padding-left: 2rem !important;
-    }
-    .hdr-actual-current {
-        background-color: #1E3A8A !important;
-        color: #F8FAFC !important;
-        text-align: center !important;
-    }
-    .hdr-actual-past {
-        background-color: #334155 !important;
-        color: #E2E8F0 !important;
-        text-align: center !important;
-    }
-    .hdr-plan {
-        background-color: #0F766E !important;
-        color: #F8FAFC !important;
-        text-align: center !important;
-    }
-    .hdr-today {
-        background-color: #D97706 !important;
-        color: #F8FAFC !important;
-        text-align: center !important;
-        border: 1px solid #FF7F32;
-    }
-    .val-positive {
-        color: #34D399 !important;
-        font-weight: 700;
-    }
-    .val-negative {
-        color: #F87171 !important;
-        font-weight: 700;
-    }
-    .val-neutral {
-        color: #94A3B8 !important;
-    }
-    .val-planning-today {
-        color: #34D399 !important;
-        background-color: rgba(52, 211, 153, 0.1);
-        border-radius: 4px;
-        padding: 2px 6px;
-    }
+    .cockpit-table tr:hover { background-color: #1E293B !important; filter: brightness(1.15); }
+    .cockpit-table .row-header { font-weight: 700; color: #38BDF8; background-color: #1A202C; }
+    .cockpit-table .row-header td { border-bottom: 2px solid #475569; font-size: 0.92rem; }
+    .cockpit-table .sub-row-header { font-weight: 500; color: #E2E8F0; padding-left: 1.5rem !important; }
+    .hdr-actual-current { background-color: #1E3A8A !important; color: #F8FAFC !important; text-align: center !important; }
+    .hdr-actual-past    { background-color: #334155 !important; color: #E2E8F0 !important; text-align: center !important; }
+    .hdr-plan           { background-color: #0F766E !important; color: #F8FAFC !important; text-align: center !important; }
+    .hdr-today          { background-color: #D97706 !important; color: #F8FAFC !important; text-align: center !important; border: 1px solid #FF7F32; }
+    .val-positive       { color: #34D399 !important; font-weight: 700; }
+    .val-negative       { color: #F87171 !important; font-weight: 700; }
+    .val-neutral        { color: #94A3B8 !important; }
+    .val-planning-today { color: #34D399 !important; background-color: rgba(52,211,153,0.1); border-radius: 3px; padding: 1px 5px; }
 
-    /* Leaderboard Card Styling */
-    .leaderboard-card {
-        background-color: #1E293B;
-        border: 1px solid #334155;
-        border-radius: 0.75rem;
-        padding: 1.2rem;
-        margin-bottom: 1rem;
-    }
-    .leaderboard-title {
-        color: #38BDF8;
-        font-weight: 700;
-        font-size: 1rem;
-        margin-bottom: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    .leaderboard-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.5rem 0.75rem;
-        margin-bottom: 0.4rem;
-        border-radius: 0.35rem;
-    }
-    .rank-1 { background-color: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); }
-    .rank-2 { background-color: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); }
-    .rank-3 { background-color: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); }
-    
-    .rank-badge {
-        font-weight: 800;
-        font-size: 0.95rem;
-    }
+    /* Leaderboard */
+    .leaderboard-card  { background-color: #1E293B; border: 1px solid #334155; border-radius: 0.6rem; padding: 0.9rem; margin-bottom: 0.75rem; }
+    .leaderboard-title { color: #38BDF8; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .leaderboard-row   { display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0.6rem; margin-bottom: 0.3rem; border-radius: 0.3rem; }
+    .rank-1 { background-color: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); }
+    .rank-2 { background-color: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); }
+    .rank-3 { background-color: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); }
+    .rank-badge { font-weight: 800; font-size: 0.9rem; }
     .rank-1 .rank-badge { color: #34D399; }
     .rank-2 .rank-badge { color: #FBBF24; }
     .rank-3 .rank-badge { color: #818CF8; }
 
-    /* Channel/Segment Analysis Table */
+    /* Analysis Table (Channel, Supply Hours, etc.) */
     .analysis-table {
-        width: 100%;
-        border-collapse: collapse;
-        color: #F8FAFC;
-        font-size: 0.82rem;
+        width: 100%; border-collapse: collapse; color: #F8FAFC;
+        font-size: 0.86rem; font-family: 'Montserrat', sans-serif !important;
     }
     .analysis-table th {
-        background-color: #0F172A;
-        color: #94A3B8;
-        font-weight: 700;
-        padding: 0.6rem 0.75rem;
-        border-bottom: 2px solid #334155;
-        text-transform: uppercase;
-        font-size: 0.7rem;
-        letter-spacing: 0.04em;
-        text-align: center;
+        background-color: #0F172A; color: #94A3B8; font-weight: 700;
+        padding: 0.42rem 0.6rem; border-bottom: 2px solid #334155;
+        text-transform: uppercase; font-size: 0.71rem; letter-spacing: 0.04em;
+        text-align: center; font-family: 'Montserrat', sans-serif !important;
+        white-space: nowrap;
     }
     .analysis-table th:first-child { text-align: left; }
     .analysis-table td {
-        padding: 0.55rem 0.75rem;
-        border-bottom: 1px solid #1E293B;
-        text-align: center;
+        padding: 0.38rem 0.6rem; border-bottom: 1px solid #1E293B;
+        text-align: center; font-family: 'Montserrat', sans-serif !important;
     }
     .analysis-table td:first-child { text-align: left; font-weight: 700; }
     .analysis-table tr:hover { background-color: rgba(255,255,255,0.03); }
-    .analysis-table .total-row {
-        background-color: #1a2840;
-        font-weight: 700;
-        color: #38BDF8;
-        border-top: 2px solid #334155;
-    }
+    .analysis-table .total-row { background-color: #1a2840; font-weight: 700; color: #38BDF8; border-top: 2px solid #334155; }
 
-    /* Heatmap Cell Styles */
-    .hm-pass { background-color: rgba(16,185,129,0.25); color: #34D399; font-weight: 700; }
+    /* Heatmap */
+    .hm-pass  { background-color: rgba(16,185,129,0.25); color: #34D399; font-weight: 700; }
     .hm-under { background-color: rgba(248,113,113,0.25); color: #F87171; font-weight: 700; }
-    .hm-over { background-color: rgba(251,191,36,0.20); color: #FBBF24; font-weight: 700; }
-    .hm-na { color: #475569; }
+    .hm-over  { background-color: rgba(251,191,36,0.20); color: #FBBF24; font-weight: 700; }
+    .hm-na    { color: #475569; }
 </style>
 """,
     unsafe_allow_html=True,
@@ -617,7 +450,7 @@ def chart_layout(fig, title="", secondary_y=False):
         return fig
     fig.update_layout(
         title={"text": title, "font": {"size": 14, "color": "#F8FAFC"}},
-        font={"family": "Lexend, sans-serif", "color": "#F8FAFC"},
+        font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
         paper_bgcolor="#1E293B",
         plot_bgcolor="#1E293B",
         margin={"l": 30, "r": 30, "t": 60, "b": 30},
@@ -746,7 +579,7 @@ def render_dual_axis_chart(data_left, data_right, title, colors_left, colors_rig
 
     fig.update_layout(
         title={"text": title, "font": {"size": 14, "color": "#F8FAFC"}},
-        font={"family": "Lexend, sans-serif", "color": "#F8FAFC"},
+        font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
         paper_bgcolor="#1E293B",
         plot_bgcolor="#1E293B",
         margin={"l": 30, "r": 60, "t": 60, "b": 30},
@@ -1945,7 +1778,7 @@ with dem_tab3:
             barmode="stack",
             title={"text": "Channel Mix % (Actual Request)", "font": {"size": 14, "color": "#F8FAFC"}},
             yaxis={"tickformat": ".0%"},
-            font={"family": "Lexend, sans-serif", "color": "#F8FAFC"},
+            font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
             paper_bgcolor="#1E293B", plot_bgcolor="#1E293B",
             margin={"l": 30, "r": 30, "t": 60, "b": 30},
             legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "xanchor": "right", "x": 1},
@@ -2361,7 +2194,7 @@ with adv_tab2:
         ))
         fig_wd.update_layout(
             title={"text": "Average Actual Request by Weekday (90 ngày gần nhất)", "font": {"size": 14, "color": "#F8FAFC"}},
-            font={"family": "Lexend, sans-serif", "color": "#F8FAFC"},
+            font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
             paper_bgcolor="#1E293B", plot_bgcolor="#1E293B",
             margin={"l": 30, "r": 30, "t": 60, "b": 30},
             hovermode="closest", template="plotly_dark",
@@ -2400,7 +2233,7 @@ with adv_tab2:
         fig_fr_wd.update_layout(
             title={"text": "Average FR% by Weekday", "font": {"size": 14, "color": "#F8FAFC"}},
             yaxis={"tickformat": ".0%"},
-            font={"family": "Lexend, sans-serif", "color": "#F8FAFC"},
+            font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
             paper_bgcolor="#1E293B", plot_bgcolor="#1E293B",
             margin={"l": 30, "r": 30, "t": 60, "b": 30},
             hovermode="closest", template="plotly_dark",
