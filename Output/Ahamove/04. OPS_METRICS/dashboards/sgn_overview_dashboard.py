@@ -1683,33 +1683,37 @@ with dem_tab1:
         st.markdown(f"<div style='background:#1E293B;padding:1rem;border-radius:0.5rem;border:1px solid #334155;'>{fr_ch_html}</div>", unsafe_allow_html=True)
 
 with dem_tab2:
-    # Channel Achievement table: FC Request / Actual Request / % / FC Demand / Actual Demand / FR%
     channels = ["GHN", "KA", "MP", "SME", "WH"]
-    ch_table_html = """<div class='cockpit-table-container'><table class='analysis-table'>
-<thead><tr>
-<th>Channel</th>
-<th>FC Req (Hôm qua)</th><th>Actual Req</th><th>% FC Req</th>
-<th>FC Demand</th><th>Actual Demand</th><th>% FC Dem</th>
-<th>FR%</th>
-<th>Actual Req MTD</th><th>Actual Dem MTD</th>
-</tr></thead><tbody>"""
+    _dod_col2 = columns_with_dates[2][0] if len(columns_with_dates) > 2 else None
+    _dod_date2 = columns_with_dates[2][1] if len(columns_with_dates) > 2 else None
 
-    # Total row first
-    total_fc_req_y = val(5, col_yesterday)
-    total_act_req_y = val(21, col_yesterday)
-    total_fc_dem_y = val(13, col_yesterday)
-    total_act_dem_y = val(28, col_yesterday)
-    total_fr_y = val(180, col_yesterday)
-    total_act_req_mtd = val(21, 3)
-    total_act_dem_mtd = val(28, 3)
-    pct_r_total = total_act_req_y / total_fc_req_y if total_fc_req_y else None
-    pct_d_total = total_act_dem_y / total_fc_dem_y if total_fc_dem_y else None
-
-    def pct_cell(v):
-        if v is None:
+    def _abs_delta_cell(curr, base, is_pct=False):
+        """Delta % + số tuyệt đối bên dưới."""
+        if curr is None:
             return "<td class='val-neutral'>—</td>"
-        color = "#34D399" if v >= 0.95 else ("#FBBF24" if v >= 0.85 else "#F87171")
-        return f"<td style='color:{color};font-weight:700;'>{v:.1%}</td>"
+        if base is None or base == 0:
+            actual_str = f"{curr:.1%}" if is_pct else format_number(curr)
+            return f"<td>{actual_str}<br><small style='color:#64748B;'>no base</small></td>"
+        d = curr - base if is_pct else (curr - base) / base
+        abs_diff = curr - base
+        cls = "val-positive" if d >= 0 else "val-negative"
+        arrow = "▲" if d >= 0 else "▼"
+        pct_str = f"{arrow}{abs(d):.1%}"
+        abs_str = f"{abs_diff:+,.0f}" if not is_pct else f"{abs_diff:+.1%}"
+        return f"<td class='{cls}'>{pct_str}<br><small style='opacity:0.75;'>{abs_str}</small></td>"
+
+    def _abs_val_cell(curr, is_pct=False):
+        if curr is None:
+            return "<td class='val-neutral'>—</td>"
+        return f"<td>{'  {:.1%}'.format(curr) if is_pct else format_number(curr)}</td>"
+
+    def pct_fc_cell(actual, fc):
+        if actual is None or fc is None or fc == 0:
+            return "<td class='val-neutral'>—</td>"
+        r = actual / fc
+        color = "#34D399" if r >= 0.95 else ("#FBBF24" if r >= 0.85 else "#F87171")
+        diff = actual - fc
+        return f"<td style='color:{color};font-weight:700;'>{r:.1%}<br><small style='opacity:0.75;'>{diff:+,.0f}</small></td>"
 
     def fr_cell(v):
         if v is None:
@@ -1717,38 +1721,87 @@ with dem_tab2:
         color = "#34D399" if v >= fr_target else ("#FBBF24" if v >= fr_target * 0.9 else "#F87171")
         return f"<td style='color:{color};font-weight:700;'>{v:.1%}</td>"
 
-    ch_table_html += f"""<tr class='total-row'>
-<td>SGN Total</td>
-<td>{format_number(total_fc_req_y)}</td><td>{format_number(total_act_req_y)}</td>{pct_cell(pct_r_total)}
-<td>{format_number(total_fc_dem_y)}</td><td>{format_number(total_act_dem_y)}</td>{pct_cell(pct_d_total)}
-{fr_cell(total_fr_y)}
-<td>{format_number(total_act_req_mtd)}</td><td>{format_number(total_act_dem_mtd)}</td>
-</tr>"""
+    _dod_lbl = _dod_date2.strftime('%d-%b') if _dod_date2 else "D-2"
+    ch_table_html = f"""<div class='cockpit-table-container'><table class='analysis-table'>
+<thead>
+  <tr>
+    <th rowspan="2" style="vertical-align:bottom;">Channel</th>
+    <th colspan="3" class="hdr-actual-current" style="text-align:center;border-bottom:1px solid #475569;">
+      DAILY — {date_yesterday.strftime('%d-%b')} (Actual vs FC)
+    </th>
+    <th colspan="2" class="hdr-actual-past" style="text-align:center;border-bottom:1px solid #475569;">
+      DoD — vs {_dod_lbl}
+    </th>
+    <th colspan="2" class="hdr-actual-past" style="text-align:center;border-bottom:1px solid #475569;">
+      WoW — vs {date_last_week.strftime('%d-%b')}
+    </th>
+    <th colspan="3" class="hdr-actual-current" style="text-align:center;border-bottom:1px solid #475569;">
+      WTD — {_wtd_label}
+    </th>
+    <th colspan="3" class="hdr-plan" style="text-align:center;border-bottom:1px solid #475569;">
+      MTD — Jun-2026
+    </th>
+    <th rowspan="2" class="hdr-actual-current" style="vertical-align:bottom;text-align:center;">FR%<br><small style='color:#94A3B8;font-size:0.65rem;'>Hôm qua</small></th>
+  </tr>
+  <tr>
+    <th class="hdr-actual-current">Actual Req</th>
+    <th class="hdr-plan">FC Req</th>
+    <th class="hdr-plan">Actual vs FC</th>
+    <th class="hdr-actual-past">Req Δ</th>
+    <th class="hdr-actual-past">Dem Δ</th>
+    <th class="hdr-actual-past">Req Δ</th>
+    <th class="hdr-actual-past">Dem Δ</th>
+    <th class="hdr-actual-current">Req</th>
+    <th class="hdr-actual-current">Dem</th>
+    <th class="hdr-actual-past">vs LWTD Req</th>
+    <th class="hdr-plan">Req</th>
+    <th class="hdr-plan">Dem</th>
+    <th class="hdr-actual-past">MoM Req</th>
+  </tr>
+</thead><tbody>"""
 
-    for ch in channels:
-        fc_req_r = CHANNEL_FC_REQ_ROWS.get(ch)
-        fc_dem_r = CHANNEL_FC_DEM_ROWS.get(ch)
-        act_req_r = CHANNEL_ACT_REQ_ROWS.get(ch)
-        act_dem_r = CHANNEL_ACT_DEM_ROWS.get(ch)
-        fr_r = FR_ROWS.get(ch)
+    all_ch_rows = [("SGN Total", 21, 5, 28, 13, 180, "total")] + \
+                  [(ch, CHANNEL_ACT_REQ_ROWS.get(ch), CHANNEL_FC_REQ_ROWS.get(ch),
+                    CHANNEL_ACT_DEM_ROWS.get(ch), CHANNEL_FC_DEM_ROWS.get(ch),
+                    FR_ROWS.get(ch), ch) for ch in channels]
 
-        fc_req_y = val(fc_req_r, col_yesterday) if fc_req_r else None
-        act_req_y = val(act_req_r, col_yesterday) if act_req_r else None
-        fc_dem_y = val(fc_dem_r, col_yesterday) if fc_dem_r else None
-        act_dem_y = val(act_dem_r, col_yesterday) if act_dem_r else None
-        fr_ch = val(fr_r, col_yesterday) if fr_r else None
-        act_req_mtd = val(act_req_r, 3) if act_req_r else None
-        act_dem_mtd = val(act_dem_r, 3) if act_dem_r else None
-        pct_r = act_req_y / fc_req_y if fc_req_y and act_req_y else None
-        pct_d = act_dem_y / fc_dem_y if fc_dem_y and act_dem_y else None
+    for ch_name, act_req_r, fc_req_r, act_dem_r, fc_dem_r, fr_r, ch_key in all_ch_rows:
+        if act_req_r is None:
+            continue
+        act_req_y   = val(act_req_r, col_yesterday)
+        fc_req_y    = val(fc_req_r, col_yesterday) if fc_req_r else None
+        act_dem_y   = val(act_dem_r, col_yesterday) if act_dem_r else None
+        act_req_dod = val(act_req_r, _dod_col2) if _dod_col2 else None
+        act_dem_dod = val(act_dem_r, _dod_col2) if _dod_col2 and act_dem_r else None
+        act_req_lw  = val(act_req_r, col_last_week)
+        act_dem_lw  = val(act_dem_r, col_last_week) if act_dem_r else None
+        wtd_req     = get_row_wtd_sum(act_req_r)
+        wtd_dem     = get_row_wtd_sum(act_dem_r) if act_dem_r else None
+        lwtd_req    = get_row_lwtd_sum(act_req_r)
+        mtd_req     = get_row_mtd_sum(act_req_r)
+        mtd_dem     = get_row_mtd_sum(act_dem_r) if act_dem_r else None
+        lm_mtd_req  = get_row_lm_mtd_sum(act_req_r)
+        fr_v        = val(fr_r, col_yesterday) if fr_r else None
 
-        ch_color = CHANNEL_COLORS.get(ch, "#F8FAFC")
-        ch_table_html += f"""<tr>
-<td style='color:{ch_color};font-weight:700;'>{ch}</td>
-<td>{format_number(fc_req_y)}</td><td>{format_number(act_req_y)}</td>{pct_cell(pct_r)}
-<td>{format_number(fc_dem_y)}</td><td>{format_number(act_dem_y)}</td>{pct_cell(pct_d)}
-{fr_cell(fr_ch)}
-<td>{format_number(act_req_mtd)}</td><td>{format_number(act_dem_mtd)}</td>
+        ch_color = CHANNEL_COLORS.get(ch_key, "#38BDF8") if ch_key != "total" else "#38BDF8"
+        tr_cls = "class='total-row'" if ch_key == "total" else ""
+
+        ch_table_html += f"""<tr {tr_cls}>
+<td style='color:{ch_color};font-weight:700;'>{ch_name}</td>
+{_abs_val_cell(act_req_y)}
+{_abs_val_cell(fc_req_y)}
+{pct_fc_cell(act_req_y, fc_req_y)}
+{_abs_delta_cell(act_req_y, act_req_dod)}
+{_abs_delta_cell(act_dem_y, act_dem_dod)}
+{_abs_delta_cell(act_req_y, act_req_lw)}
+{_abs_delta_cell(act_dem_y, act_dem_lw)}
+{_abs_val_cell(wtd_req)}
+{_abs_val_cell(wtd_dem)}
+{_abs_delta_cell(wtd_req, lwtd_req)}
+{_abs_val_cell(mtd_req)}
+{_abs_val_cell(mtd_dem)}
+{_abs_delta_cell(mtd_req, lm_mtd_req)}
+{fr_cell(fr_v)}
 </tr>"""
 
     ch_table_html += "</tbody></table></div>"
@@ -1917,9 +1970,20 @@ with sup_tab1:
 <th>DoD Δ<br><span style='color:#64748B;'>{dod_label}</span></th>
 <th>WoW Δ<br><span style='color:#64748B;'>{date_last_week.strftime('%d-%b')}</span></th>
 <th>WTD<br><span style='color:#64748B;'>{_wtd_label}</span></th>
+<th>WTD vs LWTD<br><span style='color:#64748B;'>{_lwtd_label}</span></th>
 <th>MTD<br><span style='color:#64748B;'>Jun</span></th>
 <th>MoM Δ<br><span style='color:#64748B;'>vs {lm_period_label}</span></th>
 </tr></thead><tbody>"""
+
+        def _sh_delta_td(curr, base):
+            """Δ% trên + số tuyệt đối bên dưới."""
+            if curr is None or base is None or base == 0:
+                return "<td class='val-neutral'>—</td>"
+            d = (curr - base) / base
+            abs_diff = curr - base
+            cls = "val-positive" if d >= 0 else "val-negative"
+            arrow = "▲" if d >= 0 else "▼"
+            return f"<td class='{cls}'>{arrow}{abs(d):.1%}<br><small style='opacity:0.75;'>{abs_diff:+,.0f}</small></td>"
 
         sh_detail_segs = [("Total", 66), ("FT", 67), ("PT", 68), ("NLM", 69), ("Return", 70), ("NIM", 71)]
         for seg_name, row_idx in sh_detail_segs:
@@ -1927,27 +1991,21 @@ with sup_tab1:
             dod_v = val(row_idx, col_dod) if col_dod else None
             wow_v = val(row_idx, col_last_week)
             wtd_v = get_row_wtd_sum(row_idx)
+            lwtd_v = get_row_lwtd_sum(row_idx)
             mtd_v = get_row_mtd_sum(row_idx)
             lm_mtd_v = get_row_lm_mtd_sum(row_idx)
             seg_color = "#38BDF8" if seg_name == "Total" else SEGMENT_COLORS.get(seg_name, "#F8FAFC")
-
-            def _delta_td(curr, base):
-                if curr is None or base is None or base == 0:
-                    return "<td class='val-neutral'>—</td>"
-                d = (curr - base) / base
-                cls = "val-positive" if d >= 0 else "val-negative"
-                arrow = "▲" if d >= 0 else "▼"
-                return f"<td class='{cls}'>{arrow}{abs(d):.1%}</td>"
 
             row_cls = "class='total-row'" if seg_name == "Total" else ""
             sh_detail_html += f"""<tr {row_cls}>
 <td style='color:{seg_color};font-weight:700;'>{seg_name}</td>
 <td>{format_number(yv)}</td>
-{_delta_td(yv, dod_v)}
-{_delta_td(yv, wow_v)}
+{_sh_delta_td(yv, dod_v)}
+{_sh_delta_td(yv, wow_v)}
 <td>{format_number(wtd_v)}</td>
+{_sh_delta_td(wtd_v, lwtd_v)}
 <td>{format_number(mtd_v)}</td>
-{_delta_td(mtd_v, lm_mtd_v)}
+{_sh_delta_td(mtd_v, lm_mtd_v)}
 </tr>"""
         sh_detail_html += "</tbody></table>"
         st.markdown(f"<div style='background:#1E293B;padding:1rem;border-radius:0.5rem;border:1px solid #334155;'>{sh_detail_html}</div>", unsafe_allow_html=True)
