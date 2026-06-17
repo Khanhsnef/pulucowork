@@ -162,6 +162,7 @@ Output/Ahamove/
 | File | Mô tả |
 |------|-------|
 | `incentive_simulation_app.py` | App Streamlit giả lập incentive giờ cao điểm & tối ưu nguồn cung |
+| `sgn_overview_dashboard.py` | SGN Ops Overview dashboard — live pull từ Google Sheet `SGN Overview` |
 
 #### `sql/`
 | File | Mô tả |
