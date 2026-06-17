@@ -1427,35 +1427,31 @@ with col_chart_right:
         acc_rate = day_pass / valid_days if valid_days > 0 else 0.0
         acc_rate_color = "val-positive" if acc_rate >= 0.80 else ("val-neutral" if acc_rate >= 0.50 else "val-negative")
         
-        accuracy_rows_html += f"""
-            <tr>
-                <td style='padding: 0.4rem; font-weight:700;'>{name}</td>
-                <td style='padding: 0.4rem;'>95% - 105%</td>
-                <td style='padding: 0.4rem; text-align:center;'>{day_pass}</td>
-                <td style='padding: 0.4rem; text-align:center;' class='{acc_rate_color}'>{acc_rate:.1%}</td>
-                <td style='padding: 0.4rem; text-align:center;'>{day_under}</td>
-                <td style='padding: 0.4rem; text-align:center;'>{day_over}</td>
-            </tr>
-        """
+        accuracy_rows_html += f"""<tr>
+<td style='padding: 0.4rem; font-weight:700;'>{name}</td>
+<td style='padding: 0.4rem;'>95% - 105%</td>
+<td style='padding: 0.4rem; text-align:center;'>{day_pass}</td>
+<td style='padding: 0.4rem; text-align:center;' class='{acc_rate_color}'>{acc_rate:.1%}</td>
+<td style='padding: 0.4rem; text-align:center;'>{day_under}</td>
+<td style='padding: 0.4rem; text-align:center;'>{day_over}</td>
+</tr>"""
         
     st.markdown(
-        f"""
-<table style='width:100%; font-size:0.78rem; border-collapse:collapse; color:#F8FAFC;'>
-    <thead>
-        <tr style='border-bottom:1px solid #334155; text-align:left; color:#94A3B8;'>
-            <th style='padding:0.4rem;'>Metric</th>
-            <th style='padding:0.4rem;'>Target</th>
-            <th style='padding:0.4rem; text-align:center;'>Pass</th>
-            <th style='padding:0.4rem; text-align:center;'>%</th>
-            <th style='padding:0.4rem; text-align:center;'>Under</th>
-            <th style='padding:0.4rem; text-align:center;'>Over</th>
-        </tr>
-    </thead>
-    <tbody>
-        {accuracy_rows_html}
-    </tbody>
-</table>
-        """,
+        f"""<table style='width:100%; font-size:0.78rem; border-collapse:collapse; color:#F8FAFC;'>
+<thead>
+<tr style='border-bottom:1px solid #334155; text-align:left; color:#94A3B8;'>
+<th style='padding:0.4rem;'>Metric</th>
+<th style='padding:0.4rem;'>Target</th>
+<th style='padding:0.4rem; text-align:center;'>Pass</th>
+<th style='padding:0.4rem; text-align:center;'>%</th>
+<th style='padding:0.4rem; text-align:center;'>Under</th>
+<th style='padding:0.4rem; text-align:center;'>Over</th>
+</tr>
+</thead>
+<tbody>
+{accuracy_rows_html}
+</tbody>
+</table>""",
         unsafe_allow_html=True
     )
     st.markdown("</div>", unsafe_allow_html=True)
