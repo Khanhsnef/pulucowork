@@ -250,4 +250,16 @@ Output/Ahamove/
 
 ---
 
-*Last updated: 2026-06-09 | Scanned by Antigravity AI*
+## ▶️ Chạy Dashboard Local
+
+```bash
+streamlit run "output/Ahamove/04. OPS_METRICS/dashboards/incentive_simulation_app.py" --server.port 8501
+```
+
+```bash
+streamlit run "output/Ahamove/04. OPS_METRICS/dashboards/sgn_overview_dashboard.py" --server.port 8501
+```
+
+---
+
+*Last updated: 2026-06-17 | Scanned by Claude Code*
