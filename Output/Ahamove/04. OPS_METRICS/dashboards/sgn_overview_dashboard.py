@@ -1950,7 +1950,8 @@ sup_tab1, sup_tab2, sup_tab3 = st.tabs([
 ])
 
 with sup_tab1:
-    col_s1, col_s2 = st.columns([2, 1])
+    # Charts: side by side (2 columns)
+    col_s1, col_s2_chart = st.columns(2)
     with col_s1:
         # Supply Hours trend (Online Hours = tổng giờ online của tài xế)
         onlineh_series = process_series(daily_series(raw_df, ONLINE_HOURS_TOTAL_ROW), start_date, end_date, time_granularity)
@@ -1965,6 +1966,7 @@ with sup_tab1:
             {"Total Supply Hours": "#F8FAFC", **{s: SEGMENT_COLORS[s] for s in sh_by_seg}}
         )
 
+    with col_s2_chart:
         # Active drivers by segment
         segment_data = {
             seg: process_series(daily_series(raw_df, SEGMENT_ROWS[seg]), start_date, end_date, time_granularity, agg_type="mean")
@@ -1973,14 +1975,17 @@ with sup_tab1:
         if segment_data:
             render_line_chart(segment_data, f"{time_granularity} Active Drivers by Segment", SEGMENT_COLORS)
 
-    with col_s2:
-        lm_sd_label = date_yesterday.strftime('%d') + "-" + (date_yesterday.replace(month=date_yesterday.month-1).strftime('%b') if date_yesterday.month > 1 else "")
-        dod_label = columns_with_dates[2][1].strftime('%d-%b') if len(columns_with_dates) > 2 else "D-2"
-        col_dod = columns_with_dates[2][0] if len(columns_with_dates) > 2 else None
+    # Tables: full-width below charts
+    # ── Supply tables: two columns full-width below charts ─────────────────
+    lm_sd_label = date_yesterday.strftime('%d') + "-" + (date_yesterday.replace(month=date_yesterday.month-1).strftime('%b') if date_yesterday.month > 1 else "")
+    dod_label = columns_with_dates[2][1].strftime('%d-%b') if len(columns_with_dates) > 2 else "D-2"
+    col_dod = columns_with_dates[2][0] if len(columns_with_dates) > 2 else None
 
+    _tbl_col1, _tbl_col2 = st.columns([3, 2])
+
+    with _tbl_col1:
         st.markdown(f"**Supply Hours — DoD / WoW / WTD / MTD**")
-        # Supply Hours detail table
-        sh_detail_html = f"""<table class='analysis-table' style='font-size:0.78rem;'>
+        sh_detail_html = f"""<table class='analysis-table' style='font-size:0.75rem;width:100%;'>
 <thead><tr>
 <th>Segment</th>
 <th>Hôm qua<br><span style='color:#64748B;'>{date_yesterday.strftime('%d-%b')}</span></th>
@@ -1993,7 +1998,6 @@ with sup_tab1:
 </tr></thead><tbody>"""
 
         def _sh_delta_td(curr, base):
-            """Δ% trên + số tuyệt đối bên dưới."""
             if curr is None or base is None or base == 0:
                 return "<td class='val-neutral'>—</td>"
             d = (curr - base) / base
@@ -2012,7 +2016,6 @@ with sup_tab1:
             mtd_v = get_row_mtd_sum(row_idx)
             lm_mtd_v = get_row_lm_mtd_sum(row_idx)
             seg_color = "#38BDF8" if seg_name == "Total" else SEGMENT_COLORS.get(seg_name, "#F8FAFC")
-
             row_cls = "class='total-row'" if seg_name == "Total" else ""
             sh_detail_html += f"""<tr {row_cls}>
 <td style='color:{seg_color};font-weight:700;'>{seg_name}</td>
@@ -2025,10 +2028,10 @@ with sup_tab1:
 {_sh_delta_td(mtd_v, lm_mtd_v)}
 </tr>"""
         sh_detail_html += "</tbody></table>"
-        st.markdown(f"<div style='background:#1E293B;padding:1rem;border-radius:0.5rem;border:1px solid #334155;'>{sh_detail_html}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='overflow-x:auto;background:#1E293B;padding:1rem;border-radius:0.5rem;border:1px solid #334155;'>{sh_detail_html}</div>", unsafe_allow_html=True)
 
+    with _tbl_col2:
         st.markdown(f"**Supply Snapshot — Yest vs LM cùng kỳ**")
-        # snap_rows: (name, yest_val, lm_same_day_val, lm_mtd_avg_val, is_decimal)
         snap_rows = [
             ("Active Total",   val(50, col_yesterday), val(50, lm_same_day_col) if lm_same_day_col else None, get_row_lm_mtd_mean(50), False),
             ("Supply Hours",   val(66, col_yesterday), val(66, lm_same_day_col) if lm_same_day_col else None, get_row_lm_mtd_mean(66), False),
@@ -2036,7 +2039,7 @@ with sup_tab1:
             ("Online/Driver",  val(82, col_yesterday), val(82, lm_same_day_col) if lm_same_day_col else None, get_row_lm_mtd_mean(82), True),
             ("Prod/Online Hr", val(90, col_yesterday), val(90, lm_same_day_col) if lm_same_day_col else None, get_row_lm_mtd_mean(90), True),
         ]
-        supply_snap_html = f"""<table class='analysis-table' style='font-size:0.78rem;'>
+        supply_snap_html = f"""<table class='analysis-table' style='font-size:0.75rem;width:100%;'>
 <thead><tr>
 <th>Metric</th>
 <th>Yest<br><span style='color:#64748B;'>{date_yesterday.strftime('%d-%b')}</span></th>
@@ -2045,7 +2048,6 @@ with sup_tab1:
 </tr></thead><tbody>"""
         for name, yv, lm_sd, lm_mtd_a, is_dec in snap_rows:
             fmt = lambda v: (f"{v:.2f}" if is_dec else format_number(v)) if v else "—"
-            # vs LM same day
             if yv and lm_sd and lm_sd > 0:
                 diff_sd = (yv - lm_sd) / lm_sd
                 sd_color = "#34D399" if diff_sd >= 0 else "#F87171"
@@ -2053,7 +2055,6 @@ with sup_tab1:
                 sd_str = f"<span style='color:{sd_color};'>{sd_arrow} {diff_sd:+.1%}</span><br><small>{fmt(lm_sd)}</small>"
             else:
                 sd_str = f"<span style='color:#64748B;'>—</span><br><small>{fmt(lm_sd)}</small>"
-            # vs LM MTD avg
             if yv and lm_mtd_a and lm_mtd_a > 0:
                 diff_mtd = (yv - lm_mtd_a) / lm_mtd_a
                 mtd_color = "#34D399" if diff_mtd >= 0 else "#F87171"
