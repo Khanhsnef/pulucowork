@@ -1318,45 +1318,28 @@ st.markdown("<div class='section-header'>🔴 Executive Summary — KPI Pulse</d
 
 # Compute derived KPIs
 fr_yest = val(180, col_yesterday)  # % Actual FR Total row 180
-utilization_yest = None
 active_4h_pct = None
 
-cap_yest = val(58, col_yesterday)
-online_yest = val(66, col_yesterday)
-active_total_4h = val(177, col_yesterday)   # Total active_4h
+active_total_4h = val(177, col_yesterday)   # Total active_4h (dịch vụ 4H)
 active_total = val(166, col_yesterday)       # Total Active (row 166)
-
-if cap_yest and online_yest and cap_yest > 0:
-    utilization_yest = online_yest / cap_yest
 
 if active_total and active_total > 0 and active_total_4h is not None:
     active_4h_pct = active_total_4h / active_total
 
-# LM equivalents for comparison — all use SAME PERIOD (LM MTD = same day range last month)
-# lm_same_day_col: exact same calendar day in previous month (e.g. May 16 for Jun 16)
-# get_row_lm_mtd_mean/sum: period May 1–{date_yesterday.day} (mirrors current MTD Jun 1–{date_yesterday.day})
 fr_lm_same_day = val(180, lm_same_day_col) if lm_same_day_col else None
-
-# Utilization: use LM MTD averages (not full LM totals which inflate the denominator)
-util_lm_cap_mtd = get_row_lm_mtd_mean(58)   # avg daily Capacity in LM same period
-util_lm_sh_mtd = get_row_lm_mtd_mean(66)    # avg daily Online Hours in LM same period
-util_lm = util_lm_sh_mtd / util_lm_cap_mtd if util_lm_cap_mtd and util_lm_sh_mtd else None
 
 prod_yest = val(74, col_yesterday)
 prod_lm_same_day = val(74, lm_same_day_col) if lm_same_day_col else None
-prod_lm_mtd_avg = get_row_lm_mtd_mean(74)   # avg Productivity May 1–{date_yesterday.day}
+prod_lm_mtd_avg = get_row_lm_mtd_mean(74)
 opd_yest = val(82, col_yesterday)
 opd_lm_same_day = val(82, lm_same_day_col) if lm_same_day_col else None
 opd_lm_mtd_avg = get_row_lm_mtd_mean(82)
 
-# Keep full-LM as secondary context only
-util_lm_full_cap = val(58, 2)
-util_lm_full_sh = val(66, 2)
 prod_lm_full = val(74, 2)
 opd_lm_full = val(82, 2)
 
-# Row 1: 6 KPI cards
-cols = st.columns(6)
+# Row 1: 5 KPI cards (Utilization removed)
+cols = st.columns(5)
 
 cols[0].markdown(
     metric_card(
@@ -1402,22 +1385,9 @@ cols[3].markdown(
     unsafe_allow_html=True,
 )
 
-util_pct_str = format_percent(utilization_yest) if utilization_yest else "—"
-util_lm_mtd_str = format_percent(util_lm) if util_lm else "—"
-cols[4].markdown(
-    metric_card(
-        "Supply Utilization (Hôm qua)",
-        util_pct_str,
-        delta_html(utilization_yest, util_lm, percent=True, label_suffix=f"vs LM {date_yesterday.strftime('%d')}-day MTD") if utilization_yest and util_lm else "<span style='color:#64748B'>vs LM MTD</span>",
-        f"LM MTD avg: {util_lm_mtd_str}",
-        "metric-card-green"
-    ),
-    unsafe_allow_html=True,
-)
-
 # Productivity: compare yesterday vs SAME DAY last month (best apples-to-apples daily)
 lm_day_str = date_yesterday.replace(month=date_yesterday.month - 1).strftime('%d-%b') if lm_same_day_col else ""
-cols[5].markdown(
+cols[4].markdown(
     metric_card(
         "Productivity (Hôm qua)",
         format_number(prod_yest, 1),
@@ -1427,15 +1397,25 @@ cols[5].markdown(
     unsafe_allow_html=True,
 )
 
-# Row 2: MTD comparison cards — all deltas vs LM same-period (LM MTD), full LM as context
-cols2 = st.columns(4)
+# Row 2: MTD comparison cards
+cols2 = st.columns(5)
 request_mtd_val = val(22, 3)
 demand_mtd_val = val(29, 3)
-request_lm_full = val(22, 2)       # full May
-demand_lm_full = val(29, 2)        # full May
-req_lm_mtd_sum = get_row_lm_mtd_sum(22)   # May 1–{date_yesterday.day} (same period)
-dem_lm_mtd_sum = get_row_lm_mtd_sum(29)   # May 1–{date_yesterday.day} (same period)
+request_lm_full = val(22, 2)
+demand_lm_full = val(29, 2)
+req_lm_mtd_sum = get_row_lm_mtd_sum(22)
+dem_lm_mtd_sum = get_row_lm_mtd_sum(29)
 lm_period_label = f"1–{date_yesterday.strftime('%d')} May"
+
+# Supply Hours data
+sh_yest = val(66, col_yesterday)
+sh_dod = val(66, col_last_week - 6)  # Day-over-Day: day before yesterday (col_yesterday+1 back)
+sh_lw = val(66, col_last_week)
+sh_mtd = get_row_wtd_sum(66) if False else get_row_mtd_sum(66)  # use MTD sum helper
+sh_mtd_val = cockpit["Supply hour"]["mtd"]
+sh_wtd_val = cockpit["Supply hour"]["wtd"]
+sh_lm_same_day = val(66, lm_same_day_col) if lm_same_day_col else None
+sh_lm_mtd = get_row_lm_mtd_sum(66)
 
 cols2[0].markdown(
     metric_card(
@@ -1458,7 +1438,7 @@ cols2[1].markdown(
 
 prod_mtd = val(74, 3)
 prod_lm_whole = val(74, 2)
-prod_lm_mtd_v = get_row_lm_mtd_mean(74)   # avg Productivity May 1–{date_yesterday.day}
+prod_lm_mtd_v = get_row_lm_mtd_mean(74)
 cols2[2].markdown(
     metric_card(
         "Productivity MTD avg",
@@ -1469,13 +1449,27 @@ cols2[2].markdown(
     unsafe_allow_html=True,
 )
 
-active_4h_str = format_percent(active_4h_pct) if active_4h_pct else "—"
+# Supply Hours card — DoD + WoW + MTD vs LM
+_sh_dod_col = col_yesterday + 1 if (col_yesterday + 1) < len(columns_with_dates) else None
+sh_dod_val = val(66, columns_with_dates[2][0]) if len(columns_with_dates) > 2 else None  # day before yesterday
 cols2[3].markdown(
     metric_card(
-        "Active 4h+ Retention (Hôm qua)",
+        "Supply Hours (Hôm qua)",
+        format_number(sh_yest),
+        delta_html(sh_yest, sh_dod_val, label_suffix="DoD") if sh_dod_val else delta_html(sh_yest, sh_lw, label_suffix="WoW"),
+        f"WoW vs {date_last_week.strftime('%d-%b')}: {delta_html(sh_yest, sh_lw, label_suffix='').replace('<span', '<span style=\"font-size:0.8rem\"')} | MTD: {format_number(sh_mtd_val)}",
+        "metric-card-blue"
+    ),
+    unsafe_allow_html=True,
+)
+
+active_4h_str = format_percent(active_4h_pct) if active_4h_pct else "—"
+cols2[4].markdown(
+    metric_card(
+        "Nhóm DV 4H — Active (Hôm qua)",
         active_4h_str,
-        f"<span style='color:#94A3B8'>4h+: {format_number(active_total_4h)} / {format_number(active_total)} tài xế</span>",
-        "Proxy: tài xế gắn bó cao",
+        f"<span style='color:#94A3B8'>4H: {format_number(active_total_4h)} / {format_number(active_total)} tài xế</span>",
+        "Giao trong 4H / Ghép đơn",
         "metric-card-green"
     ),
     unsafe_allow_html=True,
@@ -1881,25 +1875,26 @@ with dem_tab4:
 # ── LAYER 3: SUPPLY & DRIVER ANALYTICS ───────────────────────────────────────
 st.markdown("<div class='section-header'>🚗 Supply & Driver Analytics</div>", unsafe_allow_html=True)
 
-sup_tab1, sup_tab2, sup_tab3, sup_tab4 = st.tabs([
-    "📉 Active Driver Trend", "⚡ Segment Efficiency", "⏱️ Active Time Windows", "📊 Supply Utilization"
+sup_tab1, sup_tab2, sup_tab3 = st.tabs([
+    "📉 Active Driver Trend", "⚡ Segment Efficiency", "📦 Service Type Mix"
 ])
 
 with sup_tab1:
     col_s1, col_s2 = st.columns([2, 1])
     with col_s1:
-        # Active drivers + Capacity + Online Hours on dual axis
-        active_total_series = process_series(daily_series(raw_df, ACTIVE_TOTAL_ROW), start_date, end_date, time_granularity, agg_type="mean")
-        cap_series = process_series(daily_series(raw_df, CAPACITY_TOTAL_ROW), start_date, end_date, time_granularity)
+        # Supply Hours trend (Online Hours = tổng giờ online của tài xế)
         onlineh_series = process_series(daily_series(raw_df, ONLINE_HOURS_TOTAL_ROW), start_date, end_date, time_granularity)
-        render_dual_axis_chart(
-            data_left={"Capacity (giờ)": cap_series, "Online Hours (giờ)": onlineh_series},
-            data_right={},
-            title=f"{time_granularity} Capacity vs Online Hours",
-            colors_left={"Capacity (giờ)": "#6366F1", "Online Hours (giờ)": "#10B981"},
-            colors_right={},
-            left_label="Giờ tổng",
+        sh_by_seg = {
+            seg: process_series(daily_series(raw_df, sh_seg_rows[seg]), start_date, end_date, time_granularity)
+            for seg in ["FT", "PT", "NLM", "Return", "NIM"]
+            if sh_seg_rows.get(seg)
+        }
+        render_line_chart(
+            {"Total Supply Hours": onlineh_series, **sh_by_seg},
+            f"{time_granularity} Supply Hours (Online Hours) by Segment",
+            {"Total Supply Hours": "#F8FAFC", **{s: SEGMENT_COLORS[s] for s in sh_by_seg}}
         )
+
         # Active drivers by segment
         segment_data = {
             seg: process_series(daily_series(raw_df, SEGMENT_ROWS[seg]), start_date, end_date, time_granularity, agg_type="mean")
@@ -1910,12 +1905,58 @@ with sup_tab1:
 
     with col_s2:
         lm_sd_label = date_yesterday.strftime('%d') + "-" + (date_yesterday.replace(month=date_yesterday.month-1).strftime('%b') if date_yesterday.month > 1 else "")
+        dod_label = columns_with_dates[2][1].strftime('%d-%b') if len(columns_with_dates) > 2 else "D-2"
+        col_dod = columns_with_dates[2][0] if len(columns_with_dates) > 2 else None
+
+        st.markdown(f"**Supply Hours — DoD / WoW / WTD / MTD**")
+        # Supply Hours detail table
+        sh_detail_html = f"""<table class='analysis-table' style='font-size:0.78rem;'>
+<thead><tr>
+<th>Segment</th>
+<th>Hôm qua<br><span style='color:#64748B;'>{date_yesterday.strftime('%d-%b')}</span></th>
+<th>DoD Δ<br><span style='color:#64748B;'>{dod_label}</span></th>
+<th>WoW Δ<br><span style='color:#64748B;'>{date_last_week.strftime('%d-%b')}</span></th>
+<th>WTD<br><span style='color:#64748B;'>{_wtd_label}</span></th>
+<th>MTD<br><span style='color:#64748B;'>Jun</span></th>
+<th>MoM Δ<br><span style='color:#64748B;'>vs {lm_period_label}</span></th>
+</tr></thead><tbody>"""
+
+        sh_detail_segs = [("Total", 66), ("FT", 67), ("PT", 68), ("NLM", 69), ("Return", 70), ("NIM", 71)]
+        for seg_name, row_idx in sh_detail_segs:
+            yv = val(row_idx, col_yesterday)
+            dod_v = val(row_idx, col_dod) if col_dod else None
+            wow_v = val(row_idx, col_last_week)
+            wtd_v = get_row_wtd_sum(row_idx)
+            mtd_v = get_row_mtd_sum(row_idx)
+            lm_mtd_v = get_row_lm_mtd_sum(row_idx)
+            seg_color = "#38BDF8" if seg_name == "Total" else SEGMENT_COLORS.get(seg_name, "#F8FAFC")
+
+            def _delta_td(curr, base):
+                if curr is None or base is None or base == 0:
+                    return "<td class='val-neutral'>—</td>"
+                d = (curr - base) / base
+                cls = "val-positive" if d >= 0 else "val-negative"
+                arrow = "▲" if d >= 0 else "▼"
+                return f"<td class='{cls}'>{arrow}{abs(d):.1%}</td>"
+
+            row_cls = "class='total-row'" if seg_name == "Total" else ""
+            sh_detail_html += f"""<tr {row_cls}>
+<td style='color:{seg_color};font-weight:700;'>{seg_name}</td>
+<td>{format_number(yv)}</td>
+{_delta_td(yv, dod_v)}
+{_delta_td(yv, wow_v)}
+<td>{format_number(wtd_v)}</td>
+<td>{format_number(mtd_v)}</td>
+{_delta_td(mtd_v, lm_mtd_v)}
+</tr>"""
+        sh_detail_html += "</tbody></table>"
+        st.markdown(f"<div style='background:#1E293B;padding:1rem;border-radius:0.5rem;border:1px solid #334155;'>{sh_detail_html}</div>", unsafe_allow_html=True)
+
         st.markdown(f"**Supply Snapshot — Yest vs LM cùng kỳ**")
         # snap_rows: (name, yest_val, lm_same_day_val, lm_mtd_avg_val, is_decimal)
         snap_rows = [
             ("Active Total",   val(50, col_yesterday), val(50, lm_same_day_col) if lm_same_day_col else None, get_row_lm_mtd_mean(50), False),
-            ("Capacity",       val(58, col_yesterday), val(58, lm_same_day_col) if lm_same_day_col else None, get_row_lm_mtd_mean(58), False),
-            ("Online Hours",   val(66, col_yesterday), val(66, lm_same_day_col) if lm_same_day_col else None, get_row_lm_mtd_mean(66), False),
+            ("Supply Hours",   val(66, col_yesterday), val(66, lm_same_day_col) if lm_same_day_col else None, get_row_lm_mtd_mean(66), False),
             ("Productivity",   val(74, col_yesterday), val(74, lm_same_day_col) if lm_same_day_col else None, get_row_lm_mtd_mean(74), True),
             ("Online/Driver",  val(82, col_yesterday), val(82, lm_same_day_col) if lm_same_day_col else None, get_row_lm_mtd_mean(82), True),
             ("Prod/Online Hr", val(90, col_yesterday), val(90, lm_same_day_col) if lm_same_day_col else None, get_row_lm_mtd_mean(90), True),
@@ -2050,17 +2091,17 @@ with sup_tab2:
 
 with sup_tab3:
     # Active by Service Type (1h=Giao ngay 1H, 2h=Siêu tốc 2H, 4h=4H/Ghép đơn)
-    st.markdown("**📦 Active by Service Type Breakdown (Hôm qua)**")
-    st.caption("1h = Giao ngay 1H &nbsp;|&nbsp; 2h = Siêu tốc 2H &nbsp;|&nbsp; 4h = Giao trong 4H / Ghép đơn")
+    st.markdown("**📦 Active by Service Type — Nhóm dịch vụ (Hôm qua)**")
+    st.caption("Nhóm dịch vụ 1H = Giao ngay 1H &nbsp;|&nbsp; Nhóm dịch vụ 2H = Siêu tốc 2H &nbsp;|&nbsp; Nhóm dịch vụ 4H = Giao trong 4H / Ghép đơn")
 
     tw_segs = ["Total", "FT", "PT", "NLM", "NIM"]
     tw_html = """<div class='cockpit-table-container'><table class='analysis-table'>
 <thead><tr>
 <th>Segment</th>
 <th>Total Active</th>
-<th>Giao ngay 1H</th><th>1H%</th>
-<th>Siêu tốc 2H</th><th>2H%</th>
-<th>Giao 4H / Ghép</th><th>4H%</th>
+<th>Nhóm DV 1H<br><small style="color:#94A3B8;font-size:0.65rem;">Giao ngay 1H</small></th><th>1H%</th>
+<th>Nhóm DV 2H<br><small style="color:#94A3B8;font-size:0.65rem;">Siêu tốc 2H</small></th><th>2H%</th>
+<th>Nhóm DV 4H<br><small style="color:#94A3B8;font-size:0.65rem;">Giao 4H / Ghép đơn</small></th><th>4H%</th>
 </tr></thead><tbody>"""
 
     for seg in tw_segs:
@@ -2110,64 +2151,6 @@ with sup_tab3:
         {"Giao ngay 1H": "#FF7F32", "Siêu tốc 2H": "#38BDF8", "Giao 4H/Ghép": "#34D399", "Active Total": "#94A3B8"}
     )
 
-with sup_tab4:
-    # Supply Utilization Rate trend (Online Hours / Capacity)
-    col_u1, col_u2 = st.columns([2, 1])
-    with col_u1:
-        cap_s = daily_series(raw_df, CAPACITY_TOTAL_ROW)
-        sh_s = daily_series(raw_df, ONLINE_HOURS_TOTAL_ROW)
-        combined_util = pd.DataFrame({"sh": sh_s, "cap": cap_s}).dropna()
-        combined_util = combined_util[combined_util["cap"] > 0]
-        util_s = combined_util["sh"] / combined_util["cap"]
-        util_series = process_series(util_s, start_date, end_date, time_granularity, is_rate=True, agg_type="mean")
-
-        if not util_series.empty and go:
-            fig_util = go.Figure()
-            fig_util.add_trace(go.Scatter(
-                x=util_series.index, y=util_series.values,
-                mode="lines+markers+text",
-                name="Utilization Rate",
-                text=[f"{v:.0%}" for v in util_series.values],
-                textposition="top center",
-                textfont={"size": 9, "color": "#F8FAFC"},
-                fill="tozeroy",
-                fillcolor="rgba(16,185,129,0.1)",
-                line={"width": 3, "color": "#10B981", "shape": "spline", "smoothing": 1.3},
-                marker={"size": 6},
-                hovertemplate="%{x|%d-%b}: %{y:.1%}<extra>Utilization</extra>",
-            ))
-            fig_util.update_layout(
-                title={"text": "Supply Utilization Rate (Online Hours / Capacity)", "font": {"size": 14, "color": "#F8FAFC"}},
-                yaxis={"tickformat": ".0%"},
-                font={"family": "Lexend, sans-serif", "color": "#F8FAFC"},
-                paper_bgcolor="#1E293B", plot_bgcolor="#1E293B",
-                margin={"l": 30, "r": 30, "t": 60, "b": 30},
-                hovermode="x unified", template="plotly_dark",
-            )
-            fig_util.update_xaxes(showgrid=False, linecolor="#334155", tickfont={"color": "#94A3B8"})
-            fig_util.update_yaxes(gridcolor="#334155", linecolor="#334155", tickfont={"color": "#94A3B8"})
-            st.plotly_chart(fig_util, use_container_width=True)
-
-    with col_u2:
-        st.markdown("**Utilization by Segment (Hôm qua)**")
-        util_seg_html = """<table class='analysis-table'>
-<thead><tr><th>Segment</th><th>Online Hrs</th><th>Capacity</th><th>Util%</th></tr></thead><tbody>"""
-        for seg in segs_eff:
-            sh_r = sh_seg_rows.get(seg)
-            cap_r = cap_seg_rows.get(seg)
-            sh_v = val(sh_r, col_yesterday) if sh_r else None
-            cap_v = val(cap_r, col_yesterday) if cap_r else None
-            util_v = sh_v / cap_v if sh_v and cap_v and cap_v > 0 else None
-            color = "#34D399" if util_v and util_v >= 0.70 else ("#FBBF24" if util_v and util_v >= 0.55 else "#F87171")
-            seg_color = SEGMENT_COLORS.get(seg, "#F8FAFC")
-            util_seg_html += f"""<tr>
-<td style='color:{seg_color};'>{seg}</td>
-<td>{format_number(sh_v)}</td>
-<td>{format_number(cap_v)}</td>
-<td style='color:{color};font-weight:700;'>{format_percent(util_v)}</td>
-</tr>"""
-        util_seg_html += "</tbody></table>"
-        st.markdown(f"<div style='background:#1E293B;padding:1rem;border-radius:0.5rem;border:1px solid #334155;'>{util_seg_html}</div>", unsafe_allow_html=True)
 
 
 # ── LAYER 4: ADVANCED ANALYTICS ──────────────────────────────────────────────
