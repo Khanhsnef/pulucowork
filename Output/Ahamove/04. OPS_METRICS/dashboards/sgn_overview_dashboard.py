@@ -841,7 +841,7 @@ selected_segments = st.sidebar.multiselect(
 )
 
 # FR target threshold
-fr_target = st.sidebar.slider("Target FR% (ngưỡng đạt)", min_value=0.60, max_value=0.90, value=0.75, step=0.01, format="%.0f%%") 
+fr_target = st.sidebar.slider("Target FR% (ngưỡng đạt)", min_value=0.60, max_value=0.90, value=0.81, step=0.01, format="%.0f%%")
 
 st.sidebar.markdown("---")
 st.sidebar.caption("City view: **SGN**")
