@@ -868,6 +868,8 @@ col_today, date_today = columns_with_dates[0]
 col_yesterday, date_yesterday = columns_with_dates[1]
 col_last_week = col_yesterday + 7  # 7 days back
 date_last_week = parse_sheet_date(safe_cell(raw_df, 4, col_last_week))
+col_dod_global = columns_with_dates[2][0] if len(columns_with_dates) > 2 else None  # day before yesterday (D-2)
+date_dod = columns_with_dates[2][1] if len(columns_with_dates) > 2 else None
 
 # Calculate MTD Column Indexes (1-Jun to yesterday)
 mtd_cols = []
@@ -1291,10 +1293,12 @@ for key, row in cockpit.items():
     lw = row["last_week"]
     is_pct = row["is_percent"]
 
-    # Daily: WoW + vs Plan
+    # Daily: WoW + vs Plan (DoD computed at render time per row, needs raw sheet row)
     row["wow"] = (y - lw if is_pct else (y - lw) / lw) if (y is not None and lw is not None and lw != 0) else None
+    row["wow_abs"] = (y - lw) if (y is not None and lw is not None) else None
     plan = row["planning"]
     row["vs_planning"] = (y - plan if is_pct else (y - plan) / plan) if (y is not None and plan is not None and plan != 0) else None
+    row["vs_planning_abs"] = (y - plan) if (y is not None and plan is not None) else None
 
     # WTD
     wtd = row.get("wtd")
@@ -1311,6 +1315,43 @@ for key, row in cockpit.items():
     row["mom_whole"] = (mtd - lm if is_pct else (mtd - lm) / lm) if (mtd is not None and lm is not None and lm != 0) else None
     row["mom_mtd"] = (mtd - lm_mtd if is_pct else (mtd - lm_mtd) / lm_mtd) if (mtd is not None and lm_mtd is not None and lm_mtd != 0) else None
     row["vs_planning_mtd"] = (mtd - plan_mtd if is_pct else (mtd - plan_mtd) / plan_mtd) if (mtd is not None and plan_mtd is not None and plan_mtd != 0) else None
+    row["mom_mtd_abs"] = (mtd - lm_mtd) if (mtd is not None and lm_mtd is not None) else None
+    row["mom_whole_abs"] = (mtd - lm) if (mtd is not None and lm is not None) else None
+    row["wow_wtd_abs"] = (wtd - lwtd) if (row.get("wtd") is not None and row.get("lwtd") is not None) else None
+
+# Sheet row lookup for DoD calculation (raw data rows, not derived)
+COCKPIT_SHEET_ROW = {
+    "Request": 22, "Complete": 29, "Active": 50,
+    "Active_FT": 51, "Active_PT": 52, "Active_NLM": 53, "Active_Return": 54, "Active_NIM": 55, "Active_NID": 56,
+    "Cap": 58,
+    "Cap_FT": 59, "Cap_PT": 60, "Cap_NLM": 61, "Cap_Return": 62, "Cap_NIM": 63, "Cap_NID": 64,
+    "Supply hour": 66,
+    "Supply_hour_FT": 67, "Supply_hour_PT": 68, "Supply_hour_NLM": 69, "Supply_hour_Return": 70, "Supply_hour_NIM": 71, "Supply_hour_NID": 72,
+    "Prod": 74, "online/driver": 82,
+    # FR, Other rows are derived — DoD computed from component rows
+}
+
+def get_cockpit_dod(key, row):
+    """Return (dod_pct, dod_abs) for a cockpit row."""
+    if col_dod_global is None:
+        return None, None
+    r = COCKPIT_SHEET_ROW.get(key)
+    is_pct = row["is_percent"]
+    y = row["yesterday"]
+    if r is not None:
+        dod_val = val(r, col_dod_global)
+    elif key == "FR":
+        # FR derived: comp_dod / req_dod
+        req_dod = val(22, col_dod_global)
+        comp_dod = val(29, col_dod_global)
+        dod_val = comp_dod / req_dod if req_dod else None
+    else:
+        dod_val = None
+    if y is None or dod_val is None:
+        return None, None
+    pct = (y - dod_val) if is_pct else ((y - dod_val) / dod_val if dod_val != 0 else None)
+    abs_d = (y - dod_val)
+    return pct, abs_d
 
 
 # ── LAYER 1: EXECUTIVE SUMMARY - KPI CARDS ───────────────────────────────────
@@ -1535,22 +1576,39 @@ _lm_period = f"1–{date_yesterday.strftime('%d')} May"
 _wtd_label = f"{wtd_start_label}–{date_yesterday.strftime('%d-%b')}"
 _lwtd_label = f"{lwtd_start_label}–{_last_week_same_dow.strftime('%d-%b')}"
 
+_dod_lbl = date_dod.strftime('%d-%b') if date_dod else "D-2"
+
+def delta_cell_abs(pct_v, abs_v, positive_is_good=True, is_pct_metric=False):
+    """Delta cell: % on top, absolute number below in small text."""
+    if pct_v is None:
+        return "<td class='val-neutral'>—</td>"
+    cls = ("val-positive" if pct_v >= 0 else "val-negative") if positive_is_good else ("val-negative" if pct_v >= 0 else "val-positive")
+    arrow = "▲" if pct_v >= 0 else "▼"
+    pct_str = f"{arrow}{abs(pct_v):.1%}"
+    if abs_v is not None:
+        if is_pct_metric:
+            abs_str = f"{abs_v:+.1%}"
+        else:
+            abs_str = f"{abs_v:+,.0f}"
+        return f"<td class='{cls}'>{pct_str}<br><small style='opacity:0.72;font-size:0.68rem;'>{abs_str}</small></td>"
+    return f"<td class='{cls}'>{pct_str}</td>"
+
 html_table = f"""
 <div class="cockpit-table-container">
   <table class="cockpit-table">
     <thead>
       <tr>
         <th rowspan="2" style="vertical-align:bottom;">SGN</th>
-        <!-- DAILY group -->
-        <th colspan="4" class="hdr-actual-current" style="text-align:center;border-bottom:1px solid #475569;">
+        <!-- DAILY group: 5 cols -->
+        <th colspan="5" class="hdr-actual-current" style="text-align:center;border-bottom:1px solid #475569;">
           DAILY — {date_yesterday.strftime('%d-%b')}
         </th>
-        <!-- WTD group -->
+        <!-- WTD group: 4 cols -->
         <th colspan="4" class="hdr-actual-past" style="text-align:center;border-bottom:1px solid #475569;">
           WTD — {_wtd_label}
         </th>
-        <!-- MTD group -->
-        <th colspan="4" class="hdr-plan" style="text-align:center;border-bottom:1px solid #475569;">
+        <!-- MTD group: 3 cols -->
+        <th colspan="3" class="hdr-plan" style="text-align:center;border-bottom:1px solid #475569;">
           MTD — Jun-2026
         </th>
       </tr>
@@ -1558,18 +1616,18 @@ html_table = f"""
         <!-- DAILY sub-headers -->
         <th class="hdr-actual-current">Actual</th>
         <th class="hdr-plan">FC</th>
-        <th class="hdr-actual-past">WoW<br><small style="font-size:0.65rem;color:#94A3B8;">vs {date_last_week.strftime('%d-%b')}</small></th>
+        <th class="hdr-actual-past">DoD Δ<br><small style="font-size:0.65rem;color:#94A3B8;">vs {_dod_lbl}</small></th>
+        <th class="hdr-actual-past">vs prev week<br><small style="font-size:0.65rem;color:#94A3B8;">vs {date_last_week.strftime('%d-%b')}</small></th>
         <th class="hdr-plan">vs FC</th>
         <!-- WTD sub-headers -->
         <th class="hdr-actual-current">Actual</th>
         <th class="hdr-plan">FC</th>
-        <th class="hdr-actual-past">WoW<br><small style="font-size:0.65rem;color:#94A3B8;">vs {_lwtd_label}</small></th>
+        <th class="hdr-actual-past">vs LWTD<br><small style="font-size:0.65rem;color:#94A3B8;">{_lwtd_label}</small></th>
         <th class="hdr-plan">vs FC</th>
         <!-- MTD sub-headers -->
         <th class="hdr-actual-current">Actual</th>
-        <th class="hdr-plan">FC</th>
         <th class="hdr-actual-past">MoM<br><small style="font-size:0.65rem;color:#94A3B8;">vs {_lm_period}</small></th>
-        <th class="hdr-plan">vs FC</th>
+        <th class="hdr-plan">vs FC / LM</th>
       </tr>
     </thead>
     <tbody>
@@ -1621,39 +1679,53 @@ cockpit_rows_order = [
     ("Other (EXP)", "Supply_hour_Other", "Supply hour")
 ]
 
+_ACTIVE_KEYS = {"Active", "Active_FT", "Active_PT", "Active_NLM", "Active_Return", "Active_NIM", "Active_NID", "Active_Other"}
+
 for label, key, parent in cockpit_rows_order:
     row = cockpit[key]
     fmt = row["format"]
+    is_pct_metric = row["is_percent"]
     tr_class = "row-header" if parent is None else ""
     td_label_cls = "" if parent is None else "class='sub-row-header'"
+    is_active_row = key in _ACTIVE_KEYS
+
+    # Compute DoD
+    dod_pct, dod_abs = get_cockpit_dod(key, row)
 
     html_table += f"<tr class='{tr_class}'>"
     html_table += f"<td {td_label_cls}>{label}</td>"
-    # DAILY
+
+    # ── DAILY (5 cols) ──────────────────────────────────────────
     html_table += fmt_cell(row.get("yesterday"), fmt)
     html_table += fmt_cell(row.get("planning"), fmt)
-    html_table += delta_cell(row.get("wow"))
-    html_table += delta_cell(row.get("vs_planning"))
-    # WTD
+    html_table += delta_cell_abs(dod_pct, dod_abs, is_pct_metric=is_pct_metric)
+    html_table += delta_cell_abs(row.get("wow"), row.get("wow_abs"), is_pct_metric=is_pct_metric)
+    html_table += delta_cell_abs(row.get("vs_planning"), row.get("vs_planning_abs"), is_pct_metric=is_pct_metric)
+
+    # ── WTD (4 cols) ─────────────────────────────────────────────
     html_table += fmt_cell(row.get("wtd"), fmt)
     html_table += fmt_cell(row.get("plan_wtd"), fmt)
-    html_table += delta_cell(row.get("wow_wtd"))
-    html_table += delta_cell(row.get("vs_plan_wtd"))
-    # MTD
+    html_table += delta_cell_abs(row.get("wow_wtd"), row.get("wow_wtd_abs"), is_pct_metric=is_pct_metric)
+    html_table += delta_cell_abs(row.get("vs_plan_wtd"), None, is_pct_metric=is_pct_metric)
+
+    # ── MTD (3 cols) — Active: no FC comparison, use LM whole instead ────────
     html_table += fmt_cell(row.get("mtd"), fmt)
-    html_table += fmt_cell(row.get("plan_mtd"), fmt)
-    html_table += delta_cell(row.get("mom_mtd"))
-    html_table += delta_cell(row.get("vs_planning_mtd"))
+    html_table += delta_cell_abs(row.get("mom_mtd"), row.get("mom_mtd_abs"), is_pct_metric=is_pct_metric)
+    if is_active_row:
+        # Active MTD vs FC is meaningless (distinct driver count vs daily plan) — show vs LM whole month
+        html_table += delta_cell_abs(row.get("mom_whole"), row.get("mom_whole_abs"), is_pct_metric=is_pct_metric)
+    else:
+        html_table += delta_cell_abs(row.get("vs_planning_mtd"), None, is_pct_metric=is_pct_metric)
     html_table += "</tr>"
 
-html_table += """
+html_table += f"""
     </tbody>
   </table>
 </div>
 <div style='margin-top:0.4rem;font-size:0.72rem;color:#64748B;'>
-  💡 WTD = Week-to-date (Mon → hôm qua) &nbsp;|&nbsp; FC = Forecast Plan &nbsp;|&nbsp; MoM so với cùng kỳ tháng trước ({_lm_period})
+  💡 DAILY DoD = vs ngày hôm trước ({_dod_lbl}) &nbsp;·&nbsp; vs prev week = cùng thứ tuần trước &nbsp;·&nbsp; WTD Mon–{date_yesterday.strftime('%d-%b')} &nbsp;·&nbsp; Active MTD "vs FC/LM" = vs LM whole month (FC không có nghĩa cho distinct driver count)
 </div>
-""".format(_lm_period=_lm_period)
+"""
 st.markdown(html_table, unsafe_allow_html=True)
 
 
@@ -1981,7 +2053,7 @@ with sup_tab1:
     dod_label = columns_with_dates[2][1].strftime('%d-%b') if len(columns_with_dates) > 2 else "D-2"
     col_dod = columns_with_dates[2][0] if len(columns_with_dates) > 2 else None
 
-    _tbl_col1, _tbl_col2 = st.columns([3, 2])
+    _tbl_col1, _tbl_col2 = st.columns([5, 3])
 
     with _tbl_col1:
         st.markdown(f"**Supply Hours — DoD / WoW / WTD / MTD**")
