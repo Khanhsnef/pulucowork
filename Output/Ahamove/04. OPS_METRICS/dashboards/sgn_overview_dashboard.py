@@ -1333,10 +1333,7 @@ with col_chart_left:
         st.info("Chọn ít nhất một driver segment để hiển thị chart.")
 
 with col_chart_right:
-    # ── LEADERBOARD: TOP 3 DAYS ───────────────────────────────────────────────
-    st.markdown("<div class='leaderboard-card'>", unsafe_allow_html=True)
-    st.markdown("<div class='leaderboard-title'>🏆 Leaderboard - Top 3 ngày Request SGN</div>", unsafe_allow_html=True)
-    
+    # ── LEADERBOARD: TOP 3 DAYS (ACTUAL REQUEST) ──────────────────────────────
     leaderboard_req = []
     for col_idx in mtd_cols:
         d_val = parse_sheet_date(safe_cell(raw_df, 4, col_idx))
@@ -1345,19 +1342,22 @@ with col_chart_right:
             leaderboard_req.append((d_val, val_req))
     leaderboard_req.sort(key=lambda x: x[1], reverse=True)
     
+    req_rows_html = ""
     for rank, (d, v) in enumerate(leaderboard_req[:3]):
-        st.markdown(
-            f"""
-            <div class="leaderboard-row rank-{rank+1}">
-                <div class="rank-badge">Top {rank+1} &nbsp;&nbsp; {d.strftime('%d-%b')}</div>
-                <div style="font-weight:700;">{v:,.0f} reqs</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        req_rows_html += f"""<div class="leaderboard-row rank-{rank+1}">
+<div class="rank-badge">Top {rank+1} &nbsp;&nbsp; {d.strftime('%d-%b')}</div>
+<div style="font-weight:700;">{v:,.0f} reqs</div>
+</div>"""
         
-    st.markdown("<div class='leaderboard-title' style='margin-top:1.5rem;'>🏆 Leaderboard - Top 3 ngày Demand SGN</div>", unsafe_allow_html=True)
-    
+    st.markdown(
+        f"""<div class='leaderboard-card'>
+<div class='leaderboard-title'>🏆 Leaderboard - Top 3 ngày Actual Request SGN</div>
+{req_rows_html}
+</div>""",
+        unsafe_allow_html=True
+    )
+
+    # ── LEADERBOARD: TOP 3 DAYS (ACTUAL DEMAND) ───────────────────────────────
     leaderboard_dem = []
     for col_idx in mtd_cols:
         d_val = parse_sheet_date(safe_cell(raw_df, 4, col_idx))
@@ -1366,27 +1366,27 @@ with col_chart_right:
             leaderboard_dem.append((d_val, val_dem))
     leaderboard_dem.sort(key=lambda x: x[1], reverse=True)
     
+    dem_rows_html = ""
     for rank, (d, v) in enumerate(leaderboard_dem[:3]):
-        st.markdown(
-            f"""
-            <div class="leaderboard-row rank-{rank+1}">
-                <div class="rank-badge">Top {rank+1} &nbsp;&nbsp; {d.strftime('%d-%b')}</div>
-                <div style="font-weight:700;">{v:,.0f} orders</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-    st.markdown("</div>", unsafe_allow_html=True)
+        dem_rows_html += f"""<div class="leaderboard-row rank-{rank+1}">
+<div class="rank-badge">Top {rank+1} &nbsp;&nbsp; {d.strftime('%d-%b')}</div>
+<div style="font-weight:700;">{v:,.0f} orders</div>
+</div>"""
+        
+    st.markdown(
+        f"""<div class='leaderboard-card'>
+<div class='leaderboard-title'>🏆 Leaderboard - Top 3 ngày Actual Demand SGN</div>
+{dem_rows_html}
+</div>""",
+        unsafe_allow_html=True
+    )
 
     # ── ACCURACY TABLE: DAYS IN METRIC ACCURACY ────────────────────────────────
-    st.markdown("<div class='leaderboard-card'>", unsafe_allow_html=True)
-    st.markdown("<div class='leaderboard-title'>🎯 Số ngày các chỉ số đạt % FC SGN</div>", unsafe_allow_html=True)
-    
     accuracy_metrics = {
-        "Request": (21, 5),
-        "Complete": (28, 13),
-        "Active": (50, None),
-        "Supply hour": (66, None)
+        "Actual Request": (21, 5),
+        "Actual Demand": (28, 13),
+        "Active Drivers": (50, None),
+        "Online Hours": (66, None)
     }
     
     accuracy_rows_html = ""
@@ -1407,7 +1407,7 @@ with col_chart_right:
                 # Proportional forecast based on SGN Forecast Request (Row 5)
                 fc_req = parse_value(safe_cell(raw_df, 5, col_idx))
                 if fc_req is not None:
-                    if name == "Active":
+                    if name == "Active Drivers":
                         fc_val = fc_req * (sum(act_plan_16jun.values()) / 77392.0)
                     else:
                         fc_val = fc_req * (sum(sh_plan_16jun.values()) / 77392.0)
@@ -1437,7 +1437,9 @@ with col_chart_right:
 </tr>"""
         
     st.markdown(
-        f"""<table style='width:100%; font-size:0.78rem; border-collapse:collapse; color:#F8FAFC;'>
+        f"""<div class='leaderboard-card'>
+<div class='leaderboard-title'>🎯 Số ngày các chỉ số đạt % FC SGN</div>
+<table style='width:100%; font-size:0.78rem; border-collapse:collapse; color:#F8FAFC;'>
 <thead>
 <tr style='border-bottom:1px solid #334155; text-align:left; color:#94A3B8;'>
 <th style='padding:0.4rem;'>Metric</th>
@@ -1451,10 +1453,10 @@ with col_chart_right:
 <tbody>
 {accuracy_rows_html}
 </tbody>
-</table>""",
+</table>
+</div>""",
         unsafe_allow_html=True
     )
-    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ── FOOTER NOTE ───────────────────────────────────────────────────────────────
