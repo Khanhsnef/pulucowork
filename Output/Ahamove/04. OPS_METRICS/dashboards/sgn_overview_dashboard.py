@@ -1316,164 +1316,181 @@ for key, row in cockpit.items():
 # ── LAYER 1: EXECUTIVE SUMMARY - KPI CARDS ───────────────────────────────────
 st.markdown("<div class='section-header'>🔴 Executive Summary — KPI Pulse</div>", unsafe_allow_html=True)
 
-# Compute derived KPIs
-fr_yest = val(180, col_yesterday)  # % Actual FR Total row 180
-active_4h_pct = None
+# ── Pre-compute all KPI values ─────────────────────────────────────────────
+fr_yest           = val(180, col_yesterday)
+fr_lm_same_day    = val(180, lm_same_day_col) if lm_same_day_col else None
+fr_lm_mtd_avg     = get_row_lm_mtd_mean(180)
+fr_lm_full        = val(180, 2)
 
-active_total_4h = val(177, col_yesterday)   # Total active_4h (dịch vụ 4H)
-active_total = val(166, col_yesterday)       # Total Active (row 166)
+active_total_4h   = val(177, col_yesterday)
+active_total      = val(166, col_yesterday)
+active_4h_pct     = (active_total_4h / active_total) if active_total and active_total > 0 and active_total_4h else None
 
-if active_total and active_total > 0 and active_total_4h is not None:
-    active_4h_pct = active_total_4h / active_total
+prod_yest         = val(74, col_yesterday)
+prod_lm_same_day  = val(74, lm_same_day_col) if lm_same_day_col else None
+prod_lm_mtd_avg   = get_row_lm_mtd_mean(74)
+prod_lm_full      = val(74, 2)
+opd_yest          = val(82, col_yesterday)
 
-fr_lm_same_day = val(180, lm_same_day_col) if lm_same_day_col else None
+col_dod_kpi       = columns_with_dates[2][0] if len(columns_with_dates) > 2 else None
+lm_day_str        = date_yesterday.replace(month=date_yesterday.month - 1).strftime('%d-%b') if lm_same_day_col else ""
 
-prod_yest = val(74, col_yesterday)
-prod_lm_same_day = val(74, lm_same_day_col) if lm_same_day_col else None
-prod_lm_mtd_avg = get_row_lm_mtd_mean(74)
-opd_yest = val(82, col_yesterday)
-opd_lm_same_day = val(82, lm_same_day_col) if lm_same_day_col else None
-opd_lm_mtd_avg = get_row_lm_mtd_mean(82)
+sh_yest           = val(66, col_yesterday)
+sh_dod_val        = val(66, col_dod_kpi) if col_dod_kpi else None
+sh_lw             = val(66, col_last_week)
+sh_mtd_val        = cockpit["Supply hour"]["mtd"]
+sh_wtd_val        = cockpit["Supply hour"]["wtd"]
+sh_lm_mtd         = get_row_lm_mtd_sum(66)
 
-prod_lm_full = val(74, 2)
-opd_lm_full = val(82, 2)
+lm_period_label   = f"1–{date_yesterday.strftime('%d')} May"
+request_lm_full   = val(22, 2)
+demand_lm_full    = val(29, 2)
+req_lm_mtd_sum    = get_row_lm_mtd_sum(22)
+dem_lm_mtd_sum    = get_row_lm_mtd_sum(29)
+request_mtd_val   = val(22, 3)
+demand_mtd_val    = val(29, 3)
+prod_mtd          = val(74, 3)
+prod_lm_mtd_v     = get_row_lm_mtd_mean(74)
+active_mtd_avg    = get_row_lm_mtd_mean(50)
+sh_lm_full        = val(66, 2)
 
-# Row 1: 5 KPI cards (Utilization removed)
-cols = st.columns(5)
-
-cols[0].markdown(
-    metric_card(
-        "Actual Request (Hôm qua)",
-        format_number(val(21, col_yesterday)),
-        delta_html(val(21, col_yesterday), val(22, col_last_week), label_suffix="WoW"),
-        f"FC: {format_number(val(6, col_yesterday))} | {date_yesterday.strftime('%d-%b')}",
-        "metric-card-accent"
-    ),
+# ── GROUP 1: DAILY — Hôm qua + WoW comparison ─────────────────────────────
+st.markdown(
+    f"<div style='font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;"
+    f"color:#64748B;padding:0.4rem 0 0.2rem;border-top:1px solid #1E293B;margin-top:0.5rem;'>"
+    f"⚡ DAILY — {date_yesterday.strftime('%d %b')} &nbsp;·&nbsp; DoD vs {columns_with_dates[2][1].strftime('%d-%b') if len(columns_with_dates)>2 else '—'} &nbsp;|&nbsp; WoW vs {date_last_week.strftime('%d-%b')}"
+    f"</div>",
     unsafe_allow_html=True,
 )
+cols = st.columns(6)
 
-cols[1].markdown(
-    metric_card(
-        "Actual Demand (Hôm qua)",
-        format_number(val(28, col_yesterday)),
-        delta_html(val(28, col_yesterday), val(29, col_last_week), label_suffix="WoW"),
-        f"FC: {format_number(val(13, col_yesterday))} | {date_yesterday.strftime('%d-%b')}",
-    ),
-    unsafe_allow_html=True,
-)
+# 1. Request
+cols[0].markdown(metric_card(
+    "Request",
+    format_number(val(21, col_yesterday)),
+    (delta_html(val(21, col_yesterday), val(21, col_dod_kpi), label_suffix="DoD") if col_dod_kpi else "")
+    + " &nbsp; " + delta_html(val(21, col_yesterday), val(21, col_last_week), label_suffix="WoW"),
+    f"FC {date_yesterday.strftime('%d-%b')}: {format_number(val(6, col_yesterday))}",
+    "metric-card-accent"
+), unsafe_allow_html=True)
 
-# FR% card with color
+# 2. Demand
+cols[1].markdown(metric_card(
+    "Demand",
+    format_number(val(28, col_yesterday)),
+    (delta_html(val(28, col_yesterday), val(28, col_dod_kpi), label_suffix="DoD") if col_dod_kpi else "")
+    + " &nbsp; " + delta_html(val(28, col_yesterday), val(28, col_last_week), label_suffix="WoW"),
+    f"FC: {format_number(val(13, col_yesterday))}",
+), unsafe_allow_html=True)
+
+# 3. FR%
 fr_color = "#34D399" if fr_yest and fr_yest >= fr_target else ("#FBBF24" if fr_yest and fr_yest >= fr_target * 0.9 else "#F87171")
-fr_html = f"""
-<div class="metric-card" style="border-color: {fr_color}33;">
-    <div class="metric-label">Fulfillment Rate (Hôm qua)</div>
-    <div class="metric-value" style="color:{fr_color};">{format_percent(fr_yest)}</div>
-    <div class="metric-delta"><span style="color:{fr_color};">{'✅' if fr_yest and fr_yest >= fr_target else '⚠️'} Target: {fr_target:.0%}</span></div>
-    <div class="metric-context">vs {date_yesterday.strftime('%d-%b')}</div>
-</div>
-"""
-cols[2].markdown(fr_html, unsafe_allow_html=True)
+fr_wow_delta = delta_html(fr_yest, val(180, col_last_week), percent=True, label_suffix="WoW")
+fr_dod_delta = delta_html(fr_yest, val(180, col_dod_kpi), percent=True, label_suffix="DoD") if col_dod_kpi else ""
+fr_daily_html = f"""
+<div class="metric-card" style="border-color:{fr_color}33;">
+  <div class="metric-label">FR%</div>
+  <div class="metric-value" style="color:{fr_color};">{format_percent(fr_yest)}</div>
+  <div class="metric-delta">{fr_dod_delta}&nbsp;{fr_wow_delta}</div>
+  <div class="metric-context">{'✅' if fr_yest and fr_yest >= fr_target else '⚠️'} Target {fr_target:.0%} &nbsp;·&nbsp; LM avg {format_percent(fr_lm_mtd_avg)}</div>
+</div>"""
+cols[2].markdown(fr_daily_html, unsafe_allow_html=True)
 
-cols[3].markdown(
-    metric_card(
-        "Active Drivers (Hôm qua)",
-        format_number(val(50, col_yesterday)),
-        delta_html(val(50, col_yesterday), val(50, col_last_week), label_suffix="WoW"),
-        f"Plan: {format_number(sum(act_plan_16jun.values()))}",
-        "metric-card-blue"
-    ),
+# 4. Active Drivers
+active_dod = val(50, col_dod_kpi) if col_dod_kpi else None
+cols[3].markdown(metric_card(
+    "Active Drivers",
+    format_number(val(50, col_yesterday)),
+    (delta_html(val(50, col_yesterday), active_dod, label_suffix="DoD") if active_dod else "")
+    + " &nbsp; " + delta_html(val(50, col_yesterday), val(50, col_last_week), label_suffix="WoW"),
+    f"Plan: {format_number(sum(act_plan_16jun.values()))}",
+    "metric-card-blue"
+), unsafe_allow_html=True)
+
+# 5. Supply Hours
+cols[4].markdown(metric_card(
+    "Supply Hours",
+    format_number(sh_yest),
+    (delta_html(sh_yest, sh_dod_val, label_suffix="DoD") if sh_dod_val else "")
+    + " &nbsp; " + delta_html(sh_yest, sh_lw, label_suffix="WoW"),
+    f"WTD: {format_number(sh_wtd_val)} &nbsp;·&nbsp; MTD: {format_number(sh_mtd_val)}",
+    "metric-card-blue"
+), unsafe_allow_html=True)
+
+# 6. Productivity (EPH)
+cols[5].markdown(metric_card(
+    "Productivity (EPH)",
+    format_number(prod_yest, 1),
+    (delta_html(prod_yest, val(74, col_dod_kpi), label_suffix="DoD") if col_dod_kpi else "")
+    + " &nbsp; " + (delta_html(prod_yest, prod_lm_same_day, label_suffix=f"vs {lm_day_str}") if prod_lm_same_day else delta_html(prod_yest, prod_lm_mtd_avg, label_suffix="vs LM avg")),
+    f"Online/Dr: {format_number(opd_yest, 1)}h &nbsp;·&nbsp; LM avg: {format_number(prod_lm_mtd_avg, 1)}",
+), unsafe_allow_html=True)
+
+# ── GROUP 2: MTD — Lũy kế tháng + vs LM same period & whole month ─────────
+st.markdown(
+    f"<div style='font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;"
+    f"color:#64748B;padding:0.4rem 0 0.2rem;border-top:1px solid #1E293B;margin-top:0.75rem;'>"
+    f"📅 MTD — {date_yesterday.strftime('%b %Y')} &nbsp;·&nbsp; vs LM same period ({lm_period_label}) &amp; LM whole May"
+    f"</div>",
     unsafe_allow_html=True,
 )
+cols2 = st.columns(6)
 
-# Productivity: compare yesterday vs SAME DAY last month (best apples-to-apples daily)
-lm_day_str = date_yesterday.replace(month=date_yesterday.month - 1).strftime('%d-%b') if lm_same_day_col else ""
-cols[4].markdown(
-    metric_card(
-        "Productivity (Hôm qua)",
-        format_number(prod_yest, 1),
-        delta_html(prod_yest, prod_lm_same_day, label_suffix=f"vs {lm_day_str}") if prod_lm_same_day else delta_html(prod_yest, prod_lm_mtd_avg, label_suffix="vs LM MTD avg"),
-        f"LM MTD avg: {format_number(prod_lm_mtd_avg, 1)} | Online/Dr: {format_number(opd_yest, 1)}h",
-    ),
-    unsafe_allow_html=True,
-)
+# 1. Request MTD
+cols2[0].markdown(metric_card(
+    "Request MTD",
+    format_number(request_mtd_val),
+    delta_html(request_mtd_val, req_lm_mtd_sum, label_suffix=f"vs LM period"),
+    f"LM period: {format_number(req_lm_mtd_sum)} &nbsp;·&nbsp; LM whole: {format_number(request_lm_full)}",
+    "metric-card-accent"
+), unsafe_allow_html=True)
 
-# Row 2: MTD comparison cards
-cols2 = st.columns(5)
-request_mtd_val = val(22, 3)
-demand_mtd_val = val(29, 3)
-request_lm_full = val(22, 2)
-demand_lm_full = val(29, 2)
-req_lm_mtd_sum = get_row_lm_mtd_sum(22)
-dem_lm_mtd_sum = get_row_lm_mtd_sum(29)
-lm_period_label = f"1–{date_yesterday.strftime('%d')} May"
+# 2. Demand MTD
+cols2[1].markdown(metric_card(
+    "Demand MTD",
+    format_number(demand_mtd_val),
+    delta_html(demand_mtd_val, dem_lm_mtd_sum, label_suffix=f"vs LM period"),
+    f"LM period: {format_number(dem_lm_mtd_sum)} &nbsp;·&nbsp; LM whole: {format_number(demand_lm_full)}",
+), unsafe_allow_html=True)
 
-# Supply Hours data
-sh_yest = val(66, col_yesterday)
-sh_dod = val(66, col_last_week - 6)  # Day-over-Day: day before yesterday (col_yesterday+1 back)
-sh_lw = val(66, col_last_week)
-sh_mtd = get_row_wtd_sum(66) if False else get_row_mtd_sum(66)  # use MTD sum helper
-sh_mtd_val = cockpit["Supply hour"]["mtd"]
-sh_wtd_val = cockpit["Supply hour"]["wtd"]
-sh_lm_same_day = val(66, lm_same_day_col) if lm_same_day_col else None
-sh_lm_mtd = get_row_lm_mtd_sum(66)
+# 3. FR% MTD avg
+fr_mtd_avg = get_row_lm_mtd_mean(180)
+fr_color_mtd = "#34D399" if fr_mtd_avg and fr_mtd_avg >= fr_target else ("#FBBF24" if fr_mtd_avg and fr_mtd_avg >= fr_target * 0.9 else "#F87171")
+fr_mtd_html = f"""
+<div class="metric-card" style="border-color:{fr_color_mtd}33;">
+  <div class="metric-label">FR% MTD avg</div>
+  <div class="metric-value" style="color:{fr_color_mtd};">{format_percent(fr_mtd_avg)}</div>
+  <div class="metric-delta">{delta_html(fr_mtd_avg, fr_lm_mtd_avg, percent=True, label_suffix="vs LM period")}</div>
+  <div class="metric-context">LM avg: {format_percent(fr_lm_mtd_avg)} &nbsp;·&nbsp; LM whole: {format_percent(fr_lm_full)}</div>
+</div>"""
+cols2[2].markdown(fr_mtd_html, unsafe_allow_html=True)
 
-cols2[0].markdown(
-    metric_card(
-        "Request MTD",
-        format_number(request_mtd_val),
-        delta_html(request_mtd_val, req_lm_mtd_sum, label_suffix=f"vs LM ({lm_period_label})"),
-        f"LM same period: {format_number(req_lm_mtd_sum)} | LM whole May: {format_number(request_lm_full)}",
-    ),
-    unsafe_allow_html=True,
-)
-cols2[1].markdown(
-    metric_card(
-        "Demand MTD",
-        format_number(demand_mtd_val),
-        delta_html(demand_mtd_val, dem_lm_mtd_sum, label_suffix=f"vs LM ({lm_period_label})"),
-        f"LM same period: {format_number(dem_lm_mtd_sum)} | LM whole May: {format_number(demand_lm_full)}",
-    ),
-    unsafe_allow_html=True,
-)
+# 4. Supply Hours MTD
+cols2[3].markdown(metric_card(
+    "Supply Hours MTD",
+    format_number(sh_mtd_val),
+    delta_html(sh_mtd_val, sh_lm_mtd, label_suffix="vs LM period"),
+    f"LM period: {format_number(sh_lm_mtd)} &nbsp;·&nbsp; LM whole: {format_number(sh_lm_full)}",
+    "metric-card-blue"
+), unsafe_allow_html=True)
 
-prod_mtd = val(74, 3)
-prod_lm_whole = val(74, 2)
-prod_lm_mtd_v = get_row_lm_mtd_mean(74)
-cols2[2].markdown(
-    metric_card(
-        "Productivity MTD avg",
-        format_number(prod_mtd, 1),
-        delta_html(prod_mtd, prod_lm_mtd_v, label_suffix=f"vs LM ({lm_period_label})"),
-        f"LM same period: {format_number(prod_lm_mtd_v, 1)} | LM whole May: {format_number(prod_lm_whole, 1)}",
-    ),
-    unsafe_allow_html=True,
-)
+# 5. Productivity MTD avg
+cols2[4].markdown(metric_card(
+    "Productivity MTD avg",
+    format_number(prod_mtd, 1),
+    delta_html(prod_mtd, prod_lm_mtd_v, label_suffix="vs LM period"),
+    f"LM period: {format_number(prod_lm_mtd_v, 1)} &nbsp;·&nbsp; LM whole: {format_number(prod_lm_full, 1)}",
+), unsafe_allow_html=True)
 
-# Supply Hours card — DoD + WoW + MTD vs LM
-_sh_dod_col = col_yesterday + 1 if (col_yesterday + 1) < len(columns_with_dates) else None
-sh_dod_val = val(66, columns_with_dates[2][0]) if len(columns_with_dates) > 2 else None  # day before yesterday
-cols2[3].markdown(
-    metric_card(
-        "Supply Hours (Hôm qua)",
-        format_number(sh_yest),
-        delta_html(sh_yest, sh_dod_val, label_suffix="DoD") if sh_dod_val else delta_html(sh_yest, sh_lw, label_suffix="WoW"),
-        f"WoW vs {date_last_week.strftime('%d-%b')}: {delta_html(sh_yest, sh_lw, label_suffix='').replace('<span', '<span style=\"font-size:0.8rem\"')} | MTD: {format_number(sh_mtd_val)}",
-        "metric-card-blue"
-    ),
-    unsafe_allow_html=True,
-)
-
+# 6. Nhóm DV 4H
 active_4h_str = format_percent(active_4h_pct) if active_4h_pct else "—"
-cols2[4].markdown(
-    metric_card(
-        "Nhóm DV 4H — Active (Hôm qua)",
-        active_4h_str,
-        f"<span style='color:#94A3B8'>4H: {format_number(active_total_4h)} / {format_number(active_total)} tài xế</span>",
-        "Giao trong 4H / Ghép đơn",
-        "metric-card-green"
-    ),
-    unsafe_allow_html=True,
-)
+cols2[5].markdown(metric_card(
+    "Nhóm DV 4H (Hôm qua)",
+    active_4h_str,
+    f"<span style='color:#94A3B8'>4H: {format_number(active_total_4h)} / {format_number(active_total)} tài xế</span>",
+    "Giao trong 4H / Ghép đơn",
+    "metric-card-green"
+), unsafe_allow_html=True)
 
 
 # ── LAYER 1: DAILY OPERATING COCKPIT TABLE ────────────────────────────────────
