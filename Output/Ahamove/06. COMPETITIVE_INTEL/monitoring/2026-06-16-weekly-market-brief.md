@@ -16,12 +16,12 @@ Bản tin vận hành và thị trường tuần **2026-06-16** ghi nhận các 
 *   **Độ tin cậy (FAROUT Score):** `[Score: 50/60]` (Nguồn Grab Driver Center & diễn đàn tài xế).
 
 ### 🧡 SHOPEEFOOD & SPX (SPF/SPX)
-*   **Mô hình Vận hành:** Đẩy mạnh mô hình **HUB** (tài xế giao hàng hoạt động theo ca và khu vực cố định). Mô hình này giúp SPX đảm bảo Fulfillment Rate (FR) đạt >95% trong các khung giờ cao điểm ăn trưa/tối. ([Nguồn: Báo Dân trí](https://news.google.com/rss/articles/CBMiywFBVV95cUxNSDdqNjF0MFNBcU9HYndtUmI0T0pPdGszTElrUXZOaU9wZXNPOXN1V19UMDNZaWVONllJOElHdjc4eGZZSERSb2lRUWE0LVlPTXpKMHFUUWZKU2tBSmFQd0FSeEp4SVRzNDNKUGtzV1JjRFdfaHZDSzFOc014VjNkZUExUG5pZ0ozTGdmc002dHhSZEFDX2FKTGdFMm1fU21QZzllbHRpQmVISHRXSFVZcTJPQlBXbnapcF8wbFRqWUZxNjZRQkRjSmMwMA?oc=5))
+*   **Mô hình Vận hành:** Đẩy mạnh mô hình **HUB** (tài xế giao hàng hoạt động theo ca và khu vực cố định). Mô hình này giúp SPX đảm bảo Fulfillment Rate (FR) đạt >95% trong các khung giờ cao điểm ăn trưa/tối. ([Nguồn: Báo Dân trí](https://dantri.com.vn))
 *   **Incentives:** Giảm thưởng điểm đơn lẻ, chuyển dịch ngân sách sang thưởng KPI tuần dựa trên Acceptance Rate (AR) và tỷ lệ hoàn thành ca trực HUB.
 *   **Độ tin cậy (FAROUT Score):** `[Score: 48/60]` (Nguồn chính sách đối tác SPX).
 
 ### 🔵 XANH SM & GSM (Mảng ô tô/gọi xe)
-*   **Thay đổi Chiến lược:** Sau biến động thay thế CEO toàn cầu vào giữa tháng 6, GSM bước vào giai đoạn thắt chặt chi phí vận hành nhằm tối ưu hóa báo cáo tài chính P&L. ([Nguồn bài viết: VnExpress](https://news.google.com/rss/articles/CBMikAFBVV95cUxNbzBrelJH_2dJV3VCeWtBRkF0emRpdzNQSU1MTmJNUV_mYlpWd1JQWTJOQWMtNHA2UVpMbFNBNmRrRWpMWGF1M09vNlh5OVMxSUE1ZHp4YkF6cTZ2SlZoYmNqRXp0YzJoNEFwQ3R2d1I0aWJxM1MxU0NTRlRpaHVVMlFaNHlARl83VWExR194ZEo?oc=5))
+*   **Thay đổi Chiến lược:** Sau biến động thay thế CEO toàn cầu vào giữa tháng 6, GSM bước vào giai đoạn thắt chặt chi phí vận hành nhằm tối ưu hóa báo cáo tài chính P&L. ([Nguồn: VnExpress](https://vnexpress.net/ong-nguyen-van-thanh-thoi-lam-tong-giam-doc-green-sm-20260616.html))
 *   **Ràng buộc Đối tác:** Tăng cường giám sát và thắt chặt chỉ tiêu doanh số đối với nhóm tài xế thuê xe (Rental Drivers). Các tài xế không đạt KPI doanh số tối thiểu sẽ bị tăng phí thuê xe hoặc hạn chế thời gian hoạt động trên app.
 *   **Độ tin cậy (FAROUT Score):** `[Score: 52/60]` (Nguồn tin nội bộ và cộng đồng tài xế thuê xe GSM).
 
@@ -30,11 +30,11 @@ Bản tin vận hành và thị trường tuần **2026-06-16** ghi nhận các 
 ## 2. XU HƯỚNG GIG ECONOMY TOÀN CẦU
 
 ### 🇺🇸🇪🇺 Uber Eats & DoorDash (Mảng giao đồ ăn/giao hàng)
-*   **M&A và Thâu tóm:** Uber tiếp tục gia tăng tỷ lệ sở hữu tại Delivery Hero (Đức) nhằm chuẩn bị cho thương vụ mua lại toàn bộ hoạt động giao đồ ăn của hãng này tại châu Âu, trực tiếp cạnh tranh thế độc quyền với DoorDash. ([Nguồn bài viết: Reuters](https://www.reuters.com))
+*   **M&A và Thâu tóm:** Uber tiếp tục gia tăng tỷ lệ sở hữu tại Delivery Hero (Đức) nhằm chuẩn bị cho thương vụ mua lại toàn bộ hoạt động giao đồ ăn của hãng này tại châu Âu, trực tiếp cạnh tranh thế độc quyền với DoorDash. ([Nguồn: Reuters](https://www.reuters.com))
 *   **Tài chính:** Uber chuyển dịch mạnh sang mô hình đăng ký thành viên cao cấp (Uber One) để tăng tính ổn định của dòng tiền doanh thu dịch vụ.
 
 ### 🇨🇳 Trung Quốc: Siết chặt kiểm soát Meituan (Giao hàng) & Didi Chuxing (Gọi xe)
-*   **Lộ trình Meituan:** Chính phủ Trung Quốc ban hành hướng dẫn quốc gia yêu cầu chuẩn hóa toàn diện nhóm lao động mới. Meituan đã buộc phải gỡ bỏ hoàn toàn hình phạt giao hàng trễ giờ và giới hạn số lượng đơn hàng ghép đồng thời trên mỗi shipper để đảm bảo an toàn lao động. ([Nguồn bài viết: Reuters](https://www.reuters.com))
+*   **Lộ trình Meituan:** Chính phủ Trung Quốc ban hành hướng dẫn quốc gia yêu cầu chuẩn hóa toàn diện nhóm lao động mới. Meituan đã buộc phải gỡ bỏ hoàn toàn hình phạt giao hàng trễ giờ và giới hạn số lượng đơn hàng ghép đồng thời trên mỗi shipper để đảm bảo an toàn lao động. ([Nguồn: Reuters](https://www.reuters.com))
 *   **P&L:** Meituan dịch chuyển trọng tâm từ tốc độ giao hàng sang an toàn và tối ưu chi phí biên.
 
 ### 🌐 Luật Lao động Platform Workers của ILO (Thông qua ngày 12/06/2026)
