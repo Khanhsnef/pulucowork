@@ -6,6 +6,7 @@ import urllib.parse
 import json
 import glob
 import datetime
+import re
 
 # ── LOAD ENV CONFIG ──────────────────────────────────────────────────────────
 TOKEN = None
@@ -427,12 +428,19 @@ def handle_natural_message(chat_id, text, msg_id, message):
     reply_to = message.get("reply_to_message")
     if reply_to:
         reply_from = reply_to.get("from", {})
-        if reply_from.get("is_bot"):
+        # Ensure it is replying to our specific bot username
+        if reply_from.get("is_bot") and reply_from.get("username") == "DMAIChat_Bot":
             is_reply_to_bot = True
             
-    mentioned = "bot" in text.lower() or "@" in text
+    # Match only explicit username handle or the exact phrase "bot ơi" / "bot oi" with word boundaries
+    text_lower = text.lower()
+    mentioned = False
+    if "@dmaichat_bot" in text_lower:
+        mentioned = True
+    elif re.search(r'\bbot\s+ơi\b', text_lower) or re.search(r'\bbot\s+oi\b', text_lower):
+        mentioned = True
     
-    # Only respond in group if mentioned, replied to, or contains "bot"
+    # Only respond in group if it's a private chat, a direct reply, or explicitly mentioned
     if not is_private and not is_reply_to_bot and not mentioned:
         return
         

@@ -36,6 +36,8 @@ Skill này hướng dẫn Agent cách vận hành luồng giám sát cạnh tran
     *   **Likely Impact on Ahamove:** Tác động ngắn hạn (< 4 tuần) và dài hạn (> 3 tháng).
     *   **Recommended Response:** Khuyến nghị hành động tức thời, ngắn hạn và chiến lược.
     *   **FAROUT Score:** Đánh giá độ tin cậy.
+*   **Nguyên tắc ưu tiên trọng tâm nội dung:** Luôn ưu tiên đưa các thông tin liên quan đến **mảng giao hàng (delivery)** và **giao thông 2 bánh (2-wheelers/bikes)** lên vị trí trọng tâm và trình bày đầu tiên trong tất cả các mục báo cáo. Các thông tin liên quan đến **ô tô (car/4-wheelers)**, taxi điện hay các phương tiện lớn khác sẽ được xếp ở phía dưới hoặc trình bày làm thông tin thứ yếu sau mảng 2 bánh.
+*   **Yêu cầu bắt buộc về nguồn tin:** Đối với mỗi sự kiện hoặc động thái đối thủ được nêu trong báo cáo, bắt buộc phải trích xuất link URL cụ thể tương ứng của bài viết từ file `raw-signals.json` và chèn trực tiếp vào tiêu đề hoặc nội dung bằng cú pháp Markdown `[Nguồn bài viết](link_url)` để người dùng bấm vào xem chi tiết bài báo gốc.
 
 ### 4. Biên dịch sang HTML Dễ Đọc (Compile to Premium HTML)
 *   Sau khi tạo xong file Markdown, chạy script biên dịch HTML:
@@ -65,8 +67,9 @@ Skill này hướng dẫn Agent cách vận hành luồng giám sát cạnh tran
 Bên cạnh luồng báo cáo hàng ngày từ tin tức Google News RSS, mỗi thứ Hai hàng tuần Agent thực hiện tạo **Bản Tin Vận Hành & Thị Trường Đầu Tuần** (Weekly Market Brief):
 1. **Tìm kiếm chuyên sâu:** Thực hiện tìm kiếm web về các chương trình thưởng (incentives), chiết khấu (commission), biểu giá mới của các đối thủ Bike (Grab, Be, XanhSM) và Delivery tương tự (SPX, ShopeeFood) tại Việt Nam trong 7 ngày qua.
 2. **Cập nhật toàn cầu:** Quét tin tức nổi bật từ các nền tảng gig economy lớn trên thế giới (Uber, DoorDash, Meituan, Deliveroo) về mô hình vận hành, công nghệ điều phối (dispatch), xe điện (EV fleet) và chính sách lao động.
-3. **Cơ cấu báo cáo:** Soạn thảo báo cáo đặt tại `output/Ahamove/06. COMPETITIVE_INTEL/monitoring/YYYY-MM-DD-weekly-market-brief.md` gồm các mục: Executive Summary, Đối thủ nội địa, Xu hướng thế giới, Tác động lên Ahamove, Khuyến nghị Driver Management.
-4. **Biên dịch & Đẩy tin:** Biên dịch sang HTML và gửi file đính kèm cùng tin nhắn tóm tắt lên group Telegram.
+3. **Cơ cấu báo cáo:** Soạn thảo báo cáo đặt tại `output/Ahamove/06. COMPETITIVE_INTEL/monitoring/YYYY-MM-DD-weekly-market-brief.md` gồm các mục: Executive Summary, Đối thủ nội địa, Xu hướng thế giới, Tác động lên Ahamove, Khuyến nghị Driver Management. **Nguyên tắc ưu tiên:** Luôn đưa phân tích về mảng giao hàng (delivery) và 2 bánh (bikes) lên trước, mảng 4 bánh (car/taxi) xếp ở phía dưới hoặc làm thứ yếu.
+4. **Yêu cầu nguồn tin:** Luôn luôn đính kèm link URL nguồn cụ thể cho các thông tin tìm kiếm được hoặc thông tin quét từ các nền tảng quốc tế dưới dạng `[Nguồn bài viết](link_url)` để người dùng dễ dàng kiểm chứng thông tin trực tiếp.
+5. **Biên dịch & Đẩy tin:** Biên dịch sang HTML và gửi file đính kèm cùng tin nhắn tóm tắt lên group Telegram.
 
 ---
 
