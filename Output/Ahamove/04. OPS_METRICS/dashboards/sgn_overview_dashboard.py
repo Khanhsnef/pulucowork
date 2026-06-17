@@ -737,6 +737,29 @@ for col_idx, d_val in columns_with_dates:
     if d_val.month == target_month and d_val.year == target_year and d_val <= date_yesterday:
         mtd_cols.append(col_idx)
 
+# Calculate LM MTD Column Indexes (1-May to 16-May)
+lm_mtd_cols = []
+for col_idx, d_val in columns_with_dates:
+    if d_val.month == 5 and d_val.year == 2026 and d_val.day <= date_yesterday.day:
+        lm_mtd_cols.append(col_idx)
+
+
+def get_row_lm_mtd_sum(row_idx):
+    total = 0.0
+    for col_idx in lm_mtd_cols:
+        v = val_or_zero(row_idx, col_idx)
+        total += v
+    return total
+
+
+def get_row_lm_mtd_mean(row_idx):
+    vals = []
+    for col_idx in lm_mtd_cols:
+        v = val(row_idx, col_idx)
+        if v is not None:
+            vals.append(v)
+    return sum(vals) / len(vals) if vals else 0.0
+
 
 def val(row, col):
     return parse_value(safe_cell(raw_df, row, col))
@@ -782,6 +805,7 @@ cockpit["Request"] = {
     "today": val(6, col_today),
     "mtd": val(22, 3),
     "lm": val(22, 2),
+    "lm_mtd": get_row_lm_mtd_sum(22),
     "plan_mtd": get_row_mtd_sum(6)
 }
 
@@ -794,6 +818,7 @@ cockpit["Complete"] = {
     "today": val(14, col_today),
     "mtd": val(29, 3),
     "lm": val(29, 2),
+    "lm_mtd": get_row_lm_mtd_sum(29),
     "plan_mtd": get_row_mtd_sum(14)
 }
 
@@ -806,6 +831,8 @@ req_mtd = cockpit["Request"]["mtd"]
 comp_mtd = cockpit["Complete"]["mtd"]
 req_lm = cockpit["Request"]["lm"]
 comp_lm = cockpit["Complete"]["lm"]
+req_lm_mtd = cockpit["Request"]["lm_mtd"]
+comp_lm_mtd = cockpit["Complete"]["lm_mtd"]
 req_plan_mtd = cockpit["Request"]["plan_mtd"]
 comp_plan_mtd = cockpit["Complete"]["plan_mtd"]
 
@@ -817,6 +844,7 @@ cockpit["FR"] = {
     "today": val(14, col_today) / val(6, col_today) if val(6, col_today) else None,
     "mtd": comp_mtd / req_mtd if req_mtd else None,
     "lm": comp_lm / req_lm if req_lm else None,
+    "lm_mtd": comp_lm_mtd / req_lm_mtd if req_lm_mtd else None,
     "plan_mtd": comp_plan_mtd / req_plan_mtd if req_plan_mtd else None
 }
 
@@ -842,6 +870,7 @@ cockpit["Active"] = {
     "today": active_plan(sum(act_plan_16jun.values()), val(6, col_today)),
     "mtd": val(50, 3),
     "lm": val(50, 2),
+    "lm_mtd": get_row_lm_mtd_mean(50),
     "plan_mtd": get_driver_plan_mtd(sum(act_plan_16jun.values()), mtd_cols, "mean")
 }
 
@@ -857,6 +886,7 @@ for seg in active_segs:
         "today": active_plan(act_plan_16jun[seg], val(6, col_today)),
         "mtd": val(r, 3),
         "lm": val(r, 2),
+        "lm_mtd": get_row_lm_mtd_mean(r),
         "plan_mtd": get_driver_plan_mtd(act_plan_16jun[seg], mtd_cols, "mean")
     }
 cockpit["Active_Other"] = {
@@ -867,6 +897,7 @@ cockpit["Active_Other"] = {
     "today": 0.0,
     "mtd": val_or_zero(50, 3) - sum(val_or_zero(active_seg_rows[s], 3) for s in active_segs),
     "lm": val_or_zero(50, 2) - sum(val_or_zero(active_seg_rows[s], 2) for s in active_segs),
+    "lm_mtd": max(0.0, get_row_lm_mtd_mean(50) - sum(get_row_lm_mtd_mean(active_seg_rows[s]) for s in active_segs)),
     "plan_mtd": 0.0
 }
 
@@ -891,6 +922,7 @@ cockpit["Cap"] = {
     "today": active_plan(sum(cap_plan_16jun.values()), val(6, col_today)),
     "mtd": val(58, 3),
     "lm": val(58, 2),
+    "lm_mtd": get_row_lm_mtd_sum(58),
     "plan_mtd": get_driver_plan_mtd(sum(cap_plan_16jun.values()), mtd_cols, "sum")
 }
 
@@ -904,6 +936,7 @@ for seg in cap_segs:
         "today": active_plan(cap_plan_16jun[seg], val(6, col_today)),
         "mtd": get_cap_seg_mtd_sum(seg),
         "lm": val(r, 2),
+        "lm_mtd": get_row_lm_mtd_sum(r),
         "plan_mtd": get_driver_plan_mtd(cap_plan_16jun[seg], mtd_cols, "sum")
     }
 cockpit["Cap_Other"] = {
@@ -914,6 +947,7 @@ cockpit["Cap_Other"] = {
     "today": 0.0,
     "mtd": val_or_zero(58, 3) - sum(get_cap_seg_mtd_sum(s) for s in cap_segs),
     "lm": val_or_zero(58, 2) - sum(val_or_zero(cap_seg_rows[s], 2) for s in cap_segs),
+    "lm_mtd": max(0.0, get_row_lm_mtd_sum(58) - sum(get_row_lm_mtd_sum(cap_seg_rows[s]) for s in cap_segs)),
     "plan_mtd": 0.0
 }
 
@@ -938,6 +972,7 @@ cockpit["Supply hour"] = {
     "today": supply_hour_plan(sum(sh_plan_16jun.values()), val(6, col_today)),
     "mtd": val(66, 3),
     "lm": val(66, 2),
+    "lm_mtd": get_row_lm_mtd_sum(66),
     "plan_mtd": get_driver_plan_mtd(sum(sh_plan_16jun.values()), mtd_cols, "sum")
 }
 
@@ -951,6 +986,7 @@ for seg in sh_segs:
         "today": supply_hour_plan(sh_plan_16jun[seg], val(6, col_today)),
         "mtd": get_sh_seg_mtd_sum(seg),
         "lm": val(r, 2),
+        "lm_mtd": get_row_lm_mtd_sum(r),
         "plan_mtd": get_driver_plan_mtd(sh_plan_16jun[seg], mtd_cols, "sum")
     }
 cockpit["Supply_hour_Other"] = {
@@ -961,13 +997,14 @@ cockpit["Supply_hour_Other"] = {
     "today": 0.0,
     "mtd": val_or_zero(66, 3) - sum(get_sh_seg_mtd_sum(s) for s in sh_segs),
     "lm": val_or_zero(66, 2) - sum(val_or_zero(sh_seg_rows[s], 2) for s in sh_segs),
+    "lm_mtd": max(0.0, get_row_lm_mtd_sum(66) - sum(get_row_lm_mtd_sum(sh_seg_rows[s]) for s in sh_segs)),
     "plan_mtd": 0.0
 }
 
 # Helper for derived rows
 def make_derived_row(label, num_key, den_key, format_type):
     derived = {}
-    for col_name in ["yesterday", "last_week", "planning", "today", "mtd", "lm", "plan_mtd"]:
+    for col_name in ["yesterday", "last_week", "planning", "today", "mtd", "lm", "lm_mtd", "plan_mtd"]:
         num = cockpit[num_key][col_name]
         den = cockpit[den_key][col_name]
         derived[col_name] = num / den if num is not None and den is not None and den > 0 else None
@@ -989,6 +1026,7 @@ cockpit["online/driver_Other"] = {
     "today": 0.0,
     "mtd": cockpit["Supply_hour_Other"]["mtd"] / cockpit["Active_Other"]["mtd"] if cockpit["Active_Other"]["mtd"] else 0.0,
     "lm": cockpit["Supply_hour_Other"]["lm"] / cockpit["Active_Other"]["lm"] if cockpit["Active_Other"]["lm"] else 0.0,
+    "lm_mtd": cockpit["Supply_hour_Other"]["lm_mtd"] / cockpit["Active_Other"]["lm_mtd"] if cockpit["Active_Other"]["lm_mtd"] else 0.0,
     "plan_mtd": 0.0
 }
 
@@ -1012,6 +1050,7 @@ cockpit["Prod_Other"] = {
     "today": 0.0,
     "mtd": get_prod_other_col("mtd"),
     "lm": get_prod_other_col("lm"),
+    "lm_mtd": get_prod_other_col("lm_mtd"),
     "plan_mtd": get_prod_other_col("plan_mtd")
 }
 
@@ -1034,12 +1073,17 @@ for key, row in cockpit.items():
 
     mtd = row["mtd"]
     lm = row["lm"]
-    if key in ["Request", "Complete"]:
-        row["mom"] = None
-    elif mtd is not None and lm is not None and lm != 0:
-        row["mom"] = mtd - lm if is_pct else (mtd - lm) / lm
+    lm_mtd = row.get("lm_mtd")
+
+    if mtd is not None and lm is not None and lm != 0:
+        row["mom_whole"] = mtd - lm if is_pct else (mtd - lm) / lm
     else:
-        row["mom"] = None
+        row["mom_whole"] = None
+
+    if mtd is not None and lm_mtd is not None and lm_mtd != 0:
+        row["mom_mtd"] = mtd - lm_mtd if is_pct else (mtd - lm_mtd) / lm_mtd
+    else:
+        row["mom_mtd"] = None
 
     plan_mtd = row["plan_mtd"]
     if mtd is not None and plan_mtd is not None and plan_mtd != 0:
@@ -1137,10 +1181,12 @@ html_table = f"""
                 <th class="hdr-actual-past">WoW</th>
                 <th class="hdr-plan">vs planning</th>
                 <th class="hdr-actual-current">MTD<br>Jun-2026</th>
-                <th class="hdr-actual-past">last month<br>May-2026</th>
+                <th class="hdr-actual-past">LM (Whole)<br>May-2026</th>
+                <th class="hdr-actual-past">LM (MTD)<br>1-{date_yesterday.strftime('%d')} May</th>
                 <th class="hdr-plan">planning<br>Jun-2026</th>
-                <th class="hdr-actual-current">MoM</th>
-                <th class="hdr-plan">vs planning</th>
+                <th class="hdr-actual-current">MoM (Whole)</th>
+                <th class="hdr-actual-current">MoM (MTD)</th>
+                <th class="hdr-plan">vs planning MTD</th>
             </tr>
         </thead>
         <tbody>
@@ -1209,8 +1255,10 @@ for label, key, parent in cockpit_rows_order:
     html_table += get_cell_html(row, "vs_planning", fmt, is_delta=True)
     html_table += get_cell_html(row, "mtd", fmt)
     html_table += get_cell_html(row, "lm", fmt)
+    html_table += get_cell_html(row, "lm_mtd", fmt)
     html_table += get_cell_html(row, "plan_mtd", fmt)
-    html_table += get_cell_html(row, "mom", fmt, is_delta=True)
+    html_table += get_cell_html(row, "mom_whole", fmt, is_delta=True)
+    html_table += get_cell_html(row, "mom_mtd", fmt, is_delta=True)
     html_table += get_cell_html(row, "vs_planning_mtd", fmt, is_delta=True)
     html_table += "</tr>"
 
@@ -1287,17 +1335,38 @@ with col_chart_left:
 with col_chart_right:
     # ── LEADERBOARD: TOP 3 DAYS ───────────────────────────────────────────────
     st.markdown("<div class='leaderboard-card'>", unsafe_allow_html=True)
-    st.markdown("<div class='leaderboard-title'>🏆 Leaderboard - Top 3 ngày nhiều đơn tháng 06/2026</div>", unsafe_allow_html=True)
+    st.markdown("<div class='leaderboard-title'>🏆 Leaderboard - Top 3 ngày Request SGN</div>", unsafe_allow_html=True)
     
-    leaderboard_days = []
+    leaderboard_req = []
     for col_idx in mtd_cols:
         d_val = parse_sheet_date(safe_cell(raw_df, 4, col_idx))
-        val_comp = parse_value(safe_cell(raw_df, 28, col_idx))
-        if d_val is not None and val_comp is not None and val_comp > 0:
-            leaderboard_days.append((d_val, val_comp))
-    leaderboard_days.sort(key=lambda x: x[1], reverse=True)
+        val_req = parse_value(safe_cell(raw_df, 21, col_idx))
+        if d_val is not None and val_req is not None and val_req > 0:
+            leaderboard_req.append((d_val, val_req))
+    leaderboard_req.sort(key=lambda x: x[1], reverse=True)
     
-    for rank, (d, v) in enumerate(leaderboard_days[:3]):
+    for rank, (d, v) in enumerate(leaderboard_req[:3]):
+        st.markdown(
+            f"""
+            <div class="leaderboard-row rank-{rank+1}">
+                <div class="rank-badge">Top {rank+1} &nbsp;&nbsp; {d.strftime('%d-%b')}</div>
+                <div style="font-weight:700;">{v:,.0f} reqs</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+        
+    st.markdown("<div class='leaderboard-title' style='margin-top:1.5rem;'>🏆 Leaderboard - Top 3 ngày Demand SGN</div>", unsafe_allow_html=True)
+    
+    leaderboard_dem = []
+    for col_idx in mtd_cols:
+        d_val = parse_sheet_date(safe_cell(raw_df, 4, col_idx))
+        val_dem = parse_value(safe_cell(raw_df, 28, col_idx))
+        if d_val is not None and val_dem is not None and val_dem > 0:
+            leaderboard_dem.append((d_val, val_dem))
+    leaderboard_dem.sort(key=lambda x: x[1], reverse=True)
+    
+    for rank, (d, v) in enumerate(leaderboard_dem[:3]):
         st.markdown(
             f"""
             <div class="leaderboard-row rank-{rank+1}">
@@ -1314,18 +1383,18 @@ with col_chart_right:
     st.markdown("<div class='leaderboard-title'>🎯 Số ngày các chỉ số đạt % FC SGN</div>", unsafe_allow_html=True)
     
     accuracy_metrics = {
-        "Request": (22, 6),
-        "Complete": (29, 14),
+        "Request": (21, 5),
+        "Complete": (28, 13),
         "Active": (50, None),
         "Supply hour": (66, None)
     }
     
     accuracy_rows_html = ""
     for name, (act_row, fcast_row) in accuracy_metrics.items():
-        days_in_month = len(mtd_cols)
         day_pass = 0
         day_under = 0
         day_over = 0
+        valid_days = 0
         
         for col_idx in mtd_cols:
             act_val = parse_value(safe_cell(raw_df, act_row, col_idx))
@@ -1335,17 +1404,18 @@ with col_chart_right:
             if fcast_row is not None:
                 fc_val = parse_value(safe_cell(raw_df, fcast_row, col_idx))
             else:
-                # Proportional forecast
-                fc_req = parse_value(safe_cell(raw_df, 6, col_idx))
+                # Proportional forecast based on SGN Forecast Request (Row 5)
+                fc_req = parse_value(safe_cell(raw_df, 5, col_idx))
                 if fc_req is not None:
                     if name == "Active":
-                        fc_val = fc_req * (sum(act_plan_16jun.values()) / 69263.0)
+                        fc_val = fc_req * (sum(act_plan_16jun.values()) / 77392.0)
                     else:
-                        fc_val = fc_req * (sum(sh_plan_16jun.values()) / 69263.0)
+                        fc_val = fc_req * (sum(sh_plan_16jun.values()) / 77392.0)
                 else:
                     fc_val = None
                     
             if fc_val is not None and fc_val > 0:
+                valid_days += 1
                 ratio = act_val / fc_val
                 if 0.95 <= ratio <= 1.05:
                     day_pass += 1
@@ -1354,7 +1424,7 @@ with col_chart_right:
                 else:
                     day_over += 1
                     
-        acc_rate = day_pass / days_in_month if days_in_month > 0 else 0.0
+        acc_rate = day_pass / valid_days if valid_days > 0 else 0.0
         acc_rate_color = "val-positive" if acc_rate >= 0.80 else ("val-neutral" if acc_rate >= 0.50 else "val-negative")
         
         accuracy_rows_html += f"""
@@ -1370,21 +1440,21 @@ with col_chart_right:
         
     st.markdown(
         f"""
-        <table style='width:100%; font-size:0.78rem; border-collapse:collapse; color:#F8FAFC;'>
-            <thead>
-                <tr style='border-bottom:1px solid #334155; text-align:left; color:#94A3B8;'>
-                    <th style='padding:0.4rem;'>Metric</th>
-                    <th style='padding:0.4rem;'>Target</th>
-                    <th style='padding:0.4rem; text-align:center;'>Pass</th>
-                    <th style='padding:0.4rem; text-align:center;'>%</th>
-                    <th style='padding:0.4rem; text-align:center;'>Under</th>
-                    <th style='padding:0.4rem; text-align:center;'>Over</th>
-                </tr>
-            </thead>
-            <tbody>
-                {accuracy_rows_html}
-            </tbody>
-        </table>
+<table style='width:100%; font-size:0.78rem; border-collapse:collapse; color:#F8FAFC;'>
+    <thead>
+        <tr style='border-bottom:1px solid #334155; text-align:left; color:#94A3B8;'>
+            <th style='padding:0.4rem;'>Metric</th>
+            <th style='padding:0.4rem;'>Target</th>
+            <th style='padding:0.4rem; text-align:center;'>Pass</th>
+            <th style='padding:0.4rem; text-align:center;'>%</th>
+            <th style='padding:0.4rem; text-align:center;'>Under</th>
+            <th style='padding:0.4rem; text-align:center;'>Over</th>
+        </tr>
+    </thead>
+    <tbody>
+        {accuracy_rows_html}
+    </tbody>
+</table>
         """,
         unsafe_allow_html=True
     )
