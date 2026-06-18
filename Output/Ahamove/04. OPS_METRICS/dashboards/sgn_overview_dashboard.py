@@ -1244,7 +1244,7 @@ cols[0].markdown(metric_card(
     format_number(val(21, col_yesterday)),
     (delta_html(val(21, col_yesterday), val(21, col_dod_kpi), label_suffix="DoD") if col_dod_kpi else "")
     + " &nbsp; " + delta_html(val(21, col_yesterday), val(21, col_last_week), label_suffix="WoW"),
-    f"FC {date_yesterday.strftime('%d-%b')}: {format_number(val(6, col_yesterday))}",
+    delta_html(val(21, col_yesterday), val(6, col_yesterday), percent=True, label_suffix="vs FC") + f" &nbsp;|&nbsp; FC: {format_number(val(6, col_yesterday))}",
     "metric-card-accent"
 ), unsafe_allow_html=True)
 
@@ -1254,7 +1254,7 @@ cols[1].markdown(metric_card(
     format_number(val(28, col_yesterday)),
     (delta_html(val(28, col_yesterday), val(28, col_dod_kpi), label_suffix="DoD") if col_dod_kpi else "")
     + " &nbsp; " + delta_html(val(28, col_yesterday), val(28, col_last_week), label_suffix="WoW"),
-    f"FC: {format_number(val(13, col_yesterday))}",
+    delta_html(val(28, col_yesterday), val(13, col_yesterday), percent=True, label_suffix="vs FC") + f" &nbsp;|&nbsp; FC: {format_number(val(13, col_yesterday))}",
 ), unsafe_allow_html=True)
 
 # 3. FR%
@@ -1362,9 +1362,54 @@ cols2[5].markdown(metric_card(
     "Nhóm DV 4H (Hôm qua)",
     active_4h_str,
     f"<span style='color:#94A3B8'>4H: {format_number(active_total_4h)} / {format_number(active_total)} tài xế</span>",
-    "Giao trong 4H / Ghép đơn",
+    "Đo lường độ gắn bó (Txế hoạt động liên tục >=4h/ngày)",
     "metric-card-green"
 ), unsafe_allow_html=True)
+
+# ── GROUP 3: WTD — Lũy kế tuần ────────────────────────────────────────────────
+wtd_label = f"WTD ({wtd_start_label} - {date_yesterday.strftime('%d-%b')})"
+lwtd_label = f"LWTD ({lwtd_start_label} - {date_last_week.strftime('%d-%b')})"
+
+st.markdown(
+    f"<div style='font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;"
+    f"color:#64748B;padding:0.4rem 0 0.2rem;border-top:1px solid #1E293B;margin-top:0.75rem;'>"
+    f"📆 WTD — Tuần này &nbsp;·&nbsp; vs {lwtd_label}"
+    f"</div>",
+    unsafe_allow_html=True,
+)
+cols3 = st.columns(6)
+
+req_wtd = cockpit["Request"]["wtd"]
+req_lwtd = cockpit["Request"]["lwtd"]
+dem_wtd = cockpit["Complete"]["wtd"]
+dem_lwtd = cockpit["Complete"]["lwtd"]
+fr_wtd = cockpit["FR"]["wtd"]
+fr_lwtd = cockpit["FR"]["lwtd"]
+
+cols3[0].markdown(metric_card(
+    "Request WTD",
+    format_number(req_wtd),
+    delta_html(req_wtd, req_lwtd, label_suffix=f"vs LWTD"),
+    f"LWTD: {format_number(req_lwtd)}",
+    "metric-card-accent"
+), unsafe_allow_html=True)
+
+cols3[1].markdown(metric_card(
+    "Demand WTD",
+    format_number(dem_wtd),
+    delta_html(dem_wtd, dem_lwtd, label_suffix=f"vs LWTD"),
+    f"LWTD: {format_number(dem_lwtd)}",
+), unsafe_allow_html=True)
+
+fr_color_wtd = "#34D399" if fr_wtd and fr_wtd >= fr_target else ("#FBBF24" if fr_wtd and fr_wtd >= fr_target * 0.9 else "#F87171")
+fr_wtd_html = f"""
+<div class="metric-card" style="border-color:{fr_color_wtd}33;">
+  <div class="metric-label">FR% WTD</div>
+  <div class="metric-value" style="color:{fr_color_wtd};">{format_percent(fr_wtd)}</div>
+  <div class="metric-delta">{delta_html(fr_wtd, fr_lwtd, percent=True, label_suffix="vs LWTD")}</div>
+  <div class="metric-context">LWTD: {format_percent(fr_lwtd)}</div>
+</div>"""
+cols3[2].markdown(fr_wtd_html, unsafe_allow_html=True)
 
 
 # ── LAYER 1: DAILY OPERATING COCKPIT TABLE ────────────────────────────────────

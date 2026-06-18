@@ -2,7 +2,7 @@
 
 **Owner:** Lê Phương Khanh | Driver Management Leader  
 **Scope:** Xe máy (Instant) — Giao ngay 1H, Siêu tốc, Ghép đơn, 4H  
-**Last updated:** 2026-06-09
+**Last updated:** 2026-06-18
 
 ---
 
@@ -205,11 +205,15 @@ Output/Ahamove/
 #### Root
 | File | Mô tả |
 |------|-------|
-| `2026-06-global-driver-lifecycle-benchmark.md` | **Nghiên cứu 15+ nền tảng toàn cầu** (Meituan, Uber, DoorDash, Swiggy, Grab, Gojek, Deliveroo, Rappi, iFood, Be, XanhSM...): benchmark churn rate, lifecycle models, gap analysis |
-| `2026-06-16-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 16/06: GSM thay CEO toàn cầu & Be Group PR campaign |
-| `2026-06-16-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 16/06 |
+#### `monitoring/`
+| File | Mô tả |
+|------|-------|
+| `2026-06-18-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 18/06: Uber tập trung Robotaxi & Be kết hợp B2B y tế |
+| `2026-06-18-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 18/06 |
 | `2026-06-17-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 17/06: GSM ký Taxi Quê Lụa, GrabBenefits & Be Group EV lobby |
 | `2026-06-17-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 17/06 |
+| `2026-06-16-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 16/06: GSM thay CEO toàn cầu & Be Group PR campaign |
+| `2026-06-16-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 16/06 |
 | `2026-06-16-weekly-market-brief.md` | Bản tin vận hành & thị trường đầu tuần ngày 16/06: Grab EV, XanhSM thắt chặt P&L, luật ILO mới |
 | `2026-06-16-weekly-market-brief.html` | Bản HTML tương tác của bản tin vận hành & thị trường đầu tuần ngày 16/06 |
 
@@ -262,4 +266,4 @@ streamlit run "output/Ahamove/04. OPS_METRICS/dashboards/sgn_overview_dashboard.
 
 ---
 
-*Last updated: 2026-06-17 | Scanned by Claude Code*
+*Last updated: 2026-06-18 | Scanned by Claude Code*
