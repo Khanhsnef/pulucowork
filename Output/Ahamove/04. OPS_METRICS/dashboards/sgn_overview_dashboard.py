@@ -44,6 +44,11 @@ st.markdown(
         color: var(--text) !important;
         font-family: 'Inter', sans-serif !important;
     }
+    .block-container, [data-testid="stMainBlockContainer"] {
+        max-width: 100% !important;
+        padding-left: 0.9rem !important;
+        padding-right: 0.9rem !important;
+    }
     [class*="css"], table, th, td, input, select, button, div, span, p {
         font-family: 'Inter', sans-serif !important;
     }
@@ -100,48 +105,51 @@ st.markdown(
     }
 
     .metric-card {
-        background: var(--card) !important;
-        border: 1px solid var(--border);
+        background: linear-gradient(145deg, rgba(30,41,59,0.98), rgba(30,41,59,0.76)) !important;
+        border: 1px solid rgba(96,165,250,0.20);
         border-radius: 1rem;
-        padding: 1.15rem 1.15rem;
+        padding: 1.05rem 1.05rem;
         min-height: 128px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        box-shadow: none;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.035), 0 12px 28px rgba(2,6,23,0.16);
         transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
     }
     .metric-card * { background-color: transparent !important; }
     .metric-card:hover {
-        background: rgba(30,41,59,0.82) !important;
-        border-color: #475569;
+        background: linear-gradient(145deg, rgba(37,51,74,0.98), rgba(30,41,59,0.84)) !important;
+        border-color: rgba(96,165,250,0.38);
         transform: translateY(-1px);
     }
-    .metric-card-accent, .metric-card-green, .metric-card-blue { border-color: var(--border) !important; }
+    .metric-card-accent { border-color: rgba(96,165,250,0.32) !important; }
+    .metric-card-green { border-color: rgba(16,185,129,0.28) !important; }
+    .metric-card-blue { border-color: rgba(59,130,246,0.26) !important; }
     .metric-card-header {
         display: flex;
         align-items: center;
-        gap: 0.55rem;
-        margin-bottom: 0.55rem;
+        gap: 0.65rem;
+        margin-bottom: 0.6rem;
     }
-    .metric-icon { color: #60a5fa !important; font-size: 1rem; line-height: 1; }
+    .metric-icon { color: #60a5fa !important; font-size: 1.28rem; line-height: 1; width:1.55rem; height:1.55rem; display:inline-flex; align-items:center; justify-content:center; border-radius:0.55rem; background:rgba(96,165,250,0.10) !important; }
     .metric-label {
         color: var(--muted) !important;
         font-size: 0.82rem;
-        font-weight: 800;
-        letter-spacing: -0.01em;
+        font-weight: 900;
+        letter-spacing: -0.012em;
     }
     .metric-value {
         color: var(--text) !important;
-        font-size: 1.82rem;
-        font-weight: 900;
-        letter-spacing: -0.045em;
-        line-height: 1.05;
-        margin: 0.15rem 0 0.35rem;
+        font-size: 1.92rem;
+        font-weight: 950;
+        letter-spacing: -0.055em;
+        line-height: 1.02;
+        margin: 0.12rem 0 0.38rem;
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: clip;
+        text-shadow: 0 1px 0 rgba(255,255,255,0.05);
     }
     .metric-value-lg { font-size: 2.1rem; font-weight: 900; letter-spacing: -0.045em; }
     .metric-context { color: var(--muted) !important; font-size: 0.72rem; line-height: 1.45; margin-top: 0.35rem; }
@@ -228,12 +236,17 @@ st.markdown(
     .cockpit-table td.delta-neg .delta-badge, .cockpit-table td.delta-neg .delta-abs { color: var(--rose) !important; }
     .cockpit-table td.delta-neu .delta-badge, .cockpit-table td.delta-neu .delta-abs { color: var(--amber) !important; }
 
-    .hdr-actual-current, .hdr-actual-past, .hdr-plan, .hdr-today {
-        background: #0f172a !important;
-        color: var(--muted) !important;
-        text-align: center !important;
-        border-color: var(--border) !important;
-    }
+    .hdr-actual-current { background: rgba(59,130,246,0.18) !important; color: #bfdbfe !important; text-align: center !important; border-color: rgba(96,165,250,0.30) !important; }
+    .hdr-actual-past { background: rgba(148,163,184,0.13) !important; color: #cbd5e1 !important; text-align: center !important; border-color: rgba(148,163,184,0.22) !important; }
+    .hdr-plan { background: rgba(251,191,36,0.13) !important; color: #fde68a !important; text-align: center !important; border-color: rgba(251,191,36,0.22) !important; }
+    .hdr-today { background: rgba(16,185,129,0.15) !important; color: #a7f3d0 !important; text-align: center !important; border-color: rgba(16,185,129,0.24) !important; }
+    .hdr-delta { background: rgba(167,139,250,0.15) !important; color: #ddd6fe !important; text-align: center !important; border-color: rgba(167,139,250,0.24) !important; }
+    .cockpit-table td.col-current { background: rgba(59,130,246,0.045) !important; }
+    .cockpit-table td.col-past { background: rgba(148,163,184,0.035) !important; }
+    .cockpit-table td.col-plan { background: rgba(251,191,36,0.035) !important; }
+    .cockpit-table td.col-today { background: rgba(16,185,129,0.045) !important; }
+    .cockpit-table td.col-delta { background: rgba(167,139,250,0.040) !important; }
+    .cockpit-table tr:hover td.col-current, .cockpit-table tr:hover td.col-past, .cockpit-table tr:hover td.col-plan, .cockpit-table tr:hover td.col-today, .cockpit-table tr:hover td.col-delta { background:#334155 !important; }
     .val-positive { color: var(--emerald) !important; font-weight: 800; }
     .val-negative { color: var(--rose) !important; font-weight: 800; }
     .val-neutral { color: var(--muted) !important; }
@@ -524,17 +537,19 @@ def delta_html(current, baseline, percent=False, label_suffix="vs LM"):
 
 def metric_card(label, value, delta, context="", accent_class=""):
     """Render a clean Slate KPI card. Data values are passed in unchanged."""
-    icon = "◎"
+    icon = "◉"
     if "FR" in label or "Fulfillment" in label:
-        icon = "⌁"
+        icon = "％"
     elif "Active" in label or "Driver" in label:
-        icon = "♙"
-    elif "Productivity" in label or "EPH" in label or "Prod" in label:
-        icon = "↯"
+        icon = "♟"
+    elif "Productivity" in label or "Prod" in label:
+        icon = "⚡"
     elif "Supply" in label:
-        icon = "◷"
+        icon = "⏱"
     elif "Demand" in label or "Complete" in label:
-        icon = "⌁"
+        icon = "↘"
+    elif "Request" in label:
+        icon = "◎"
     return f"""
     <div class="metric-card {accent_class}">
         <div class="metric-card-header">
@@ -1327,24 +1342,27 @@ COCKPIT_SHEET_ROW = {
     # FR, Other rows are derived — DoD computed from component rows
 }
 
-def get_cockpit_dod(key, row):
-    """Return (dod_pct, dod_abs) for a cockpit row."""
+def get_cockpit_prev_day_value(key):
+    """Return adjacent previous day value (D-1 vs yesterday) for display/comparison."""
     if col_dod_global is None:
-        return None, None
+        return None
     r = COCKPIT_SHEET_ROW.get(key)
-    is_pct = row["is_percent"]
-    y = row["yesterday"]
     if r is not None:
-        dod_val = val(r, col_dod_global)
-    elif key == "FR":
-        # FR derived: comp_dod / req_dod
+        return val(r, col_dod_global)
+    if key == "FR":
         req_dod = val(22, col_dod_global)
         comp_dod = val(29, col_dod_global)
-        dod_val = comp_dod / req_dod if req_dod else None
-    else:
-        dod_val = None
+        return comp_dod / req_dod if req_dod else None
+    return None
+
+
+def get_cockpit_dod(key, row):
+    """Return (dod_pct, dod_abs) for a cockpit row."""
+    y = row["yesterday"]
+    dod_val = get_cockpit_prev_day_value(key)
     if y is None or dod_val is None:
         return None, None
+    is_pct = row["is_percent"]
     pct = (y - dod_val) if is_pct else ((y - dod_val) / dod_val if dod_val != 0 else None)
     abs_d = (y - dod_val)
     return pct, abs_d
@@ -1601,16 +1619,19 @@ cols2[5].markdown(metric_card(
 st.markdown("<div class='section-header'>🎛️ Daily Operating Cockpit (SGN)</div>", unsafe_allow_html=True)
 
 
-def fmt_cell(v, fmt, is_today=False):
+def fmt_cell(v, fmt, is_today=False, td_class=""):
+    base_class = "val-planning-today" if is_today else ""
+    class_attr = " ".join([c for c in [td_class, base_class] if c]).strip()
+    class_attr = f" class='{class_attr}'" if class_attr else ""
     if v is None:
-        return "<td class='val-neutral'>—</td>"
-    today_cls = " class='val-planning-today'" if is_today else ""
+        empty_class = " ".join([c for c in [td_class, "val-neutral"] if c]).strip()
+        return f"<td class='{empty_class}'>—</td>"
     if fmt == "percent":
-        return f"<td{today_cls}>{v:.1%}</td>"
+        return f"<td{class_attr}>{v:.1%}</td>"
     elif fmt == "decimal":
-        return f"<td{today_cls}>{v:.2f}</td>"
+        return f"<td{class_attr}>{v:.2f}</td>"
     else:
-        return f"<td{today_cls}>{v:,.0f}</td>"
+        return f"<td{class_attr}>{v:,.0f}</td>"
 
 
 def delta_cell(v, positive_is_good=True):
@@ -1641,31 +1662,33 @@ _lwtd_label = f"{lwtd_start_label}–{_last_week_same_dow.strftime('%d-%b')}"
 
 _dod_lbl = date_dod.strftime('%d-%b') if date_dod else "D-2"
 
-def delta_cell_abs(pct_v, abs_v, positive_is_good=True, is_pct_metric=False):
+def delta_cell_abs(pct_v, abs_v, positive_is_good=True, is_pct_metric=False, td_class=""):
     """Delta cell: percent pill plus absolute movement below."""
     if pct_v is None:
-        return "<td class='val-neutral'>—</td>"
+        empty_class = " ".join([c for c in [td_class, "val-neutral"] if c]).strip()
+        return f"<td class='{empty_class}'>—</td>"
     good = pct_v >= 0 if positive_is_good else pct_v < 0
     cls = "pos" if good else "neg"
     td_cls = "delta-pos" if good else "delta-neg"
+    td_classes = " ".join([c for c in [td_class, td_cls] if c]).strip()
     arrow = "▲" if pct_v >= 0 else "▼"
     pct_str = f"{arrow}{abs(pct_v):.1%}"
     if abs_v is None:
-        return f"<td class='{td_cls}'><span class='delta-badge {cls}'>{pct_str}</span></td>"
+        return f"<td class='{td_classes}'><span class='delta-badge {cls}'>{pct_str}</span></td>"
     if is_pct_metric:
         abs_str = f"{abs_v:+.1%}"
     elif abs(abs_v) < 10 and abs_v != int(abs_v):
         abs_str = f"{abs_v:+.2f}"
     else:
         abs_str = f"{abs_v:+,.0f}"
-    return f"<td class='{td_cls}'><span class='delta-badge {cls}'>{pct_str}</span><span class='delta-abs'>{abs_str}</span></td>"
+    return f"<td class='{td_classes}'><span class='delta-badge {cls}'>{pct_str}</span><span class='delta-abs'>{abs_str}</span></td>"
 html_table = f"""
 <div class="cockpit-table-container">
   <table class="cockpit-table">
     <thead>
       <tr>
         <th rowspan="2" class="sticky-col" style="vertical-align:bottom;">SGN</th>
-        <th colspan="6" class="hdr-actual-current" style="text-align:center;border-bottom:1px solid #475569;">
+        <th colspan="8" class="hdr-actual-current" style="text-align:center;border-bottom:1px solid #475569;">
           DAILY — {date_yesterday.strftime('%d-%b')}
         </th>
         <th colspan="5" class="hdr-plan" style="text-align:center;border-bottom:1px solid #475569;">
@@ -1674,10 +1697,12 @@ html_table = f"""
       </tr>
       <tr>
         <th class="hdr-actual-current">Yesterday<br><small style="font-size:0.65rem;color:#94A3B8;">{date_yesterday.strftime('%d-%b')}</small></th>
+        <th class="hdr-actual-past">Prev Day<br><small style="font-size:0.65rem;color:#94A3B8;">{_dod_lbl}</small></th>
         <th class="hdr-actual-past">Last week<br><small style="font-size:0.65rem;color:#94A3B8;">{date_last_week.strftime('%d-%b')}</small></th>
         <th class="hdr-plan">Planning<br><small style="font-size:0.65rem;color:#94A3B8;">{date_yesterday.strftime('%d-%b')}</small></th>
         <th class="hdr-today">Today<br><small style="font-size:0.65rem;color:#94A3B8;">{date_today.strftime('%d-%b')}</small></th>
-        <th class="hdr-actual-past">WoW</th>
+        <th class="hdr-delta">DoD<br><small style="font-size:0.65rem;color:#94A3B8;">vs {_dod_lbl}</small></th>
+        <th class="hdr-delta">WoW<br><small style="font-size:0.65rem;color:#94A3B8;">vs {date_last_week.strftime('%d-%b')}</small></th>
         <th class="hdr-plan">vs Planning</th>
         <th class="hdr-actual-current">MTD<br><small style="font-size:0.65rem;color:#94A3B8;">Jun-2026</small></th>
         <th class="hdr-actual-past">Last month<br><small style="font-size:0.65rem;color:#94A3B8;">May-2026</small></th>
@@ -1747,21 +1772,24 @@ for label, key, parent in cockpit_rows_order:
     html_table += f"<tr class='{tr_class}'>"
     html_table += f"<td class='{td_label_cls}'>{display_label}</td>"
 
-    # ── DAILY: yesterday / last week / planning / today / WoW / vs planning ──
-    html_table += fmt_cell(row.get("yesterday"), fmt)
-    html_table += fmt_cell(row.get("last_week"), fmt)
-    html_table += fmt_cell(row.get("planning"), fmt)
-    html_table += fmt_cell(row.get("today"), fmt, is_today=True)
-    html_table += delta_cell_abs(row.get("wow"), row.get("wow_abs"), is_pct_metric=is_pct_metric)
-    html_table += delta_cell_abs(row.get("vs_planning"), row.get("vs_planning_abs"), is_pct_metric=is_pct_metric)
+    # ── DAILY: yesterday / prev day / last week / planning / today / DoD / WoW / vs planning ──
+    prev_day_value = get_cockpit_prev_day_value(key)
+    html_table += fmt_cell(row.get("yesterday"), fmt, td_class="col-current")
+    html_table += fmt_cell(prev_day_value, fmt, td_class="col-past")
+    html_table += fmt_cell(row.get("last_week"), fmt, td_class="col-past")
+    html_table += fmt_cell(row.get("planning"), fmt, td_class="col-plan")
+    html_table += fmt_cell(row.get("today"), fmt, is_today=True, td_class="col-today")
+    html_table += delta_cell_abs(dod_pct, dod_abs, is_pct_metric=is_pct_metric, td_class="col-delta")
+    html_table += delta_cell_abs(row.get("wow"), row.get("wow_abs"), is_pct_metric=is_pct_metric, td_class="col-delta")
+    html_table += delta_cell_abs(row.get("vs_planning"), row.get("vs_planning_abs"), is_pct_metric=is_pct_metric, td_class="col-plan")
 
     # ── MTD: MTD / last month / planning / MoM / vs planning ────────────────
-    html_table += fmt_cell(row.get("mtd"), fmt)
-    html_table += fmt_cell(row.get("lm"), fmt)
-    html_table += fmt_cell(row.get("plan_mtd"), fmt)
-    html_table += delta_cell_abs(row.get("mom_whole"), row.get("mom_whole_abs"), is_pct_metric=is_pct_metric)
+    html_table += fmt_cell(row.get("mtd"), fmt, td_class="col-current")
+    html_table += fmt_cell(row.get("lm"), fmt, td_class="col-past")
+    html_table += fmt_cell(row.get("plan_mtd"), fmt, td_class="col-plan")
+    html_table += delta_cell_abs(row.get("mom_whole"), row.get("mom_whole_abs"), is_pct_metric=is_pct_metric, td_class="col-delta")
     mtd_plan_abs = (row.get("mtd") - row.get("plan_mtd")) if row.get("mtd") is not None and row.get("plan_mtd") is not None else None
-    html_table += delta_cell_abs(row.get("vs_planning_mtd"), mtd_plan_abs, is_pct_metric=is_pct_metric)
+    html_table += delta_cell_abs(row.get("vs_planning_mtd"), mtd_plan_abs, is_pct_metric=is_pct_metric, td_class="col-plan")
     html_table += "</tr>"
 
 html_table += f"""
