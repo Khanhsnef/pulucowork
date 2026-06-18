@@ -1075,15 +1075,15 @@ cockpit["Active"] = {
     "label": "Active", "is_header": True, "format": "number", "is_percent": False,
     "yesterday": val(50, col_yesterday),
     "last_week": val(50, col_last_week),
-    "planning": sum(act_plan_16jun.values()),
-    "today": active_plan(sum(act_plan_16jun.values()), val(6, col_today)),
+    "planning": None,
+    "today": None,
     "wtd": get_row_wtd_mean(50),
     "lwtd": get_row_lwtd_mean(50),
-    "plan_wtd": get_driver_plan_mtd(sum(act_plan_16jun.values()), wtd_cols, "mean"),
+    "plan_wtd": None,
     "mtd": val(50, 3),
     "lm": val(50, 2),
     "lm_mtd": get_row_lm_mtd_mean(50),
-    "plan_mtd": get_driver_plan_mtd(sum(act_plan_16jun.values()), mtd_cols, "mean")
+    "plan_mtd": None
 }
 
 active_segs = ["FT", "PT", "NLM", "Return", "NIM", "NID"]
@@ -1094,15 +1094,15 @@ for seg in active_segs:
         "label": seg, "is_header": False, "format": "number", "is_percent": False,
         "yesterday": val(r, col_yesterday),
         "last_week": val(r, col_last_week),
-        "planning": act_plan_16jun[seg],
-        "today": active_plan(act_plan_16jun[seg], val(6, col_today)),
+        "planning": None,
+        "today": None,
         "wtd": get_row_wtd_mean(r),
         "lwtd": get_row_lwtd_mean(r),
-        "plan_wtd": get_driver_plan_mtd(act_plan_16jun[seg], wtd_cols, "mean"),
+        "plan_wtd": None,
         "mtd": val(r, 3),
         "lm": val(r, 2),
         "lm_mtd": get_row_lm_mtd_mean(r),
-        "plan_mtd": get_driver_plan_mtd(act_plan_16jun[seg], mtd_cols, "mean")
+        "plan_mtd": None
     }
 cockpit["Active_Other"] = {
     "label": "Other (EXP)", "is_header": False, "format": "number", "is_percent": False,
@@ -1129,15 +1129,15 @@ cockpit["Cap"] = {
     "label": "Cap", "is_header": True, "format": "number", "is_percent": False,
     "yesterday": val(58, col_yesterday),
     "last_week": val(58, col_last_week),
-    "planning": sum(cap_plan_16jun.values()),
-    "today": active_plan(sum(cap_plan_16jun.values()), val(6, col_today)),
+    "planning": None,
+    "today": None,
     "wtd": get_row_wtd_sum(58),
     "lwtd": get_row_lwtd_sum(58),
-    "plan_wtd": get_driver_plan_mtd(sum(cap_plan_16jun.values()), wtd_cols, "sum"),
+    "plan_wtd": None,
     "mtd": val(58, 3),
     "lm": val(58, 2),
     "lm_mtd": get_row_lm_mtd_sum(58),
-    "plan_mtd": get_driver_plan_mtd(sum(cap_plan_16jun.values()), mtd_cols, "sum")
+    "plan_mtd": None
 }
 
 for seg in cap_segs:
@@ -1146,15 +1146,15 @@ for seg in cap_segs:
         "label": seg, "is_header": False, "format": "number", "is_percent": False,
         "yesterday": val(r, col_yesterday),
         "last_week": val(r, col_last_week),
-        "planning": cap_plan_16jun[seg],
-        "today": active_plan(cap_plan_16jun[seg], val(6, col_today)),
+        "planning": None,
+        "today": None,
         "wtd": get_row_wtd_sum(r),
         "lwtd": get_row_lwtd_sum(r),
-        "plan_wtd": get_driver_plan_mtd(cap_plan_16jun[seg], wtd_cols, "sum"),
+        "plan_wtd": None,
         "mtd": get_cap_seg_mtd_sum(seg),
         "lm": val(r, 2),
         "lm_mtd": get_row_lm_mtd_sum(r),
-        "plan_mtd": get_driver_plan_mtd(cap_plan_16jun[seg], mtd_cols, "sum")
+        "plan_mtd": None
     }
 cockpit["Cap_Other"] = {
     "label": "Other (EXP)", "is_header": False, "format": "number", "is_percent": False,
@@ -1181,15 +1181,15 @@ cockpit["Supply hour"] = {
     "label": "Supply hour", "is_header": True, "format": "number", "is_percent": False,
     "yesterday": val(66, col_yesterday),
     "last_week": val(66, col_last_week),
-    "planning": sum(sh_plan_16jun.values()),
-    "today": supply_hour_plan(sum(sh_plan_16jun.values()), val(6, col_today)),
+    "planning": None,
+    "today": None,
     "wtd": get_row_wtd_sum(66),
     "lwtd": get_row_lwtd_sum(66),
-    "plan_wtd": get_driver_plan_mtd(sum(sh_plan_16jun.values()), wtd_cols, "sum"),
+    "plan_wtd": None,
     "mtd": val(66, 3),
     "lm": val(66, 2),
     "lm_mtd": get_row_lm_mtd_sum(66),
-    "plan_mtd": get_driver_plan_mtd(sum(sh_plan_16jun.values()), mtd_cols, "sum")
+    "plan_mtd": None
 }
 
 for seg in sh_segs:
@@ -1198,15 +1198,15 @@ for seg in sh_segs:
         "label": seg, "is_header": False, "format": "number", "is_percent": False,
         "yesterday": val(r, col_yesterday),
         "last_week": val(r, col_last_week),
-        "planning": sh_plan_16jun[seg],
-        "today": supply_hour_plan(sh_plan_16jun[seg], val(6, col_today)),
+        "planning": None,
+        "today": None,
         "wtd": get_row_wtd_sum(r),
         "lwtd": get_row_lwtd_sum(r),
-        "plan_wtd": get_driver_plan_mtd(sh_plan_16jun[seg], wtd_cols, "sum"),
+        "plan_wtd": None,
         "mtd": get_sh_seg_mtd_sum(seg),
         "lm": val(r, 2),
         "lm_mtd": get_row_lm_mtd_sum(r),
-        "plan_mtd": get_driver_plan_mtd(sh_plan_16jun[seg], mtd_cols, "sum")
+        "plan_mtd": None
     }
 cockpit["Supply_hour_Other"] = {
     "label": "Other (EXP)", "is_header": False, "format": "number", "is_percent": False,
@@ -1424,7 +1424,7 @@ cols[3].markdown(metric_card(
     format_number(val(50, col_yesterday)),
     (delta_html(val(50, col_yesterday), active_dod, label_suffix="DoD") if active_dod else "")
     + "" + delta_html(val(50, col_yesterday), val(50, col_last_week), label_suffix="WoW"),
-    f"Plan: {format_number(sum(act_plan_16jun.values()))}",
+    "",
     "metric-card-blue"
 ), unsafe_allow_html=True)
 
