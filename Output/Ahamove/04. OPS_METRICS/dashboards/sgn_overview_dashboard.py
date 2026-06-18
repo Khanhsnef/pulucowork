@@ -626,14 +626,19 @@ def render_dual_axis_chart(data_left, data_right, title, colors_left, colors_rig
 
     for label, series in data_left.items():
         text_values = add_text_labels(series, max_left)
+        is_forecast = label.upper().startswith("FC") or "FORECAST" in label.upper()
+        line_color = colors_left.get(label, "#38BDF8")
+        fill_color = "rgba(255,127,50,0.10)" if "Request" in label else "rgba(56,189,248,0.10)"
         fig.add_trace(
             go.Scatter(
                 x=series.index, y=series.values,
-                mode="lines+markers+text", name=label,
-                text=text_values, textposition="top center",
+                mode="lines+markers+text" if not is_forecast else "lines+markers", name=label,
+                text=text_values if not is_forecast else None, textposition="top center",
                 textfont={"size": 8, "color": "#F8FAFC"},
-                line={"width": 3, "color": colors_left.get(label, "#38BDF8"), "shape": "spline", "smoothing": 1.3},
-                marker={"size": 5},
+                line={"width": 3 if not is_forecast else 1.8, "color": line_color if not is_forecast else "rgba(203,213,225,0.55)", "dash": "solid" if not is_forecast else "dash", "shape": "spline", "smoothing": 1.3},
+                marker={"size": 5 if not is_forecast else 4, "opacity": 0.9 if not is_forecast else 0.55},
+                fill="tozeroy" if not is_forecast else None,
+                fillcolor=fill_color if not is_forecast else None,
                 hovertemplate=f"%{{x|%d-%b}}: %{{y:,.0f}}<extra>{label}</extra>",
             ),
             secondary_y=False,
@@ -655,16 +660,17 @@ def render_dual_axis_chart(data_left, data_right, title, colors_left, colors_rig
     fig.update_layout(
         title={"text": title, "font": {"size": 14, "color": "#F8FAFC"}},
         font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
-        paper_bgcolor="#1E293B",
-        plot_bgcolor="#1E293B",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
         margin={"l": 30, "r": 60, "t": 60, "b": 30},
         legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "xanchor": "right", "x": 1, "font": {"color": "#F8FAFC"}},
         hovermode="x unified",
+        hoverlabel={"bgcolor": "#1E293B", "bordercolor": "#334155", "font": {"family": "Montserrat, sans-serif", "color": "#F8FAFC", "size": 12}},
         template="plotly_dark",
     )
-    fig.update_xaxes(showgrid=False, linecolor="#334155", gridcolor="#334155", tickfont={"color": "#94A3B8"})
-    fig.update_yaxes(title_text=left_label, gridcolor="#334155", zerolinecolor="#334155", linecolor="#334155", tickfont={"color": "#94A3B8"}, secondary_y=False)
-    fig.update_yaxes(title_text=right_label, gridcolor="#334155", zerolinecolor="#334155", linecolor="#334155", tickfont={"color": "#10B981"}, tickformat=".0%", secondary_y=True)
+    fig.update_xaxes(showgrid=False, linecolor="rgba(51,65,85,0.75)", gridcolor="rgba(51,65,85,0.35)", tickfont={"color": "#94A3B8"})
+    fig.update_yaxes(title_text=left_label, gridcolor="rgba(51,65,85,0.35)", zerolinecolor="rgba(51,65,85,0.55)", linecolor="rgba(51,65,85,0.75)", tickfont={"color": "#94A3B8"}, secondary_y=False)
+    fig.update_yaxes(title_text=right_label, showgrid=False, zerolinecolor="rgba(51,65,85,0.55)", linecolor="rgba(51,65,85,0.75)", tickfont={"color": "#10B981"}, tickformat=".0%", secondary_y=True)
     st.plotly_chart(fig, use_container_width=True)
 
 
