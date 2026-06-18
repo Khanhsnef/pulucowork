@@ -1452,10 +1452,7 @@ wtd_label = f"WTD ({wtd_start_label} - {date_yesterday.strftime('%d-%b')})"
 lwtd_label = f"LWTD ({lwtd_start_label} - {date_last_week.strftime('%d-%b')})"
 
 st.markdown(
-    f"<div style='font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;"
-    f"color:#64748B;padding:0.4rem 0 0.2rem;border-top:1px solid #1E293B;margin-top:0.75rem;'>"
-    f"📆 WTD — Tuần này &nbsp;·&nbsp; vs {lwtd_label}"
-    f"</div>",
+    f"<div class='metric-group-label'>📆 WTD — Tuần này &nbsp;·&nbsp; vs {lwtd_label}</div>",
     unsafe_allow_html=True,
 )
 cols3 = st.columns(6)
@@ -1466,6 +1463,11 @@ dem_wtd = cockpit["Complete"]["wtd"]
 dem_lwtd = cockpit["Complete"]["lwtd"]
 fr_wtd = cockpit["FR"]["wtd"]
 fr_lwtd = cockpit["FR"]["lwtd"]
+active_wtd = cockpit["Active"]["wtd"]
+active_lwtd = cockpit["Active"]["lwtd"]
+sh_lwtd = cockpit["Supply hour"]["lwtd"]
+prod_wtd = cockpit["Prod"]["wtd"]
+prod_lwtd = cockpit["Prod"]["lwtd"]
 
 cols3[0].markdown(metric_card(
     "Request WTD",
@@ -1491,6 +1493,29 @@ fr_wtd_html = f"""
   <div class="metric-context">LWTD: {format_percent(fr_lwtd)}</div>
 </div>"""
 cols3[2].markdown(fr_wtd_html, unsafe_allow_html=True)
+
+cols3[3].markdown(metric_card(
+    "Active WTD",
+    format_number(active_wtd),
+    delta_html(active_wtd, active_lwtd, label_suffix="vs LWTD"),
+    f"LWTD: {format_number(active_lwtd)}",
+    "metric-card-blue"
+), unsafe_allow_html=True)
+
+cols3[4].markdown(metric_card(
+    "Supply Hours WTD",
+    format_number(sh_wtd_val),
+    delta_html(sh_wtd_val, sh_lwtd, label_suffix="vs LWTD"),
+    f"LWTD: {format_number(sh_lwtd)} &nbsp;·&nbsp; MTD: {format_number(sh_mtd_val)}",
+    "metric-card-blue"
+), unsafe_allow_html=True)
+
+cols3[5].markdown(metric_card(
+    "Productivity WTD",
+    format_number(prod_wtd, 1),
+    delta_html(prod_wtd, prod_lwtd, label_suffix="vs LWTD"),
+    f"LWTD: {format_number(prod_lwtd, 1)} &nbsp;·&nbsp; MTD: {format_number(prod_mtd, 1)}",
+), unsafe_allow_html=True)
 
 
 # ── LAYER 1: DAILY OPERATING COCKPIT TABLE ────────────────────────────────────
@@ -1557,7 +1582,7 @@ html_table = f"""
   <table class="cockpit-table">
     <thead>
       <tr>
-        <th rowspan="2" style="vertical-align:bottom;">SGN</th>
+        <th rowspan="2" class="sticky-col" style="vertical-align:bottom;">SGN</th>
         <!-- DAILY group: 5 cols -->
         <th colspan="5" class="hdr-actual-current" style="text-align:center;border-bottom:1px solid #475569;">
           DAILY — {date_yesterday.strftime('%d-%b')}
@@ -1645,14 +1670,15 @@ for label, key, parent in cockpit_rows_order:
     fmt = row["format"]
     is_pct_metric = row["is_percent"]
     tr_class = "row-header" if parent is None else ""
-    td_label_cls = "" if parent is None else "class='sub-row-header'"
+    td_label_cls = "sticky-col" if parent is None else "sticky-col sub-row-header"
+    display_label = label if parent is None else f"↳ {label}"
     is_active_row = key in _ACTIVE_KEYS
 
     # Compute DoD
     dod_pct, dod_abs = get_cockpit_dod(key, row)
 
     html_table += f"<tr class='{tr_class}'>"
-    html_table += f"<td {td_label_cls}>{label}</td>"
+    html_table += f"<td class='{td_label_cls}'>{display_label}</td>"
 
     # ── DAILY (5 cols) ──────────────────────────────────────────
     html_table += fmt_cell(row.get("yesterday"), fmt)
