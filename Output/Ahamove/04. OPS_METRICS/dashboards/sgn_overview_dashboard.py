@@ -1402,8 +1402,8 @@ fr_dod_delta = delta_html(fr_yest, val(180, col_dod_kpi), percent=True, label_su
 fr_daily_html = metric_card(
     "FR%",
     format_percent(fr_yest),
-    f"{fr_dod_delta}{fr_wow_delta}<span class='delta-badge {'pos' if fr_yest and fr_yest >= fr_target else 'neg'}'><span class='badge-label'>Target</span>{fr_target:.0%}</span>",
-    f"LM avg: {format_percent(fr_lm_mtd_avg)}",
+    f"{fr_dod_delta}{fr_wow_delta}",
+    f"Target: {fr_target:.0%} &nbsp;·&nbsp; LM avg: {format_percent(fr_lm_mtd_avg)}",
     "metric-card-green"
 )
 cols[2].markdown(fr_daily_html, unsafe_allow_html=True)
@@ -1429,13 +1429,13 @@ cols[4].markdown(metric_card(
     "metric-card-blue"
 ), unsafe_allow_html=True)
 
-# 6. Productivity (EPH)
+# 6. Productivity
 cols[5].markdown(metric_card(
-    "Productivity (EPH)",
+    "Productivity",
     format_number(prod_yest, 1),
     (delta_html(prod_yest, val(74, col_dod_kpi), label_suffix="DoD") if col_dod_kpi else "")
     + " &nbsp; " + (delta_html(prod_yest, prod_lm_same_day, label_suffix=f"vs {lm_day_str}") if prod_lm_same_day else delta_html(prod_yest, prod_lm_mtd_avg, label_suffix="vs LM avg")),
-    f"Online/Dr: {format_number(opd_yest, 1)}h &nbsp;·&nbsp; LM avg: {format_number(prod_lm_mtd_avg, 1)}",
+    f"Orders/Driver &nbsp;·&nbsp; LM avg: {format_number(prod_lm_mtd_avg, 1)}",
 ), unsafe_allow_html=True)
 
 # ── GROUP 2: MTD — Lũy kế tháng + vs LM same period & whole month ─────────
@@ -1474,8 +1474,19 @@ fr_mtd_html = metric_card(
 )
 cols2[2].markdown(fr_mtd_html, unsafe_allow_html=True)
 
-# 4. Supply Hours MTD
+# 4. Active Drivers MTD
+active_mtd_val = cockpit["Active"]["mtd"]
+active_lm_mtd_val = cockpit["Active"].get("lm_mtd")
 cols2[3].markdown(metric_card(
+    "Active Drivers MTD",
+    format_number(active_mtd_val),
+    delta_html(active_mtd_val, active_lm_mtd_val, label_suffix="vs LM period"),
+    f"LM period: {format_number(active_lm_mtd_val)} &nbsp;·&nbsp; LM whole: {format_number(cockpit['Active']['lm'])}",
+    "metric-card-blue"
+), unsafe_allow_html=True)
+
+# 5. Supply Hours MTD
+cols2[4].markdown(metric_card(
     "Supply Hours MTD",
     format_number(sh_mtd_val),
     delta_html(sh_mtd_val, sh_lm_mtd, label_suffix="vs LM period"),
@@ -1483,22 +1494,12 @@ cols2[3].markdown(metric_card(
     "metric-card-blue"
 ), unsafe_allow_html=True)
 
-# 5. Productivity MTD avg
-cols2[4].markdown(metric_card(
+# 6. Productivity MTD avg
+cols2[5].markdown(metric_card(
     "Productivity MTD avg",
     format_number(prod_mtd, 1),
     delta_html(prod_mtd, prod_lm_mtd_v, label_suffix="vs LM period"),
-    f"LM period: {format_number(prod_lm_mtd_v, 1)} &nbsp;·&nbsp; LM whole: {format_number(prod_lm_full, 1)}",
-), unsafe_allow_html=True)
-
-# 6. Nhóm DV 4H
-active_4h_str = format_percent(active_4h_pct) if active_4h_pct else "—"
-cols2[5].markdown(metric_card(
-    "Nhóm DV 4H (Hôm qua)",
-    active_4h_str,
-    f"<span style='color:#94A3B8'>4H: {format_number(active_total_4h)} / {format_number(active_total)} tài xế</span>",
-    "Đo lường độ gắn bó (Txế hoạt động liên tục >=4h/ngày)",
-    "metric-card-green"
+    f"Orders/Driver &nbsp;·&nbsp; LM period: {format_number(prod_lm_mtd_v, 1)}",
 ), unsafe_allow_html=True)
 
 # ── GROUP 3: WTD — Lũy kế tuần ────────────────────────────────────────────────
@@ -1568,7 +1569,7 @@ cols3[5].markdown(metric_card(
     "Productivity WTD",
     format_number(prod_wtd, 1),
     delta_html(prod_wtd, prod_lwtd, label_suffix="vs LWTD"),
-    f"LWTD: {format_number(prod_lwtd, 1)} &nbsp;·&nbsp; MTD: {format_number(prod_mtd, 1)}",
+    f"Orders/Driver &nbsp;·&nbsp; LWTD: {format_number(prod_lwtd, 1)}",
 ), unsafe_allow_html=True)
 
 
