@@ -1373,8 +1373,8 @@ req_lm_mtd_sum    = get_row_lm_mtd_sum(22)
 dem_lm_mtd_sum    = get_row_lm_mtd_sum(29)
 request_mtd_val   = val(22, 3)
 demand_mtd_val    = val(29, 3)
-prod_mtd          = val(74, 3)
-prod_lm_mtd_v     = get_row_lm_mtd_mean(74)
+prod_mtd          = cockpit["Prod"]["mtd"]
+prod_lm_mtd_v     = cockpit["Prod"].get("lm_mtd")
 active_mtd_avg    = get_row_lm_mtd_mean(50)
 sh_lm_full        = val(66, 2)
 
@@ -1483,14 +1483,14 @@ fr_mtd_html = metric_card(
 )
 cols2[2].markdown(fr_mtd_html, unsafe_allow_html=True)
 
-# 4. Active Drivers MTD avg
-active_mtd_val = get_row_mtd_mean(50)
-active_lm_mtd_val = get_row_lm_mtd_mean(50)
+# 4. Active Drivers MTD
+active_mtd_val = cockpit["Active"]["mtd"]
+active_lm_val = cockpit["Active"].get("lm")
 cols2[3].markdown(metric_card(
-    "Active Drivers MTD avg",
+    "Active Drivers MTD",
     format_number(active_mtd_val),
-    delta_html(active_mtd_val, active_lm_mtd_val, label_suffix="vs LM period"),
-    f"Avg daily active &nbsp;·&nbsp; LM period: {format_number(active_lm_mtd_val)}",
+    delta_html(active_mtd_val, active_lm_val, label_suffix="vs LM"),
+    f"MTD active &nbsp;·&nbsp; LM: {format_number(active_lm_val)}",
     "metric-card-blue"
 ), unsafe_allow_html=True)
 
@@ -1503,12 +1503,12 @@ cols2[4].markdown(metric_card(
     "metric-card-blue"
 ), unsafe_allow_html=True)
 
-# 6. Productivity MTD avg
+# 6. Productivity MTD
 cols2[5].markdown(metric_card(
-    "Productivity MTD avg",
+    "Productivity MTD",
     format_number(prod_mtd, 1),
-    delta_html(prod_mtd, prod_lm_mtd_v, label_suffix="vs LM period"),
-    f"Orders/Driver &nbsp;·&nbsp; LM period: {format_number(prod_lm_mtd_v, 1)}",
+    delta_html(prod_mtd, prod_lm_full, label_suffix="vs LM"),
+    f"Capacity / Active MTD &nbsp;·&nbsp; LM: {format_number(prod_lm_full, 1)}",
 ), unsafe_allow_html=True)
 
 # ── GROUP 3: WTD — Lũy kế tuần ────────────────────────────────────────────────
@@ -1559,10 +1559,10 @@ fr_wtd_html = metric_card(
 cols3[2].markdown(fr_wtd_html, unsafe_allow_html=True)
 
 cols3[3].markdown(metric_card(
-    "Active WTD",
+    "Avg Active WTD",
     format_number(active_wtd),
-    delta_html(active_wtd, active_lwtd, label_suffix="vs LWTD"),
-    f"LWTD: {format_number(active_lwtd)}",
+    delta_html(active_wtd, active_lwtd, label_suffix="vs Avg LWTD"),
+    f"Avg Active LWTD: {format_number(active_lwtd)}",
     "metric-card-blue"
 ), unsafe_allow_html=True)
 
@@ -1578,7 +1578,7 @@ cols3[5].markdown(metric_card(
     "Productivity WTD",
     format_number(prod_wtd, 1),
     delta_html(prod_wtd, prod_lwtd, label_suffix="vs LWTD"),
-    f"Orders/Driver &nbsp;·&nbsp; LWTD: {format_number(prod_lwtd, 1)}",
+    f"Capacity WTD / Avg Active WTD &nbsp;·&nbsp; LWTD: {format_number(prod_lwtd, 1)}",
 ), unsafe_allow_html=True)
 
 
