@@ -24,186 +24,220 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
 
-    /* Global — Montserrat throughout */
-    .stApp, html, body, [class*="css"], [data-testid="stAppViewContainer"],
-    table, th, td, input, select, button, div, span, p {
+    :root {
+        --bg: #0f172a;
+        --card: #1e293b;
+        --card-soft: rgba(30, 41, 59, 0.55);
+        --border: #334155;
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --emerald: #10b981;
+        --rose: #fb7185;
+        --amber: #fbbf24;
+        --blue: #3b82f6;
+    }
+
+    .stApp, html, body, [data-testid="stAppViewContainer"] {
+        background-color: var(--bg) !important;
+        color: var(--text) !important;
         font-family: 'Montserrat', sans-serif !important;
-        background-color: #0F172A !important;
-        color: #F8FAFC !important;
+    }
+    [class*="css"], table, th, td, input, select, button, div, span, p {
+        font-family: 'Montserrat', sans-serif !important;
     }
 
-    /* Sidebar */
-    [data-testid="stSidebar"] { background-color: #1E293B !important; border-right: 1px solid #334155; }
-    [data-testid="stSidebar"] * { color: #F8FAFC !important; }
-    [data-testid="stSidebar"] .stButton button { background-color: #334155 !important; color: #F8FAFC !important; border: 1px solid #475569 !important; }
-    [data-testid="stSidebar"] .stButton button:hover { background-color: #475569 !important; border-color: #FF7F32 !important; }
+    [data-testid="stSidebar"] {
+        background: var(--card) !important;
+        border-right: 1px solid var(--border);
+    }
+    [data-testid="stSidebar"] * { color: var(--text) !important; }
+    [data-testid="stSidebar"] .stButton button {
+        background: #0f172a !important;
+        color: var(--text) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 0.75rem !important;
+    }
+    [data-testid="stSidebar"] .stButton button:hover {
+        background: #334155 !important;
+        border-color: var(--blue) !important;
+    }
 
-    /* Main Typography */
     .main-title {
-        color: #F8FAFC; font-weight: 800; font-size: 2.4rem;
-        margin-bottom: 0.15rem; letter-spacing: -0.03em;
-        background: linear-gradient(90deg, #F8FAFC 0%, #FF7F32 100%);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        color: var(--text) !important;
+        font-weight: 900;
+        font-size: 2.2rem;
+        margin-bottom: 0.2rem;
+        letter-spacing: -0.035em;
+        background: none !important;
+        -webkit-text-fill-color: var(--text) !important;
     }
-    .subtitle { color: #94A3B8; font-weight: 600; font-size: 1rem; margin-bottom: 1rem; }
+    .subtitle {
+        color: var(--muted) !important;
+        font-weight: 600;
+        font-size: 0.98rem;
+        margin-bottom: 1.1rem;
+    }
     .section-header {
-        color: #38BDF8; font-weight: 800; font-size: 1.25rem;
-        border-left: 5px solid #FF7F32; padding-left: 0.75rem;
-        margin: 1.4rem 0 0.75rem 0; letter-spacing: -0.01em;
+        color: var(--text) !important;
+        font-weight: 900;
+        font-size: 1.18rem;
+        border-left: 4px solid var(--blue);
+        padding-left: 0.75rem;
+        margin: 1.5rem 0 0.85rem 0;
+        letter-spacing: -0.02em;
     }
-
     .metric-group-label {
-        font-size: 0.68rem; font-weight: 800; letter-spacing: 0.13em;
-        text-transform: uppercase; color: #94A3B8;
-        padding: 0.62rem 0.2rem 0.42rem;
-        border-top: 1px solid rgba(51,65,85,0.55);
-        margin-top: 0.85rem;
-    }
-    .kpi-group-container {
-        border: 1px solid rgba(51,65,85,0.45);
-        border-radius: 1.25rem;
-        padding: 0.65rem 0.55rem 0.2rem;
-        margin: 0.2rem 0 0.9rem;
-        background: rgba(15,23,42,0.28);
-    }
-    .chart-card {
-        background: rgba(30,41,59,0.52);
-        border: 1px solid rgba(51,65,85,0.5);
-        border-radius: 1rem;
-        padding: 1rem;
-        backdrop-filter: blur(4px);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted) !important;
+        padding: 0.75rem 0 0.45rem;
+        border-top: 1px solid rgba(51,65,85,0.7);
+        margin-top: 0.9rem;
     }
 
-    /* Metric Cards — React template style */
     .metric-card {
-        background: #182235 !important;
-        border: 1px solid #2A3A52;
-        border-radius: 1.05rem;
-        padding: 1.25rem 1.35rem;
+        background: var(--card) !important;
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+        padding: 1.2rem 1.25rem;
+        min-height: 128px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         box-shadow: none;
-        display: flex; flex-direction: column; justify-content: space-between;
-        min-height: 132px;
-        transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
+        transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
     }
     .metric-card * { background-color: transparent !important; }
-    .metric-card:hover { background: #1A263A !important; border-color: #3B82F6; transform: translateY(-1px); }
-    .metric-card-accent, .metric-card-green, .metric-card-blue { border-color: #2A3A52 !important; }
+    .metric-card:hover {
+        background: rgba(30,41,59,0.82) !important;
+        border-color: #475569;
+        transform: translateY(-1px);
+    }
+    .metric-card-accent, .metric-card-green, .metric-card-blue { border-color: var(--border) !important; }
+    .metric-card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin-bottom: 0.55rem;
+    }
+    .metric-icon { color: #60a5fa !important; font-size: 1rem; line-height: 1; }
+    .metric-label {
+        color: var(--muted) !important;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+    }
+    .metric-value {
+        color: var(--text) !important;
+        font-size: 2rem;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.05;
+        margin: 0.15rem 0 0.35rem;
+    }
+    .metric-value-lg { font-size: 2.1rem; font-weight: 900; letter-spacing: -0.045em; }
+    .metric-context { color: var(--muted) !important; font-size: 0.72rem; line-height: 1.45; margin-top: 0.35rem; }
+    .metric-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
 
-    /* Card inner layout — clean executive style */
-    .metric-card-header { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.65rem; }
-    .metric-icon { color:#60A5FA !important; font-size:1.02rem; line-height:1; }
-    .metric-label  { font-size: 0.82rem; color: #A8B3C7 !important; font-weight: 800; letter-spacing: -0.01em; text-transform: none; }
-    .metric-value  { font-size: 2.05rem; font-weight: 900; color: #F8FAFC !important; letter-spacing: -0.045em; line-height: 1.05; margin: 0.1rem 0 0.35rem; }
-    .metric-value-lg { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.03em; }
-    .metric-context { color: #64748B; font-size: 0.7rem; margin-top: 0.25rem; line-height: 1.4; }
-
-    /* Delta pill badges (DoD / WoW) — React KpiCard style */
-    .metric-badges { display: flex; gap: 0.55rem; flex-wrap: wrap; margin-top: 0.55rem; }
     .delta-badge {
-        display: inline-flex; align-items: center; gap: 0.25rem;
-        background: #111B2B !important;
-        padding: 0.32rem 0.6rem; border-radius: 0.45rem;
-        font-size: 0.76rem; font-weight: 800; white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.32rem 0.58rem;
+        border-radius: 0.5rem;
+        font-size: 0.74rem;
+        font-weight: 800;
+        white-space: nowrap;
+        border: 1px solid transparent;
     }
-    .delta-badge .badge-label { color: #718099 !important; font-size: 0.72rem; font-weight: 800; margin-right: 0.12rem; }
-    .delta-badge.pos { color: #2EE6A6 !important; }
-    .delta-badge.neg { color: #FB7185 !important; }
-    .delta-badge.neu { color: #A8B3C7 !important; }
+    .delta-badge .badge-label { color: var(--muted) !important; font-size: 0.72rem; font-weight: 800; margin-right: 0.1rem; }
+    .delta-badge.pos { color: var(--emerald) !important; background: rgba(16,185,129,0.10) !important; border-color: rgba(16,185,129,0.16); }
+    .delta-badge.neg { color: var(--rose) !important; background: rgba(251,113,133,0.10) !important; border-color: rgba(251,113,133,0.16); }
+    .delta-badge.neu { color: var(--muted) !important; background: rgba(148,163,184,0.10) !important; border-color: rgba(148,163,184,0.14); }
 
-    /* Status pills for tables */
-    .pill-on-track   { display:inline-block; padding:0.15rem 0.55rem; border-radius:0.3rem; font-size:0.7rem; font-weight:700; background:rgba(16,185,129,0.12); color:#34D399; border:1px solid rgba(16,185,129,0.25); }
-    .pill-attention  { display:inline-block; padding:0.15rem 0.55rem; border-radius:0.3rem; font-size:0.7rem; font-weight:700; background:rgba(251,191,36,0.12); color:#FBBF24; border:1px solid rgba(251,191,36,0.25); }
-    .pill-below      { display:inline-block; padding:0.15rem 0.55rem; border-radius:0.3rem; font-size:0.7rem; font-weight:700; background:rgba(248,113,113,0.12); color:#F87171; border:1px solid rgba(248,113,113,0.25); }
+    .pill-on-track { display:inline-flex; padding:0.22rem 0.6rem; border-radius:0.5rem; font-size:0.72rem; font-weight:800; background:rgba(16,185,129,0.10); color:var(--emerald); border:1px solid rgba(16,185,129,0.16); }
+    .pill-attention { display:inline-flex; padding:0.22rem 0.6rem; border-radius:0.5rem; font-size:0.72rem; font-weight:800; background:rgba(251,191,36,0.10); color:var(--amber); border:1px solid rgba(251,191,36,0.16); }
+    .pill-below { display:inline-flex; padding:0.22rem 0.6rem; border-radius:0.5rem; font-size:0.72rem; font-weight:800; background:rgba(251,113,133,0.10); color:var(--rose); border:1px solid rgba(251,113,133,0.16); }
+    .status-pill { display:inline-flex; background:rgba(16,185,129,0.10); color:var(--emerald); border:1px solid rgba(16,185,129,0.16); border-radius:999px; padding:0.25rem 0.65rem; font-weight:800; font-size:0.75rem; }
 
-    .status-pill {
-        display: inline-block; background: #064E3B; color: #34D399;
-        border: 1px solid #059669; border-radius: 999px;
-        padding: 0.2rem 0.6rem; font-weight: 700; font-size: 0.75rem;
-    }
-    .footer-note { color: #64748B; font-size: 0.78rem; padding-top: 0.6rem; border-top: 1px solid #334155; margin-top: 1.5rem; }
-    .footer-note a { color: #FF7F32; text-decoration: none; }
-    .footer-note a:hover { text-decoration: underline; }
-
-    /* Cockpit Table */
     .cockpit-table-container {
-        overflow-x: auto; margin: 0.95rem 0;
-        border-radius: 0.85rem; border: 1px solid rgba(51,65,85,0.75);
-        background-color: rgba(30,41,59,0.55);
+        overflow-x: auto;
+        margin: 1rem 0;
+        border-radius: 1rem;
+        border: 1px solid var(--border);
+        background: var(--card-soft);
     }
     .cockpit-table {
-        width: 100%; border-collapse: collapse;
-        color: #F8FAFC; font-size: 0.82rem; text-align: left;
-        font-family: 'Montserrat', sans-serif !important;
+        width: 100%;
+        border-collapse: collapse;
+        color: var(--text);
+        font-size: 0.82rem;
+        text-align: left;
     }
     .cockpit-table th {
-        background-color: #0F172A; color: #94A3B8; font-weight: 700;
-        padding: 0.58rem 0.8rem; border-bottom: 2px solid #334155;
-        text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em;
-        font-family: 'Montserrat', sans-serif !important;
+        background: #0f172a !important;
+        color: var(--muted) !important;
+        font-weight: 800;
+        padding: 0.72rem 0.85rem;
+        border-bottom: 1px solid var(--border);
+        text-transform: uppercase;
+        font-size: 0.68rem;
+        letter-spacing: 0.06em;
         white-space: nowrap;
     }
     .cockpit-table td {
-        padding: 0.52rem 0.8rem; border-bottom: 1px solid rgba(51,65,85,0.75); font-weight: 500;
-        font-family: 'Montserrat', sans-serif !important;
+        background: transparent !important;
+        padding: 0.72rem 0.85rem;
+        border-bottom: 1px solid var(--border);
+        font-weight: 600;
         white-space: nowrap;
     }
-    .cockpit-table tr { transition: background 0.1s ease, filter 0.1s ease; }
-    .cockpit-table tr:hover { background-color: #1E293B !important; filter: brightness(1.15); }
-    .cockpit-table .row-header { font-weight: 700; color: #38BDF8; background-color: #1A202C; }
-    .cockpit-table .row-header td { border-top: 2px solid #475569; border-bottom: 2px solid #475569; font-size: 0.9rem; }
-    .cockpit-table .sub-row-header { font-weight: 500; color: #E2E8F0; padding-left: 1.5rem !important; }
-    .cockpit-table .sticky-col { position: sticky; left: 0; z-index: 3; background: #0F172A !important; box-shadow: 8px 0 12px -12px rgba(0,0,0,0.9); }
+    .cockpit-table tr { transition: background-color 0.12s ease; }
+    .cockpit-table tr:hover { background-color: #334155 !important; filter: none; }
+    .cockpit-table .row-header { color: #60a5fa !important; font-weight: 800; }
+    .cockpit-table .row-header td { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); font-size: 0.86rem; }
+    .cockpit-table .sub-row-header { color: #cbd5e1 !important; padding-left: 1.65rem !important; font-weight: 600; }
+    .cockpit-table .sticky-col { position: sticky; left: 0; z-index: 3; background: #0f172a !important; box-shadow: 8px 0 14px -14px rgba(0,0,0,0.9); }
     .cockpit-table td.sticky-col { background: #111827 !important; }
-    .cockpit-table .row-header td.sticky-col { background: #1A202C !important; color: #38BDF8 !important; }
-    .hdr-actual-current { background-color: #1E3A8A !important; color: #F8FAFC !important; text-align: center !important; }
-    .hdr-actual-past    { background-color: #334155 !important; color: #E2E8F0 !important; text-align: center !important; }
-    .hdr-plan           { background-color: #0F766E !important; color: #F8FAFC !important; text-align: center !important; }
-    .hdr-today          { background-color: #D97706 !important; color: #F8FAFC !important; text-align: center !important; border: 1px solid #FF7F32; }
-    .val-positive       { color: #34D399 !important; font-weight: 700; }
-    .val-negative       { color: #F87171 !important; font-weight: 700; }
-    .val-neutral        { color: #94A3B8 !important; }
-    .val-planning-today { color: #34D399 !important; background-color: rgba(52,211,153,0.1); border-radius: 3px; padding: 1px 5px; }
+    .cockpit-table tr:hover td.sticky-col { background: #334155 !important; }
 
-    /* Leaderboard */
-    .leaderboard-card  { background-color: #1E293B; border: 1px solid #334155; border-radius: 0.6rem; padding: 0.9rem; margin-bottom: 0.75rem; }
-    .leaderboard-title { color: #38BDF8; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .leaderboard-row   { display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0.6rem; margin-bottom: 0.3rem; border-radius: 0.3rem; }
-    .rank-1 { background-color: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); }
-    .rank-2 { background-color: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); }
-    .rank-3 { background-color: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); }
-    .rank-badge { font-weight: 800; font-size: 0.9rem; }
-    .rank-1 .rank-badge { color: #34D399; }
-    .rank-2 .rank-badge { color: #FBBF24; }
-    .rank-3 .rank-badge { color: #818CF8; }
+    .hdr-actual-current, .hdr-actual-past, .hdr-plan, .hdr-today {
+        background: #0f172a !important;
+        color: var(--muted) !important;
+        text-align: center !important;
+        border-color: var(--border) !important;
+    }
+    .val-positive { color: var(--emerald) !important; font-weight: 800; }
+    .val-negative { color: var(--rose) !important; font-weight: 800; }
+    .val-neutral { color: var(--muted) !important; }
+    .val-planning-today { color: var(--emerald) !important; background: rgba(16,185,129,0.10) !important; border-radius: 0.35rem; padding: 0.1rem 0.35rem; }
 
-    /* Analysis Table (Channel, Supply Hours, etc.) */
-    .analysis-table {
-        width: 100%; border-collapse: collapse; color: #F8FAFC;
-        font-size: 0.86rem; font-family: 'Montserrat', sans-serif !important;
-    }
-    .analysis-table th {
-        background-color: #0F172A; color: #94A3B8; font-weight: 700;
-        padding: 0.42rem 0.6rem; border-bottom: 2px solid #334155;
-        text-transform: uppercase; font-size: 0.71rem; letter-spacing: 0.04em;
-        text-align: center; font-family: 'Montserrat', sans-serif !important;
-        white-space: nowrap;
-    }
-    .analysis-table th:first-child { text-align: left; }
-    .analysis-table td {
-        padding: 0.38rem 0.6rem; border-bottom: 1px solid #1E293B;
-        text-align: center; font-family: 'Montserrat', sans-serif !important;
-    }
-    .analysis-table td:first-child { text-align: left; font-weight: 700; }
-    .analysis-table tr:hover { background-color: rgba(255,255,255,0.03); }
-    .analysis-table .total-row { background-color: #1a2840; font-weight: 700; color: #38BDF8; border-top: 2px solid #334155; }
+    .analysis-table { width:100%; border-collapse:collapse; color:var(--text); font-size:0.84rem; }
+    .analysis-table th { background:#0f172a !important; color:var(--muted) !important; font-weight:800; padding:0.6rem 0.65rem; border-bottom:1px solid var(--border); text-transform:uppercase; font-size:0.68rem; letter-spacing:0.05em; text-align:center; white-space:nowrap; }
+    .analysis-table th:first-child { text-align:left; }
+    .analysis-table td { padding:0.58rem 0.65rem; border-bottom:1px solid var(--border); text-align:center; }
+    .analysis-table td:first-child { text-align:left; font-weight:800; }
+    .analysis-table tr:hover { background-color:#334155 !important; }
+    .analysis-table .total-row { background:rgba(59,130,246,0.08) !important; font-weight:800; color:#60a5fa !important; border-top:1px solid var(--border); }
 
-    /* Heatmap */
-    .hm-pass  { background-color: rgba(16,185,129,0.25); color: #34D399; font-weight: 700; }
-    .hm-under { background-color: rgba(248,113,113,0.25); color: #F87171; font-weight: 700; }
-    .hm-over  { background-color: rgba(251,191,36,0.20); color: #FBBF24; font-weight: 700; }
-    .hm-na    { color: #475569; }
+    .leaderboard-card { background:var(--card); border:1px solid var(--border); border-radius:1rem; padding:1rem; margin-bottom:0.75rem; }
+    .leaderboard-title { color:var(--text); font-weight:800; font-size:0.9rem; margin-bottom:0.65rem; text-transform:uppercase; letter-spacing:0.05em; }
+    .leaderboard-row { display:flex; justify-content:space-between; align-items:center; padding:0.42rem 0.65rem; margin-bottom:0.35rem; border-radius:0.5rem; background:rgba(15,23,42,0.45); }
+    .rank-1, .rank-2, .rank-3 { border:1px solid var(--border); }
+    .rank-1 .rank-badge { color:var(--emerald); }
+    .rank-2 .rank-badge { color:var(--amber); }
+    .rank-3 .rank-badge { color:#60a5fa; }
+
+    .hm-pass { background:rgba(16,185,129,0.18); color:var(--emerald); font-weight:800; }
+    .hm-under { background:rgba(251,113,133,0.18); color:var(--rose); font-weight:800; }
+    .hm-over { background:rgba(251,191,36,0.16); color:var(--amber); font-weight:800; }
+    .hm-na { color:#475569; }
+    .footer-note { color: var(--muted); font-size: 0.78rem; padding-top: 0.6rem; border-top: 1px solid var(--border); margin-top: 1.5rem; }
+    .footer-note a { color: #60a5fa; text-decoration: none; }
 </style>
 """,
     unsafe_allow_html=True,
@@ -299,12 +333,12 @@ ACHIEVEMENT_REQUEST_ROWS = {"GHN": 37, "KA": 38, "MP": 39, "SME": 40, "TRUCK": 4
 ACHIEVEMENT_DEMAND_ROWS = {"GHN": 44, "KA": 45, "MP": 46, "SME": 47, "TRUCK": 48, "WH": 48}
 
 CHANNEL_COLORS = {
-    "GHN": "#38BDF8", "KA": "#FF7F32", "MP": "#10B981",
+    "GHN": "#3b82f6", "KA": "#3b82f6", "MP": "#10B981",
     "SME": "#6366F1", "TRUCK": "#94A3B8", "WH": "#F59E0B",
     "SME+MP+KA": "#A78BFA", "Total": "#F8FAFC",
 }
 SEGMENT_COLORS = {
-    "FT": "#38BDF8", "PT": "#FF7F32", "NLM": "#10B981",
+    "FT": "#3b82f6", "PT": "#3b82f6", "NLM": "#10B981",
     "Return": "#6366F1", "NIM": "#EF4444", "NID": "#F59E0B",
 }
 
@@ -448,40 +482,37 @@ def format_percent(value, decimals=1):
 
 
 def delta_html(current, baseline, percent=False, label_suffix="vs LM"):
-    """Returns a badge pill span for use inside .metric-badges."""
+    """Returns a Slate pill badge for use inside .metric-badges."""
     if current is None or baseline is None or baseline == 0:
         return f"<span class='delta-badge neu'><span class='badge-label'>{label_suffix}</span>—</span>"
     delta = current - baseline
     delta_pct = delta / abs(baseline)
     pos = delta >= 0
     cls = "pos" if pos else "neg"
-    arrow = "▲" if pos else "▼"
-    if percent:
-        val_str = f"{arrow}{abs(delta):.1%}"
-    else:
-        val_str = f"{arrow}{abs(delta_pct):.1%}"
+    arrow = "↗" if pos else "↘"
+    val_str = f"{arrow} {abs(delta):.1%}" if percent else f"{arrow} {abs(delta_pct):.1%}"
     return f"<span class='delta-badge {cls}'><span class='badge-label'>{label_suffix}</span>{val_str}</span>"
 
 
 def metric_card(label, value, delta, context="", accent_class=""):
-    """
-    delta: HTML string (may contain multiple <span> deltas separated by &nbsp;).
-    Wraps delta spans as badge pills automatically.
-    """
+    """Render a clean Slate KPI card. Data values are passed in unchanged."""
     icon = "◎"
     if "FR" in label or "Fulfillment" in label:
-        icon = "↯"
+        icon = "⌁"
     elif "Active" in label or "Driver" in label:
         icon = "♙"
     elif "Productivity" in label or "EPH" in label or "Prod" in label:
-        icon = "⚡"
+        icon = "↯"
     elif "Supply" in label:
         icon = "◷"
     elif "Demand" in label or "Complete" in label:
         icon = "⌁"
     return f"""
     <div class="metric-card {accent_class}">
-        <div class="metric-card-header"><span class="metric-icon">{icon}</span><span class="metric-label">{label}</span></div>
+        <div class="metric-card-header">
+            <span class="metric-icon">{icon}</span>
+            <span class="metric-label">{label}</span>
+        </div>
         <div class="metric-value">{value}</div>
         <div class="metric-badges">{delta}</div>
         <div class="metric-context">{context}</div>
@@ -490,18 +521,17 @@ def metric_card(label, value, delta, context="", accent_class=""):
 
 
 def _delta_badge(pct_val, base_val, label="", is_pct_metric=False, positive_is_good=True):
-    """Render a single DoD/WoW/etc badge pill matching React KpiCard style."""
+    """Render a Slate semantic delta pill."""
     if pct_val is None or base_val is None or base_val == 0:
         return f"<span class='delta-badge neu'><span class='badge-label'>{label}</span>—</span>"
     d = (pct_val - base_val) if is_pct_metric else (pct_val - base_val) / base_val
     good = d >= 0 if positive_is_good else d <= 0
     cls = "pos" if good else "neg"
-    arrow = "▲" if d >= 0 else "▼"
+    arrow = "↗" if d >= 0 else "↘"
     abs_d = f"{abs(d):.1%}"
     if is_pct_metric:
-        abs_d = f"{d:+.1%}"
-        arrow = ""
-    return f"<span class='delta-badge {cls}'><span class='badge-label'>{label}</span>{arrow}{abs_d}</span>"
+        abs_d = f"{abs(d):.1%}"
+    return f"<span class='delta-badge {cls}'><span class='badge-label'>{label}</span>{arrow} {abs_d}</span>"
 
 
 # ── TIME GRANULARITY AGGREGATION ENGINE ───────────────────────────────────────
@@ -577,19 +607,22 @@ def render_line_chart(data, title, colors, is_rate=False):
 
     for label, series in data.items():
         text_values = add_text_labels(series, max_val if not is_rate else None)
-        fmt = ".1%" if is_rate else None
-
+        is_forecast = label.upper().startswith("FC") or "FORECAST" in label.upper()
+        base_color = colors.get(label, "#3b82f6")
+        line_color = "#94a3b8" if is_forecast else base_color
         fig.add_trace(
             go.Scatter(
                 x=series.index,
                 y=series.values,
-                mode="lines+markers+text",
+                mode="lines+markers" if is_forecast else "lines+markers+text",
                 name=label,
-                text=text_values,
+                text=None if is_forecast else text_values,
                 textposition="top center",
-                textfont={"size": 9, "color": "#F8FAFC"},
-                line={"width": 3, "color": colors.get(label, "#38BDF8"), "shape": "spline", "smoothing": 1.3},
-                marker={"size": 6, "symbol": "circle"},
+                textfont={"size": 9, "color": "#f8fafc"},
+                line={"width": 2 if is_forecast else 3, "color": line_color, "dash": "dash" if is_forecast else "solid", "shape": "spline", "smoothing": 1.3},
+                marker={"size": 4 if is_forecast else 5, "symbol": "circle", "opacity": 0.65 if is_forecast else 0.95},
+                fill=None if is_forecast else "tozeroy",
+                fillcolor=None if is_forecast else "rgba(59,130,246,0.14)",
                 hovertemplate=f"%{{x|%d-%b}}: %{{y{':.1%' if is_rate else ':,.0f'}}}<extra>{label}</extra>",
             )
         )
@@ -615,7 +648,7 @@ def render_bar_chart(data, title, colors, stacked=False, is_rate=False):
                 text=text_values,
                 textposition="inside" if stacked else "outside",
                 textfont={"size": 9, "color": "#F8FAFC"},
-                marker_color=colors.get(label, "#38BDF8"),
+                marker_color=colors.get(label, "#3b82f6"),
                 hovertemplate=f"%{{x|%d-%b}}: %{{y{':.1%' if is_rate else ':,.0f'}}}<extra>{label}</extra>",
             )
         )
@@ -637,16 +670,18 @@ def render_dual_axis_chart(data_left, data_right, title, colors_left, colors_rig
     for label, series in data_left.items():
         text_values = add_text_labels(series, max_left)
         is_forecast = label.upper().startswith("FC") or "FORECAST" in label.upper()
-        line_color = colors_left.get(label, "#38BDF8")
-        fill_color = "rgba(255,127,50,0.10)" if "Request" in label else "rgba(56,189,248,0.10)"
+        line_color = colors_left.get(label, "#3b82f6")
+        if "Demand" in label and not is_forecast:
+            line_color = "#10b981"
+        fill_color = "rgba(59,130,246,0.14)" if "Request" in label else "rgba(16,185,129,0.12)"
         fig.add_trace(
             go.Scatter(
                 x=series.index, y=series.values,
                 mode="lines+markers+text" if not is_forecast else "lines+markers", name=label,
                 text=text_values if not is_forecast else None, textposition="top center",
-                textfont={"size": 8, "color": "#F8FAFC"},
-                line={"width": 3 if not is_forecast else 1.8, "color": line_color if not is_forecast else "rgba(203,213,225,0.55)", "dash": "solid" if not is_forecast else "dash", "shape": "spline", "smoothing": 1.3},
-                marker={"size": 5 if not is_forecast else 4, "opacity": 0.9 if not is_forecast else 0.55},
+                textfont={"size": 8, "color": "#f8fafc"},
+                line={"width": 3 if not is_forecast else 2, "color": line_color if not is_forecast else "#94a3b8", "dash": "solid" if not is_forecast else "dash", "shape": "spline", "smoothing": 1.3},
+                marker={"size": 5 if not is_forecast else 4, "opacity": 0.9 if not is_forecast else 0.6},
                 fill="tozeroy" if not is_forecast else None,
                 fillcolor=fill_color if not is_forecast else None,
                 hovertemplate=f"%{{x|%d-%b}}: %{{y:,.0f}}<extra>{label}</extra>",
@@ -1349,7 +1384,7 @@ cols[1].markdown(metric_card(
 ), unsafe_allow_html=True)
 
 # 3. FR%
-fr_color = "#34D399" if fr_yest and fr_yest >= fr_target else ("#FBBF24" if fr_yest and fr_yest >= fr_target * 0.9 else "#F87171")
+fr_color = "#10b981" if fr_yest and fr_yest >= fr_target else ("#fbbf24" if fr_yest and fr_yest >= fr_target * 0.9 else "#fb7185")
 fr_wow_delta = delta_html(fr_yest, val(180, col_last_week), percent=True, label_suffix="WoW")
 fr_dod_delta = delta_html(fr_yest, val(180, col_dod_kpi), percent=True, label_suffix="DoD") if col_dod_kpi else ""
 fr_daily_html = f"""
@@ -1420,7 +1455,7 @@ cols2[1].markdown(metric_card(
 
 # 3. FR% MTD avg
 fr_mtd_avg = get_row_lm_mtd_mean(180)
-fr_color_mtd = "#34D399" if fr_mtd_avg and fr_mtd_avg >= fr_target else ("#FBBF24" if fr_mtd_avg and fr_mtd_avg >= fr_target * 0.9 else "#F87171")
+fr_color_mtd = "#10b981" if fr_mtd_avg and fr_mtd_avg >= fr_target else ("#fbbf24" if fr_mtd_avg and fr_mtd_avg >= fr_target * 0.9 else "#fb7185")
 fr_mtd_html = f"""
 <div class="metric-card" style="border-color:{fr_color_mtd}33;">
   <div class="metric-label">FR% MTD avg</div>
@@ -1494,7 +1529,7 @@ cols3[1].markdown(metric_card(
     f"LWTD: {format_number(dem_lwtd)}",
 ), unsafe_allow_html=True)
 
-fr_color_wtd = "#34D399" if fr_wtd and fr_wtd >= fr_target else ("#FBBF24" if fr_wtd and fr_wtd >= fr_target * 0.9 else "#F87171")
+fr_color_wtd = "#10b981" if fr_wtd and fr_wtd >= fr_target else ("#fbbf24" if fr_wtd and fr_wtd >= fr_target * 0.9 else "#fb7185")
 fr_wtd_html = f"""
 <div class="metric-card" style="border-color:{fr_color_wtd}33;">
   <div class="metric-label">FR% WTD</div>
@@ -1553,17 +1588,17 @@ def delta_cell(v, positive_is_good=True):
 
 
 def fc_vs_cell(actual, fc, fmt):
-    """Show actual vs FC with ratio badge inline."""
+    """Show actual vs FC with a Slate ratio pill inline."""
     if actual is None:
         return "<td class='val-neutral'>—</td>"
     actual_str = f"{actual:.1%}" if fmt == "percent" else (f"{actual:.2f}" if fmt == "decimal" else f"{actual:,.0f}")
     if fc is None or fc == 0:
         return f"<td>{actual_str}</td>"
     ratio = actual / fc
-    r_cls = "val-positive" if ratio >= 0.95 else ("val-neutral" if ratio >= 0.85 else "val-negative")
+    r_cls = "pos" if ratio >= 0.95 else ("neu" if ratio >= 0.85 else "neg")
     r_str = f"{ratio:.0%}"
     fc_str = f"{fc:.1%}" if fmt == "percent" else (f"{fc:.2f}" if fmt == "decimal" else f"{fc:,.0f}")
-    return f"<td>{actual_str}<br><small class='{r_cls}' style='font-size:0.7rem;'>vs FC {r_str} ({fc_str})</small></td>"
+    return f"<td>{actual_str}<br><span class='delta-badge {r_cls}' style='margin-top:0.25rem;'><span class='badge-label'>vs FC</span>{r_str}</span><br><small class='val-neutral' style='font-size:0.68rem;'>FC {fc_str}</small></td>"
 
 
 _lm_period = f"1–{date_yesterday.strftime('%d')} May"
@@ -1573,19 +1608,20 @@ _lwtd_label = f"{lwtd_start_label}–{_last_week_same_dow.strftime('%d-%b')}"
 _dod_lbl = date_dod.strftime('%d-%b') if date_dod else "D-2"
 
 def delta_cell_abs(pct_v, abs_v, positive_is_good=True, is_pct_metric=False):
-    """Delta cell: % on top, absolute number below in small text."""
+    """Delta cell: pill percentage on top, absolute number below in muted text."""
     if pct_v is None:
         return "<td class='val-neutral'>—</td>"
-    cls = ("val-positive" if pct_v >= 0 else "val-negative") if positive_is_good else ("val-negative" if pct_v >= 0 else "val-positive")
-    arrow = "▲" if pct_v >= 0 else "▼"
-    pct_str = f"{arrow}{abs(pct_v):.1%}"
+    good = pct_v >= 0 if positive_is_good else pct_v < 0
+    cls = "pos" if good else "neg"
+    arrow = "↗" if pct_v >= 0 else "↘"
+    pct_str = f"{arrow} {abs(pct_v):.1%}"
     if abs_v is not None:
         if is_pct_metric:
             abs_str = f"{abs_v:+.1%}"
         else:
             abs_str = f"{abs_v:+,.0f}"
-        return f"<td class='{cls}'>{pct_str}<br><small style='opacity:0.72;font-size:0.68rem;'>{abs_str}</small></td>"
-    return f"<td class='{cls}'>{pct_str}</td>"
+        return f"<td><span class='delta-badge {cls}'>{pct_str}</span><br><small class='val-neutral' style='font-size:0.68rem;'>{abs_str}</small></td>"
+    return f"<td><span class='delta-badge {cls}'>{pct_str}</span></td>"
 
 html_table = f"""
 <div class="cockpit-table-container">
@@ -1745,7 +1781,7 @@ with dem_tab1:
                        "FC Request": fc_request_series, "FC Demand": fc_demand_series},
             data_right={"FR% (Actual)": fr_series},
             title=f"{time_granularity} Actual vs FC — Request, Demand & FR%",
-            colors_left={"Actual Request": "#FF7F32", "Actual Demand": "#38BDF8",
+            colors_left={"Actual Request": "#3b82f6", "Actual Demand": "#3b82f6",
                          "FC Request": "rgba(255,127,50,0.35)", "FC Demand": "rgba(56,189,248,0.35)"},
             colors_right={"FR% (Actual)": "#10B981"},
             left_label="Số đơn",
@@ -1761,7 +1797,7 @@ with dem_tab1:
             if fr_ch_val is None:
                 continue
             status = "✅" if fr_ch_val >= fr_target else ("⚠️" if fr_ch_val >= fr_target * 0.9 else "🔴")
-            color = "#34D399" if fr_ch_val >= fr_target else ("#FBBF24" if fr_ch_val >= fr_target * 0.9 else "#F87171")
+            color = "#10b981" if fr_ch_val >= fr_target else ("#fbbf24" if fr_ch_val >= fr_target * 0.9 else "#fb7185")
             fr_ch_html += f"<tr><td>{ch_name}</td><td style='color:{color};font-weight:700;'>{fr_ch_val:.1%}</td><td>{status}</td></tr>"
         fr_ch_html += "</tbody></table>"
         st.markdown(f"<div style='background:#1E293B;padding:1rem;border-radius:0.5rem;border:1px solid #334155;'>{fr_ch_html}</div>", unsafe_allow_html=True)
@@ -1795,14 +1831,14 @@ with dem_tab2:
         if actual is None or fc is None or fc == 0:
             return "<td class='val-neutral'>—</td>"
         r = actual / fc
-        color = "#34D399" if r >= 0.95 else ("#FBBF24" if r >= 0.85 else "#F87171")
+        color = "#10b981" if r >= 0.95 else ("#fbbf24" if r >= 0.85 else "#fb7185")
         diff = actual - fc
         return f"<td style='color:{color};font-weight:700;'>{r:.1%}<br><small style='opacity:0.75;'>{diff:+,.0f}</small></td>"
 
     def fr_cell(v):
         if v is None:
             return "<td class='val-neutral'>—</td>"
-        color = "#34D399" if v >= fr_target else ("#FBBF24" if v >= fr_target * 0.9 else "#F87171")
+        color = "#10b981" if v >= fr_target else ("#fbbf24" if v >= fr_target * 0.9 else "#fb7185")
         return f"<td style='color:{color};font-weight:700;'>{v:.1%}</td>"
 
     _dod_lbl = _dod_date2.strftime('%d-%b') if _dod_date2 else "D-2"
@@ -1867,7 +1903,7 @@ with dem_tab2:
         lm_mtd_req  = get_row_lm_mtd_sum(act_req_r)
         fr_v        = val(fr_r, col_yesterday) if fr_r else None
 
-        ch_color = CHANNEL_COLORS.get(ch_key, "#38BDF8") if ch_key != "total" else "#38BDF8"
+        ch_color = CHANNEL_COLORS.get(ch_key, "#3b82f6") if ch_key != "total" else "#3b82f6"
         tr_cls = "class='total-row'" if ch_key == "total" else ""
 
         ch_table_html += f"""<tr {tr_cls}>
@@ -1933,7 +1969,7 @@ with dem_tab3:
                 x=s.index, y=s.values, name=ch,
                 text=text_labels, textposition="inside",
                 textfont={"size": 8, "color": "#F8FAFC"},
-                marker_color=CHANNEL_COLORS.get(ch, "#38BDF8"),
+                marker_color=CHANNEL_COLORS.get(ch, "#3b82f6"),
                 hovertemplate=f"%{{x|%d-%b}}: %{{y:.1%}}<extra>{ch}</extra>",
             ))
         fig_mix.update_layout(
@@ -2082,7 +2118,7 @@ with sup_tab1:
             lwtd_v = get_row_lwtd_sum(row_idx)
             mtd_v = get_row_mtd_sum(row_idx)
             lm_mtd_v = get_row_lm_mtd_sum(row_idx)
-            seg_color = "#38BDF8" if seg_name == "Total" else SEGMENT_COLORS.get(seg_name, "#F8FAFC")
+            seg_color = "#3b82f6" if seg_name == "Total" else SEGMENT_COLORS.get(seg_name, "#F8FAFC")
             row_cls = "class='total-row'" if seg_name == "Total" else ""
             sh_detail_html += f"""<tr {row_cls}>
 <td style='color:{seg_color};font-weight:700;'>{seg_name}</td>
@@ -2117,14 +2153,14 @@ with sup_tab1:
             fmt = lambda v: (f"{v:.2f}" if is_dec else format_number(v)) if v else "—"
             if yv and lm_sd and lm_sd > 0:
                 diff_sd = (yv - lm_sd) / lm_sd
-                sd_color = "#34D399" if diff_sd >= 0 else "#F87171"
+                sd_color = "#10b981" if diff_sd >= 0 else "#fb7185"
                 sd_arrow = "▲" if diff_sd >= 0 else "▼"
                 sd_str = f"<span style='color:{sd_color};'>{sd_arrow} {diff_sd:+.1%}</span><br><small>{fmt(lm_sd)}</small>"
             else:
                 sd_str = f"<span style='color:#64748B;'>—</span><br><small>{fmt(lm_sd)}</small>"
             if yv and lm_mtd_a and lm_mtd_a > 0:
                 diff_mtd = (yv - lm_mtd_a) / lm_mtd_a
-                mtd_color = "#34D399" if diff_mtd >= 0 else "#F87171"
+                mtd_color = "#10b981" if diff_mtd >= 0 else "#fb7185"
                 mtd_arrow = "▲" if diff_mtd >= 0 else "▼"
                 mtd_str = f"<span style='color:{mtd_color};'>{mtd_arrow} {diff_mtd:+.1%}</span><br><small>{fmt(lm_mtd_a)}</small>"
             else:
@@ -2143,7 +2179,7 @@ with sup_tab2:
             return "—"
         if lm_v and lm_v > 0:
             diff = (v - lm_v) / lm_v
-            color = "#34D399" if diff >= 0 else "#F87171"
+            color = "#10b981" if diff >= 0 else "#fb7185"
             arrow = "▲" if diff >= 0 else "▼"
             return f"{fmt(v)}<br><small style='color:{color};'>{arrow} {diff:+.1%}</small>"
         return fmt(v)
@@ -2258,13 +2294,13 @@ with sup_tab3:
         pct_2h = v_2h / total_v if total_v and v_2h else None
         pct_4h = v_4h / total_v if total_v and v_4h else None
 
-        seg_color = SEGMENT_COLORS.get(seg, "#F8FAFC") if seg != "Total" else "#38BDF8"
+        seg_color = SEGMENT_COLORS.get(seg, "#F8FAFC") if seg != "Total" else "#3b82f6"
         row_cls = "class='total-row'" if seg == "Total" else ""
 
         def pct_svc_cell(v, threshold_hi=0.5, threshold_lo=0.3):
             if v is None:
                 return "<td class='val-neutral'>—</td>"
-            color = "#34D399" if v >= threshold_hi else ("#FBBF24" if v >= threshold_lo else "#F87171")
+            color = "#10b981" if v >= threshold_hi else ("#fbbf24" if v >= threshold_lo else "#fb7185")
             return f"<td style='color:{color};font-weight:700;'>{v:.1%}</td>"
 
         tw_html += f"""<tr {row_cls}>
@@ -2291,7 +2327,7 @@ with sup_tab3:
         {"Giao ngay 1H": active_1h_series, "Siêu tốc 2H": active_2h_series,
          "Giao 4H/Ghép": active_4h_series, "Active Total": active_total_series_2},
         f"{time_granularity} Active by Service Type",
-        {"Giao ngay 1H": "#FF7F32", "Siêu tốc 2H": "#38BDF8", "Giao 4H/Ghép": "#34D399", "Active Total": "#94A3B8"}
+        {"Giao ngay 1H": "#3b82f6", "Siêu tốc 2H": "#3b82f6", "Giao 4H/Ghép": "#10b981", "Active Total": "#94A3B8"}
     )
 
 
@@ -2319,7 +2355,7 @@ with adv_tab1:
         data_left={"Actual Request": req_90, "Actual Demand": dem_90},
         data_right={"FR% (Actual)": fr_90},
         title="90-Day Trend — Actual Request, Demand & FR%",
-        colors_left={"Actual Request": "#FF7F32", "Actual Demand": "#38BDF8"},
+        colors_left={"Actual Request": "#3b82f6", "Actual Demand": "#3b82f6"},
         colors_right={"FR% (Actual)": "#10B981"},
         left_label="Số đơn",
         right_label="FR%"
@@ -2342,7 +2378,7 @@ with adv_tab2:
         weekday_avg = weekday_avg.sort_values("weekday_num")
         
         fig_wd = go.Figure()
-        bar_colors = ["#38BDF8" if d in [0, 1, 2, 3, 4] else "#6366F1" for d in weekday_avg["weekday_num"]]
+        bar_colors = ["#3b82f6" if d in [0, 1, 2, 3, 4] else "#6366F1" for d in weekday_avg["weekday_num"]]
         fig_wd.add_trace(go.Bar(
             x=weekday_avg["weekday"],
             y=weekday_avg["mean"],
@@ -2377,7 +2413,7 @@ with adv_tab2:
         fr_wd_avg = fr_wd_avg.sort_values("weekday_num")
         
         fig_fr_wd = go.Figure()
-        fr_bar_colors = ["#34D399" if v >= fr_target else ("#FBBF24" if v >= fr_target * 0.9 else "#F87171")
+        fr_bar_colors = ["#10b981" if v >= fr_target else ("#fbbf24" if v >= fr_target * 0.9 else "#fb7185")
                          for v in fr_wd_avg["value"]]
         fig_fr_wd.add_trace(go.Bar(
             x=fr_wd_avg["weekday"],
@@ -2388,10 +2424,10 @@ with adv_tab2:
             marker_color=fr_bar_colors,
             hovertemplate="<b>%{x}</b>: %{y:.1%}<extra>FR%</extra>",
         ))
-        fig_fr_wd.add_hline(y=fr_target, line_dash="dot", line_color="#FF7F32",
+        fig_fr_wd.add_hline(y=fr_target, line_dash="dot", line_color="#3b82f6",
                             annotation_text=f"Target FR {fr_target:.0%}",
                             annotation_position="bottom right",
-                            annotation={"font": {"color": "#FF7F32"}})
+                            annotation={"font": {"color": "#3b82f6"}})
         fig_fr_wd.update_layout(
             title={"text": "Average FR% by Weekday", "font": {"size": 14, "color": "#F8FAFC"}},
             yaxis={"tickformat": ".0%"},
