@@ -51,7 +51,29 @@ st.markdown(
     .section-header {
         color: #38BDF8; font-weight: 800; font-size: 1.25rem;
         border-left: 5px solid #FF7F32; padding-left: 0.75rem;
-        margin: 1.2rem 0 0.6rem 0; letter-spacing: -0.01em;
+        margin: 1.4rem 0 0.75rem 0; letter-spacing: -0.01em;
+    }
+
+    .metric-group-label {
+        font-size: 0.68rem; font-weight: 800; letter-spacing: 0.13em;
+        text-transform: uppercase; color: #94A3B8;
+        padding: 0.62rem 0.2rem 0.42rem;
+        border-top: 1px solid rgba(51,65,85,0.55);
+        margin-top: 0.85rem;
+    }
+    .kpi-group-container {
+        border: 1px solid rgba(51,65,85,0.45);
+        border-radius: 1.25rem;
+        padding: 0.65rem 0.55rem 0.2rem;
+        margin: 0.2rem 0 0.9rem;
+        background: rgba(15,23,42,0.28);
+    }
+    .chart-card {
+        background: rgba(30,41,59,0.52);
+        border: 1px solid rgba(51,65,85,0.5);
+        border-radius: 1rem;
+        padding: 1rem;
+        backdrop-filter: blur(4px);
     }
 
     /* Metric Cards — React template style */
@@ -59,14 +81,14 @@ st.markdown(
         background: rgba(30,41,59,0.6);
         border: 1px solid rgba(51,65,85,0.6);
         border-radius: 1rem;
-        padding: 1rem 1.1rem 0.85rem;
+        padding: 1.2rem 1.3rem 1rem;
         box-shadow: 0 8px 24px -12px rgba(0,0,0,0.5);
         display: flex; flex-direction: column; justify-content: space-between;
-        min-height: 118px;
-        transition: background 0.15s ease, box-shadow 0.15s ease;
+        min-height: 130px;
+        transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
         backdrop-filter: blur(4px);
     }
-    .metric-card:hover { background: rgba(30,41,59,0.95); box-shadow: 0 14px 30px -8px rgba(0,0,0,0.65); border-color: #475569; }
+    .metric-card:hover { background: rgba(30,41,59,0.95); box-shadow: 0 14px 30px -8px rgba(0,0,0,0.65); border-color: #475569; transform: translateY(-1px); }
     .metric-card-accent { border-color: #FF7F32 !important; background: linear-gradient(135deg, rgba(30,41,59,0.7) 0%, rgba(26,34,53,0.9) 100%) !important; }
     .metric-card-green  { border-color: rgba(16,185,129,0.6) !important; }
     .metric-card-blue   { border-color: rgba(56,189,248,0.6) !important; }
@@ -107,29 +129,35 @@ st.markdown(
 
     /* Cockpit Table */
     .cockpit-table-container {
-        overflow-x: auto; margin: 0.75rem 0;
-        border-radius: 0.6rem; border: 1px solid #334155;
-        background-color: #1E293B;
+        overflow-x: auto; margin: 0.95rem 0;
+        border-radius: 0.85rem; border: 1px solid rgba(51,65,85,0.75);
+        background-color: rgba(30,41,59,0.55);
     }
     .cockpit-table {
         width: 100%; border-collapse: collapse;
-        color: #F8FAFC; font-size: 0.88rem; text-align: left;
+        color: #F8FAFC; font-size: 0.82rem; text-align: left;
         font-family: 'Montserrat', sans-serif !important;
     }
     .cockpit-table th {
         background-color: #0F172A; color: #94A3B8; font-weight: 700;
-        padding: 0.45rem 0.65rem; border-bottom: 2px solid #334155;
-        text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.05em;
+        padding: 0.58rem 0.8rem; border-bottom: 2px solid #334155;
+        text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em;
         font-family: 'Montserrat', sans-serif !important;
+        white-space: nowrap;
     }
     .cockpit-table td {
-        padding: 0.42rem 0.65rem; border-bottom: 1px solid #334155; font-weight: 500;
+        padding: 0.52rem 0.8rem; border-bottom: 1px solid rgba(51,65,85,0.75); font-weight: 500;
         font-family: 'Montserrat', sans-serif !important;
+        white-space: nowrap;
     }
+    .cockpit-table tr { transition: background 0.1s ease, filter 0.1s ease; }
     .cockpit-table tr:hover { background-color: #1E293B !important; filter: brightness(1.15); }
     .cockpit-table .row-header { font-weight: 700; color: #38BDF8; background-color: #1A202C; }
-    .cockpit-table .row-header td { border-bottom: 2px solid #475569; font-size: 0.92rem; }
+    .cockpit-table .row-header td { border-top: 2px solid #475569; border-bottom: 2px solid #475569; font-size: 0.9rem; }
     .cockpit-table .sub-row-header { font-weight: 500; color: #E2E8F0; padding-left: 1.5rem !important; }
+    .cockpit-table .sticky-col { position: sticky; left: 0; z-index: 3; background: #0F172A !important; box-shadow: 8px 0 12px -12px rgba(0,0,0,0.9); }
+    .cockpit-table td.sticky-col { background: #111827 !important; }
+    .cockpit-table .row-header td.sticky-col { background: #1A202C !important; color: #38BDF8 !important; }
     .hdr-actual-current { background-color: #1E3A8A !important; color: #F8FAFC !important; text-align: center !important; }
     .hdr-actual-past    { background-color: #334155 !important; color: #E2E8F0 !important; text-align: center !important; }
     .hdr-plan           { background-color: #0F766E !important; color: #F8FAFC !important; text-align: center !important; }
@@ -497,15 +525,16 @@ def chart_layout(fig, title="", secondary_y=False):
     fig.update_layout(
         title={"text": title, "font": {"size": 14, "color": "#F8FAFC"}},
         font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
-        paper_bgcolor="#1E293B",
-        plot_bgcolor="#1E293B",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
         margin={"l": 30, "r": 30, "t": 60, "b": 30},
         legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "xanchor": "right", "x": 1, "font": {"color": "#F8FAFC"}},
         hovermode="x unified",
+        hoverlabel={"bgcolor": "#1E293B", "bordercolor": "#334155", "font": {"family": "Montserrat, sans-serif", "color": "#F8FAFC", "size": 12}},
         template="plotly_dark",
     )
-    fig.update_xaxes(showgrid=False, linecolor="#334155", gridcolor="#334155", tickfont={"color": "#94A3B8"})
-    fig.update_yaxes(gridcolor="#334155", zerolinecolor="#334155", linecolor="#334155", tickfont={"color": "#94A3B8"})
+    fig.update_xaxes(showgrid=False, linecolor="rgba(51,65,85,0.75)", gridcolor="rgba(51,65,85,0.35)", tickfont={"color": "#94A3B8"})
+    fig.update_yaxes(gridcolor="rgba(51,65,85,0.35)", zerolinecolor="rgba(51,65,85,0.55)", linecolor="rgba(51,65,85,0.75)", tickfont={"color": "#94A3B8"})
     return fig
 
 
