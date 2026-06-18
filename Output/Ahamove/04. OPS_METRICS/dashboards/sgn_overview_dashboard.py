@@ -1412,7 +1412,7 @@ fr_daily_html = metric_card(
     "FR%",
     format_percent(fr_yest),
     f"{fr_dod_delta}{fr_wow_delta}",
-    f"Target: {fr_target:.0%} &nbsp;·&nbsp; LM avg: {format_percent(fr_lm_mtd_avg)}",
+    f"Target: {fr_target:.0%} · LM: {format_percent(fr_lm_mtd_avg)}",
     "metric-card-green"
 )
 cols[2].markdown(fr_daily_html, unsafe_allow_html=True)
@@ -1434,7 +1434,7 @@ cols[4].markdown(metric_card(
     format_number(sh_yest),
     (delta_html(sh_yest, sh_dod_val, label_suffix="DoD") if sh_dod_val else "")
     + "" + delta_html(sh_yest, sh_lw, label_suffix="WoW"),
-    f"WTD: {format_number(sh_wtd_val)} &nbsp;·&nbsp; MTD: {format_number(sh_mtd_val)}",
+    f"WTD: {format_number(sh_wtd_val)} · MTD: {format_number(sh_mtd_val)}",
     "metric-card-blue"
 ), unsafe_allow_html=True)
 
@@ -1444,79 +1444,15 @@ cols[5].markdown(metric_card(
     format_number(prod_yest, 1),
     (delta_html(prod_yest, val(74, col_dod_kpi), label_suffix="DoD") if col_dod_kpi else "")
     + " &nbsp; " + (delta_html(prod_yest, prod_lm_same_day, label_suffix=f"vs {lm_day_str}") if prod_lm_same_day else delta_html(prod_yest, prod_lm_mtd_avg, label_suffix="vs LM avg")),
-    f"Orders/Driver &nbsp;·&nbsp; LM avg: {format_number(prod_lm_mtd_avg, 1)}",
+    f"LM: {format_number(prod_lm_mtd_avg, 1)}",
 ), unsafe_allow_html=True)
 
-# ── GROUP 2: MTD — Lũy kế tháng + vs LM same period & whole month ─────────
-st.markdown(
-    f"<div class='metric-group-label'>📅 MTD — {date_yesterday.strftime('%b %Y')} &nbsp;·&nbsp; vs LM same period ({lm_period_label}) &amp; LM whole May</div>",
-    unsafe_allow_html=True,
-)
-cols2 = st.columns(6)
-
-# 1. Request MTD
-cols2[0].markdown(metric_card(
-    "Request MTD",
-    format_number(request_mtd_val),
-    delta_html(request_mtd_val, req_lm_mtd_sum, label_suffix=f"vs LM period"),
-    f"LM period: {format_number(req_lm_mtd_sum)} &nbsp;·&nbsp; LM whole: {format_number(request_lm_full)}",
-    "metric-card-accent"
-), unsafe_allow_html=True)
-
-# 2. Demand MTD
-cols2[1].markdown(metric_card(
-    "Demand MTD",
-    format_number(demand_mtd_val),
-    delta_html(demand_mtd_val, dem_lm_mtd_sum, label_suffix=f"vs LM period"),
-    f"LM period: {format_number(dem_lm_mtd_sum)} &nbsp;·&nbsp; LM whole: {format_number(demand_lm_full)}",
-), unsafe_allow_html=True)
-
-# 3. FR% MTD avg
-fr_mtd_avg = get_row_lm_mtd_mean(180)
-fr_color_mtd = "#10b981" if fr_mtd_avg and fr_mtd_avg >= fr_target else ("#fbbf24" if fr_mtd_avg and fr_mtd_avg >= fr_target * 0.9 else "#fb7185")
-fr_mtd_html = metric_card(
-    "FR% MTD avg",
-    format_percent(fr_mtd_avg),
-    delta_html(fr_mtd_avg, fr_lm_mtd_avg, percent=True, label_suffix="vs LM"),
-    f"LM same period: {format_percent(fr_lm_mtd_avg)} &nbsp;·&nbsp; LM whole: {format_percent(fr_lm_full)}",
-    "metric-card-green"
-)
-cols2[2].markdown(fr_mtd_html, unsafe_allow_html=True)
-
-# 4. Active Drivers MTD
-active_mtd_val = cockpit["Active"]["mtd"]
-active_lm_val = cockpit["Active"].get("lm")
-cols2[3].markdown(metric_card(
-    "Active Drivers MTD",
-    format_number(active_mtd_val),
-    delta_html(active_mtd_val, active_lm_val, label_suffix="vs LM"),
-    f"MTD active &nbsp;·&nbsp; LM: {format_number(active_lm_val)}",
-    "metric-card-blue"
-), unsafe_allow_html=True)
-
-# 5. Supply Hours MTD
-cols2[4].markdown(metric_card(
-    "Supply Hours MTD",
-    format_number(sh_mtd_val),
-    delta_html(sh_mtd_val, sh_lm_mtd, label_suffix="vs LM period"),
-    f"LM period: {format_number(sh_lm_mtd)} &nbsp;·&nbsp; LM whole: {format_number(sh_lm_full)}",
-    "metric-card-blue"
-), unsafe_allow_html=True)
-
-# 6. Productivity MTD
-cols2[5].markdown(metric_card(
-    "Productivity MTD",
-    format_number(prod_mtd, 1),
-    delta_html(prod_mtd, prod_lm_full, label_suffix="vs LM"),
-    f"Capacity / Active MTD &nbsp;·&nbsp; LM: {format_number(prod_lm_full, 1)}",
-), unsafe_allow_html=True)
-
-# ── GROUP 3: WTD — Lũy kế tuần ────────────────────────────────────────────────
+# ── GROUP 2: WEEKLY — Lũy kế tuần ────────────────────────────────────────────
 wtd_label = f"WTD ({wtd_start_label} - {date_yesterday.strftime('%d-%b')})"
 lwtd_label = f"LWTD ({lwtd_start_label} - {date_last_week.strftime('%d-%b')})"
 
 st.markdown(
-    f"<div class='metric-group-label'>📆 WTD — Tuần này &nbsp;·&nbsp; vs {lwtd_label}</div>",
+    f"<div class='metric-group-label'>📆 WEEKLY — WTD &nbsp;·&nbsp; vs {lwtd_label}</div>",
     unsafe_allow_html=True,
 )
 cols3 = st.columns(6)
@@ -1562,7 +1498,7 @@ cols3[3].markdown(metric_card(
     "Avg Active WTD",
     format_number(active_wtd),
     delta_html(active_wtd, active_lwtd, label_suffix="vs Avg LWTD"),
-    f"Avg Active LWTD: {format_number(active_lwtd)}",
+    f"Avg LWTD: {format_number(active_lwtd)}",
     "metric-card-blue"
 ), unsafe_allow_html=True)
 
@@ -1570,7 +1506,7 @@ cols3[4].markdown(metric_card(
     "Supply Hours WTD",
     format_number(sh_wtd_val),
     delta_html(sh_wtd_val, sh_lwtd, label_suffix="vs LWTD"),
-    f"LWTD: {format_number(sh_lwtd)} &nbsp;·&nbsp; MTD: {format_number(sh_mtd_val)}",
+    f"LWTD: {format_number(sh_lwtd)}",
     "metric-card-blue"
 ), unsafe_allow_html=True)
 
@@ -1578,8 +1514,74 @@ cols3[5].markdown(metric_card(
     "Productivity WTD",
     format_number(prod_wtd, 1),
     delta_html(prod_wtd, prod_lwtd, label_suffix="vs LWTD"),
-    f"Capacity WTD / Avg Active WTD &nbsp;·&nbsp; LWTD: {format_number(prod_lwtd, 1)}",
+    f"LWTD: {format_number(prod_lwtd, 1)}",
 ), unsafe_allow_html=True)
+
+
+# ── GROUP 3: MONTHLY — Lũy kế tháng ─────────────────────────────────────────
+st.markdown(
+    f"<div class='metric-group-label'>📅 MONTHLY — MTD {date_yesterday.strftime('%b %Y')} &nbsp;·&nbsp; vs LM</div>",
+    unsafe_allow_html=True,
+)
+cols2 = st.columns(6)
+
+# 1. Request MTD
+cols2[0].markdown(metric_card(
+    "Request MTD",
+    format_number(request_mtd_val),
+    delta_html(request_mtd_val, req_lm_mtd_sum, label_suffix=f"vs LM period"),
+    f"LMp: {format_number(req_lm_mtd_sum)} &nbsp;·&nbsp; LM: {format_number(request_lm_full)}",
+    "metric-card-accent"
+), unsafe_allow_html=True)
+
+# 2. Demand MTD
+cols2[1].markdown(metric_card(
+    "Demand MTD",
+    format_number(demand_mtd_val),
+    delta_html(demand_mtd_val, dem_lm_mtd_sum, label_suffix=f"vs LM period"),
+    f"LMp: {format_number(dem_lm_mtd_sum)} &nbsp;·&nbsp; LM: {format_number(demand_lm_full)}",
+), unsafe_allow_html=True)
+
+# 3. FR% MTD avg
+fr_mtd_avg = get_row_lm_mtd_mean(180)
+fr_color_mtd = "#10b981" if fr_mtd_avg and fr_mtd_avg >= fr_target else ("#fbbf24" if fr_mtd_avg and fr_mtd_avg >= fr_target * 0.9 else "#fb7185")
+fr_mtd_html = metric_card(
+    "FR% MTD avg",
+    format_percent(fr_mtd_avg),
+    delta_html(fr_mtd_avg, fr_lm_mtd_avg, percent=True, label_suffix="vs LM"),
+    f"LMp: {format_percent(fr_lm_mtd_avg)} &nbsp;·&nbsp; LM: {format_percent(fr_lm_full)}",
+    "metric-card-green"
+)
+cols2[2].markdown(fr_mtd_html, unsafe_allow_html=True)
+
+# 4. Active Drivers MTD
+active_mtd_val = cockpit["Active"]["mtd"]
+active_lm_val = cockpit["Active"].get("lm")
+cols2[3].markdown(metric_card(
+    "Active Drivers MTD",
+    format_number(active_mtd_val),
+    delta_html(active_mtd_val, active_lm_val, label_suffix="vs LM"),
+    f"LM: {format_number(active_lm_val)}",
+    "metric-card-blue"
+), unsafe_allow_html=True)
+
+# 5. Supply Hours MTD
+cols2[4].markdown(metric_card(
+    "Supply Hours MTD",
+    format_number(sh_mtd_val),
+    delta_html(sh_mtd_val, sh_lm_mtd, label_suffix="vs LM period"),
+    f"LMp: {format_number(sh_lm_mtd)} &nbsp;·&nbsp; LM: {format_number(sh_lm_full)}",
+    "metric-card-blue"
+), unsafe_allow_html=True)
+
+# 6. Productivity MTD
+cols2[5].markdown(metric_card(
+    "Productivity MTD",
+    format_number(prod_mtd, 1),
+    delta_html(prod_mtd, prod_lm_full, label_suffix="vs LM"),
+    f"LM: {format_number(prod_lm_full, 1)}",
+), unsafe_allow_html=True)
+
 
 
 # ── LAYER 1: DAILY OPERATING COCKPIT TABLE ────────────────────────────────────
