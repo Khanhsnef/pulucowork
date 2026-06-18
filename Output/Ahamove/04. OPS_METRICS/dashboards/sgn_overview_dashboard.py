@@ -1657,35 +1657,25 @@ html_table = f"""
     <thead>
       <tr>
         <th rowspan="2" class="sticky-col" style="vertical-align:bottom;">SGN</th>
-        <!-- DAILY group: 5 cols -->
-        <th colspan="5" class="hdr-actual-current" style="text-align:center;border-bottom:1px solid #475569;">
+        <th colspan="6" class="hdr-actual-current" style="text-align:center;border-bottom:1px solid #475569;">
           DAILY — {date_yesterday.strftime('%d-%b')}
         </th>
-        <!-- WTD group: 4 cols -->
-        <th colspan="4" class="hdr-actual-past" style="text-align:center;border-bottom:1px solid #475569;">
-          WTD — {_wtd_label}
-        </th>
-        <!-- MTD group: 3 cols -->
-        <th colspan="3" class="hdr-plan" style="text-align:center;border-bottom:1px solid #475569;">
+        <th colspan="5" class="hdr-plan" style="text-align:center;border-bottom:1px solid #475569;">
           MTD — Jun-2026
         </th>
       </tr>
       <tr>
-        <!-- DAILY sub-headers -->
-        <th class="hdr-actual-current">Actual</th>
-        <th class="hdr-plan">FC</th>
-        <th class="hdr-actual-past">DoD Δ<br><small style="font-size:0.65rem;color:#94A3B8;">vs {_dod_lbl}</small></th>
-        <th class="hdr-actual-past">vs prev week<br><small style="font-size:0.65rem;color:#94A3B8;">vs {date_last_week.strftime('%d-%b')}</small></th>
-        <th class="hdr-plan">vs FC</th>
-        <!-- WTD sub-headers -->
-        <th class="hdr-actual-current">Actual</th>
-        <th class="hdr-plan">FC</th>
-        <th class="hdr-actual-past">vs LWTD<br><small style="font-size:0.65rem;color:#94A3B8;">{_lwtd_label}</small></th>
-        <th class="hdr-plan">vs FC</th>
-        <!-- MTD sub-headers -->
-        <th class="hdr-actual-current">Actual</th>
-        <th class="hdr-actual-past">MoM<br><small style="font-size:0.65rem;color:#94A3B8;">vs {_lm_period}</small></th>
-        <th class="hdr-plan">vs FC / LM</th>
+        <th class="hdr-actual-current">Yesterday<br><small style="font-size:0.65rem;color:#94A3B8;">{date_yesterday.strftime('%d-%b')}</small></th>
+        <th class="hdr-actual-past">Last week<br><small style="font-size:0.65rem;color:#94A3B8;">{date_last_week.strftime('%d-%b')}</small></th>
+        <th class="hdr-plan">Planning<br><small style="font-size:0.65rem;color:#94A3B8;">{date_yesterday.strftime('%d-%b')}</small></th>
+        <th class="hdr-today">Today<br><small style="font-size:0.65rem;color:#94A3B8;">{date_today.strftime('%d-%b')}</small></th>
+        <th class="hdr-actual-past">WoW</th>
+        <th class="hdr-plan">vs Planning</th>
+        <th class="hdr-actual-current">MTD<br><small style="font-size:0.65rem;color:#94A3B8;">Jun-2026</small></th>
+        <th class="hdr-actual-past">Last month<br><small style="font-size:0.65rem;color:#94A3B8;">May-2026</small></th>
+        <th class="hdr-plan">Planning<br><small style="font-size:0.65rem;color:#94A3B8;">Jun-2026</small></th>
+        <th class="hdr-actual-past">MoM</th>
+        <th class="hdr-plan">vs Planning</th>
       </tr>
     </thead>
     <tbody>
@@ -1749,29 +1739,21 @@ for label, key, parent in cockpit_rows_order:
     html_table += f"<tr class='{tr_class}'>"
     html_table += f"<td class='{td_label_cls}'>{display_label}</td>"
 
-    # ── DAILY (5 cols) ──────────────────────────────────────────
+    # ── DAILY: yesterday / last week / planning / today / WoW / vs planning ──
     html_table += fmt_cell(row.get("yesterday"), fmt)
+    html_table += fmt_cell(row.get("last_week"), fmt)
     html_table += fmt_cell(row.get("planning"), fmt)
-    html_table += delta_cell_abs(dod_pct, dod_abs, is_pct_metric=is_pct_metric)
+    html_table += fmt_cell(row.get("today"), fmt, is_today=True)
     html_table += delta_cell_abs(row.get("wow"), row.get("wow_abs"), is_pct_metric=is_pct_metric)
     html_table += delta_cell_abs(row.get("vs_planning"), row.get("vs_planning_abs"), is_pct_metric=is_pct_metric)
 
-    # ── WTD (4 cols) ─────────────────────────────────────────────
-    html_table += fmt_cell(row.get("wtd"), fmt)
-    html_table += fmt_cell(row.get("plan_wtd"), fmt)
-    html_table += delta_cell_abs(row.get("wow_wtd"), row.get("wow_wtd_abs"), is_pct_metric=is_pct_metric)
-    wtd_plan_abs = (row.get("wtd") - row.get("plan_wtd")) if row.get("wtd") is not None and row.get("plan_wtd") is not None else None
-    html_table += delta_cell_abs(row.get("vs_plan_wtd"), wtd_plan_abs, is_pct_metric=is_pct_metric)
-
-    # ── MTD (3 cols) — Active: no FC comparison, use LM whole instead ────────
+    # ── MTD: MTD / last month / planning / MoM / vs planning ────────────────
     html_table += fmt_cell(row.get("mtd"), fmt)
-    html_table += delta_cell_abs(row.get("mom_mtd"), row.get("mom_mtd_abs"), is_pct_metric=is_pct_metric)
-    if is_active_row:
-        # Active MTD vs FC is meaningless (distinct driver count vs daily plan) — show vs LM whole month
-        html_table += delta_cell_abs(row.get("mom_whole"), row.get("mom_whole_abs"), is_pct_metric=is_pct_metric)
-    else:
-        mtd_plan_abs = (row.get("mtd") - row.get("plan_mtd")) if row.get("mtd") is not None and row.get("plan_mtd") is not None else None
-        html_table += delta_cell_abs(row.get("vs_planning_mtd"), mtd_plan_abs, is_pct_metric=is_pct_metric)
+    html_table += fmt_cell(row.get("lm"), fmt)
+    html_table += fmt_cell(row.get("plan_mtd"), fmt)
+    html_table += delta_cell_abs(row.get("mom_whole"), row.get("mom_whole_abs"), is_pct_metric=is_pct_metric)
+    mtd_plan_abs = (row.get("mtd") - row.get("plan_mtd")) if row.get("mtd") is not None and row.get("plan_mtd") is not None else None
+    html_table += delta_cell_abs(row.get("vs_planning_mtd"), mtd_plan_abs, is_pct_metric=is_pct_metric)
     html_table += "</tr>"
 
 html_table += f"""
@@ -1779,7 +1761,7 @@ html_table += f"""
   </table>
 </div>
 <div style='margin-top:0.4rem;font-size:0.72rem;color:#64748B;'>
-  💡 DAILY DoD = vs ngày hôm trước ({_dod_lbl}) &nbsp;·&nbsp; vs prev week = cùng thứ tuần trước &nbsp;·&nbsp; WTD Mon–{date_yesterday.strftime('%d-%b')} &nbsp;·&nbsp; Active MTD "vs FC/LM" = vs LM whole month (FC không có nghĩa cho distinct driver count)
+  💡 DAILY: yesterday / last week / planning / today / WoW / vs planning &nbsp;·&nbsp; MTD: actual / last month / planning / MoM / vs planning. FC chỉ hiển thị khi có trong sheet.
 </div>
 """
 st.markdown(html_table, unsafe_allow_html=True)
