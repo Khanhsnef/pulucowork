@@ -103,7 +103,7 @@ st.markdown(
         background: var(--card) !important;
         border: 1px solid var(--border);
         border-radius: 1rem;
-        padding: 1.2rem 1.25rem;
+        padding: 1.15rem 1.15rem;
         min-height: 128px;
         display: flex;
         flex-direction: column;
@@ -133,12 +133,15 @@ st.markdown(
     }
     .metric-value {
         color: var(--text) !important;
-        font-size: 2rem;
+        font-size: 1.82rem;
         font-weight: 900;
         letter-spacing: -0.045em;
         line-height: 1.05;
         margin: 0.15rem 0 0.35rem;
         font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: clip;
     }
     .metric-value-lg { font-size: 2.1rem; font-weight: 900; letter-spacing: -0.045em; }
     .metric-context { color: var(--muted) !important; font-size: 0.72rem; line-height: 1.45; margin-top: 0.35rem; }
@@ -1379,7 +1382,7 @@ cols[0].markdown(metric_card(
     format_number(val(21, col_yesterday)),
     (delta_html(val(21, col_yesterday), val(21, col_dod_kpi), label_suffix="DoD") if col_dod_kpi else "")
     + "" + delta_html(val(21, col_yesterday), val(21, col_last_week), label_suffix="WoW"),
-    delta_html(val(21, col_yesterday), val(6, col_yesterday), percent=True, label_suffix="vs FC") + f" &nbsp;|&nbsp; FC: {format_number(val(6, col_yesterday))}",
+    delta_html(val(21, col_yesterday), val(6, col_yesterday), label_suffix="vs FC") + f" &nbsp;|&nbsp; FC: {format_number(val(6, col_yesterday))}",
     "metric-card-accent"
 ), unsafe_allow_html=True)
 
@@ -1389,7 +1392,7 @@ cols[1].markdown(metric_card(
     format_number(val(28, col_yesterday)),
     (delta_html(val(28, col_yesterday), val(28, col_dod_kpi), label_suffix="DoD") if col_dod_kpi else "")
     + "" + delta_html(val(28, col_yesterday), val(28, col_last_week), label_suffix="WoW"),
-    delta_html(val(28, col_yesterday), val(13, col_yesterday), percent=True, label_suffix="vs FC") + f" &nbsp;|&nbsp; FC: {format_number(val(13, col_yesterday))}",
+    delta_html(val(28, col_yesterday), val(13, col_yesterday), label_suffix="vs FC") + f" &nbsp;|&nbsp; FC: {format_number(val(13, col_yesterday))}",
 ), unsafe_allow_html=True)
 
 # 3. FR%
