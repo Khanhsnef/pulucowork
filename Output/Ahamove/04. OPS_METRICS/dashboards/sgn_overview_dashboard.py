@@ -1677,7 +1677,6 @@ cockpit_rows_order = [
     ("Return", "Active_Return", "Active"),
     ("NIM", "Active_NIM", "Active"),
     ("NID", "Active_NID", "Active"),
-    ("Other (EXP)", "Active_Other", "Active"),
     ("Cap", "Cap", None),
     ("FT", "Cap_FT", "Cap"),
     ("PT", "Cap_PT", "Cap"),
@@ -1685,7 +1684,6 @@ cockpit_rows_order = [
     ("Return", "Cap_Return", "Cap"),
     ("NIM", "Cap_NIM", "Cap"),
     ("NID", "Cap_NID", "Cap"),
-    ("Other (EXP)", "Cap_Other", "Cap"),
     ("online/driver", "online/driver", None),
     ("FT", "online/driver_FT", "online/driver"),
     ("PT", "online/driver_PT", "online/driver"),
@@ -1693,7 +1691,6 @@ cockpit_rows_order = [
     ("Return", "online/driver_Return", "online/driver"),
     ("NIM", "online/driver_NIM", "online/driver"),
     ("NID", "online/driver_NID", "online/driver"),
-    ("Other (EXP)", "online/driver_Other", "online/driver"),
     ("Prod", "Prod", None),
     ("FT", "Prod_FT", "Prod"),
     ("PT", "Prod_PT", "Prod"),
@@ -1701,7 +1698,6 @@ cockpit_rows_order = [
     ("Return", "Prod_Return", "Prod"),
     ("NIM", "Prod_NIM", "Prod"),
     ("NID", "Prod_NID", "Prod"),
-    ("Other (EXP)", "Prod_Other", "Prod"),
     ("Supply hour", "Supply hour", None),
     ("FT", "Supply_hour_FT", "Supply hour"),
     ("PT", "Supply_hour_PT", "Supply hour"),
@@ -1709,7 +1705,6 @@ cockpit_rows_order = [
     ("Return", "Supply_hour_Return", "Supply hour"),
     ("NIM", "Supply_hour_NIM", "Supply hour"),
     ("NID", "Supply_hour_NID", "Supply hour"),
-    ("Other (EXP)", "Supply_hour_Other", "Supply hour")
 ]
 
 _ACTIVE_KEYS = {"Active", "Active_FT", "Active_PT", "Active_NLM", "Active_Return", "Active_NIM", "Active_NID", "Active_Other"}
