@@ -219,6 +219,7 @@ st.markdown(
     .cockpit-table tr:hover td.sticky-col { background: #334155 !important; }
     .cockpit-table .delta-badge { min-width: 3.9rem; padding: 0.18rem 0.35rem; border-radius: 0; font-size: 0.76rem; }
     .cockpit-table .delta-badge .badge-label { display: none; }
+    .cockpit-table .delta-abs { display:block; margin-top:0.18rem; color:var(--muted); font-size:0.66rem; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; }
 
     .hdr-actual-current, .hdr-actual-past, .hdr-plan, .hdr-today {
         background: #0f172a !important;
@@ -1629,14 +1630,22 @@ _lwtd_label = f"{lwtd_start_label}–{_last_week_same_dow.strftime('%d-%b')}"
 _dod_lbl = date_dod.strftime('%d-%b') if date_dod else "D-2"
 
 def delta_cell_abs(pct_v, abs_v, positive_is_good=True, is_pct_metric=False):
-    """Delta cell: pill percentage on top, absolute number below in muted text."""
+    """Delta cell: percent pill plus absolute movement below."""
     if pct_v is None:
         return "<td class='val-neutral'>—</td>"
     good = pct_v >= 0 if positive_is_good else pct_v < 0
     cls = "pos" if good else "neg"
     arrow = "▲" if pct_v >= 0 else "▼"
     pct_str = f"{arrow}{abs(pct_v):.1%}"
-    return f"<td><span class='delta-badge {cls}' title='{abs_v if abs_v is not None else ''}'>{pct_str}</span></td>"
+    if abs_v is None:
+        return f"<td><span class='delta-badge {cls}'>{pct_str}</span></td>"
+    if is_pct_metric:
+        abs_str = f"{abs_v:+.1%}"
+    elif abs(abs_v) < 10 and abs_v != int(abs_v):
+        abs_str = f"{abs_v:+.2f}"
+    else:
+        abs_str = f"{abs_v:+,.0f}"
+    return f"<td><span class='delta-badge {cls}'>{pct_str}</span><span class='delta-abs'>{abs_str}</span></td>"
 html_table = f"""
 <div class="cockpit-table-container">
   <table class="cockpit-table">
@@ -1746,7 +1755,8 @@ for label, key, parent in cockpit_rows_order:
     html_table += fmt_cell(row.get("wtd"), fmt)
     html_table += fmt_cell(row.get("plan_wtd"), fmt)
     html_table += delta_cell_abs(row.get("wow_wtd"), row.get("wow_wtd_abs"), is_pct_metric=is_pct_metric)
-    html_table += delta_cell_abs(row.get("vs_plan_wtd"), None, is_pct_metric=is_pct_metric)
+    wtd_plan_abs = (row.get("wtd") - row.get("plan_wtd")) if row.get("wtd") is not None and row.get("plan_wtd") is not None else None
+    html_table += delta_cell_abs(row.get("vs_plan_wtd"), wtd_plan_abs, is_pct_metric=is_pct_metric)
 
     # ── MTD (3 cols) — Active: no FC comparison, use LM whole instead ────────
     html_table += fmt_cell(row.get("mtd"), fmt)
@@ -1755,7 +1765,8 @@ for label, key, parent in cockpit_rows_order:
         # Active MTD vs FC is meaningless (distinct driver count vs daily plan) — show vs LM whole month
         html_table += delta_cell_abs(row.get("mom_whole"), row.get("mom_whole_abs"), is_pct_metric=is_pct_metric)
     else:
-        html_table += delta_cell_abs(row.get("vs_planning_mtd"), None, is_pct_metric=is_pct_metric)
+        mtd_plan_abs = (row.get("mtd") - row.get("plan_mtd")) if row.get("mtd") is not None and row.get("plan_mtd") is not None else None
+        html_table += delta_cell_abs(row.get("vs_planning_mtd"), mtd_plan_abs, is_pct_metric=is_pct_metric)
     html_table += "</tr>"
 
 html_table += f"""
