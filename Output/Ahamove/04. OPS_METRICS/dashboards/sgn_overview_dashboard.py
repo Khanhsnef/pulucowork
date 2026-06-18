@@ -1776,8 +1776,8 @@ fc_request_series = process_series(daily_series(raw_df, FC_REQUEST_ROW), start_d
 fc_demand_series = process_series(daily_series(raw_df, FC_DEMAND_ROW), start_date, end_date, time_granularity)
 fr_series = process_series(daily_series(raw_df, FR_ROWS["Total"]), start_date, end_date, time_granularity, is_rate=True)
 
-dem_tab1, dem_tab2, dem_tab3, dem_tab4 = st.tabs([
-    "📈 Request vs Demand vs FR", "🏪 Channel Performance", "📊 Channel Mix", "🔥 FR Heatmap"
+dem_tab1, dem_tab2, dem_tab3, dem_tab4, dem_tab5 = st.tabs([
+    "📈 Request vs Demand vs FR", "🏪 Channel Performance", "📊 Channel Mix", "🔥 FR Heatmap", "👥 User Group FR%"
 ])
 
 with dem_tab1:
@@ -2050,6 +2050,108 @@ with dem_tab4:
 🟢 Pass (95-105%) &nbsp; 🔴 Under (<95%) &nbsp; 🟡 Over (>105%)
 </div>"""
     st.markdown(hm_html, unsafe_allow_html=True)
+
+with dem_tab5:
+    st.markdown("**👥 FR% by User Group — Actual Demand / Actual Request**")
+    st.caption("FR% = Actual Demand ÷ Actual Request. Daily dùng từng ngày; Weekly/Monthly cộng Demand và Request trong kỳ rồi mới chia để tránh sai do averaging.")
+
+    fr_group_granularity = st.radio(
+        "View granularity",
+        ["Daily", "Weekly", "Monthly"],
+        horizontal=True,
+        key="fr_group_granularity",
+    )
+
+    USER_GROUP_ROWS = [
+        ("SGN Total", ACTUAL_REQUEST_ROW, ACTUAL_DEMAND_ROW, "total"),
+        ("SME+MP+KA", 22, 29, "SME+MP+KA"),
+        ("GHN", CHANNEL_ACT_REQ_ROWS.get("GHN"), CHANNEL_ACT_DEM_ROWS.get("GHN"), "GHN"),
+        ("KA", CHANNEL_ACT_REQ_ROWS.get("KA"), CHANNEL_ACT_DEM_ROWS.get("KA"), "KA"),
+        ("MP", CHANNEL_ACT_REQ_ROWS.get("MP"), CHANNEL_ACT_DEM_ROWS.get("MP"), "MP"),
+        ("SME", CHANNEL_ACT_REQ_ROWS.get("SME"), CHANNEL_ACT_DEM_ROWS.get("SME"), "SME"),
+        ("WH", CHANNEL_ACT_REQ_ROWS.get("WH"), CHANNEL_ACT_DEM_ROWS.get("WH"), "WH"),
+    ]
+
+    def _period_fr_series(req_row, dem_row, granularity):
+        req = daily_series(raw_df, req_row) if req_row is not None else pd.Series(dtype="float64")
+        dem = daily_series(raw_df, dem_row) if dem_row is not None else pd.Series(dtype="float64")
+        if req.empty or dem.empty:
+            return pd.Series(dtype="float64")
+        df = pd.DataFrame({"request": req, "demand": dem}).dropna()
+        df = df[df["request"] > 0]
+        if df.empty:
+            return pd.Series(dtype="float64")
+        if granularity == "Weekly":
+            df = df.resample("W-MON").sum()
+        elif granularity == "Monthly":
+            df = df.resample("MS").sum()
+        return df["demand"] / df["request"]
+
+    fr_group_data = []
+    for group_name, req_row, dem_row, color_key in USER_GROUP_ROWS:
+        fr_s = _period_fr_series(req_row, dem_row, fr_group_granularity)
+        fr_s = fr_s[(fr_s.index >= pd.Timestamp(start_date)) & (fr_s.index <= pd.Timestamp(end_date))]
+        if fr_s.empty:
+            continue
+        latest_val = fr_s.iloc[-1]
+        avg_val = fr_s.mean()
+        best_idx = fr_s.idxmax()
+        worst_idx = fr_s.idxmin()
+        fr_group_data.append({
+            "group": group_name,
+            "color": CHANNEL_COLORS.get(color_key, "#3b82f6") if color_key != "total" else "#60a5fa",
+            "series": fr_s,
+            "latest": latest_val,
+            "avg": avg_val,
+            "best_label": best_idx.strftime("%d-%b") if fr_group_granularity != "Monthly" else best_idx.strftime("%b-%Y"),
+            "best": fr_s.loc[best_idx],
+            "worst_label": worst_idx.strftime("%d-%b") if fr_group_granularity != "Monthly" else worst_idx.strftime("%b-%Y"),
+            "worst": fr_s.loc[worst_idx],
+        })
+
+    if fr_group_data:
+        # Summary table: newest / avg / best / worst to quickly spot good-bad groups.
+        fr_summary_html = """<div class='cockpit-table-container'><table class='analysis-table'>
+<thead><tr><th>User Group</th><th>Latest FR%</th><th>Avg FR%</th><th>Best period</th><th>Worst period</th><th>Status</th></tr></thead><tbody>"""
+        for item in fr_group_data:
+            latest_color = "#10b981" if item["latest"] >= fr_target else ("#fbbf24" if item["latest"] >= fr_target * 0.9 else "#fb7185")
+            status = "Good" if item["latest"] >= fr_target else ("Watch" if item["latest"] >= fr_target * 0.9 else "Low")
+            pill_cls = "pill-on-track" if status == "Good" else ("pill-attention" if status == "Watch" else "pill-below")
+            fr_summary_html += f"""<tr>
+<td style='color:{item['color']};font-weight:800;'>{item['group']}</td>
+<td style='color:{latest_color};font-weight:900;'>{item['latest']:.1%}</td>
+<td>{item['avg']:.1%}</td>
+<td><span style='color:#10b981;font-weight:800;'>{item['best']:.1%}</span><br><small style='color:#94a3b8;'>{item['best_label']}</small></td>
+<td><span style='color:#fb7185;font-weight:800;'>{item['worst']:.1%}</span><br><small style='color:#94a3b8;'>{item['worst_label']}</small></td>
+<td><span class='{pill_cls}'>{status}</span></td>
+</tr>"""
+        fr_summary_html += "</tbody></table></div>"
+        st.markdown(fr_summary_html, unsafe_allow_html=True)
+
+        if go:
+            fig_group_fr = go.Figure()
+            for item in fr_group_data:
+                fig_group_fr.add_trace(go.Scatter(
+                    x=item["series"].index,
+                    y=item["series"].values,
+                    mode="lines+markers",
+                    name=item["group"],
+                    line={"width": 2.4, "color": item["color"], "shape": "spline", "smoothing": 1.1},
+                    marker={"size": 5},
+                    hovertemplate="%{x|%d-%b}: %{y:.1%}<extra>%{fullData.name}</extra>",
+                ))
+            fig_group_fr.add_hline(
+                y=fr_target,
+                line_dash="dash",
+                line_color="#fbbf24",
+                annotation_text=f"Target {fr_target:.0%}",
+                annotation_position="bottom right",
+                annotation={"font": {"color": "#fbbf24"}},
+            )
+            fig_group_fr.update_layout(yaxis={"tickformat": ".0%"})
+            st.plotly_chart(chart_layout(fig_group_fr, f"{fr_group_granularity} FR% by User Group"), use_container_width=True)
+    else:
+        st.info("Không có dữ liệu Actual Request/Demand đủ để tính FR% cho nhóm user trong khoảng ngày đã chọn.")
 
 
 # ── LAYER 3: SUPPLY & DRIVER ANALYTICS ───────────────────────────────────────
