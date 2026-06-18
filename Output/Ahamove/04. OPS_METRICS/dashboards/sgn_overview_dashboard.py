@@ -174,8 +174,8 @@ st.markdown(
 
     .cockpit-table-container {
         overflow-x: auto;
-        margin: 1rem 0;
-        border-radius: 1rem;
+        margin: 0.55rem 0;
+        border-radius: 0.85rem;
         border: 1px solid var(--border);
         background: var(--card-soft);
     }
@@ -184,29 +184,32 @@ st.markdown(
         border-collapse: collapse;
         table-layout: auto;
         color: var(--text);
-        font-size: 0.8rem;
+        font-size: 0.72rem;
         text-align: left;
         font-variant-numeric: tabular-nums;
+        line-height: 1.15;
     }
     .cockpit-table th {
         background: #0f172a !important;
         color: var(--muted) !important;
         font-weight: 800;
-        padding: 0.5rem 0.7rem;
+        padding: 0.32rem 0.46rem;
         border-bottom: 1px solid var(--border);
         text-transform: uppercase;
-        font-size: 0.66rem;
-        letter-spacing: 0.06em;
+        font-size: 0.58rem;
+        letter-spacing: 0.045em;
         white-space: nowrap;
+        line-height: 1.15;
     }
     .cockpit-table td {
         background: transparent !important;
-        padding: 0.48rem 0.7rem;
+        padding: 0.28rem 0.46rem;
         border-bottom: 1px solid var(--border);
         font-weight: 700;
         white-space: nowrap;
         text-align: right;
-        height: 2.25rem;
+        height: 1.7rem;
+        line-height: 1.15;
     }
     .cockpit-table th:first-child, .cockpit-table td:first-child { text-align: left; }
     .cockpit-table tr { transition: background-color 0.12s ease; }
