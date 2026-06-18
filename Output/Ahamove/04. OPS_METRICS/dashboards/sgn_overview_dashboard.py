@@ -243,6 +243,9 @@ st.markdown(
     .analysis-table td:first-child { text-align:left; font-weight:800; }
     .analysis-table tr:hover { background-color:#334155 !important; }
     .analysis-table .total-row { background:rgba(59,130,246,0.08) !important; font-weight:800; color:#60a5fa !important; border-top:1px solid var(--border); }
+    .analysis-table .sticky-col { position: sticky; left: 0; z-index: 3; background: #0f172a !important; box-shadow: 8px 0 14px -14px rgba(0,0,0,0.9); }
+    .fr-matrix-table td, .fr-matrix-table th { min-width: 6.2rem; }
+    .fr-matrix-table td:first-child, .fr-matrix-table th:first-child { min-width: 9rem; }
 
     .leaderboard-card { background:var(--card); border:1px solid var(--border); border-radius:1rem; padding:1rem; margin-bottom:0.75rem; }
     .leaderboard-title { color:var(--text); font-weight:800; font-size:0.9rem; margin-bottom:0.65rem; text-transform:uppercase; letter-spacing:0.05em; }
@@ -2110,23 +2113,43 @@ with dem_tab5:
         })
 
     if fr_group_data:
-        # Summary table: newest / avg / best / worst to quickly spot good-bad groups.
-        fr_summary_html = """<div class='cockpit-table-container'><table class='analysis-table'>
-<thead><tr><th>User Group</th><th>Latest FR%</th><th>Avg FR%</th><th>Best period</th><th>Worst period</th><th>Status</th></tr></thead><tbody>"""
+        # Cockpit-style matrix: rows = user groups, columns = selected periods.
+        all_periods = sorted(set().union(*[set(item["series"].index) for item in fr_group_data]))
+        max_cols = 14 if fr_group_granularity == "Daily" else (10 if fr_group_granularity == "Weekly" else 8)
+        display_periods = all_periods[-max_cols:]
+
+        def _period_label(ts):
+            if fr_group_granularity == "Monthly":
+                return ts.strftime("%b-%Y")
+            if fr_group_granularity == "Weekly":
+                week_end = ts + pd.Timedelta(days=6)
+                return f"{ts.strftime('%d-%b')}<br><small style='color:#94a3b8;'>to {week_end.strftime('%d-%b')}</small>"
+            return f"{ts.strftime('%d-%b')}<br><small style='color:#94a3b8;'>{ts.strftime('%a')}</small>"
+
+        def _fr_cell(v):
+            if v is None or pd.isna(v):
+                return "<td class='hm-na'>—</td>"
+            color = "#10b981" if v >= fr_target else ("#fbbf24" if v >= fr_target * 0.9 else "#fb7185")
+            return f"<td style='color:{color};font-weight:900;'>{v:.1%}</td>"
+
+        fr_matrix_html = """<div class='cockpit-table-container'><table class='analysis-table fr-matrix-table'>
+<thead><tr><th class='sticky-col'>User Group</th>"""
+        for ts in display_periods:
+            fr_matrix_html += f"<th>{_period_label(ts)}</th>"
+        fr_matrix_html += "<th>Avg</th><th>Best</th><th>Worst</th></tr></thead><tbody>"
+
         for item in fr_group_data:
-            latest_color = "#10b981" if item["latest"] >= fr_target else ("#fbbf24" if item["latest"] >= fr_target * 0.9 else "#fb7185")
-            status = "Good" if item["latest"] >= fr_target else ("Watch" if item["latest"] >= fr_target * 0.9 else "Low")
-            pill_cls = "pill-on-track" if status == "Good" else ("pill-attention" if status == "Watch" else "pill-below")
-            fr_summary_html += f"""<tr>
-<td style='color:{item['color']};font-weight:800;'>{item['group']}</td>
-<td style='color:{latest_color};font-weight:900;'>{item['latest']:.1%}</td>
-<td>{item['avg']:.1%}</td>
-<td><span style='color:#10b981;font-weight:800;'>{item['best']:.1%}</span><br><small style='color:#94a3b8;'>{item['best_label']}</small></td>
-<td><span style='color:#fb7185;font-weight:800;'>{item['worst']:.1%}</span><br><small style='color:#94a3b8;'>{item['worst_label']}</small></td>
-<td><span class='{pill_cls}'>{status}</span></td>
+            series = item["series"]
+            fr_matrix_html += f"<tr><td class='sticky-col' style='color:{item['color']};font-weight:900;'>{item['group']}</td>"
+            for ts in display_periods:
+                fr_matrix_html += _fr_cell(series.get(ts, None))
+            fr_matrix_html += f"""
+<td style='font-weight:800;'>{item['avg']:.1%}</td>
+<td><span style='color:#10b981;font-weight:900;'>{item['best']:.1%}</span><br><small style='color:#94a3b8;'>{item['best_label']}</small></td>
+<td><span style='color:#fb7185;font-weight:900;'>{item['worst']:.1%}</span><br><small style='color:#94a3b8;'>{item['worst_label']}</small></td>
 </tr>"""
-        fr_summary_html += "</tbody></table></div>"
-        st.markdown(fr_summary_html, unsafe_allow_html=True)
+        fr_matrix_html += "</tbody></table></div>"
+        st.markdown(fr_matrix_html, unsafe_allow_html=True)
 
         if go:
             fig_group_fr = go.Figure()
