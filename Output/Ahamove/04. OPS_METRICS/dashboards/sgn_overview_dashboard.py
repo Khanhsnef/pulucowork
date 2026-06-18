@@ -138,6 +138,7 @@ st.markdown(
         letter-spacing: -0.045em;
         line-height: 1.05;
         margin: 0.15rem 0 0.35rem;
+        font-variant-numeric: tabular-nums;
     }
     .metric-value-lg { font-size: 2.1rem; font-weight: 900; letter-spacing: -0.045em; }
     .metric-context { color: var(--muted) !important; font-size: 0.72rem; line-height: 1.45; margin-top: 0.35rem; }
@@ -146,13 +147,17 @@ st.markdown(
     .delta-badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.25rem;
-        padding: 0.32rem 0.58rem;
-        border-radius: 0.5rem;
+        justify-content: center;
+        gap: 0.2rem;
+        min-width: 4.35rem;
+        padding: 0.26rem 0.5rem;
+        border-radius: 0.18rem;
         font-size: 0.74rem;
-        font-weight: 800;
+        font-weight: 900;
+        line-height: 1;
         white-space: nowrap;
         border: 1px solid transparent;
+        font-variant-numeric: tabular-nums;
     }
     .delta-badge .badge-label { color: var(--muted) !important; font-size: 0.72rem; font-weight: 800; margin-right: 0.1rem; }
     .delta-badge.pos { color: var(--emerald) !important; background: rgba(16,185,129,0.10) !important; border-color: rgba(16,185,129,0.16); }
@@ -174,28 +179,33 @@ st.markdown(
     .cockpit-table {
         width: 100%;
         border-collapse: collapse;
+        table-layout: auto;
         color: var(--text);
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         text-align: left;
+        font-variant-numeric: tabular-nums;
     }
     .cockpit-table th {
         background: #0f172a !important;
         color: var(--muted) !important;
         font-weight: 800;
-        padding: 0.72rem 0.85rem;
+        padding: 0.5rem 0.7rem;
         border-bottom: 1px solid var(--border);
         text-transform: uppercase;
-        font-size: 0.68rem;
+        font-size: 0.66rem;
         letter-spacing: 0.06em;
         white-space: nowrap;
     }
     .cockpit-table td {
         background: transparent !important;
-        padding: 0.72rem 0.85rem;
+        padding: 0.48rem 0.7rem;
         border-bottom: 1px solid var(--border);
-        font-weight: 600;
+        font-weight: 700;
         white-space: nowrap;
+        text-align: right;
+        height: 2.25rem;
     }
+    .cockpit-table th:first-child, .cockpit-table td:first-child { text-align: left; }
     .cockpit-table tr { transition: background-color 0.12s ease; }
     .cockpit-table tr:hover { background-color: #334155 !important; filter: none; }
     .cockpit-table .row-header { color: #60a5fa !important; font-weight: 800; }
@@ -204,6 +214,8 @@ st.markdown(
     .cockpit-table .sticky-col { position: sticky; left: 0; z-index: 3; background: #0f172a !important; box-shadow: 8px 0 14px -14px rgba(0,0,0,0.9); }
     .cockpit-table td.sticky-col { background: #111827 !important; }
     .cockpit-table tr:hover td.sticky-col { background: #334155 !important; }
+    .cockpit-table .delta-badge { min-width: 3.9rem; padding: 0.18rem 0.35rem; border-radius: 0; font-size: 0.76rem; }
+    .cockpit-table .delta-badge .badge-label { display: none; }
 
     .hdr-actual-current, .hdr-actual-past, .hdr-plan, .hdr-today {
         background: #0f172a !important;
@@ -489,8 +501,8 @@ def delta_html(current, baseline, percent=False, label_suffix="vs LM"):
     delta_pct = delta / abs(baseline)
     pos = delta >= 0
     cls = "pos" if pos else "neg"
-    arrow = "↗" if pos else "↘"
-    val_str = f"{arrow} {abs(delta):.1%}" if percent else f"{arrow} {abs(delta_pct):.1%}"
+    arrow = "▲" if pos else "▼"
+    val_str = f"{arrow}{abs(delta):.1%}" if percent else f"{arrow}{abs(delta_pct):.1%}"
     return f"<span class='delta-badge {cls}'><span class='badge-label'>{label_suffix}</span>{val_str}</span>"
 
 
@@ -527,11 +539,11 @@ def _delta_badge(pct_val, base_val, label="", is_pct_metric=False, positive_is_g
     d = (pct_val - base_val) if is_pct_metric else (pct_val - base_val) / base_val
     good = d >= 0 if positive_is_good else d <= 0
     cls = "pos" if good else "neg"
-    arrow = "↗" if d >= 0 else "↘"
+    arrow = "▲" if d >= 0 else "▼"
     abs_d = f"{abs(d):.1%}"
     if is_pct_metric:
         abs_d = f"{abs(d):.1%}"
-    return f"<span class='delta-badge {cls}'><span class='badge-label'>{label}</span>{arrow} {abs_d}</span>"
+    return f"<span class='delta-badge {cls}'><span class='badge-label'>{label}</span>{arrow}{abs_d}</span>"
 
 
 # ── TIME GRANULARITY AGGREGATION ENGINE ───────────────────────────────────────
@@ -1607,16 +1619,9 @@ def delta_cell_abs(pct_v, abs_v, positive_is_good=True, is_pct_metric=False):
         return "<td class='val-neutral'>—</td>"
     good = pct_v >= 0 if positive_is_good else pct_v < 0
     cls = "pos" if good else "neg"
-    arrow = "↗" if pct_v >= 0 else "↘"
-    pct_str = f"{arrow} {abs(pct_v):.1%}"
-    if abs_v is not None:
-        if is_pct_metric:
-            abs_str = f"{abs_v:+.1%}"
-        else:
-            abs_str = f"{abs_v:+,.0f}"
-        return f"<td><span class='delta-badge {cls}'>{pct_str}</span><br><small class='val-neutral' style='font-size:0.68rem;'>{abs_str}</small></td>"
-    return f"<td><span class='delta-badge {cls}'>{pct_str}</span></td>"
-
+    arrow = "▲" if pct_v >= 0 else "▼"
+    pct_str = f"{arrow}{abs(pct_v):.1%}"
+    return f"<td><span class='delta-badge {cls}' title='{abs_v if abs_v is not None else ''}'>{pct_str}</span></td>"
 html_table = f"""
 <div class="cockpit-table-container">
   <table class="cockpit-table">
