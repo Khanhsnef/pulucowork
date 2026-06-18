@@ -54,29 +54,54 @@ st.markdown(
         margin: 1.2rem 0 0.6rem 0; letter-spacing: -0.01em;
     }
 
-    /* Metric Cards — tighter padding */
+    /* Metric Cards — React template style */
     .metric-card {
-        background-color: #1E293B; border: 1px solid #334155;
-        border-radius: 1rem; padding: 0.85rem 1rem;
+        background: rgba(30,41,59,0.6);
+        border: 1px solid rgba(51,65,85,0.6);
+        border-radius: 1rem;
+        padding: 1rem 1.1rem 0.85rem;
         box-shadow: 0 8px 24px -12px rgba(0,0,0,0.5);
-        text-align: center; min-height: 120px;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        display: flex; flex-direction: column; justify-content: space-between;
+        min-height: 118px;
+        transition: background 0.15s ease, box-shadow 0.15s ease;
+        backdrop-filter: blur(4px);
     }
-    .metric-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(0,0,0,0.6); border-color: #475569; }
-    .metric-card-accent { border-color: #FF7F32 !important; background: linear-gradient(135deg, #1E293B 0%, #1a2235 100%) !important; }
-    .metric-card-green { border-color: #10B981 !important; }
-    .metric-card-blue  { border-color: #38BDF8 !important; }
-    .metric-label  { font-size: 0.72rem; color: #94A3B8; text-transform: uppercase; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: 0.06em; }
-    .metric-value  { font-size: 1.9rem; font-weight: 800; color: #F8FAFC; letter-spacing: -0.03em; }
-    .metric-value-lg { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; }
-    .metric-delta  { font-size: 0.85rem; font-weight: 700; margin-top: 0.2rem; }
-    .metric-context { color: #64748B; font-size: 0.72rem; margin-top: 0.1rem; }
+    .metric-card:hover { background: rgba(30,41,59,0.95); box-shadow: 0 14px 30px -8px rgba(0,0,0,0.65); border-color: #475569; }
+    .metric-card-accent { border-color: #FF7F32 !important; background: linear-gradient(135deg, rgba(30,41,59,0.7) 0%, rgba(26,34,53,0.9) 100%) !important; }
+    .metric-card-green  { border-color: rgba(16,185,129,0.6) !important; }
+    .metric-card-blue   { border-color: rgba(56,189,248,0.6) !important; }
+
+    /* Card inner layout */
+    .metric-card-header { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem; }
+    .metric-label  { font-size: 0.73rem; color: #94A3B8; font-weight: 600; letter-spacing: 0.04em; }
+    .metric-value  { font-size: 1.85rem; font-weight: 800; color: #F8FAFC; letter-spacing: -0.03em; line-height: 1.1; }
+    .metric-value-lg { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.03em; }
+    .metric-context { color: #64748B; font-size: 0.7rem; margin-top: 0.25rem; line-height: 1.4; }
+
+    /* Delta pill badges (DoD / WoW) — React KpiCard style */
+    .metric-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.55rem; }
+    .delta-badge {
+        display: inline-flex; align-items: center; gap: 0.25rem;
+        background: rgba(15,23,42,0.6);
+        padding: 0.18rem 0.5rem; border-radius: 0.4rem;
+        font-size: 0.72rem; font-weight: 700; white-space: nowrap;
+    }
+    .delta-badge .badge-label { color: #64748B; font-size: 0.65rem; font-weight: 700; margin-right: 0.1rem; }
+    .delta-badge.pos { color: #34D399; }
+    .delta-badge.neg { color: #F87171; }
+    .delta-badge.neu { color: #94A3B8; }
+
+    /* Status pills for tables */
+    .pill-on-track   { display:inline-block; padding:0.15rem 0.55rem; border-radius:0.3rem; font-size:0.7rem; font-weight:700; background:rgba(16,185,129,0.12); color:#34D399; border:1px solid rgba(16,185,129,0.25); }
+    .pill-attention  { display:inline-block; padding:0.15rem 0.55rem; border-radius:0.3rem; font-size:0.7rem; font-weight:700; background:rgba(251,191,36,0.12); color:#FBBF24; border:1px solid rgba(251,191,36,0.25); }
+    .pill-below      { display:inline-block; padding:0.15rem 0.55rem; border-radius:0.3rem; font-size:0.7rem; font-weight:700; background:rgba(248,113,113,0.12); color:#F87171; border:1px solid rgba(248,113,113,0.25); }
+
     .status-pill {
         display: inline-block; background: #064E3B; color: #34D399;
         border: 1px solid #059669; border-radius: 999px;
-        padding: 0.2rem 0.6rem; font-weight: 700; font-size: 0.78rem;
+        padding: 0.2rem 0.6rem; font-weight: 700; font-size: 0.75rem;
     }
-    .footer-note { color: #64748B; font-size: 0.8rem; padding-top: 0.75rem; border-top: 1px solid #334155; margin-top: 2rem; }
+    .footer-note { color: #64748B; font-size: 0.78rem; padding-top: 0.6rem; border-top: 1px solid #334155; margin-top: 1.5rem; }
     .footer-note a { color: #FF7F32; text-decoration: none; }
     .footer-note a:hover { text-decoration: underline; }
 
@@ -396,28 +421,49 @@ def format_percent(value, decimals=1):
 
 
 def delta_html(current, baseline, percent=False, label_suffix="vs LM"):
+    """Returns a badge pill span for use inside .metric-badges."""
     if current is None or baseline is None or baseline == 0:
-        return "<span style='color:#64748B'>No baseline</span>"
+        return f"<span class='delta-badge neu'><span class='badge-label'>{label_suffix}</span>—</span>"
     delta = current - baseline
     delta_pct = delta / abs(baseline)
-    color = "#34D399" if delta >= 0 else "#F87171"
-    arrow = "▲" if delta >= 0 else "▼"
+    pos = delta >= 0
+    cls = "pos" if pos else "neg"
+    arrow = "▲" if pos else "▼"
     if percent:
-        label = f"{arrow} {delta:+.2%} {label_suffix}"
+        val_str = f"{arrow}{abs(delta):.1%}"
     else:
-        label = f"{arrow} {delta_pct:+.2%} {label_suffix}"
-    return f"<span style='color:{color}'>{label}</span>"
+        val_str = f"{arrow}{abs(delta_pct):.1%}"
+    return f"<span class='delta-badge {cls}'><span class='badge-label'>{label_suffix}</span>{val_str}</span>"
 
 
 def metric_card(label, value, delta, context="", accent_class=""):
+    """
+    delta: HTML string (may contain multiple <span> deltas separated by &nbsp;).
+    Wraps delta spans as badge pills automatically.
+    """
     return f"""
     <div class="metric-card {accent_class}">
         <div class="metric-label">{label}</div>
         <div class="metric-value">{value}</div>
-        <div class="metric-delta">{delta}</div>
+        <div class="metric-badges">{delta}</div>
         <div class="metric-context">{context}</div>
     </div>
     """
+
+
+def _delta_badge(pct_val, base_val, label="", is_pct_metric=False, positive_is_good=True):
+    """Render a single DoD/WoW/etc badge pill matching React KpiCard style."""
+    if pct_val is None or base_val is None or base_val == 0:
+        return f"<span class='delta-badge neu'><span class='badge-label'>{label}</span>—</span>"
+    d = (pct_val - base_val) if is_pct_metric else (pct_val - base_val) / base_val
+    good = d >= 0 if positive_is_good else d <= 0
+    cls = "pos" if good else "neg"
+    arrow = "▲" if d >= 0 else "▼"
+    abs_d = f"{abs(d):.1%}"
+    if is_pct_metric:
+        abs_d = f"{d:+.1%}"
+        arrow = ""
+    return f"<span class='delta-badge {cls}'><span class='badge-label'>{label}</span>{arrow}{abs_d}</span>"
 
 
 # ── TIME GRANULARITY AGGREGATION ENGINE ───────────────────────────────────────
@@ -1243,7 +1289,7 @@ cols[0].markdown(metric_card(
     "Request",
     format_number(val(21, col_yesterday)),
     (delta_html(val(21, col_yesterday), val(21, col_dod_kpi), label_suffix="DoD") if col_dod_kpi else "")
-    + " &nbsp; " + delta_html(val(21, col_yesterday), val(21, col_last_week), label_suffix="WoW"),
+    + "" + delta_html(val(21, col_yesterday), val(21, col_last_week), label_suffix="WoW"),
     delta_html(val(21, col_yesterday), val(6, col_yesterday), percent=True, label_suffix="vs FC") + f" &nbsp;|&nbsp; FC: {format_number(val(6, col_yesterday))}",
     "metric-card-accent"
 ), unsafe_allow_html=True)
@@ -1253,7 +1299,7 @@ cols[1].markdown(metric_card(
     "Demand",
     format_number(val(28, col_yesterday)),
     (delta_html(val(28, col_yesterday), val(28, col_dod_kpi), label_suffix="DoD") if col_dod_kpi else "")
-    + " &nbsp; " + delta_html(val(28, col_yesterday), val(28, col_last_week), label_suffix="WoW"),
+    + "" + delta_html(val(28, col_yesterday), val(28, col_last_week), label_suffix="WoW"),
     delta_html(val(28, col_yesterday), val(13, col_yesterday), percent=True, label_suffix="vs FC") + f" &nbsp;|&nbsp; FC: {format_number(val(13, col_yesterday))}",
 ), unsafe_allow_html=True)
 
@@ -1265,8 +1311,8 @@ fr_daily_html = f"""
 <div class="metric-card" style="border-color:{fr_color}33;">
   <div class="metric-label">FR%</div>
   <div class="metric-value" style="color:{fr_color};">{format_percent(fr_yest)}</div>
-  <div class="metric-delta">{fr_dod_delta}&nbsp;{fr_wow_delta}</div>
-  <div class="metric-context">{'✅' if fr_yest and fr_yest >= fr_target else '⚠️'} Target {fr_target:.0%} &nbsp;·&nbsp; LM avg {format_percent(fr_lm_mtd_avg)}</div>
+  <div class="metric-badges">{fr_dod_delta}{fr_wow_delta}<span class="delta-badge {'pos' if fr_yest and fr_yest >= fr_target else 'neg'}"><span class="badge-label">Target</span>{'✅' if fr_yest and fr_yest >= fr_target else '⚠️'}{fr_target:.0%}</span></div>
+  <div class="metric-context">LM avg: {format_percent(fr_lm_mtd_avg)}</div>
 </div>"""
 cols[2].markdown(fr_daily_html, unsafe_allow_html=True)
 
@@ -1276,7 +1322,7 @@ cols[3].markdown(metric_card(
     "Active Drivers",
     format_number(val(50, col_yesterday)),
     (delta_html(val(50, col_yesterday), active_dod, label_suffix="DoD") if active_dod else "")
-    + " &nbsp; " + delta_html(val(50, col_yesterday), val(50, col_last_week), label_suffix="WoW"),
+    + "" + delta_html(val(50, col_yesterday), val(50, col_last_week), label_suffix="WoW"),
     f"Plan: {format_number(sum(act_plan_16jun.values()))}",
     "metric-card-blue"
 ), unsafe_allow_html=True)
@@ -1286,7 +1332,7 @@ cols[4].markdown(metric_card(
     "Supply Hours",
     format_number(sh_yest),
     (delta_html(sh_yest, sh_dod_val, label_suffix="DoD") if sh_dod_val else "")
-    + " &nbsp; " + delta_html(sh_yest, sh_lw, label_suffix="WoW"),
+    + "" + delta_html(sh_yest, sh_lw, label_suffix="WoW"),
     f"WTD: {format_number(sh_wtd_val)} &nbsp;·&nbsp; MTD: {format_number(sh_mtd_val)}",
     "metric-card-blue"
 ), unsafe_allow_html=True)
@@ -1334,8 +1380,8 @@ fr_mtd_html = f"""
 <div class="metric-card" style="border-color:{fr_color_mtd}33;">
   <div class="metric-label">FR% MTD avg</div>
   <div class="metric-value" style="color:{fr_color_mtd};">{format_percent(fr_mtd_avg)}</div>
-  <div class="metric-delta">{delta_html(fr_mtd_avg, fr_lm_mtd_avg, percent=True, label_suffix="vs LM period")}</div>
-  <div class="metric-context">LM avg: {format_percent(fr_lm_mtd_avg)} &nbsp;·&nbsp; LM whole: {format_percent(fr_lm_full)}</div>
+  <div class="metric-badges">{delta_html(fr_mtd_avg, fr_lm_mtd_avg, percent=True, label_suffix="vs LM")}</div>
+  <div class="metric-context">LM same period: {format_percent(fr_lm_mtd_avg)} &nbsp;·&nbsp; LM whole: {format_percent(fr_lm_full)}</div>
 </div>"""
 cols2[2].markdown(fr_mtd_html, unsafe_allow_html=True)
 
@@ -1406,7 +1452,7 @@ fr_wtd_html = f"""
 <div class="metric-card" style="border-color:{fr_color_wtd}33;">
   <div class="metric-label">FR% WTD</div>
   <div class="metric-value" style="color:{fr_color_wtd};">{format_percent(fr_wtd)}</div>
-  <div class="metric-delta">{delta_html(fr_wtd, fr_lwtd, percent=True, label_suffix="vs LWTD")}</div>
+  <div class="metric-badges">{delta_html(fr_wtd, fr_lwtd, percent=True, label_suffix="vs LWTD")}</div>
   <div class="metric-context">LWTD: {format_percent(fr_lwtd)}</div>
 </div>"""
 cols3[2].markdown(fr_wtd_html, unsafe_allow_html=True)
