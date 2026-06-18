@@ -929,6 +929,15 @@ def get_row_lm_mtd_mean(row_idx):
     return sum(vals) / len(vals) if vals else 0.0
 
 
+def get_row_mtd_mean(row_idx):
+    vals = []
+    for col_idx in mtd_cols:
+        v = val(row_idx, col_idx)
+        if v is not None:
+            vals.append(v)
+    return sum(vals) / len(vals) if vals else None
+
+
 def get_row_wtd_sum(row_idx):
     total = 0.0
     for col_idx in wtd_cols:
@@ -1474,14 +1483,14 @@ fr_mtd_html = metric_card(
 )
 cols2[2].markdown(fr_mtd_html, unsafe_allow_html=True)
 
-# 4. Active Drivers MTD
-active_mtd_val = cockpit["Active"]["mtd"]
-active_lm_mtd_val = cockpit["Active"].get("lm_mtd")
+# 4. Active Drivers MTD avg
+active_mtd_val = get_row_mtd_mean(50)
+active_lm_mtd_val = get_row_lm_mtd_mean(50)
 cols2[3].markdown(metric_card(
-    "Active Drivers MTD",
+    "Active Drivers MTD avg",
     format_number(active_mtd_val),
     delta_html(active_mtd_val, active_lm_mtd_val, label_suffix="vs LM period"),
-    f"LM period: {format_number(active_lm_mtd_val)} &nbsp;·&nbsp; LM whole: {format_number(cockpit['Active']['lm'])}",
+    f"Avg daily active &nbsp;·&nbsp; LM period: {format_number(active_lm_mtd_val)}",
     "metric-card-blue"
 ), unsafe_allow_html=True)
 
