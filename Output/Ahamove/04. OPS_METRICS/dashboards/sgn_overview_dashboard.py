@@ -24,7 +24,7 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
     :root {
         --bg: #0f172a;
@@ -42,10 +42,10 @@ st.markdown(
     .stApp, html, body, [data-testid="stAppViewContainer"] {
         background-color: var(--bg) !important;
         color: var(--text) !important;
-        font-family: 'Montserrat', sans-serif !important;
+        font-family: 'Inter', sans-serif !important;
     }
     [class*="css"], table, th, td, input, select, button, div, span, p {
-        font-family: 'Montserrat', sans-serif !important;
+        font-family: 'Inter', sans-serif !important;
     }
 
     [data-testid="stSidebar"] {
@@ -564,13 +564,13 @@ def chart_layout(fig, title="", secondary_y=False):
         return fig
     fig.update_layout(
         title={"text": title, "font": {"size": 14, "color": "#F8FAFC"}},
-        font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
+        font={"family": "Inter, sans-serif", "color": "#F8FAFC"},
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         margin={"l": 30, "r": 30, "t": 60, "b": 30},
         legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "xanchor": "right", "x": 1, "font": {"color": "#F8FAFC"}},
         hovermode="x unified",
-        hoverlabel={"bgcolor": "#1E293B", "bordercolor": "#334155", "font": {"family": "Montserrat, sans-serif", "color": "#F8FAFC", "size": 12}},
+        hoverlabel={"bgcolor": "#1E293B", "bordercolor": "#334155", "font": {"family": "Inter, sans-serif", "color": "#F8FAFC", "size": 12}},
         template="plotly_dark",
     )
     fig.update_xaxes(showgrid=False, linecolor="rgba(51,65,85,0.75)", gridcolor="rgba(51,65,85,0.35)", tickfont={"color": "#94A3B8"})
@@ -704,13 +704,13 @@ def render_dual_axis_chart(data_left, data_right, title, colors_left, colors_rig
 
     fig.update_layout(
         title={"text": title, "font": {"size": 14, "color": "#F8FAFC"}},
-        font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
+        font={"family": "Inter, sans-serif", "color": "#F8FAFC"},
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         margin={"l": 30, "r": 60, "t": 60, "b": 30},
         legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "xanchor": "right", "x": 1, "font": {"color": "#F8FAFC"}},
         hovermode="x unified",
-        hoverlabel={"bgcolor": "#1E293B", "bordercolor": "#334155", "font": {"family": "Montserrat, sans-serif", "color": "#F8FAFC", "size": 12}},
+        hoverlabel={"bgcolor": "#1E293B", "bordercolor": "#334155", "font": {"family": "Inter, sans-serif", "color": "#F8FAFC", "size": 12}},
         template="plotly_dark",
     )
     fig.update_xaxes(showgrid=False, linecolor="rgba(51,65,85,0.75)", gridcolor="rgba(51,65,85,0.35)", tickfont={"color": "#94A3B8"})
@@ -1356,10 +1356,7 @@ sh_lm_full        = val(66, 2)
 
 # ── GROUP 1: DAILY — Hôm qua + WoW comparison ─────────────────────────────
 st.markdown(
-    f"<div style='font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;"
-    f"color:#64748B;padding:0.4rem 0 0.2rem;border-top:1px solid #1E293B;margin-top:0.5rem;'>"
-    f"⚡ DAILY — {date_yesterday.strftime('%d %b')} &nbsp;·&nbsp; DoD vs {columns_with_dates[2][1].strftime('%d-%b') if len(columns_with_dates)>2 else '—'} &nbsp;|&nbsp; WoW vs {date_last_week.strftime('%d-%b')}"
-    f"</div>",
+    f"<div class='metric-group-label'>⚡ DAILY — {date_yesterday.strftime('%d %b')} &nbsp;·&nbsp; DoD vs {columns_with_dates[2][1].strftime('%d-%b') if len(columns_with_dates)>2 else '—'} &nbsp;|&nbsp; WoW vs {date_last_week.strftime('%d-%b')}</div>",
     unsafe_allow_html=True,
 )
 cols = st.columns(6)
@@ -1387,13 +1384,13 @@ cols[1].markdown(metric_card(
 fr_color = "#10b981" if fr_yest and fr_yest >= fr_target else ("#fbbf24" if fr_yest and fr_yest >= fr_target * 0.9 else "#fb7185")
 fr_wow_delta = delta_html(fr_yest, val(180, col_last_week), percent=True, label_suffix="WoW")
 fr_dod_delta = delta_html(fr_yest, val(180, col_dod_kpi), percent=True, label_suffix="DoD") if col_dod_kpi else ""
-fr_daily_html = f"""
-<div class="metric-card" style="border-color:{fr_color}33;">
-  <div class="metric-label">FR%</div>
-  <div class="metric-value" style="color:{fr_color};">{format_percent(fr_yest)}</div>
-  <div class="metric-badges">{fr_dod_delta}{fr_wow_delta}<span class="delta-badge {'pos' if fr_yest and fr_yest >= fr_target else 'neg'}"><span class="badge-label">Target</span>{'✅' if fr_yest and fr_yest >= fr_target else '⚠️'}{fr_target:.0%}</span></div>
-  <div class="metric-context">LM avg: {format_percent(fr_lm_mtd_avg)}</div>
-</div>"""
+fr_daily_html = metric_card(
+    "FR%",
+    format_percent(fr_yest),
+    f"{fr_dod_delta}{fr_wow_delta}<span class='delta-badge {'pos' if fr_yest and fr_yest >= fr_target else 'neg'}'><span class='badge-label'>Target</span>{fr_target:.0%}</span>",
+    f"LM avg: {format_percent(fr_lm_mtd_avg)}",
+    "metric-card-green"
+)
 cols[2].markdown(fr_daily_html, unsafe_allow_html=True)
 
 # 4. Active Drivers
@@ -1428,10 +1425,7 @@ cols[5].markdown(metric_card(
 
 # ── GROUP 2: MTD — Lũy kế tháng + vs LM same period & whole month ─────────
 st.markdown(
-    f"<div style='font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;"
-    f"color:#64748B;padding:0.4rem 0 0.2rem;border-top:1px solid #1E293B;margin-top:0.75rem;'>"
-    f"📅 MTD — {date_yesterday.strftime('%b %Y')} &nbsp;·&nbsp; vs LM same period ({lm_period_label}) &amp; LM whole May"
-    f"</div>",
+    f"<div class='metric-group-label'>📅 MTD — {date_yesterday.strftime('%b %Y')} &nbsp;·&nbsp; vs LM same period ({lm_period_label}) &amp; LM whole May</div>",
     unsafe_allow_html=True,
 )
 cols2 = st.columns(6)
@@ -1456,13 +1450,13 @@ cols2[1].markdown(metric_card(
 # 3. FR% MTD avg
 fr_mtd_avg = get_row_lm_mtd_mean(180)
 fr_color_mtd = "#10b981" if fr_mtd_avg and fr_mtd_avg >= fr_target else ("#fbbf24" if fr_mtd_avg and fr_mtd_avg >= fr_target * 0.9 else "#fb7185")
-fr_mtd_html = f"""
-<div class="metric-card" style="border-color:{fr_color_mtd}33;">
-  <div class="metric-label">FR% MTD avg</div>
-  <div class="metric-value" style="color:{fr_color_mtd};">{format_percent(fr_mtd_avg)}</div>
-  <div class="metric-badges">{delta_html(fr_mtd_avg, fr_lm_mtd_avg, percent=True, label_suffix="vs LM")}</div>
-  <div class="metric-context">LM same period: {format_percent(fr_lm_mtd_avg)} &nbsp;·&nbsp; LM whole: {format_percent(fr_lm_full)}</div>
-</div>"""
+fr_mtd_html = metric_card(
+    "FR% MTD avg",
+    format_percent(fr_mtd_avg),
+    delta_html(fr_mtd_avg, fr_lm_mtd_avg, percent=True, label_suffix="vs LM"),
+    f"LM same period: {format_percent(fr_lm_mtd_avg)} &nbsp;·&nbsp; LM whole: {format_percent(fr_lm_full)}",
+    "metric-card-green"
+)
 cols2[2].markdown(fr_mtd_html, unsafe_allow_html=True)
 
 # 4. Supply Hours MTD
@@ -1530,13 +1524,13 @@ cols3[1].markdown(metric_card(
 ), unsafe_allow_html=True)
 
 fr_color_wtd = "#10b981" if fr_wtd and fr_wtd >= fr_target else ("#fbbf24" if fr_wtd and fr_wtd >= fr_target * 0.9 else "#fb7185")
-fr_wtd_html = f"""
-<div class="metric-card" style="border-color:{fr_color_wtd}33;">
-  <div class="metric-label">FR% WTD</div>
-  <div class="metric-value" style="color:{fr_color_wtd};">{format_percent(fr_wtd)}</div>
-  <div class="metric-badges">{delta_html(fr_wtd, fr_lwtd, percent=True, label_suffix="vs LWTD")}</div>
-  <div class="metric-context">LWTD: {format_percent(fr_lwtd)}</div>
-</div>"""
+fr_wtd_html = metric_card(
+    "FR% WTD",
+    format_percent(fr_wtd),
+    delta_html(fr_wtd, fr_lwtd, percent=True, label_suffix="vs LWTD"),
+    f"LWTD: {format_percent(fr_lwtd)}",
+    "metric-card-green"
+)
 cols3[2].markdown(fr_wtd_html, unsafe_allow_html=True)
 
 cols3[3].markdown(metric_card(
@@ -1976,7 +1970,7 @@ with dem_tab3:
             barmode="stack",
             title={"text": "Channel Mix % (Actual Request)", "font": {"size": 14, "color": "#F8FAFC"}},
             yaxis={"tickformat": ".0%"},
-            font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
+            font={"family": "Inter, sans-serif", "color": "#F8FAFC"},
             paper_bgcolor="#1E293B", plot_bgcolor="#1E293B",
             margin={"l": 30, "r": 30, "t": 60, "b": 30},
             legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "xanchor": "right", "x": 1},
@@ -2392,7 +2386,7 @@ with adv_tab2:
         ))
         fig_wd.update_layout(
             title={"text": "Average Actual Request by Weekday (90 ngày gần nhất)", "font": {"size": 14, "color": "#F8FAFC"}},
-            font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
+            font={"family": "Inter, sans-serif", "color": "#F8FAFC"},
             paper_bgcolor="#1E293B", plot_bgcolor="#1E293B",
             margin={"l": 30, "r": 30, "t": 60, "b": 30},
             hovermode="closest", template="plotly_dark",
@@ -2431,7 +2425,7 @@ with adv_tab2:
         fig_fr_wd.update_layout(
             title={"text": "Average FR% by Weekday", "font": {"size": 14, "color": "#F8FAFC"}},
             yaxis={"tickformat": ".0%"},
-            font={"family": "Montserrat, sans-serif", "color": "#F8FAFC"},
+            font={"family": "Inter, sans-serif", "color": "#F8FAFC"},
             paper_bgcolor="#1E293B", plot_bgcolor="#1E293B",
             margin={"l": 30, "r": 30, "t": 60, "b": 30},
             hovermode="closest", template="plotly_dark",
