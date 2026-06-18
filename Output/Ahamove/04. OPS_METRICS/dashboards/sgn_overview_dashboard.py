@@ -78,40 +78,39 @@ st.markdown(
 
     /* Metric Cards — React template style */
     .metric-card {
-        background: rgba(30,41,59,0.6);
-        border: 1px solid rgba(51,65,85,0.6);
-        border-radius: 1rem;
-        padding: 1.2rem 1.3rem 1rem;
-        box-shadow: 0 8px 24px -12px rgba(0,0,0,0.5);
+        background: #182235 !important;
+        border: 1px solid #2A3A52;
+        border-radius: 1.05rem;
+        padding: 1.25rem 1.35rem;
+        box-shadow: none;
         display: flex; flex-direction: column; justify-content: space-between;
-        min-height: 130px;
-        transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
-        backdrop-filter: blur(4px);
+        min-height: 132px;
+        transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
     }
-    .metric-card:hover { background: rgba(30,41,59,0.95); box-shadow: 0 14px 30px -8px rgba(0,0,0,0.65); border-color: #475569; transform: translateY(-1px); }
-    .metric-card-accent { border-color: #FF7F32 !important; background: linear-gradient(135deg, rgba(30,41,59,0.7) 0%, rgba(26,34,53,0.9) 100%) !important; }
-    .metric-card-green  { border-color: rgba(16,185,129,0.6) !important; }
-    .metric-card-blue   { border-color: rgba(56,189,248,0.6) !important; }
+    .metric-card * { background-color: transparent !important; }
+    .metric-card:hover { background: #1A263A !important; border-color: #3B82F6; transform: translateY(-1px); }
+    .metric-card-accent, .metric-card-green, .metric-card-blue { border-color: #2A3A52 !important; }
 
-    /* Card inner layout */
-    .metric-card-header { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem; }
-    .metric-label  { font-size: 0.73rem; color: #94A3B8; font-weight: 600; letter-spacing: 0.04em; }
-    .metric-value  { font-size: 1.85rem; font-weight: 800; color: #F8FAFC; letter-spacing: -0.03em; line-height: 1.1; }
+    /* Card inner layout — clean executive style */
+    .metric-card-header { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.65rem; }
+    .metric-icon { color:#60A5FA !important; font-size:1.02rem; line-height:1; }
+    .metric-label  { font-size: 0.82rem; color: #A8B3C7 !important; font-weight: 800; letter-spacing: -0.01em; text-transform: none; }
+    .metric-value  { font-size: 2.05rem; font-weight: 900; color: #F8FAFC !important; letter-spacing: -0.045em; line-height: 1.05; margin: 0.1rem 0 0.35rem; }
     .metric-value-lg { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.03em; }
     .metric-context { color: #64748B; font-size: 0.7rem; margin-top: 0.25rem; line-height: 1.4; }
 
     /* Delta pill badges (DoD / WoW) — React KpiCard style */
-    .metric-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.55rem; }
+    .metric-badges { display: flex; gap: 0.55rem; flex-wrap: wrap; margin-top: 0.55rem; }
     .delta-badge {
         display: inline-flex; align-items: center; gap: 0.25rem;
-        background: rgba(15,23,42,0.6);
-        padding: 0.18rem 0.5rem; border-radius: 0.4rem;
-        font-size: 0.72rem; font-weight: 700; white-space: nowrap;
+        background: #111B2B !important;
+        padding: 0.32rem 0.6rem; border-radius: 0.45rem;
+        font-size: 0.76rem; font-weight: 800; white-space: nowrap;
     }
-    .delta-badge .badge-label { color: #64748B; font-size: 0.65rem; font-weight: 700; margin-right: 0.1rem; }
-    .delta-badge.pos { color: #34D399; }
-    .delta-badge.neg { color: #F87171; }
-    .delta-badge.neu { color: #94A3B8; }
+    .delta-badge .badge-label { color: #718099 !important; font-size: 0.72rem; font-weight: 800; margin-right: 0.12rem; }
+    .delta-badge.pos { color: #2EE6A6 !important; }
+    .delta-badge.neg { color: #FB7185 !important; }
+    .delta-badge.neu { color: #A8B3C7 !important; }
 
     /* Status pills for tables */
     .pill-on-track   { display:inline-block; padding:0.15rem 0.55rem; border-radius:0.3rem; font-size:0.7rem; font-weight:700; background:rgba(16,185,129,0.12); color:#34D399; border:1px solid rgba(16,185,129,0.25); }
@@ -469,9 +468,20 @@ def metric_card(label, value, delta, context="", accent_class=""):
     delta: HTML string (may contain multiple <span> deltas separated by &nbsp;).
     Wraps delta spans as badge pills automatically.
     """
+    icon = "◎"
+    if "FR" in label or "Fulfillment" in label:
+        icon = "↯"
+    elif "Active" in label or "Driver" in label:
+        icon = "♙"
+    elif "Productivity" in label or "EPH" in label or "Prod" in label:
+        icon = "⚡"
+    elif "Supply" in label:
+        icon = "◷"
+    elif "Demand" in label or "Complete" in label:
+        icon = "⌁"
     return f"""
     <div class="metric-card {accent_class}">
-        <div class="metric-label">{label}</div>
+        <div class="metric-card-header"><span class="metric-icon">{icon}</span><span class="metric-label">{label}</span></div>
         <div class="metric-value">{value}</div>
         <div class="metric-badges">{delta}</div>
         <div class="metric-context">{context}</div>
