@@ -217,9 +217,13 @@ st.markdown(
     .cockpit-table .sticky-col { position: sticky; left: 0; z-index: 3; background: #0f172a !important; box-shadow: 8px 0 14px -14px rgba(0,0,0,0.9); }
     .cockpit-table td.sticky-col { background: #111827 !important; }
     .cockpit-table tr:hover td.sticky-col { background: #334155 !important; }
-    .cockpit-table .delta-badge { min-width: 3.9rem; padding: 0.18rem 0.35rem; border-radius: 0; font-size: 0.76rem; }
+    .cockpit-table .delta-badge { min-width: 0; padding: 0; border: 0; background: transparent !important; border-radius: 0; font-size: 0.78rem; font-weight: 900; }
+    .cockpit-table .delta-badge.pos, .cockpit-table .delta-badge.neg, .cockpit-table .delta-badge.neu { background: transparent !important; border-color: transparent !important; }
     .cockpit-table .delta-badge .badge-label { display: none; }
-    .cockpit-table .delta-abs { display:block; margin-top:0.18rem; color:var(--muted); font-size:0.66rem; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; }
+    .cockpit-table .delta-abs { display:block; margin-top:0.22rem; font-size:0.68rem; font-weight:900; line-height:1; font-variant-numeric:tabular-nums; }
+    .cockpit-table td.delta-pos .delta-badge, .cockpit-table td.delta-pos .delta-abs { color: var(--emerald) !important; }
+    .cockpit-table td.delta-neg .delta-badge, .cockpit-table td.delta-neg .delta-abs { color: var(--rose) !important; }
+    .cockpit-table td.delta-neu .delta-badge, .cockpit-table td.delta-neu .delta-abs { color: var(--amber) !important; }
 
     .hdr-actual-current, .hdr-actual-past, .hdr-plan, .hdr-today {
         background: #0f172a !important;
@@ -1635,17 +1639,18 @@ def delta_cell_abs(pct_v, abs_v, positive_is_good=True, is_pct_metric=False):
         return "<td class='val-neutral'>—</td>"
     good = pct_v >= 0 if positive_is_good else pct_v < 0
     cls = "pos" if good else "neg"
+    td_cls = "delta-pos" if good else "delta-neg"
     arrow = "▲" if pct_v >= 0 else "▼"
     pct_str = f"{arrow}{abs(pct_v):.1%}"
     if abs_v is None:
-        return f"<td><span class='delta-badge {cls}'>{pct_str}</span></td>"
+        return f"<td class='{td_cls}'><span class='delta-badge {cls}'>{pct_str}</span></td>"
     if is_pct_metric:
         abs_str = f"{abs_v:+.1%}"
     elif abs(abs_v) < 10 and abs_v != int(abs_v):
         abs_str = f"{abs_v:+.2f}"
     else:
         abs_str = f"{abs_v:+,.0f}"
-    return f"<td><span class='delta-badge {cls}'>{pct_str}</span><span class='delta-abs'>{abs_str}</span></td>"
+    return f"<td class='{td_cls}'><span class='delta-badge {cls}'>{pct_str}</span><span class='delta-abs'>{abs_str}</span></td>"
 html_table = f"""
 <div class="cockpit-table-container">
   <table class="cockpit-table">
