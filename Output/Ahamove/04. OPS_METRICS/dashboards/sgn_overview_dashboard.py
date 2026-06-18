@@ -223,7 +223,7 @@ st.markdown(
     .cockpit-table .delta-badge { min-width: 0; padding: 0; border: 0; background: transparent !important; border-radius: 0; font-size: 0.70rem; font-weight: 900; line-height: 1; }
     .cockpit-table .delta-badge.pos, .cockpit-table .delta-badge.neg, .cockpit-table .delta-badge.neu { background: transparent !important; border-color: transparent !important; }
     .cockpit-table .delta-badge .badge-label { display: none; }
-    .cockpit-table .delta-abs { display:block; margin-top:0.06rem; font-size:0.62rem; font-weight:900; line-height:0.98; font-variant-numeric:tabular-nums; }
+    .cockpit-table .delta-abs { display:block; margin-top:0.06rem; font-size:0.62rem; font-weight:600; font-style:italic; line-height:0.98; font-variant-numeric:tabular-nums; opacity:0.9; }
     .cockpit-table td.delta-pos .delta-badge, .cockpit-table td.delta-pos .delta-abs { color: var(--emerald) !important; }
     .cockpit-table td.delta-neg .delta-badge, .cockpit-table td.delta-neg .delta-abs { color: var(--rose) !important; }
     .cockpit-table td.delta-neu .delta-badge, .cockpit-table td.delta-neu .delta-abs { color: var(--amber) !important; }
