@@ -94,14 +94,18 @@ st.markdown(
         letter-spacing: -0.02em;
     }
     .metric-group-label {
-        font-size: 0.72rem;
-        font-weight: 800;
+        font-size: 0.74rem;
+        font-weight: 900;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: var(--muted) !important;
-        padding: 0.75rem 0 0.45rem;
-        border-top: 1px solid rgba(51,65,85,0.7);
-        margin-top: 0.9rem;
+        color: #dbeafe !important;
+        padding: 0.55rem 0.85rem;
+        border: 1px solid rgba(96,165,250,0.18);
+        border-left: 4px solid #60a5fa;
+        border-radius: 0.75rem;
+        margin: 1rem 0 0.75rem;
+        background: linear-gradient(90deg, rgba(59,130,246,0.16), rgba(15,23,42,0.18)) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.035);
     }
 
     .metric-card {
@@ -133,10 +137,11 @@ st.markdown(
     }
     .metric-icon { color: #60a5fa !important; font-size: 1.28rem; line-height: 1; width:1.55rem; height:1.55rem; display:inline-flex; align-items:center; justify-content:center; border-radius:0.55rem; background:rgba(96,165,250,0.10) !important; }
     .metric-label {
-        color: var(--muted) !important;
-        font-size: 0.82rem;
-        font-weight: 900;
+        color: #dbeafe !important;
+        font-size: 0.86rem;
+        font-weight: 950;
         letter-spacing: -0.012em;
+        text-shadow: 0 1px 0 rgba(0,0,0,0.35);
     }
     .metric-value {
         color: var(--text) !important;
@@ -220,6 +225,8 @@ st.markdown(
         line-height: 1.08;
     }
     .cockpit-table th:first-child, .cockpit-table td:first-child { text-align: left; }
+    .cockpit-table thead th { color:#e2e8f0 !important; font-weight:950; text-shadow:0 1px 0 rgba(0,0,0,0.4); }
+    .cockpit-table thead th.sticky-col { background: linear-gradient(180deg, rgba(51,65,85,0.70), rgba(15,23,42,0.98)) !important; color:#f8fafc !important; }
     .cockpit-table tr { transition: background-color 0.12s ease; }
     .cockpit-table tr:hover { background-color: #334155 !important; filter: none; }
     .cockpit-table .row-header { color: #60a5fa !important; font-weight: 800; }
@@ -236,11 +243,11 @@ st.markdown(
     .cockpit-table td.delta-neg .delta-badge, .cockpit-table td.delta-neg .delta-abs { color: var(--rose) !important; }
     .cockpit-table td.delta-neu .delta-badge, .cockpit-table td.delta-neu .delta-abs { color: var(--amber) !important; }
 
-    .hdr-actual-current { background: rgba(59,130,246,0.18) !important; color: #bfdbfe !important; text-align: center !important; border-color: rgba(96,165,250,0.30) !important; }
-    .hdr-actual-past { background: rgba(148,163,184,0.13) !important; color: #cbd5e1 !important; text-align: center !important; border-color: rgba(148,163,184,0.22) !important; }
-    .hdr-plan { background: rgba(251,191,36,0.13) !important; color: #fde68a !important; text-align: center !important; border-color: rgba(251,191,36,0.22) !important; }
-    .hdr-today { background: rgba(16,185,129,0.15) !important; color: #a7f3d0 !important; text-align: center !important; border-color: rgba(16,185,129,0.24) !important; }
-    .hdr-delta { background: rgba(167,139,250,0.15) !important; color: #ddd6fe !important; text-align: center !important; border-color: rgba(167,139,250,0.24) !important; }
+    .hdr-actual-current { background: linear-gradient(180deg, rgba(59,130,246,0.34), rgba(59,130,246,0.16)) !important; color: #eff6ff !important; text-align: center !important; border-color: rgba(96,165,250,0.45) !important; }
+    .hdr-actual-past { background: linear-gradient(180deg, rgba(148,163,184,0.24), rgba(148,163,184,0.11)) !important; color: #f1f5f9 !important; text-align: center !important; border-color: rgba(148,163,184,0.34) !important; }
+    .hdr-plan { background: linear-gradient(180deg, rgba(251,191,36,0.28), rgba(251,191,36,0.12)) !important; color: #fef3c7 !important; text-align: center !important; border-color: rgba(251,191,36,0.40) !important; }
+    .hdr-today { background: linear-gradient(180deg, rgba(16,185,129,0.30), rgba(16,185,129,0.13)) !important; color: #ecfdf5 !important; text-align: center !important; border-color: rgba(16,185,129,0.42) !important; }
+    .hdr-delta { background: linear-gradient(180deg, rgba(167,139,250,0.30), rgba(167,139,250,0.13)) !important; color: #f5f3ff !important; text-align: center !important; border-color: rgba(167,139,250,0.42) !important; }
     .cockpit-table td.col-current { background: rgba(59,130,246,0.045) !important; }
     .cockpit-table td.col-past { background: rgba(148,163,184,0.035) !important; }
     .cockpit-table td.col-plan { background: rgba(251,191,36,0.035) !important; }
