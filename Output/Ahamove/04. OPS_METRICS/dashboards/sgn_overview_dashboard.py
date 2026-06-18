@@ -174,7 +174,7 @@ st.markdown(
 
     .cockpit-table-container {
         overflow-x: auto;
-        margin: 0.55rem 0;
+        margin: 0.45rem 0;
         border-radius: 0.85rem;
         border: 1px solid var(--border);
         background: var(--card-soft);
@@ -184,46 +184,46 @@ st.markdown(
         border-collapse: collapse;
         table-layout: auto;
         color: var(--text);
-        font-size: 0.72rem;
+        font-size: 0.70rem;
         text-align: left;
         font-variant-numeric: tabular-nums;
-        line-height: 1.15;
+        line-height: 1.08;
     }
     .cockpit-table th {
         background: #0f172a !important;
         color: var(--muted) !important;
         font-weight: 800;
-        padding: 0.32rem 0.46rem;
+        padding: 0.26rem 0.34rem;
         border-bottom: 1px solid var(--border);
         text-transform: uppercase;
-        font-size: 0.58rem;
-        letter-spacing: 0.045em;
+        font-size: 0.56rem;
+        letter-spacing: 0.035em;
         white-space: nowrap;
-        line-height: 1.15;
+        line-height: 1.08;
     }
     .cockpit-table td {
         background: transparent !important;
-        padding: 0.28rem 0.46rem;
+        padding: 0.22rem 0.34rem;
         border-bottom: 1px solid var(--border);
         font-weight: 700;
         white-space: nowrap;
         text-align: right;
-        height: 1.7rem;
-        line-height: 1.15;
+        height: 1.45rem;
+        line-height: 1.08;
     }
     .cockpit-table th:first-child, .cockpit-table td:first-child { text-align: left; }
     .cockpit-table tr { transition: background-color 0.12s ease; }
     .cockpit-table tr:hover { background-color: #334155 !important; filter: none; }
     .cockpit-table .row-header { color: #60a5fa !important; font-weight: 800; }
-    .cockpit-table .row-header td { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); font-size: 0.86rem; }
-    .cockpit-table .sub-row-header { color: #cbd5e1 !important; padding-left: 1.65rem !important; font-weight: 600; }
+    .cockpit-table .row-header td { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); font-size: 0.76rem; }
+    .cockpit-table .sub-row-header { color: #cbd5e1 !important; padding-left: 1.05rem !important; font-weight: 600; }
     .cockpit-table .sticky-col { position: sticky; left: 0; z-index: 3; background: #0f172a !important; box-shadow: 8px 0 14px -14px rgba(0,0,0,0.9); }
     .cockpit-table td.sticky-col { background: #111827 !important; }
     .cockpit-table tr:hover td.sticky-col { background: #334155 !important; }
-    .cockpit-table .delta-badge { min-width: 0; padding: 0; border: 0; background: transparent !important; border-radius: 0; font-size: 0.78rem; font-weight: 900; }
+    .cockpit-table .delta-badge { min-width: 0; padding: 0; border: 0; background: transparent !important; border-radius: 0; font-size: 0.70rem; font-weight: 900; line-height: 1; }
     .cockpit-table .delta-badge.pos, .cockpit-table .delta-badge.neg, .cockpit-table .delta-badge.neu { background: transparent !important; border-color: transparent !important; }
     .cockpit-table .delta-badge .badge-label { display: none; }
-    .cockpit-table .delta-abs { display:block; margin-top:0.22rem; font-size:0.68rem; font-weight:900; line-height:1; font-variant-numeric:tabular-nums; }
+    .cockpit-table .delta-abs { display:block; margin-top:0.06rem; font-size:0.62rem; font-weight:900; line-height:0.98; font-variant-numeric:tabular-nums; }
     .cockpit-table td.delta-pos .delta-badge, .cockpit-table td.delta-pos .delta-abs { color: var(--emerald) !important; }
     .cockpit-table td.delta-neg .delta-badge, .cockpit-table td.delta-neg .delta-abs { color: var(--rose) !important; }
     .cockpit-table td.delta-neu .delta-badge, .cockpit-table td.delta-neu .delta-abs { color: var(--amber) !important; }
@@ -237,22 +237,24 @@ st.markdown(
     .val-positive { color: var(--emerald) !important; font-weight: 800; }
     .val-negative { color: var(--rose) !important; font-weight: 800; }
     .val-neutral { color: var(--muted) !important; }
-    .val-planning-today { color: var(--emerald) !important; background: rgba(16,185,129,0.10) !important; border-radius: 0.35rem; padding: 0.1rem 0.35rem; }
+    .val-planning-today { color: var(--emerald) !important; background: rgba(16,185,129,0.10) !important; border-radius: 0.28rem; padding: 0.05rem 0.2rem; }
 
-    .analysis-table { width:100%; border-collapse:collapse; color:var(--text); font-size:0.84rem; }
-    .analysis-table th { background:#0f172a !important; color:var(--muted) !important; font-weight:800; padding:0.6rem 0.65rem; border-bottom:1px solid var(--border); text-transform:uppercase; font-size:0.68rem; letter-spacing:0.05em; text-align:center; white-space:nowrap; }
+    .analysis-table { width:100%; border-collapse:collapse; color:var(--text); font-size:0.72rem; line-height:1.08; font-variant-numeric:tabular-nums; }
+    .analysis-table th { background:#0f172a !important; color:var(--muted) !important; font-weight:800; padding:0.30rem 0.34rem; border-bottom:1px solid var(--border); text-transform:uppercase; font-size:0.56rem; letter-spacing:0.035em; text-align:center; white-space:nowrap; line-height:1.08; }
     .analysis-table th:first-child { text-align:left; }
-    .analysis-table td { padding:0.58rem 0.65rem; border-bottom:1px solid var(--border); text-align:center; }
+    .analysis-table td { padding:0.24rem 0.34rem; border-bottom:1px solid var(--border); text-align:center; white-space:nowrap; line-height:1.08; }
     .analysis-table td:first-child { text-align:left; font-weight:800; }
     .analysis-table tr:hover { background-color:#334155 !important; }
     .analysis-table .total-row { background:rgba(59,130,246,0.08) !important; font-weight:800; color:#60a5fa !important; border-top:1px solid var(--border); }
     .analysis-table .sticky-col { position: sticky; left: 0; z-index: 3; background: #0f172a !important; box-shadow: 8px 0 14px -14px rgba(0,0,0,0.9); }
-    .fr-matrix-table td, .fr-matrix-table th { min-width: 6.2rem; }
-    .fr-matrix-table td:first-child, .fr-matrix-table th:first-child { min-width: 9rem; }
+    .analysis-table small, .analysis-table span[style*="font-size:0.65rem"] { font-size:0.58rem !important; line-height:1 !important; }
+    .analysis-table br + small, .analysis-table br + span { display:inline-block; margin-top:0.04rem; }
+    .fr-matrix-table td, .fr-matrix-table th { min-width: 4.9rem; }
+    .fr-matrix-table td:first-child, .fr-matrix-table th:first-child { min-width: 7rem; }
 
-    .leaderboard-card { background:var(--card); border:1px solid var(--border); border-radius:1rem; padding:1rem; margin-bottom:0.75rem; }
-    .leaderboard-title { color:var(--text); font-weight:800; font-size:0.9rem; margin-bottom:0.65rem; text-transform:uppercase; letter-spacing:0.05em; }
-    .leaderboard-row { display:flex; justify-content:space-between; align-items:center; padding:0.42rem 0.65rem; margin-bottom:0.35rem; border-radius:0.5rem; background:rgba(15,23,42,0.45); }
+    .leaderboard-card { background:var(--card); border:1px solid var(--border); border-radius:0.85rem; padding:0.65rem; margin-bottom:0.55rem; }
+    .leaderboard-title { color:var(--text); font-weight:800; font-size:0.78rem; margin-bottom:0.42rem; text-transform:uppercase; letter-spacing:0.04em; }
+    .leaderboard-row { display:flex; justify-content:space-between; align-items:center; padding:0.30rem 0.45rem; margin-bottom:0.25rem; border-radius:0.45rem; background:rgba(15,23,42,0.45); font-size:0.74rem; }
     .rank-1, .rank-2, .rank-3 { border:1px solid var(--border); }
     .rank-1 .rank-badge { color:var(--emerald); }
     .rank-2 .rank-badge { color:var(--amber); }
@@ -1813,7 +1815,7 @@ with dem_tab1:
             color = "#10b981" if fr_ch_val >= fr_target else ("#fbbf24" if fr_ch_val >= fr_target * 0.9 else "#fb7185")
             fr_ch_html += f"<tr><td>{ch_name}</td><td style='color:{color};font-weight:700;'>{fr_ch_val:.1%}</td><td>{status}</td></tr>"
         fr_ch_html += "</tbody></table>"
-        st.markdown(f"<div style='background:#1E293B;padding:1rem;border-radius:0.5rem;border:1px solid #334155;'>{fr_ch_html}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='background:#1E293B;padding:0.55rem;border-radius:0.5rem;border:1px solid #334155;'>{fr_ch_html}</div>", unsafe_allow_html=True)
 
 with dem_tab2:
     channels = ["GHN", "KA", "MP", "SME", "WH"]
@@ -2266,7 +2268,7 @@ with sup_tab1:
 {_sh_delta_td(mtd_v, lm_mtd_v)}
 </tr>"""
         sh_detail_html += "</tbody></table>"
-        st.markdown(f"<div style='overflow-x:auto;background:#1E293B;padding:1rem;border-radius:0.5rem;border:1px solid #334155;'>{sh_detail_html}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='overflow-x:auto;background:#1E293B;padding:0.55rem;border-radius:0.5rem;border:1px solid #334155;'>{sh_detail_html}</div>", unsafe_allow_html=True)
 
     with _tbl_col2:
         st.markdown(f"**Supply Snapshot — Yest vs LM cùng kỳ**")
@@ -2302,7 +2304,7 @@ with sup_tab1:
                 mtd_str = f"<span style='color:#64748B;'>—</span><br><small>{fmt(lm_mtd_a)}</small>"
             supply_snap_html += f"<tr><td><b>{name}</b></td><td>{fmt(yv)}</td><td>{sd_str}</td><td>{mtd_str}</td></tr>"
         supply_snap_html += "</tbody></table>"
-        st.markdown(f"<div style='background:#1E293B;padding:1rem;border-radius:0.5rem;border:1px solid #334155;'>{supply_snap_html}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='background:#1E293B;padding:0.55rem;border-radius:0.5rem;border:1px solid #334155;'>{supply_snap_html}</div>", unsafe_allow_html=True)
 
 with sup_tab2:
     # Segment Efficiency Table: Active / Cap / OnlineHrs / Prod / Online/Driver / Prod/OnlineHr
@@ -2622,13 +2624,13 @@ with adv_tab3:
         acc_rate_color = "val-positive" if acc_rate >= 0.80 else ("val-neutral" if acc_rate >= 0.50 else "val-negative")
 
         accuracy_rows_html += f"""<tr>
-<td style='padding: 0.4rem; font-weight:700;'>{name}</td>
-<td style='padding: 0.4rem;'>95% - 105%</td>
-<td style='padding: 0.4rem; text-align:center;'>{day_pass}</td>
-<td style='padding: 0.4rem; text-align:center;' class='{acc_rate_color}'>{acc_rate:.1%}</td>
-<td style='padding: 0.4rem; text-align:center;'>{day_under}</td>
-<td style='padding: 0.4rem; text-align:center;'>{day_over}</td>
-<td style='padding: 0.4rem; text-align:center; color:#64748B;'>{valid_days}</td>
+<td style='padding: 0.28rem 0.34rem; font-weight:700;'>{name}</td>
+<td style='padding: 0.28rem 0.34rem;'>95% - 105%</td>
+<td style='padding: 0.28rem 0.34rem; text-align:center;'>{day_pass}</td>
+<td style='padding: 0.28rem 0.34rem; text-align:center;' class='{acc_rate_color}'>{acc_rate:.1%}</td>
+<td style='padding: 0.28rem 0.34rem; text-align:center;'>{day_under}</td>
+<td style='padding: 0.28rem 0.34rem; text-align:center;'>{day_over}</td>
+<td style='padding: 0.28rem 0.34rem; text-align:center; color:#64748B;'>{valid_days}</td>
 </tr>"""
 
     st.markdown(
