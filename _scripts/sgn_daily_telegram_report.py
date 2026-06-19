@@ -292,20 +292,20 @@ def capture_sections(url, out_dir):
         images.append((daily_path, "Daily Operating Cockpit — Daily view only"))
 
         # FR% by User Group table.
-        page.get_by_role("tab", name=lambda name: name and "User Group FR" in name).click(timeout=30000)
+        page.locator('[role="tab"]').filter(has_text="User Group FR").click(timeout=30000)
         page.wait_for_timeout(1500)
         fr_table = page.locator("table.fr-matrix-table").first
         screenshot_locator(fr_table, "fr-user-group", "FR% by User Group")
 
         # Supply tables under Active Driver Trend.
-        page.get_by_role("tab", name=lambda name: name and "Active Driver Trend" in name).click(timeout=30000)
+        page.locator('[role="tab"]').filter(has_text="Active Driver Trend").click(timeout=30000)
         page.wait_for_timeout(1500)
         supply_heading = page.locator("text=Supply Hours — DoD / WoW / WTD / MTD").first
         supply_table = supply_heading.locator("xpath=following::table[1]")
         screenshot_locator(supply_table, "supply-hours-detail", "Supply Hours — DoD / WoW / WTD / MTD")
 
         # Segment Efficiency table.
-        page.get_by_role("tab", name=lambda name: name and "Segment Efficiency" in name).click(timeout=30000)
+        page.locator('[role="tab"]').filter(has_text="Segment Efficiency").click(timeout=30000)
         page.wait_for_timeout(1500)
         seg_table = page.locator("text=Segment").locator("xpath=ancestor::table[1]").first
         screenshot_locator(seg_table, "segment-efficiency", "Segment Efficiency")
