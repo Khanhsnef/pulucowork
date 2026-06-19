@@ -248,7 +248,7 @@ def capture_sections(url, out_dir):
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        page = browser.new_page(viewport={"width": 2000, "height": 1400}, device_scale_factor=1)
+        page = browser.new_page(viewport={"width": 2200, "height": 1500}, device_scale_factor=2)
         page.goto(url, wait_until="networkidle", timeout=90000)
 
         # Refresh Streamlit cache/data source before capture.
@@ -289,14 +289,29 @@ def capture_sections(url, out_dir):
                 raise RuntimeError(f"No visible table containing: {text}")
             return page.locator(f'table[data-capture-target="{marker}"]').first
 
-        # Executive Summary cards: from section title through monthly card row.
+        # Executive Summary cards only: crop the KPI card grid and remove left/title whitespace.
         exec_title = page.locator("text=Executive Summary").first
-        exec_box = exec_title.bounding_box(timeout=30000)
+        exec_title.bounding_box(timeout=30000)
         daily_table_title = page.locator("text=Daily Operating Cockpit").first
-        next_box = daily_table_title.bounding_box(timeout=30000)
-        exec_clip = {"x": 0, "y": max(0, exec_box["y"] - 10), "width": 2000, "height": max(360, next_box["y"] - exec_box["y"] - 18)}
+        daily_table_title.bounding_box(timeout=30000)
+        card_boxes = page.evaluate(
+            """
+            () => Array.from(document.querySelectorAll('.metric-card'))
+                .map(el => {
+                    const r = el.getBoundingClientRect();
+                    return {x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height};
+                })
+                .filter(r => r.width > 0 && r.height > 0)
+            """
+        )
+        if not card_boxes:
+            raise RuntimeError("No visible KPI metric cards found for Executive Summary capture")
+        min_x = max(0, min(b["x"] for b in card_boxes) - 8)
+        min_y = max(0, min(b["y"] for b in card_boxes) - 8)
+        max_right = min(2200, max(b["right"] for b in card_boxes) + 8)
+        max_bottom = max(b["bottom"] for b in card_boxes) + 8
         exec_path = out_dir / f"{date_stamp}-executive-summary.png"
-        page.screenshot(path=str(exec_path), clip=exec_clip)
+        page.screenshot(path=str(exec_path), clip={"x": min_x, "y": min_y, "width": max_right - min_x, "height": max_bottom - min_y})
         images.append((exec_path, "Executive Summary — KPI Pulse"))
 
         # Daily cockpit table: crop left daily block only, not MTD.
