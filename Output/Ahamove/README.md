@@ -2,7 +2,7 @@
 
 **Owner:** Lê Phương Khanh | Driver Management Leader  
 **Scope:** Xe máy (Instant) — Giao ngay 1H, Siêu tốc, Ghép đơn, 4H  
-**Last updated:** 2026-06-18
+**Last updated:** 2026-06-19
 
 ---
 
@@ -208,6 +208,8 @@ Output/Ahamove/
 #### `monitoring/`
 | File | Mô tả |
 |------|-------|
+| `2026-06-19-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 19/06: GSM thay CEO (Nguyễn Văn Thanh rời ghế) & DoorDash gặp sự cố |
+| `2026-06-19-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 19/06 |
 | `2026-06-18-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 18/06: Uber tập trung Robotaxi & Be kết hợp B2B y tế |
 | `2026-06-18-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 18/06 |
 | `2026-06-17-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 17/06: GSM ký Taxi Quê Lụa, GrabBenefits & Be Group EV lobby |
@@ -266,4 +268,4 @@ streamlit run "output/Ahamove/04. OPS_METRICS/dashboards/sgn_overview_dashboard.
 
 ---
 
-*Last updated: 2026-06-18 | Scanned by Claude Code*
+*Last updated: 2026-06-19 | Scanned by Claude Code*
