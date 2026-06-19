@@ -266,6 +266,29 @@ def capture_sections(url, out_dir):
             locator.screenshot(path=str(path), timeout=30000)
             images.append((path, caption))
 
+        def visible_table_containing(text, marker):
+            ok = page.evaluate(
+                """
+                ({text, marker}) => {
+                    const tables = Array.from(document.querySelectorAll('table'));
+                    for (const table of tables) {
+                        const rect = table.getBoundingClientRect();
+                        const style = window.getComputedStyle(table);
+                        const visible = rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
+                        if (visible && table.innerText.includes(text)) {
+                            table.setAttribute('data-capture-target', marker);
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                """,
+                {"text": text, "marker": marker},
+            )
+            if not ok:
+                raise RuntimeError(f"No visible table containing: {text}")
+            return page.locator(f'table[data-capture-target="{marker}"]').first
+
         # Executive Summary cards: from section title through monthly card row.
         exec_title = page.locator("text=Executive Summary").first
         exec_box = exec_title.bounding_box(timeout=30000)
@@ -294,20 +317,19 @@ def capture_sections(url, out_dir):
         # FR% by User Group table.
         page.locator('[role="tab"]').filter(has_text="User Group FR").click(timeout=30000)
         page.wait_for_timeout(1500)
-        fr_table = page.locator("table.fr-matrix-table").first
+        fr_table = visible_table_containing("USER GROUP", "fr-user-group")
         screenshot_locator(fr_table, "fr-user-group", "FR% by User Group")
 
         # Supply tables under Active Driver Trend.
         page.locator('[role="tab"]').filter(has_text="Active Driver Trend").click(timeout=30000)
         page.wait_for_timeout(1500)
-        supply_heading = page.locator("text=Supply Hours — DoD / WoW / WTD / MTD").first
-        supply_table = supply_heading.locator("xpath=following::table[1]")
+        supply_table = visible_table_containing("WTD VS LWTD", "supply-hours-detail")
         screenshot_locator(supply_table, "supply-hours-detail", "Supply Hours — DoD / WoW / WTD / MTD")
 
         # Segment Efficiency table.
         page.locator('[role="tab"]').filter(has_text="Segment Efficiency").click(timeout=30000)
         page.wait_for_timeout(1500)
-        seg_table = page.locator("text=Segment").locator("xpath=ancestor::table[1]").first
+        seg_table = visible_table_containing("PROD/ONLINEHR", "segment-efficiency")
         screenshot_locator(seg_table, "segment-efficiency", "Segment Efficiency")
 
         browser.close()
