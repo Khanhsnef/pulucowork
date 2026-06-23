@@ -88,13 +88,11 @@ Xây dựng **AhaBenefits v2.0** — hệ thống tích lũy điểm và đổi 
 
 | Platform | Tên chương trình | Cơ chế tích điểm | Catalog | Điểm mạnh | Điểm yếu |
 |----------|-----------------|------------------|---------|-----------|----------|
-| **Grab (MY/SG)** | GrabRewards for Drivers | Điểm theo trip + weekly challenge | Nhiên liệu, bảo hiểm, thiết bị | Tích hợp sâu vào app, UX mượt | Chỉ phát triển tốt ở SG/MY, VN chưa đẩy mạnh |
+| **Grab (VN/MY/SG)** | GrabRewards for Drivers | Điểm theo trip + weekly challenge | Nhiên liệu, bảo hiểm, thiết bị | Tích hợp sâu vào app, UX mượt 
 | **Gojek (ID)** | GoPoints | Điểm theo GSV + tier GoClub | F&B, health, data | Ecosystem rộng (GoFood, GoPay) | Leverage internal ecosystem, khó replicate |
 | **Uber (US)** | Uber Pro | Điểm theo trips, tier Gold/Platinum/Diamond | Cashback xăng, phí app, học phí | Điểm đổi phí dịch vụ (high perceived value) | Market khác biệt, model không apply trực tiếp |
 | **DoorDash (US)** | DoorDash Rewards | Streak bonus, challenge | Voucher Chevron, thiết bị | Streak mechanic hiệu quả | Delivery-only, không phù hợp model Bike VN |
-| **Lalamove (HK/VN)** | — | Không có chương trình loyalty công bố | — | — | Thiếu retention tool |
-| **Be Delivery (VN)** | — | Không có điểm tích lũy công bố, chủ yếu cash promo | — | Agile promo response | Burn cash, không tạo loyalty |
-| **Grab Express (VN)** | — | Flash incentive theo campaign | — | Brand awareness cao | Không có loyalty mechanism bền vững tại VN |
+| **Be Delivery (VN)** | beLoyalty *(customer-side only)* | **Driver: không có loyalty points** — chỉ cash bonus theo trips/zone/giờ, thay đổi theo campaign. beLoyalty là chương trình tích bePoint dành cho hành khách, không phải tài xế | — | Agile promo response | Driver retention hoàn toàn bằng tiền mặt ngắn hạn, không tạo switching cost |
 
 > **Nguồn tham khảo:**
 > - Grab Driver: [grab.com/vn/driver](https://www.grab.com/vn/driver/) — chính sách tài xế VN
