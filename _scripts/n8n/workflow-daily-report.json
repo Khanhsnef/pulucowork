@@ -1,0 +1,88 @@
+{
+  "name": "Ahamove Daily Ops Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 1-6"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule — 8AM Mon-Sat",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://docs.google.com/spreadsheets/d/1Nbc4NYg3u8TxEh1acuWvDH-p6_8Nz8bDNF3j4bLGWvM/export?format=csv&gid=743032311",
+        "options": {}
+      },
+      "id": "fetch-sheet",
+      "name": "Fetch SGN Metrics Sheet",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "model": "claude-sonnet-4-6",
+        "messages": {
+          "values": [
+            {
+              "role": "user",
+              "content": "=Dữ liệu metrics Ahamove SGN hôm nay:\n\n{{ $json.data }}\n\nHãy tóm tắt thành báo cáo Telegram ngắn gọn (tối đa 400 ký tự) với format:\n🚀 *Daily SGN Report {{ $now.format('DD/MM') }}*\n📦 Orders: [số]\n✅ FR: [%]\n⚡ AR: [%]\n💰 CPO: [số]\n\n[1 dòng nhận xét nổi bật nhất]\n\nChỉ trả về text thuần, không thêm giải thích."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "claude-summarize",
+      "name": "Claude — Format Report",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "={{ $json.content[0].text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "telegram-send",
+      "name": "Telegram — Send Report",
+      "type": "n8n-nodes-base.telegram",
+      "position": [860, 300],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-creds",
+          "name": "Telegram Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule — 8AM Mon-Sat": {
+      "main": [[{"node": "Fetch SGN Metrics Sheet", "type": "main", "index": 0}]]
+    },
+    "Fetch SGN Metrics Sheet": {
+      "main": [[{"node": "Claude — Format Report", "type": "main", "index": 0}]]
+    },
+    "Claude — Format Report": {
+      "main": [[{"node": "Telegram — Send Report", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "_meta": {
+    "description": "Gửi Telegram report SGN Ops lúc 8AM các ngày trong tuần. Fetch từ Google Sheet → Claude format → Telegram.",
+    "requiredCredentials": ["telegramApi", "anthropicApi"],
+    "schedule": "0 8 * * 1-6"
+  }
+}

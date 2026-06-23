@@ -1,0 +1,132 @@
+{
+  "name": "Ahamove Competitor Intel Alert",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 */6 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule — Every 6h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "command": "cd /Users/ts-1148/Desktop/Pulu-workspace && python3 _scripts/crawl_competitor_intel.py 2>&1"
+      },
+      "id": "run-crawler",
+      "name": "Run Crawler Script",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "filePath": "/Users/ts-1148/Desktop/Pulu-workspace/Output/Ahamove/06. COMPETITIVE_INTEL/monitoring/raw-signals.json"
+      },
+      "id": "read-signals",
+      "name": "Read Signals JSON",
+      "type": "n8n-nodes-base.readBinaryFile",
+      "position": [620, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse signals and filter last 6h\nconst data = JSON.parse(Buffer.from($input.first().binary.data.data, 'base64').toString());\nconst cutoff = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();\nconst recent = data.filter(s => s.fetched_at > cutoff);\nreturn [{ json: { signals: recent, count: recent.length, hasNew: recent.length > 0 } }];"
+      },
+      "id": "filter-recent",
+      "name": "Filter New Signals (6h)",
+      "type": "n8n-nodes-base.code",
+      "position": [820, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.hasNew }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-new",
+      "name": "Has New Signals?",
+      "type": "n8n-nodes-base.if",
+      "position": [1020, 300]
+    },
+    {
+      "parameters": {
+        "model": "claude-haiku-4-5-20251001",
+        "messages": {
+          "values": [
+            {
+              "role": "user",
+              "content": "=Các tin tức về đối thủ Ahamove trong 6h qua:\n\n{{ $json.signals.slice(0,10).map(s => `[${s.competitor}] ${s.title}`).join('\\n') }}\n\nTóm tắt thành Telegram alert ngắn (tối đa 300 ký tự):\n⚔️ *Competitor Intel Alert*\n{{ 1-3 điểm quan trọng nhất }}\n\nChỉ trả về text thuần."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "claude-summarize",
+      "name": "Claude — Summarize Intel",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "position": [1220, 200]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "={{ $json.content[0].text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "telegram-alert",
+      "name": "Telegram — Send Alert",
+      "type": "n8n-nodes-base.telegram",
+      "position": [1420, 200],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-creds",
+          "name": "Telegram Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule — Every 6h": {
+      "main": [[{"node": "Run Crawler Script", "type": "main", "index": 0}]]
+    },
+    "Run Crawler Script": {
+      "main": [[{"node": "Read Signals JSON", "type": "main", "index": 0}]]
+    },
+    "Read Signals JSON": {
+      "main": [[{"node": "Filter New Signals (6h)", "type": "main", "index": 0}]]
+    },
+    "Filter New Signals (6h)": {
+      "main": [[{"node": "Has New Signals?", "type": "main", "index": 0}]]
+    },
+    "Has New Signals?": {
+      "main": [
+        [{"node": "Claude — Summarize Intel", "type": "main", "index": 0}],
+        []
+      ]
+    },
+    "Claude — Summarize Intel": {
+      "main": [[{"node": "Telegram — Send Alert", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "_meta": {
+    "description": "Mỗi 6h: chạy crawler → filter tin mới → nếu có tin → Claude tóm tắt → gửi Telegram alert.",
+    "requiredCredentials": ["telegramApi", "anthropicApi"],
+    "schedule": "0 */6 * * *"
+  }
+}

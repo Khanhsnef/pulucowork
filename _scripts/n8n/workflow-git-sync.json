@@ -1,0 +1,135 @@
+{
+  "name": "Ahamove Git Auto-Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/30 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule — Every 30min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "command": "cd /Users/ts-1148/Desktop/Pulu-workspace && git status --short 2>&1"
+      },
+      "id": "check-changes",
+      "name": "Check Git Changes",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.stdout.trim() }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "has-changes",
+      "name": "Has Changes?",
+      "type": "n8n-nodes-base.if",
+      "position": [620, 300]
+    },
+    {
+      "parameters": {
+        "command": "cd /Users/ts-1148/Desktop/Pulu-workspace && git add -A && CHANGED=$(git diff --cached --name-only | head -3 | tr '\\n' ' ' | sed 's/ $//') && COUNT=$(git diff --cached --name-only | wc -l | tr -d ' ') && MSG=\"auto-sync: ${CHANGED}\" && [ \"$COUNT\" -gt 3 ] && MSG=\"${MSG} (+$((COUNT-3)) more)\" ; git commit -m \"$MSG\" && git push 2>&1 && echo \"PUSHED:$COUNT files\""
+      },
+      "id": "git-commit-push",
+      "name": "Git Commit & Push",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [820, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.stdout }}",
+              "operation": "contains",
+              "value2": "PUSHED"
+            }
+          ]
+        }
+      },
+      "id": "check-push-ok",
+      "name": "Push Success?",
+      "type": "n8n-nodes-base.if",
+      "position": [1020, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = $input.first().json.stdout || '';\nconst match = output.match(/PUSHED:(\\d+)/);\nconst count = match ? match[1] : '?';\nconst ts = new Date().toLocaleString('vi-VN', {timeZone: 'Asia/Ho_Chi_Minh'});\nreturn [{ json: { message: `✅ *Git Sync* \\`${ts}\\`\\n+${count} files pushed to GitHub`, count } }];"
+      },
+      "id": "format-success",
+      "name": "Format Success Message",
+      "type": "n8n-nodes-base.code",
+      "position": [1220, 100]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "parse_mode": "Markdown",
+          "disable_notification": true
+        }
+      },
+      "id": "telegram-confirm",
+      "name": "Telegram — Silent Confirm",
+      "type": "n8n-nodes-base.telegram",
+      "position": [1420, 100],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-creds",
+          "name": "Telegram Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule — Every 30min": {
+      "main": [[{"node": "Check Git Changes", "type": "main", "index": 0}]]
+    },
+    "Check Git Changes": {
+      "main": [[{"node": "Has Changes?", "type": "main", "index": 0}]]
+    },
+    "Has Changes?": {
+      "main": [
+        [{"node": "Git Commit & Push", "type": "main", "index": 0}],
+        []
+      ]
+    },
+    "Git Commit & Push": {
+      "main": [[{"node": "Check Push Success?", "type": "main", "index": 0}]]
+    },
+    "Check Push Success?": {
+      "main": [
+        [{"node": "Format Success Message", "type": "main", "index": 0}],
+        []
+      ]
+    },
+    "Format Success Message": {
+      "main": [[{"node": "Telegram — Silent Confirm", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "_meta": {
+    "description": "Mỗi 30 phút: check git changes → nếu có → commit + push → gửi Telegram confirm (silent notification). Thay thế launchd job hiện tại.",
+    "requiredCredentials": ["telegramApi"],
+    "schedule": "*/30 * * * *"
+  }
+}
