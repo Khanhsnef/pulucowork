@@ -215,7 +215,7 @@ earned_pts = round( round(trip_GSV ÷ 5,000) × layer_multiplier )
 
 | Điều kiện | Mô tả |
 |-----------|-------|
-| ✅ Online in zone | Online trong zone đăng ký ≥ [X]% thời lượng ca |
+| ✅ Online in zone | Online trong zone đăng ký ≥ 90% thời lượng ca |
 | ✅ Đủ hoạt động | AR và số chuyến tối thiểu trong ca |
 | ❌ Offline/ngoài zone | Không bonus, điểm chuyến giữ nguyên |
 | ❌ Ca bị force-close | Không bonus, điểm chuyến giữ nguyên |
@@ -487,7 +487,187 @@ Driver mở tab AhaBenefits
 
 ---
 
-### 6.4 Bảo hiểm tai nạn R1 — Special Flow
+### 6.4 Reward Delivery Types — 4 loại phát thưởng
+
+Mỗi reward khi được tạo trên Admin tool phải được chỉ định **một** `delivery_type`. Delivery type quyết định cách hệ thống xử lý sau khi điểm được RESERVED và driver xác nhận đổi.
+
+---
+
+#### Type 1 — VOUCHER_CODE (Mã text/số)
+
+**Mô tả:** Hệ thống lấy một mã alphanumeric từ pool do DM team upload sẵn, hiển thị cho driver dưới dạng text để copy/đọc tại điểm bán.
+
+**Ví dụ áp dụng:** Mã giảm giá Urbox, mã nạp data 4G, mã voucher siêu thị.
+
+```
+[DM tạo reward trên Admin]
+  → Upload file danh sách mã (.csv): CODE001, CODE002, CODE003…
+  → Hệ thống lưu vào Code Pool, trạng thái: AVAILABLE
+       │
+[Driver đổi thành công (điểm RESERVED → xác nhận)]
+       │
+       ▼
+[Hệ thống pop 1 mã từ Pool — FIFO]
+  Mã chuyển trạng thái: AVAILABLE → ASSIGNED (gắn driver_id)
+       │
+       ▼
+[Màn hình "Đổi thành công"]
+  Hiển thị: Mã code dạng text lớn + nút [Copy mã]
+  Lưu vào tab "Quà của tôi" (có thể xem lại bất kỳ lúc nào)
+       │
+       ▼
+[Driver mang mã đến cửa hàng đối tác → nhân viên nhập/quét]
+[Đối soát: partner báo về Ahamove danh sách mã đã dùng → batch reconcile]
+```
+
+**Quy tắc Code Pool:**
+- Khi pool còn < 10% mã → Admin nhận alert để upload thêm
+- Khi pool = 0 mã → reward tự động hiển thị "Tạm hết" trên app driver
+- Mã đã ASSIGNED không thể thu hồi dù driver bị suspend (mã đã cam kết)
+- 1 mã chỉ assign cho 1 driver duy nhất (no reuse)
+
+---
+
+#### Type 2 — QR_CODE (Mã QR tại cửa hàng)
+
+**Mô tả:** Hệ thống lấy một mã từ pool do DM upload, render thành QR Code hiển thị trên app driver. Cửa hàng đối tác quét QR bằng máy POS/app riêng để xác nhận sử dụng.
+
+**Ví dụ áp dụng:** Voucher xăng tại trạm Petrolimex, voucher bảo dưỡng tại chuỗi garage đối tác.
+
+```
+[DM tạo reward trên Admin]
+  → Upload file danh sách mã (.csv) — cùng cơ chế pool như Type 1
+  → Chọn delivery_type = QR_CODE
+  → Cấu hình: kích thước QR, logo overlay (nếu có)
+       │
+[Driver đổi thành công]
+       │
+       ▼
+[Hệ thống pop 1 mã → render QR Code]
+  Lưu vào "Quà của tôi" dưới dạng QR image
+       │
+       ▼
+[Màn hình "Đổi thành công"]
+  Hiển thị: QR Code full-screen + tên reward + thời hạn
+  Nút: [Lưu ảnh QR] | [Xem lại trong Quà của tôi]
+       │
+       ▼
+[Driver đến cửa hàng → cửa hàng mở app/POS quét QR]
+  ├── Quét thành công → nhân viên thấy thông tin reward, xác nhận
+  └── QR đã dùng → hệ thống báo "Mã này đã được sử dụng"
+```
+
+**Lưu ý quan trọng:**
+- QR phải **hoạt động offline** (cached trên device) — driver có thể ở vùng sóng yếu khi đến cửa hàng
+- Thời hạn hiệu lực của QR hiển thị rõ trên màn hình (ví dụ: "Hết hạn 30/06/2026")
+- Cửa hàng đối tác cần được cung cấp app/web portal riêng để quét và đối soát (nằm ngoài scope v2.0 — cần partnership team confirm)
+
+---
+
+#### Type 3 — PHYSICAL_GIFT (Quà vật lý — DM gửi sau)
+
+**Mô tả:** Không phát mã. Hệ thống ghi nhận driver đã đổi thành công (REDEEMED) và DM team tự xuất danh sách để xử lý giao quà vật lý.
+
+**Ví dụ áp dụng:** Áo thun Ahamove, túi nhiệt, phụ kiện xe, quà tặng sự kiện cột mốc.
+
+```
+[Driver đổi thành công]
+  Điểm RESERVED → REDEEMED
+       │
+       ▼
+[Màn hình "Đổi thành công"]
+  Hiển thị: "Yêu cầu của bạn đã được ghi nhận.
+             Team Ahamove sẽ liên hệ để giao quà trong [X] ngày làm việc."
+  Lưu vào "Quà của tôi" với trạng thái: "Đang xử lý"
+       │
+       ▼
+[Ops/DM export danh sách REDEEMED từ Admin]
+  Bao gồm: driver_id, tên, SĐT, địa chỉ, reward, ngày đổi
+       │
+       ▼
+[DM team xử lý giao quà offline]
+       │
+       ▼
+[Sau khi giao xong: DM đánh dấu "Đã giao" trên Admin]
+  → App driver cập nhật trạng thái: "Đang xử lý" → "Đã giao"
+  → Push notification: "Quà [tên reward] đã được giao thành công"
+```
+
+**Trạng thái phụ (sub-status) của PHYSICAL_GIFT:**
+
+| Sub-status | Hiển thị trên app | Hành động tiếp theo |
+|------------|-------------------|---------------------|
+| `PENDING_FULFILLMENT` | "Đang xử lý" | DM export và chuẩn bị |
+| `SHIPPED` | "Đang giao" | DM update sau khi gửi hàng |
+| `DELIVERED` | "Đã giao" | Hoàn tất |
+
+---
+
+#### Type 4 — CASH_BONUS (Ghi nhận đổi điểm → Cộng tiền sau)
+
+**Mô tả:** Không phát mã. Hệ thống ghi nhận driver đạt cột mốc/đổi thành công. DM team xuất danh sách và thực hiện cộng thưởng tiền mặt vào tài khoản driver (qua hệ thống thanh toán Ahamove hoặc chuyển khoản ngân hàng).
+
+**Ví dụ áp dụng:** Driver đổi điểm để nhận thưởng tiền mặt theo milestone, campaign "Tích đủ X điểm nhận 200k vào tài khoản", thưởng cuối năm.
+
+```
+[Driver đổi thành công]
+  Điểm RESERVED → REDEEMED
+       │
+       ▼
+[Màn hình "Đổi thành công"]
+  Hiển thị: "Bạn đã ghi nhận thành công.
+             [Giá trị tiền tương ứng, VD: 200,000đ] sẽ được
+             cộng vào tài khoản trong [X] ngày làm việc."
+  Lưu vào "Quà của tôi" với trạng thái: "Chờ cộng thưởng"
+       │
+       ▼
+[Ops/DM export danh sách REDEEMED từ Admin]
+  Bao gồm: driver_id, tên, SĐT, bank account, số tiền thưởng, ngày đổi
+       │
+       ▼
+[DM/Finance thực hiện cộng tiền qua hệ thống nội bộ]
+       │
+       ▼
+[Sau khi cộng xong: DM đánh dấu "Đã cộng thưởng" trên Admin]
+  → App driver cập nhật trạng thái: "Chờ cộng thưởng" → "Đã nhận thưởng"
+  → Push notification: "Thưởng [X]đ đã được cộng vào tài khoản của bạn"
+```
+
+---
+
+#### Tổng kết 4 Delivery Types
+
+| Type | Mã phát | Nguồn mã | Xác nhận | Phù hợp cho |
+|------|---------|---------|---------|-------------|
+| `VOUCHER_CODE` | Text alphanumeric | DM upload pool | Driver tự dùng tại đối tác | Urbox, data 4G, siêu thị |
+| `QR_CODE` | QR image | DM upload pool | Cửa hàng quét | Xăng, bảo dưỡng, F&B tại điểm |
+| `PHYSICAL_GIFT` | Không | — | DM giao tay/ship | Áo, túi nhiệt, phụ kiện |
+| `CASH_BONUS` | Không | — | DM cộng tài khoản | Thưởng tiền mặt, milestone |
+
+---
+
+#### Admin Tool — Quản lý Code Pool (bổ sung Module 4)
+
+Khi tạo reward có delivery_type = `VOUCHER_CODE` hoặc `QR_CODE`, DM team phải upload code pool:
+
+```
+[DM tạo reward mới trên Admin]
+  → Điền: tên reward, điểm cần đổi, rank yêu cầu, thời hạn, delivery_type
+  → Upload file .csv chứa danh sách mã
+  → Hệ thống validate: kiểm tra trùng lặp, format hợp lệ
+  → Hiển thị: "X mã hợp lệ / Y mã lỗi" → xác nhận import
+  → Reward active khi pool > 0
+```
+
+**Monitoring Pool:**
+- Dashboard hiển thị: Tổng mã / Đã dùng / Còn lại / % còn
+- Alert khi pool < 10% hoặc < 50 mã (tùy config)
+- DM có thể upload thêm mã bất kỳ lúc nào (append, không replace pool cũ)
+- Export log: ai dùng mã nào, lúc nào (audit trail)
+
+---
+
+### 6.5 Bảo hiểm tai nạn R1 — Special Flow
 
 ```
 Chỉ dành cho R1, đăng ký trước ngày 25 hàng tháng
@@ -518,17 +698,22 @@ Mất R1 mid-month:
 
 ---
 
-### 6.5 Acceptance Criteria — Store
+### 6.6 Acceptance Criteria — Store
 
-| # | Criteria | Priority |
-|---|---------|---------|
-| AC-S1 | Driver thấy catalog đúng tier rank của mình | Must Have |
-| AC-S2 | Điểm RESERVED ngay khi driver bấm xác nhận | Must Have |
-| AC-S3 | QR/Promo code hiển thị trong "Quà của tôi" ≤ 5 giây sau xác nhận | Must Have |
-| AC-S4 | Hoàn điểm về AVAILABLE nếu partner fail trong 30s | Must Have |
-| AC-S5 | Item hết hàng hiển thị "Tạm hết" thay vì ẩn đi | Should Have |
-| AC-S6 | Lịch sử đổi thưởng hiển thị đầy đủ: ngày, reward, điểm trừ | Should Have |
-| AC-S7 | Insurance R1 hiển thị ngày coverage chính xác | Must Have |
+| # | Criteria | Delivery Type | Priority |
+|---|---------|--------------|---------|
+| AC-S1 | Driver thấy catalog đúng tier rank của mình | All | Must Have |
+| AC-S2 | Điểm RESERVED ngay khi driver bấm xác nhận | All | Must Have |
+| AC-S3 | VOUCHER_CODE: mã text hiển thị trong "Quà của tôi" ≤ 5 giây | VOUCHER_CODE | Must Have |
+| AC-S4 | QR_CODE: QR render đúng, hoạt động offline (cached) | QR_CODE | Must Have |
+| AC-S5 | PHYSICAL_GIFT: màn hình xác nhận ghi rõ "giao trong X ngày" | PHYSICAL_GIFT | Must Have |
+| AC-S6 | CASH_BONUS: màn hình ghi rõ số tiền và thời gian cộng | CASH_BONUS | Must Have |
+| AC-S7 | Code Pool = 0 → reward hiển thị "Tạm hết", không hiển thị lỗi kỹ thuật | VOUCHER_CODE / QR_CODE | Must Have |
+| AC-S8 | Admin alert khi Code Pool < 10% | VOUCHER_CODE / QR_CODE | Must Have |
+| AC-S9 | PHYSICAL_GIFT / CASH_BONUS: trạng thái sub-status cập nhật từ Admin → app ≤ 5 phút | PHYSICAL_GIFT / CASH_BONUS | Should Have |
+| AC-S10 | Lịch sử đổi thưởng hiển thị đầy đủ: ngày, reward, điểm trừ, trạng thái | All | Should Have |
+| AC-S11 | Insurance R1 hiển thị ngày coverage chính xác | Insurance | Must Have |
+| AC-S12 | 1 mã trong pool chỉ được assign cho 1 driver (no reuse) | VOUCHER_CODE / QR_CODE | Must Have |
 
 ---
 
