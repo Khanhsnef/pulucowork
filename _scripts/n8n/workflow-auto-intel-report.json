@@ -1,0 +1,94 @@
+{
+  "name": "Auto Competitor Intel Report (Daily & Weekly)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "trigger-daily",
+      "name": "Daily (8AM Everyday)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [ 0, 200 ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "trigger-weekly",
+      "name": "Weekly (8AM Mon)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [ 0, 400 ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "report_type", "value": "daily" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-daily",
+      "name": "Set Daily",
+      "type": "n8n-nodes-base.set",
+      "position": [ 200, 200 ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "report_type", "value": "weekly" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-weekly",
+      "name": "Set Weekly",
+      "type": "n8n-nodes-base.set",
+      "position": [ 200, 400 ]
+    },
+    {
+      "parameters": {
+        "command": "={{ 'bash /Users/ts-1148/Desktop/Pulu-workspace/_scripts/run_intel_workflow.sh ' + $json.report_type }}"
+      },
+      "id": "run-all",
+      "name": "RUN FULL WORKFLOW",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [ 500, 300 ]
+    }
+  ],
+  "connections": {
+    "Daily (7AM Tue-Sat)": {
+      "main": [ [ { "node": "Set Daily", "type": "main", "index": 0 } ] ]
+    },
+    "Weekly (7AM Mon)": {
+      "main": [ [ { "node": "Set Weekly", "type": "main", "index": 0 } ] ]
+    },
+    "Set Daily": {
+      "main": [ [ { "node": "RUN FULL WORKFLOW", "type": "main", "index": 0 } ] ]
+    },
+    "Set Weekly": {
+      "main": [ [ { "node": "RUN FULL WORKFLOW", "type": "main", "index": 0 } ] ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "_meta": {
+    "description": "Trigger -> Set Variable -> Execute 1 single Bash script"
+  }
+}

@@ -117,7 +117,7 @@ def delta_str(cur, base, is_rate=False):
 
 def build_brief():
     """Refresh data source directly from Google Sheet and summarize yesterday."""
-    response = requests.get(SHEET_CSV_URL, timeout=30)
+    response = requests.get(SHEET_CSV_URL, timeout=120)
     response.raise_for_status()
     df = pd.read_csv(io.StringIO(response.text), header=None, dtype=str, keep_default_na=False)
     cols = daily_columns(df)
