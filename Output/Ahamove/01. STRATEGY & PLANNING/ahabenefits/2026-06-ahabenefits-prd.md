@@ -145,21 +145,20 @@ Low cash cost ──────────┼───────────
    │             │
 [Đổi thưởng] [Vi phạm/Adjust]
    │             │
-[RESERVED]   [DEDUCTED]
-   │
-[Partner xác nhận]
-   │
-[REDEEMED] ────── Cuối quý ──► [EXPIRED]
+[REDEEMED]   [DEDUCTED]   ────── Cuối quý ──► [EXPIRED]
+(điểm trừ ngay,
+ reward vào "Quà của tôi")
 ```
 
-**5 trạng thái điểm:**
+> **Nguyên tắc cốt lõi:** Điểm bị trừ **ngay lập tức** khi driver xác nhận đổi thưởng — không chờ partner, không có bước trung gian. Reward xuất hiện trong "Quà của tôi" ngay sau đó. Trạng thái `RESERVED` được loại bỏ khỏi flow.
+
+**4 trạng thái điểm:**
 
 | Trạng thái | Mô tả | Có thể dùng? |
 |------------|-------|-------------|
 | `PENDING` | Điểm trong ca, chưa validate | Không |
 | `AVAILABLE` | Đã credit vào ví, sẵn sàng đổi | Có |
-| `RESERVED` | Đang trong quá trình đổi thưởng | Không |
-| `REDEEMED` | Đã đổi thành công | — |
+| `REDEEMED` | Đã đổi thành công, điểm trừ ngay | — |
 | `EXPIRED` | Hết hạn cuối quý | — |
 
 ---
@@ -321,14 +320,16 @@ Cuối quý     23:59 — Điểm AVAILABLE expire, balance reset về 0
 
 ### 5.9 Edge Cases
 
-**Scenario A — Đổi điểm cuối quý, partner fail:**
+**Scenario A — Đổi điểm cuối quý (29–31/6):**
 ```
-Driver đổi ngày 29/6 → điểm RESERVED
-Partner fail → điểm hoàn về ngày 30/6 23:58
+Điểm trừ ngay khi driver xác nhận → reward vào "Quà của tôi" CLAIMED
+Không có partner timeout. Không có hoàn điểm tự động.
 
-Rule: Nếu redemption fail trong 48h cuối quý
-  → Điểm hoàn về được gia hạn 7 ngày sang quý mới
-  → Notification: "Điểm được gia hạn thêm 7 ngày do lỗi đổi thưởng"
+Rủi ro: Driver đổi xong nhưng chưa bấm "Sử dụng ngay" → điểm đã mất,
+  reward CLAIMED vẫn còn trong "Quà của tôi" (không expire theo điểm).
+
+Rule: Reward (CLAIMED/USED) không bị expire theo quý — chỉ expire theo
+  thời hạn của từng reward item (do DM config khi tạo reward).
 ```
 
 **Scenario B — Driver bị downgrade rank:**
@@ -353,11 +354,11 @@ Trip income 70,000đ
   → Điểm = round(14.0) × 1.0 = 14 pts
 ```
 
-**Scenario D — Đổi thất bại sát cuối quý (48h rule):**
+**Scenario D — Driver đổi sát cuối quý, muốn "giữ điểm":**
 ```
-Driver đổi ngày 30/12, partner fail → hoàn về ngày 31/12 23:58
-→ Rule: RESERVED pts được bảo vệ → hoàn về với grace period 7 ngày
-→ Notification: "Điểm được gia hạn 7 ngày sang quý mới do lỗi đổi thưởng"
+Không còn scenario này — điểm trừ ngay khi xác nhận đổi.
+Driver không thể bị kẹt giữa "đã trừ điểm mà chưa có reward".
+Reward CLAIMED luôn an toàn trong "Quà của tôi" dù điểm đã expire.
 ```
 
 **Scenario E — Ca có cả đơn layer và overflow:**
@@ -380,8 +381,8 @@ PointTransaction
   ├── id
   ├── driver_id
   ├── amount          (+/−)
-  ├── type            EARNED | BONUS | REDEEMED | DEDUCTED | EXPIRED | REFUNDED | ADJUSTED
-  ├── status          PENDING | AVAILABLE | RESERVED | FINAL
+  ├── type            EARNED | BONUS | REDEEMED | DEDUCTED | EXPIRED | ADJUSTED
+  ├── status          PENDING | AVAILABLE | FINAL
   ├── source_ref      trip_id | shift_id | campaign_id | cs_ticket_id
   ├── layer           L2–L6 | OVERFLOW
   ├── multiplier_applied  1.0–1.5
@@ -392,7 +393,6 @@ PointTransaction
 DriverPointWallet
   ├── driver_id
   ├── available_balance
-  ├── reserved_balance
   ├── total_earned_current_quarter
   ├── quarter_expires_at
   └── last_updated_at
@@ -452,6 +452,8 @@ DriverPointWallet
 
 ### 6.3 Redemption Flow — Happy Path
 
+> **Nguyên tắc:** Điểm bị trừ ngay khi driver xác nhận. Reward xuất hiện trong "Quà của tôi" ngay lập tức. Việc **sử dụng** reward (mang QR ra cửa hàng, bấm dùng mã) là bước tách biệt, xảy ra sau.
+
 ```
 Driver mở tab AhaBenefits
        │
@@ -465,25 +467,40 @@ Driver mở tab AhaBenefits
 [Hệ thống kiểm tra 3 điều kiện]
   ├── Balance ≥ điểm yêu cầu?    → No → "Cần thêm X pts"
   ├── Rank đủ điều kiện?          → No → "Cần đạt [rank] để đổi"
-  └── Reward còn hàng/slot?       → No → "Tạm hết — thử lại sau"
+  └── Reward còn slot (quantity)?  → No → "Tạm hết — thử lại sau"
        │ All pass
        ▼
-[Điểm → RESERVED]
-[Màn hình xác nhận: reward + điểm trừ]
+[Màn hình xác nhận: tên reward + điểm sẽ trừ]
        │
        ▼
 [Driver xác nhận]
        │
        ▼
-[Hệ thống gửi yêu cầu đến Partner API — timeout 30s]
+[Hệ thống xử lý đồng thời — ngay lập tức]
+  ├── Trừ điểm: AVAILABLE → REDEEMED
+  ├── Giảm quantity reward đi 1
+  └── Tạo reward record trong "Quà của tôi" — trạng thái: CLAIMED
        │
-   ┌───┴──────────────────────┐
-   │ Partner confirm (≤ 30s)  │ Timeout / fail (> 30s)
-   ▼                          ▼
-[REDEEMED]               [AVAILABLE — hoàn điểm]
-[Gửi QR/Promo Code]      [Notification: "Đổi thất bại,
-[Push notification]       điểm đã hoàn"]
+       ▼
+[Màn hình "Đổi thành công"]
+  Hiển thị: tên reward + thông tin sử dụng
+  Nút: [Xem Quà của tôi] | [Đóng]
+       │
+       ▼
+[Driver vào "Quà của tôi" → chọn reward → bấm "Sử dụng ngay"]
+       │
+       ▼
+[Hiển thị nội dung reward theo delivery_type]
+  (QR / code text / thông báo giao / thông báo cộng tiền)
+  Trạng thái reward: CLAIMED → USED
 ```
+
+**2 trạng thái của Reward trong "Quà của tôi":**
+
+| Trạng thái | Mô tả | Hiển thị |
+|------------|-------|---------|
+| `CLAIMED` | Đã đổi điểm, chưa bấm sử dụng | "Chưa dùng" — hiển thị nút [Sử dụng ngay] |
+| `USED` | Đã bấm sử dụng / đã được ghi nhận | "Đã dùng" — hiển thị lại nội dung (readonly) |
 
 ---
 
@@ -495,154 +512,155 @@ Mỗi reward khi được tạo trên Admin tool phải được chỉ định *
 
 #### Type 1 — VOUCHER_CODE (Mã text/số)
 
-**Mô tả:** Hệ thống lấy một mã alphanumeric từ pool do DM team upload sẵn, hiển thị cho driver dưới dạng text để copy/đọc tại điểm bán.
+**Mô tả:** Hệ thống assign một mã alphanumeric từ pool do DM upload sẵn. Mã được lưu trong "Quà của tôi" ở trạng thái CLAIMED. Khi driver bấm **"Sử dụng ngay"** thì mã hiện ra và reward chuyển sang USED.
 
 **Ví dụ áp dụng:** Mã giảm giá Urbox, mã nạp data 4G, mã voucher siêu thị.
 
 ```
-[DM tạo reward trên Admin]
-  → Upload file danh sách mã (.csv): CODE001, CODE002, CODE003…
-  → Hệ thống lưu vào Code Pool, trạng thái: AVAILABLE
-       │
-[Driver đổi thành công (điểm RESERVED → xác nhận)]
-       │
-       ▼
-[Hệ thống pop 1 mã từ Pool — FIFO]
-  Mã chuyển trạng thái: AVAILABLE → ASSIGNED (gắn driver_id)
-       │
-       ▼
-[Màn hình "Đổi thành công"]
-  Hiển thị: Mã code dạng text lớn + nút [Copy mã]
-  Lưu vào tab "Quà của tôi" (có thể xem lại bất kỳ lúc nào)
+[DM tạo reward — upload pool mã .csv]
+  CODE001, CODE002, CODE003…
+  Hệ thống lưu vào Code Pool, quantity = số dòng hợp lệ
+
+[Driver đổi thành công — điểm trừ ngay]
+  Hệ thống assign 1 mã từ Pool (FIFO) → gắn driver_id
+  Quantity reward giảm 1
+  Reward vào "Quà của tôi" — trạng thái: CLAIMED (mã chưa hiện)
        │
        ▼
-[Driver mang mã đến cửa hàng đối tác → nhân viên nhập/quét]
-[Đối soát: partner báo về Ahamove danh sách mã đã dùng → batch reconcile]
+[Driver vào "Quà của tôi" → bấm "Sử dụng ngay"]
+       │
+       ▼
+[Màn hình hiển thị mã]
+  Text lớn: "PETRO-CODE001"
+  Nút: [Copy mã]
+  Trạng thái: CLAIMED → USED
+  (Mã vẫn hiển thị được sau khi USED — readonly, để driver xem lại)
+       │
+       ▼
+[Driver đọc/copy mã → nhập tại cửa hàng/app đối tác]
 ```
 
 **Quy tắc Code Pool:**
-- Khi pool còn < 10% mã → Admin nhận alert để upload thêm
-- Khi pool = 0 mã → reward tự động hiển thị "Tạm hết" trên app driver
-- Mã đã ASSIGNED không thể thu hồi dù driver bị suspend (mã đã cam kết)
-- 1 mã chỉ assign cho 1 driver duy nhất (no reuse)
+- 1 mã chỉ assign cho 1 driver duy nhất — không reuse
+- Pool = 0 → reward hiển thị "Tạm hết" trên catalog, không nhận đổi mới
+- Pool < 10% hoặc < 50 mã → Admin alert DM upload thêm
+- Mã đã ASSIGNED không bị thu hồi kể cả khi driver bị suspend
 
 ---
 
 #### Type 2 — QR_CODE (Mã QR tại cửa hàng)
 
-**Mô tả:** Hệ thống lấy một mã từ pool do DM upload, render thành QR Code hiển thị trên app driver. Cửa hàng đối tác quét QR bằng máy POS/app riêng để xác nhận sử dụng.
+**Mô tả:** Cùng cơ chế pool với VOUCHER_CODE, nhưng mã được render thành QR Code. Driver mang QR đến cửa hàng để nhân viên quét. Khi driver bấm **"Sử dụng ngay"** thì QR mới hiển thị full-screen.
 
-**Ví dụ áp dụng:** Voucher xăng tại trạm Petrolimex, voucher bảo dưỡng tại chuỗi garage đối tác.
+**Ví dụ áp dụng:** Voucher xăng tại trạm Petrolimex, voucher bảo dưỡng tại garage đối tác.
 
 ```
-[DM tạo reward trên Admin]
-  → Upload file danh sách mã (.csv) — cùng cơ chế pool như Type 1
-  → Chọn delivery_type = QR_CODE
-  → Cấu hình: kích thước QR, logo overlay (nếu có)
-       │
-[Driver đổi thành công]
-       │
-       ▼
-[Hệ thống pop 1 mã → render QR Code]
-  Lưu vào "Quà của tôi" dưới dạng QR image
+[DM tạo reward — upload pool mã .csv, chọn delivery_type = QR_CODE]
+
+[Driver đổi thành công — điểm trừ ngay]
+  Assign 1 mã từ Pool → gắn driver_id
+  Reward vào "Quà của tôi" — trạng thái: CLAIMED
+  (QR chưa hiển thị ở bước này)
        │
        ▼
-[Màn hình "Đổi thành công"]
-  Hiển thị: QR Code full-screen + tên reward + thời hạn
-  Nút: [Lưu ảnh QR] | [Xem lại trong Quà của tôi]
+[Driver đến cửa hàng → vào "Quà của tôi" → bấm "Sử dụng ngay"]
        │
        ▼
-[Driver đến cửa hàng → cửa hàng mở app/POS quét QR]
-  ├── Quét thành công → nhân viên thấy thông tin reward, xác nhận
-  └── QR đã dùng → hệ thống báo "Mã này đã được sử dụng"
+[Màn hình QR full-screen]
+  QR Code + tên reward + thời hạn
+  Trạng thái: CLAIMED → USED
+  Nút: [Lưu ảnh QR]
+  (QR vẫn hiển thị được sau USED — readonly)
+       │
+       ▼
+[Nhân viên cửa hàng quét QR bằng máy POS/app riêng của đối tác]
 ```
 
-**Lưu ý quan trọng:**
-- QR phải **hoạt động offline** (cached trên device) — driver có thể ở vùng sóng yếu khi đến cửa hàng
-- Thời hạn hiệu lực của QR hiển thị rõ trên màn hình (ví dụ: "Hết hạn 30/06/2026")
-- Cửa hàng đối tác cần được cung cấp app/web portal riêng để quét và đối soát (nằm ngoài scope v2.0 — cần partnership team confirm)
+**Lưu ý:**
+- QR phải hoạt động **offline** (render từ mã đã cached) — driver có thể ở vùng sóng yếu
+- Thời hạn hiệu lực hiển thị rõ trên màn hình QR
+- Cơ chế đối soát với đối tác (portal quét mã) là scope của Partnership team, nằm ngoài v2.0
 
 ---
 
-#### Type 3 — PHYSICAL_GIFT (Quà vật lý — DM gửi sau)
+#### Type 3 — PHYSICAL_GIFT (Quà vật lý — DM giao sau)
 
-**Mô tả:** Không phát mã. Hệ thống ghi nhận driver đã đổi thành công (REDEEMED) và DM team tự xuất danh sách để xử lý giao quà vật lý.
+**Mô tả:** Không phát mã. Khi driver đổi thành công, hệ thống ghi nhận CLAIMED và DM xuất danh sách để xử lý giao quà. Driver bấm **"Sử dụng ngay"** = xác nhận muốn nhận quà, reward chuyển USED và DM thấy trong export list.
 
-**Ví dụ áp dụng:** Áo thun Ahamove, túi nhiệt, phụ kiện xe, quà tặng sự kiện cột mốc.
+**Ví dụ áp dụng:** Áo thun Ahamove, túi nhiệt, phụ kiện xe, quà tặng sự kiện.
 
 ```
-[Driver đổi thành công]
-  Điểm RESERVED → REDEEMED
+[Driver đổi thành công — điểm trừ ngay]
+  Reward vào "Quà của tôi" — trạng thái: CLAIMED
+  Hiển thị: "Nhấn 'Sử dụng ngay' để đăng ký nhận quà"
+
+[Driver bấm "Sử dụng ngay"]
+  Màn hình: form xác nhận địa chỉ nhận quà (SĐT, địa chỉ)
+  Sau xác nhận: CLAIMED → USED
+  Hiển thị: "Đã ghi nhận. Team Ahamove liên hệ trong [X] ngày làm việc."
        │
        ▼
-[Màn hình "Đổi thành công"]
-  Hiển thị: "Yêu cầu của bạn đã được ghi nhận.
-             Team Ahamove sẽ liên hệ để giao quà trong [X] ngày làm việc."
-  Lưu vào "Quà của tôi" với trạng thái: "Đang xử lý"
-       │
-       ▼
-[Ops/DM export danh sách REDEEMED từ Admin]
+[Ops/DM export danh sách USED từ Admin]
   Bao gồm: driver_id, tên, SĐT, địa chỉ, reward, ngày đổi
        │
        ▼
-[DM team xử lý giao quà offline]
+[DM giao quà offline]
        │
        ▼
-[Sau khi giao xong: DM đánh dấu "Đã giao" trên Admin]
-  → App driver cập nhật trạng thái: "Đang xử lý" → "Đã giao"
-  → Push notification: "Quà [tên reward] đã được giao thành công"
+[DM cập nhật sub-status trên Admin sau khi giao]
+  → App driver cập nhật: "Đang xử lý" → "Đã giao"
+  → Push notification: "Quà [tên reward] đã được giao"
 ```
 
-**Trạng thái phụ (sub-status) của PHYSICAL_GIFT:**
+**Sub-status của PHYSICAL_GIFT (sau khi USED):**
 
-| Sub-status | Hiển thị trên app | Hành động tiếp theo |
-|------------|-------------------|---------------------|
-| `PENDING_FULFILLMENT` | "Đang xử lý" | DM export và chuẩn bị |
-| `SHIPPED` | "Đang giao" | DM update sau khi gửi hàng |
+| Sub-status | Hiển thị app | Action |
+|------------|-------------|--------|
+| `PENDING_FULFILLMENT` | "Đang xử lý" | DM chuẩn bị hàng |
+| `SHIPPED` | "Đang giao" | DM update sau khi ship |
 | `DELIVERED` | "Đã giao" | Hoàn tất |
 
 ---
 
-#### Type 4 — CASH_BONUS (Ghi nhận đổi điểm → Cộng tiền sau)
+#### Type 4 — CASH_BONUS (Cột mốc ghi nhận → Cộng tiền sau)
 
-**Mô tả:** Không phát mã. Hệ thống ghi nhận driver đạt cột mốc/đổi thành công. DM team xuất danh sách và thực hiện cộng thưởng tiền mặt vào tài khoản driver (qua hệ thống thanh toán Ahamove hoặc chuyển khoản ngân hàng).
+**Mô tả:** Không phát mã. Dùng để tạo cột mốc ghi nhận trên hệ thống khi driver đổi điểm. DM xuất danh sách và cộng thưởng tiền vào tài khoản. Driver bấm **"Sử dụng ngay"** = xác nhận muốn nhận thưởng tiền, chuyển USED.
 
-**Ví dụ áp dụng:** Driver đổi điểm để nhận thưởng tiền mặt theo milestone, campaign "Tích đủ X điểm nhận 200k vào tài khoản", thưởng cuối năm.
+**Ví dụ áp dụng:** Campaign "Tích đủ X điểm nhận 200k vào tài khoản", thưởng milestone, thưởng cuối năm.
 
 ```
-[Driver đổi thành công]
-  Điểm RESERVED → REDEEMED
+[Driver đổi thành công — điểm trừ ngay]
+  Reward vào "Quà của tôi" — trạng thái: CLAIMED
+  Hiển thị: "Nhấn 'Sử dụng ngay' để nhận [200,000đ] vào tài khoản"
+
+[Driver bấm "Sử dụng ngay"]
+  Màn hình xác nhận: số tiền + tài khoản nhận (lấy từ profile)
+  Sau xác nhận: CLAIMED → USED
+  Hiển thị: "[200,000đ] sẽ được cộng trong [X] ngày làm việc."
        │
        ▼
-[Màn hình "Đổi thành công"]
-  Hiển thị: "Bạn đã ghi nhận thành công.
-             [Giá trị tiền tương ứng, VD: 200,000đ] sẽ được
-             cộng vào tài khoản trong [X] ngày làm việc."
-  Lưu vào "Quà của tôi" với trạng thái: "Chờ cộng thưởng"
+[Ops/DM export danh sách USED từ Admin]
+  Bao gồm: driver_id, tên, SĐT, bank account, số tiền, ngày đổi
        │
        ▼
-[Ops/DM export danh sách REDEEMED từ Admin]
-  Bao gồm: driver_id, tên, SĐT, bank account, số tiền thưởng, ngày đổi
+[DM/Finance cộng tiền qua hệ thống nội bộ]
        │
        ▼
-[DM/Finance thực hiện cộng tiền qua hệ thống nội bộ]
-       │
-       ▼
-[Sau khi cộng xong: DM đánh dấu "Đã cộng thưởng" trên Admin]
-  → App driver cập nhật trạng thái: "Chờ cộng thưởng" → "Đã nhận thưởng"
-  → Push notification: "Thưởng [X]đ đã được cộng vào tài khoản của bạn"
+[DM cập nhật "Đã cộng thưởng" trên Admin]
+  → App driver: "Chờ cộng thưởng" → "Đã nhận thưởng"
+  → Push notification: "Thưởng [200,000đ] đã được cộng vào tài khoản"
 ```
 
 ---
 
 #### Tổng kết 4 Delivery Types
 
-| Type | Mã phát | Nguồn mã | Xác nhận | Phù hợp cho |
-|------|---------|---------|---------|-------------|
-| `VOUCHER_CODE` | Text alphanumeric | DM upload pool | Driver tự dùng tại đối tác | Urbox, data 4G, siêu thị |
-| `QR_CODE` | QR image | DM upload pool | Cửa hàng quét | Xăng, bảo dưỡng, F&B tại điểm |
-| `PHYSICAL_GIFT` | Không | — | DM giao tay/ship | Áo, túi nhiệt, phụ kiện |
-| `CASH_BONUS` | Không | — | DM cộng tài khoản | Thưởng tiền mặt, milestone |
+| Type | Điểm trừ khi | Mã hiện khi | Ghi nhận USED khi | Phù hợp cho |
+|------|-------------|------------|-------------------|-------------|
+| `VOUCHER_CODE` | Xác nhận đổi | Bấm "Sử dụng ngay" | Bấm "Sử dụng ngay" | Urbox, data 4G, siêu thị |
+| `QR_CODE` | Xác nhận đổi | Bấm "Sử dụng ngay" | Bấm "Sử dụng ngay" | Xăng, bảo dưỡng, F&B tại điểm |
+| `PHYSICAL_GIFT` | Xác nhận đổi | Không có mã | Bấm "Sử dụng ngay" + xác nhận địa chỉ | Áo, túi nhiệt, phụ kiện |
+| `CASH_BONUS` | Xác nhận đổi | Không có mã | Bấm "Sử dụng ngay" + xác nhận tài khoản | Thưởng tiền mặt, milestone |
 
 ---
 
