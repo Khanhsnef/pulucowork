@@ -37,10 +37,10 @@
     },
     {
       "parameters": {
-        "jsCode": "// Parse signals and filter last 6h\nconst data = JSON.parse(Buffer.from($input.first().binary.data.data, 'base64').toString());\nconst cutoff = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();\nconst recent = data.filter(s => s.fetched_at > cutoff);\nreturn [{ json: { signals: recent, count: recent.length, hasNew: recent.length > 0 } }];"
+        "jsCode": "const data = JSON.parse(Buffer.from($input.first().binary.data.data, 'base64').toString());\nconst cutoff = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();\nconst recent = data.filter(s => s.fetched_at > cutoff);\n\nif (!recent.length) return [{ json: { hasNew: false, message: '' } }];\n\n// Group by competitor\nconst byComp = {};\nfor (const s of recent) {\n  if (!byComp[s.competitor]) byComp[s.competitor] = [];\n  byComp[s.competitor].push(s.title);\n}\n\nconst lines = ['⚔️ *Competitor Intel Alert*', ''];\nfor (const [comp, titles] of Object.entries(byComp)) {\n  lines.push(`*${comp}* (${titles.length} tin):`);\n  titles.slice(0, 2).forEach(t => lines.push(`• ${t.substring(0, 80)}`));\n  lines.push('');\n}\nlines.push(`_${recent.length} signals | ${new Date().toLocaleString('vi-VN', {timeZone: 'Asia/Ho_Chi_Minh'})}_`);\n\nreturn [{ json: { hasNew: true, message: lines.join('\\n') } }];"
       },
-      "id": "filter-recent",
-      "name": "Filter New Signals (6h)",
+      "id": "format-intel",
+      "name": "Format Intel Message (JS)",
       "type": "n8n-nodes-base.code",
       "position": [820, 300]
     },
@@ -62,26 +62,8 @@
     },
     {
       "parameters": {
-        "model": "claude-haiku-4-5-20251001",
-        "messages": {
-          "values": [
-            {
-              "role": "user",
-              "content": "=Các tin tức về đối thủ Ahamove trong 6h qua:\n\n{{ $json.signals.slice(0,10).map(s => `[${s.competitor}] ${s.title}`).join('\\n') }}\n\nTóm tắt thành Telegram alert ngắn (tối đa 300 ký tự):\n⚔️ *Competitor Intel Alert*\n{{ 1-3 điểm quan trọng nhất }}\n\nChỉ trả về text thuần."
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "claude-summarize",
-      "name": "Claude — Summarize Intel",
-      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
-      "position": [1220, 200]
-    },
-    {
-      "parameters": {
         "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
-        "text": "={{ $json.content[0].text }}",
+        "text": "={{ $json.message }}",
         "additionalFields": {
           "parse_mode": "Markdown"
         }
@@ -89,7 +71,7 @@
       "id": "telegram-alert",
       "name": "Telegram — Send Alert",
       "type": "n8n-nodes-base.telegram",
-      "position": [1420, 200],
+      "position": [1220, 200],
       "credentials": {
         "telegramApi": {
           "id": "telegram-creds",
@@ -106,27 +88,22 @@
       "main": [[{"node": "Read Signals JSON", "type": "main", "index": 0}]]
     },
     "Read Signals JSON": {
-      "main": [[{"node": "Filter New Signals (6h)", "type": "main", "index": 0}]]
+      "main": [[{"node": "Format Intel Message (JS)", "type": "main", "index": 0}]]
     },
-    "Filter New Signals (6h)": {
+    "Format Intel Message (JS)": {
       "main": [[{"node": "Has New Signals?", "type": "main", "index": 0}]]
     },
     "Has New Signals?": {
       "main": [
-        [{"node": "Claude — Summarize Intel", "type": "main", "index": 0}],
+        [{"node": "Telegram — Send Alert", "type": "main", "index": 0}],
         []
       ]
-    },
-    "Claude — Summarize Intel": {
-      "main": [[{"node": "Telegram — Send Alert", "type": "main", "index": 0}]]
     }
   },
-  "settings": {
-    "executionOrder": "v1"
-  },
+  "settings": { "executionOrder": "v1" },
   "_meta": {
-    "description": "Mỗi 6h: chạy crawler → filter tin mới → nếu có tin → Claude tóm tắt → gửi Telegram alert.",
-    "requiredCredentials": ["telegramApi", "anthropicApi"],
+    "description": "Mỗi 6h: crawler → filter signals mới → JS format → Telegram. Không cần LLM.",
+    "requiredCredentials": ["telegramApi"],
     "schedule": "0 */6 * * *"
   }
 }

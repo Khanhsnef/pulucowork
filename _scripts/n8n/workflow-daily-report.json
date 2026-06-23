@@ -30,26 +30,17 @@
     },
     {
       "parameters": {
-        "model": "claude-sonnet-4-6",
-        "messages": {
-          "values": [
-            {
-              "role": "user",
-              "content": "=Dữ liệu metrics Ahamove SGN hôm nay:\n\n{{ $json.data }}\n\nHãy tóm tắt thành báo cáo Telegram ngắn gọn (tối đa 400 ký tự) với format:\n🚀 *Daily SGN Report {{ $now.format('DD/MM') }}*\n📦 Orders: [số]\n✅ FR: [%]\n⚡ AR: [%]\n💰 CPO: [số]\n\n[1 dòng nhận xét nổi bật nhất]\n\nChỉ trả về text thuần, không thêm giải thích."
-            }
-          ]
-        },
-        "options": {}
+        "jsCode": "// Parse CSV và format Telegram message\nconst csv = $input.first().json.data || '';\nconst lines = csv.trim().split('\\n').filter(l => l.trim());\nconst today = new Date().toLocaleDateString('vi-VN', {timeZone: 'Asia/Ho_Chi_Minh'});\n\n// Lấy dòng cuối (ngày mới nhất)\nconst lastLine = lines[lines.length - 1]?.split(',') || [];\nconst headers = lines[0]?.split(',') || [];\n\nconst getValue = (key) => {\n  const idx = headers.findIndex(h => h.toLowerCase().includes(key.toLowerCase()));\n  return idx >= 0 ? (lastLine[idx] || '—').replace(/\"/g, '').trim() : '—';\n};\n\nconst msg = [\n  `🚀 *Daily SGN Report ${today}*`,\n  ``,\n  `📦 Orders: ${getValue('order') || getValue('đơn')}`,\n  `✅ FR: ${getValue('fr') || getValue('fulfillment')}`,\n  `⚡ AR: ${getValue('ar') || getValue('accept')}`,\n  `💰 CPO: ${getValue('cpo')}`,\n  ``,\n  `_Auto-report by Pulu_`\n].join('\\n');\n\nreturn [{ json: { message: msg } }];"
       },
-      "id": "claude-summarize",
-      "name": "Claude — Format Report",
-      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "id": "format-report",
+      "name": "Format Report (JS)",
+      "type": "n8n-nodes-base.code",
       "position": [640, 300]
     },
     {
       "parameters": {
         "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
-        "text": "={{ $json.content[0].text }}",
+        "text": "={{ $json.message }}",
         "additionalFields": {
           "parse_mode": "Markdown"
         }
@@ -71,18 +62,16 @@
       "main": [[{"node": "Fetch SGN Metrics Sheet", "type": "main", "index": 0}]]
     },
     "Fetch SGN Metrics Sheet": {
-      "main": [[{"node": "Claude — Format Report", "type": "main", "index": 0}]]
+      "main": [[{"node": "Format Report (JS)", "type": "main", "index": 0}]]
     },
-    "Claude — Format Report": {
+    "Format Report (JS)": {
       "main": [[{"node": "Telegram — Send Report", "type": "main", "index": 0}]]
     }
   },
-  "settings": {
-    "executionOrder": "v1"
-  },
+  "settings": { "executionOrder": "v1" },
   "_meta": {
-    "description": "Gửi Telegram report SGN Ops lúc 8AM các ngày trong tuần. Fetch từ Google Sheet → Claude format → Telegram.",
-    "requiredCredentials": ["telegramApi", "anthropicApi"],
+    "description": "8AM Mon-Sat: Fetch Google Sheet → JS format → Telegram. Không cần LLM.",
+    "requiredCredentials": ["telegramApi"],
     "schedule": "0 8 * * 1-6"
   }
 }
