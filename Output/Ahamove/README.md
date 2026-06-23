@@ -2,7 +2,7 @@
 
 **Owner:** Lê Phương Khanh | Driver Management Leader  
 **Scope:** Xe máy (Instant) — Giao ngay 1H, Siêu tốc, Ghép đơn, 4H  
-**Last updated:** 2026-06-19
+**Last updated:** 2026-06-22
 
 ---
 
@@ -208,6 +208,14 @@ Output/Ahamove/
 #### `monitoring/`
 | File | Mô tả |
 |------|-------|
+| `2026-06-22-weekly-market-brief.md` | BẢN TIN VẬN HÀNH & THỊ TRƯỜNG ĐẦU TUẦN (16/06 - 22/06/2026) |
+| `2026-06-22-weekly-market-brief.html` | Bản HTML tương tác của Bản tin thị trường đầu tuần 22/06 |
+| `2026-06-22-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 22/06: ShopeeFood tuyển dụng mạnh, Uber thâu tóm Getir |
+| `2026-06-22-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 22/06 |
+| `2026-06-21-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 21/06: ShopeeFood campaign siêu sale, Uber liên minh Robotaxi, DoorDash mở rộng Grocery |
+| `2026-06-21-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 21/06 |
+| `2026-06-20-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 20/06: ShopeeFood siêu sale 21/6, DoorDash tung Summer of DashPass |
+| `2026-06-20-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 20/06 |
 | `2026-06-19-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 19/06: GSM thay CEO (Nguyễn Văn Thanh rời ghế) & DoorDash gặp sự cố |
 | `2026-06-19-competitor-intel-report.html` | Bản HTML tương tác của báo cáo giám sát cạnh tranh ngày 19/06 |
 | `2026-06-18-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 18/06: Uber tập trung Robotaxi & Be kết hợp B2B y tế |
@@ -268,4 +276,4 @@ streamlit run "output/Ahamove/04. OPS_METRICS/dashboards/sgn_overview_dashboard.
 
 ---
 
-*Last updated: 2026-06-19 | Scanned by Claude Code*
+*Last updated: 2026-06-22 | Scanned by Claude Code*

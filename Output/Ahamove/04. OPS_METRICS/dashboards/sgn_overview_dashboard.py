@@ -49,7 +49,7 @@ st.markdown(
         padding-left: 0.9rem !important;
         padding-right: 0.9rem !important;
     }
-    [class*="css"], table, th, td, input, select, button, div, span, p {
+    [class*="css"]:not(i):not(svg):not(span), table, th, td, input, select, button, p {
         font-family: 'Inter', sans-serif !important;
     }
 
@@ -804,59 +804,8 @@ min_date = min(available_dates)
 max_date = max(available_dates)
 
 
-# ── SIDEBAR CONTROLS ──────────────────────────────────────────────────────────
-st.sidebar.markdown(
-    "<div style='text-align: center; margin-top:1rem;'><img src='https://www.ahamove.com/_next/static/media/logo.5c234a9f.svg' width='150'></div>",
-    unsafe_allow_html=True,
-)
-st.sidebar.markdown("---")
-st.sidebar.subheader("🎛️ Bộ lọc Dashboard")
-st.sidebar.markdown("<span class='status-pill'>Live Google Sheet</span>", unsafe_allow_html=True)
-st.sidebar.caption(f"Last fetched: {fetched_at}")
-
-if st.sidebar.button("🔄 Refresh data"):
-    st.cache_data.clear()
-    st.rerun()
-
-# Time Granularity Radio Button
-time_granularity = st.sidebar.radio(
-    "Granularity view",
-    ["Daily", "Weekly"],
-    horizontal=True,
-)
-
-# Date range selection: default to last 30 days
-default_start = max(min_date.date(), max_date.date() - timedelta(days=30))
-selected_range = st.sidebar.date_input(
-    "Date range filter",
-    value=(default_start, max_date.date()),
-    min_value=min_date.date(),
-    max_value=max_date.date(),
-)
-if isinstance(selected_range, tuple) and len(selected_range) == 2:
-    start_date, end_date = selected_range
-else:
-    start_date, end_date = min_date.date(), max_date.date()
-
-selected_channels = st.sidebar.multiselect(
-    "Channel request",
-    list(CHANNEL_ROWS.keys()),
-    default=["KA", "MP", "SME"],
-)
-selected_segments = st.sidebar.multiselect(
-    "Driver segment",
-    list(SEGMENT_ROWS.keys()),
-    default=list(SEGMENT_ROWS.keys()),
-)
-
-# FR target threshold
-fr_target = st.sidebar.slider("Target FR% (ngưỡng đạt)", min_value=0.60, max_value=0.90, value=0.81, step=0.01, format="%.0f%%")
-
-st.sidebar.markdown("---")
-st.sidebar.caption("City view: **SGN**")
-st.sidebar.caption("Cache TTL: **15 phút**")
-st.sidebar.link_button("Mở Google Sheet", SHEET_URL)
-
+# ── SIDEBAR CONTROLS & LOGO ───────────────────────────────────────────────────
+st.logo("https://ahamove.com/static/icons/Logo.svg", link="https://ahamove.com")
 
 # ── HEADER ───────────────────────────────────────────────────────────────────
 st.markdown("<div class='main-title'>SGN Ops Overview Dashboard</div>", unsafe_allow_html=True)
@@ -864,6 +813,45 @@ st.markdown(
     "<div class='subtitle'>Daily operating cockpit — Request/Demand, Driver Supply, Productivity & Forecast Achievement</div>",
     unsafe_allow_html=True,
 )
+
+with st.expander("🎛️ Bộ lọc Dashboard", expanded=False):
+    st.markdown("<span class='status-pill'>Live Google Sheet</span> &nbsp;&nbsp; <span style='font-size:0.75rem; color:var(--muted);'>Last fetched: " + fetched_at + "</span>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-bottom: 0.5rem;'></div>", unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1, 1.2, 1.5])
+    with col1:
+        time_granularity = st.radio(
+            "Granularity view",
+            ["Daily", "Weekly"],
+            horizontal=True,
+        )
+    with col2:
+        default_start = max(min_date.date(), max_date.date() - timedelta(days=30))
+        selected_range = st.date_input(
+            "Date range filter",
+            value=(default_start, max_date.date()),
+            min_value=min_date.date(),
+            max_value=max_date.date(),
+        )
+    with col3:
+        fr_target_int = st.slider("Target FR% (ngưỡng đạt)", min_value=60, max_value=90, value=81, step=1, format="%d%%")
+        fr_target = fr_target_int / 100.0
+    if isinstance(selected_range, tuple) and len(selected_range) == 2:
+        start_date, end_date = selected_range
+    else:
+        start_date, end_date = min_date.date(), max_date.date()
+
+    st.markdown("<div style='margin-bottom: 0.5rem;'></div>", unsafe_allow_html=True)
+    
+    col_b1, col_b2, col_b3 = st.columns([10, 2, 2])
+    with col_b1:
+        st.caption("City view: **SGN** | Cache TTL: **15 phút**")
+    with col_b2:
+        if st.button("🔄 Refresh data", use_container_width=True):
+            st.cache_data.clear()
+            st.rerun()
+    with col_b3:
+        st.link_button("Mở Google Sheet", SHEET_URL, use_container_width=True)
 
 if structure_warnings:
     with st.expander("⚠️ Sheet structure warning — kiểm tra row mapping", expanded=False):
@@ -2245,7 +2233,7 @@ with sup_tab1:
         # Active drivers by segment
         segment_data = {
             seg: process_series(daily_series(raw_df, SEGMENT_ROWS[seg]), start_date, end_date, time_granularity, agg_type="mean")
-            for seg in selected_segments
+            for seg in ["FT", "PT", "NLM", "Return", "NIM"]
         }
         if segment_data:
             render_line_chart(segment_data, f"{time_granularity} Active Drivers by Segment", SEGMENT_COLORS)
