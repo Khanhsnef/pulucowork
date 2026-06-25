@@ -61,10 +61,10 @@ Xây dựng **AhaBenefits v2.0** — một **Hub quyền lợi tập trung in-ap
 | **Point Burn Rate** | — | > 60% | Điểm đổi / Điểm phát |
 | **Redemption Rate** | — | > 80% | Mã voucher dùng thành công / Mã phát |
 | **Voucher tab CTR** | — | > 40% weekly active drivers | Click vào AhaBenefits tab / DAD |
-| **R1/R2 Churn Rate** | Baseline TBD | Giảm 30% | Driver R1/R2 rời platform / tháng |
+| **R1/R2 Churn Rate** | 20% | Giảm 30% | Driver R1/R2 rời platform / tháng |
 | **AR peak hour** | Baseline TBD | +2–3 pp | AR khung giờ 11h–13h, 17h–20h |
 | **Avg AhaPoints/Driver/Month** | — | > 1.500 pts (R3) | Tracking ví điểm |
-| **DAD (Daily Active Drivers)** | Baseline TBD | +5% | Driver có ít nhất 1 đơn/ngày |
+| **DAD (Daily Active Drivers)** | 5k5-7k | +5% | Driver có ít nhất 1 đơn/ngày |
 
 ---
 
@@ -81,6 +81,16 @@ Xây dựng **AhaBenefits v2.0** — một **Hub quyền lợi tập trung in-ap
 - Các tỉnh thành ngoài SGN/HAN — Phase 3 mở rộng
 - Transfer/Gift điểm giữa driver — nghiên cứu v3.0
 - Driver chưa có rank (Unranked/L6) — chỉ xem catalog, không đổi
+
+### 3.3 Core User Stories (Use Cases)
+
+| Tôi là? (Persona) | Tôi cần gì? (Need) | Nó như thế nào? (How does it work?) | Vì sao? (Why?) |
+|-------------------|--------------------|--------------------------------------|----------------|
+| **DM Member** | Tạo rewards đưa lên hệ thống | Tôi cần một hệ thống admin tools để setup thông tin quà (tên, điểm đổi, rule) và API/upload CSV tự động để add pool mã (rewards) lên. | Để tự động hóa cấp phát voucher, dễ dàng quản lý số lượng và đa dạng hóa catalog. |
+| **Driver (R1/R2)** | Tích lũy điểm sau chuyến đi | Điểm tự động cộng vào ví AhaPoints trên Driver App ngay sau khi hoàn thành đơn (kèm theo hệ số nhân nếu ở zone khó). | Để có thêm động lực chạy đơn, cảm nhận được sự ghi nhận ngoài thu nhập tiền mặt. |
+| **Driver (R1/R2)** | Dùng điểm đổi lấy phần thưởng | Tôi vào mục AhaBenefits trên app, chọn voucher xăng/F&B theo đúng tier rank của mình và bấm đổi là điểm tự trừ ngay lập tức. | Để tối ưu chi phí vận hành (đổ xăng, thay nhớt) và nhận thấy lợi ích thực tế từ việc trung thành với Ahamove. |
+| **Ops Lead** | Điều chỉnh hệ số điểm (Multiplier) | Tôi cần giao diện cấu hình tham số hệ số nhân (layer multiplier, base points) theo thời gian thực hoặc theo ca. | Để linh hoạt điều hướng tài xế vào các điểm nóng (hot zones) hoặc giờ cao điểm thiếu xe. |
+| **CS Agent** | Giải quyết khiếu nại và phạt điểm | Tôi cần công cụ trên Admin để tra cứu lịch sử tích/đổi điểm của tài xế và chức năng cộng/trừ điểm thủ công (có audit log). | Để giải quyết nhanh các sự cố (như lỗi không có mã) hoặc phạt điểm khi tài xế vi phạm tiêu chuẩn chất lượng. |
 
 ---
 
@@ -267,7 +277,6 @@ shift_trip_pts           shift_trip_pts
 | Trạng thái điểm | Xử lý cuối quý |
 |-----------------|---------------|
 | `AVAILABLE` | Expire toàn bộ |
-| `RESERVED` (đang đổi) | Bảo vệ 7 ngày sang quý mới |
 | `PENDING` (trong ca) | Credit vào ví rồi expire |
 
 **Reminder notifications:**
@@ -508,18 +517,18 @@ Driver mở tab AhaBenefits
 
 ### 6.4 Reward Delivery Types — 4 loại phát thưởng
 
-Mỗi reward khi được tạo trên Admin tool phải được chỉ định **một** `delivery_type`. Delivery type quyết định cách hệ thống xử lý sau khi điểm được RESERVED và driver xác nhận đổi.
+Mỗi reward khi được tạo trên Admin tool phải được chỉ định **một** `delivery_type`. Delivery type quyết định cách hệ thống xử lý sau khi điểm bị trừ và driver xác nhận đổi.
 
 ---
 
 #### Type 1 — VOUCHER_CODE (Mã text/số)
 
-**Mô tả:** Hệ thống assign một mã alphanumeric từ pool do DM upload sẵn. Mã được lưu trong "Quà của tôi" ở trạng thái CLAIMED. Khi driver bấm **"Sử dụng ngay"** thì mã hiện ra và reward chuyển sang USED.
+**Mô tả:** Hệ thống assign một mã alphanumeric từ pool do DM upload sẵn hoặc lấy từ Card metabase. Mã được lưu trong "Quà của tôi" ở trạng thái CLAIMED. Khi driver bấm **"Sử dụng ngay"** thì mã hiện ra và reward chuyển sang USED.
 
 **Ví dụ áp dụng:** Mã giảm giá Urbox, mã nạp data 4G, mã voucher siêu thị.
 
 ```
-[DM tạo reward — upload pool mã .csv]
+[DM tạo reward — upload pool mã .csv .xlsx hoặc Card kết quả]
   CODE001, CODE002, CODE003…
   Hệ thống lưu vào Code Pool, quantity = số dòng hợp lệ
 
@@ -673,7 +682,7 @@ Khi tạo reward có delivery_type = `VOUCHER_CODE` hoặc `QR_CODE`, DM team ph
 ```
 [DM tạo reward mới trên Admin]
   → Điền: tên reward, điểm cần đổi, rank yêu cầu, thời hạn, delivery_type
-  → Upload file .csv chứa danh sách mã
+  → Upload file .csv hoặc metabase card chứa danh sách mã
   → Hệ thống validate: kiểm tra trùng lặp, format hợp lệ
   → Hiển thị: "X mã hợp lệ / Y mã lỗi" → xác nhận import
   → Reward active khi pool > 0
@@ -701,19 +710,19 @@ Driver vào mục "Bảo hiểm R1"
 [Xác nhận: "Coverage có hiệu lực từ 01/[tháng+1]"]
        │
        ▼
-[Điểm RESERVED ngay]
+[Điểm bị trừ ngay]
        │
        ▼
 [Ngày 01 tháng sau → REDEEMED, coverage kích hoạt]
 [Gửi số hợp đồng bảo hiểm qua app/SMS]
 
 Hủy (trước ngày 25):
-  → Điểm RESERVED → AVAILABLE (hoàn lại)
+  → Điểm hoàn lại vào AVAILABLE
   → Coverage ngừng cuối tháng hiện tại
 
 Mất R1 mid-month:
   → Không cho đăng ký mới
-  → Nếu đã RESERVED: giữ đến hết tháng đã đăng ký
+  → Nếu đã đăng ký: giữ đến hết tháng đã đăng ký
 ```
 
 ---
@@ -723,7 +732,7 @@ Mất R1 mid-month:
 | # | Criteria | Delivery Type | Priority |
 |---|---------|--------------|---------|
 | AC-S1 | Driver thấy catalog đúng tier rank của mình | All | Must Have |
-| AC-S2 | Điểm RESERVED ngay khi driver bấm xác nhận | All | Must Have |
+| AC-S2 | Điểm bị trừ ngay khi driver bấm xác nhận | All | Must Have |
 | AC-S3 | VOUCHER_CODE: mã text hiển thị trong "Quà của tôi" ≤ 5 giây | VOUCHER_CODE | Must Have |
 | AC-S4 | QR_CODE: QR render đúng, hoạt động offline (cached) | QR_CODE | Must Have |
 | AC-S5 | PHYSICAL_GIFT: màn hình xác nhận ghi rõ "giao trong X ngày" | PHYSICAL_GIFT | Must Have |
@@ -781,7 +790,7 @@ Driver App
 ### 7.2 Màn hình chính — AhaBenefits Homepage
 
 **Components:**
-- **Point Balance Card:** Hiển thị to, trung tâm. Số dư AVAILABLE (không tính RESERVED). Badge tier (💎/🥇/🥈).
+- **Point Balance Card:** Hiển thị to, trung tâm. Số dư AVAILABLE. Badge tier (💎/🥇/🥈).
 - **Banner Carousel:** Auto-scroll 3s, tối đa 5 banner, deep link vào catalog category.
 - **Progress Bar:** "Cần thêm X pts để đạt R2" — hiển thị cho R3 và R2.
 - **Expiry Warning:** Hiển thị nếu balance > 0 và còn ≤ 14 ngày đến cuối quý.
@@ -919,10 +928,9 @@ CS mở ticket → Chọn driver → Nhập adjustment (+ hoặc −) → Nhập
 |---|---------|-----------|-------|---------|
 | 1 | Ngưỡng "online in zone" để nhận bonus ca là bao nhiêu %? | Ảnh hưởng tỷ lệ driver eligible nhận bonus | Product + Ops | Trước design sprint |
 | 2 | Layer của đơn overflow xác định bằng origin zone hay assigned zone? | Ảnh hưởng điểm tính cho R1 overflow | Engineering + Ops | Trước dev |
-| 3 | Điểm RESERVED có bị expire cuối quý không? | Rule xử lý Scenario A, D | Product | Trước dev |
-| 4 | Điểm PENDING trong ca, khi hết quý: credit rồi expire hay expire luôn? | Edge case cuối quý | Product | Trước dev |
-| 5 | Driver bị suspend: điểm freeze hay expire? | CS/Policy cần quyết định | CS Lead + Product | Trước launch |
-| 6 | Catalog availability theo thành phố (SGN vs HAN) khác nhau không? | Ảnh hưởng partner coverage | Ops + Partnership | Trước Phase 2 |
+| 3 | Điểm PENDING trong ca, khi hết quý: credit rồi expire hay expire luôn? | Edge case cuối quý | Product | Trước dev |
+| 4 | Driver bị suspend: điểm freeze hay expire? | CS/Policy cần quyết định | CS Lead + Product | Trước launch |
+| 5 | Catalog availability theo thành phố (SGN vs HAN) khác nhau không? | Ảnh hưởng partner coverage | Ops + Partnership | Trước Phase 2 |
 | 7 | Điều kiện "đủ hoạt động ca" (AR tối thiểu, số chuyến tối thiểu) cụ thể là bao nhiêu? | Cùng câu hỏi #1, cần define cùng lúc | Ops | Trước design sprint |
 
 ---
