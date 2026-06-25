@@ -24,20 +24,22 @@
 ## 1. Problem Statement
 
 ### Situation
-Ahamove hiện vận hành đội ngũ tài xế Bike (Instant) quy mô lớn tại SGN và HAN. Driver là tài sản cạnh tranh cốt lõi — thiếu supply trực tiếp ảnh hưởng AR, FR, và SLA với merchant.
+Ahamove hiện vận hành đội ngũ tài xế Bike (Instant) quy mô lớn tại SGN và HAN. Driver là tài sản cạnh tranh cốt lõi — thiếu supply trực tiếp ảnh hưởng AR, FR, và SLA với merchant. Các chương trình hỗ trợ như Bảo hiểm, các voucher gotit, các voucher hỗ trợ từ các partnership như MindX, Valvoline, Dat Bike, Selex,... chưa được tích hợp vào một hệ thống, hiện tại vẫn đang thủ công gửi cho Tài xế thông qua noti, sms, khiến tỉ lệ sử dụng voucher thấp, tài xế không biết được những quyền lợi mà mình được hưởng.
 
 ### Complication
-Mô hình incentive hiện tại hoàn toàn dựa trên **tiền mặt ngắn hạn**: bonus ca, thưởng hoàn thành đơn. Điều này dẫn đến:
+Mặc dù công ty đã đàm phán được nhiều chương trình hỗ trợ giá trị cao (Bảo hiểm, MindX, Valvoline, Dat Bike, Selex...), nhưng do quy trình phân phối **rời rạc và thủ công** (qua SMS/Noti) kết hợp với mô hình incentive phụ thuộc vào **tiền mặt ngắn hạn**, dẫn đến:
 
 | Vấn đề | Biểu hiện | Hệ quả |
 |--------|-----------|--------|
-| **Loyalty thấp** | Driver chạy multi-platform (Grab + Ahamove song song) | AR drop giờ peak, FR không ổn định |
-| **Thiếu cơ chế giữ chân** | Không có lý do để "trung thành" với Ahamove ngoài thu nhập | Churn rate cao, R1 dễ bị đối thủ lôi kéo |
-| **CPO leo thang** | Đốt tiền mặt liên tục để giữ supply | Không bền vững theo mùa, mất lợi thế khi đối thủ promo mạnh |
-| **Không có differentiation** | Driver cảm nhận Ahamove = Grab = Be về mặt quyền lợi | Không tạo được moat |
+| **Lãng phí giá trị đối tác** | Driver trôi tin nhắn SMS/Noti, tỷ lệ sử dụng voucher cực thấp | Lãng phí nguồn lực đàm phán B2B, không phát huy được lợi thế đối tác |
+| **Trải nghiệm phân mảnh** | Thiếu nền tảng tập trung để tài xế tra cứu đặc quyền | Driver không nhận thức được toàn bộ giá trị phúc lợi (Low Perceived Value) |
+| **CPO leo thang** | Đốt tiền mặt liên tục để kích supply giờ peak vì hệ thống phúc lợi phi tiền mặt chưa hoạt động hiệu quả | Không bền vững theo mùa, dễ bị đối thủ lôi kéo bằng cash promo |
+| **Loyalty thấp** | Driver chạy multi-platform (Grab + Ahamove song song), không có lý do gắn kết ngoài thu nhập | Churn rate cao, đặc biệt ở tập tài xế R1 cốt lõi |
 
 ### Resolution
-Xây dựng **AhaBenefits v2.0** — hệ thống tích lũy điểm và đổi quyền lợi phi tiền mặt, gắn chặt với Driver Ranking (R1/R2/R3). Mục tiêu: chuyển từ *transactional relationship* sang *loyalty ecosystem*, giảm CPO dài hạn trong khi tăng perceived value cho driver.
+Xây dựng **AhaBenefits v2.0** — một **Hub quyền lợi tập trung in-app** kết hợp cơ chế tích lũy điểm (AhaPoints) tự động gắn chặt với Driver Ranking (R1/R2/R3).
+*   **Mục tiêu:** Số hóa và tự động hóa toàn bộ quy trình cấp phát voucher đối tác vào một Cửa hàng đổi thưởng (AhaBenefits Store).
+*   **Tác động:** Giúp tài xế dễ dàng truy xuất, sử dụng quyền lợi; nâng cao nhận thức về giá trị phúc lợi; qua đó chuyển dịch từ *mối quan hệ giao dịch (transactional)* sang *hệ sinh thái trung thành (loyalty ecosystem)* và giảm áp lực lên CPO dài hạn.
 
 ---
 
