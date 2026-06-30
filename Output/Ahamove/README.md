@@ -276,4 +276,12 @@ streamlit run "output/Ahamove/04. OPS_METRICS/dashboards/sgn_overview_dashboard.
 
 ---
 
-*Last updated: 2026-06-22 | Scanned by Claude Code*
+## 📄 Templates (`output/templates/`)
+
+| File | Mô tả |
+| ---- | ----- |
+| `ahamove-weekly-perf-mau2.html` | Mẫu 2 — Weekly Performance Dashboard. Scrollable HTML report, 5 sections: Sản lượng/AR/FR, GSV migration, Tỷ trọng ghép, OTR trend, OTR heatmap theo mức ghép. Brand Ahamove, SVG charts thuần, self-contained. |
+
+---
+
+*Last updated: 2026-06-30 | Scanned by Claude Code*
