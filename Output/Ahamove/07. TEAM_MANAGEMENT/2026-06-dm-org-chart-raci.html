@@ -1,1059 +1,1557 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DM Team — Org Chart & RACI Matrix</title>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --blue: #0E4174;
-  --blue-light: #1a5fa8;
-  --blue-pale: #EFF6FF;
-  --orange: #FF7F32;
-  --orange-pale: #FFF4ED;
-  --success: #10B981;
-  --success-pale: #ECFDF5;
-  --danger: #EF4444;
-  --danger-pale: #FEF2F2;
-  --warn: #F59E0B;
-  --warn-pale: #FFFBEB;
-  --purple: #8B5CF6;
-  --purple-pale: #F5F3FF;
-  --gray-50: #F9FAFB;
-  --gray-100: #F3F4F6;
-  --gray-200: #E5E7EB;
-  --gray-300: #D1D5DB;
-  --gray-400: #9CA3AF;
-  --gray-500: #6B7280;
-  --gray-600: #4B5563;
-  --gray-700: #374151;
-  --gray-800: #1F2937;
-  --white: #FFFFFF;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Lexend', sans-serif;
-  background: var(--gray-50);
-  color: var(--gray-800);
-  font-size: 13px;
-  line-height: 1.55;
-}
-.mono { font-family: 'Space Mono', monospace; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DM Team — Org Chart & RACI Matrix</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --blue: #0E4174;
+      --blue-light: #1a5fa8;
+      --blue-pale: #EFF6FF;
+      --orange: #FF7F32;
+      --orange-pale: #FFF4ED;
+      --success: #10B981;
+      --success-pale: #ECFDF5;
+      --danger: #EF4444;
+      --danger-pale: #FEF2F2;
+      --warn: #F59E0B;
+      --warn-pale: #FFFBEB;
+      --purple: #8B5CF6;
+      --purple-pale: #F5F3FF;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --white: #FFFFFF;
+    }
 
-/* HEADER */
-.report-header {
-  background: var(--blue);
-  padding: 28px 40px 24px;
-  color: white;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-}
-.report-header h1 {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  line-height: 1.2;
-}
-.report-header .subtitle {
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
-  margin-top: 5px;
-}
-.report-header .meta {
-  text-align: right;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 5px;
-}
-.header-badge {
-  display: inline-block;
-  padding: 3px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 500;
-}
-.header-badge.outline {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.85);
-}
-.header-badge.orange {
-  background: var(--orange);
-  color: white;
-}
-.header-accent {
-  height: 3px;
-  background: linear-gradient(90deg, var(--orange) 0%, rgba(255,127,50,0.3) 60%, transparent 100%);
-}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* CONTAINER */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 32px 32px 64px;
-}
+    body {
+      font-family: 'Lexend', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      font-size: 13px;
+      line-height: 1.55;
+    }
 
-/* SECTION */
-.section { margin-bottom: 48px; }
-.section-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--gray-200);
-}
-.section-num {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--blue);
-  background: var(--blue-pale);
-  border: 1px solid rgba(14,65,116,0.15);
-  border-radius: 4px;
-  padding: 2px 8px;
-  letter-spacing: 0.5px;
-}
-.section-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--gray-800);
-}
-.section-title span {
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--gray-400);
-  margin-left: 8px;
-}
+    .mono {
+      font-family: 'Space Mono', monospace;
+    }
 
-/* CARD */
-.card {
-  background: var(--white);
-  border: 1px solid var(--gray-100);
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 16px;
-}
+    /* HEADER */
+    .report-header {
+      background: var(--blue);
+      padding: 28px 40px 24px;
+      color: white;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
 
-/* ═══════════════════════════════════════
+    .report-header h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+
+    .report-header .subtitle {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 5px;
+    }
+
+    .report-header .meta {
+      text-align: right;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+
+    .header-badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .header-badge.outline {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .header-badge.orange {
+      background: var(--orange);
+      color: white;
+    }
+
+    .header-accent {
+      height: 3px;
+      background: linear-gradient(90deg, var(--orange) 0%, rgba(255, 127, 50, 0.3) 60%, transparent 100%);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 32px 64px;
+    }
+
+    /* SECTION */
+    .section {
+      margin-bottom: 48px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .section-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-pale);
+      border: 1px solid rgba(14, 65, 116, 0.15);
+      border-radius: 4px;
+      padding: 2px 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+
+    .section-title span {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--gray-400);
+      margin-left: 8px;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-100);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    /* ═══════════════════════════════════════
    ORG CHART
 ═══════════════════════════════════════ */
-.org-chart {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  padding: 32px 0;
-}
+    .org-chart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 32px 0;
+    }
 
-.org-node {
-  border-radius: 14px;
-  padding: 14px 22px;
-  text-align: center;
-  position: relative;
-  min-width: 180px;
-  transition: transform 0.15s;
-}
-.org-node:hover { transform: translateY(-2px); }
+    .org-node {
+      border-radius: 14px;
+      padding: 14px 22px;
+      text-align: center;
+      position: relative;
+      min-width: 180px;
+      transition: transform 0.15s;
+    }
 
-.org-node .name {
-  font-weight: 700;
-  font-size: 14px;
-  margin-bottom: 2px;
-}
-.org-node .role {
-  font-size: 11px;
-  opacity: 0.8;
-}
-.org-node .tag {
-  display: inline-block;
-  font-size: 9px;
-  font-weight: 600;
-  padding: 1px 8px;
-  border-radius: 10px;
-  margin-top: 4px;
-  letter-spacing: 0.3px;
-}
+    .org-node:hover {
+      transform: translateY(-2px);
+    }
 
-/* Node styles */
-.node-am {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  color: white;
-  border: 2px solid var(--orange);
-  box-shadow: 0 4px 20px rgba(14,65,116,0.25);
-}
-.node-am .tag { background: var(--orange); color: white; }
+    .org-node .name {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
 
-.node-leader {
-  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
-  color: white;
-  border: 2px solid rgba(255,127,50,0.5);
-  box-shadow: 0 4px 16px rgba(14,65,116,0.2);
-}
-.node-leader .tag { background: rgba(255,255,255,0.2); color: white; }
+    .org-node .role {
+      font-size: 11px;
+      opacity: 0.8;
+    }
 
-.node-lead {
-  background: var(--white);
-  color: var(--gray-800);
-  border: 2px solid var(--blue);
-  box-shadow: 0 2px 8px rgba(14,65,116,0.08);
-}
-.node-lead .tag { background: var(--blue-pale); color: var(--blue); }
+    .org-node .tag {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 1px 8px;
+      border-radius: 10px;
+      margin-top: 4px;
+      letter-spacing: 0.3px;
+    }
 
-.node-member {
-  background: var(--white);
-  color: var(--gray-700);
-  border: 1.5px solid var(--gray-200);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  min-width: 140px;
-}
-.node-member .name { font-size: 13px; }
-.node-member .role { font-size: 10px; color: var(--gray-500); }
+    /* Node styles */
+    .node-am {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: white;
+      border: 2px solid var(--orange);
+      box-shadow: 0 4px 20px rgba(14, 65, 116, 0.25);
+    }
 
-.node-vacant {
-  background: var(--gray-50);
-  color: var(--gray-400);
-  border: 1.5px dashed var(--gray-300);
-  min-width: 140px;
-}
-.node-vacant .name { font-style: italic; }
+    .node-am .tag {
+      background: var(--orange);
+      color: white;
+    }
 
-.node-engagement {
-  border-color: var(--orange);
-}
-.node-engagement .tag { background: var(--orange-pale); color: var(--orange); }
+    .node-leader {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+      color: white;
+      border: 2px solid rgba(255, 127, 50, 0.5);
+      box-shadow: 0 4px 16px rgba(14, 65, 116, 0.2);
+    }
 
-/* Connectors */
-.connector-v {
-  width: 2px;
-  height: 28px;
-  background: var(--gray-300);
-  margin: 0 auto;
-}
-.connector-v.short { height: 18px; }
+    .node-leader .tag {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
 
-.org-row {
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  position: relative;
-}
+    .node-lead {
+      background: var(--white);
+      color: var(--gray-800);
+      border: 2px solid var(--blue);
+      box-shadow: 0 2px 8px rgba(14, 65, 116, 0.08);
+    }
 
-.org-branch {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-}
+    .node-lead .tag {
+      background: var(--blue-pale);
+      color: var(--blue);
+    }
 
-.squad-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  min-width: 200px;
-}
+    .node-member {
+      background: var(--white);
+      color: var(--gray-700);
+      border: 1.5px solid var(--gray-200);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      min-width: 140px;
+    }
 
-.squad-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--gray-400);
-  margin-bottom: 8px;
-  padding: 3px 12px;
-  background: var(--gray-100);
-  border-radius: 6px;
-}
-.squad-label.ops { color: var(--blue); background: var(--blue-pale); }
-.squad-label.hub { color: var(--purple); background: var(--purple-pale); }
-.squad-label.cap { color: var(--success); background: var(--success-pale); }
-.squad-label.eng { color: var(--orange); background: var(--orange-pale); }
+    .node-member .name {
+      font-size: 13px;
+    }
 
-.squad-members {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
+    .node-member .role {
+      font-size: 10px;
+      color: var(--gray-500);
+    }
 
-/* Horizontal connector bar */
-.h-connector {
-  position: relative;
-  width: 100%;
-  height: 28px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-.h-connector::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 2px;
-  height: 14px;
-  background: var(--gray-300);
-}
-.h-connector::after {
-  content: '';
-  position: absolute;
-  top: 14px;
-  height: 2px;
-  background: var(--gray-300);
-}
+    .node-vacant {
+      background: var(--gray-50);
+      color: var(--gray-400);
+      border: 1.5px dashed var(--gray-300);
+      min-width: 140px;
+    }
 
-.subteam-wrapper {
-  display: flex;
-  gap: 48px;
-  justify-content: center;
-  margin-top: 0;
-}
+    .node-vacant .name {
+      font-style: italic;
+    }
 
-.subteam-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+    .node-engagement {
+      border-color: var(--orange);
+    }
 
-.subteam-label {
-  font-size: 12px;
-  font-weight: 700;
-  padding: 6px 20px;
-  border-radius: 10px;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
-}
-.subteam-dm { background: var(--blue); color: white; }
-.subteam-de { background: var(--orange); color: white; }
+    .node-engagement .tag {
+      background: var(--orange-pale);
+      color: var(--orange);
+    }
 
-.squads-row {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-}
+    /* Connectors */
+    .connector-v {
+      width: 2px;
+      height: 28px;
+      background: var(--gray-300);
+      margin: 0 auto;
+    }
 
-/* Tree lines with SVG */
-.tree-lines {
-  width: 100%;
-  overflow: visible;
-}
+    .connector-v.short {
+      height: 18px;
+    }
 
-/* AM assist badge */
-.am-assist {
-  display: inline-block;
-  font-size: 8px;
-  font-weight: 600;
-  padding: 1px 6px;
-  border-radius: 8px;
-  background: var(--warn-pale);
-  color: var(--warn);
-  margin-top: 3px;
-  letter-spacing: 0.3px;
-}
+    .org-row {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      position: relative;
+    }
 
-/* Cross-squad indicator */
-.cross-badge {
-  display: inline-block;
-  font-size: 8px;
-  font-weight: 600;
-  padding: 1px 6px;
-  border-radius: 8px;
-  background: var(--purple-pale);
-  color: var(--purple);
-  margin-top: 2px;
-}
+    .org-branch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
 
-/* ═══════════════════════════════════════
+    .squad-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      width: 190px;
+    }
+
+    .squad-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 8px;
+      padding: 3px 12px;
+      background: var(--gray-100);
+      border-radius: 6px;
+    }
+
+    .squad-label.ops {
+      color: var(--blue);
+      background: var(--blue-pale);
+    }
+
+    .squad-label.hub {
+      color: var(--purple);
+      background: var(--purple-pale);
+    }
+
+    .squad-label.cap {
+      color: var(--success);
+      background: var(--success-pale);
+    }
+
+    .squad-label.eng {
+      color: var(--orange);
+      background: var(--orange-pale);
+    }
+
+    .squad-members {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
+      width: 100%;
+    }
+
+    /* Equal-height cards inside squads */
+    .squad-members .org-node {
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-width: unset;
+      padding: 10px 12px;
+    }
+
+    /* Horizontal connector bar */
+    .h-connector {
+      position: relative;
+      width: 100%;
+      height: 28px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .h-connector::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
+      height: 14px;
+      background: var(--gray-300);
+    }
+
+    .h-connector::after {
+      content: '';
+      position: absolute;
+      top: 14px;
+      height: 2px;
+      background: var(--gray-300);
+    }
+
+    .subteam-wrapper {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      margin-top: 0;
+    }
+
+    .subteam-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-self: flex-start;
+    }
+
+    .subteam-label {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 20px;
+      border-radius: 10px;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .subteam-dm {
+      background: var(--blue);
+      color: white;
+    }
+
+    .subteam-de {
+      background: var(--orange);
+      color: white;
+    }
+
+    .squads-row {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    /* Tree lines with SVG */
+    .tree-lines {
+      width: 100%;
+      overflow: visible;
+    }
+
+    /* AM assist badge */
+    .am-assist {
+      display: inline-block;
+      font-size: 8px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 8px;
+      background: var(--warn-pale);
+      color: var(--warn);
+      margin-top: 3px;
+      letter-spacing: 0.3px;
+    }
+
+    /* Cross-squad indicator */
+    .cross-badge {
+      display: inline-block;
+      font-size: 8px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 8px;
+      background: var(--purple-pale);
+      color: var(--purple);
+      margin-top: 2px;
+    }
+
+    /* ═══════════════════════════════════════
    RACI TABLE
 ═══════════════════════════════════════ */
-.raci-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 12px;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid var(--gray-200);
-}
-.raci-table thead th {
-  background: var(--blue);
-  color: white;
-  padding: 10px 8px;
-  font-weight: 600;
-  font-size: 11px;
-  text-align: center;
-  border-bottom: 2px solid rgba(255,127,50,0.4);
-  position: sticky;
-  top: 0;
-}
-.raci-table thead th:first-child {
-  text-align: left;
-  padding-left: 16px;
-  min-width: 200px;
-}
-.raci-table thead th .th-sub {
-  font-size: 9px;
-  font-weight: 400;
-  opacity: 0.6;
-  display: block;
-  margin-top: 1px;
-}
-.raci-table tbody tr {
-  transition: background 0.1s;
-}
-.raci-table tbody tr:hover {
-  background: var(--blue-pale);
-}
-.raci-table tbody td {
-  padding: 9px 8px;
-  border-bottom: 1px solid var(--gray-100);
-  text-align: center;
-  vertical-align: middle;
-}
-.raci-table tbody td:first-child {
-  text-align: left;
-  padding-left: 16px;
-  font-weight: 500;
-  color: var(--gray-700);
-}
-.raci-table tbody tr.group-row td {
-  background: var(--gray-50);
-  font-weight: 700;
-  font-size: 11px;
-  color: var(--blue);
-  letter-spacing: 0.5px;
-  padding: 8px 16px;
-  border-bottom: 1px solid var(--gray-200);
-}
+    .raci-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 12px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
 
-/* RACI badges */
-.raci {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 0;
-}
-.raci-R { background: var(--blue); color: white; }
-.raci-A { background: var(--orange); color: white; }
-.raci-C { background: var(--success-pale); color: var(--success); border: 1px solid rgba(16,185,129,0.2); }
-.raci-I { background: var(--gray-100); color: var(--gray-500); }
+    .raci-table thead th {
+      background: var(--blue);
+      color: white;
+      padding: 10px 8px;
+      font-weight: 600;
+      font-size: 11px;
+      text-align: center;
+      border-bottom: 2px solid rgba(255, 127, 50, 0.4);
+      position: sticky;
+      top: 0;
+    }
 
-/* Legend */
-.raci-legend {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
-.raci-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--gray-600);
-}
+    .raci-table thead th:first-child {
+      text-align: left;
+      padding-left: 16px;
+      min-width: 200px;
+    }
 
-/* FOOTER */
-.report-footer {
-  text-align: center;
-  padding: 24px;
-  color: var(--gray-400);
-  font-size: 11px;
-  border-top: 1px solid var(--gray-100);
-  margin-top: 40px;
-}
+    .raci-table thead th .th-sub {
+      font-size: 9px;
+      font-weight: 400;
+      opacity: 0.6;
+      display: block;
+      margin-top: 1px;
+    }
 
-/* Note callout */
-.note-box {
-  background: var(--blue-pale);
-  border-left: 3px solid var(--blue);
-  padding: 12px 16px;
-  border-radius: 0 8px 8px 0;
-  font-size: 12px;
-  color: var(--gray-700);
-  margin-top: 16px;
-}
-.note-box strong { color: var(--blue); }
-</style>
+    .raci-table tbody tr {
+      transition: background 0.1s;
+    }
+
+    .raci-table tbody tr:hover {
+      background: var(--blue-pale);
+    }
+
+    .raci-table tbody td {
+      padding: 9px 8px;
+      border-bottom: 1px solid var(--gray-100);
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .raci-table tbody td:first-child {
+      text-align: left;
+      padding-left: 16px;
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+
+    .raci-table tbody tr.group-row td {
+      background: var(--gray-50);
+      font-weight: 700;
+      font-size: 11px;
+      color: var(--blue);
+      letter-spacing: 0.5px;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    /* RACI badges */
+    .raci {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0;
+    }
+
+    .raci-R {
+      background: var(--blue);
+      color: white;
+    }
+
+    .raci-A {
+      background: var(--orange);
+      color: white;
+    }
+
+    .raci-C {
+      background: var(--success-pale);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .raci-I {
+      background: var(--gray-100);
+      color: var(--gray-500);
+    }
+
+    /* Legend */
+    .raci-legend {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .raci-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--gray-600);
+    }
+
+    /* FOOTER */
+    .report-footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--gray-400);
+      font-size: 11px;
+      border-top: 1px solid var(--gray-100);
+      margin-top: 40px;
+    }
+
+    /* Note callout */
+    .note-box {
+      background: var(--blue-pale);
+      border-left: 3px solid var(--blue);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      font-size: 12px;
+      color: var(--gray-700);
+      margin-top: 16px;
+    }
+
+    .note-box strong {
+      color: var(--blue);
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- HEADER -->
-<div class="report-header">
-  <div>
-    <h1>Driver Management Team</h1>
-    <div class="subtitle">Org Chart & RACI Matrix — Cấu trúc mới Q3/2026</div>
+  <!-- HEADER -->
+  <div class="report-header">
+    <div>
+      <h1>Driver Management Team</h1>
+      <div class="subtitle">Org Chart & RACI Matrix — Cấu trúc mới Q3/2026</div>
+    </div>
+    <div class="meta">
+      <span class="header-badge orange">TEAM STRUCTURE</span>
+      <span class="header-badge outline">2026-06-08</span>
+    </div>
   </div>
-  <div class="meta">
-    <span class="header-badge orange">TEAM STRUCTURE</span>
-    <span class="header-badge outline">2026-06-08</span>
-  </div>
-</div>
-<div class="header-accent"></div>
+  <div class="header-accent"></div>
 
-<div class="container">
+  <div class="container">
 
-<!-- ═══════════════════════════════════════
+    <!-- ═══════════════════════════════════════
      SECTION 01: ORG CHART
 ═══════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <span class="section-num mono">01</span>
-    <h2 class="section-title">Org Chart <span>Sơ đồ tổ chức</span></h2>
-  </div>
-
-  <div class="card" style="padding: 32px 16px; overflow-x: auto;">
-    <div class="org-chart">
-
-      <!-- AM -->
-      <div class="org-node node-am">
-        <div class="name">Chị Trang</div>
-        <div class="role">Asst. Driver Management Manager</div>
-        <span class="tag">AM</span>
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num mono">01</span>
+        <h2 class="section-title">Org Chart <span>Sơ đồ tổ chức</span></h2>
       </div>
-      <div class="connector-v"></div>
 
-      <!-- Leader -->
-      <div class="org-node node-leader">
-        <div class="name">Khanh</div>
-        <div class="role">Driver Management Leader</div>
-        <span class="tag">LEADER — Quản lý toàn bộ</span>
-      </div>
-      <div class="connector-v"></div>
+      <div class="card" style="padding: 32px 16px; overflow-x: auto;">
 
-      <!-- Split to 2 sub-teams via SVG -->
-      <svg class="tree-lines" width="900" height="50" viewBox="0 0 900 50" style="display:block; margin: 0 auto;">
-        <line x1="450" y1="0" x2="450" y2="16" stroke="#D1D5DB" stroke-width="2"/>
-        <line x1="225" y1="16" x2="675" y2="16" stroke="#D1D5DB" stroke-width="2"/>
-        <line x1="225" y1="16" x2="225" y2="50" stroke="#D1D5DB" stroke-width="2"/>
-        <line x1="675" y1="16" x2="675" y2="50" stroke="#D1D5DB" stroke-width="2"/>
-      </svg>
+        <!-- === CẤU TRÚC PHÒNG VẬN HÀNH ĐỐI TÁC TÀI XẾ === -->
+        <div style="margin-bottom: 40px; border-bottom: 2px dashed var(--gray-200); padding-bottom: 40px;">
+          <h3
+            style="color: var(--blue); font-size: 13px; font-weight: 800; text-align: center; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px;">
+            Sơ đồ Tổng thể: Phòng Vận Hành Đối Tác Tài Xế (32+1 nhân sự)
+          </h3>
 
-      <!-- 2 Sub-teams -->
-      <div class="subteam-wrapper">
-        <!-- SUB-TEAM DM -->
-        <div class="subteam-block">
-          <div class="subteam-label subteam-dm">SUB-TEAM: DM</div>
-          <div style="font-size:10px; color:var(--gray-400); margin-bottom:8px;">Performance · Capacity · Retention</div>
-
-          <svg width="440" height="40" viewBox="0 0 440 40" style="display:block; margin:0 auto;">
-            <line x1="220" y1="0" x2="220" y2="14" stroke="#D1D5DB" stroke-width="2"/>
-            <line x1="80" y1="14" x2="360" y2="14" stroke="#D1D5DB" stroke-width="2"/>
-            <line x1="80" y1="14" x2="80" y2="40" stroke="#D1D5DB" stroke-width="2"/>
-            <line x1="220" y1="14" x2="220" y2="40" stroke="#D1D5DB" stroke-width="2"/>
-            <line x1="360" y1="14" x2="360" y2="40" stroke="#D1D5DB" stroke-width="2"/>
-          </svg>
-
-          <div class="squads-row">
-            <!-- Operations Squad -->
-            <div class="squad-group">
-              <div class="squad-label ops">OPERATIONS</div>
-              <div class="squad-members">
-                <div class="org-node node-lead" style="min-width:160px;">
-                  <div class="name">Tiên</div>
-                  <div class="role">Lead Squad</div>
-                  <span class="tag">PERFORMANCE</span>
-                </div>
-                <div class="connector-v short"></div>
-                <div class="org-node node-member">
-                  <div class="name">Lượng</div>
-                  <div class="role">Ops Member</div>
-                  <span class="cross-badge">+ Captain PIC</span>
-                </div>
-                <div class="org-node node-member">
-                  <div class="name">Nhi</div>
-                  <div class="role">NIM/NLM → 60-day</div>
-                </div>
-                <div class="org-node node-vacant">
-                  <div class="name">Vacant</div>
-                  <div class="role">Đang tuyển</div>
-                </div>
-              </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0;">
+            <!-- Head Department Node: Chị Duyên -->
+            <div class="org-node node-am"
+              style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-color: var(--orange); border-width: 2.5px; min-width: 260px; box-shadow: 0 4px 20px rgba(15,23,42,0.25);">
+              <div class="name" style="font-size: 14px; letter-spacing: -0.2px;">Chị Nguyễn Thị Duyên</div>
+              <div class="role" style="font-size: 11px; font-weight: 600;">Trưởng Phòng Vận Hành Đối Tác Cao Cấp</div>
+              <div class="role"
+                style="font-size: 10px; opacity: 0.7; font-style: italic; font-weight: 400; margin-top: 1px;">Senior
+                Operations Manager</div>
+              <span class="tag" style="background: var(--orange); color: white; font-weight: 700;">HEAD OF DEPARTMENT —
+                32(+1)</span>
             </div>
 
-            <!-- MiniHub Squad -->
-            <div class="squad-group">
-              <div class="squad-label hub">MINIHUB</div>
-              <div style="margin-bottom:4px;"><span class="am-assist">AM hỗ trợ quản lý</span></div>
-              <div class="squad-members">
-                <div class="org-node node-lead" style="min-width:160px; border-color:var(--purple);">
-                  <div class="name">Hoàng</div>
-                  <div class="role">Lead Squad</div>
-                  <span class="tag" style="background:var(--purple-pale); color:var(--purple);">MINIHUB OPS</span>
-                </div>
-                <div class="connector-v short"></div>
-                <div class="org-node node-member">
-                  <div class="name">Trúc</div>
-                  <div class="role">MiniHub SGN</div>
-                  <span class="cross-badge">+ Captain Support</span>
-                </div>
-              </div>
-            </div>
+            <div style="width: 2px; height: 28px; background: var(--gray-300);"></div>
 
-            <!-- Captain Squad -->
-            <div class="squad-group">
-              <div class="squad-label cap">CAPTAIN</div>
-              <div style="margin-bottom:4px;"><span class="am-assist">AM hỗ trợ quản lý</span></div>
-              <div class="squad-members">
-                <div class="org-node node-lead" style="min-width:160px; border-color:var(--success);">
-                  <div class="name">Lượng</div>
-                  <div class="role">PIC</div>
-                  <span class="tag" style="background:var(--success-pale); color:var(--success);">PROJECT LEAD</span>
-                </div>
-                <div class="connector-v short"></div>
-                <div class="org-node node-member">
-                  <div class="name">Trúc</div>
-                  <div class="role">Support</div>
+            <!-- Branches horizontal connector line -->
+            <svg width="1000" height="20" viewBox="0 0 1000 20"
+              style="display:block; margin: 0 auto; overflow: visible;">
+              <line x1="100" y1="0" x2="900" y2="0" stroke="#D1D5DB" stroke-width="2" />
+              <line x1="100" y1="0" x2="100" y2="20" stroke="#D1D5DB" stroke-width="2" />
+              <line x1="300" y1="0" x2="300" y2="20" stroke="#D1D5DB" stroke-width="2" />
+              <line x1="500" y1="0" x2="500" y2="20" stroke="#D1D5DB" stroke-width="2" />
+              <line x1="700" y1="0" x2="700" y2="20" stroke="#D1D5DB" stroke-width="2" />
+              <line x1="900" y1="0" x2="900" y2="20" stroke="#D1D5DB" stroke-width="2" />
+            </svg>
+
+            <!-- 5 Branches Grid -->
+            <div
+              style="display: flex; gap: 16px; justify-content: center; width: 100%; max-width: 1080px; margin-top: 0;">
+
+              <!-- 1. Operations Growth -->
+              <div
+                style="flex: 1; display: flex; flex-direction: column; align-items: center; background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 12px; padding: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                <div
+                  style="font-weight: 800; font-size: 10px; color: var(--blue-light); text-align: center; margin-bottom: 8px; letter-spacing: 0.5px;">
+                  BỘ PHẬN OPERATIONS GROWTH (12)</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; width: 100%;">
+                  <div class="org-node node-member"
+                    style="min-width: unset; text-align: center; padding: 6px 10px; border-color: var(--gray-200);">
+                    <div class="name" style="font-size: 11px;">Team Growth SGN</div>
+                    <div class="role" style="font-size: 10px; color: var(--success); font-weight: 600;">7 nhân sự</div>
+                  </div>
+                  <div class="org-node node-member"
+                    style="min-width: unset; text-align: center; padding: 6px 10px; border-color: var(--gray-200);">
+                    <div class="name" style="font-size: 11px;">Team Growth HAN</div>
+                    <div class="role" style="font-size: 10px; color: var(--success); font-weight: 600;">5 nhân sự</div>
+                  </div>
                 </div>
               </div>
+
+              <!-- 2. Driver Management (Active/Highlighted) -->
+              <div
+                style="flex: 1; display: flex; flex-direction: column; align-items: center; background: var(--blue-pale); border: 2.5px solid var(--blue); border-radius: 12px; padding: 12px; box-shadow: 0 4px 12px rgba(14,65,116,0.08);">
+                <div
+                  style="font-weight: 800; font-size: 10px; color: var(--blue); text-align: center; margin-bottom: 8px; letter-spacing: 0.5px;">
+                  BỘ PHẬN DRIVER MANAGEMENT (13)</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; width: 100%;">
+                  <div class="org-node node-lead"
+                    style="min-width: unset; text-align: center; padding: 6px 10px; border-color: var(--blue-light);">
+                    <div class="name" style="font-size: 11px; font-weight: 700; color: var(--blue);">Team DM SGN</div>
+                    <div class="role" style="font-size: 10px; color: var(--blue-light); font-weight: 700;">6 nhân sự
+                      (Chi tiết dưới)</div>
+                  </div>
+                  <div class="org-node node-member"
+                    style="min-width: unset; text-align: center; padding: 6px 10px; border-color: var(--orange);">
+                    <div class="name" style="font-size: 11px;">Team DM HAN</div>
+                    <div class="role" style="font-size: 10px; color: var(--orange); font-weight: 600;">7 nhân sự (bao
+                      gồm AM Trang)</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Purchasing -->
+              <div
+                style="flex: 1; display: flex; flex-direction: column; align-items: center; background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 12px; padding: 12px; justify-content: flex-start;">
+                <div
+                  style="font-weight: 800; font-size: 10px; color: var(--gray-600); text-align: center; margin-bottom: 8px; letter-spacing: 0.5px;">
+                  BỘ PHẬN PURCHASING</div>
+                <div class="org-node node-member"
+                  style="min-width: unset; width: 100%; text-align: center; padding: 10px 6px; border-color: var(--gray-200); margin-top: auto; margin-bottom: auto;">
+                  <div class="name" style="font-size: 12px;">Purchasing</div>
+                  <div class="role" style="font-size: 10px; color: var(--success); font-weight: 700;">1(+1) nhân sự
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. Strategy & Planning -->
+              <div
+                style="flex: 1; display: flex; flex-direction: column; align-items: center; background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 12px; padding: 12px; justify-content: flex-start;">
+                <div
+                  style="font-weight: 800; font-size: 10px; color: var(--gray-600); text-align: center; margin-bottom: 8px; letter-spacing: 0.5px;">
+                  BỘ PHẬN STRATEGY & PLANNING</div>
+                <div class="org-node node-member"
+                  style="min-width: unset; width: 100%; text-align: center; padding: 10px 6px; border-color: var(--gray-200); margin-top: auto; margin-bottom: auto;">
+                  <div class="name" style="font-size: 12px;">Strategy & Planning</div>
+                  <div class="role" style="font-size: 10px; color: var(--success); font-weight: 700;">2 nhân sự</div>
+                </div>
+              </div>
+
+              <!-- 5. Local Operations Expansion -->
+              <div
+                style="flex: 1; display: flex; flex-direction: column; align-items: center; background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 12px; padding: 12px; justify-content: flex-start;">
+                <div
+                  style="font-weight: 800; font-size: 10px; color: var(--gray-600); text-align: center; margin-bottom: 8px; letter-spacing: 0.5px;">
+                  BỘ PHẬN LOCAL OPS EXPANSION</div>
+                <div class="org-node node-member"
+                  style="min-width: unset; width: 100%; text-align: center; padding: 10px 6px; border-color: var(--gray-200); margin-top: auto; margin-bottom: auto;">
+                  <div class="name" style="font-size: 12px;">Ops Expansion</div>
+                  <div class="role" style="font-size: 10px; color: var(--success); font-weight: 700;">4 nhân sự</div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
 
-        <!-- SUB-TEAM DE -->
-        <div class="subteam-block">
-          <div class="subteam-label subteam-de">SUB-TEAM: DE</div>
-          <div style="font-size:10px; color:var(--gray-400); margin-bottom:8px;">Engagement · Comms · Partnership</div>
+        <!-- === SƠ ĐỒ CHI TIẾT: BỘ PHẬN DRIVER MANAGEMENT === -->
+        <h3
+          style="color: var(--blue); font-size: 13px; font-weight: 800; text-align: center; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">
+          Sơ đồ Chi tiết: Bộ phận Driver Management (13 nhân sự)
+        </h3>
 
-          <svg width="200" height="40" viewBox="0 0 200 40" style="display:block; margin:0 auto;">
-            <line x1="100" y1="0" x2="100" y2="40" stroke="#D1D5DB" stroke-width="2"/>
-          </svg>
+        <div class="org-chart">
 
-          <div class="squads-row">
-            <!-- Engagement Squad -->
-            <div class="squad-group">
-              <div class="squad-label eng">DRIVER ENGAGEMENT</div>
-              <div class="squad-members">
-                <div class="org-node node-lead node-engagement" style="min-width:180px;">
-                  <div class="name">Vân</div>
-                  <div class="role">Lead Squad</div>
-                  <span class="tag" style="background:var(--orange-pale); color:var(--orange);">ENGAGEMENT</span>
+          <!-- AM -->
+          <div class="org-node node-am">
+            <div class="name">Chị Trang <span
+                style="font-size:8px;background:#F97316;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">HAN</span>
+            </div>
+            <div class="role">Asst. Driver Management Manager</div>
+            <span class="tag">AM</span>
+          </div>
+          <div class="connector-v"></div>
+
+          <!-- Leader -->
+          <div class="org-node node-leader">
+            <div class="name">Khanh <span
+                style="font-size:8px;background:#0E4174;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">SGN</span>
+            </div>
+            <div class="role">Driver Management Leader</div>
+            <span class="tag">LEADER — Quản lý toàn bộ</span>
+          </div>
+          <div class="connector-v"></div>
+
+
+
+          <!-- Main split connector: JS will draw lines into this SVG -->
+          <svg id="svg-main-split" width="900" height="50" viewBox="0 0 900 50" style="display:block; width:100%; overflow:visible;"></svg>
+
+          <!-- 2 Sub-teams with CSS connectors -->
+          <div id="subteam-wrapper" class="subteam-wrapper" style="position:relative;">
+            <!-- SUB-TEAM DM -->
+            <div id="dm-block" class="subteam-block" style="position:relative;">
+              <div class="subteam-label subteam-dm">SUB-TEAM: DM</div>
+              <div style="font-size:10px; color:var(--gray-400); margin-bottom:8px;">Performance · Capacity · Retention
+              </div>
+
+              <!-- CSS connector: from DM label down to squads -->
+              <svg id="svg-dm-split" width="100%" height="40" viewBox="0 0 610 40" preserveAspectRatio="none" style="display:block; overflow:visible;">
+                <line x1="305" y1="0" x2="305" y2="14" stroke="#D1D5DB" stroke-width="2" />
+                <line x1="95" y1="14" x2="515" y2="14" stroke="#D1D5DB" stroke-width="2" />
+                <line x1="95" y1="14" x2="95" y2="40" stroke="#D1D5DB" stroke-width="2" />
+                <line x1="305" y1="14" x2="305" y2="40" stroke="#D1D5DB" stroke-width="2" />
+                <line x1="515" y1="14" x2="515" y2="40" stroke="#D1D5DB" stroke-width="2" />
+              </svg>
+
+              <div class="squads-row">
+                <!-- Operations Squad -->
+                <div id="squad-ops" class="squad-group">
+                  <div class="squad-label ops">OPERATIONS</div>
+                  <div class="squad-members">
+                    <div class="org-node node-lead">
+                      <div class="name">Tiên <span style="font-size:8px;background:#0E4174;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">SGN</span>
+                      </div>
+                      <div class="role">Lead Squad</div>
+                      <span class="tag">PERFORMANCE</span>
+                    </div>
+                    <div class="org-node node-member">
+                      <div class="name">Lượng <span style="font-size:8px;background:#F97316;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">HAN</span>
+                      </div>
+                      <div class="role">Ops Member</div>
+                      <span class="cross-badge">+ Captain PIC</span>
+                    </div>
+                    <div class="org-node node-member">
+                      <div class="name">Nhi <span style="font-size:8px;background:#0E4174;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">SGN</span>
+                      </div>
+                      <div class="role">NIM/NLM → 60-day</div>
+                    </div>
+                    <div class="org-node node-member" style="border-color:var(--orange);">
+                      <div class="name">Hoàng (mới) <span style="font-size:8px;background:#F97316;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">HAN</span>
+                      </div>
+                      <div class="role">DM Ops</div>
+                      <span class="cross-badge">Mới tuyển</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="connector-v short"></div>
-                <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
-                  <div class="org-node node-member node-engagement" style="min-width:120px;">
-                    <div class="name">Thúy</div>
-                    <div class="role">HAN Region</div>
+
+                <!-- MiniHub Squad -->
+                <div id="squad-hub" class="squad-group">
+                  <div class="squad-label hub">MINIHUB</div>
+                  <div style="margin-bottom:4px;"><span class="am-assist">Report trực tiếp AM</span></div>
+                  <div class="squad-members">
+                    <div class="org-node node-lead" style="min-width:160px; border-color:var(--purple);">
+                      <div class="name">Hoàng (MH) <span
+                          style="font-size:8px;background:#F97316;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">HAN</span>
+                      </div>
+                      <div class="role">Lead Squad</div>
+                      <span class="tag" style="background:var(--purple-pale); color:var(--purple);">MINIHUB OPS</span>
+                    </div>
+                    <div class="connector-v short"></div>
+                    <div class="org-node node-member">
+                      <div class="name">Trúc <span
+                          style="font-size:8px;background:#0E4174;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">SGN</span>
+                      </div>
+                      <div class="role">MiniHub</div>
+                      <span class="cross-badge">+ Captain Support</span>
+                    </div>
                   </div>
-                  <div class="org-node node-member node-engagement" style="min-width:120px;">
-                    <div class="name">Khoa</div>
-                    <div class="role">Comms</div>
+                </div>
+
+                <!-- Captain Squad -->
+                <div id="squad-cap" class="squad-group">
+                  <div class="squad-label cap">CAPTAIN</div>
+                  <div style="margin-bottom:4px;"><span class="am-assist">Report trực tiếp AM</span></div>
+                  <div class="squad-members">
+                    <div class="org-node node-lead" style="min-width:160px; border-color:var(--success);">
+                      <div class="name">Lượng</div>
+                      <div class="role">PIC</div>
+                      <span class="tag" style="background:var(--success-pale); color:var(--success);">PROJECT
+                        LEAD</span>
+                    </div>
+                    <div class="connector-v short"></div>
+                    <div class="org-node node-member">
+                      <div class="name">Trúc <span
+                          style="font-size:8px;background:#0E4174;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">SGN</span>
+                      </div>
+                      <div class="role">Captain Support</div>
+                    </div>
                   </div>
-                  <div class="org-node node-member node-engagement" style="min-width:120px;">
-                    <div class="name">Hoa</div>
-                    <div class="role">Comms</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUB-TEAM DE -->
+            <div id="de-block" class="subteam-block">
+              <div class="subteam-label subteam-de">SUB-TEAM: DE</div>
+              <div style="font-size:10px; color:var(--gray-400); margin-bottom:8px;">Engagement · Comms · Partnership
+              </div>
+
+              <svg width="200" height="40" viewBox="0 0 200 40" style="display:block; margin:0 auto;">
+                <line x1="100" y1="0" x2="100" y2="40" stroke="#D1D5DB" stroke-width="2" />
+              </svg>
+
+              <div class="squads-row">
+                <!-- Engagement Squad -->
+                <div class="squad-group">
+                  <div class="squad-label eng">DRIVER ENGAGEMENT</div>
+                  <div class="squad-members">
+                    <div class="org-node node-lead node-engagement" style="min-width:180px;">
+                      <div class="name">Vân <span
+                          style="font-size:8px;background:#0E4174;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">SGN</span>
+                      </div>
+                      <div class="role">Lead Squad</div>
+                      <span class="tag" style="background:var(--orange-pale); color:var(--orange);">ENGAGEMENT</span>
+                    </div>
+                    <div class="connector-v short"></div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+                      <div class="org-node node-member node-engagement" style="min-width:120px;">
+                        <div class="name">Thúy <span
+                            style="font-size:8px;background:#F97316;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">HAN</span>
+                        </div>
+                        <div class="role">Engagement</div>
+                      </div>
+                      <div class="org-node node-member node-engagement" style="min-width:120px;">
+                        <div class="name">Khoa <span
+                            style="font-size:8px;background:#0E4174;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">SGN</span>
+                        </div>
+                        <div class="role">Comms</div>
+                      </div>
+                      <div class="org-node node-member node-engagement" style="min-width:120px;">
+                        <div class="name">Hoa <span
+                            style="font-size:8px;background:#F97316;color:white;border-radius:3px;padding:1px 5px;font-weight:800;margin-left:4px;vertical-align:middle;">HAN</span>
+                        </div>
+                        <div class="role">Comms</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+        </div>
+
+        <div class="note-box" style="margin-top:24px;">
+          <strong>Lưu ý cross-squad:</strong> Lượng (Ops + Captain PIC) · Trúc (MiniHub + Captain Support). |
+          <strong>Lưu ý trùng tên:</strong> Hoàng (MH) = MiniHub Lead HAN · Hoàng (mới) = DM Ops mới tuyển HAN Region.
         </div>
       </div>
-
     </div>
 
-    <div class="note-box" style="margin-top:24px;">
-      <strong>Lưu ý cross-squad:</strong> Lượng (Ops + Captain PIC) · Trúc (MiniHub + Captain Support) · AM (Chị Trang) hỗ trợ quản lý MiniHub & Captain squads.
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════
+    <!-- ═══════════════════════════════════════
      SECTION 02: RACI MATRIX
 ═══════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <span class="section-num mono">02</span>
-    <h2 class="section-title">RACI Matrix <span>Phân công trách nhiệm</span></h2>
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num mono">02</span>
+        <h2 class="section-title">RACI Matrix <span>Phân công trách nhiệm</span></h2>
+      </div>
+
+      <div class="raci-legend">
+        <div class="raci-legend-item"><span class="raci raci-R">R</span> Responsible — Thực hiện</div>
+        <div class="raci-legend-item"><span class="raci raci-A">A</span> Accountable — Chịu trách nhiệm</div>
+        <div class="raci-legend-item"><span class="raci raci-C">C</span> Consulted — Tham vấn</div>
+        <div class="raci-legend-item"><span class="raci raci-I">I</span> Informed — Được thông báo</div>
+      </div>
+
+      <div class="card" style="padding:0; overflow-x:auto;">
+        <table class="raci-table">
+          <thead>
+            <tr>
+              <th>Hoạt động / Nhiệm vụ</th>
+              <th>Khanh<div class="th-sub">Leader</div>
+              </th>
+              <th>AM Trang<div class="th-sub">Asst. Mgr</div>
+              </th>
+              <th>Tiên<div class="th-sub">Ops Lead</div>
+              </th>
+              <th>Lượng<div class="th-sub">Ops + Cpt</div>
+              </th>
+              <th>Nhi<div class="th-sub">NIM/NLM</div>
+              </th>
+              <th>Hoàng<div class="th-sub">Hub Lead</div>
+              </th>
+              <th>Trúc<div class="th-sub">Hub + Cpt</div>
+              </th>
+              <th>Vân<div class="th-sub">DE Lead</div>
+              </th>
+              <th>Thúy<div class="th-sub">HAN</div>
+              </th>
+              <th>Khoa<div class="th-sub">Comms</div>
+              </th>
+              <th>Hoa<div class="th-sub">Comms</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- GROUP: OPERATIONS -->
+            <tr class="group-row">
+              <td colspan="12">OPERATIONS — Performance & Retention</td>
+            </tr>
+            <tr>
+              <td>Giám sát Performance tổng (AR, FR, CPO)</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Cân đối Capacity & Supply theo zone</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Incentive Design & Budget Control</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Driver Retention & Churn Analysis</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Onboarding Tài xế mới (NIM/NLM)</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Quản lý Tài xế 60 ngày đầu</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Driver Tiering (4-tier system)</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+
+            <!-- GROUP: MINIHUB -->
+            <tr class="group-row">
+              <td colspan="12">MINIHUB — Zone Operations</td>
+            </tr>
+            <tr>
+              <td>Vận hành MiniHub tổng</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-A">A</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>MiniHub SGN — vận hành hàng ngày</td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-A">A</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Driver trong Zone — phân bổ & SLA</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+
+            <!-- GROUP: CAPTAIN -->
+            <tr class="group-row">
+              <td colspan="12">CAPTAIN PROJECT</td>
+            </tr>
+            <tr>
+              <td>Thiết kế & triển khai Captain Program</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Tuyển chọn & quản lý Captain</td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-A">A</span></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Đánh giá hiệu quả Captain</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+
+            <!-- GROUP: DRIVER ENGAGEMENT -->
+            <tr class="group-row">
+              <td colspan="12">DRIVER ENGAGEMENT — Comms & Partnership</td>
+            </tr>
+            <tr>
+              <td>Chiến lược Engagement tổng</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-C">C</span></td>
+            </tr>
+            <tr>
+              <td>Hoạt động gắn kết offline SGN</td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-A">A</span></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-R">R</span></td>
+            </tr>
+            <tr>
+              <td>Hoạt động gắn kết offline HAN</td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Partnership & Benefits Tài xế</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-C">C</span></td>
+            </tr>
+            <tr>
+              <td>Truyền thông nội bộ Tài xế</td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-I">I</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-A">A</span></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-R">R</span></td>
+            </tr>
+            <tr>
+              <td>Hỗ trợ truyền thông cho DM & liên team</td>
+              <td><span class="raci raci-I">I</span></td>
+              <td></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-A">A</span></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-R">R</span></td>
+            </tr>
+
+            <!-- GROUP: CROSS-FUNCTIONAL -->
+            <tr class="group-row">
+              <td colspan="12">CROSS-FUNCTIONAL</td>
+            </tr>
+            <tr>
+              <td>Báo cáo tuần/tháng cho Management</td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Mega Sales Planning (capacity surge)</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Fraud Detection & Xử lý vi phạm</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>EV Driver Transition</td>
+              <td><span class="raci raci-A">A</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td><span class="raci raci-R">R</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td><span class="raci raci-C">C</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note-box" style="margin-top:16px;">
+        <strong>Quy ước:</strong> Mỗi hoạt động chỉ có 1 Accountable (A). Với MiniHub & Captain, AM (Chị Trang) đồng A
+        cùng Khanh — nghĩa là AM chịu trách nhiệm trực tiếp hàng ngày, Khanh chịu trách nhiệm tổng.
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+     SECTION 03: ROLES & RESPONSIBILITIES
+═══════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num mono">03</span>
+        <h2 class="section-title">Roles & Responsibilities <span>Vai trò & Nhiệm vụ chi tiết</span></h2>
+      </div>
+
+      <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+        <!-- Sub-team DM Card -->
+        <div class="card" style="flex: 1; min-width: 320px; margin-bottom: 0;">
+          <h3
+            style="color: var(--blue); font-size: 14px; font-weight: 700; margin-bottom: 16px; border-bottom: 2px solid var(--blue-pale); padding-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+            <span
+              style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--blue);"></span>
+            SUB-TEAM: DM (Vận hành & Hiệu suất)
+          </h3>
+
+          <div style="margin-bottom: 16px;">
+            <strong style="color: var(--blue-light); font-size: 13px;">1. Operations Squad (Performance &
+              Lifecycle)</strong>
+            <div style="font-size: 10px; color: var(--gray-400); margin: 2px 0 6px 0;">PIC: Tiên (Lead), Lượng, Nhi
+            </div>
+            <ul style="padding-left: 16px; font-size: 12px; color: var(--gray-600); line-height: 1.6;">
+              <li>Giám sát & Tối ưu hóa các chỉ số hiệu suất chính: tỷ lệ tiếp nhận (AR), tỷ lệ hoàn thành (FR), chi phí
+                đơn (CPO).</li>
+              <li>Cân đối cung cầu (Capacity Balancing) theo từng vùng (Zone) và khung giờ cao điểm (Peak hours).</li>
+              <li>Thiết kế cơ chế thưởng ngắn/dài hạn (Incentive Design) và quản lý ngân sách (Budget Control).</li>
+              <li>Phân tích nguyên nhân và giải pháp hạn chế tài xế rời bỏ (Retention & Churn Analysis).</li>
+              <li>Quản lý toàn diện quy trình Onboarding tài xế mới (NIM/NLM) và tài xế trong 60 ngày đầu (PIC: Nhi).
+              </li>
+              <li>Phát triển hệ thống phân tầng tài xế 4 cấp (Driver Tiering).</li>
+            </ul>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <strong style="color: var(--purple); font-size: 13px;">2. MiniHub Squad (Zone Operations)</strong>
+            <div style="font-size: 10px; color: var(--gray-400); margin: 2px 0 6px 0;">PIC: Hoàng (Lead), Trúc</div>
+            <ul style="padding-left: 16px; font-size: 12px; color: var(--gray-600); line-height: 1.6;">
+              <li>Quản lý trực tiếp hoạt động hàng ngày tại hệ thống các trạm MiniHub miền Nam.</li>
+              <li>Đảm bảo chất lượng dịch vụ (SLA) và phân bổ tài xế hợp lý theo từng vùng địa bàn phụ trách.</li>
+            </ul>
+          </div>
+
+          <div>
+            <strong style="color: var(--success); font-size: 13px;">3. Captain Squad (Project Management)</strong>
+            <div style="font-size: 10px; color: var(--gray-400); margin: 2px 0 6px 0;">PIC: Lượng (Lead), Trúc</div>
+            <ul style="padding-left: 16px; font-size: 12px; color: var(--gray-600); line-height: 1.6;">
+              <li>Thiết kế mô hình hoạt động, tiêu chí tuyển chọn và bộ khung vận hành cho Captain Program.</li>
+              <li>Quản lý, huấn luyện và đánh giá hiệu quả hoạt động định kỳ của mạng lưới Đội trưởng tài xế.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Sub-team DE Card -->
+        <div class="card" style="flex: 1; min-width: 320px; margin-bottom: 0;">
+          <h3
+            style="color: var(--orange); font-size: 14px; font-weight: 700; margin-bottom: 16px; border-bottom: 2px solid var(--orange-pale); padding-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+            <span
+              style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--orange);"></span>
+            SUB-TEAM: DE (Gắn kết & Truyền thông)
+          </h3>
+
+          <div style="margin-bottom: 16px;">
+            <strong style="color: var(--orange); font-size: 13px;">1. Driver Engagement & Community</strong>
+            <div style="font-size: 10px; color: var(--gray-400); margin: 2px 0 6px 0;">PIC: Vân (Lead), Thúy (HAN)</div>
+            <ul style="padding-left: 16px; font-size: 12px; color: var(--gray-600); line-height: 1.6;">
+              <li>Thiết lập và triển khai chiến lược gắn kết tài xế tổng thể qua các hoạt động phi tài chính.</li>
+              <li>Tổ chức các sự kiện offline, buổi họp mặt định kỳ và chương trình vinh danh tài xế xuất sắc.</li>
+              <li>Phân vùng phụ trách: miền Nam (Vân), miền Bắc (Thúy).</li>
+            </ul>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <strong style="color: var(--gray-700); font-size: 13px;">2. Partnership & Benefits</strong>
+            <div style="font-size: 10px; color: var(--gray-400); margin: 2px 0 6px 0;">PIC: Vân (Lead)</div>
+            <ul style="padding-left: 16px; font-size: 12px; color: var(--gray-600); line-height: 1.6;">
+              <li>Tìm kiếm, đàm phán và duy trì mối quan hệ hợp tác với các đối tác ngoài (xăng dầu, bảo hiểm, sửa xe,
+                viễn thông...) để cung cấp phúc lợi tốt nhất cho tài xế.</li>
+            </ul>
+          </div>
+
+          <div>
+            <strong style="color: var(--blue-light); font-size: 13px;">3. Driver Internal Communications</strong>
+            <div style="font-size: 10px; color: var(--gray-400); margin: 2px 0 6px 0;">PIC: Khoa, Hoa</div>
+            <ul style="padding-left: 16px; font-size: 12px; color: var(--gray-600); line-height: 1.6;">
+              <li>Quản lý nội dung và vận hành các kênh truyền thông chính thức (Zalo, In-app notification, Facebook
+                Group).</li>
+              <li>Soạn thảo các thông báo chính sách mới, hướng dẫn quy định và nội dung truyền thông liên phòng ban.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="report-footer">
+      Ahamove — Driver Management Team · Cập nhật 2026-06-08 · Confidential
+    </div>
+    Ahamove — Driver Management Team · Cập nhật 2026-06-08 · Confidential
   </div>
 
-  <div class="raci-legend">
-    <div class="raci-legend-item"><span class="raci raci-R">R</span> Responsible — Thực hiện</div>
-    <div class="raci-legend-item"><span class="raci raci-A">A</span> Accountable — Chịu trách nhiệm</div>
-    <div class="raci-legend-item"><span class="raci raci-C">C</span> Consulted — Tham vấn</div>
-    <div class="raci-legend-item"><span class="raci raci-I">I</span> Informed — Được thông báo</div>
   </div>
 
-  <div class="card" style="padding:0; overflow-x:auto;">
-    <table class="raci-table">
-      <thead>
-        <tr>
-          <th>Hoạt động / Nhiệm vụ</th>
-          <th>Khanh<div class="th-sub">Leader</div></th>
-          <th>AM Trang<div class="th-sub">Asst. Mgr</div></th>
-          <th>Tiên<div class="th-sub">Ops Lead</div></th>
-          <th>Lượng<div class="th-sub">Ops + Cpt</div></th>
-          <th>Nhi<div class="th-sub">NIM/NLM</div></th>
-          <th>Hoàng<div class="th-sub">Hub Lead</div></th>
-          <th>Trúc<div class="th-sub">Hub + Cpt</div></th>
-          <th>Vân<div class="th-sub">DE Lead</div></th>
-          <th>Thúy<div class="th-sub">HAN</div></th>
-          <th>Khoa<div class="th-sub">Comms</div></th>
-          <th>Hoa<div class="th-sub">Comms</div></th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- GROUP: OPERATIONS -->
-        <tr class="group-row"><td colspan="12">OPERATIONS — Performance & Retention</td></tr>
-        <tr>
-          <td>Giám sát Performance tổng (AR, FR, CPO)</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Cân đối Capacity & Supply theo zone</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Incentive Design & Budget Control</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Driver Retention & Churn Analysis</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Onboarding Tài xế mới (NIM/NLM)</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Quản lý Tài xế 60 ngày đầu</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Driver Tiering (4-tier system)</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
+<script>
+function updateTreeLines() {
+  // === MAIN SPLIT: Khanh → DM / DE ===
+  var mainSvg  = document.getElementById('svg-main-split');
+  var leaderNode = document.querySelector('.node-leader');
+  var dmBlock  = document.getElementById('dm-block');
+  var deBlock  = document.getElementById('de-block');
+  
+  if (mainSvg && leaderNode && dmBlock && deBlock) {
+    var svgR  = mainSvg.getBoundingClientRect();
+    var leaderR = leaderNode.getBoundingClientRect();
+    var dmR   = dmBlock.getBoundingClientRect();
+    var deR   = deBlock.getBoundingClientRect();
+    
+    var W     = svgR.width || 900;
+    var H     = 50;
+    
+    mainSvg.setAttribute('width', W);
+    mainSvg.setAttribute('height', H);
+    mainSvg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    
+    // Calculate centers relative to the SVG coordinate system
+    var leaderCx = leaderR.left + leaderR.width / 2 - svgR.left;
+    var dmCx     = dmR.left + dmR.width / 2 - svgR.left;
+    var deCx     = deR.left + deR.width / 2 - svgR.left;
+    
+    mainSvg.innerHTML = '';
+    function mkLine(x1, y1, x2, y2) {
+      var l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      l.setAttribute('x1', x1); l.setAttribute('y1', y1);
+      l.setAttribute('x2', x2); l.setAttribute('y2', y2);
+      l.setAttribute('stroke', '#D1D5DB'); l.setAttribute('stroke-width', '2');
+      mainSvg.appendChild(l);
+    }
+    
+    // Vertical stem down from Leader node to horizontal bar
+    mkLine(leaderCx, 0, leaderCx, 16);
+    // Horizontal bar connecting DM and DE drops
+    mkLine(dmCx, 16, deCx, 16);
+    // Drops to individual subteams
+    mkLine(dmCx, 16, dmCx, H);
+    mkLine(deCx, 16, deCx, H);
+  }
 
-        <!-- GROUP: MINIHUB -->
-        <tr class="group-row"><td colspan="12">MINIHUB — Zone Operations</td></tr>
-        <tr>
-          <td>Vận hành MiniHub tổng</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-A">A</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>MiniHub SGN — vận hành hàng ngày</td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-A">A</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Driver trong Zone — phân bổ & SLA</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
+  // === DM SQUAD SPLIT ===
+  var dmSvg = document.getElementById('svg-dm-split');
+  var sqOps = document.getElementById('squad-ops');
+  var sqHub = document.getElementById('squad-hub');
+  var sqCap = document.getElementById('squad-cap');
+  if (dmSvg && sqOps && sqHub && sqCap) {
+    var svgR2 = dmSvg.getBoundingClientRect();
+    var W2    = svgR2.width || 610;
+    var H2    = 40;
+    
+    dmSvg.setAttribute('width', W2);
+    dmSvg.setAttribute('height', H2);
+    dmSvg.setAttribute('viewBox', '0 0 ' + W2 + ' ' + H2);
+    
+    var dmLabelCx = W2 / 2;
+    var opsCx = sqOps.getBoundingClientRect().left + sqOps.getBoundingClientRect().width / 2 - svgR2.left;
+    var hubCx = sqHub.getBoundingClientRect().left + sqHub.getBoundingClientRect().width / 2 - svgR2.left;
+    var capCx = sqCap.getBoundingClientRect().left + sqCap.getBoundingClientRect().width / 2 - svgR2.left;
+    
+    function mkLine2(x1, y1, x2, y2) {
+      var l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      l.setAttribute('x1', x1); l.setAttribute('y1', y1);
+      l.setAttribute('x2', x2); l.setAttribute('y2', y2);
+      l.setAttribute('stroke', '#D1D5DB'); l.setAttribute('stroke-width', '2');
+      dmSvg.appendChild(l);
+    }
+    
+    dmSvg.innerHTML = '';
+    mkLine2(dmLabelCx, 0, dmLabelCx, 14);
+    mkLine2(opsCx, 14, capCx, 14);
+    mkLine2(opsCx, 14, opsCx, H2);
+    mkLine2(hubCx, 14, hubCx, H2);
+    mkLine2(capCx, 14, capCx, H2);
+  }
+}
 
-        <!-- GROUP: CAPTAIN -->
-        <tr class="group-row"><td colspan="12">CAPTAIN PROJECT</td></tr>
-        <tr>
-          <td>Thiết kế & triển khai Captain Program</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Tuyển chọn & quản lý Captain</td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-A">A</span></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Đánh giá hiệu quả Captain</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-
-        <!-- GROUP: DRIVER ENGAGEMENT -->
-        <tr class="group-row"><td colspan="12">DRIVER ENGAGEMENT — Comms & Partnership</td></tr>
-        <tr>
-          <td>Chiến lược Engagement tổng</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-C">C</span></td>
-        </tr>
-        <tr>
-          <td>Hoạt động gắn kết offline SGN</td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-A">A</span></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-R">R</span></td>
-        </tr>
-        <tr>
-          <td>Hoạt động gắn kết offline HAN</td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Partnership & Benefits Tài xế</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-C">C</span></td>
-        </tr>
-        <tr>
-          <td>Truyền thông nội bộ Tài xế</td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-I">I</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-A">A</span></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-R">R</span></td>
-        </tr>
-        <tr>
-          <td>Hỗ trợ truyền thông cho DM & liên team</td>
-          <td><span class="raci raci-I">I</span></td>
-          <td></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-A">A</span></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-R">R</span></td>
-        </tr>
-
-        <!-- GROUP: CROSS-FUNCTIONAL -->
-        <tr class="group-row"><td colspan="12">CROSS-FUNCTIONAL</td></tr>
-        <tr>
-          <td>Báo cáo tuần/tháng cho Management</td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Mega Sales Planning (capacity surge)</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Fraud Detection & Xử lý vi phạm</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>EV Driver Transition</td>
-          <td><span class="raci raci-A">A</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td><span class="raci raci-R">R</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td><span class="raci raci-C">C</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="note-box" style="margin-top:16px;">
-    <strong>Quy ước:</strong> Mỗi hoạt động chỉ có 1 Accountable (A). Với MiniHub & Captain, AM (Chị Trang) đồng A cùng Khanh — nghĩa là AM chịu trách nhiệm trực tiếp hàng ngày, Khanh chịu trách nhiệm tổng.
-  </div>
-</div>
-
-<!-- FOOTER -->
-<div class="report-footer">
-  Ahamove — Driver Management Team · Cập nhật 2026-06-08 · Confidential
-</div>
-
-</div>
+// Run after full layout paint
+window.addEventListener('load', function() {
+  updateTreeLines();
+  requestAnimationFrame(function() {
+    requestAnimationFrame(updateTreeLines);
+  });
+  setTimeout(updateTreeLines, 300);
+});
+window.addEventListener('resize', updateTreeLines);
+</script>
 </body>
+
 </html>
