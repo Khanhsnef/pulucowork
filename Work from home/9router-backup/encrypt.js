@@ -28,8 +28,10 @@ function encryptFile(inputPath, outputPath) {
 
 const homedir = require('os').homedir();
 const sourceDir = path.join(homedir, '.9router');
-const outputDir = __dirname; // 9router-backup
+const outputDir = __dirname; // Work from home/9router-backup
+const workspaceDir = path.join(__dirname, '..', '..'); // Pulu-workspace
 
 encryptFile(path.join(sourceDir, 'db', 'data.sqlite'), path.join(outputDir, 'data', 'db', 'data.sqlite.enc'));
 encryptFile(path.join(sourceDir, 'jwt-secret'), path.join(outputDir, 'data', 'jwt-secret.enc'));
 encryptFile(path.join(sourceDir, 'machine-id'), path.join(outputDir, 'data', 'machine-id.enc'));
+encryptFile(path.join(workspaceDir, '.env'), path.join(outputDir, 'data', 'workspace-env.enc'));

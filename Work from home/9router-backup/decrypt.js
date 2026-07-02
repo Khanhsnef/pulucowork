@@ -33,8 +33,10 @@ if (!targetDir) {
     process.exit(1);
 }
 
-const backupDir = __dirname; // 9router-backup
+const backupDir = __dirname; // Work from home/9router-backup
+const workspaceDir = path.join(__dirname, '..', '..'); // Pulu-workspace
 
 decryptFile(path.join(backupDir, 'data', 'db', 'data.sqlite.enc'), path.join(targetDir, 'db', 'data.sqlite'));
 decryptFile(path.join(backupDir, 'data', 'jwt-secret.enc'), path.join(targetDir, 'jwt-secret'));
 decryptFile(path.join(backupDir, 'data', 'machine-id.enc'), path.join(targetDir, 'machine-id'));
+decryptFile(path.join(backupDir, 'data', 'workspace-env.enc'), path.join(workspaceDir, '.env'));
