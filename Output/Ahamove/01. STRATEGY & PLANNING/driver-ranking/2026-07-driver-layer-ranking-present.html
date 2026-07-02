@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ahamove · Driver Layer &amp; Ranking Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #0E4174;
+      --navy-light: #1A5A9A;
+      --navy-tint: #EEF2FF;
+      --orange: #FF7F32;
+      --orange-light: #FFF7ED;
+      --green:  #10B981;
+      --green-light: #D1FAE5;
+      --red:    #EF4444;
+      --red-light: #FEE2E2;
+      --gray50: #F9FAFB;
+      --gray100:#F3F4F6;
+      --gray200:#E5E7EB;
+      --gray400:#9CA3AF;
+      --gray600:#4B5563;
+      --gray900:#111827;
+    }
+
+    body {
+      font-family: 'Lexend', sans-serif;
+      background: var(--gray50);
+      color: var(--gray900);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────────────────── */
+    .report-header {
+      background: var(--navy);
+      color: #fff;
+      padding: 2.5rem 3rem 2.8rem;
+      border-radius: 0 0 2rem 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .report-header::after {
+      content: "";
+      position: absolute;
+      right: -10%;
+      bottom: -30%;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(255, 127, 50, 0.1);
+      pointer-events: none;
+    }
+    .header-pills {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .pill {
+      height: 6px;
+      border-radius: 3px;
+    }
+    .pill-navy  { width: 28px; background: rgba(255,255,255,0.35); }
+    .pill-orange{ width: 18px; background: var(--orange); }
+
+    .report-header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .header-sub1 {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 0.4rem;
+    }
+    .header-sub2 {
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.01em;
+    }
+
+    /* ─── SECTION CARD ────────────────────────────────────────────── */
+    .section-card {
+      background: #fff;
+      border-radius: 2rem;
+      border: 1px solid var(--gray100);
+      padding: 2rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.02);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+    .section-badge {
+      background: var(--navy);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 700;
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-title-block h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--gray900);
+      line-height: 1.3;
+    }
+    .section-title-block p {
+      font-size: 0.8rem;
+      color: var(--gray400);
+      margin-top: 0.2rem;
+    }
+
+    .section-main {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* ─── VISUAL AREA ─────────────────────────────────────────────── */
+    .visual-area {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      background: #fff;
+      border: 1px solid var(--gray100);
+      border-radius: 1.25rem;
+      padding: 1.25rem;
+    }
+    .visual-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--gray900);
+      border-left: 3px solid var(--orange);
+      padding-left: 0.5rem;
+    }
+    .visual-subtitle {
+      font-size: 0.75rem;
+      color: var(--gray600);
+      margin-top: -0.4rem;
+    }
+    .svg-wrap {
+      width: 100%;
+      overflow: visible;
+    }
+
+    /* ─── RIGHT PANEL ─────────────────────────────────────────────── */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* KPI grid 2×2 */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .kpi-card {
+      border: 1px solid var(--gray200);
+      border-radius: 1rem;
+      padding: 1rem 1.15rem;
+      background: #fff;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: transparent;
+      transition: background 0.3s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(14,65,116,0.06);
+    }
+    .kpi-fleet::before { background: var(--navy); }
+    .kpi-fleet { background: linear-gradient(135deg, #ffffff 60%, #f0f5fa 100%); }
+    
+    .kpi-window::before { background: var(--orange); }
+    .kpi-window { background: linear-gradient(135deg, #ffffff 60%, #fff6f0 100%); }
+    
+    .kpi-priority::before { background: var(--green); }
+    .kpi-priority { background: linear-gradient(135deg, #ffffff 60%, #f0fdf4 100%); }
+    
+    .kpi-backup::before { background: var(--gray600); }
+    .kpi-backup { background: linear-gradient(135deg, #ffffff 60%, #f8fafc 100%); }
+
+    .kpi-label {
+      font-size: 0.65rem;
+      color: var(--gray600);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .kpi-value {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.15;
+    }
+    .kpi-value.orange { color: var(--orange); }
+    .kpi-value.green { color: var(--green); }
+    .kpi-delta {
+      font-size: 0.7rem;
+      margin-top: 0.35rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .kpi-delta.green { color: var(--green); }
+    .kpi-delta.orange { color: var(--orange); }
+    .kpi-delta.gray { color: var(--gray600); }
+
+    /* Điểm nhấn Box */
+    .highlight-box {
+      background: var(--navy);
+      color: #fff;
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 4px 12px rgba(14, 65, 116, 0.15);
+    }
+    .highlight-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      border-left: 3px solid var(--orange);
+      padding-left: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+    .highlight-list {
+      list-style: none;
+    }
+    .highlight-list li {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      margin-bottom: 0.6rem;
+      position: relative;
+      padding-left: 1.2rem;
+      color: rgba(255,255,255,0.9);
+    }
+    .highlight-list li::before {
+      content: "►";
+      position: absolute;
+      left: 0;
+      top: 1px;
+      color: var(--orange);
+      font-size: 0.7rem;
+    }
+    .highlight-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Insight bar */
+    .insight-bar {
+      background: var(--orange-light);
+      border-left: 4px solid var(--orange);
+      padding: 0.85rem 1.25rem;
+      border-radius: 0.5rem;
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: #92400E;
+      line-height: 1.5;
+      grid-column: 1 / -1;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: white;
+    }
+    .badge-r1 { background: var(--orange); }
+    .badge-r2 { background: var(--yellow); }
+    .badge-r3 { background: var(--blue); }
+    .badge-gray { background: var(--gray600); }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      width: 100%;
+    }
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+    .custom-table th, .custom-table td {
+      padding: 0.65rem 0.5rem;
+      border: 1px solid var(--gray200);
+    }
+    .custom-table th {
+      background: var(--navy);
+      color: white;
+      font-weight: 600;
+    }
+    .custom-table tr:nth-child(even) td {
+      background: var(--gray50);
+    }
+    .custom-table td.highlight-cell {
+      background: var(--navy-tint) !important;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .custom-table td.orange-cell {
+      background: var(--orange-light) !important;
+      font-weight: 600;
+      color: #92400E;
+    }
+    .custom-table td.green-cell {
+      background: var(--green-light) !important;
+      color: #065F46;
+      font-weight: 600;
+    }
+    .custom-table td.red-cell {
+      background: var(--red-light) !important;
+      color: #991B1B;
+      font-weight: 600;
+    }
+    .custom-table td:first-child {
+      text-align: left;
+      font-weight: 600;
+      color: var(--gray900);
+      background: var(--gray50);
+    }
+
+    /* Footer Table Specifics */
+    .footer-card {
+      background: white;
+      border-radius: 2rem;
+      border: 1px solid var(--gray100);
+      padding: 2.5rem 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+    .footer-card h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 1.25rem;
+      border-bottom: 2px solid var(--gray200);
+      padding-bottom: 0.5rem;
+    }
+    .footer-table th {
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+    }
+    .footer-table td {
+      font-size: 0.78rem;
+    }
+
+    /* Integrated SVG layout handles Priority Registration Window directly */
+
+    /* ─── RESPONSIVE ──────────────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .section-main {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .report-header {
+        padding: 2rem 1.5rem;
+      }
+      .report-header h1 {
+        font-size: 1.45rem;
+      }
+    }
+    @media (max-width: 600px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="report-header">
+  <div class="header-pills">
+    <div class="pill pill-navy"></div>
+    <div class="pill pill-orange"></div>
+  </div>
+  <h1>Driver Layer &amp; Ranking — Hệ thống phân tầng tài xế Ahamove 2026</h1>
+  <p class="header-sub1">Kiến trúc phân tầng tài xế · Tiêu chí xếp hạng · Layer Access · Quyền lợi &amp; AhaBenefits</p>
+  <p class="header-sub2">Phiên bản FINAL (Params Aligned) · Phân tích &amp; Quy hoạch Chiến lược · Driver Management Team · 2026-07</p>
+</div>
+
+<div class="page-wrap">
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!--  SECTION 1: TIÊU CHÍ PHÂN HẠNG                                -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <section class="section-card">
+    <div class="section-header">
+      <div class="section-badge">1</div>
+      <div class="section-title-block">
+        <h2>Tiêu chí xếp hạng tài xế chính thức</h2>
+        <p>Kiểm tra cuối tháng dựa trên chỉ số DQS và Năng suất stp/tháng (Không xét AR/FR riêng lẻ)</p>
+      </div>
+    </div>
+
+    <div class="section-main">
+      <!-- Left Visual -->
+      <div class="visual-area">
+        <div class="visual-title">Bảng tiêu chuẩn KPI xếp hạng Rank tài xế (Params Aligned)</div>
+        <div class="visual-subtitle">Áp dụng chung cho toàn hệ thống SGN &amp; HAN dựa trên thang điểm tích hợp</div>
+        <div class="table-wrap">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>KPI Chỉ Số</th>
+                <th>💎 R1 Elite / Kim Cương</th>
+                <th>🥇 R2 Active / Vàng</th>
+                <th>🥈 R3 Standard / Bạc</th>
+                <th>Unranked</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Thang điểm tích hợp (DQS)</td>
+                <td class="highlight-cell">≥ 80</td>
+                <td class="highlight-cell">≥ 75</td>
+                <td class="highlight-cell">≥ 75</td>
+                <td class="red-cell">&lt; 75</td>
+              </tr>
+              <tr>
+                <td>Năng suất (Productivity)</td>
+                <td class="highlight-cell">≥ 280 stp/tháng</td>
+                <td class="highlight-cell">≥ 210 stp/tháng</td>
+                <td class="orange-cell">≥ 70 stp/tháng</td>
+                <td class="gray-cell">—</td>
+              </tr>
+              <tr>
+                <td>Cấp bậc Layer ưu tiên</td>
+                <td>L2 Minizone</td>
+                <td>L3 Mediumzone</td>
+                <td>L4 Bigzone</td>
+                <td>L6 MASS</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.7rem; color:var(--gray600); font-style:italic; margin-top:0.25rem;">
+          * Note: Thang điểm tích hợp DQS (Driver Quality Score) thay thế hoàn toàn cho việc tính điểm AR/FR/Rating riêng lẻ trước đây nhằm tránh thiên kiến và phản ánh chính xác chất lượng dịch vụ của tài xế.
+        </p>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="right-panel">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Chu kỳ kiểm tra</div>
+            <div class="kpi-value">Cuối tháng</div>
+            <div class="kpi-delta gray">Rolling 30 ngày</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Cập nhật KPI</div>
+            <div class="kpi-value green">Mỗi ngày</div>
+            <div class="kpi-delta green">Realtime live tracking</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Ngưỡng R1 DQS</div>
+            <div class="kpi-value orange">≥ 80</div>
+            <div class="kpi-delta gray">Prod ≥ 280 stp</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Ngưỡng R2 DQS</div>
+            <div class="kpi-value orange">≥ 75</div>
+            <div class="kpi-delta gray">Prod ≥ 210 stp</div>
+          </div>
+        </div>
+
+        <div class="highlight-box">
+          <div class="highlight-title">Điểm lưu ý vận hành</div>
+          <ul class="highlight-list">
+            <li>Hệ thống xét duyệt tự động tuần tự từ cao xuống thấp: <strong>R1 → R2 → R3</strong>.</li>
+            <li><strong>DQS</strong> tích hợp tỷ lệ phản hồi, chấp nhận và đánh giá sao của tài xế để ra điểm tổng hợp.</li>
+            <li>Tài xế có điểm DQS dưới 75 sẽ tự động bị phân loại xuống nhóm <strong>Unranked</strong> (không được xếp hạng).</li>
+            <li>Tiêu chí thâm niên được chốt tối thiểu 1 tháng để được xét xếp hạng R1/R2/R3.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Insight Bar -->
+      <div class="insight-bar">
+        <strong>Thay đổi chiến lược:</strong> Chuyển dịch từ AR/FR/CR đơn lẻ sang DQS giúp đồng bộ chất lượng Tài xế với nhiều chỉ số khác nhau trong hệ thống DQS. Phân loại Tài xế cũng sẽ được dựa vào productivity của Tài xế để lọc các Tài xế hoạt động thực tốt.
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!--  SECTION 2: KIẾN TRÚC PHÂN TẦNG                               -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <section class="section-card">
+    <div class="section-header">
+      <div class="section-badge">2</div>
+      <div class="section-title-block">
+        <h2>Kiến trúc hệ thống phân tầng tài xế</h2>
+        <p>Phân bổ 4 Tiers × 6 Layers × Priority Registration</p>
+      </div>
+    </div>
+
+    <div class="section-main">
+      <!-- Left Visual -->
+      <div class="visual-area">
+        <div class="visual-title">Sơ đồ phân tầng &amp; Quy trình đăng ký ưu tiên</div>
+        <div class="visual-subtitle">Biểu đồ kim tự tháp Tiers và phân phối cổng đăng ký theo giờ</div>
+        <div class="svg-wrap">
+          <svg viewBox="0 0 680 430" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+                <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0E4174" flood-opacity="0.15"/>
+              </filter>
+              <linearGradient id="grad-r1-left" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FF7F32" />
+                <stop offset="100%" stop-color="#D84315" />
+              </linearGradient>
+              <linearGradient id="grad-r1-right" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#D84315" />
+                <stop offset="100%" stop-color="#9E2A00" />
+              </linearGradient>
+              <linearGradient id="grad-r2-left" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#2A75C5" />
+                <stop offset="100%" stop-color="#1A5A9A" />
+              </linearGradient>
+              <linearGradient id="grad-r2-right" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1A5A9A" />
+                <stop offset="100%" stop-color="#0E4174" />
+              </linearGradient>
+              <linearGradient id="grad-r3-left" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#7889A4" />
+                <stop offset="100%" stop-color="#64748B" />
+              </linearGradient>
+              <linearGradient id="grad-r3-right" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#64748B" />
+                <stop offset="100%" stop-color="#475569" />
+              </linearGradient>
+              <linearGradient id="grad-un-left" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#CBD5E1" />
+                <stop offset="100%" stop-color="#94A3B8" />
+              </linearGradient>
+              <linearGradient id="grad-un-right" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#94A3B8" />
+                <stop offset="100%" stop-color="#64748B" />
+              </linearGradient>
+              <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#FF7F32" />
+              </marker>
+              <marker id="arrow-gray" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#94A3B8" />
+              </marker>
+            </defs>
+
+            <!-- LEFT: 3D PYRAMID RANKS -->
+            <g filter="url(#shadow)">
+              <polygon points="160,20 200,20 200,100 95,100" fill="url(#grad-r1-left)" />
+              <polygon points="200,20 240,20 305,100 200,100" fill="url(#grad-r1-right)" />
+              <text x="200" y="55" fill="white" font-size="11.5" font-weight="900" text-anchor="middle" letter-spacing="0.04em">💎 R1 ELITE / KIM CƯƠNG</text>
+              <text x="200" y="77" fill="rgba(255,255,255,0.95)" font-size="9.5" font-weight="600" text-anchor="middle">~15% fleet · Đăng ký từ 00:00</text>
+            </g>
+
+            <g filter="url(#shadow)">
+              <polygon points="90,104 200,104 200,190 45,190" fill="url(#grad-r2-left)" />
+              <polygon points="200,104 310,104 355,190 200,190" fill="url(#grad-r2-right)" />
+              <text x="200" y="140" fill="white" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="0.04em">🥇 R2 ACTIVE / VÀNG</text>
+              <text x="200" y="162" fill="rgba(255,255,255,0.95)" font-size="9.5" font-weight="600" text-anchor="middle">~35% fleet · Đăng ký từ 10:00</text>
+            </g>
+
+            <g filter="url(#shadow)">
+              <polygon points="40,194 200,194 200,280 10,280" fill="url(#grad-r3-left)" />
+              <polygon points="200,194 360,194 390,280 200,280" fill="url(#grad-r3-right)" />
+              <text x="200" y="230" fill="white" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="0.04em">🥈 R3 STANDARD / BẠC</text>
+              <text x="200" y="252" fill="rgba(255,255,255,0.95)" font-size="9.5" font-weight="600" text-anchor="middle">~35% fleet · Đăng ký từ 14:00</text>
+            </g>
+
+            <g filter="url(#shadow)">
+              <polygon points="5,284 200,284 200,370 10,370" fill="url(#grad-un-left)" />
+              <polygon points="200,284 395,284 390,370 200,370" fill="url(#grad-un-right)" />
+              <text x="200" y="320" fill="white" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="0.04em">👤 UNRANKED</text>
+              <text x="200" y="342" fill="rgba(255,255,255,0.95)" font-size="9.5" font-weight="600" text-anchor="middle">~15% fleet · Đăng ký Ngày 2+</text>
+            </g>
+
+            <!-- MIDDLE: HORIZONTAL LINKS -->
+            <g>
+              <path d="M 305 60 L 460 60" fill="none" stroke="#FF7F32" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+              <text x="382" y="52" font-size="8" font-weight="800" fill="#FF7F32" text-anchor="middle">Tất cả Layer</text>
+
+              <path d="M 332 145 L 460 145" fill="none" stroke="#2A75C5" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+              <text x="396" y="137" font-size="8" font-weight="800" fill="#2A75C5" text-anchor="middle">Tất cả Layer</text>
+
+              <path d="M 375 235 L 460 235" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+              <text x="417" y="227" font-size="8" font-weight="800" fill="#64748B" text-anchor="middle">Tất cả Layer</text>
+
+              <path d="M 380 327 L 460 327" fill="none" stroke="#94A3B8" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arrow-gray)"/>
+              <text x="420" y="319" font-size="8" font-weight="800" fill="#94A3B8" text-anchor="middle">Slot còn trống</text>
+            </g>
+
+            <!-- RIGHT: LAYERS LIST -->
+            <g>
+              <rect x="460" y="37" width="190" height="46" rx="23" fill="#FFF7ED" stroke="#FF7F32" stroke-width="1.5"/>
+              <text x="555" y="64" font-size="10.5" font-weight="800" fill="#C2410C" text-anchor="middle">💎 L2 Minizone (≤4km)</text>
+            </g>
+
+            <g>
+              <rect x="460" y="122" width="190" height="46" rx="23" fill="#EEF2FF" stroke="#0E4174" stroke-width="1.5"/>
+              <text x="555" y="149" font-size="10.5" font-weight="800" fill="#0E4174" text-anchor="middle">L3 Medium (4-7km)</text>
+            </g>
+
+            <g>
+              <rect x="460" y="212" width="190" height="46" rx="23" fill="#F1F5F9" stroke="#64748B" stroke-width="1.5"/>
+              <text x="555" y="239" font-size="10.5" font-weight="800" fill="#334155" text-anchor="middle">L4 Bigzone (7-11km)</text>
+            </g>
+
+            <g>
+              <rect x="460" y="280" width="190" height="26" rx="13" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1"/>
+              <text x="555" y="296" font-size="9.5" font-weight="700" fill="#475569" text-anchor="middle">L5 Cityzone</text>
+            </g>
+
+            <g>
+              <rect x="460" y="315" width="190" height="46" rx="23" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1.5"/>
+              <text x="555" y="342" font-size="10.5" font-weight="800" fill="#64748B" text-anchor="middle">👤 L6 MASS Buffer</text>
+            </g>
+          </svg>
+        </div>
+        <div class="table-wrap" style="margin-top:0.75rem;">
+          <table class="custom-table" style="font-size:0.7rem;">
+            <thead>
+              <tr>
+                <th>Hạng Tài Xế</th>
+                <th>Giờ mở cổng (Ngày 1)</th>
+                <th>Phạm vi Zone được phép đăng ký</th>
+                <th>Cơ chế ưu tiên</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700; color:var(--orange);">💎 R1 Elite / Kim Cương</td>
+                <td class="highlight-cell">00:00 (Từ 0h - 10h)</td>
+                <td class="highlight-cell">Tất cả các zone (L2 - L6)</td>
+                <td class="green-cell">Ưu tiên đăng ký sớm nhất FCFS</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700; color:var(--yellow);">🥇 R2 Active / Vàng</td>
+                <td class="highlight-cell">10:00 (Từ 10h - 14h)</td>
+                <td class="highlight-cell">Tất cả các zone (L2 - L6)</td>
+                <td class="green-cell">Đăng ký ca sau khung R1</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700; color:var(--blue);">🥈 R3 Standard / Bạc</td>
+                <td>14:00 (Sau 14h)</td>
+                <td>Tất cả các zone (L2 - L6)</td>
+                <td>Đăng ký ca sau khung R2</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700; color:var(--gray600);">👤 Unranked</td>
+                <td>Ngày 2+</td>
+                <td class="red-cell">L6 MASS (hoặc slot trống còn lại)</td>
+                <td class="red-cell">Đăng ký tự do các slot còn thừa</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="right-panel">
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-fleet">
+            <div class="kpi-label">Tổng Fleet Tháng</div>
+            <div class="kpi-value">~30.000</div>
+            <div class="kpi-delta gray">Actives SGN+HAN</div>
+          </div>
+          <div class="kpi-card kpi-window">
+            <div class="kpi-label">Cửa sổ đăng ký</div>
+            <div class="kpi-value orange">Ngày 1-5</div>
+            <div class="kpi-delta orange">Hàng tháng</div>
+          </div>
+          <div class="kpi-card kpi-priority">
+            <div class="kpi-label">Đăng ký tự do</div>
+            <div class="kpi-value green">Ngày 2+</div>
+            <div class="kpi-delta green">Mở cho Unranked</div>
+          </div>
+          <div class="kpi-card kpi-backup">
+            <div class="kpi-label">Dự phòng tự động</div>
+            <div class="kpi-value">L6 MASS</div>
+            <div class="kpi-delta gray">Hết ngày 5 tự xếp</div>
+          </div>
+        </div>
+
+        <div class="highlight-box">
+          <div class="highlight-title">Quy tắc cốt lõi</div>
+          <ul class="highlight-list">
+            <li><strong>Tier</strong> xác định tài xế được quyền nhìn thấy layer nào khi đăng ký ca.</li>
+            <li><strong>Timestamp FCFS</strong> xác định thứ tự ưu tiên slot — ai đăng ký trước được trước trong mọi layer hiển thị.</li>
+            <li>[R1 Elite/Kim Cương] được ưu tiên đăng ký sớm nhất từ 00:00 - 10:00 ngày đầu tiên.</li>
+            <li>[R2 Active/Vàng] bắt đầu đăng ký từ 10:00, [R3 Bạc] bắt đầu đăng ký từ 14:00.</li>
+            <li>Tài xế Chưa xếp hạng chỉ được đăng ký từ Ngày 2 trở đi đối với các slot còn trống.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Insight Bar -->
+      <div class="insight-bar">
+        <strong>Nguyên lý thiết kế:</strong> Phân tầng tối ưu hóa hiệu quả cung cầu. Tier cao hơn gắn với zone phục vụ nhỏ hơn (đơn dày hơn) dẫn đến Target EPH cao hơn. Hệ thống mở cổng theo khung giờ giúp bảo vệ quyền ưu tiên chọn zone cho tài xế hoạt động xuất sắc mà không cần duy trì cơ chế cascade phức tạp.
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!--  SECTION 3: LAYER ACCESS & REGISTRATION WINDOWS               -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <section class="section-card">
+    <div class="section-header">
+      <div class="section-badge">3</div>
+      <div class="section-title-block">
+        <h2>Quyền truy cập Layer &amp; Ca làm việc</h2>
+        <p>Quy hoạch hiển thị layer đăng ký theo rank và tỷ lệ phân bổ slot ca làm việc</p>
+      </div>
+    </div>
+
+    <div class="section-main">
+      <!-- Left Visual -->
+      <div class="visual-area">
+        <div class="visual-title">Bảng phân bổ tỷ lệ slot % theo Rank tài xế</div>
+        <div class="visual-subtitle">Khung giờ ca và phân phối slot theo cấu trúc ca chính thức</div>
+        <div class="table-wrap">
+          <table class="custom-table" style="font-size:0.75rem;">
+            <thead>
+              <tr>
+                <th>Hạng Tài Xế</th>
+                <th>Ca Sáng<br><small>08:00–12:00 (4h)</small></th>
+                <th>Ca Chiều<br><small>13:00–17:00 (4h)</small></th>
+                <th>Ca Tối<br><small>17:00–21:00 (4h)</small></th>
+                <th>Ca Full-day ★<br><small>08:00–18:00 (10h)</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700; color:var(--orange);">💎 R1 Elite / Kim Cương</td>
+                <td class="highlight-cell">20% slot</td>
+                <td class="highlight-cell">20% slot</td>
+                <td>15% slot</td>
+                <td class="orange-cell">50% slot (💰 Mở 100-200 ca / 10-15%)</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700; color:var(--yellow);">🥇 R2 Active / Vàng</td>
+                <td class="highlight-cell">40% slot</td>
+                <td class="highlight-cell">40% slot</td>
+                <td>40% slot</td>
+                <td class="orange-cell">50% slot (💰 Mở 100-200 ca / 10-15%)</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700; color:var(--blue);">🥈 R3 Standard / Bạc</td>
+                <td>40% slot</td>
+                <td>40% slot</td>
+                <td>45% slot</td>
+                <td class="red-cell">❌ Không mở</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700; color:var(--gray600);">👤 Unranked</td>
+                <td class="gray-cell">on-demand</td>
+                <td class="gray-cell">on-demand</td>
+                <td class="gray-cell">on-demand</td>
+                <td class="red-cell">❌ Không mở</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:0.75rem; border-top:1px solid var(--gray200); padding-top:0.75rem; font-size:0.72rem; color:var(--gray600); display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+          <div>
+            <strong>Đặc tả ca làm việc:</strong>
+            <ul style="padding-left:1rem; margin-top:0.2rem;">
+              <li>Ca Sáng &amp; Chiều: Chạy khung giờ cao điểm (⚡ Peak sáng/chiều)</li>
+              <li>Ca Full-day: 10 tiếng, dành riêng cho R1 &amp; R2</li>
+            </ul>
+          </div>
+          <div>
+            <ul style="padding-left:1rem; margin-top:0.25rem;">
+              <li>Unranked không có structured slot — chỉ nhận đơn tràn on-demand.</li>
+              <li>Cổng thiết bị (EV/Baga) tự động áp khi chọn layer đăng ký ca.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="right-panel">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Thời gian mở cổng</div>
+            <div class="kpi-value">Ngày 1</div>
+            <div class="kpi-delta gray">Phân khung theo hạng</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">R1 Kim Cương window</div>
+            <div class="kpi-value green">00:00</div>
+            <div class="kpi-delta green">Ưu tiên 00:00–10:00</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">R2 Vàng window</div>
+            <div class="kpi-value orange">10:00</div>
+            <div class="kpi-delta orange">Ưu tiên 10:00–14:00</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">R3 Bạc window</div>
+            <div class="kpi-value">14:00</div>
+            <div class="kpi-delta gray">Sau 14:00</div>
+          </div>
+        </div>
+
+        <div class="highlight-box">
+          <div class="highlight-title">Cơ chế phân bổ ca</div>
+          <ul class="highlight-list">
+            <li><strong>L1 KA/MP:</strong> Assigned trực tiếp, không hiển thị tự chọn trên ứng dụng đăng ký ca.</li>
+            <li><strong>Ca Full-day (10 tiếng):</strong> Quy mô ca giới hạn mở 100–200 slot (chiếm 10–15% tổng ca) R1 và R2 được gán 50% tổng lượng slot này.</li>
+            <li><strong>Cửa sổ Ngày 1–5:</strong> Cửa sổ đăng ký mở muộn nhất cho Unranked từ ngày 2 để đảm bảo tối ưu phân bổ slot cho rank cao.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Insight Bar -->
+      <div class="insight-bar">
+        <strong>Phân bổ ca tối ưu:</strong> Quy mô ca Full-day giới hạn mở 100–200 slot (10–15% tổng ca) chia đều cho R1 và R2 giúp đảm bảo nguồn cung tối đa tại các mini-hub trong khung giờ cao điểm liên tục, tăng mức độ hấp dẫn đối với các Layer zone ngắn.
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!--  SECTION 4: QUYỀN LỢI TÀI XẾ & PHÚC LỢI                        -->
+  <section class="section-card">
+    <div class="section-header">
+      <div class="section-badge">4</div>
+      <div class="section-title-block">
+        <h2>Hệ sinh thái Phúc lợi &amp; Đặc quyền theo Rank</h2>
+        <p>Phân phối các gói hỗ trợ xăng, bảo hiểm, công cụ dụng cụ và sự kiện offline theo thứ hạng tài xế</p>
+      </div>
+    </div>
+
+    <div class="section-main">
+      <!-- Left Visual -->
+      <div class="visual-area">
+        <div class="visual-title">Danh mục đặc quyền và hỗ trợ thực địa theo Rank</div>
+        <div class="visual-subtitle">Ưu tiên cấp phát công cụ dụng cụ (driver kit), xăng, bảo dưỡng xe định kỳ và rewards hấp dẫn</div>
+        
+        <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
+          <!-- R1 -->
+          <div style="background:#FFF7ED; border-left:4px solid var(--orange); border-radius:4px; padding:12px; font-size:12px;">
+            <div style="font-weight:800; color:#C2410C; font-size:13px; margin-bottom:4px;">💎 R1 Elite (Hạng Kim Cương) — Đặc quyền cao nhất</div>
+            <ul style="padding-left:16px; margin:0; line-height:1.6; color:#475569;">
+              <li><strong>Hỗ trợ xăng/EV:</strong> Cộng voucher <strong>50.000đ/tháng</strong> tự động vào tài khoản app trước ngày 5.</li>
+              <li><strong>Bảo hiểm tai nạn tự nguyện:</strong> Được gán trực tiếp hoặc nâng cấp bằng điểm thưởng (1.425 - 4.285 pts).</li>
+              <li><strong>CCDC &amp; Quà tặng:</strong> Ưu tiên cấp phát Driver Kit cao cấp, túi giữ nhiệt XL, áo khoác ấm mùa đông.</li>
+              <li><strong>Hỗ trợ vận hành:</strong> Ưu tiên tham gia các sự kiện Ahamove, sạc pin EV ưu đãi và bảo dưỡng xe định kỳ.</li>
+            </ul>
+          </div>
+
+          <!-- R2 -->
+          <div style="background:#F0F9FF; border-left:4px solid var(--blue); border-radius:4px; padding:12px; font-size:12px;">
+            <div style="font-weight:800; color:#0369A1; font-size:13px; margin-bottom:4px;">🥇 R2 Active (Hạng Vàng) — Phúc lợi nâng cao</div>
+            <ul style="padding-left:16px; margin:0; line-height:1.6; color:#475569;">
+              <li><strong>Hỗ trợ xăng/EV:</strong> Cộng voucher <strong>30.000đ/tháng</strong> tự động vào tài khoản app.</li>
+              <li><strong>CCDC &amp; Quà tặng:</strong> Ưu tiên mua và cấp phát túi giữ nhiệt tiêu chuẩn, bộ đồng phục mới với giá ưu đãi.</li>
+              <li><strong>Hỗ trợ vận hành:</strong> Được tham gia sự kiện vinh danh định kỳ, hỗ trợ giải quyết sự cố thực địa qua hotline.</li>
+            </ul>
+          </div>
+
+          <!-- R3 -->
+          <div style="background:#F8FAFC; border-left:4px solid #64748B; border-radius:4px; padding:12px; font-size:12px;">
+            <div style="font-weight:800; color:#334155; font-size:13px; margin-bottom:4px;">🥈 R3 Standard (Hạng Bạc) — Phúc lợi cơ bản</div>
+            <ul style="padding-left:16px; margin:0; line-height:1.6; color:#475569;">
+              <li>Quyền lợi voucher data di động tốc độ cao (5GB/tháng), voucher F&amp;B đối tác giảm 10%.</li>
+              <li>Hỗ trợ vá lốp, sửa xe lưu động thông qua các trạm liên kết của Ahamove.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="right-panel">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Voucher xăng R1</div>
+            <div class="kpi-value green">50k/tháng</div>
+            <div class="kpi-delta green">Cộng tự động ngày 5</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Voucher xăng R2</div>
+            <div class="kpi-value green">30k/tháng</div>
+            <div class="kpi-delta green">Hỗ trợ hoạt động thực địa</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Bảo hiểm R1</div>
+            <div class="kpi-value orange">Đổi điểm</div>
+            <div class="kpi-delta orange">1.425–4.285 pts/tháng</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Hotline Support VIP</div>
+            <div class="kpi-value">Có</div>
+            <div class="kpi-delta gray">Ưu tiên xử lý sự vụ dưới 15p</div>
+          </div>
+        </div>
+
+        <div class="highlight-box">
+          <div class="highlight-title">Đặc quyền xăng &amp; Bảo hiểm R1/R2</div>
+          <ul class="highlight-list">
+            <li><strong>Voucher xăng/EV:</strong> R1 Kim Cương được nhận **50k/tháng**; R2 Vàng được nhận **30k/tháng** trực tiếp vào app.</li>
+            <li><strong>Bảo hiểm tai nạn R1:</strong> Gói bảo hiểm tai nạn tự nguyện gán riêng cho rank cao nhất R1:
+              <ul style="padding-left:1rem; margin-top:0.2rem; font-size:0.75rem;">
+                <li>Gói bảo vệ 10k/tháng: đổi bằng **1.425 pts**</li>
+                <li>Gói bảo vệ 30k/tháng: đổi bằng **4.285 pts**</li>
+              </ul>
+            </li>
+            <li>Đăng ký bảo hiểm trên app trước ngày 25 hàng tháng, có hiệu lực từ ngày 01 tháng tiếp theo.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Insight Bar -->
+      <div class="insight-bar">
+        <strong>Phúc lợi phi tài chính thiết thực:</strong> Thay thế cơ chế bù tiền mặt bằng hệ sinh thái phúc lợi thực địa giúp tăng tính bền vững tài chính cho Ahamove, đồng thời gia tăng sự gắn kết lâu dài của tài xế.
+      </div>
+    </div>
+  </section>
+
+  <!--  SECTION 5: AHABENEFITS POINTS ECONOMY                        -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <section class="section-card">
+    <div class="section-header">
+      <div class="section-badge">5</div>
+      <div class="section-title-block">
+        <h2>AhaBenefits — Point Economy</h2>
+        <p>Cơ chế tích điểm dựa trên doanh thu chuyến xe nhân với hệ số layer hoạt động</p>
+      </div>
+    </div>
+
+    <div class="section-main">
+      <!-- Left Visual -->
+      <div class="visual-area">
+        <div class="visual-title">Ước tính điểm tích luỹ hàng tháng theo từng Hạng tài xế</div>
+        <div class="visual-subtitle">Mô hình tính toán dựa trên 22 ngày chạy/tháng, 1 ca 4h/ngày (Điểm)</div>
+        <div class="svg-wrap">
+          <svg viewBox="0 0 560 260" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+            <!-- Grid lines Y-axis -->
+            <line x1="50" y1="20" x2="520" y2="20" stroke="#E5E7EB" stroke-width="1"/>
+            <line x1="50" y1="60" x2="520" y2="60" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="50" y1="100" x2="520" y2="100" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="50" y1="140" x2="520" y2="140" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="50" y1="180" x2="520" y2="180" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="50" y1="220" x2="520" y2="220" stroke="#E5E7EB" stroke-width="1"/>
+
+            <!-- Y Axis values -->
+            <text x="42" y="24" font-size="8" fill="#6B7280" text-anchor="end">2500</text>
+            <text x="42" y="64" font-size="8" fill="#6B7280" text-anchor="end">2000</text>
+            <text x="42" y="104" font-size="8" fill="#6B7280" text-anchor="end">1500</text>
+            <text x="42" y="144" font-size="8" fill="#6B7280" text-anchor="end">1000</text>
+            <text x="42" y="184" font-size="8" fill="#6B7280" text-anchor="end">500</text>
+            <text x="42" y="224" font-size="8" fill="#6B7280" text-anchor="end">0</text>
+
+            <!-- X Axis Tiers -->
+            <text x="110" y="235" font-size="9" font-weight="700" fill="#0E4174" text-anchor="middle">R1 Elite (L2)</text>
+            <text x="215" y="235" font-size="9" font-weight="700" fill="#0E4174" text-anchor="middle">R2 Active (L3)</text>
+            <text x="320" y="235" font-size="9" font-weight="700" fill="#0E4174" text-anchor="middle">R3 Standard (L4)</text>
+            <text x="425" y="235" font-size="9" font-weight="700" fill="#0E4174" text-anchor="middle">L6 MASS</text>
+
+            <!-- Threshold Red Line (1500 points) -->
+            <!-- y = 220 - (1500/2500)*200 = 100 -->
+            <line x1="50" y1="100" x2="520" y2="100" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="4,4"/>
+            <text x="515" y="95" font-size="8" font-weight="700" fill="#EF4444" text-anchor="end">Ngưỡng đổi thưởng 50k (1.500 pts)</text>
+
+            <!-- Stacked Bars -->
+            <!-- Height scale: y = 220 - (val/2500)*200 -->
+            <rect x="90" y="121.5" width="40" height="98.5" fill="#9CA3AF" rx="2"/>
+            <rect x="90" y="72.2" width="40" height="49.3" fill="#0E4174" rx="2"/>
+            <rect x="90" y="19.4" width="40" height="52.8" fill="#FF7F32" rx="2"/>
+            <text x="110" y="15" font-size="8" font-weight="700" fill="#111827" text-anchor="middle">2.508</text>
+
+            <!-- R2 (L3): Total 2046 [base 1144 (y: 91.5), multiplier 352 (y: 28.2), bonus 550 (y: 44)] -->
+            <rect x="195" y="128.5" width="40" height="91.5" fill="#9CA3AF" rx="2"/>
+            <rect x="195" y="100.3" width="40" height="28.2" fill="#0E4174" rx="2"/>
+            <rect x="195" y="56.3" width="40" height="44" fill="#FF7F32" rx="2"/>
+            <text x="215" y="51" font-size="8" font-weight="700" fill="#111827" text-anchor="middle">2.046</text>
+
+            <!-- R3 (L4): Total 1606 [base 1056 (y: 84.5), multiplier 110 (y: 8.8), bonus 440 (y: 35.2)] -->
+            <rect x="300" y="135.5" width="40" height="84.5" fill="#9CA3AF" rx="2"/>
+            <rect x="300" y="126.7" width="40" height="8.8" fill="#0E4174" rx="2"/>
+            <rect x="300" y="91.5" width="40" height="35.2" fill="#FF7F32" rx="2"/>
+            <text x="320" y="86" font-size="8" font-weight="700" fill="#111827" text-anchor="middle">1.606</text>
+
+            <!-- L6 Mass: Total 968 [base 968 (y: 77.4), no multiplier, no bonus] -->
+            <rect x="405" y="142.6" width="40" height="77.4" fill="#9CA3AF" rx="2"/>
+            <text x="425" y="137" font-size="8" font-weight="700" fill="#111827" text-anchor="middle">968</text>
+
+            <!-- Legend -->
+            <rect x="380" y="245" width="10" height="8" fill="#9CA3AF" rx="1"/>
+            <text x="395" y="252" font-size="7" fill="#4B5563">Điểm cơ bản</text>
+            <rect x="430" y="245" width="10" height="8" fill="#0E4174" rx="1"/>
+            <text x="445" y="252" font-size="7" fill="#4B5563">Nhân hệ số Layer</text>
+            <rect x="480" y="245" width="10" height="8" fill="#FF7F32" rx="1"/>
+            <text x="495" y="252" font-size="7" fill="#4B5563">Bonus ca</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="right-panel">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Ngưỡng đổi thưởng</div>
+            <div class="kpi-value orange">1.500 pts</div>
+            <div class="kpi-delta orange">Tương đương 50k cash</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Hệ số L2</div>
+            <div class="kpi-value green">× 1.5</div>
+            <div class="kpi-delta green">+30 pts/ca hoàn tất</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Hệ số L3</div>
+            <div class="kpi-value green">× 1.3</div>
+            <div class="kpi-delta green">+25 pts/ca hoàn tất</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Hệ số L4</div>
+            <div class="kpi-value green">× 1.1</div>
+            <div class="kpi-delta green">+20 pts/ca hoàn tất</div>
+          </div>
+        </div>
+
+        <div class="highlight-box">
+          <div class="highlight-title">Cơ chế Points Economy</div>
+          <ul class="highlight-list">
+            <li><strong>Công thức tích điểm:</strong> Điểm = (Doanh thu thực tế ÷ 5.000) × Hệ số Layer + Điểm thưởng hoàn ca.</li>
+            <li>Hệ số nhân áp dụng theo layer vận hành thực tế của đơn hàng, không phụ thuộc vào thứ hạng (Rank) của tài xế.</li>
+            <li>Mức phạt ĐBCL: trừ thẳng <strong>-50 điểm/lần vi phạm</strong> (như không mặc đồng phục, bị khách hàng đánh giá xấu).</li>
+            <li>Tài xế L6 chạy tự do chỉ tích luỹ tối đa 968 pts/tháng → không chạm mốc đổi quà 50k trong 1 tháng.</li>
+          </ul>
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!--  SECTION 6: LỘ TRÌNH THĂNG HẠNG & TIMELINE HÀNG THÁNG         -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <section class="section-card">
+    <div class="section-header">
+      <div class="section-badge">6</div>
+      <div class="section-title-block">
+        <h2>Lộ trình nâng Rank &amp; Vòng đời tháng</h2>
+        <p>Hành trình thăng tiến của tài xế và lịch trình vận hành hệ thống hàng tháng</p>
+      </div>
+    </div>
+
+    <div class="section-main">
+      <!-- Left Visual -->
+      <div class="visual-area">
+        <div class="visual-title">Quy trình nâng hạng &amp; Timeline đăng ký ca hàng tháng</div>
+        <div class="visual-subtitle">Hành trình thăng hạng (trên) và các mốc thời gian mở cổng hệ thống (dưới)</div>
+        <div class="svg-wrap">
+          <svg viewBox="0 0 560 260" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+            <!-- Top: Upgrade path -->
+            <text x="20" y="20" font-size="9" font-weight="700" fill="#0E4174">1. Lộ trình nâng Rank:</text>
+            
+            <rect x="20" y="32" width="90" height="24" rx="4" fill="#9CA3AF" />
+            <text x="65" y="47" fill="white" font-size="8" font-weight="700" text-anchor="middle">Mới / Chưa XH</text>
+
+            <path d="M 115 44 L 140 44" fill="none" stroke="#0E4174" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+            <text x="127" y="38" font-size="6" fill="#0E4174" text-anchor="middle">≥ 1 tháng</text>
+
+            <rect x="145" y="32" width="90" height="24" rx="4" fill="#3B82F6" />
+            <text x="190" y="47" fill="white" font-size="8" font-weight="700" text-anchor="middle">🥈 R3 Bạc</text>
+
+            <path d="M 240 44 L 265 44" fill="none" stroke="#0E4174" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+            <text x="252" y="38" font-size="6" fill="#0E4174" text-anchor="middle">DQS ≥ 75</text>
+
+            <rect x="270" y="32" width="90" height="24" rx="4" fill="#F59E0B" />
+            <text x="315" y="47" fill="white" font-size="8" font-weight="700" text-anchor="middle">🥇 R2 Vàng</text>
+
+            <path d="M 365 44 L 390 44" fill="none" stroke="#0E4174" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+            <text x="377" y="38" font-size="6" fill="#0E4174" text-anchor="middle">DQS ≥ 80</text>
+
+            <rect x="395" y="32" width="90" height="24" rx="4" fill="#FF7F32" />
+            <text x="440" y="47" fill="white" font-size="8" font-weight="700" text-anchor="middle">💎 R1 Kim Cương</text>
+
+            <!-- Bottom: Timeline -->
+            <text x="20" y="100" font-size="9" font-weight="700" fill="#0E4174">2. Vòng đời vận hành hàng tháng (Tháng T):</text>
+            
+            <!-- Axis timeline -->
+            <line x1="30" y1="150" x2="520" y2="150" stroke="#0E4174" stroke-width="3"/>
+            
+            <!-- Day 1 00:00 -->
+            <circle cx="60" y="150" r="6" fill="#FF7F32" stroke="white" stroke-width="1.5"/>
+            <text x="60" y="138" font-size="7" font-weight="700" fill="#FF7F32" text-anchor="middle">Ngày 1 - 00:00</text>
+            <text x="60" y="165" font-size="7" font-weight="600" fill="#111827" text-anchor="middle">Mở cổng R1 (0-10h)</text>
+            <text x="60" y="175" font-size="6" fill="#6B7280" text-anchor="middle">(Thấy L2 + L3 ↩)</text>
+
+            <!-- Day 1 10:00 -->
+            <circle cx="170" y="150" r="6" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
+            <text x="170" y="138" font-size="7" font-weight="700" fill="#F59E0B" text-anchor="middle">Ngày 1 - 10:00</text>
+            <text x="170" y="165" font-size="7" font-weight="600" fill="#111827" text-anchor="middle">Mở cổng R2 (10-14h)</text>
+            <text x="170" y="175" font-size="6" fill="#6B7280" text-anchor="middle">(Thấy L3 + L4 ↩)</text>
+
+            <!-- Day 1 14:00 -->
+            <circle cx="280" y="150" r="6" fill="#3B82F6" stroke="white" stroke-width="1.5"/>
+            <text x="280" y="138" font-size="7" font-weight="700" fill="#3B82F6" text-anchor="middle">Ngày 1 - 14:00</text>
+            <text x="280" y="165" font-size="7" font-weight="600" fill="#111827" text-anchor="middle">Mở cổng R3 (Sau 14h)</text>
+            <text x="280" y="175" font-size="6" fill="#6B7280" text-anchor="middle">(Thấy L4 + L5 ↩)</text>
+
+            <!-- Day 2 -->
+            <circle cx="390" y="150" r="6" fill="#9CA3AF" stroke="white" stroke-width="1.5"/>
+            <text x="390" y="138" font-size="7" font-weight="700" fill="#9CA3AF" text-anchor="middle">Ngày 2+</text>
+            <text x="390" y="165" font-size="7" font-weight="600" fill="#111827" text-anchor="middle">Cổng mở tự do</text>
+            <text x="390" y="175" font-size="6" fill="#6B7280" text-anchor="middle">(Unranked - L6)</text>
+
+            <!-- Day 5 EOD -->
+            <circle cx="490" y="150" r="6" fill="#EF4444" stroke="white" stroke-width="1.5"/>
+            <text x="490" y="138" font-size="7" font-weight="700" fill="#EF4444" text-anchor="middle">Hết Ngày 5</text>
+            <text x="490" y="165" font-size="7" font-weight="600" fill="#EF4444" text-anchor="middle">Đóng cổng đăng ký</text>
+            <text x="490" y="175" font-size="6" fill="#6B7280" text-anchor="middle">(Auto xếp L6 MASS)</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="right-panel">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Hành trình thăng hạng</div>
+            <div class="kpi-value">3-4 Tháng</div>
+            <div class="kpi-delta gray">Từ Mới lên R1 điển hình</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Duy trì thăng hạng</div>
+            <div class="kpi-value green">Tự do</div>
+            <div class="kpi-delta green">Không có tier lock</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Cập nhật hạng</div>
+            <div class="kpi-value orange">1 Lần/tháng</div>
+            <div class="kpi-delta gray">Áp dụng từ đầu tháng</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Xuống hạng</div>
+            <div class="kpi-value red-cell">1 Tháng</div>
+            <div class="kpi-delta gray">Không đạt chuẩn KPI</div>
+          </div>
+        </div>
+
+        <div class="highlight-box">
+          <div class="highlight-title">Hành trình nâng Rank tiêu biểu</div>
+          <ul class="highlight-list">
+            <li><strong>Tháng 1 (Mới join):</strong> Thuộc nhóm Unranked, chỉ chạy L6 tự do. Tích luỹ thâm niên và làm quen hệ thống.</li>
+            <li><strong>Tháng 2 (Lên R3 Bạc):</strong> Đạt thâm niên ≥ 1 tháng, DQS ≥75, Năng suất ≥ 70 stp → Lên R3 Bạc, được đăng ký ca L4/L5.</li>
+            <li><strong>Tháng 3 (Lên R2 Vàng):</strong> Cải thiện kỹ năng nhận đơn, DQS đạt ≥75, chạy trên 210 đơn → Lên R2 Vàng, đăng ký L3.</li>
+            <li><strong>Tháng 4 (Đạt R1 Kim Cương):</strong> Hoàn thành trên 280 đơn, đổi sang chạy xe điện EV, giữ DQS ≥80 → Đạt R1 Kim Cương tối ưu thu nhập.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Insight Bar -->
+      <div class="insight-bar">
+        <strong>Chính sách xuống hạng linh hoạt:</strong> Nếu tài xế R1 gặp sự cố và bị tụt KPI trong 1 tháng → tháng kế tiếp sẽ bị hạ xuống hạng R2 hoặc R3. Tuy nhiên, họ có thể nhanh chóng khôi phục lại thứ hạng vào tháng tiếp theo nếu các chỉ số KPI rolling 30 ngày được cải thiện đạt chuẩn.
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!--  SUMMARY FOOTER: BẢNG SO SÁNH TỔNG HỢP                        -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <footer class="footer-card">
+    <h3>Bảng đối chiếu so sánh quyền lợi &amp; đặc quyền của 4 hạng tài xế</h3>
+    <div class="table-wrap">
+      <table class="custom-table footer-table">
+        <thead>
+          <tr>
+            <th>Quyền lợi &amp; Đặc quyền</th>
+            <th>💎 R1 Elite / Kim Cương</th>
+            <th>🥇 R2 Active / Vàng</th>
+            <th>🥈 R3 Standard / Bạc</th>
+            <th>👤 Unranked</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Điều kiện xét tuyển</td>
+            <td class="highlight-cell">DQS ≥80 · Prod ≥280</td>
+            <td class="highlight-cell">DQS ≥75 · Prod ≥210</td>
+            <td class="highlight-cell">DQS ≥75 · Prod ≥70</td>
+            <td>DQS &lt; 75</td>
+          </tr>
+          <tr>
+            <td>Layer hoạt động chính</td>
+            <td class="highlight-cell">L2 Minizone (≤4km)</td>
+            <td class="highlight-cell">L3 Medium (4-7km)</td>
+            <td class="highlight-cell">L4 Bigzone (7-11km)</td>
+            <td>L6 MASS (Tự do)</td>
+          </tr>
+          
+          
+          <tr>
+            <td>Hệ số nhân điểm thưởng</td>
+            <td class="orange-cell">× 1.5</td>
+            <td class="orange-cell">× 1.3</td>
+            <td>× 1.1</td>
+            <td>× 1.0</td>
+          </tr>
+          
+          <tr>
+            <td>Voucher xăng/EV hàng tháng</td>
+            <td class="green-cell">50.000đ/tháng</td>
+            <td class="green-cell">30.000đ/tháng</td>
+            <td class="red-cell">Không áp dụng</td>
+            <td class="red-cell">Không áp dụng</td>
+          </tr>
+          <tr>
+            <td>Bảo hiểm tai nạn (đổi điểm)</td>
+            <td class="green-cell">Gói 10k (1.425 pts) / 30k (4.285 pts)</td>
+            <td class="red-cell">Không áp dụng</td>
+            <td class="red-cell">Không áp dụng</td>
+            <td class="red-cell">Không áp dụng</td>
+          </tr>
+          <tr>
+            <td>Khung giờ đăng ký ca</td>
+            <td class="orange-cell">Ngày 1 - 00:00 (0-10h)</td>
+            <td class="orange-cell">Ngày 1 - 10:00 (10-14h)</td>
+            <td>Ngày 1 - sau 14:00</td>
+            <td>Ngày 2+</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

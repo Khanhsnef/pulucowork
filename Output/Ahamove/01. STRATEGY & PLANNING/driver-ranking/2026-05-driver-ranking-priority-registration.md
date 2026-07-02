@@ -18,9 +18,9 @@ Ahamove Driver Management | 2026-05 | Phiên bản: FINAL 3-Tier
 | 4 | Thời gian mở đăng ký ca | **Ngày 1–5 hàng tháng** |
 | 5 | Hiển thị KPI cho tài xế | Có — cập nhật mỗi ngày (rolling 30 ngày gần nhất) |
 | 6 | Tài xế mới < 1 tháng | Tier "Chưa xếp hạng" — chỉ thấy L6 |
-| 7 | Slot priority | **FCFS theo timestamp** + **Cascade reveal** — layer mở dần khi layer trước ≥ 80% slot |
+| 7 | Slot priority | **FCFS theo timestamp** + **Priority Window** — mở cổng theo khung giờ cho từng Rank |
 | 8 | Equipment gate | Tự động tại lúc đăng ký — COD không check khi đăng ký ca |
-| 9 | R1 fallback | R1 thấy thêm L3 khi L2 đạt ≥80% slot — layer dự phòng theo cascade |
+| 9 | Đăng ký tự do | Tài xế được tự do đăng ký tất cả các zone trong khung giờ của mình |
 | 10 | Auto L6 fallback | Hết ngày 5 chưa đăng ký ca → system tự động xếp vào L6 MASS |
 
 ---
@@ -55,73 +55,50 @@ Ahamove Driver Management | 2026-05 | Phiên bản: FINAL 3-Tier
 
 > **L1 KA/MP** được assigned trực tiếp — không qua hệ thống đăng ký ca này.
 > Hệ thống đăng ký ca áp dụng cho **L2–L5** (+ L6 buffer). Tier thấp hơn = **hard block**.
-> ↩ = cascade fallback: mở thêm khi layer ưu tiên đạt ≥80% slot.
+> Tài xế các Rank được đăng ký tự do tất cả các zone (L2-L6) theo khung giờ mở cổng đăng ký.
 
 | Tier | L1 | L2 | L3 | L4 | L5 | L6 |
 | --- | --- | --- | --- | --- | --- | --- |
-| R1 Elite | ★ assigned | ✅ | ↩ cascade | ❌ | ❌ | ✅ |
-| R2 Active | ★ assigned | ❌ | ✅ | ↩ cascade | ❌ | ✅ |
-| R3 Standard | ★ assigned | ❌ | ❌ | ✅ | ↩ cascade | ✅ |
+| R1 Elite | ★ assigned | ✅ | ✅ | ✅ | ✅ | ✅ |
+| R2 Active | ★ assigned | ✅ | ✅ | ✅ | ✅ | ✅ |
+| R3 Standard | ★ assigned | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Chưa xếp hạng | ★ assigned | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 | Layer | Supply đến từ | Ghi chú |
 | --- | --- | --- |
 | L1 | ★ KA/MP assigned | Không qua đăng ký ca — assigned trực tiếp |
 | L2 | R1 ưu tiên | Đăng ký ca, R1 primary layer |
-| L3 | R2 ưu tiên · R1 cascade ↩ | R1 fallback khi L2 ≥80% slot |
-| L4 | R3 ưu tiên · R2 cascade ↩ | Vùng đệm |
-| L5 | R3 cascade ↩ | Long-haul >11km |
+| L3 | R2 ưu tiên | R1 + R2 cùng đăng ký theo giờ mở |
+| L4 | R3 ưu tiên | R2 + R3 cùng đăng ký theo giờ mở |
+| L5 | Bất kỳ | Mở cho mọi rank đăng ký |
 | L6 | Tất cả | Buffer co giãn toàn hệ thống |
 
 ---
 
-## 3. Slot Priority — Cascade Reveal + FCFS
+## 3. Slot Priority — Priority Windows + FCFS
 
-> **Cascade reveal**: Mỗi tier bắt đầu từ layer ưu tiên cao nhất. Layer tiếp theo chỉ mở khi layer trước đạt **≥ 80% fill-rate**.
-> **Timestamp FCFS** áp dụng trong mọi layer đang hiển thị — không ưu tiên theo tier.
-> **Auto L6**: Hết ngày 5 chưa đăng ký bất kỳ layer nào → system tự động xếp vào L6.
+> **Priority Window**: Từng rank được phân bổ khung giờ mở cổng đăng ký khác nhau để ưu tiên giữ chỗ ca/zone mong muốn.
+> **Timestamp FCFS** áp dụng trong mọi layer đang hiển thị trong khung giờ.
+> **Auto L6**: Hết ngày 5 chưa đăng ký ca nào → system tự động gán vào L6 MASS để hoạt động.
 
-| Tier | Mở đầu | Khi ≥80% → thêm | Hết ngày 5 |
+| Tier | Giờ mở đăng ký (Ngày 1) | Zone được đăng ký | Quyền ưu tiên |
 | --- | --- | --- | --- |
-| R1 Elite | L2 | + L3 ↩ | Auto L6 |
-| R2 Active | L3 | + L4 ↩ | Auto L6 |
-| R3 Standard | L4 | + L5 ↩ | Auto L6 |
-| Chưa xếp hạng | L6 | — | L6 |
+| **R1 Elite** | 00:00 - 10:00 | Tất cả (L2 - L6) | Cao nhất, chọn trước |
+| **R2 Active** | 10:00 - 14:00 | Tất cả (L2 - L6) | Trung bình, chọn sau R1 |
+| **R3 Standard** | 14:00 - 24:00 | Tất cả (L2 - L6) | Baseline, chọn sau R2 |
+| **Chưa xếp hạng** | Ngày 2 trở đi | L6 MASS (hoặc slot trống) | Thấp nhất, đăng ký slot còn lại |
 
 ```text
-R1 Anh Hùng — cascade trong ngày 1–5/7:
+Ví dụ Khung giờ đăng ký ca Ngày 1:
 
-  Phase 1: L2 mở đầu (R1 primary)
-    01/07 08:22 — R1 Anh Hùng → L2 slot #12
-    (R2 chạy L3 song song độc lập)
+  Khung 1: R1 Kim Cương (00:00 - 10:00)
+    - 01/07 08:22: R1 Anh Hùng mở app → thấy L2-L6 đều mở. Đăng ký L2 ca sáng thành công.
 
-  [02/07] L2 đạt 80% (400/500 slot) → Hệ thống mở L3 ↩ cho R1
-  Phase 2: R1 thấy L2 + L3 ↩
-    02/07 10:06 — R1 Anh Hùng → L3 slot #88
-    02/07 10:09 — R2 Chị Lan  → L3 slot #89
-    (FCFS — R1/R2 bình đẳng trong L3)
+  Khung 2: R2 Vàng (10:00 - 14:00)
+    - 01/07 10:05: R2 Anh Bình mở app → thấy L2-L6 đều mở. Chọn ca sáng L2 còn trống slot và đăng ký thành công.
 
-  Hết 05/07: Tài xế chưa đăng ký → Auto L6
-```
-
----
-
-## 4. Equipment Gate (Tự động)
-
-> System check khi tài xế bấm đăng ký ca. COD **không** check tại bước này.
-
-| Layer | Equipment bắt buộc khi đăng ký ca |
-| --- | --- |
-| L1 | Baga + Ký cam kết |
-| L2, L3 | EV |
-| L4, L5 | Baga |
-| L6 | Không yêu cầu |
-
----
-
-## 5. Layer Hard Requirements (KPI + Thâm niên)
-
-> Check tại thời điểm đăng ký. **L1 không áp dụng** (KA/MP assigned). Đồng bộ với rank: L2 = R1 KPI, L3 = R2 KPI, L4–L5 = R3 KPI.
+  Khung 3: R3 Bạc (Sau 14:00)
+    - 01/07 14:30: R3 Anh Hoàng mở app → thấy L2 ca sáng hết slot, chọn ca tối L2 và đăng ký thành công.
 
 ### 5.1 SGN
 
@@ -148,20 +125,6 @@ R1 Anh Hùng — cascade trong ngày 1–5/7:
 ## 6. Quyền lợi theo Layer & Rank
 
 > Quyền lợi áp dụng khi tài xế **đang hoạt động trong layer** (đã đăng ký ca, duy trì tiêu chuẩn KPI). Các mục `📋 đề xuất` cần validate với team liên quan. Các mục `⏳ pending` đang trong quá trình finalize.
-
----
-
-### 6.1 Thu nhập đảm bảo (đề xuất cân chỉnh)
-
-> **Nguyên tắc cân chỉnh:** Layer có yêu cầu KPI đầu vào cao hơn → ngưỡng đảm bảo cao hơn để phản ánh đúng giá trị cam kết của tài xế. L2 yêu cầu KPI R1 (cao nhất) → xứng đáng được đảm bảo thu nhập cao nhất. Cần validate với S&P dựa trên data EPH thực tế.
-
-| Layer | Khu vực | SGN (đề xuất) | HAN (đề xuất) | Ghi chú |
-| --- | --- | --- | --- | --- |
-| **L2 Minizone** | ≤ 4km | **70k/h** | **80k/h** | Ghép 4–5 đơn, KPI R1 → EPH cao nhất |
-| **L3 Mediumzone** | 4–7km | **65k/h** | **75k/h** | Ghép 3–4 đơn, KPI R2 |
-| **L4 Bigzone** | 7–11km | **60k/h** | **70k/h** | Ghép 2–3 đơn, KPI R3 |
-| **L5 Cityzone** | >11km | **60k/h** | **70k/h** | Đơn 2H/4H, zone rộng — giữ nguyên baseline |
-| **L6 MASS** | Toàn bộ | Không đảm bảo | Không đảm bảo | Tự do ca, co giãn theo demand |
 
 ---
 
@@ -213,9 +176,9 @@ Rank ảnh hưởng trực tiếp đến 4 quyền lợi độc lập ngoài lay
 
 | Rank | Thời điểm mở đăng ký | Layer được thấy |
 | --- | --- | --- |
-| **R1 Elite** | Ngày 1 · 00:00 (sớm nhất) | L2 + cascade L3 |
-| **R2 Active** | Ngày 1 · 08:00 | L3 + cascade L4 |
-| **R3 Standard** | Ngày 1 · 14:00 | L4 + cascade L5 |
+| **R1 Elite** | Ngày 1 · 00:00 (sớm nhất) | Đăng ký tất cả layer (L2-L6) FCFS |
+| **R2 Active** | Ngày 1 · 10:00 | Đăng ký tất cả layer (L2-L6) FCFS |
+| **R3 Standard** | Ngày 1 · 14:00 | Đăng ký tất cả layer (L2-L6) FCFS |
 | **Chưa xếp hạng** | Ngày 2+ | L6 only |
 
 > R1 có lợi thế đăng ký sớm nhất trong ngày 1 → giảm nguy cơ hết slot ở layer ưu tiên. FCFS timestamp vẫn áp dụng trong cùng window. (📋 đề xuất — cần check với Product về technical feasibility)
@@ -236,7 +199,7 @@ Rank ảnh hưởng trực tiếp đến 4 quyền lợi độc lập ngoài lay
 | Rank | Quyền lợi sự kiện |
 | --- | --- |
 | **R1 Elite** | Invite VIP · Reserved seating · Vinh danh tại Gala / Community Day · Nhận quà recognition |
-| **R2 Active** | Invite ưu tiên · Đảm bảo có slot tham dự |
+| **R2 Active** | Voucher xăng 30k · Invite ưu tiên tham dự sự kiện |
 | **R3 Standard** | Tham dự theo số lượng còn lại |
 | **Chưa xếp hạng** | Không ưu tiên |
 
@@ -258,7 +221,7 @@ Rank ảnh hưởng trực tiếp đến 4 quyền lợi độc lập ngoài lay
 | Quyền lợi | R1 Elite | R2 Active | R3 Standard | Chưa XH |
 | --- | --- | --- | --- | --- |
 | Layer ưu tiên | L2 (Minizone) | L3 (Medium) | L4 (Bigzone) | L6 only |
-| Thu nhập đảm bảo | 70k/h SGN · 80k/h HAN | 65k/h SGN · 75k/h HAN | 60k/h SGN · 70k/h HAN | Không |
+| Voucher xăng/EV | 50k/tháng | 30k/tháng | Không | Không |
 | Rewards multiplier | ×2.0 | ×1.7 | ×1.3 | ×1.0 |
 | Partner benefits | Hạng Vàng | Hạng Vàng | Hạng Bạc | — |
 | Tier bonus | ×1.3 | ×1.15 | ×1.0 | ×1.0 |
@@ -273,7 +236,7 @@ Rank ảnh hưởng trực tiếp đến 4 quyền lợi độc lập ngoài lay
 
 | Mục | Trạng thái | Team phụ trách |
 | --- | --- | --- |
-| Thu nhập đảm bảo L2/L3 (70k/65k SGN) | Validate với S&P — đối chiếu EPH P50 thực tế | DM + S&P |
+| Voucher xăng/EV R1/R2 | Triển khai cộng voucher vào app trước ngày 5 | DM + Finance |
 | Bảo hiểm sức khỏe (L2–L5) | Check điều kiện (đề xuất: cam kết ≥ 1 năm) | DM + HR |
 | Gói đối tác Hạng Vàng / Bạc | Đàm phán danh sách đối tác cụ thể | DM + Partnership |
 | Bảo hiểm tai nạn (L2–L3) | Đàm phán với PTI / PJICO | DM + HR |
@@ -291,7 +254,7 @@ Tuần cuối tháng (T-1)
   └─ Check điều kiện → gán tier mới cho từng tài xế
 
 Ngày 1–5 tháng T  ←  CỬA SỔ ĐĂNG KÝ CA
-  └─ Mỗi tier thấy layer ưu tiên trước (cascade reveal)
+  └─ Mở cổng đăng ký theo khung giờ ưu tiên của từng Rank (R1 lúc 0h, R2 lúc 10h, R3 lúc 14h)
   └─ Layer tiếp theo mở khi layer trước ≥ 80% slot
   └─ Timestamp FCFS trong mọi layer đang mở
 
@@ -301,7 +264,7 @@ Ngày 6+ tháng T
   └─ Vận hành theo ca đã đăng ký
 ```
 
-### Cascade đăng ký — Mở dần theo fill-rate
+### Khung giờ mở cổng đăng ký (Priority Registration)
 
 | Tier | Mở đầu | Khi ≥80% → thêm | Hết ngày 5 chưa ĐK |
 | --- | --- | --- | --- |
@@ -326,7 +289,7 @@ Chưa xếp hạng ──(đủ 1 tháng, đạt KPI R3)──► R3 Standard  �
                                                R1 Elite    →  đăng ký L2, L3 ↩
 
 ★ L1 KA/MP = assigned trực tiếp, không qua đăng ký ca
-↩ = cascade fallback khi layer ưu tiên ≥80% slot
+Tài xế được đăng ký tự do tất cả các zone
 ```
 
 > KPI hiển thị mỗi ngày (rolling 30 ngày). Tier chính thức cập nhật 1 lần/tháng.

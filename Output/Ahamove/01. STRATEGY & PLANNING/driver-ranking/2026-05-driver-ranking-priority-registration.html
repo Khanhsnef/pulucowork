@@ -222,9 +222,9 @@
       <div class="dec-item"><div class="dec-num" style="background:var(--orange)">4</div><div><div class="dec-k">Cửa sổ đăng ký ca</div><div class="dec-v">Ngày 1–5 hàng tháng</div></div></div>
       <div class="dec-item"><div class="dec-num">5</div><div><div class="dec-k">Hiển thị KPI cho tài xế</div><div class="dec-v">Có — cập nhật mỗi ngày (rolling 30 ngày)</div></div></div>
       <div class="dec-item"><div class="dec-num">6</div><div><div class="dec-k">Tài xế mới &lt; 1 tháng</div><div class="dec-v">Chưa xếp hạng — chỉ thấy L6</div></div></div>
-      <div class="dec-item"><div class="dec-num" style="background:var(--orange)">7</div><div><div class="dec-k">Slot priority</div><div class="dec-v">FCFS timestamp · Cascade reveal ≥80% fill</div></div></div>
+      <div class="dec-item"><div class="dec-num" style="background:var(--orange)">7</div><div><div class="dec-k">Slot priority</div><div class="dec-v">FCFS timestamp · Priority Window mở cổng</div></div></div>
       <div class="dec-item"><div class="dec-num">8</div><div><div class="dec-k">Equipment gate</div><div class="dec-v">Tự động — COD không check khi đăng ký ca</div></div></div>
-      <div class="dec-item"><div class="dec-num" style="background:var(--green)">9</div><div><div class="dec-k">R1 fallback</div><div class="dec-v">R1 thấy L3 khi L2 ≥80% — cascade tự nhiên</div></div></div>
+      <div class="dec-item"><div class="dec-num" style="background:var(--green)">9</div><div><div class="dec-k">R1 fallback</div><div class="dec-v">R1 được đăng ký tự do tất cả layer (L2-L6) sớm nhất</div></div></div>
       <div class="dec-item"><div class="dec-num" style="background:var(--red)">10</div><div><div class="dec-k">Auto L6 fallback</div><div class="dec-v">Hết ngày 5 chưa đăng ký → system tự gán L6</div></div></div>
     </div>
   </section>
@@ -325,7 +325,7 @@
               <td><span class="tag tr1">R1 Elite</span></td>
               <td><div class="cx" style="margin:auto" title="KA/MP — assigned trực tiếp, không qua đăng ký ca">★</div></td>
               <td><div class="cy" style="margin:auto">✅</div></td>
-              <td><div class="cf" style="margin:auto" title="Cascade khi L2 ≥80% slot">↩</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="ca" style="margin:auto">✅</div></td>
@@ -335,7 +335,7 @@
               <td><div class="cx" style="margin:auto" title="KA/MP — assigned trực tiếp, không qua đăng ký ca">★</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="cy" style="margin:auto">✅</div></td>
-              <td><div class="cf" style="margin:auto" title="Cascade khi L3 ≥80% slot">↩</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="ca" style="margin:auto">✅</div></td>
             </tr>
@@ -345,7 +345,7 @@
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="cn" style="margin:auto">—</div></td>
               <td><div class="cy" style="margin:auto">✅</div></td>
-              <td><div class="cf" style="margin:auto" title="Cascade khi L4 ≥80% slot">↩</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
               <td><div class="ca" style="margin:auto">✅</div></td>
             </tr>
             <tr>
@@ -361,9 +361,9 @@
               <td>Supply từ</td>
               <td>★ KA/MP assigned<br><em style="opacity:.75;font-style:normal">Không qua đăng ký ca</em></td>
               <td>R1 ưu tiên</td>
-              <td>R2 ưu tiên<br>R1 cascade ↩</td>
-              <td>R3 ưu tiên<br>R2 cascade ↩</td>
-              <td>R3 cascade ↩</td>
+              <td>R2 ưu tiên<br>R1 ưu tiên</td>
+              <td>R3 ưu tiên<br>R2 ưu tiên</td>
+              <td>R3 ưu tiên</td>
               <td>Tất cả · Buffer</td>
             </tr>
           </tbody>
@@ -372,7 +372,7 @@
     </div>
     <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--g600);">
       <div style="display:flex;align-items:center;gap:6px;"><div class="cy" style="width:20px;height:20px;font-size:11px">✅</div> Đăng ký ca (ưu tiên)</div>
-      <div style="display:flex;align-items:center;gap:6px;"><div class="cf" style="width:20px;height:20px;font-size:11px">↩</div> Cascade fallback (≥80%)</div>
+      <div style="display:flex;align-items:center;gap:6px;"><div class="cf" style="width:20px;height:20px;font-size:11px">↩</div> Được đăng ký tự do</div>
       <div style="display:flex;align-items:center;gap:6px;"><div class="ca" style="width:20px;height:20px;font-size:11px;color:var(--blue)">✅</div> Luôn mở (L6)</div>
       <div style="display:flex;align-items:center;gap:6px;"><div class="cn" style="width:20px;height:20px;font-size:11px">—</div> Hard block</div>
       <div style="display:flex;align-items:center;gap:6px;"><div class="cx" style="width:20px;height:20px;font-size:11px">★</div> KA/MP assigned (ngoài hệ thống)</div>
@@ -382,46 +382,45 @@
   <!-- SLOT PRIORITY -->
   <section id="slot">
     <div class="section-label">Phần 3</div>
-    <div class="section-title">Slot Priority — Cascade Reveal + FCFS</div>
-    <div class="note"><strong>Cascade reveal:</strong> Mỗi tier bắt đầu từ layer ưu tiên cao nhất. Layer tiếp theo chỉ mở khi layer trước ≥ 80% slot. <strong>Timestamp FCFS</strong> áp dụng trong mọi layer đang hiển thị.</div>
+    <div class="section-title">Slot Priority — Priority Registration Window + FCFS</div>
+    <div class="note"><strong>Priority Registration:</strong> Quyền lợi của từng rank được ưu tiên thông qua giờ đăng ký ca bắt đầu từ Ngày 1 hàng tháng. <strong>Timestamp FCFS</strong> áp dụng trong mọi layer đang hiển thị.</div>
     <div class="two-col">
       <div class="card">
         <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:14px;">Nguyên tắc</div>
         <div class="rule-item">
           <div class="rn">1</div>
-          <div class="rt"><strong>Mỗi tier bắt đầu từ layer ưu tiên.</strong> R1 thấy L2 trước, R2 thấy L3, R3 thấy L4 — tập trung supply vào đúng layer.</div>
+          <div class="rt"><strong>Tất cả Rank được mở đăng ký tất cả các zone.</strong> R1, R2, R3 đều được đăng ký từ L2 đến L6, không còn cascade hay block layer.</div>
         </div>
         <div class="rule-item">
           <div class="rn">2</div>
-          <div class="rt"><strong>Layer tiếp theo mở khi ≥ 80% slot.</strong> L2 đủ 80% → R1 thấy thêm L3 ↩. L3 đủ 80% → R2 thấy thêm L4 ↩.</div>
+          <div class="rt"><strong>Phân chia khung giờ mở cổng (Window).</strong> R1 bắt đầu từ 00:00, R2 từ 10:00, R3 từ 14:00 ngày đầu tiên.</div>
         </div>
         <div class="rule-item">
           <div class="rn">3</div>
-          <div class="rt"><strong>Timestamp FCFS trong mọi layer đang mở.</strong> Khi R1 và R2 cùng thấy L2 — ai ấn nhanh hơn được slot trước.</div>
+          <div class="rt"><strong>Timestamp FCFS trong từng khung giờ.</strong> Tài xế đăng ký trước sẽ giữ chỗ trước cho ca làm việc mong muốn.</div>
         </div>
         <div class="rule-item">
           <div class="rn">4</div>
-          <div class="rt"><strong>Hết ngày 5 chưa đăng ký → Auto L6.</strong> System tự động xếp vào pool MASS để vẫn có thể chạy đơn.</div>
+          <div class="rt"><strong>Unranked đăng ký từ Ngày 2.</strong> Hết ngày 1 dành riêng cho Rank, ngày 2+ mở tự do cho Chưa xếp hạng và slot trống còn thừa.</div>
         </div>
       </div>
       <div class="codeblk">
-<span class="h">R1 Anh Hùng — cascade ngày 1–5/7</span>
+<span class="h">Khung giờ mở đăng ký Ngày 1:</span>
 
-<span class="d">── PHASE 1: L2 mở đầu ────────────────</span>
-<span class="b">01/07</span>  Mở app → chỉ thấy <span class="g">L2</span> (500 slot)
-<span class="b">01/07 08:22</span>  Anh Hùng → <span class="g">L2 slot #12</span>
-       <span class="d">(R2 chạy L3 song song độc lập)</span>
+<span class="d">── KHUNG 1: R1 KIM CƯƠNG ─────────────</span>
+<span class="b">00:00 - 10:00</span>  Mở cổng cho R1 Elite
+               Đăng ký tất cả layer (L2-L6) FCFS
 
-<span class="d">── TRIGGER: L2 = 80% (400/500) ───────</span>
-<span class="g">Hệ thống mở L3 ↩ → R1 thấy thêm L3</span>
+<span class="d">── KHUNG 2: R2 VÀNG ──────────────────</span>
+<span class="b">10:00 - 14:00</span>  Mở cổng cho R2 Active
+               Đăng ký tất cả layer (L2-L6) FCFS
 
-<span class="d">── PHASE 2: L2 + L3 ──────────────────</span>
-<span class="b">02/07 10:06</span>  R1 Anh Hùng → <span class="g">L3 slot #88</span>
-<span class="b">02/07 10:09</span>  R2 Chị Lan  → <span class="g">L3 slot #89</span>
-       <span class="d">(FCFS — R1/R2 bình đẳng trong L3)</span>
+<span class="d">── KHUNG 3: R3 BẠC ───────────────────</span>
+<span class="b">14:00 - 24:00</span>  Mở cổng cho R3 Standard
+               Đăng ký tất cả layer (L2-L6) FCFS
 
 <span class="d">──────────────────────────────────────</span>
-<span class="r">Hết 05/07</span>: Chưa ĐK → <span class="g">Auto L6</span></div>
+<span class="r">Ngày 2 trở đi</span>: Mở cổng tự do cho Unranked</div>
     </div>
   </section>
 
@@ -488,64 +487,62 @@
     <div class="section-title">Quyền lợi theo Layer &amp; Rank</div>
     <div class="note">Quyền lợi áp dụng khi tài xế <strong>đang hoạt động trong layer</strong> (đã đăng ký ca, duy trì KPI). <span style="background:#FEF9C3;color:#854D0E;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">📋 đề xuất</span> = cần validate. <span style="background:#FEE2E2;color:#991B1B;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">⏳ pending</span> = đang finalize với team liên quan.</div>
 
-    <!-- 6.1 Thu nhập đảm bảo -->
+    <!-- 6.1 Quyền lợi vận hành & Hỗ trợ thực địa -->
     <div class="card" style="padding:0;overflow:hidden;margin-bottom:16px;">
-      <div style="padding:14px 20px 12px;font-size:14px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">6.1 · Thu nhập đảm bảo <span style="font-size:11px;font-weight:500;color:var(--orange);margin-left:8px">📋 đề xuất cân chỉnh — cần validate S&amp;P</span></div>
+      <div style="padding:14px 20px 12px;font-size:14px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">6.1 · Quyền lợi vận hành &amp; Hỗ trợ thực địa</div>
       <div style="overflow-x:auto;">
         <table class="dtable">
-          <thead><tr><th>Layer</th><th>Khu vực</th><th>SGN (đề xuất)</th><th>HAN (đề xuất)</th><th>Ghép đơn tối đa</th><th>Đội trưởng</th><th>Lộ trình</th><th>BH sức khỏe</th></tr></thead>
+          <thead><tr><th>Layer</th><th>Khu vực</th><th>Bán kính phục vụ</th><th>Ghép đơn tối đa</th><th>Hệ số điểm AhaPoints</th><th>Đội trưởng hỗ trợ</th><th>Lộ trình tối ưu</th></tr></thead>
           <tbody>
             <tr>
               <td><span class="tag" style="background:#EBF3FF;color:#1D4ED8;border:1px solid #93C5FD">L2 Minizone</span></td>
               <td style="font-size:12px">≤ 4km</td>
-              <td style="font-weight:800;color:var(--green);font-size:14px">70k/h</td>
-              <td style="font-weight:800;color:var(--green);font-size:14px">80k/h</td>
-              <td style="font-weight:800;color:var(--blue);text-align:center">4–5</td>
-              <td style="text-align:center">✅</td>
-              <td style="font-size:12px;color:var(--g600)">Đội phó / Đội trưởng</td>
-              <td style="text-align:center"><span style="background:#FEE2E2;color:#991B1B;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700">⏳</span></td>
+              <td style="font-size:12px">Ưu tiên ngắn (≤4km)</td>
+              <td style="font-weight:800;color:var(--blue);text-align:center">4–5 đơn</td>
+              <td style="font-weight:800;color:var(--orange);text-align:center">× 1.5</td>
+              <td style="text-align:center">✅ Có (Đội phó/Đội trưởng)</td>
+              <td style="text-align:center">✅ Có</td>
             </tr>
             <tr>
               <td><span class="tag" style="background:#F0FDF4;color:#166534;border:1px solid #86EFAC">L3 Mediumzone</span></td>
               <td style="font-size:12px">4–7km</td>
-              <td style="font-weight:800;color:#059669;font-size:14px">65k/h</td>
-              <td style="font-weight:800;color:#059669;font-size:14px">75k/h</td>
-              <td style="font-weight:800;color:var(--blue);text-align:center">3–4</td>
-              <td style="text-align:center">✅</td>
-              <td style="font-size:12px;color:var(--g600)">Đội phó / Đội trưởng</td>
-              <td style="text-align:center"><span style="background:#FEE2E2;color:#991B1B;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700">⏳</span></td>
+              <td style="font-size:12px">Trung bình (4-7km)</td>
+              <td style="font-weight:800;color:var(--blue);text-align:center">3–4 đơn</td>
+              <td style="font-weight:800;color:var(--orange);text-align:center">× 1.3</td>
+              <td style="text-align:center">✅ Có (Đội phó/Đội trưởng)</td>
+              <td style="text-align:center">✅ Có</td>
             </tr>
             <tr>
               <td><span class="tag" style="background:#F0FDF4;color:#166534;border:1px solid #86EFAC">L4 Bigzone</span></td>
               <td style="font-size:12px">7–11km</td>
-              <td style="font-weight:800;color:var(--g600);font-size:14px">60k/h</td>
-              <td style="font-weight:800;color:var(--g600);font-size:14px">70k/h</td>
-              <td style="font-weight:800;color:var(--blue);text-align:center">2–3</td>
-              <td style="text-align:center">✅</td>
-              <td style="font-size:12px;color:var(--g600)">Đội phó / Đội trưởng</td>
-              <td style="text-align:center"><span style="background:#FEE2E2;color:#991B1B;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700">⏳</span></td>
+              <td style="font-size:12px">Đường dài (7-11km)</td>
+              <td style="font-weight:800;color:var(--blue);text-align:center">2–3 đơn</td>
+              <td style="font-weight:800;color:var(--orange);text-align:center">× 1.1</td>
+              <td style="text-align:center">✅ Có (Đội phó/Đội trưởng)</td>
+              <td style="text-align:center">✅ Có</td>
             </tr>
             <tr>
               <td><span class="tag" style="background:#FEFCE8;color:#854D0E;border:1px solid #FDE047">L5 Cityzone</span></td>
               <td style="font-size:12px">&gt;11km</td>
-              <td style="font-weight:800;color:var(--g600);font-size:14px">60k/h</td>
-              <td style="font-weight:800;color:var(--g600);font-size:14px">70k/h</td>
-              <td style="font-weight:800;color:var(--blue);text-align:center">2–3</td>
+              <td style="font-size:12px">Rất dài (&gt;11km)</td>
+              <td style="font-weight:800;color:var(--blue);text-align:center">2–3 đơn</td>
+              <td style="font-weight:800;color:var(--orange);text-align:center">× 1.0</td>
               <td style="text-align:center;color:var(--g400)">—</td>
               <td style="text-align:center;color:var(--g400)">—</td>
-              <td style="text-align:center"><span style="background:#FEE2E2;color:#991B1B;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700">⏳</span></td>
             </tr>
             <tr style="background:#FAFBFC">
               <td><span class="tag tr3">L6 MASS</span></td>
               <td style="font-size:12px;color:var(--g400)">Toàn bộ</td>
-              <td colspan="6" style="font-size:12px;color:var(--g600)">Không đảm bảo · Tự do ca giờ · Incentive/promo thông thường · Upgrade path rõ ràng</td>
+              <td style="font-size:12px;color:var(--g400)">Không giới hạn</td>
+              <td style="font-size:12px;color:var(--g600);text-align:center">Tự do</td>
+              <td style="font-weight:800;color:var(--orange);text-align:center">× 1.0</td>
+              <td style="text-align:center;color:var(--g400)">—</td>
+              <td style="text-align:center;color:var(--g400)">—</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div style="padding:9px 20px;font-size:11.5px;color:var(--g600);border-top:1px solid var(--g100);background:#FAFBFC">L2 yêu cầu KPI R1 (cao nhất) → ngưỡng đảm bảo cao nhất. L4/L5 giữ baseline 60/70k/h. Cần validate với S&amp;P đối chiếu EPH P50 thực tế.</div>
     </div>
-
     <!-- 6.2 Rewards + Partner side by side -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
 
@@ -556,15 +553,15 @@
           <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
             <div style="flex:1;min-width:80px;background:#FFF7F2;border:2px solid var(--orange);border-radius:1rem;padding:12px;text-align:center">
               <div style="font-size:11px;font-weight:700;color:var(--orange);margin-bottom:4px">L2 Minizone</div>
-              <div style="font-size:28px;font-weight:800;color:var(--orange)">×2.0</div>
+              <div style="font-size:28px;font-weight:800;color:var(--orange)">×1.5</div>
             </div>
             <div style="flex:1;min-width:80px;background:#F0F5FF;border:2px solid var(--blue);border-radius:1rem;padding:12px;text-align:center">
               <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:4px">L3 Mediumzone</div>
-              <div style="font-size:28px;font-weight:800;color:var(--blue)">×1.7</div>
+              <div style="font-size:28px;font-weight:800;color:var(--blue)">×1.3</div>
             </div>
             <div style="flex:1;min-width:80px;background:#F0FDF4;border:2px solid #10B981;border-radius:1rem;padding:12px;text-align:center">
               <div style="font-size:11px;font-weight:700;color:#065F46;margin-bottom:4px">L4 Bigzone</div>
-              <div style="font-size:28px;font-weight:800;color:#10B981">×1.3</div>
+              <div style="font-size:28px;font-weight:800;color:#10B981">×1.1</div>
             </div>
             <div style="flex:1;min-width:80px;background:var(--g100);border:2px solid var(--g200);border-radius:1rem;padding:12px;text-align:center">
               <div style="font-size:11px;font-weight:700;color:var(--g400);margin-bottom:4px">L5 / L6</div>
@@ -670,18 +667,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td style="font-weight:600">Layer ưu tiên</td><td style="background:#FFF7F2;font-weight:700;color:var(--orange)">L2 Minizone</td><td style="background:#F0F5FF;font-weight:700;color:var(--blue)">L3 Medium</td><td style="font-weight:700;color:var(--g600)">L4 Bigzone</td><td style="color:var(--g400)">L6 only</td></tr>
-            <tr><td style="font-weight:600">Thu nhập đảm bảo SGN</td><td style="background:#FFF7F2;font-weight:800;color:var(--green)">70k/h</td><td style="background:#F0F5FF;font-weight:800;color:#059669">65k/h</td><td style="font-weight:800;color:var(--g600)">60k/h</td><td style="color:var(--g400)">—</td></tr>
-            <tr><td style="font-weight:600">Thu nhập đảm bảo HAN</td><td style="background:#FFF7F2;font-weight:800;color:var(--green)">80k/h</td><td style="background:#F0F5FF;font-weight:800;color:#059669">75k/h</td><td style="font-weight:800;color:var(--g600)">70k/h</td><td style="color:var(--g400)">—</td></tr>
-            <tr><td style="font-weight:600">Rewards multiplier</td><td style="background:#FFF7F2;font-weight:800;color:var(--orange)">×2.0</td><td style="background:#F0F5FF;font-weight:800;color:var(--blue)">×1.7</td><td style="font-weight:800;color:var(--g600)">×1.3</td><td style="color:var(--g400)">×1.0</td></tr>
+            <tr><td style="font-weight:600">Phạm vi Zone đăng ký</td><td style="background:#FFF7F2;font-weight:700;color:var(--orange)">Tất cả (L2 - L6)</td><td style="background:#F0F5FF;font-weight:700;color:var(--blue)">Tất cả (L2 - L6)</td><td style="font-weight:700;color:var(--g600)">Tất cả (L2 - L6)</td><td style="color:var(--g400)">L6 MASS</td></tr>
+            <tr><td style="font-weight:600">Voucher xăng/EV</td><td style="background:#FFF7F2;font-weight:800;color:var(--green)">50k/tháng</td><td style="background:#F0F5FF;font-weight:800;color:#059669">30k/tháng</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td></tr>
+            <tr><td style="font-weight:600">AhaPoints multiplier</td><td style="background:#FFF7F2;font-weight:800;color:var(--orange)">×1.5</td><td style="background:#F0F5FF;font-weight:800;color:var(--blue)">×1.3</td><td style="font-weight:800;color:var(--g600)">×1.1</td><td style="color:var(--g400)">×1.0</td></tr>
             <tr><td style="font-weight:600">Partner benefits</td><td style="background:#FFF7F2;font-weight:700;color:#92400E">🥇 Hạng Vàng</td><td style="background:#F0F5FF;font-weight:700;color:#92400E">🥇 Hạng Vàng</td><td style="font-weight:700;color:var(--g600)">🥈 Hạng Bạc</td><td style="color:var(--g400)">—</td></tr>
-            <tr><td style="font-weight:600">Tier bonus</td><td style="background:#FFF7F2;font-weight:800;color:var(--orange)">×1.3</td><td style="background:#F0F5FF;font-weight:800;color:var(--blue)">×1.15</td><td style="font-weight:800;color:var(--g600)">×1.0</td><td style="color:var(--g400)">×1.0</td></tr>
-            <tr><td style="font-weight:600">Đăng ký ca sớm</td><td style="background:#FFF7F2;font-weight:700">Ngày 1 · 08:00</td><td style="background:#F0F5FF;font-weight:700">Ngày 1 · 13:00</td><td style="font-weight:700">Ngày 1 · 18:00</td><td style="color:var(--g400)">—</td></tr>
+            <tr><td style="font-weight:600">Mở cổng đăng ký ca</td><td style="background:#FFF7F2;font-weight:700">Ngày 1 · 00:00 (Từ 0-10h)</td><td style="background:#F0F5FF;font-weight:700">Ngày 1 · 10:00 (Từ 10-14h)</td><td style="font-weight:700">Ngày 1 · 14:00 (Sau 14h)</td><td style="color:var(--g400)">Ngày 2+</td></tr>
             <tr><td style="font-weight:600">Sự kiện Ahamove</td><td style="background:#FFF7F2">VIP + vinh danh</td><td style="background:#F0F5FF">Ưu tiên</td><td>Theo slot</td><td style="color:var(--g400)">Không ưu tiên</td></tr>
-            <tr><td style="font-weight:600">Hỗ trợ SLA</td><td style="background:#FFF7F2;font-weight:700;color:var(--green)">&lt; 15 phút</td><td style="background:#F0F5FF;font-weight:700;color:#059669">&lt; 30 phút</td><td style="font-weight:700;color:var(--g600)">&lt; 1 giờ</td><td style="color:var(--g400)">Standard</td></tr>
-            <tr><td style="font-weight:600">BH sức khỏe</td><td style="background:#FFF7F2"><span style="background:#FEE2E2;color:#991B1B;border-radius:3px;padding:0 5px;font-size:11px;font-weight:700">⏳</span></td><td style="background:#F0F5FF"><span style="background:#FEE2E2;color:#991B1B;border-radius:3px;padding:0 5px;font-size:11px;font-weight:700">⏳</span></td><td><span style="background:#FEE2E2;color:#991B1B;border-radius:3px;padding:0 5px;font-size:11px;font-weight:700">⏳</span></td><td style="color:var(--g400)">—</td></tr>
-          </tbody>
-        </table>
+            <tr><td style="font-weight:600">Hỗ trợ đội trưởng</td><td style="background:#FFF7F2;font-weight:700;color:var(--green)">✅ Có</td><td style="background:#F0F5FF;font-weight:700;color:#059669">✅ Có</td><td style="font-weight:700">✅ Có</td><td style="color:var(--g400)">Standard</td></tr>
+            <tr><td style="font-weight:600">BH tai nạn (đổi điểm)</td><td style="background:#FFF7F2;color:var(--green);font-weight:700">Gói 10k/30k (R1 only)</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td><td style="color:var(--g400)">—</td></tr>
+          </tbody></table>
       </div>
     </div>
 
@@ -691,10 +685,10 @@
       <table class="dtable">
         <thead><tr><th>Mục</th><th>Trạng thái</th><th>Team</th></tr></thead>
         <tbody>
-          <tr><td style="font-size:12px">Thu nhập đảm bảo L2/L3 (70k/65k SGN)</td><td style="font-size:12px">Validate EPH P50 thực tế với S&amp;P</td><td style="font-size:11px;font-weight:700;color:var(--blue)">DM + S&amp;P</td></tr>
+          
           <tr><td style="font-size:12px">Gói đối tác Hạng Vàng / Bạc</td><td style="font-size:12px">Đàm phán danh sách đối tác cụ thể</td><td style="font-size:11px;font-weight:700;color:var(--blue)">DM + Partnership</td></tr>
           <tr><td style="font-size:12px">Priority registration window (time-based)</td><td style="font-size:12px">Check technical feasibility với Product</td><td style="font-size:11px;font-weight:700;color:var(--blue)">DM + Product</td></tr>
-          <tr><td style="font-size:12px">Tier bonus multiplier (×1.3 / ×1.15)</td><td style="font-size:12px">Xây scheme chi tiết</td><td style="font-size:11px;font-weight:700;color:var(--blue)">DM + S&amp;P</td></tr>
+          
           <tr><td style="font-size:12px">Rewards points (base point, redemption catalog)</td><td style="font-size:12px">Thiết kế product feature</td><td style="font-size:11px;font-weight:700;color:var(--blue)">DM + Product</td></tr>
         </tbody>
       </table>
@@ -717,11 +711,11 @@
         </div>
         <div class="tl-step highlight">
           <div class="tl-step-num" style="color:var(--orange)">Ngày 1–5 tháng T ← ĐĂNG KÝ CA</div>
-          <div class="tl-step-title">📅 Cascade Đăng Ký</div>
+          <div class="tl-step-title">📅 Phân khung giờ Ngày 1</div>
           <div class="tl-step-body">
-            Mỗi tier thấy layer ưu tiên trước.<br><br>
-            Layer tiếp theo mở tự động khi layer trước ≥ 80% slot.<br><br>
-            <strong>Timestamp FCFS</strong> trong mọi layer đang mở.
+            Mở cổng đăng ký theo khung giờ ưu tiên của từng Rank (R1 lúc 0h, R2 lúc 10h, R3 lúc 14h).<br><br>
+            Tài xế được đăng ký tự do tất cả các zone.<br><br>
+            <strong>Timestamp FCFS</strong> trong mọi ca hiển thị.
           </div>
         </div>
         <div class="tl-step">
@@ -736,53 +730,51 @@
       </div>
     </div>
 
-    <!-- CASCADE TABLE -->
+    <!-- PRIORITY REGISTRATION WINDOWS -->
     <div style="margin-top:20px">
-      <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:10px">⚡ Cascade đăng ký — Mở dần theo fill-rate</div>
-      <div class="note" style="margin-bottom:14px">Ngày 1–5: Mỗi tier chỉ thấy layer ưu tiên trước. Layer tiếp theo mở <strong>tự động khi layer trước ≥ 80% slot</strong> (hoặc hết slot). Hết ngày 5 chưa đăng ký → <strong style="color:var(--red)">Auto L6</strong>.</div>
+      <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:10px">⚡ Khung giờ mở đăng ký ca (Priority Registration)</div>
+      <div class="note" style="margin-bottom:14px">Ngày 1 mở cổng đăng ký ca theo thứ tự ưu tiên của các Rank. Tài xế được tự do đăng ký tất cả các zone (L2 - L6) trong khung giờ mở của mình. FCFS cho từng ca.</div>
       <div class="card" style="padding:0;overflow:hidden;">
         <table class="mtable">
           <thead>
             <tr>
               <th style="text-align:left;padding-left:16px;min-width:115px">Tier</th>
-              <th>🔓 Ngày 1 — Mở đầu<br><span style="font-size:10px;font-weight:400;opacity:.8">Layer ưu tiên của tier</span></th>
-              <th>📈 Khi ≥80% → mở thêm<br><span style="font-size:10px;font-weight:400;opacity:.8">Cascade fallback ↩</span></th>
-              <th>⏰ Hết ngày 5<br><span style="font-size:10px;font-weight:400;opacity:.8">Chưa đăng ký ca nào</span></th>
+              <th>⏰ Giờ mở cổng (Ngày 1)</th>
+              <th>🔓 Phạm vi Zone được đăng ký</th>
+              <th>📌 Cách thức ưu tiên</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td style="padding-left:16px"><span class="tag tr1">R1 Elite</span></td>
-              <td style="text-align:center"><span class="lp lp-2" style="font-size:12px;padding:4px 14px">L2</span></td>
-              <td style="text-align:center"><span style="color:var(--g400);font-size:13px;margin-right:4px">＋</span><span class="lp lp-3" style="font-size:12px;padding:4px 14px">L3 ↩</span></td>
-              <td style="text-align:center"><span style="font-size:12px;font-weight:700;padding:4px 12px;background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;border-radius:999px">Auto L6</span></td>
+              <td style="text-align:center;font-weight:700;color:var(--orange)">00:00 - 10:00</td>
+              <td style="text-align:center"><span class="lp lp-2" style="font-size:12px;padding:4px 14px">L2-L6</span></td>
+              <td style="text-align:center;font-weight:700;color:var(--green)">Ưu tiên tuyệt đối FCFS sớm nhất</td>
             </tr>
             <tr>
               <td style="padding-left:16px"><span class="tag tr2">R2 Active</span></td>
-              <td style="text-align:center"><span class="lp lp-3" style="font-size:12px;padding:4px 14px">L3</span></td>
-              <td style="text-align:center"><span style="color:var(--g400);font-size:13px;margin-right:4px">＋</span><span class="lp lp-4" style="font-size:12px;padding:4px 14px">L4 ↩</span></td>
-              <td style="text-align:center"><span style="font-size:12px;font-weight:700;padding:4px 12px;background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;border-radius:999px">Auto L6</span></td>
+              <td style="text-align:center;font-weight:700;color:var(--orange)">10:00 - 14:00</td>
+              <td style="text-align:center"><span class="lp lp-3" style="font-size:12px;padding:4px 14px">L2-L6</span></td>
+              <td style="text-align:center;color:var(--blue)">Đăng ký ca sau khung R1</td>
             </tr>
             <tr>
               <td style="padding-left:16px"><span class="tag tr3">R3 Standard</span></td>
-              <td style="text-align:center"><span class="lp lp-4" style="font-size:12px;padding:4px 14px">L4</span></td>
-              <td style="text-align:center"><span style="color:var(--g400);font-size:13px;margin-right:4px">＋</span><span class="lp lp-5" style="font-size:12px;padding:4px 14px">L5 ↩</span></td>
-              <td style="text-align:center"><span style="font-size:12px;font-weight:700;padding:4px 12px;background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;border-radius:999px">Auto L6</span></td>
+              <td style="text-align:center;font-weight:700;color:var(--g600)">14:00 - 24:00</td>
+              <td style="text-align:center"><span class="lp lp-4" style="font-size:12px;padding:4px 14px">L2-L6</span></td>
+              <td style="text-align:center;color:var(--g600)">Đăng ký ca sau khung R2</td>
             </tr>
             <tr>
               <td style="padding-left:16px"><span style="font-size:12px;color:var(--un);font-weight:700">⬜ Chưa XH</span></td>
+              <td style="text-align:center;color:var(--g400)">Ngày 2 trở đi</td>
               <td style="text-align:center"><span class="lp lp-6" style="font-size:12px;padding:4px 14px">L6</span></td>
-              <td style="text-align:center;color:var(--g400);font-size:13px">—</td>
-              <td style="text-align:center"><span class="lp lp-6" style="font-size:12px;padding:4px 14px">L6</span></td>
+              <td style="text-align:center;color:var(--red)">Chỉ đăng ký slot trống còn lại</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="callout cg" style="margin-top:12px"><strong>Mục tiêu cascade:</strong> Tập trung tài xế vào layer chính trước → bảo đảm supply chất lượng cao ở các layer ưu tiên. Layer thấp hơn chỉ mở khi layer cao đã gần đầy. R1 fallback vào L3 xảy ra tự nhiên qua cascade, không cần cấu hình riêng.</div>
+      <div class="callout cg" style="margin-top:12px"><strong>Mục tiêu:</strong> Thay thế cơ chế cascade lấp đầy phức tạp bằng khung giờ đăng ký rõ ràng, công bằng và khuyến khích tài xế nỗ lực thăng hạng để giữ chỗ sớm.</div>
     </div>
-  </section>
-
-  <!-- UPGRADE PATH -->
+    <!-- UPGRADE PATH -->
   <section id="upgrade">
     <div class="section-label">Phần 8</div>
     <div class="section-title">Upgrade Path — Lộ trình thăng hạng</div>
@@ -828,7 +820,7 @@
         </div>
       </div>
     </div>
-    <div class="callout cb" style="margin-top:8px;"><span style="font-size:12px">★ L1 = KA/MP assigned, không qua đăng ký ca. &nbsp;↩ = cascade fallback: <strong>R1</strong> L2→L3 · <strong>R2</strong> L3→L4 · <strong>R3</strong> L4→L5</span></div>
+    <div class="callout cb" style="margin-top:8px;"><span style="font-size:12px">★ L1 = KA/MP assigned, không qua đăng ký ca. Tài xế được tự do chọn tất cả các zone L2-L6 theo khung giờ mở cổng đăng ký ca.</span></div>
   </section>
 
   <!-- EXAMPLES -->
@@ -885,36 +877,35 @@
     </div>
 
     <!-- 8.2 -->
-    <div class="ex-card">
-      <div class="ex-title"><span class="exn">2</span>R1 cascade khi L2 ≥ 80% slot</div>
+    <di<div class="ex-card">
+      <div class="ex-title"><span class="exn">2</span>Ví dụ về Khung giờ đăng ký ca Ngày 1</div>
       <div class="two-col-eq">
         <div>
           <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px">Tình huống</div>
-          <p style="font-size:13px;line-height:1.8"><strong>Anh Hùng — R1 Elite</strong>, mở app <strong>ngày 3/7</strong> khi L2 đã gần đầy.<br><br>Mở app thấy:</p>
+          <p style="font-size:13px;line-height:1.8"><strong>Anh Hùng — R1 Elite</strong> và <strong>Anh Bình — R2 Active</strong> cùng muốn đăng ký ca sáng L2 vào ngày 1 hàng tháng.<br><br>Mở app thấy:</p>
           <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
-            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:var(--g100);border-radius:8px"><span style="font-weight:600">L1</span><span style="font-size:12px;color:var(--g400);font-style:italic">★ KA/MP — không hiển thị</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:var(--g100);border-radius:8px"><span style="font-weight:600">L2</span><span class="tag tre">≥80% · 420/500</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:#ECFDF5;border-radius:8px"><span style="font-weight:600">L3 ↩ cascade</span><span class="tag tg">Còn 350/1000</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:var(--g100);border-radius:8px"><span style="font-weight:600">L6</span><span style="font-size:12px;color:var(--g600)">Luôn mở</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:#FFF7F2;border-radius:8px"><span style="font-weight:600">Khung 00:00 - 10:00</span><span class="tag tre">Chỉ R1 đăng ký</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;background:#F0F5FF;border-radius:8px"><span style="font-weight:600">Khung 10:00 - 14:00</span><span class="tag tr2">R1 + R2 cùng đăng ký</span></div>
           </div>
         </div>
         <div>
           <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px">Kết quả</div>
           <div class="callout cg">
-            <strong>Anh Hùng chọn L2 (còn slot) hoặc L3 ↩:</strong><br>
-            L2: còn 80 slot — vẫn có thể đăng ký.<br>
-            L3: System check EV ✅ → <strong>Đăng ký thành công</strong><br>
-            Không bị đẩy xuống L6 MASS.
+            <strong>Anh Hùng (R1) đăng ký lúc 08:30:</strong><br>
+            Cổng L2 mở sớm cho R1, Anh Hùng dễ dàng chọn ca sáng và đăng ký thành công FCFS.<br>
+            Không lo bị cạnh tranh bởi R2/R3.
           </div>
           <div class="callout cb" style="margin-top:10px">
-            <strong>Thiết kế cascade:</strong><br>
-            L3 tự động mở cho R1 khi L2 ≥80%. R1 luôn có layer phù hợp để đăng ký — không cần config riêng.
+            <strong>Anh Bình (R2) đăng ký lúc 10:15:</strong><br>
+            Từ 10:00 cổng mở cho R2. Anh Bình thấy slot ca sáng L2 còn trống và đăng ký thành công.<br>
+            R2 được hưởng slot sau khi R1 đã chọn xong.
           </div>
         </div>
       </div>
     </div>
+    
+    </div>
 
-    <!-- 8.3 -->
     <div class="ex-card">
       <div class="ex-title"><span class="exn">3</span>Hành trình thăng hạng — Tài xế Minh (SGN, 6 tháng)</div>
       <div style="overflow-x:auto">

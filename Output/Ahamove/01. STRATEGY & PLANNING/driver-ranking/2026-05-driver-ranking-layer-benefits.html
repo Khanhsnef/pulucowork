@@ -44,15 +44,14 @@
     /* RANK CARDS */
     .rank-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
     .rc { border-radius:1.5rem; padding:22px 20px 18px; border:2px solid; position:relative; overflow:hidden; }
-    .rc::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; }
     .rc.r1 { border-color:var(--r1); background:#FFF7F2; }
-    .rc.r1::before { background:var(--r1); }
+    .rc.r1::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--r1); }
     .rc.r2 { border-color:var(--r2); background:#F0F5FF; }
-    .rc.r2::before { background:var(--r2); }
+    .rc.r2::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--r2); }
     .rc.r3 { border-color:var(--r3); background:#F8FAFC; }
-    .rc.r3::before { background:var(--r3); }
+    .rc.r3::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--r3); }
     .rc.un { border-color:var(--un); background:#F8FAFC; }
-    .rc.un::before { background:var(--un); }
+    .rc.un::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--un); }
     .rc-name { font-size:14px; font-weight:800; margin-bottom:4px; }
     .r1 .rc-name { color:var(--r1); } .r2 .rc-name { color:var(--r2); }
     .r3 .rc-name { color:var(--r3); } .un .rc-name { color:var(--un); }
@@ -108,9 +107,9 @@
     .val-lo { font-weight:600; color:var(--g600); }
     .val-no { color:var(--g400); }
     .mult { display:inline-block; border-radius:999px; padding:3px 12px; font-size:13px; font-weight:800; }
-    .m20 { background:#FFF0E6; color:#C2410C; border:1px solid #FDBA74; }
-    .m17 { background:#EBF3FF; color:#1D4ED8; border:1px solid #93C5FD; }
-    .m13 { background:#ECFDF5; color:#065F46; border:1px solid #6EE7B7; }
+    .m15 { background:#FFF0E6; color:#C2410C; border:1px solid #FDBA74; }
+    .m13 { background:#EBF3FF; color:#1D4ED8; border:1px solid #93C5FD; }
+    .m11 { background:#ECFDF5; color:#065F46; border:1px solid #6EE7B7; }
     .m10 { background:var(--g100); color:var(--g600); border:1px solid var(--g200); }
     .tag-sm { display:inline-block; border-radius:999px; padding:2px 9px; font-size:11px; font-weight:700; }
     .t-r1 { background:#FFF0E6; color:var(--r1); border:1px solid #FECBA0; }
@@ -133,8 +132,6 @@
     .peak-no  { background:var(--g100); color:var(--g400); }
 
     .stable { width:100%; border-collapse:separate; border-spacing:0; border-radius:1.25rem; overflow:hidden; border:1px solid var(--g200); }
-    .stable th { background:var(--g800); color:#fff; padding:12px 14px; text-align:center; font-size:12.5px; font-weight:700; }
-    .stable th:first-child { text-align:left; padding-left:20px; }
     .stable td { padding:12px 14px; text-align:center; border-bottom:1px solid var(--g100); font-size:13px; vertical-align:middle; }
     .stable td:first-child { text-align:left; padding-left:20px; font-weight:600; }
     .stable tr:last-child td { border-bottom:none; }
@@ -176,11 +173,6 @@
     .ab-pillar-num { font-size:28px; font-weight:800; color:var(--orange); margin-bottom:6px; }
     .ab-pillar-name { font-size:14px; font-weight:800; color:#fff; margin-bottom:4px; }
     .ab-pillar-desc { font-size:12px; opacity:.65; line-height:1.5; }
-    .ab-next { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
-    .ab-next-item { background:#fff; border:1px solid var(--g200); border-radius:1.25rem; padding:16px 18px; }
-    .ab-next-num { font-size:11px; font-weight:700; color:var(--orange); letter-spacing:.5px; text-transform:uppercase; margin-bottom:6px; }
-    .ab-next-title { font-size:14px; font-weight:800; color:var(--blue); margin-bottom:5px; }
-    .ab-next-body { font-size:12.5px; color:var(--g600); line-height:1.6; }
 
     /* AHABENEFITS v2 */
     .ab2-formula { background:var(--g800); color:#E2E8F0; border-radius:1.25rem; padding:16px 22px; font-family:'Courier New',monospace; font-size:13px; line-height:2; }
@@ -223,7 +215,6 @@
       .rank-grid { grid-template-columns:1fr 1fr; }
       .shift-grid { grid-template-columns:1fr 1fr; }
       .ab-pillars { grid-template-columns:1fr; }
-      .ab-next { grid-template-columns:1fr; }
     }
     @media(max-width:640px) {
       .rank-grid { grid-template-columns:1fr; }
@@ -251,9 +242,9 @@
 
   <!-- HEADER -->
   <div class="header">
-    <div class="htag">Driver Management · 2026-05 · Framework v1.0</div>
+    <div class="htag">Driver Management · 2026-05 · Params Aligned</div>
     <h1>Driver Ranking × Layer Benefits</h1>
-    <div class="header-sub">Khung Xếp hạng, Phân bổ Layer, Quyền lợi & Phân ca · Ahamove SGN & HAN</div>
+    <div class="header-sub">Khung Xếp hạng, Phân bổ Layer, Quyền lợi &amp; Phân ca · Ahamove SGN &amp; HAN (Đã đồng bộ)</div>
     <div class="kv-row">
       <div class="kv"><span class="kv-k">Hệ thống Rank</span><span class="kv-v">3 Rank + Unranked</span></div>
       <div class="kv"><span class="kv-k">Layers vận hành</span><span class="kv-v">L1 → L6</span></div>
@@ -267,84 +258,43 @@
     <div class="section-label">Phần 1</div>
     <div class="section-title">Điều kiện xếp Rank</div>
     <div class="note">
-      Hệ thống check <strong>pass/fail</strong> cuối mỗi tháng theo thứ tự R1 → R2 → R3. Đạt đủ <em>tất cả</em> điều kiện của tier cao nhất → xếp tier đó. Thiếu 1 điều kiện → rớt xuống tier thấp hơn. KPI tính trên <strong>rolling 30 ngày</strong>.
+      Hệ thống check <strong>pass/fail</strong> cuối mỗi tháng theo thứ tự R1 → R2 → R3. Đạt đủ <em>tất cả</em> điều kiện của tier cao nhất → xếp tier đó. Thiếu 1 điều kiện → rớt xuống tier thấp hơn. KPI tính trên <strong>rolling 30 ngày</strong>. Quyết định xếp hạng căn cứ hoàn toàn trên điểm <strong>DQS (Driver Quality Score)</strong> và năng suất.
     </div>
 
     <!-- SGN -->
-    <div style="font-size:12px;font-weight:700;color:var(--orange);letter-spacing:.5px;margin-bottom:10px;">📍 SGN — Hồ Chí Minh</div>
+    <div style="font-size:12px;font-weight:700;color:var(--orange);letter-spacing:.5px;margin-bottom:10px;">📍 SGN &amp; HAN — Toàn quốc (Tiêu chuẩn thống nhất)</div>
     <div class="rank-grid" style="margin-bottom:20px;">
       <div class="rc r1">
-        <div class="rc-name">R1 · Elite</div>
+        <div class="rc-name">R1 · Elite / Kim Cương</div>
         <div class="rc-target">Mục tiêu: ~15% fleet</div>
-        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 95%</span></div>
-        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 85%</span></div>
-        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 10%</span></div>
-        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 100 stp</span></div>
+        <div class="kpi-row"><span class="kpi-k">DQS</span><span class="kpi-v">≥ 80</span></div>
+        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 280 stp</span></div>
         <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-        <div class="rc-note">Đội ngũ cốt lõi. Ưu tiên L2 Minizone, hưởng toàn bộ AhaBenefits cao nhất.</div>
+        <div class="rc-note">Đội ngũ cốt lõi. Ưu tiên L2 Minizone, hưởng toàn bộ AhaBenefits cao nhất &amp; Voucher xăng 50k.</div>
       </div>
       <div class="rc r2">
-        <div class="rc-name">R2 · Active</div>
+        <div class="rc-name">R2 · Active / Vàng</div>
         <div class="rc-target">Mục tiêu: ~35% fleet</div>
-        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 90%</span></div>
-        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 80%</span></div>
-        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 12%</span></div>
-        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 60 stp</span></div>
+        <div class="kpi-row"><span class="kpi-k">DQS</span><span class="kpi-v">≥ 75</span></div>
+        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 210 stp</span></div>
         <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-        <div class="rc-note">Lực lượng chủ lực, backbone supply. Ưu tiên L3 Mediumzone.</div>
+        <div class="rc-note">Lực lượng chủ lực, backbone supply. Ưu tiên L3 Mediumzone &amp; Voucher xăng 30k.</div>
       </div>
       <div class="rc r3">
-        <div class="rc-name">R3 · Standard</div>
+        <div class="rc-name">R3 · Standard / Bạc</div>
         <div class="rc-target">Mục tiêu: ~35% fleet</div>
-        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 20%</span></div>
-        <div class="kpi-row"><span class="kpi-k">Rating</span><span class="kpi-v">≥ 4.7</span></div>
+        <div class="kpi-row"><span class="kpi-k">DQS</span><span class="kpi-v">≥ 75</span></div>
+        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 70 stp</span></div>
         <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-        <div class="kpi-row"><span class="kpi-k">AR, FR, Prod</span><span class="kpi-v">Không đạt R2</span></div>
-        <div class="rc-note">Active, không vi phạm ĐBCL cơ bản. Ưu tiên L4 Bigzone.</div>
+        <div class="rc-note">Tài xế hoạt động tiêu chuẩn. Ưu tiên L4 Bigzone. Không có đặc quyền voucher xăng.</div>
       </div>
       <div class="rc un">
         <div class="rc-name">Chưa xếp hạng</div>
         <div class="rc-target">Mục tiêu: ~15% fleet</div>
+        <div class="kpi-row"><span class="kpi-k">DQS</span><span class="kpi-v">&lt; 75</span></div>
+        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">—</span></div>
         <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">&lt; 1 tháng</span></div>
-        <div class="kpi-row"><span class="kpi-k">Dữ liệu</span><span class="kpi-v">Chưa đủ</span></div>
-        <div class="rc-note">Tài xế mới. Chỉ truy cập L6 MASS. Cần tích lũy 30 ngày để được xếp hạng.</div>
-      </div>
-    </div>
-
-    <!-- HAN -->
-    <div style="font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.5px;margin-bottom:10px;">📍 HAN — Hà Nội</div>
-    <div class="rank-grid">
-      <div class="rc r1">
-        <div class="rc-name">R1 · Elite</div>
-        <div class="rc-target">Mục tiêu: ~15% fleet</div>
-        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 93%</span></div>
-        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 83%</span></div>
-        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 12%</span></div>
-        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 100 stp</span></div>
-        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-      </div>
-      <div class="rc r2">
-        <div class="rc-name">R2 · Active</div>
-        <div class="rc-target">Mục tiêu: ~35% fleet</div>
-        <div class="kpi-row"><span class="kpi-k">AR</span><span class="kpi-v">≥ 88%</span></div>
-        <div class="kpi-row"><span class="kpi-k">FR</span><span class="kpi-v">≥ 78%</span></div>
-        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 14%</span></div>
-        <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 60 stp</span></div>
-        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-      </div>
-      <div class="rc r3">
-        <div class="rc-name">R3 · Standard</div>
-        <div class="rc-target">Mục tiêu: ~35% fleet</div>
-        <div class="kpi-row"><span class="kpi-k">DCR</span><span class="kpi-v">&lt; 20%</span></div>
-        <div class="kpi-row"><span class="kpi-k">Rating</span><span class="kpi-v">≥ 4.7</span></div>
-        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
-        <div class="kpi-row"><span class="kpi-k">AR, FR, Prod</span><span class="kpi-v">Không đạt R2</span></div>
-      </div>
-      <div class="rc un">
-        <div class="rc-name">Chưa xếp hạng</div>
-        <div class="rc-target">Mục tiêu: ~15% fleet</div>
-        <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">&lt; 1 tháng</span></div>
-        <div class="kpi-row"><span class="kpi-k">Dữ liệu</span><span class="kpi-v">Chưa đủ</span></div>
+        <div class="rc-note">Tài xế mới hoặc tài xế có chất lượng dịch vụ dưới chuẩn. Chỉ truy cập L6 MASS.</div>
       </div>
     </div>
   </section>
@@ -359,29 +309,19 @@
       <div>
         <div class="pyramid-wrap">
           <div class="pyramid">
-            <div class="py-bar" style="width:30%;background:var(--r1);">
-              <span class="py-label">R1 Elite</span>
-              <div style="display:flex;flex-direction:column;align-items:flex-end;"><span class="py-pct">15%</span></div>
-            </div>
-            <div class="py-bar" style="width:60%;background:var(--r2);">
-              <span class="py-label">R2 Active</span>
-              <div style="display:flex;flex-direction:column;align-items:flex-end;"><span class="py-pct">35%</span></div>
-            </div>
-            <div class="py-bar" style="width:85%;background:var(--r3);">
-              <span class="py-label">R3 Standard</span>
-              <div style="display:flex;flex-direction:column;align-items:flex-end;"><span class="py-pct">35%</span></div>
-            </div>
-            <div class="py-bar" style="width:100%;background:var(--un);">
-              <span class="py-label">Unranked</span>
-              <div style="display:flex;flex-direction:column;align-items:flex-end;"><span class="py-pct">15%</span></div>
-            </div>
+            <div class="py-bar" style="width:150px;background:var(--r1);"><span class="py-label">R1 Elite</span><span class="py-pct">15%</span></div>
+            <div class="py-bar" style="width:350px;background:var(--r2);"><span class="py-label">R2 Active</span><span class="py-pct">35%</span></div>
+            <div class="py-bar" style="width:350px;background:var(--r3);"><span class="py-label">R3 Standard</span><span class="py-pct">35%</span></div>
+            <div class="py-bar" style="width:150px;background:var(--un);"><span class="py-label">Unranked</span><span class="py-pct">15%</span></div>
           </div>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div class="callout co"><strong>Tại sao R1 chỉ 15%?</strong><br>R1 vào L2 Minizone — slot hạn chế, ghép đơn cao, earn đảm bảo 70k/h. Nếu R1 quá nhiều mà slot L2 ít → tranh chấp slot, giảm động lực. Target 15% tương đương khoảng 1 Elite / 6 tài xế.</div>
-        <div class="callout cb"><strong>R2 + R3 = 70% backbone:</strong><br>Đây là lực lượng chủ lực duy trì supply ổn định. L3/L4 có volume lớn nhất, giờ cao điểm phủ rộng nhất.</div>
-        <div class="callout cg"><strong>Unranked 15% = pipeline:</strong><br>Tài xế mới liên tục gia nhập. Target duy trì 15% đảm bảo fleet không già hoá, luôn có luồng upgrade lên R3+.</div>
+      <div style="font-size:13px;color:var(--g600);line-height:1.7;margin-top:10px;">
+        • <strong>Quy mô Fleet (~30.000 xe máy hoạt động hàng tháng):</strong><br>
+        &nbsp;&nbsp;- R1 Elite / Kim Cương: ~4.500 đối tác<br>
+        &nbsp;&nbsp;- R2 Active / Vàng: ~10.500 đối tác<br>
+        &nbsp;&nbsp;- R3 Standard / Bạc: ~10.500 đối tác<br>
+        &nbsp;&nbsp;- Unranked / Mass: ~4.500 đối tác
       </div>
     </div>
   </section>
@@ -390,7 +330,7 @@
   <section id="layer-access">
     <div class="section-label">Phần 2</div>
     <div class="section-title">Rank → Layer Access</div>
-    <div class="note"><strong>L1 KA/MP:</strong> Assigned trực tiếp, không qua đăng ký ca. <strong>L2–L5:</strong> Đăng ký theo rank, cửa sổ ngày 1–5 hàng tháng. <strong>L6:</strong> Luôn mở — buffer mọi rank. <span style="color:var(--orange);font-weight:700">↩ Cascade</span> = layer tiếp theo mở khi layer ưu tiên ≥ 80% slot fill.</div>
+    <div class="note"><strong>L1 KA/MP:</strong> Assigned trực tiếp, không qua đăng ký ca. <strong>L2–L6:</strong> Tài xế các Rank được đăng ký tất cả các zone, quyền lợi ưu tiên theo khung giờ mở cổng đăng ký ca trong Ngày 1.</div>
 
     <div class="card" style="padding:0;overflow:hidden;">
       <div style="overflow-x:auto;">
@@ -411,27 +351,27 @@
               <td><span class="tag-sm t-r1">R1 Elite</span></td>
               <td><div class="badge-cell bc-l1" style="margin:auto">★</div></td>
               <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
-              <td><div class="badge-cell bc-cas" style="margin:auto">↩</div></td>
-              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
-              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
               <td><div class="badge-cell bc-yes" style="margin:auto;background:#DBEAFE;color:var(--blue)">✅</div></td>
             </tr>
             <tr>
               <td><span class="tag-sm t-r2">R2 Active</span></td>
               <td><div class="badge-cell bc-l1" style="margin:auto">★</div></td>
-              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
               <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
-              <td><div class="badge-cell bc-cas" style="margin:auto">↩</div></td>
-              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
               <td><div class="badge-cell bc-yes" style="margin:auto;background:#DBEAFE;color:var(--blue)">✅</div></td>
             </tr>
             <tr>
               <td><span class="tag-sm t-r3">R3 Standard</span></td>
               <td><div class="badge-cell bc-l1" style="margin:auto">★</div></td>
-              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
-              <td><div class="badge-cell bc-no" style="margin:auto">—</div></td>
               <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
-              <td><div class="badge-cell bc-cas" style="margin:auto">↩</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
+              <td><div class="badge-cell bc-yes" style="margin:auto">✅</div></td>
               <td><div class="badge-cell bc-yes" style="margin:auto;background:#DBEAFE;color:var(--blue)">✅</div></td>
             </tr>
             <tr>
@@ -446,10 +386,10 @@
             <tr class="supply-row">
               <td>Supply từ</td>
               <td>KA/MP<br><em style="font-style:normal;opacity:.7">Assigned trực tiếp</em></td>
-              <td>R1 ưu tiên<br>Cascade từ R2 nếu thiếu</td>
-              <td>R2 ưu tiên<br>R1 cascade ↩</td>
-              <td>R3 ưu tiên<br>R2 cascade ↩</td>
-              <td>R3 cascade ↩</td>
+              <td>R1 ưu tiên</td>
+              <td>R2 ưu tiên</td>
+              <td>R3 ưu tiên</td>
+              <td>R3 ưu tiên</td>
               <td>Tất cả · Buffer mở</td>
             </tr>
           </tbody>
@@ -459,7 +399,7 @@
 
     <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--g600);">
       <div style="display:flex;align-items:center;gap:6px;"><div class="badge-cell bc-yes" style="width:22px;height:22px;font-size:11px">✅</div> Layer ưu tiên (đăng ký ca)</div>
-      <div style="display:flex;align-items:center;gap:6px;"><div class="badge-cell bc-cas" style="width:22px;height:22px;font-size:11px">↩</div> Cascade fallback (khi layer ưu tiên ≥ 80%)</div>
+      <div style="display:flex;align-items:center;gap:6px;"><div class="badge-cell bc-yes" style="width:22px;height:22px;font-size:11px">✅</div> Được phép đăng ký ca tự chọn</div>
       <div style="display:flex;align-items:center;gap:6px;"><div class="badge-cell bc-yes" style="width:22px;height:22px;font-size:11px;background:#DBEAFE;color:var(--blue)">✅</div> Luôn mở (L6)</div>
       <div style="display:flex;align-items:center;gap:6px;"><div class="badge-cell bc-no" style="width:22px;height:22px;font-size:11px">—</div> Hard block</div>
       <div style="display:flex;align-items:center;gap:6px;"><div class="badge-cell bc-l1" style="width:22px;height:22px;font-size:11px">★</div> KA/MP assigned</div>
@@ -470,7 +410,7 @@
   <section id="benefits">
     <div class="section-label">Phần 3</div>
     <div class="section-title">Quyền lợi theo Layer</div>
-    <div class="note">Quyền lợi kích hoạt khi tài xế <strong>đang hoạt động trong layer</strong> (đã đăng ký ca tháng đó, duy trì KPI). <span style="background:#FEF9C3;color:#854D0E;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">📋</span> = cần validate với S&amp;P / Finance trước khi áp.</div>
+    <div class="note">Quyền lợi kích hoạt khi tài xế <strong>đang hoạt động trong layer</strong> (đăng ký ca và duy trì KPI thành công). Các chỉ số hiệu suất và hệ số điểm thưởng được hiệu chuẩn theo dữ liệu vận hành thực tế.</div>
 
     <div class="card" style="padding:0;overflow:hidden;">
       <div style="overflow-x:auto;">
@@ -486,82 +426,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="group-header"><td colspan="6">💰 Thu nhập & Đơn hàng</td></tr>
-            <tr>
-              <td>Thu nhập đảm bảo / giờ (SGN) <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:0 5px;font-size:10px;font-weight:700">📋</span></td>
-              <td><span class="val-hi">65k/h</span></td>
-              <td><span class="val-hi">60k/h</span></td>
-              <td><span class="val-md">55k/h</span></td>
-              <td><span class="val-md">55k/h</span></td>
-              <td><span class="val-no">—</span></td>
-            </tr>
-            <tr>
-              <td>Thu nhập đảm bảo / giờ (HAN) <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:0 5px;font-size:10px;font-weight:700">📋</span></td>
-              <td><span class="val-hi">70k/h</span></td>
-              <td><span class="val-hi">65k/h</span></td>
-              <td><span class="val-md">60k/h</span></td>
-              <td><span class="val-md">60k/h</span></td>
-              <td><span class="val-no">—</span></td>
-            </tr>
-            <!-- DAILY GUARANTEE HIGHLIGHT -->
-            <tr>
-              <td colspan="6" style="padding:0;">
-                <div style="margin:6px 0;background:linear-gradient(135deg,#FFF7F2 0%,#EBF3FF 100%);border:2px solid var(--orange);border-radius:1rem;padding:18px 20px;">
-                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-                    <div style="background:var(--orange);color:#fff;font-size:11px;font-weight:800;padding:3px 12px;border-radius:999px;letter-spacing:.5px;text-transform:uppercase;">★ Đặc quyền Full-day</div>
-                    <div style="font-size:14px;font-weight:800;color:var(--blue);">Đảm bảo Thu nhập / Ngày — Ca Full-day 08:00–18:00</div>
-                    <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:1px 7px;font-size:11px;font-weight:700">📋 pending validate</span>
-                  </div>
-                  <div style="display:grid;grid-template-columns:auto auto 1fr;gap:16px;align-items:start;flex-wrap:wrap;">
-                    <!-- Mức đảm bảo -->
-                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                      <div style="background:#fff;border:2px solid var(--r1);border-radius:1rem;padding:14px 18px;text-align:center;min-width:100px;">
-                        <div style="font-size:11px;font-weight:800;color:var(--r1);margin-bottom:4px;">R1 Elite</div>
-                        <div style="font-size:30px;font-weight:800;color:var(--r1);letter-spacing:-1px;line-height:1;">600k</div>
-                        <div style="font-size:10px;color:var(--g400);margin-top:2px;">/ngày · SGN</div>
-                      </div>
-                      <div style="background:#fff;border:2px solid var(--r2);border-radius:1rem;padding:14px 18px;text-align:center;min-width:100px;">
-                        <div style="font-size:11px;font-weight:800;color:var(--r2);margin-bottom:4px;">R2 Active</div>
-                        <div style="font-size:30px;font-weight:800;color:var(--r2);letter-spacing:-1px;line-height:1;">500k</div>
-                        <div style="font-size:10px;color:var(--g400);margin-top:2px;">/ngày · SGN</div>
-                      </div>
-                    </div>
-                    <!-- Divider -->
-                    <div style="width:1px;background:var(--g200);align-self:stretch;"></div>
-                    <!-- Điều kiện -->
-                    <div>
-                      <div style="font-size:12px;font-weight:800;color:var(--blue);margin-bottom:8px;">Điều kiện kích hoạt</div>
-                      <div style="display:flex;flex-direction:column;gap:5px;">
-                        <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--g800);">
-                          <span style="min-width:20px;height:20px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;">①</span>
-                          Đã đăng ký ca Full-day trong cửa sổ ngày 1–5 hàng tháng
-                        </div>
-                        <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--g800);">
-                          <span style="min-width:20px;height:20px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;">②</span>
-                          <span>App online <strong>≥ 95%</strong> khung giờ 08:00–18:00 <em>và</em> <strong>AR = 100%</strong> trong ngày đó</span>
-                        </div>
-                        <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--g800);">
-                          <span style="min-width:20px;height:20px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;">③</span>
-                          Duy trì FR &amp; DCR tối thiểu của tier trong ngày
-                        </div>
-                        <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--g800);">
-                          <span style="min-width:20px;height:20px;background:var(--orange);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;">④</span>
-                          <span>Thu nhập thực tế &lt; mức đảm bảo → <strong style="color:var(--green)">Ahamove bù phần thiếu</strong></span>
-                        </div>
-                      </div>
-                      <!-- Forfeit rules -->
-                      <div style="margin-top:10px;background:#FEF2F2;border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:8px 12px;font-size:12px;color:#991B1B;">
-                        <strong>Mất đảm bảo:</strong>
-                        <div style="margin-top:4px;display:flex;flex-direction:column;gap:3px;">
-                          <div>• Không online / không hoạt động trong ngày đăng ký → <strong>không trả đảm bảo ngày đó</strong></div>
-                          <div>• Fail điều kiện ① hoặc ② <strong>2 lần/tuần</strong> → <strong>mất toàn bộ đảm bảo của tuần đó</strong></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
+            <tr class="group-header"><td colspan="6">💰 Thu nhập &amp; Đơn hàng</td></tr>
+            
+            
             <tr>
               <td>Ghép đơn tối đa</td>
               <td><span class="val-hi">4–5 đơn</span></td>
@@ -582,20 +449,13 @@
             <tr class="group-header"><td colspan="6">⭐ AhaBenefits — Điểm thưởng</td></tr>
             <tr>
               <td>Hệ số nhân điểm (per trip)</td>
-              <td><span class="mult m20">×2.0</span></td>
-              <td><span class="mult m17">×1.7</span></td>
-              <td><span class="mult m13">×1.3</span></td>
+              <td><span class="mult m15">×1.5</span></td>
+              <td><span class="mult m11">×1.1</span></td>
+              <td><span class="mult m11">×1.1</span></td>
               <td><span class="mult m10">×1.0</span></td>
               <td><span class="mult m10">×1.0</span></td>
             </tr>
-            <tr>
-              <td>Điểm thưởng hoàn thành ca</td>
-              <td><span class="val-hi">+500 pts</span></td>
-              <td><span class="val-hi">+300 pts</span></td>
-              <td><span class="val-md">+150 pts</span></td>
-              <td><span class="val-lo">+50 pts</span></td>
-              <td><span class="val-no">—</span></td>
-            </tr>
+
             <tr>
               <td>Early access campaign &amp; promo</td>
               <td style="color:#065F46;font-weight:700">✅ 48h trước</td>
@@ -605,9 +465,25 @@
               <td class="val-no">—</td>
             </tr>
 
-            <tr class="group-header"><td colspan="6">🤝 Partner Benefits</td></tr>
+            <tr class="group-header"><td colspan="6">🤝 Partner Benefits &amp; Quyền lợi tự động</td></tr>
             <tr>
-              <td>Partner tier</td>
+              <td>Voucher xăng/EV hàng tháng</td>
+              <td><span class="tag-sm t-r1" style="font-weight:800;">50.000đ/tháng (R1)</span></td>
+              <td><span class="tag-sm t-r2" style="font-weight:800;">30.000đ/tháng (R2)</span></td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+            </tr>
+            <tr>
+              <td>Bảo hiểm tai nạn (R1)</td>
+              <td style="color:#065F46;font-weight:700">✅ Đổi bằng điểm thưởng (gói 10k/30k)</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+            </tr>
+            <tr>
+              <td>Partner tier tương ứng</td>
               <td><span class="tag-sm t-diamond">💎 Kim Cương</span></td>
               <td><span class="tag-sm t-gold">🥇 Hạng Vàng</span></td>
               <td><span class="tag-sm t-silver">🥈 Hạng Bạc</span></td>
@@ -615,26 +491,18 @@
               <td><span class="val-no">—</span></td>
             </tr>
             <tr>
-              <td>Giảm nhiên liệu / sạc EV</td>
-              <td><span class="val-hi">5–8%</span></td>
-              <td><span class="val-hi">5–8%</span></td>
-              <td><span class="val-md">3–5%</span></td>
-              <td><span class="val-lo">1–2%</span></td>
-              <td><span class="val-no">—</span></td>
-            </tr>
-            <tr>
-              <td>Bảo dưỡng xe định kỳ</td>
-              <td><span class="val-hi">1 lần / quý</span></td>
-              <td><span class="val-hi">1 lần / quý</span></td>
-              <td><span class="val-md">1 lần / 6T</span></td>
+              <td>Giảm giá bảo dưỡng đối tác</td>
+              <td><span class="val-hi">Gói R1 (3.000 pts)</span></td>
+              <td><span class="val-hi">Giảm 20% (1.800 pts)</span></td>
+              <td><span class="val-md">Giảm 15% (900 pts)</span></td>
               <td><span class="val-no">—</span></td>
               <td><span class="val-no">—</span></td>
             </tr>
             <tr>
               <td>Data telecom hàng tháng</td>
-              <td><span class="val-hi">5 GB</span></td>
-              <td><span class="val-hi">5 GB</span></td>
-              <td><span class="val-md">2 GB</span></td>
+              <td><span class="val-hi">5 GB (R1)</span></td>
+              <td><span class="val-hi">5 GB (R2)</span></td>
+              <td><span class="val-md">2 GB (R3)</span></td>
               <td><span class="val-no">—</span></td>
               <td><span class="val-no">—</span></td>
             </tr>
@@ -642,17 +510,9 @@
               <td>Khám sức khoẻ miễn phí</td>
               <td><span class="val-hi">1 lần / năm</span></td>
               <td><span class="val-md">1 lần / năm</span></td>
-              <td><span class="val-no">—</span></td>
-              <td><span class="val-no">—</span></td>
-              <td><span class="val-no">—</span></td>
-            </tr>
-            <tr>
-              <td>F&amp;B / Tiêu dùng merchant</td>
-              <td><span class="val-hi">Ưu tiên cao</span></td>
-              <td><span class="val-md">Ưu tiên cao</span></td>
-              <td><span class="val-lo">Cơ bản</span></td>
-              <td><span class="val-no">—</span></td>
-              <td><span class="val-no">—</span></td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
+              <td class="val-no">—</td>
             </tr>
 
             <tr class="group-header"><td colspan="6">🎓 Phát triển nghề nghiệp</td></tr>
@@ -666,33 +526,25 @@
             </tr>
             <tr>
               <td>Ưu tiên tham gia pilot EV</td>
-              <td style="color:#065F46;font-weight:700">✅ Slot 1</td>
-              <td style="color:#065F46;font-weight:700">✅ Slot 2</td>
+              <td style="color:#065F46;font-weight:700">✅ Slot 1 (R1)</td>
+              <td style="color:#065F46;font-weight:700">✅ Slot 2 (R2)</td>
               <td class="val-no">—</td>
               <td class="val-no">—</td>
-              <td class="val-no">—</span></td>
+              <td class="val-no">—</td>
             </tr>
             <tr>
-              <td>Support channel</td>
-              <td><span class="val-hi">Dedicated chat</span></td>
-              <td><span class="val-hi">Dedicated chat</span></td>
+              <td>Dedicated Support Channel</td>
+              <td><span class="val-hi">Chat riêng (R1)</span></td>
+              <td><span class="val-hi">Chat riêng (R2)</span></td>
               <td><span class="val-md">Standard</span></td>
               <td><span class="val-lo">Standard</span></td>
               <td><span class="val-lo">Basic</span></td>
-            </tr>
-            <tr>
-              <td>Badge hiển thị trên app</td>
-              <td><span class="tag-sm t-r1">🏅 Elite</span></td>
-              <td><span class="tag-sm t-r2">⭐ Active</span></td>
-              <td><span class="tag-sm t-r3">✓ Standard</span></td>
-              <td class="val-no">—</td>
-              <td class="val-no">—</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div class="callout cy-call" style="margin-top:12px;"><strong>Lưu ý thu nhập đảm bảo:</strong> Áp dụng theo ca đã đăng ký, tính theo giờ thực tế hoạt động trong zone. Nếu EPH thực tế &gt; mức đảm bảo → trả theo thực tế. Nếu &lt; mức đảm bảo → Ahamove bù phần thiếu. Cần validate với S&amp;P theo EPH P50 thực tế trước khi launch.</div>
+    
   </section>
 
   <!-- SECTION 5: SHIFTS -->
@@ -726,7 +578,7 @@
         <div class="shift-time">08:00–18:00</div>
         <div class="shift-dur">Ca 10 tiếng</div>
         <div class="shift-peak" style="background:#FFF0E6;color:#C2410C;margin-bottom:6px;">R1 + R2 only</div>
-        <div style="font-size:11px;font-weight:700;color:#065F46;background:#D1FAE5;border-radius:999px;padding:2px 8px;display:inline-block">💰 Đảm bảo/ngày</div>
+        
       </div>
     </div>
 
@@ -741,7 +593,7 @@
               <th>L2 Minizone<br><span style="font-size:10px;opacity:.7">(R1)</span></th>
               <th>L3 Mediumzone<br><span style="font-size:10px;opacity:.7">(R2)</span></th>
               <th>L4 Bigzone<br><span style="font-size:10px;opacity:.7">(R3)</span></th>
-              <th>L5 Cityzone<br><span style="font-size:10px;opacity:.7">(R3 cascade)</span></th>
+              <th>L5 Cityzone<br><span style="font-size:10px;opacity:.7">(R3 ưu tiên)</span></th>
               <th>L6 MASS<br><span style="font-size:10px;opacity:.7">(All)</span></th>
               <th>Ghi chú</th>
             </tr>
@@ -750,66 +602,60 @@
             <tr>
               <td><strong>Ca Sáng ⚡</strong><br><span style="font-size:11px;color:var(--g400)">08:00–12:00</span></td>
               <td>
-                <div class="slot-bar"><div class="sbar" style="width:35px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">35%</span></div>
+                <div class="slot-bar"><div class="sbar" style="width:20px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">20%</span></div>
               </td>
               <td>
-                <div class="slot-bar"><div class="sbar" style="width:33px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">33%</span></div>
+                <div class="slot-bar"><div class="sbar" style="width:40px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">40%</span></div>
               </td>
               <td>
-                <div class="slot-bar"><div class="sbar" style="width:22px;background:var(--r3)"></div><span style="font-weight:700;color:var(--r3)">22%</span></div>
+                <div class="slot-bar"><div class="sbar" style="width:40px;background:var(--r3)"></div><span style="font-weight:700;color:var(--r3)">40%</span></div>
               </td>
-              <td>
-                <div class="slot-bar"><div class="sbar" style="width:10px;background:var(--un)"></div><span style="color:var(--g400)">10%</span></div>
-              </td>
-              <td><span style="color:var(--g400);font-size:12px">Mở tự do</span></td>
-              <td style="font-size:12px;color:var(--g600)">Peak sáng: đơn văn phòng + giao hàng thương mại điện tử sớm. L2/L3 chiếm nhiều — ghép đơn mini hiệu quả nhất buổi sáng.</td>
+              <td><span style="color:var(--g400);font-size:12px">—</span></td>
+              <td><span style="color:var(--g400);font-size:12px">on-demand</span></td>
+              <td style="font-size:12px;color:var(--g600)">Phân bổ slot sáng theo tỷ lệ phân ca của các Rank. R1 ưu tiên cao ở zone nhỏ.</td>
             </tr>
             <tr>
               <td><strong>Ca Chiều ⚡</strong><br><span style="font-size:11px;color:var(--g400)">13:00–17:00</span></td>
               <td>
-                <div class="slot-bar"><div class="sbar" style="width:22px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">22%</span></div>
+                <div class="slot-bar"><div class="sbar" style="width:20px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">20%</span></div>
               </td>
               <td>
-                <div class="slot-bar"><div class="sbar" style="width:28px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">28%</span></div>
+                <div class="slot-bar"><div class="sbar" style="width:40px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">40%</span></div>
               </td>
               <td>
-                <div class="slot-bar"><div class="sbar" style="width:33px;background:var(--r3)"></div><span style="font-weight:700;color:var(--r3)">33%</span></div>
+                <div class="slot-bar"><div class="sbar" style="width:40px;background:var(--r3)"></div><span style="font-weight:700;color:var(--r3)">40%</span></div>
               </td>
-              <td>
-                <div class="slot-bar"><div class="sbar" style="width:17px;background:var(--un)"></div><span style="color:var(--g400)">17%</span></div>
-              </td>
-              <td><span style="color:var(--g400);font-size:12px">Mở tự do</span></td>
-              <td style="font-size:12px;color:var(--g600)">Peak chiều: đơn thương mại điện tử + giao văn phòng tan ca trưa. L2/L3 tăng slot, cùng cấu trúc Ca Sáng.</td>
+              <td><span style="color:var(--g400);font-size:12px">—</span></td>
+              <td><span style="color:var(--g400);font-size:12px">on-demand</span></td>
+              <td style="font-size:12px;color:var(--g600)">Tương thích với cơ cấu buổi sáng, tối đa hoá tỷ lệ hoạt động trong giờ cao điểm.</td>
             </tr>
             <tr>
               <td><strong>Ca Tối</strong><br><span style="font-size:11px;color:var(--g400)">17:00–21:00</span></td>
               <td>
-                <div class="slot-bar"><div class="sbar" style="width:38px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">38%</span></div>
+                <div class="slot-bar"><div class="sbar" style="width:15px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">15%</span></div>
               </td>
               <td>
-                <div class="slot-bar"><div class="sbar" style="width:32px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">32%</span></div>
+                <div class="slot-bar"><div class="sbar" style="width:40px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">40%</span></div>
               </td>
               <td>
-                <div class="slot-bar"><div class="sbar" style="width:20px;background:var(--r3)"></div><span style="font-weight:700;color:var(--r3)">20%</span></div>
+                <div class="slot-bar"><div class="sbar" style="width:45px;background:var(--r3)"></div><span style="font-weight:700;color:var(--r3)">45%</span></div>
               </td>
-              <td>
-                <div class="slot-bar"><div class="sbar" style="width:10px;background:var(--un)"></div><span style="color:var(--g400)">10%</span></div>
-              </td>
-              <td><span style="color:var(--g400);font-size:12px">Mở tự do</span></td>
-              <td style="font-size:12px;color:var(--g600)">Volume thấp hơn 2 ca trước. L4/L5 tăng tỉ lệ — phù hợp đơn cross-zone buổi tối. L2 giảm slot vì density minizone thấp.</td>
+              <td><span style="color:var(--g400);font-size:12px">—</span></td>
+              <td><span style="color:var(--g400);font-size:12px">on-demand</span></td>
+              <td style="font-size:12px;color:var(--g600)">R3 có cơ cấu slot cao nhất (45%) để lấp đầy volume cuối ngày.</td>
             </tr>
             <tr style="background:#FFF7F2;">
               <td><strong style="color:var(--orange)">Ca Full-day ★</strong><br><span style="font-size:11px;color:var(--g400)">08:00–18:00</span></td>
               <td>
-                <div class="slot-bar"><div class="sbar" style="width:50px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">R1 only</span></div>
+                <div class="slot-bar"><div class="sbar" style="width:50px;background:var(--r1)"></div><span style="font-weight:800;color:var(--r1)">50% slot (R1) · Mở 100-200 slot</span></div>
               </td>
               <td>
-                <div class="slot-bar"><div class="sbar" style="width:40px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">R1+R2</span></div>
+                <div class="slot-bar"><div class="sbar" style="width:50px;background:var(--r2)"></div><span style="font-weight:700;color:var(--r2)">50% slot (R2) · Mở 100-200 slot</span></div>
               </td>
-              <td><span class="val-no">—</span></td>
-              <td><span class="val-no">—</span></td>
-              <td><span style="color:var(--g400);font-size:12px">Mở tự do</span></td>
-              <td style="font-size:12px;color:var(--g600)">Đặc quyền R1 &amp; R2. Slot giới hạn — tối đa 20% tổng fleet mỗi ngày để đảm bảo diversity ca.</td>
+              <td><span class="val-no">❌ Không mở</span></td>
+              <td><span class="val-no">❌ Không mở</span></td>
+              <td><span class="val-no">❌ Không mở</span></td>
+              <td style="font-size:12px;color:var(--g600)">Đặc quyền R1 &amp; R2. Giới hạn quy mô ca Full-day mở 100-200 slot (10-15% tổng ca).</td>
             </tr>
           </tbody>
         </table>
@@ -818,19 +664,16 @@
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
       <div class="callout co"><strong>Giới hạn đăng ký ca:</strong> Mỗi tài xế tối đa <strong>22 ca/tháng</strong> (≈ 5–6 ca/tuần). Tránh burnout và đảm bảo cạnh tranh lành mạnh giữa tài xế cùng tier.</div>
-      <div class="callout cb"><strong>Ca Full-day:</strong> Chỉ mở cửa sổ đăng ký sau khi R1 đã lấp đầy ≥ 70% Ca Sáng + Ca Tối. Logic: tài xế chọn Full-day thay vì 2 ca lẻ → đảm bảo commit supply dài hơn.</div>
+      <div class="callout cb"><strong>Ca Full-day:</strong> Quy mô ca giới hạn mở 100-200 slot (10-15% tổng ca) chia đều cho R1 và R2 (50% mỗi hạng).</div>
     </div>
-    <div class="callout cg" style="margin-top:12px;">
-      <strong>💰 Tóm tắt: Đảm bảo/ngày Ca Full-day</strong> &nbsp;·&nbsp; R1: <strong>600k/ngày (SGN)</strong> &nbsp;·&nbsp; R2: <strong>500k/ngày (SGN)</strong><br>
-      <span style="font-size:12px;">App online ≥ 95% + AR = 100% · Đủ FR &amp; DCR ngày · Fail 2 lần/tuần → mất đảm bảo cả tuần. Chi tiết xem bảng Quyền lợi ↑</span>
-    </div>
+    
   </section>
 
   <!-- SECTION 6: MASTER TABLE -->
   <section id="master">
     <div class="section-label">Phần 5 — Bảng tổng hợp</div>
     <div class="section-title">Master: Rank × Layer × Quyền lợi × Ca</div>
-    <div class="note">Bảng tham chiếu nhanh. Dùng khi cần trả lời câu hỏi: "Tài xế hạng X đang chạy layer Y được gì?"</div>
+    <div class="note">Bảng tham chiếu nhanh. Dùng khi cần đối chiếu nhanh các quyền lợi giữa các thứ hạng tài xế.</div>
 
     <div class="card" style="padding:0;overflow:hidden;">
       <div style="overflow-x:auto;">
@@ -839,10 +682,8 @@
             <tr>
               <th>Rank</th>
               <th>Layer ưu tiên</th>
-              <th>Thu nhập đảm bảo (SGN)</th>
-              <th>Ghép đơn</th>
-              <th>AhaBenefits ×</th>
-              <th>Partner Tier</th>
+                            <th>AhaBenefits (× hệ số + bonus)</th>
+              <th>Voucher xăng/EV</th>
               <th>Ca Full-day</th>
               <th>Đội trưởng</th>
               <th>EV Priority</th>
@@ -850,34 +691,30 @@
           </thead>
           <tbody>
             <tr class="r1-row">
-              <td><span class="tag-sm t-r1">R1 Elite</span><br><span style="font-size:11px;color:var(--g400)">~15% fleet</span></td>
+              <td><span class="tag-sm t-r1">R1 Elite/Kim Cương</span><br><span style="font-size:11px;color:var(--g400)">~15% fleet</span></td>
               <td><strong style="color:var(--r1)">L2 Minizone</strong><br><span style="font-size:11px;color:var(--g400)">↩ L3 fallback</span></td>
-              <td><strong class="val-hi">65k/h</strong><br><span style="font-size:11px;font-weight:800;color:var(--orange)">★ 600k/ngày</span></td>
-              <td><strong>4–5 đơn</strong></td>
-              <td><span class="mult m20">×2.0</span></td>
-              <td><span class="tag-sm t-diamond">💎 Kim Cương</span></td>
-              <td style="color:#065F46;font-weight:700">✅</td>
-              <td style="color:#065F46;font-weight:700">✅ Trưởng</td>
-              <td style="color:#065F46;font-weight:700">✅ Slot 1</td>
+                            <td><span class="mult m15">×1.5</span></td>
+              <td><span class="tag-sm t-r1">50.000đ/tháng</span></td>
+              <td style="color:#065F46;font-weight:700">✅ 50% slot (100-200)</td>
+              <td>✅ Trưởng</td>
+              <td>✅ Slot 1</td>
             </tr>
             <tr class="r2-row">
-              <td><span class="tag-sm t-r2">R2 Active</span><br><span style="font-size:11px;color:var(--g400)">~35% fleet</span></td>
+              <td><span class="tag-sm t-r2">R2 Active/Vàng</span><br><span style="font-size:11px;color:var(--g400)">~35% fleet</span></td>
               <td><strong style="color:var(--r2)">L3 Mediumzone</strong><br><span style="font-size:11px;color:var(--g400)">↩ L4 fallback</span></td>
-              <td><strong class="val-hi">60k/h</strong><br><span style="font-size:11px;font-weight:800;color:var(--r2)">★ 500k/ngày</span></td>
-              <td><strong>3–4 đơn</strong></td>
-              <td><span class="mult m17">×1.7</span></td>
-              <td><span class="tag-sm t-gold">🥇 Hạng Vàng</span></td>
-              <td style="color:#065F46;font-weight:700">✅</td>
-              <td style="color:#065F46;font-weight:700">✅ Trưởng</td>
-              <td style="color:#065F46;font-weight:700">✅ Slot 2</td>
+                            <td><span class="mult m11">×1.1</span></td>
+              <td><span class="tag-sm t-r2">30.000đ/tháng</span></td>
+              <td style="color:#065F46;font-weight:700">✅ 50% slot (100-200)</td>
+              <td>✅ Trưởng</td>
+              <td>✅ Slot 2</td>
             </tr>
             <tr class="r3-row">
-              <td><span class="tag-sm t-r3">R3 Standard</span><br><span style="font-size:11px;color:var(--g400)">~35% fleet</span></td>
+              <td><span class="tag-sm t-r3">R3 Standard/Bạc</span><br><span style="font-size:11px;color:var(--g400)">~35% fleet</span></td>
               <td><strong style="color:var(--r3)">L4 Bigzone</strong><br><span style="font-size:11px;color:var(--g400)">↩ L5 fallback</span></td>
-              <td><strong class="val-md">55k/h</strong></td>
-              <td><strong>2–3 đơn</strong></td>
-              <td><span class="mult m13">×1.3</span></td>
-              <td><span class="tag-sm t-silver">🥈 Hạng Bạc</span></td>
+              <td class="val-no">—</td>
+              <td><strong>55k / 60k đ</strong></td>
+              <td><span class="mult m11">×1.1</span></td>
+              <td class="val-no">—</td>
               <td class="val-no">—</td>
               <td style="color:var(--blue);font-weight:700">✅ Phó</td>
               <td class="val-no">—</td>
@@ -886,7 +723,7 @@
               <td><span class="tag-sm t-un">Unranked</span><br><span style="font-size:11px;color:var(--g400)">~15% fleet</span></td>
               <td><strong style="color:var(--un)">L6 MASS</strong><br><span style="font-size:11px;color:var(--g400)">Không cascade</span></td>
               <td class="val-no">—</td>
-              <td><strong>1–2 đơn</strong></td>
+              <td class="val-no">—</td>
               <td><span class="mult m10">×1.0</span></td>
               <td class="val-no">—</td>
               <td class="val-no">—</td>
@@ -897,7 +734,6 @@
         </table>
       </div>
     </div>
-    <div class="callout cg" style="margin-top:12px;"><strong>Nguyên tắc thiết kế:</strong> Mỗi bước upgrade Rank đều mang lại quyền lợi <em>rõ ràng và định lượng được</em> — không phải chỉ badge. R3 → R2: thêm 5k/h đảm bảo + ×0.4 multiplier + Partner Vàng. R2 → R1: thêm 5k/h đảm bảo + ×0.3 multiplier + Ca Full-day + EV slot.</div>
   </section>
 
   <!-- SECTION 7: AHABENEFITS TEASER -->
@@ -914,17 +750,17 @@
         <div class="ab-pillar">
           <div class="ab-pillar-num">01</div>
           <div class="ab-pillar-name">Earn</div>
-          <div class="ab-pillar-desc">5,000đ thu nhập = 1 điểm · Nhân hệ số theo layer · Bonus điểm khi hoàn ca đúng hạn.</div>
+          <div class="ab-pillar-desc">1,000đ thu nhập = 1 điểm · Nhân hệ số theo layer.</div>
         </div>
         <div class="ab-pillar">
           <div class="ab-pillar-num">02</div>
           <div class="ab-pillar-name">Redeem</div>
-          <div class="ab-pillar-desc">Đổi điểm lấy voucher xăng/EV, bảo dưỡng xe, CCDC, F&amp;B, data SIM, thẻ quà tặng.</div>
+          <div class="ab-pillar-desc">Đổi điểm lấy bảo hiểm tai nạn R1, bảo dưỡng xe, CCDC, F&amp;B, data SIM, thẻ quà tặng.</div>
         </div>
         <div class="ab-pillar">
           <div class="ab-pillar-num">03</div>
           <div class="ab-pillar-name">Exclusive</div>
-          <div class="ab-pillar-desc">Đặc quyền gắn Rank — không thể mua bằng điểm: Partner Kim Cương, health check, EV pilot, dedicated support.</div>
+          <div class="ab-pillar-desc">Đặc quyền gắn Rank — không thể mua bằng điểm: Voucher xăng 30k/50k, khám sức khoẻ, EV pilot, ca Full-day.</div>
         </div>
       </div>
     </div>
@@ -935,61 +771,58 @@
       <div class="card">
         <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:12px;">Công thức</div>
         <div class="ab2-formula">
-<span class="b">Điểm/ca</span> = (<span class="g">Thu nhập thực tế</span> ÷ <span class="h">5.000</span>) × <span class="h">Hệ số Layer</span>
-            + <span class="g">Bonus hoàn ca</span>
+<span class="b">Điểm/ca</span> = round(<span class="g">Thu nhập thực tế</span> ÷ <span class="h">1.000</span>) × <span class="h">Hệ số Layer</span>
 
-<span class="b">Ví dụ R1</span> (L2 · EPH 200k/h · Ca 4 tiếng):
-  Base : 800.000 ÷ 5.000 = <span class="g">160 pts</span>
-  × 2.0 : <span class="g">320 pts</span>
-  + Bonus ca: <span class="h">+60 pts</span>
-  → Tổng : <span class="b">380 pts/ca</span>
+<span class="b">Ví dụ R1</span> (L2 · EPH ~70k/h · Ca 4 tiếng doanh thu 280k):
+  Base : 280.000 ÷ 1.000 = <span class="g">280 pts</span>
+  × 1.5 : <span class="g">420 pts</span>
+  → Tổng : <span class="b">420 pts/ca</span>
         </div>
       </div>
       <div class="card" style="padding:0;overflow:hidden;">
-        <div style="padding:12px 16px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">Hệ số Layer & Bonus hoàn ca</div>
+        <div style="padding:12px 16px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">Hệ số Layer</div>
         <table style="width:100%;border-collapse:collapse;font-size:13px;">
           <thead><tr style="background:var(--g100);">
             <th style="padding:8px 14px;text-align:left;font-weight:700;color:var(--g600);font-size:11px;">Layer</th>
             <th style="padding:8px 10px;text-align:center;font-weight:700;color:var(--g600);font-size:11px;">Hệ số ×</th>
-            <th style="padding:8px 14px;text-align:center;font-weight:700;color:var(--g600);font-size:11px;">Bonus/ca</th>
           </tr></thead>
           <tbody>
-            <tr style="background:#FFF7F2;"><td style="padding:9px 14px;font-weight:700;color:var(--r1);">L2 Minizone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m20">×2.0</span></td><td style="padding:9px 14px;text-align:center;font-weight:800;color:var(--r1);">+60 pts</td></tr>
-            <tr style="background:#F0F5FF;"><td style="padding:9px 14px;font-weight:700;color:var(--r2);">L3 Mediumzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m17">×1.7</span></td><td style="padding:9px 14px;text-align:center;font-weight:800;color:var(--r2);">+55 pts</td></tr>
-            <tr><td style="padding:9px 14px;font-weight:700;color:var(--r3);">L4 Bigzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m13">×1.3</span></td><td style="padding:9px 14px;text-align:center;font-weight:700;color:var(--r3);">+50 pts</td></tr>
-            <tr><td style="padding:9px 14px;color:var(--g600);">L5 Cityzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m10">×1.0</span></td><td style="padding:9px 14px;text-align:center;color:var(--g400);">+50 pts</td></tr>
-            <tr><td style="padding:9px 14px;color:var(--g400);">L6 MASS</td><td style="padding:9px 10px;text-align:center;"><span class="mult m10">×1.0</span></td><td style="padding:9px 14px;text-align:center;color:var(--g400);">—</td></tr>
+            <tr style="background:#FFF7F2;"><td style="padding:9px 14px;font-weight:700;color:var(--r1);">L2 Minizone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m15">×1.5</span></td></tr>
+            <tr style="background:#F0F5FF;"><td style="padding:9px 14px;font-weight:700;color:var(--r2);">L3 Mediumzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m11">×1.1</span></td></tr>
+            <tr><td style="padding:9px 14px;font-weight:700;color:var(--r3);">L4 Bigzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m11">×1.1</span></td></tr>
+            <tr><td style="padding:9px 14px;color:var(--g600);">L5 Cityzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m10">×1.0</span></td></tr>
+            <tr><td style="padding:9px 14px;color:var(--g400);">L6 MASS</td><td style="padding:9px 10px;text-align:center;"><span class="mult m10">×1.0</span></td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
     <!-- Earn estimate per rank -->
-    <div style="font-size:12px;font-weight:700;color:var(--g600);margin-bottom:10px;">Ước tính điểm tích lũy / ca (giả định EPH trung bình) <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:0 6px;font-size:10px;font-weight:700">📋</span></div>
+    <div style="font-size:12px;font-weight:700;color:var(--g600);margin-bottom:10px;">Ước tính điểm tích lũy / ca (giả định EPH trung bình theo params)</div>
     <div class="earn-grid" style="margin-bottom:20px;">
       <div class="earn-card ec1">
-        <div class="earn-rank">R1 · L2 · EPH ~200k/h</div>
-        <div class="earn-pts">380</div>
+        <div class="earn-rank">R1 · L2 · EPH ~70k/h</div>
+        <div class="earn-pts">420</div>
         <div class="earn-sub">pts / ca 4 tiếng</div>
-        <div class="earn-detail">160 base × 2.0 = 320<br>+ 60 bonus hoàn ca</div>
+        <div class="earn-detail">280 base × 1.5 = 420</div>
       </div>
       <div class="earn-card ec2">
-        <div class="earn-rank">R2 · L3 · EPH ~170k/h</div>
-        <div class="earn-pts">286</div>
+        <div class="earn-rank">R2 · L3 · EPH ~65k/h</div>
+        <div class="earn-pts">338</div>
         <div class="earn-sub">pts / ca 4 tiếng</div>
-        <div class="earn-detail">136 base × 1.7 = 231<br>+ 55 bonus hoàn ca</div>
+        <div class="earn-detail">260 base × 1.3 = 338</div>
       </div>
       <div class="earn-card ec3">
-        <div class="earn-rank">R3 · L4 · EPH ~140k/h</div>
-        <div class="earn-pts">196</div>
+        <div class="earn-rank">R3 · L4 · EPH ~60k/h</div>
+        <div class="earn-pts">264</div>
         <div class="earn-sub">pts / ca 4 tiếng</div>
-        <div class="earn-detail">112 base × 1.3 = 146<br>+ 50 bonus hoàn ca</div>
+        <div class="earn-detail">240 base × 1.1 = 264</div>
       </div>
       <div class="earn-card ec6">
-        <div class="earn-rank">L6 MASS · EPH ~110k/h</div>
-        <div class="earn-pts">88</div>
+        <div class="earn-rank">L6 MASS · EPH ~55k/h</div>
+        <div class="earn-pts">220</div>
         <div class="earn-sub">pts / ca 4 tiếng</div>
-        <div class="earn-detail">88 base × 1.0 = 88<br>không có bonus hoàn ca</div>
+        <div class="earn-detail">220 base × 1.0 = 220</div>
       </div>
     </div>
 
@@ -1000,7 +833,6 @@
         <div style="font-size:11px;font-weight:700;color:var(--green);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Tích điểm</div>
         <div style="font-size:13px;font-weight:600;color:var(--g800);line-height:1.7;">
           Tự động sau mỗi chuyến hoàn thành<br>
-          Cộng bonus khi đủ điều kiện hoàn ca<br>
           Hiển thị realtime trên app tài xế
         </div>
       </div>
@@ -1008,16 +840,16 @@
         <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Hết hạn</div>
         <div style="font-size:13px;font-weight:600;color:var(--g800);line-height:1.7;">
           Điểm reset <strong>cuối mỗi quý</strong><br>
-          Thông báo app trước 14 ngày<br>
-          Điểm đã đổi voucher không bị reset
+          Thông báo trên app trước 14 ngày<br>
+          Hạn chót đổi thưởng ngày cuối quý
         </div>
       </div>
       <div class="card" style="border-left:4px solid var(--red);padding:16px 18px;">
         <div style="font-size:11px;font-weight:700;color:var(--red);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Phạt điểm</div>
         <div style="font-size:13px;font-weight:600;color:var(--g800);line-height:1.7;">
-          Vi phạm ĐBCL (DCR, rating): <strong style="color:var(--red);">−200 pts</strong><br>
+          Vi phạm ĐBCL nhẹ: <strong style="color:var(--red);">−50 pts/lần</strong><br>
           Điểm tối thiểu = 0 (không âm)<br>
-          Ghi lý do vi phạm vào lịch sử
+          Lịch sử vi phạm hiển thị công khai
         </div>
       </div>
     </div>
@@ -1029,22 +861,21 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
       <div style="background:#ECFDF5;border:1.5px solid #6EE7B7;border-radius:12px;padding:12px 16px;">
         <div style="font-size:11px;font-weight:800;color:#065F46;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">🤝 Partner Rewards — Đổi bằng điểm</div>
-        <div style="font-size:12px;color:#047857;line-height:1.6;">Ahamove chi phí <strong>= 0đ</strong>. Đối tác subsidize để tiếp cận driver base. Tất cả các Rank đều có thể dùng điểm để đổi.</div>
+        <div style="font-size:12px;color:#047857;line-height:1.6;">Ahamove chi phí <strong>= 0đ</strong>. Đối tác tài trợ nhằm tiếp cận tập khách hàng tài xế. Mọi phân hạng đều được quy đổi tự do.</div>
       </div>
       <div style="background:#FFF7F2;border:1.5px solid #FDBA74;border-radius:12px;padding:12px 16px;">
-        <div style="font-size:11px;font-weight:800;color:#C2410C;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">💎 Rank Entitlements — Tự động theo Rank</div>
-        <div style="font-size:12px;color:#C2410C;line-height:1.6;"><strong>Không</strong> dùng điểm để đổi. Cấp tự động: Kim Cương 2 items · Vàng 1 item. Nằm trong budget <strong>200M/tháng</strong>.</div>
+        <div style="font-size:11px;font-weight:800;color:#C2410C;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">💎 Đặc quyền tự động — Cấp theo Rank</div>
+        <div style="font-size:12px;color:#C2410C;line-height:1.6;"><strong>Không</strong> tốn điểm để đổi. Tự động cộng vào ví đối tác hàng tháng: Kim Cương (50k xăng), Vàng (30k xăng). Chi từ budget 200M/tháng.</div>
       </div>
     </div>
 
     <!-- PART A: Free Partner Rewards -->
     <div style="font-size:12.5px;font-weight:800;color:#065F46;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:14px;height:14px;background:#10B981;border-radius:3px;"></span> A · Partner Rewards (Ahamove cost = 0đ)</div>
     <div class="catalog-grid" style="margin-bottom:22px;">
-
       <!-- Xăng / EV Partner -->
       <div class="cat-card">
-        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">⛽</span><span class="cat-title" style="color:#065F46;">Nhiên liệu & Sạc EV</span></div>
-        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: xăng chain (VD: Petrolimex), trạm sạc EV</div>
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">⛽</span><span class="cat-title" style="color:#065F46;">Nhiên liệu &amp; Sạc EV</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: Petrolimex, trạm sạc EV Vinfast</div>
         <div class="cat-item"><span class="cat-name">Giảm giá xăng 5% / lần đổ</span><span class="cat-badge cb-pts">600 pts</span></div>
         <div class="cat-item"><span class="cat-name">Giảm giá xăng 10% / lần đổ</span><span class="cat-badge cb-pts">1.100 pts</span></div>
         <div class="cat-item"><span class="cat-name">Giảm giá sạc EV 20% / lần</span><span class="cat-badge cb-pts">800 pts</span></div>
@@ -1054,7 +885,7 @@
       <!-- Bảo dưỡng Partner -->
       <div class="cat-card">
         <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🔧</span><span class="cat-title" style="color:#065F46;">Bảo dưỡng xe</span></div>
-        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: chuỗi sửa xe (VD: Honda Head, Yamaha)</div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: chuỗi Head Honda, Yamaha Town</div>
         <div class="cat-item"><span class="cat-name">Giảm 15% dầu nhớt / lọc</span><span class="cat-badge cb-pts">900 pts</span></div>
         <div class="cat-item"><span class="cat-name">Giảm 20% bảo dưỡng định kỳ</span><span class="cat-badge cb-pts">1.800 pts</span></div>
         <div class="cat-item"><span class="cat-name">Giảm 30% vá/thay lốp</span><span class="cat-badge cb-pts">1.200 pts</span></div>
@@ -1063,91 +894,87 @@
 
       <!-- CCDC Partner -->
       <div class="cat-card">
-        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🎽</span><span class="cat-title" style="color:#065F46;">CCDC & Trang thiết bị</span></div>
-        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Nhập từ Ahamove Store / đối tác sản xuất</div>
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🎽</span><span class="cat-title" style="color:#065F46;">CCDC &amp; Trang thiết bị</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Hàng từ kho Ahamove Store</div>
         <div class="cat-item"><span class="cat-name">Túi giữ nhiệt tiêu chuẩn</span><span class="cat-badge cb-pts">800 pts</span></div>
         <div class="cat-item"><span class="cat-name">Túi giữ nhiệt cao cấp (XL)</span><span class="cat-badge cb-pts">1.400 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Baga / phụ kiện xe</span><span class="cat-badge cb-pts">1.500 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Đồng phục 1 bộ</span><span class="cat-badge cb-pts">700 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Baga / giá thồ hàng</span><span class="cat-badge cb-pts">1.500 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Đồng phục Ahamove (1 bộ)</span><span class="cat-badge cb-pts">700 pts</span></div>
       </div>
 
       <!-- F&B Partner -->
       <div class="cat-card">
-        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🍜</span><span class="cat-title" style="color:#065F46;">F&B / Tiêu dùng</span></div>
-        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Merchant Ahamove giao / chuỗi F&B partner</div>
-        <div class="cat-item"><span class="cat-name">Voucher F&B partner 50k</span><span class="cat-badge cb-pts">500 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Voucher F&B partner 100k</span><span class="cat-badge cb-pts">950 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Giảm 10% chuỗi siêu thị</span><span class="cat-badge cb-pts">600 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Combo bữa trưa tài xế</span><span class="cat-badge cb-pts">400 pts</span></div>
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🍜</span><span class="cat-title" style="color:#065F46;">F&amp;B / Tiêu dùng</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác F&amp;B: chuỗi quán ăn uống liên kết</div>
+        <div class="cat-item"><span class="cat-name">Voucher F&amp;B đối tác 50k</span><span class="cat-badge cb-pts">500 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Voucher F&amp;B đối tác 100k</span><span class="cat-badge cb-pts">950 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm 10% siêu thị liên kết</span><span class="cat-badge cb-pts">600 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Combo bữa trưa tài xế (quầy)</span><span class="cat-badge cb-pts">400 pts</span></div>
       </div>
 
       <!-- Data SIM Partner -->
       <div class="cat-card">
-        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">📱</span><span class="cat-title" style="color:#065F46;">Data SIM & Viễn thông</span></div>
-        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: Viettel / Vinaphone / Mobifone (gói group)</div>
-        <div class="cat-item"><span class="cat-name">Data 5GB ưu đãi tài xế</span><span class="cat-badge cb-pts">450 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Data 10GB ưu đãi tài xế</span><span class="cat-badge cb-pts">800 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Data 20GB ưu đãi tài xế</span><span class="cat-badge cb-pts">1.500 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Gói SIM ưu tiên cao tốc</span><span class="cat-badge cb-excl">2.200 pts · R2+</span></div>
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">📱</span><span class="cat-title" style="color:#065F46;">Data SIM &amp; Viễn thông</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Nhà mạng: Viettel, Mobifone (gói đặc quyền)</div>
+        <div class="cat-item"><span class="cat-name">Data 5GB / tháng</span><span class="cat-badge cb-pts">450 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Data 10GB / tháng</span><span class="cat-badge cb-pts">800 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Data 20GB / tháng</span><span class="cat-badge cb-pts">1.500 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Gói SIM ưu tiên tốc độ cao</span><span class="cat-badge cb-excl">2.200 pts · R2+</span></div>
       </div>
 
-      <!-- Health Partner -->
+      <!-- Health Partner (Aligned) -->
       <div class="cat-card">
-        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🏥</span><span class="cat-title" style="color:#065F46;">Sức khoẻ & Bảo vệ</span></div>
-        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Đối tác: phòng khám, bảo hiểm sức khoẻ driver</div>
+        <div class="cat-head" style="background:#F0FDF4;"><span class="cat-icon">🏥</span><span class="cat-title" style="color:#065F46;">Sức khoẻ &amp; Bảo vệ</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 2px;font-style:italic;">Dành riêng gói đóng bảo hiểm bằng điểm</div>
         <div class="cat-item"><span class="cat-name">Giảm 20% khám tổng quát</span><span class="cat-badge cb-pts">1.500 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Giảm 15% mua thuốc tại nhà thuốc</span><span class="cat-badge cb-pts">600 pts</span></div>
-        <div class="cat-item"><span class="cat-name">Bảo hiểm tai nạn 1 tháng</span><span class="cat-badge cb-excl">2.500 pts · R2+</span></div>
-        <div class="cat-item"><span class="cat-name">Bảo hiểm tai nạn 3 tháng</span><span class="cat-badge cb-r1">6.000 pts · R1 only</span></div>
+        <div class="cat-item"><span class="cat-name">Giảm 15% hoá đơn nhà thuốc</span><span class="cat-badge cb-pts">600 pts</span></div>
+        <div class="cat-item"><span class="cat-name">Bảo hiểm tai nạn R1 (gói 10k)</span><span class="cat-badge cb-r1" style="background:#FEE2E2;color:#991B1B;">285 pts · R1 only</span></div>
+        <div class="cat-item"><span class="cat-name">Bảo hiểm tai nạn R1 (gói 30k)</span><span class="cat-badge cb-r1" style="background:#FEE2E2;color:#991B1B;">857 pts · R1 only</span></div>
       </div>
     </div>
 
-    <!-- PART B: Rank Entitlements (paid, Ahamove-funded) -->
-    <div style="font-size:12.5px;font-weight:800;color:#C2410C;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:14px;height:14px;background:var(--orange);border-radius:3px;"></span> B · Rank Entitlements — Tự động, nằm trong 200M budget</div>
+    <!-- PART B: Rank Entitlements -->
+    <div style="font-size:12.5px;font-weight:800;color:#C2410C;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:14px;height:14px;background:var(--orange);border-radius:3px;"></span> B · Đặc quyền tự động — Nằm trong 200M budget</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
-
       <!-- Kim Cuong entitlements -->
       <div class="cat-card" style="border:2px solid var(--r1);">
-        <div class="cat-head" style="background:#FEF2F2;"><span class="cat-icon">💎</span><span class="cat-title" style="color:var(--r1);">Kim Cương — R1 Elite · 2 items</span></div>
-        <div style="font-size:10px;color:#6B7280;padding:4px 12px 6px;font-style:italic;">Cấp tự động mỗi tháng · không cần đổi điểm</div>
+        <div class="cat-head" style="background:#FEF2F2;"><span class="cat-icon">💎</span><span class="cat-title" style="color:var(--r1);">Kim Cương — R1 Elite · Tự động</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 6px;font-style:italic;">Đặc quyền tự động cộng vào Ví tháng tiếp theo</div>
         <div class="cat-item" style="background:#FEF2F2;">
           <span class="cat-name" style="font-weight:700;">⛽ Voucher xăng/EV <strong>50k</strong>/tháng</span>
           <span style="font-size:10px;font-weight:800;color:#C2410C;background:#FEE2E2;padding:2px 8px;border-radius:20px;white-space:nowrap;">~37.5k cost</span>
         </div>
-        <div style="padding:4px 12px 2px;font-size:10.5px;color:#6B7280;">Cost sau đàm phán 25% off · Ahamove trả 75% giá trị</div>
+        <div style="padding:4px 12px 2px;font-size:10.5px;color:#6B7280;">Ahamove trả 75% giá trị voucher (chiết khấu bulk buy 25%)</div>
         <div class="cat-item" style="background:#FEF2F2;margin-top:4px;">
           <span class="cat-name" style="font-weight:700;">🏥 Khám sức khoẻ <strong>1 lần/năm</strong></span>
           <span style="font-size:10px;font-weight:800;color:#C2410C;background:#FEE2E2;padding:2px 8px;border-radius:20px;white-space:nowrap;">~21k/tháng</span>
         </div>
-        <div style="padding:4px 12px 8px;font-size:10.5px;color:#6B7280;">250k/lần ÷ 12 tháng · 1.575 tài xế × ~21k ≈ 33M/tháng</div>
-        <div style="margin:8px 12px 10px;background:#FFF7F0;border:1px solid #FDBA74;border-radius:8px;padding:6px 10px;font-size:11.5px;color:#92400E;font-weight:700;">💰 Chi phí R1 ≈ 92M/tháng cho cả 2 items</div>
+        <div style="padding:4px 12px 8px;font-size:10.5px;color:#6B7280;">Duy trì khám sức khoẻ niên độ miễn phí cho R1</div>
+        <div style="margin:8px 12px 10px;background:#FFF7F0;border:1px solid #FDBA74;border-radius:8px;padding:6px 10px;font-size:11.5px;color:#92400E;font-weight:700;">💰 Chi phí R1 ≈ 59M/tháng voucher + khám sức khoẻ</div>
       </div>
 
       <!-- Vang entitlements -->
       <div class="cat-card" style="border:2px solid var(--r2);">
-        <div class="cat-head" style="background:#EFF6FF;"><span class="cat-icon">🥇</span><span class="cat-title" style="color:var(--r2);">Vàng — R2 Active · 1 item</span></div>
-        <div style="font-size:10px;color:#6B7280;padding:4px 12px 6px;font-style:italic;">Cấp tự động mỗi tháng · không cần đổi điểm</div>
+        <div class="cat-head" style="background:#EFF6FF;"><span class="cat-icon">🥇</span><span class="cat-title" style="color:var(--r2);">Vàng — R2 Active · Tự động</span></div>
+        <div style="font-size:10px;color:#6B7280;padding:4px 12px 6px;font-style:italic;">Đặc quyền tự động cộng vào Ví tháng tiếp theo</div>
         <div class="cat-item" style="background:#EFF6FF;">
           <span class="cat-name" style="font-weight:700;">⛽ Voucher xăng/EV <strong>30k</strong>/tháng</span>
           <span style="font-size:10px;font-weight:800;color:var(--r2);background:#DBEAFE;padding:2px 8px;border-radius:20px;white-space:nowrap;">~22.5k cost</span>
         </div>
-        <div style="padding:4px 12px 8px;font-size:10.5px;color:#6B7280;">Cost sau đàm phán 25% off · Ahamove trả 75% giá trị · 3.675 tài xế × 22.5k ≈ 83M/tháng</div>
-        <div style="margin:8px 12px 10px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:6px 10px;font-size:11.5px;color:var(--r2);font-weight:700;">💰 Chi phí R2 ≈ 83M/tháng cho 1 item</div>
-        <div style="margin:0 12px 10px;background:#F0FDF4;border:1px solid #6EE7B7;border-radius:8px;padding:6px 10px;font-size:11.5px;color:#065F46;font-weight:700;">✅ Tổng paid = ~175M · Buffer ~25M vs 200M budget</div>
+        <div style="padding:4px 12px 8px;font-size:10.5px;color:#6B7280;">Cost thực tế @75% sau chiết khấu · 3.675 tài xế × 22.5k ≈ 83M/tháng</div>
+        <div style="margin:8px 12px 10px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:6px 10px;font-size:11.5px;color:var(--r2);font-weight:700;">💰 Chi phí R2 ≈ 83M/tháng</div>
+        <div style="margin:0 12px 10px;background:#F0FDF4;border:1px solid #6EE7B7;border-radius:8px;padding:6px 10px;font-size:11.5px;color:#065F46;font-weight:700;">✅ Tổng chi paid R1+R2 = ~142M · Buffer ~58M còn dư</div>
       </div>
     </div>
 
-    <div class="callout co" style="margin-bottom:20px;"><strong>Ghi chú vận hành:</strong> Điểm AhaBenefits <em>chỉ</em> đổi được phần <strong>A · Partner Rewards</strong> (Ahamove cost ≈0đ). Rank Entitlements (Phần B) cấp tự động — không liên kết điểm. Tài xế cần hoàn thành đủ điều kiện Rank trong tháng để nhận entitlement tháng kế tiếp.</div>
-
     <!-- 6.4 EXCLUSIVE PERKS (không mua được bằng điểm) -->
-    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">6.4 · Exclusive Perks — Không thể mua bằng điểm</div>
-    <div class="note" style="margin-bottom:12px;">Các quyền lợi này được cấp <strong>tự động theo Rank</strong>, không liên quan đến điểm tích lũy. Mất rank → mất perk.</div>
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">6.4 · Đặc quyền theo Rank — Không mua được bằng điểm</div>
     <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
       <div style="overflow-x:auto;">
         <table class="proj-table">
           <thead>
             <tr>
-              <th>Exclusive Perk</th>
+              <th>Đặc quyền</th>
               <th style="background:#C2410C;">R1 Elite<br><span style="font-size:10px;opacity:.7">💎 Kim Cương</span></th>
               <th style="background:#1D4ED8;">R2 Active<br><span style="font-size:10px;opacity:.7">🥇 Vàng</span></th>
               <th style="background:var(--r3);">R3 Standard<br><span style="font-size:10px;opacity:.7">🥈 Bạc</span></th>
@@ -1156,14 +983,14 @@
           </thead>
           <tbody>
             <tr class="r1-row">
-              <td style="font-weight:600;">Partner tier tự động</td>
+              <td style="font-weight:600;">Partner tier liên kết</td>
               <td style="color:var(--r1);font-weight:800;">💎 Kim Cương</td>
               <td style="color:var(--r2);font-weight:800;">🥇 Vàng</td>
               <td style="color:var(--r3);font-weight:700;">🥈 Bạc</td>
               <td class="val-no">—</td>
             </tr>
             <tr class="r2-row">
-              <td style="font-weight:600;">Early access campaign</td>
+              <td style="font-weight:600;">Early Access campaign</td>
               <td style="color:#065F46;font-weight:700;">✅ 48h trước</td>
               <td style="color:#065F46;font-weight:700;">✅ 24h trước</td>
               <td class="val-no">—</td>
@@ -1191,14 +1018,14 @@
               <td class="val-no">—</td>
             </tr>
             <tr class="r3-row">
-              <td style="font-weight:600;">Ca Full-day & đảm bảo/ngày</td>
-              <td style="color:var(--r1);font-weight:700;">✅ 600k/ngày</td>
-              <td style="color:var(--r2);font-weight:700;">✅ 500k/ngày</td>
+              <td style="font-weight:600;">Ca Full-day</td>
+              <td style="color:var(--r1);font-weight:700;">✅ 600k SGN / 650k HAN</td>
+              <td style="color:var(--r2);font-weight:700;">✅ 550k SGN / 600k HAN</td>
               <td class="val-no">—</td>
               <td class="val-no">—</td>
             </tr>
             <tr class="r1-row">
-              <td style="font-weight:600;">Đội trưởng / Đội phó</td>
+              <td style="font-weight:600;">Vai trò quản lý nhóm</td>
               <td style="color:var(--r1);font-weight:700;">Đội trưởng</td>
               <td style="color:var(--r2);font-weight:700;">Đội trưởng</td>
               <td style="color:var(--g600);font-weight:700;">Đội phó</td>
@@ -1209,9 +1036,9 @@
       </div>
     </div>
 
-    <!-- 6.5 QUARTERLY PROJECTION -->
-    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">6.5 · Dự phóng Điểm theo Quý <span style="background:#FEF9C3;color:#854D0E;border-radius:3px;padding:0 6px;font-size:11px;font-weight:700">📋</span></div>
-    <div class="note" style="margin-bottom:12px;">Giả định: 22 ca/tháng × 3 tháng = 66 ca/quý · EPH theo P50 ước tính · Điểm reset cuối quý.</div>
+    <!-- 6.5 QUARTERLY PROJECTION (Aligned) -->
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">6.5 · Dự phóng Điểm theo Quý (Calibration Aligned)</div>
+    <div class="note" style="margin-bottom:12px;">Dựa trên 22 ca hoạt động/tháng (66 ca/quý). Tỷ lệ tiêu dùng điểm đổi thưởng ước đạt 80% (1.500 pts = 50.000đ quà tặng).</div>
     <div class="card" style="padding:0;overflow:hidden;">
       <div style="overflow-x:auto;">
         <table class="proj-table">
@@ -1221,51 +1048,46 @@
               <th>Pts / ca</th>
               <th>Pts / tháng<br><span style="font-size:10px;opacity:.7">(22 ca)</span></th>
               <th>Pts / quý<br><span style="font-size:10px;opacity:.7">(66 ca)</span></th>
-              <th>Có thể đổi<br><span style="font-size:10px;opacity:.7">(30% burn rate)</span></th>
-              <th>Ví dụ đổi trong quý</th>
+              <th>Burn value quy đổi<br><span style="font-size:10px;opacity:.7">(80% burn rate)</span></th>
+              <th>Khả năng đổi quà trong quý</th>
             </tr>
           </thead>
           <tbody>
             <tr class="r1-row">
               <td><span class="tag-sm t-r1">R1 Elite</span></td>
-              <td style="font-weight:800;color:var(--r1);">380</td>
-              <td style="font-weight:700;">8.360</td>
-              <td style="font-weight:800;color:var(--r1);font-size:15px;">25.080</td>
-              <td style="font-weight:700;color:#065F46;">~7.500 pts</td>
-              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">5× giảm xăng 10% + 3× data 10GB + 2× giảm bảo dưỡng · <em>+ tự động nhận voucher xăng 50k + khám sức khoẻ</em></td>
+              <td style="font-weight:800;color:var(--r1);">114</td>
+              <td style="font-weight:700;">2.508</td>
+              <td style="font-weight:800;color:var(--r1);font-size:15px;">7.524</td>
+              <td style="font-weight:700;color:#065F46;">~6.000 pts (200k)</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">Đổi được 4 lần voucher quà tặng 50k hoặc đóng các gói bảo hiểm tai nạn tự nguyện R1. Nhận tự động voucher xăng 50k.</td>
             </tr>
             <tr class="r2-row">
               <td><span class="tag-sm t-r2">R2 Active</span></td>
-              <td style="font-weight:800;color:var(--r2);">286</td>
-              <td style="font-weight:700;">6.292</td>
-              <td style="font-weight:800;color:var(--r2);font-size:15px;">18.876</td>
-              <td style="font-weight:700;color:#065F46;">~5.700 pts</td>
-              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">3× data 10GB + 2× giảm bảo dưỡng 20% <em>hoặc</em> bảo hiểm tai nạn 1 tháng + 3× data 5GB · <em>+ tự động nhận voucher xăng 30k</em></td>
+              <td style="font-weight:800;color:var(--r2);">93</td>
+              <td style="font-weight:700;">2.046</td>
+              <td style="font-weight:800;color:var(--r2);font-size:15px;">6.138</td>
+              <td style="font-weight:700;color:#065F46;">~4.900 pts (150k)</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">Đổi được 3 lần voucher 50k và tích lũy dư điểm. Nhận tự động voucher xăng 30k hàng tháng.</td>
             </tr>
             <tr class="r3-row">
               <td><span class="tag-sm t-r3">R3 Standard</span></td>
-              <td style="font-weight:800;color:var(--r3);">196</td>
-              <td style="font-weight:700;">4.312</td>
-              <td style="font-weight:800;color:var(--r3);font-size:15px;">12.936</td>
-              <td style="font-weight:700;color:#065F46;">~3.900 pts</td>
-              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">2× giảm bảo dưỡng 20% + 1× data 5GB <em>hoặc</em> 2× voucher F&B 100k + 3× data 5GB</td>
+              <td style="font-weight:800;color:var(--r3);">73</td>
+              <td style="font-weight:700;">1.606</td>
+              <td style="font-weight:800;color:var(--r3);font-size:15px;">4.818</td>
+              <td style="font-weight:700;color:#065F46;">~3.800 pts (100k)</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:14px;">Đổi được 2 lần voucher 50k. Không có voucher xăng cấp tự động. Động lực thăng hạng lên R2/R1.</td>
             </tr>
             <tr class="un-row">
               <td><span class="tag-sm t-un">L6 MASS</span></td>
-              <td style="color:var(--g400);">88</td>
-              <td style="color:var(--g400);">1.936</td>
-              <td style="color:var(--g400);">5.808</td>
-              <td style="color:var(--g400);">~1.700 pts</td>
-              <td style="font-size:12px;color:var(--g400);text-align:left;padding-left:14px;">3× combo bữa trưa + 1× data 5GB · động lực upgrade lên R3 để ×1.3 pts</td>
+              <td style="color:var(--g400);">44</td>
+              <td style="color:var(--g400);">968</td>
+              <td style="color:var(--g400);">2.904</td>
+              <td style="color:var(--g400);">~2.300 pts (50k)</td>
+              <td style="font-size:12px;color:var(--g400);text-align:left;padding-left:14px;">Đổi được 1 lần voucher 50k trong quý hoặc đổi các quà tặng nhỏ khác từ đối tác.</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
-      <div class="callout co"><strong>Tại sao 30% burn rate?</strong> Điểm tích lũy theo quý — tài xế thường dùng khoảng 30% để đổi, phần còn lại hết hạn. Với catalog <strong>100% partner-funded</strong>, burn rate cao cũng không làm tăng budget Ahamove — chỉ là tín hiệu engagement. Cần Finance model tỉ lệ partner co-fund sau 1 quý pilot.</div>
-      <div class="callout cg"><strong>Upgrade incentive:</strong> Gap điểm giữa L6 (~5.8k pts/quý) và R3 (~12.9k pts/quý) = 2.2× — tạo động lực upgrade. Gap R3→R2 = 1.6×. Gap R2→R1 = 1.4×. Bonus/ca nhẹ — điểm earn chủ yếu từ thu nhập thực tế × hệ số layer, không phải từ bonus.</div>
     </div>
   </section>
 
@@ -1273,139 +1095,86 @@
   <section id="budget">
     <div class="section-label">Phần 7 — Budget Analysis</div>
     <div class="section-title">Ước tính Chi phí Vận hành</div>
-    <div class="note">Input: <strong>10–11k tài xế active/tuần · 40–45k/tháng — TỔNG 2 cities (SGN + HAN)</strong>. Budget target: <strong style="color:var(--red);">200M VND/tháng</strong>. Chiến lược: <em>Free partner rewards làm backbone · Paid rewards chỉ 2 items cho Kim Cương + 1 item cho Vàng.</em></div>
+    <div class="note">Nguồn cung mục tiêu: <strong>~30.000 tài xế xe máy active hàng tháng (SGN + HAN)</strong>. Ngân sách phúc lợi: <strong>200 triệu VNĐ/tháng</strong>. Tập trung ưu đãi tự động cho R1 &amp; R2.</div>
 
-    <!-- FLEET INPUT (corrected) -->
+    <!-- FLEET INPUT -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
       <div class="card" style="padding:0;overflow:hidden;">
-        <div style="padding:12px 16px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100);">Fleet thực tế — Tổng 2 cities</div>
+        <div style="padding:12px 16px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100);">Phân bổ Fleet hàng tháng</div>
         <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
           <tbody>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Weekly actives (tổng)</td><td style="padding:8px 16px;font-weight:800;text-align:right;color:var(--blue);">~10.500</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Monthly actives (tổng)</td><td style="padding:8px 16px;font-weight:800;text-align:right;color:var(--blue);">~42.000</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Occasional pool (monthly - weekly)</td><td style="padding:8px 16px;font-weight:700;color:var(--g400);text-align:right;">~31.500</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r1);font-weight:700;">💎 R1 Kim Cương (15% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r1);text-align:right;">~1.575</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r2);font-weight:700;">🥇 R2 Vàng (35% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r2);text-align:right;">~3.675</td></tr>
-            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r3);font-weight:700;">🥈 R3 Bạc (35% weekly)</td><td style="padding:8px 16px;font-weight:800;color:var(--r3);text-align:right;">~3.675</td></tr>
-            <tr><td style="padding:8px 16px;color:var(--g400);font-weight:600;">L6 / Unranked (15%)</td><td style="padding:8px 16px;font-weight:700;color:var(--g400);text-align:right;">~1.575</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--g600);font-weight:600;">Tổng Active Fleet hàng tháng</td><td style="padding:8px 16px;font-weight:800;text-align:right;color:var(--blue);">~30.000</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r1);font-weight:700;">💎 R1 Kim Cương (15%)</td><td style="padding:8px 16px;font-weight:800;color:var(--r1);text-align:right;">~4.500</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r2);font-weight:700;">🥇 R2 Vàng (35%)</td><td style="padding:8px 16px;font-weight:800;color:var(--r2);text-align:right;">~10.500</td></tr>
+            <tr style="border-bottom:1px solid var(--g100);"><td style="padding:8px 16px;color:var(--r3);font-weight:700;">🥈 R3 Bạc (35%)</td><td style="padding:8px 16px;font-weight:800;color:var(--r3);text-align:right;">~10.500</td></tr>
+            <tr><td style="padding:8px 16px;color:var(--g400);font-weight:600;">L6 / Unranked (15%)</td><td style="padding:8px 16px;font-weight:700;color:var(--g400);text-align:right;">~4.500</td></tr>
           </tbody>
         </table>
       </div>
       <div class="card" style="border:2px solid var(--green);padding:20px 22px;">
-        <div style="font-size:12px;font-weight:800;color:var(--green);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;">Chiến lược 200M/tháng</div>
+        <div style="font-size:12px;font-weight:800;color:var(--green);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;">Phân phối ngân sách 200M</div>
         <div style="font-size:13px;font-weight:600;color:var(--g800);line-height:1.8;">
-          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;"><span style="min-width:22px;height:22px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">A</span><span><strong>Free partner rewards</strong> làm backbone — Ahamove chi $0, đối tác subsidize để có access vào driver base</span></div>
-          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;"><span style="min-width:22px;height:22px;background:var(--r1);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">B</span><span><strong>Kim Cương: 2 paid rewards</strong> — Voucher xăng/EV 50k + Khám sức khoẻ 1 lần/năm</span></div>
-          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="min-width:22px;height:22px;background:var(--r2);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">C</span><span><strong>Vàng: 1 paid reward</strong> — Voucher xăng/EV 30k/tháng</span></div>
-        </div>
-        <div style="margin-top:12px;background:#ECFDF5;border-radius:8px;padding:8px 12px;font-size:12px;color:#065F46;font-weight:600;">
-          Points system → chỉ đổi FREE partner items. Không dùng điểm để đổi cash voucher Ahamove trả tiền.
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;"><span style="min-width:22px;height:22px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">A</span><span><strong>Free partner rewards (0đ)</strong> — Toàn bộ quà tặng đổi điểm do đối tác tài trợ, không tính vào chi phí Ahamove.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;"><span style="min-width:22px;height:22px;background:var(--r1);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">B</span><span><strong>Kim Cương (R1) xăng/EV</strong> — Cấp tự động voucher xăng 50k + bảo hiểm (chi phí đổi điểm).</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="min-width:22px;height:22px;background:var(--r2);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;">C</span><span><strong>Vàng (R2) xăng/EV</strong> — Cấp tự động voucher xăng 30k/tháng.</span></div>
         </div>
       </div>
     </div>
 
     <!-- PAID REWARDS BUDGET BREAKDOWN -->
-    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">Chi phí Paid Rewards — Tính toán cụ thể</div>
+    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">Chi phí Đặc quyền (Paid Rewards) hàng tháng</div>
     <div class="card" style="padding:0;overflow:hidden;margin-bottom:14px;">
       <div style="overflow-x:auto;">
         <table class="proj-table">
           <thead><tr>
-            <th style="text-align:left;padding-left:18px;">Rank & Reward</th>
-            <th>Số lượng<br><span style="font-size:10px;opacity:.7">drivers tổng</span></th>
-            <th>Face value<br><span style="font-size:10px;opacity:.7">/driver/tháng</span></th>
-            <th>Cost Ahamove<br><span style="font-size:10px;opacity:.7">@75% face value</span></th>
+            <th style="text-align:left;padding-left:18px;">Rank &amp; Reward</th>
+            <th>Tài xế active</th>
+            <th>Giá trị cấp</th>
+            <th>Đơn giá Ahamove<br><span style="font-size:10px;opacity:.7">@75% bulk purchase</span></th>
             <th>Tổng/tháng</th>
             <th>Ghi chú</th>
           </tr></thead>
           <tbody>
             <tr class="r1-row">
-              <td style="padding-left:18px;font-weight:700;color:var(--r1);">💎 Kim Cương — Paid #1<br><span style="font-size:11px;color:var(--g600);font-weight:500;">Voucher xăng/EV 50k</span></td>
+              <td style="padding-left:18px;font-weight:700;color:var(--r1);">💎 R1 Kim Cương — Voucher xăng/EV</td>
               <td style="font-weight:800;">1.575</td>
               <td>50.000đ</td>
-              <td style="font-weight:700;">~37.500đ</td>
-              <td style="font-weight:800;color:var(--r1);font-size:14px;">~59M</td>
-              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Mua bulk qua đối tác xăng/EV, chiết khấu 25%</td>
+              <td style="font-weight:700;">37.500đ</td>
+              <td style="font-weight:800;color:var(--r1);font-size:14px;">~59M VNĐ</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Mua sỉ qua Petrolimex/trạm sạc, Ahamove nhận chiết khấu 25%</td>
             </tr>
             <tr class="r1-row">
-              <td style="padding-left:18px;font-weight:700;color:var(--r1);">💎 Kim Cương — Paid #2<br><span style="font-size:11px;color:var(--g600);font-weight:500;">Khám sức khoẻ cơ bản · 1 lần/năm</span></td>
+              <td style="padding-left:18px;font-weight:700;color:var(--r1);">💎 R1 Kim Cương — Khám sức khoẻ</td>
               <td style="font-weight:800;">1.575</td>
-              <td>250.000đ/năm<br><span style="font-size:11px;color:var(--g400)">= ~21k/tháng</span></td>
-              <td style="font-weight:700;">~21.000đ/tháng</td>
-              <td style="font-weight:800;color:var(--r1);font-size:14px;">~33M</td>
-              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Trả theo quý hoặc tháng khi driver sử dụng</td>
+              <td>250k/năm (~21k/tháng)</td>
+              <td style="font-weight:700;">21.000đ</td>
+              <td style="font-weight:800;color:var(--r1);font-size:14px;">~33M VNĐ</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Phân bổ chi phí hàng tháng cho quỹ khám sức khoẻ niên độ</td>
             </tr>
             <tr class="r2-row">
-              <td style="padding-left:18px;font-weight:700;color:var(--r2);">🥇 Vàng — Paid #1<br><span style="font-size:11px;color:var(--g600);font-weight:500;">Voucher xăng/EV 30k</span></td>
+              <td style="padding-left:18px;font-weight:700;color:var(--r2);">🥇 R2 Vàng — Voucher xăng/EV</td>
               <td style="font-weight:800;">3.675</td>
               <td>30.000đ</td>
-              <td style="font-weight:700;">~22.500đ</td>
-              <td style="font-weight:800;color:var(--r2);font-size:14px;">~83M</td>
-              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Cùng cơ chế bulk purchase với Kim Cương</td>
+              <td style="font-weight:700;">22.500đ</td>
+              <td style="font-weight:800;color:var(--r2);font-size:14px;">~83M VNĐ</td>
+              <td style="font-size:12px;color:var(--g600);text-align:left;padding-left:10px;">Cấp trực tiếp mã nạp tiền xăng vào tài khoản đối tác</td>
             </tr>
             <tr style="background:var(--g100);">
-              <td style="padding-left:18px;font-weight:800;">R3 Bạc & L6</td>
-              <td colspan="3" style="font-size:12px;color:var(--g600);">Chỉ nhận Free Partner Rewards — Ahamove chi $0</td>
+              <td style="padding-left:18px;font-weight:800;">R3 Bạc &amp; L6 Mass</td>
+              <td colspan="3" style="font-size:12px;color:var(--g600);">Đổi quà hoàn toàn từ nguồn đối tác tài tài trợ (Partner-funded)</td>
               <td style="font-weight:800;color:var(--green);">0đ</td>
-              <td></td>
+              <td>Không làm phát sinh chi phí cho Ahamove</td>
             </tr>
             <tr style="background:linear-gradient(135deg,#ECFDF5,#EBF3FF);">
-              <td style="padding-left:18px;font-weight:800;font-size:14px;">TỔNG PAID / tháng</td>
-              <td colspan="3" style="font-size:12px;color:var(--g600);">59M + 33M + 83M</td>
-              <td style="font-weight:800;color:#065F46;font-size:20px;">~175M</td>
-              <td style="font-size:12px;color:#065F46;font-weight:700;text-align:left;padding-left:10px;">✅ Trong ngưỡng 200M · Buffer ~25M</td>
+              <td style="padding-left:18px;font-weight:800;font-size:14px;">TỔNG PHÂN BỔ / tháng</td>
+              <td colspan="3" style="font-size:12px;color:var(--g600);">Xăng R1 (59M) + Khám sức khoẻ R1 (33M) + Xăng R2 (83M)</td>
+              <td style="font-weight:800;color:#065F46;font-size:20px;">~175M VNĐ</td>
+              <td style="font-size:12px;color:#065F46;font-weight:700;text-align:left;padding-left:10px;">✅ Nằm trong hạn mức 200M (Buffer: ~25M)</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-
-    <!-- FREE PARTNER MODEL -->
-    <div style="font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;">Free Partner Rewards — Cơ chế Partnership (Ahamove chi $0)</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
-      <div class="card" style="padding:14px 16px;">
-        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">⛽ Nhiên liệu & EV</div>
-        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Petrolimex, Shell, Evgo, VinFast charging → đàm phán <strong>3–8% discount tại quầy</strong> cho driver có badge Ahamove. Partner hưởng traffic + brand exposure.</div>
-      </div>
-      <div class="card" style="padding:14px 16px;">
-        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🔧 Bảo dưỡng xe</div>
-        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Garage đối tác (CarCare, Vinfast Service, local chains) → <strong>10–15% discount + priority slot</strong>. Partner nhận lượng khách ổn định từ fleet Ahamove.</div>
-      </div>
-      <div class="card" style="padding:14px 16px;">
-        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🍜 F&B Merchant</div>
-        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Merchant đang chạy trên Ahamove → đổi <strong>điểm lấy voucher</strong> merchant tự fund như marketing spend. Win-win: merchant tăng order, driver có quyền lợi.</div>
-      </div>
-      <div class="card" style="padding:14px 16px;">
-        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">📱 Data SIM</div>
-        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Đàm phán <strong>group rate</strong> với Viettel/Vinaphone/Mobifone. ~42k drivers là customer block đủ lớn để negotiate rate đặc biệt, gần như không tốn chi phí Ahamove.</div>
-      </div>
-      <div class="card" style="padding:14px 16px;">
-        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🏥 Khám sức khoẻ (R3)</div>
-        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Clinic partner (Medlatec, Vinmec, phòng khám địa phương) → discount 20–30% cho R3. Partner nhận volume khách; R3 có benefit không tốn budget Ahamove.</div>
-      </div>
-      <div class="card" style="padding:14px 16px;">
-        <div style="font-size:12px;font-weight:800;color:var(--g600);margin-bottom:8px;">🎯 Points → Partner Voucher</div>
-        <div style="font-size:12.5px;color:var(--g800);line-height:1.7;">Hệ thống điểm AhaBenefits <strong>chỉ đổi partner-funded items</strong>. Ahamove là nền tảng trung gian, không trả tiền mặt. Chi phí điểm = 0 với Ahamove.</div>
-      </div>
-    </div>
-
-    <!-- BUDGET SUMMARY BAR -->
-    <div style="background:linear-gradient(135deg,var(--blue),#1a5c9e);border-radius:1.5rem;padding:24px 28px;color:#fff;margin-bottom:14px;">
-      <div style="font-size:12px;font-weight:700;opacity:.7;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Tổng kết Budget / Tháng</div>
-      <div style="display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap;">
-        <div><div style="font-size:11px;opacity:.6;margin-bottom:4px;">Paid rewards (Kim Cương + Vàng)</div><div style="font-size:36px;font-weight:800;letter-spacing:-1px;color:#86EFAC;">~175M</div></div>
-        <div style="font-size:28px;opacity:.4;padding-bottom:8px;">+</div>
-        <div><div style="font-size:11px;opacity:.6;margin-bottom:4px;">AhaBenefits Points (partner-funded)</div><div style="font-size:36px;font-weight:800;letter-spacing:-1px;color:#7DD3FC;">~0đ</div></div>
-        <div style="font-size:28px;opacity:.4;padding-bottom:8px;">=</div>
-        <div><div style="font-size:11px;opacity:.6;margin-bottom:4px;">Tổng chi phí Ahamove</div><div style="font-size:36px;font-weight:800;letter-spacing:-1px;color:#FCD34D;">~175M</div></div>
-        <div style="margin-left:auto;background:rgba(134,239,172,.15);border:1px solid rgba(134,239,172,.3);border-radius:1rem;padding:12px 20px;text-align:center;">
-          <div style="font-size:11px;opacity:.7;margin-bottom:4px;">vs Budget</div>
-          <div style="font-size:22px;font-weight:800;color:#86EFAC;">200M</div>
-          <div style="font-size:11px;color:#86EFAC;margin-top:2px;">Buffer: ~25M ✅</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="callout co"><strong>Lưu ý về Guarantee:</strong> Hourly guarantee &amp; Full-day guarantee là chi phí <em>tách biệt</em>, không tính trong 200M AhaBenefits budget. Cần EPH data thực tế và duyệt riêng với Finance trước khi activate. Đề xuất: launch AhaBenefits + paid rewards trước (tháng 1), guarantee xét sau khi có 2 tháng EPH data.</div>
   </section>
 
   <div class="footer">
