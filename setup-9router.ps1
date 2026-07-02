@@ -4,7 +4,7 @@
 $ErrorActionPreference = "Continue"
 
 Write-Host "==============================================" -ForegroundColor Cyan
-Write-Host "   9ROUTER AUTOMATIC SETUP FOR WINDOWS        " -ForegroundColor Cyan
+Write-Host "   9ROUTER & AGENT MEMORY SETUP FOR WINDOWS   " -ForegroundColor Cyan
 Write-Host "==============================================" -ForegroundColor Cyan
 
 $WorkspaceDir = $PSScriptRoot
@@ -102,6 +102,15 @@ pause
 "@
 [System.IO.File]::WriteAllText($StartBatPath, $StartBatContent)
 Write-Host "[OK] Đã tạo file khởi chạy nhanh: $StartBatPath" -ForegroundColor Green
+
+# 8. Giải mã và khôi phục bộ nhớ Agent (Brain/Conversations)
+Write-Host "`n[*] Đang khôi phục bộ nhớ và lịch sử của Agent (Brain/Conversations)..." -ForegroundColor Yellow
+$RestoreScript = Join-Path $WorkspaceDir "9router-backup\unpack-memory.js"
+if (Test-Path $RestoreScript) {
+    node $RestoreScript
+} else {
+    Write-Host "[WARNING] Không tìm thấy file khôi phục bộ nhớ: $RestoreScript" -ForegroundColor Yellow
+}
 
 Write-Host "`n==============================================" -ForegroundColor Green
 Write-Host "[THÀNH CÔNG] Đồng bộ và cài đặt hoàn tất!" -ForegroundColor Green
