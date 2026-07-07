@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HAN Operations — Executive One-Pager · W27 Jul 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #08090C;
+  --bg-1:  #0F1117;
+  --bg-2:  #161920;
+  --bg-3:  #1D2028;
+  --border: rgba(255,255,255,0.07);
+  --orange: #FF7F32;
+  --yellow: #F59E0B;
+  --green:  #22C55E;
+  --blue:   #3B82F6;
+  --purple: #A855F7;
+  --red:    #EF4444;
+  --teal:   #14B8A6;
+  --t0: #EDF1F7;
+  --t1: #B8C2D0;
+  --t2: #6B7789;
+  --t3: #353E52;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--t0); }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  padding:28px 40px 20px;
+  border-bottom:1px solid var(--border);
+  background:radial-gradient(ellipse 100% 80% at 50% -20%, rgba(59,130,246,0.07) 0%, transparent 70%);
+}
+.ph-eyebrow {
+  font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--blue); margin-bottom:6px; display:flex; align-items:center; gap:8px;
+}
+.ph-eyebrow::before { content:''; display:block; width:18px; height:2px; background:var(--blue); }
+.ph-title { font-family:'Montserrat',sans-serif; font-size:22px; font-weight:900; line-height:1.2; }
+.ph-title span { background:linear-gradient(135deg,var(--orange),var(--yellow)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.ph-sub { font-size:12px; color:var(--t2); margin-top:4px; }
+.ph-right { text-align:right; }
+.ph-date { font-family:'Space Mono',monospace; font-size:11px; color:var(--t2); }
+.ph-badge {
+  display:inline-block; margin-top:8px;
+  font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+  padding:4px 10px; border-radius:4px;
+  background:rgba(59,130,246,0.1); color:var(--blue); border:1px solid rgba(59,130,246,0.25);
+}
+
+/* ── HERO KPI ROW ── */
+.kpi-row {
+  display:grid; grid-template-columns:repeat(6,1fr);
+  border-bottom:1px solid var(--border);
+  background:var(--border);
+  gap:1px;
+}
+.kpi-cell {
+  background:var(--bg-1); padding:18px 20px 14px;
+  position:relative; overflow:hidden;
+}
+.kpi-cell.accent::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+}
+.kpi-cell.acc-orange::after { background:var(--orange); }
+.kpi-cell.acc-green::after  { background:var(--green); }
+.kpi-cell.acc-blue::after   { background:var(--blue); }
+.kpi-cell.acc-yellow::after { background:var(--yellow); }
+.kpi-cell.acc-red::after    { background:var(--red); }
+.kpi-cell.acc-purple::after { background:var(--purple); }
+.kpi-lbl { font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--t3); margin-bottom:6px; }
+.kpi-val { font-family:'Montserrat',sans-serif; font-size:26px; font-weight:900; color:var(--t0); line-height:1; }
+.kpi-val sup { font-size:12px; font-weight:600; color:var(--t2); }
+.kpi-delta {
+  display:inline-flex; align-items:center; gap:3px;
+  font-family:'Space Mono',monospace; font-size:10px; font-weight:700;
+  margin-top:6px; padding:2px 6px; border-radius:3px;
+}
+.up   { color:var(--green); background:rgba(34,197,94,0.1); }
+.down { color:var(--red);   background:rgba(239,68,68,0.1); }
+.flat { color:var(--t2);    background:rgba(255,255,255,0.04); }
+/* Spark */
+.spark { display:flex; align-items:flex-end; gap:2px; height:22px; margin-top:8px; }
+.sp { flex:1; border-radius:1px 1px 0 0; background:rgba(255,255,255,0.06); }
+.sp.hi  { background:var(--orange); opacity:0.9; }
+.sp.md  { background:var(--orange); opacity:0.5; }
+
+/* ── ALERT BANNER ── */
+.alert {
+  margin:18px 40px;
+  padding:12px 18px;
+  border-radius:8px;
+  display:flex; align-items:flex-start; gap:12px;
+  font-size:12.5px; line-height:1.5;
+}
+.alert.warn { background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.22); color:#FCD34D; }
+.alert.good { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.22); color:#86EFAC; }
+.alert.info { background:rgba(59,130,246,0.07); border:1px solid rgba(59,130,246,0.22); color:#93C5FD; }
+.alert-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.alert-title { font-weight:700; margin-bottom:2px; }
+.alert-body  { font-size:11px; opacity:0.85; }
+
+/* ── MAIN GRID ── */
+.main { padding:20px 40px 0; display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.full-row { grid-column:1/-1; }
+
+/* ── CARD ── */
+.card {
+  background:var(--bg-1); border:1px solid var(--border);
+  border-radius:12px; padding:18px 20px; overflow:hidden;
+}
+.card-title {
+  font-size:9px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--t3); margin-bottom:14px;
+  display:flex; align-items:center; gap:8px;
+}
+.card-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── PERFORMANCE TABLE ── */
+.perf-table { width:100%; border-collapse:collapse; font-size:12px; }
+.perf-table th {
+  text-align:left; font-size:8.5px; font-weight:700; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--t3); padding:5px 10px 7px;
+  border-bottom:1px solid var(--border);
+}
+.perf-table td { padding:9px 10px; border-bottom:1px solid rgba(255,255,255,0.03); vertical-align:middle; color:var(--t1); }
+.perf-table tr:last-child td { border-bottom:none; }
+.perf-table td:first-child { color:var(--t0); font-weight:600; }
+.mono { font-family:'Space Mono',monospace; font-size:11px; }
+.txt-g { color:var(--green); }
+.txt-y { color:var(--yellow); }
+.txt-r { color:var(--red); }
+.txt-b { color:var(--blue); }
+.dot-g  { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 5px var(--green); margin-right:5px; }
+.dot-y  { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--yellow); box-shadow:0 0 5px var(--yellow); margin-right:5px; }
+.dot-r  { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--red); box-shadow:0 0 5px var(--red); margin-right:5px; }
+
+/* ── SEGMENT BAR BREAKDOWN ── */
+.seg-rows { display:flex; flex-direction:column; gap:9px; }
+.seg-row { display:flex; align-items:center; gap:10px; }
+.seg-label { font-size:11px; font-weight:600; color:var(--t1); min-width:52px; }
+.seg-track { flex:1; height:7px; background:rgba(255,255,255,0.05); border-radius:4px; overflow:hidden; }
+.seg-fill  { height:100%; border-radius:4px; }
+.seg-val   { font-family:'Space Mono',monospace; font-size:10px; color:var(--t2); min-width:40px; text-align:right; }
+.seg-pct   { font-size:10px; font-weight:700; min-width:44px; text-align:right; }
+
+/* ── TREND CHART (SVG) ── */
+.trend-svg { width:100%; overflow:visible; }
+
+/* ── DRIVER SNAPSHOT ── */
+.driver-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.driver-cell { background:var(--bg-2); border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
+.dc-lbl  { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--t3); margin-bottom:6px; }
+.dc-val  { font-family:'Montserrat',sans-serif; font-size:20px; font-weight:900; line-height:1; }
+.dc-sub  { font-size:10px; color:var(--t3); margin-top:4px; }
+.dc-bar  { height:3px; border-radius:2px; margin-top:8px; background:rgba(255,255,255,0.05); overflow:hidden; }
+.dc-bar-fill { height:100%; border-radius:2px; }
+
+/* ── ACTIONS ── */
+.action-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.action-card { background:var(--bg-2); border:1px solid var(--border); border-radius:9px; padding:14px 16px; }
+.action-card.critical { border-color:rgba(239,68,68,0.3); }
+.action-card.watch    { border-color:rgba(245,158,11,0.3); }
+.action-card.good     { border-color:rgba(34,197,94,0.2); }
+.action-priority { font-size:9px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:7px; }
+.p-r { color:var(--red); }  .p-y { color:var(--yellow); } .p-g { color:var(--green); }
+.action-title { font-size:12.5px; font-weight:700; color:var(--t0); margin-bottom:4px; }
+.action-desc  { font-size:11px; color:var(--t2); line-height:1.5; }
+.action-owner { margin-top:9px; font-size:10px; color:var(--t3); }
+.action-owner span { color:var(--blue); font-weight:600; }
+
+/* ── FOOTER ── */
+.page-footer {
+  margin-top:18px; border-top:1px solid var(--border); padding:13px 40px 20px;
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:11px; color:var(--t3);
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div>
+    <div class="ph-eyebrow">Executive One-Pager · HAN Operations</div>
+    <div class="ph-title"><span>Hà Nội</span> — Driver Operations Dashboard</div>
+    <div class="ph-sub">Nguồn: Ahamove Operations Tracker · City View: HAN · Tổng hợp Jun 2026 & Jul 2026 MTD</div>
+  </div>
+  <div class="ph-right">
+    <div class="ph-date">MTD Jul 2026 · As of 07-Jul</div>
+    <div class="ph-badge">🔒 Internal Only</div>
+  </div>
+</div>
+
+<!-- HERO KPI ROW — dữ liệu thực từ sheet -->
+<div class="kpi-row">
+
+  <!-- Request FC vs Last Month -->
+  <div class="kpi-cell accent acc-orange">
+    <div class="kpi-lbl">FC Request (Jul)</div>
+    <div class="kpi-val">1.83<sup>M</sup></div>
+    <div class="kpi-delta up">▲ vs LM: 90.0%</div>
+    <div class="spark">
+      <div class="sp" style="height:45%"></div>
+      <div class="sp md" style="height:55%"></div>
+      <div class="sp md" style="height:60%"></div>
+      <div class="sp hi" style="height:70%"></div>
+      <div class="sp hi" style="height:75%"></div>
+      <div class="sp hi" style="height:80%"></div>
+      <div class="sp hi" style="height:88%"></div>
+    </div>
+  </div>
+
+  <!-- Actual Request MTD -->
+  <div class="kpi-cell accent acc-blue">
+    <div class="kpi-lbl">Actual Request (MTD)</div>
+    <div class="kpi-val">302<sup>K</sup></div>
+    <div class="kpi-delta flat">MTD 7 ngày đầu</div>
+    <div class="spark">
+      <div class="sp" style="height:0%"></div>
+      <div class="sp md" style="height:50%"></div>
+      <div class="sp md" style="height:35%"></div>
+      <div class="sp hi" style="height:55%"></div>
+      <div class="sp hi" style="height:65%"></div>
+      <div class="sp hi" style="height:58%"></div>
+      <div class="sp hi" style="height:60%"></div>
+    </div>
+  </div>
+
+  <!-- % Request (Fulfillment) -->
+  <div class="kpi-cell accent acc-green">
+    <div class="kpi-lbl">% FR (Request)</div>
+    <div class="kpi-val">91.6<sup>%</sup></div>
+    <div class="kpi-delta up">▲ LM: 18.4% completed</div>
+    <div class="spark">
+      <div class="sp" style="height:0%"></div>
+      <div class="sp hi" style="height:88%"></div>
+      <div class="sp md" style="height:75%"></div>
+      <div class="sp hi" style="height:90%"></div>
+      <div class="sp hi" style="height:95%"></div>
+      <div class="sp hi" style="height:92%"></div>
+      <div class="sp hi" style="height:87%"></div>
+    </div>
+  </div>
+
+  <!-- % Demand -->
+  <div class="kpi-cell accent acc-yellow">
+    <div class="kpi-lbl">% FR (Demand)</div>
+    <div class="kpi-val">87.4<sup>%</sup></div>
+    <div class="kpi-delta down">▼ Below target 90%</div>
+    <div class="spark">
+      <div class="sp" style="height:0%"></div>
+      <div class="sp hi" style="height:82%"></div>
+      <div class="sp md" style="height:70%"></div>
+      <div class="sp hi" style="height:85%"></div>
+      <div class="sp hi" style="height:88%"></div>
+      <div class="sp md" style="height:79%"></div>
+      <div class="sp hi" style="height:84%"></div>
+    </div>
+  </div>
+
+  <!-- Active Drivers -->
+  <div class="kpi-cell accent acc-purple">
+    <div class="kpi-lbl">Active Drivers (MTD)</div>
+    <div class="kpi-val">9.28<sup>K</sup></div>
+    <div class="kpi-delta down">▼ 63.4% of FC 14.6K</div>
+    <div class="spark">
+      <div class="sp" style="height:0%"></div>
+      <div class="sp md" style="height:55%"></div>
+      <div class="sp md" style="height:40%"></div>
+      <div class="sp hi" style="height:60%"></div>
+      <div class="sp hi" style="height:65%"></div>
+      <div class="sp hi" style="height:62%"></div>
+      <div class="sp hi" style="height:63%"></div>
+    </div>
+  </div>
+
+  <!-- MP Performance (Critical watch) -->
+  <div class="kpi-cell accent acc-red">
+    <div class="kpi-lbl">MP FR % (Critical)</div>
+    <div class="kpi-val">58.3<sup>%</sup></div>
+    <div class="kpi-delta down">▼ -30pp vs target</div>
+    <div class="spark">
+      <div class="sp" style="height:0%"></div>
+      <div class="sp" style="height:40%"></div>
+      <div class="sp" style="height:25%"></div>
+      <div class="sp md" style="height:50%"></div>
+      <div class="sp md" style="height:45%"></div>
+      <div class="sp" style="height:35%"></div>
+      <div class="sp md" style="height:48%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ALERT BANNER -->
+<div class="alert warn">
+  <div class="alert-icon">⚠️</div>
+  <div>
+    <div class="alert-title">MP (Merchant Partner) FR chỉ đạt 58.3% — thấp nhất trong tất cả segment, cần điều tra ngay</div>
+    <div class="alert-body">MP demand forecast là 213.8K nhưng actual request mới đạt 89.9K (42.1% MTD). FR demand MP tại HAN chỉ 58.3% vs SME 92.9% và KA 98.2%. Gap này có thể do capacity không đủ tại zone MP tập trung.</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- LEFT: Performance by Segment Table -->
+  <div class="card">
+    <div class="card-title">KPI theo Segment — Jun 2026 (Full Month)</div>
+    <table class="perf-table">
+      <thead>
+        <tr>
+          <th>Segment</th>
+          <th>Request FC</th>
+          <th>Actual</th>
+          <th>% FR Req</th>
+          <th>% FR Dem</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>SME</strong></td>
+          <td class="mono">1,115,181</td>
+          <td class="mono txt-g">1,100,852</td>
+          <td class="mono txt-g">98.7%</td>
+          <td class="mono txt-g">90.2%</td>
+          <td><span class="dot-g"></span>On Track</td>
+        </tr>
+        <tr>
+          <td><strong>KA</strong></td>
+          <td class="mono">354,931</td>
+          <td class="mono txt-g">348,476</td>
+          <td class="mono txt-g">98.2%</td>
+          <td class="mono txt-g">104.1%</td>
+          <td><span class="dot-g"></span>Exceeded</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--red)">MP ⚠</strong></td>
+          <td class="mono">213,778</td>
+          <td class="mono txt-r">89,893</td>
+          <td class="mono txt-r">42.1%</td>
+          <td class="mono txt-r">58.3%</td>
+          <td><span class="dot-r"></span>Critical</td>
+        </tr>
+        <tr>
+          <td><strong>GHN</strong></td>
+          <td class="mono">113,910</td>
+          <td class="mono txt-y">85,896</td>
+          <td class="mono txt-y">75.4%</td>
+          <td class="mono txt-y">95.1%</td>
+          <td><span class="dot-y"></span>Watch</td>
+        </tr>
+        <tr>
+          <td><strong>TRUCK</strong></td>
+          <td class="mono">17,272</td>
+          <td class="mono txt-y">10,525</td>
+          <td class="mono txt-y">60.9%</td>
+          <td class="mono txt-y">59.9%</td>
+          <td><span class="dot-y"></span>At Risk</td>
+        </tr>
+        <tr>
+          <td><strong>WH</strong></td>
+          <td class="mono">17,341</td>
+          <td class="mono txt-y">12,903</td>
+          <td class="mono txt-y">74.4%</td>
+          <td class="mono txt-y">73.1%</td>
+          <td><span class="dot-y"></span>At Risk</td>
+        </tr>
+        <tr style="border-top:1px solid var(--border)">
+          <td><strong>TOTAL</strong></td>
+          <td class="mono">1,832,413</td>
+          <td class="mono txt-g">1,648,545</td>
+          <td class="mono txt-g">90.0%</td>
+          <td class="mono txt-y">88.5%</td>
+          <td><span class="dot-y"></span>Near Target</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- RIGHT: Driver Tracking -->
+  <div style="display:flex; flex-direction:column; gap:14px;">
+
+    <!-- Driver Type Breakdown -->
+    <div class="card" style="padding:16px 20px;">
+      <div class="card-title">Driver Snapshot — MTD Jul 2026</div>
+      <div class="driver-grid">
+        <div class="driver-cell">
+          <div class="dc-lbl">Full-Time (FT)</div>
+          <div class="dc-val" style="color:var(--green)">1,215</div>
+          <div class="dc-sub">101% of FC</div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:100%;background:var(--green)"></div></div>
+        </div>
+        <div class="driver-cell">
+          <div class="dc-lbl">Part-Time (PT)</div>
+          <div class="dc-val" style="color:var(--yellow)">6,272</div>
+          <div class="dc-sub">70.3% of FC 8.9K</div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:70%;background:var(--yellow)"></div></div>
+        </div>
+        <div class="driver-cell">
+          <div class="dc-lbl">NLM</div>
+          <div class="dc-val" style="color:var(--blue)">1,053</div>
+          <div class="dc-sub">84.8% of FC 1.2K</div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:85%;background:var(--blue)"></div></div>
+        </div>
+        <div class="driver-cell">
+          <div class="dc-lbl">Return</div>
+          <div class="dc-val" style="color:var(--purple)">376</div>
+          <div class="dc-sub">29.1% of FC 1.3K</div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:29%;background:var(--purple)"></div></div>
+        </div>
+        <div class="driver-cell">
+          <div class="dc-lbl">NIM (Mới)</div>
+          <div class="dc-val" style="color:var(--orange)">366</div>
+          <div class="dc-sub">18.4% of FC 2.0K</div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:18%;background:var(--orange)"></div></div>
+        </div>
+        <div class="driver-cell">
+          <div class="dc-lbl">Online Hours</div>
+          <div class="dc-val" style="color:var(--teal)">140K</div>
+          <div class="dc-sub">18.0% of FC 780K</div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:18%;background:var(--teal)"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Capacity Utilization -->
+    <div class="card" style="padding:16px 20px;">
+      <div class="card-title">Capacity Utilization — Driver Type MTD</div>
+      <div class="seg-rows">
+        <div class="seg-row">
+          <div class="seg-label" style="color:var(--green)">FT</div>
+          <div class="seg-track"><div class="seg-fill" style="width:20%;background:linear-gradient(90deg,#16A34A,var(--green))"></div></div>
+          <div class="seg-val">67.4K</div>
+          <div class="seg-pct" style="color:var(--green)">20.3%</div>
+        </div>
+        <div class="seg-row">
+          <div class="seg-label" style="color:var(--blue)">PT</div>
+          <div class="seg-track"><div class="seg-fill" style="width:18%;background:linear-gradient(90deg,#2563EB,var(--blue))"></div></div>
+          <div class="seg-val">119K</div>
+          <div class="seg-pct" style="color:var(--blue)">18.2%</div>
+        </div>
+        <div class="seg-row">
+          <div class="seg-label" style="color:var(--purple)">NLM</div>
+          <div class="seg-track"><div class="seg-fill" style="width:27%;background:linear-gradient(90deg,#7C3AED,var(--purple))"></div></div>
+          <div class="seg-val">21.8K</div>
+          <div class="seg-pct" style="color:var(--purple)">26.6%</div>
+        </div>
+        <div class="seg-row">
+          <div class="seg-label" style="color:var(--orange)">Return</div>
+          <div class="seg-track"><div class="seg-fill" style="width:10%;background:linear-gradient(90deg,#C2410C,var(--orange))"></div></div>
+          <div class="seg-val">4.6K</div>
+          <div class="seg-pct" style="color:var(--orange)">9.9%</div>
+        </div>
+        <div class="seg-row">
+          <div class="seg-label" style="color:var(--teal)">NIM</div>
+          <div class="seg-track"><div class="seg-fill" style="width:6%;background:linear-gradient(90deg,#0F766E,var(--teal))"></div></div>
+          <div class="seg-val">5.4K</div>
+          <div class="seg-pct" style="color:var(--teal)">6.3%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULL WIDTH: Trend Chart — Request theo ngày (Jun actual) -->
+  <div class="card full-row">
+    <div class="card-title">Trend Thực Tế — Request/Ngày · Jun 2026 (4 tuần gần nhất)</div>
+    <svg class="trend-svg" viewBox="0 0 1100 130" height="130" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="grad-total" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="grad-sme" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#FF7F32" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#FF7F32" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- Grid -->
+      <line x1="0" y1="25"  x2="1100" y2="25"  stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+      <line x1="0" y1="55"  x2="1100" y2="55"  stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+      <line x1="0" y1="85"  x2="1100" y2="85"  stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+      <line x1="0" y1="115" x2="1100" y2="115" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+      <!-- Y labels -->
+      <text x="6" y="28"  fill="rgba(255,255,255,0.18)" font-size="9" font-family="Space Mono">80K</text>
+      <text x="6" y="58"  fill="rgba(255,255,255,0.18)" font-size="9" font-family="Space Mono">70K</text>
+      <text x="6" y="88"  fill="rgba(255,255,255,0.18)" font-size="9" font-family="Space Mono">60K</text>
+      <text x="6" y="118" fill="rgba(255,255,255,0.18)" font-size="9" font-family="Space Mono">50K</text>
+      <!-- Area Total Request (Jun week data) -->
+      <!-- Data points mapped: Sun=low, Mon-Sat peaks. Values normalized to 130px height, max ~77K -->
+      <!-- W1-Jun: 52K,64K,76K,73K,73K,71K,77K | W2: 52K,64K,75K,72K,71K,69K,73K | W3: 51K,63K,81K,71K,73K,72K,76K | W4: 52K,63K,77K,76K,75K,85K,80K -->
+      <path d="
+        M 40,92  L 80,68  L 120,35  L 160,42  L 200,42  L 240,46  L 280,30
+        L 320,92 L 360,68 L 400,38  L 440,45  L 480,46  L 520,50  L 560,42
+        L 600,95 L 640,70 L 680,20  L 720,46  L 760,42  L 800,43  L 840,34
+        L 880,92 L 920,70 L 960,38  L 1000,35 L 1040,28 L 1080,20 L 1100,23
+        L 1100,120 L 40,120 Z" fill="url(#grad-total)"/>
+      <polyline points="
+        40,92 80,68 120,35 160,42 200,42 240,46 280,30
+        320,92 360,68 400,38 440,45 480,46 520,50 560,42
+        600,95 640,70 680,20 720,46 760,42 800,43 840,34
+        880,92 920,70 960,38 1000,35 1040,28 1080,20 1100,23"
+        fill="none" stroke="#3B82F6" stroke-width="2" stroke-linejoin="round"/>
+      <!-- SME line (dominant) -->
+      <polyline points="
+        40,100 80,78 120,45 160,52 200,52 240,56 280,40
+        320,100 360,78 400,48 440,55 480,56 520,60 560,52
+        600,105 640,80 680,28 720,56 760,52 800,53 840,44
+        880,102 920,80 960,48 1000,45 1040,38 1080,30 1100,33"
+        fill="none" stroke="#FF7F32" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.6" stroke-linejoin="round"/>
+      <!-- X date labels — Mon highlights -->
+      <text x="40"   y="128" fill="rgba(255,255,255,0.2)" font-size="8" font-family="Space Mono" text-anchor="middle">1-Jun</text>
+      <text x="80"   y="128" fill="rgba(255,255,255,0.25)" font-size="8" font-family="Space Mono" text-anchor="middle">2</text>
+      <text x="120"  y="128" fill="rgba(255,255,255,0.2)" font-size="8" font-family="Space Mono" text-anchor="middle">3</text>
+      <text x="200"  y="128" fill="rgba(255,255,255,0.2)" font-size="8" font-family="Space Mono" text-anchor="middle">5</text>
+      <text x="320"  y="128" fill="rgba(255,255,255,0.25)" font-size="8" font-family="Space Mono" text-anchor="middle">9-Jun</text>
+      <text x="600"  y="128" fill="rgba(255,255,255,0.25)" font-size="8" font-family="Space Mono" text-anchor="middle">22-Jun</text>
+      <text x="880"  y="128" fill="rgba(255,255,255,0.25)" font-size="8" font-family="Space Mono" text-anchor="middle">1-Jul</text>
+      <text x="1060" y="128" fill="#3B82F6" font-size="8" font-family="Space Mono" text-anchor="middle" font-weight="700">7-Jul</text>
+      <!-- Legend -->
+      <rect x="30" y="8" width="14" height="2.5" rx="1" fill="#3B82F6"/>
+      <text x="48" y="13" fill="rgba(255,255,255,0.45)" font-size="9">Total Request</text>
+      <rect x="140" y="8" width="14" height="2" rx="1" fill="#FF7F32" opacity="0.7"/>
+      <text x="158" y="13" fill="rgba(255,255,255,0.45)" font-size="9">SME (dominant)</text>
+      <!-- Weekend pattern note -->
+      <text x="560" y="13" fill="rgba(255,255,255,0.25)" font-size="8">📉 Cuối tuần drop ~30% · 📈 Thu-Fri peak</text>
+      <!-- End dot -->
+      <circle cx="1100" cy="23" r="4" fill="#3B82F6"/>
+    </svg>
+  </div>
+
+  <!-- LEFT: % FR by Segment weekly (Jun months avg) -->
+  <div class="card">
+    <div class="card-title">% FR Demand theo Segment — Jun 2026 avg</div>
+    <div class="seg-rows">
+      <div class="seg-row">
+        <div class="seg-label" style="color:var(--green)">KA</div>
+        <div class="seg-track"><div class="seg-fill" style="width:104%;background:linear-gradient(90deg,#16A34A,#22C55E)"></div></div>
+        <div class="seg-val mono">276K</div>
+        <div class="seg-pct txt-g">104.1%</div>
+      </div>
+      <div class="seg-row">
+        <div class="seg-label" style="color:var(--green)">SME</div>
+        <div class="seg-track"><div class="seg-fill" style="width:93%;background:linear-gradient(90deg,#0F766E,#14B8A6)"></div></div>
+        <div class="seg-val mono">874K</div>
+        <div class="seg-pct txt-g">92.9%</div>
+      </div>
+      <div class="seg-row">
+        <div class="seg-label" style="color:var(--blue)">GHN</div>
+        <div class="seg-track"><div class="seg-fill" style="width:95%;background:linear-gradient(90deg,#1D4ED8,#3B82F6)"></div></div>
+        <div class="seg-val mono">86K</div>
+        <div class="seg-pct txt-b">95.1%</div>
+      </div>
+      <div class="seg-row">
+        <div class="seg-label" style="color:var(--yellow)">WH</div>
+        <div class="seg-track"><div class="seg-fill" style="width:73%;background:linear-gradient(90deg,#B45309,#F59E0B)"></div></div>
+        <div class="seg-val mono">13K</div>
+        <div class="seg-pct txt-y">73.2%</div>
+      </div>
+      <div class="seg-row">
+        <div class="seg-label" style="color:var(--red)">MP ⚠</div>
+        <div class="seg-track"><div class="seg-fill" style="width:58%;background:linear-gradient(90deg,#991B1B,#EF4444)"></div></div>
+        <div class="seg-val mono">90K</div>
+        <div class="seg-pct txt-r">58.3%</div>
+      </div>
+      <div class="seg-row">
+        <div class="seg-label" style="color:var(--red)">TRUCK</div>
+        <div class="seg-track"><div class="seg-fill" style="width:60%;background:linear-gradient(90deg,#7C2D12,#F97316)"></div></div>
+        <div class="seg-val mono">10.5K</div>
+        <div class="seg-pct txt-r">59.9%</div>
+      </div>
+    </div>
+    <!-- MP insight -->
+    <div style="margin-top:14px;padding:10px 12px;border-radius:7px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);">
+      <div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:3px;">⚡ Critical Gap</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.45);line-height:1.5;">MP có FR thấp nhất hệ thống (58.3%) với gap <strong style="color:var(--red)">-31.8pp</strong> so với KA. Demand MP = 213K nhưng actual chỉ 90K. Cần review ngay allocation driver cho zone MP.</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Driver Online Hours & Capacity -->
+  <div class="card">
+    <div class="card-title">Capacity Snapshot — Jun 2026 (SME+MP+KA)</div>
+    <table class="perf-table">
+      <thead>
+        <tr><th>Driver Type</th><th>FC Capacity</th><th>MTD Actual</th><th>% MTD</th><th>Online Hrs</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Full-Time</td>
+          <td class="mono">332,594</td>
+          <td class="mono txt-g">67,426</td>
+          <td class="mono txt-g">20.3%</td>
+          <td class="mono txt-b">44,288h</td>
+        </tr>
+        <tr>
+          <td>Part-Time</td>
+          <td class="mono">654,209</td>
+          <td class="mono txt-y">119,163</td>
+          <td class="mono txt-y">18.2%</td>
+          <td class="mono txt-b">80,588h</td>
+        </tr>
+        <tr>
+          <td>NLM</td>
+          <td class="mono">81,894</td>
+          <td class="mono txt-b">21,791</td>
+          <td class="mono txt-b">26.6%</td>
+          <td class="mono txt-b">15,165h</td>
+        </tr>
+        <tr>
+          <td>Return</td>
+          <td class="mono">46,811</td>
+          <td class="mono txt-r">4,627</td>
+          <td class="mono txt-r">9.9%</td>
+          <td class="mono txt-b">3,225h</td>
+        </tr>
+        <tr>
+          <td>NIM (Mới)</td>
+          <td class="mono">85,639</td>
+          <td class="mono txt-r">5,416</td>
+          <td class="mono txt-r">6.3%</td>
+          <td class="mono txt-b">3,863h</td>
+        </tr>
+        <tr style="border-top:1px solid var(--border)">
+          <td><strong>TOTAL</strong></td>
+          <td class="mono">1,201,147</td>
+          <td class="mono txt-y">208,380</td>
+          <td class="mono txt-y">17.4%</td>
+          <td class="mono txt-b">140,040h</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px;font-size:10px;color:var(--t3);">
+      📌 Return driver chỉ đạt 9.9% FC — pipeline Return cần được review. NIM mới 6.3% cho thấy conversion onboarding thấp.
+    </div>
+  </div>
+
+  <!-- ACTION ITEMS — Full Width -->
+  <div class="full-row">
+    <div style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;">🎯 Key Actions This Week</div>
+    <div class="action-grid">
+      <div class="action-card critical">
+        <div class="action-priority p-r">🔴 Critical</div>
+        <div class="action-title">Điều tra MP FR thấp bất thường (58.3%)</div>
+        <div class="action-desc">Gap -31.8pp so với KA, demand 213K chỉ fulfill 90K. Cần pull dispatch log zone MP + interview driver R1/R2 tại khu MP tập trung. Check xem có issue zone config không.</div>
+        <div class="action-owner">Owner: <span>Driver Ops + BI</span> · Due: 10-Jul</div>
+      </div>
+      <div class="action-card watch">
+        <div class="action-priority p-y">🟡 Watch</div>
+        <div class="action-title">NIM & Return conversion rate thấp</div>
+        <div class="action-desc">NIM chỉ đạt 6.3% FC (5,416 vs 85K forecast) và Return driver 9.9%. Onboarding funnel cần được audit. So sánh với same period Jun để xác định seasonal hay structural issue.</div>
+        <div class="action-owner">Owner: <span>Recruitment Team</span> · Due: 14-Jul</div>
+      </div>
+      <div class="action-card good">
+        <div class="action-priority p-g">🟢 Maintain</div>
+        <div class="action-title">KA & SME performance đang tốt — duy trì</div>
+        <div class="action-desc">KA đạt 104.1% demand FR, SME đạt 92.9%. FT driver đạt 101% FC. Đây là nền tảng tốt để focus resource giải quyết MP và TRUCK. Không cần can thiệp thêm tại 2 segment này.</div>
+        <div class="action-owner">Owner: <span>All Ops Teams</span> · Ongoing</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <div style="display:flex;align-items:center;gap:16px;">
+    <span>📊 HAN Operations Dashboard · MTD Jul 2026</span>
+    <span style="color:var(--border)">|</span>
+    <span>🔒 CONFIDENTIAL — Internal Only</span>
+  </div>
+  <div>Source: Google Sheets — Ahamove Operations Tracker · gid=743032311 · Generated 07-Jul-2026</div>
+</div>
+
+</body>
+</html>

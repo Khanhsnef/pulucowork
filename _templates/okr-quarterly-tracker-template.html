@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OKR / KPI Quarterly Tracker — Template</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!--
+  ╔════════════════════════════════════════════════════════╗
+  ║  OKR / KPI QUARTERLY TRACKER TEMPLATE                  ║
+  ║  Dùng cho: quarterly review, goal tracking, OKR board  ║
+  ║  Theme: Dark + RAG status system (Red/Amber/Green)     ║
+  ╚════════════════════════════════════════════════════════╝
+
+  COMPONENT INDEX:
+  [1]  CSS Variables & Base
+  [2]  Quarter Header — period, owner, progress ring
+  [3]  OKR Card — Objective + Key Results + progress
+  [4]  KR Row với animated progress bar + RAG status
+  [5]  Initiatives Mini-table
+  [6]  Quarter Summary scorecard
+  [7]  Risk Register compact
+-->
+<style>
+:root {
+  --bg:    #07090E;
+  --bg-1:  #0C0F18;
+  --bg-2:  #121620;
+  --bg-3:  #181D28;
+  --border: rgba(255,255,255,0.06);
+  --border-2: rgba(255,255,255,0.1);
+
+  --green:   #22C55E;
+  --amber:   #F59E0B;
+  --red:     #EF4444;
+  --blue:    #3B82F6;
+  --purple:  #8B5CF6;
+  --teal:    #14B8A6;
+  --orange:  #F97316;
+
+  --t0: #EDF1F7;
+  --t1: #B0BAC8;
+  --t2: #6B7789;
+  --t3: #353E52;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--t0);
+  padding-bottom: 60px;
+}
+
+/* [2] QUARTER HEADER */
+.q-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 32px 48px 28px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(34,197,94,0.04) 0%, transparent 60%);
+}
+.qh-left {}
+.qh-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.qh-tag::before { content:''; width:20px; height:2px; background:var(--green); display:block; }
+.qh-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px; font-weight: 900; margin-bottom: 6px;
+}
+.qh-subtitle { font-size: 13px; color: var(--t2); margin-bottom: 20px; }
+.qh-meta { display: flex; gap: 28px; }
+.qh-meta-item {}
+.qh-meta-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--t3); margin-bottom: 3px; }
+.qh-meta-value { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--t1); }
+
+/* PROGRESS RING SVG */
+.progress-ring-wrap { text-align: center; }
+.ring-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--t2); margin-top: 8px; }
+.ring-pct {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px; font-weight: 900;
+}
+
+/* CONTENT */
+.content { padding: 32px 48px; }
+
+/* [3] OKR CARD */
+.okr-card {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 14px; margin-bottom: 24px; overflow: hidden;
+}
+.okr-header {
+  display: flex; align-items: flex-start;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+  gap: 16px;
+}
+.okr-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px; font-weight: 900; opacity: 0.08;
+  line-height: 1; color: #fff; flex-shrink: 0;
+}
+.okr-info { flex: 1; }
+.okr-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--t3); margin-bottom: 6px; }
+.okr-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px; font-weight: 800; color: var(--t0); line-height: 1.3; margin-bottom: 6px;
+}
+.okr-desc { font-size: 12px; color: var(--t2); line-height: 1.5; }
+.okr-meta { display:flex; gap:12px; margin-top:10px; }
+.okr-tag {
+  font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.okr-tag.g { background:rgba(34,197,94,0.1); color:var(--green); }
+.okr-tag.a { background:rgba(245,158,11,0.1); color:var(--amber); }
+.okr-tag.r { background:rgba(239,68,68,0.1); color:var(--red); }
+.okr-tag.b { background:rgba(59,130,246,0.1); color:var(--blue); }
+
+/* OKR OVERALL PROGRESS */
+.okr-overall {
+  display: flex; align-items: center; gap: 10px; margin-left: auto; flex-shrink: 0;
+}
+.okr-overall-pct {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px; font-weight: 900;
+}
+.okr-overall-pct.green  { color: var(--green); }
+.okr-overall-pct.amber  { color: var(--amber); }
+.okr-overall-pct.red    { color: var(--red); }
+.okr-overall-label { font-size: 10px; color: var(--t2); }
+
+/* [4] KR ROW */
+.kr-list { padding: 12px 24px 16px; }
+.kr-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.kr-row:last-child { border-bottom: none; }
+.kr-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ks-green  { background: var(--green);  box-shadow: 0 0 6px var(--green); }
+.ks-amber  { background: var(--amber);  box-shadow: 0 0 6px var(--amber); }
+.ks-red    { background: var(--red);    box-shadow: 0 0 6px var(--red); }
+.ks-blue   { background: var(--blue);   box-shadow: 0 0 6px var(--blue); }
+
+.kr-info { flex: 1; min-width: 0; }
+.kr-title { font-size: 13px; font-weight: 600; color: var(--t0); margin-bottom: 6px; line-height: 1.4; }
+.kr-bar-row { display: flex; align-items: center; gap: 10px; }
+.kr-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+.kr-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+.kr-bar-fill.green  { background: linear-gradient(90deg, #16A34A, var(--green)); }
+.kr-bar-fill.amber  { background: linear-gradient(90deg, #D97706, var(--amber)); }
+.kr-bar-fill.red    { background: linear-gradient(90deg, #DC2626, var(--red)); }
+.kr-bar-fill.blue   { background: linear-gradient(90deg, #2563EB, var(--blue)); }
+.kr-bar-fill.purple { background: linear-gradient(90deg, #7C3AED, var(--purple)); }
+
+.kr-vals {
+  text-align: right; flex-shrink: 0; min-width: 120px;
+}
+.kr-actual { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; }
+.kr-target { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--t3); }
+.kr-delta  { font-size: 10px; font-weight: 700; margin-top: 2px; }
+
+.kr-rag {
+  font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 3px 8px; border-radius: 3px; flex-shrink: 0; min-width: 52px; text-align: center;
+}
+.rag-g { background:rgba(34,197,94,0.12);  color:var(--green); }
+.rag-a { background:rgba(245,158,11,0.12); color:var(--amber); }
+.rag-r { background:rgba(239,68,68,0.12);  color:var(--red); }
+
+/* [5] INITIATIVES MINI-TABLE */
+.init-section { padding: 0 24px 18px; }
+.init-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--t3); margin-bottom: 8px; }
+.init-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.init-table td { padding: 5px 8px; color: var(--t2); border-bottom: 1px solid rgba(255,255,255,0.02); }
+.init-table tr:last-child td { border-bottom: none; }
+.init-table td:first-child { font-weight: 600; color: var(--t1); }
+.init-chip { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 3px; }
+.ic-done   { background:rgba(34,197,94,0.1); color:var(--green); }
+.ic-prog   { background:rgba(59,130,246,0.1); color:var(--blue); }
+.ic-plan   { background:rgba(107,114,128,0.15); color:var(--t2); }
+.ic-at     { background:rgba(245,158,11,0.1); color:var(--amber); }
+
+/* [6] QUARTER SUMMARY SCORECARD */
+.scorecard {
+  background: var(--bg-1); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px; margin-bottom: 24px;
+}
+.sc-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px; font-weight: 800; margin-bottom: 20px; color: var(--t0);
+  display: flex; align-items: center; gap: 10px;
+}
+.sc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.sc-cell { text-align: center; }
+.sc-rag-big {
+  font-size: 32px; font-weight: 900; font-family: 'Montserrat', sans-serif;
+  line-height: 1;
+}
+.sc-rag-label { font-size: 10px; color: var(--t2); margin-top: 4px; }
+.sc-bar-section {}
+.sc-bar-label { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px; }
+.sc-bar-track { height: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; overflow: hidden; }
+.sc-bar-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, #16A34A, var(--green)); }
+.sc-legend { display: flex; gap: 20px; margin-top: 16px; }
+.sc-leg-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--t2); }
+.sc-leg-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+/* [7] RISK REGISTER */
+.risk-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.risk-table th { padding: 8px 12px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--t3); border-bottom: 1px solid var(--border); text-align: left; }
+.risk-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--t1); }
+.risk-table tr:last-child td { border-bottom: none; }
+.risk-level { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 3px; text-transform: uppercase; }
+.rl-high   { background:rgba(239,68,68,0.12); color:var(--red); }
+.rl-medium { background:rgba(245,158,11,0.12); color:var(--amber); }
+.rl-low    { background:rgba(34,197,94,0.10); color:var(--green); }
+</style>
+</head>
+<body>
+
+<!-- [2] QUARTER HEADER -->
+<div class="q-header">
+  <div class="qh-left">
+    <div class="qh-tag">OKR Tracker · Q3 2026</div>
+    <div class="qh-title">Driver Management — OKRs Q3/2026</div>
+    <div class="qh-subtitle">Theo dõi mục tiêu & chỉ số then chốt · 2026-07-01 → 2026-09-30</div>
+    <div class="qh-meta">
+      <div class="qh-meta-item">
+        <div class="qh-meta-label">Team</div>
+        <div class="qh-meta-value">Driver Management</div>
+      </div>
+      <div class="qh-meta-item">
+        <div class="qh-meta-label">HoD</div>
+        <div class="qh-meta-value">Driver Ops Lead</div>
+      </div>
+      <div class="qh-meta-item">
+        <div class="qh-meta-label">Period</div>
+        <div class="qh-meta-value">Q3 · 13 tuần</div>
+      </div>
+      <div class="qh-meta-item">
+        <div class="qh-meta-label">Reviewed</div>
+        <div class="qh-meta-value">2026-07-07 · W27</div>
+      </div>
+    </div>
+  </div>
+  <div class="progress-ring-wrap">
+    <svg width="120" height="120" viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="10"/>
+      <circle cx="60" cy="60" r="50" fill="none" stroke="url(#ring-grad)" stroke-width="10"
+              stroke-dasharray="314" stroke-dashoffset="125" stroke-linecap="round"
+              transform="rotate(-90 60 60)"/>
+      <defs>
+        <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#22C55E"/>
+          <stop offset="100%" stop-color="#14B8A6"/>
+        </linearGradient>
+      </defs>
+      <text x="60" y="56" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="22" font-weight="900" fill="#EDF1F7">60%</text>
+      <text x="60" y="72" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#6B7789">Progress</text>
+    </svg>
+    <div class="ring-label">Q3 Overall</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- [6] QUARTER SUMMARY SCORECARD -->
+  <div class="scorecard">
+    <div class="sc-title">
+      📊 Quarter Scorecard — RAG Summary
+      <span style="margin-left:auto;font-size:10px;color:var(--t3);font-weight:400;">W27 of 13 · 7 tuần còn lại</span>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-cell">
+        <div class="sc-rag-big" style="color:var(--green)">3</div>
+        <div class="sc-rag-label">🟢 On Track</div>
+      </div>
+      <div class="sc-cell">
+        <div class="sc-rag-big" style="color:var(--amber)">2</div>
+        <div class="sc-rag-label">🟡 At Risk</div>
+      </div>
+      <div class="sc-cell">
+        <div class="sc-rag-big" style="color:var(--red)">1</div>
+        <div class="sc-rag-label">🔴 Off Track</div>
+      </div>
+      <div class="sc-cell">
+        <div class="sc-rag-big" style="color:var(--blue)">6</div>
+        <div class="sc-rag-label">Total KRs</div>
+      </div>
+    </div>
+    <div class="sc-bar-section">
+      <div class="sc-bar-label">
+        <span style="font-weight:700">Overall Q3 Progress</span>
+        <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--green)">60%</span>
+      </div>
+      <div class="sc-bar-track"><div class="sc-bar-fill" style="width:60%"></div></div>
+    </div>
+    <div class="sc-legend">
+      <div class="sc-leg-item"><div class="sc-leg-dot" style="background:var(--green)"></div>On Track (≥70%)</div>
+      <div class="sc-leg-item"><div class="sc-leg-dot" style="background:var(--amber)"></div>At Risk (50–70%)</div>
+      <div class="sc-leg-item"><div class="sc-leg-dot" style="background:var(--red)"></div>Off Track (&lt;50%)</div>
+    </div>
+  </div>
+
+  <!-- OKR 1 -->
+  <div class="okr-card">
+    <div class="okr-header">
+      <div class="okr-num">O1</div>
+      <div class="okr-info">
+        <div class="okr-label">Objective 1 · Supply Quality</div>
+        <div class="okr-title">Xây dựng đội ngũ tài xế chất lượng cao, có hệ thống đánh giá minh bạch</div>
+        <div class="okr-desc">Triển khai DQS v2.0 và hệ thống Ranking v2.0 để chuẩn hóa chất lượng đội ngũ.</div>
+        <div class="okr-meta">
+          <span class="okr-tag g">🟢 On Track</span>
+          <span class="okr-tag b">Q3 2026</span>
+        </div>
+      </div>
+      <div class="okr-overall">
+        <div>
+          <div class="okr-overall-pct green">72%</div>
+          <div class="okr-overall-label">Progress</div>
+        </div>
+      </div>
+    </div>
+    <div class="kr-list">
+      <div class="kr-row">
+        <div class="kr-status-dot ks-green"></div>
+        <div class="kr-info">
+          <div class="kr-title">KR1.1: Tỷ lệ tài xế R1 đạt DQS &ge; 80 đạt 85% fleet R1 vào Q3</div>
+          <div class="kr-bar-row">
+            <div class="kr-bar-track"><div class="kr-bar-fill green" style="width:82%"></div></div>
+          </div>
+        </div>
+        <div class="kr-vals">
+          <div class="kr-actual" style="color:var(--green)">82%</div>
+          <div class="kr-target">Target: 85%</div>
+          <div class="kr-delta" style="color:var(--green)">▲ +3pp MoQ</div>
+        </div>
+        <div class="kr-rag rag-g">Green</div>
+      </div>
+      <div class="kr-row">
+        <div class="kr-status-dot ks-green"></div>
+        <div class="kr-info">
+          <div class="kr-title">KR1.2: Triển khai Ranking v2.0 (DQS-based) go-live trước 2026-08-01</div>
+          <div class="kr-bar-row">
+            <div class="kr-bar-track"><div class="kr-bar-fill blue" style="width:70%"></div></div>
+          </div>
+        </div>
+        <div class="kr-vals">
+          <div class="kr-actual" style="color:var(--blue)">70%</div>
+          <div class="kr-target">Target: Shadow Mode</div>
+          <div class="kr-delta" style="color:var(--blue)">In Progress</div>
+        </div>
+        <div class="kr-rag rag-g">Green</div>
+      </div>
+    </div>
+    <div class="init-section">
+      <div class="init-title">Key Initiatives</div>
+      <table class="init-table">
+        <tr><td>DQS v2.0 formula finalize</td><td><span class="init-chip ic-done">✓ Done</span></td><td style="color:var(--t3)">2026-07-01</td></tr>
+        <tr><td>Shadow Mode run tại HAN</td><td><span class="init-chip ic-prog">In Prog</span></td><td style="color:var(--t3)">2026-08-01</td></tr>
+        <tr><td>Go-live SGN chính thức</td><td><span class="init-chip ic-plan">Planned</span></td><td style="color:var(--t3)">2026-09-01</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- OKR 2 -->
+  <div class="okr-card">
+    <div class="okr-header">
+      <div class="okr-num">O2</div>
+      <div class="okr-info">
+        <div class="okr-label">Objective 2 · Supply Efficiency</div>
+        <div class="okr-title">Tối ưu hóa phân phối nguồn cung, giảm mất cân bằng cung-cầu tại Peak-hour</div>
+        <div class="okr-desc">Áp dụng hệ thống Layer + Priority Registration để điều phối tài xế tự nguyện vào zone trọng điểm.</div>
+        <div class="okr-meta">
+          <span class="okr-tag a">🟡 At Risk</span>
+          <span class="okr-tag b">Q3 2026</span>
+        </div>
+      </div>
+      <div class="okr-overall">
+        <div>
+          <div class="okr-overall-pct amber">54%</div>
+          <div class="okr-overall-label">Progress</div>
+        </div>
+      </div>
+    </div>
+    <div class="kr-list">
+      <div class="kr-row">
+        <div class="kr-status-dot ks-amber"></div>
+        <div class="kr-info">
+          <div class="kr-title">KR2.1: Fulfillment Rate toàn hệ thống đạt &ge; 95% vào cuối Q3</div>
+          <div class="kr-bar-row">
+            <div class="kr-bar-track"><div class="kr-bar-fill amber" style="width:94.2%"></div></div>
+          </div>
+        </div>
+        <div class="kr-vals">
+          <div class="kr-actual" style="color:var(--amber)">94.2%</div>
+          <div class="kr-target">Target: 95.0%</div>
+          <div class="kr-delta" style="color:var(--amber)">-0.8pp to target</div>
+        </div>
+        <div class="kr-rag rag-a">Amber</div>
+      </div>
+      <div class="kr-row">
+        <div class="kr-status-dot ks-red"></div>
+        <div class="kr-info">
+          <div class="kr-title">KR2.2: Acceptance Rate đạt &ge; 90% tại SGN L2 Minizone vào cuối Q3</div>
+          <div class="kr-bar-row">
+            <div class="kr-bar-track"><div class="kr-bar-fill red" style="width:87.3%"></div></div>
+          </div>
+        </div>
+        <div class="kr-vals">
+          <div class="kr-actual" style="color:var(--red)">87.3%</div>
+          <div class="kr-target">Target: 90.0%</div>
+          <div class="kr-delta" style="color:var(--red)">▼ -2.7pp gap</div>
+        </div>
+        <div class="kr-rag rag-r">Red</div>
+      </div>
+      <div class="kr-row">
+        <div class="kr-status-dot ks-green"></div>
+        <div class="kr-info">
+          <div class="kr-title">KR2.3: Tỷ lệ slot L2/L3 lấp đầy trong ca Peak đạt &ge; 88%</div>
+          <div class="kr-bar-row">
+            <div class="kr-bar-track"><div class="kr-bar-fill green" style="width:90%"></div></div>
+          </div>
+        </div>
+        <div class="kr-vals">
+          <div class="kr-actual" style="color:var(--green)">90%</div>
+          <div class="kr-target">Target: 88%</div>
+          <div class="kr-delta" style="color:var(--green)">▲ +2pp above</div>
+        </div>
+        <div class="kr-rag rag-g">Green</div>
+      </div>
+    </div>
+    <div class="init-section">
+      <div class="init-title">Key Initiatives</div>
+      <table class="init-table">
+        <tr><td>Priority Registration System (Layer + Giờ mở cổng) go-live</td><td><span class="init-chip ic-prog">In Prog</span></td><td style="color:var(--t3)">2026-08-15</td></tr>
+        <tr><td>AR SGN L2 recovery plan (zone rollback + slot rebalance)</td><td><span class="init-chip ic-prog">In Prog</span></td><td style="color:var(--t3)">2026-07-14</td></tr>
+        <tr><td>AhaBenefits ×1.5 AhaPoints L2 activation</td><td><span class="init-chip ic-plan">Planned</span></td><td style="color:var(--t3)">2026-09-01</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- OKR 3 -->
+  <div class="okr-card">
+    <div class="okr-header">
+      <div class="okr-num">O3</div>
+      <div class="okr-info">
+        <div class="okr-label">Objective 3 · Driver Loyalty & Retention</div>
+        <div class="okr-title">Tăng cường gắn kết và giảm Churn Rate của đội ngũ tài xế R1/R2</div>
+        <div class="okr-desc">Triển khai AhaBenefits ecosystem với voucher, điểm tích lũy và bảo hiểm tai nạn.</div>
+        <div class="okr-meta">
+          <span class="okr-tag a">🟡 At Risk</span>
+          <span class="okr-tag b">Q3 2026</span>
+        </div>
+      </div>
+      <div class="okr-overall">
+        <div>
+          <div class="okr-overall-pct amber">48%</div>
+          <div class="okr-overall-label">Progress</div>
+        </div>
+      </div>
+    </div>
+    <div class="kr-list">
+      <div class="kr-row">
+        <div class="kr-status-dot ks-amber"></div>
+        <div class="kr-info">
+          <div class="kr-title">KR3.1: Churn Rate MoM của R1/R2 xuống dưới 2.5% vào tháng 9</div>
+          <div class="kr-bar-row">
+            <div class="kr-bar-track"><div class="kr-bar-fill amber" style="width:64%"></div></div>
+          </div>
+        </div>
+        <div class="kr-vals">
+          <div class="kr-actual" style="color:var(--amber)">3.2%</div>
+          <div class="kr-target">Target: 2.5%</div>
+          <div class="kr-delta" style="color:var(--red)">▲ +0.7pp vs target</div>
+        </div>
+        <div class="kr-rag rag-a">Amber</div>
+      </div>
+    </div>
+    <div class="init-section">
+      <div class="init-title">Key Initiatives</div>
+      <table class="init-table">
+        <tr><td>AhaBenefits Voucher xăng/sạc R1/R2 activation</td><td><span class="init-chip ic-at">At Risk</span></td><td style="color:var(--t3)">2026-09-01</td></tr>
+        <tr><td>Bảo hiểm tai nạn Mini R1 enrollment</td><td><span class="init-chip ic-plan">Planned</span></td><td style="color:var(--t3)">2026-09-15</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- [7] RISK REGISTER -->
+  <div style="background:var(--bg-1);border:1px solid var(--border);border-radius:14px;padding:24px;">
+    <div style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:800;margin-bottom:18px;display:flex;align-items:center;gap:10px;">
+      ⚠️ Risk Register Q3
+      <span style="margin-left:auto;font-size:10px;color:var(--t3);font-weight:400;">Rủi ro ảnh hưởng đến OKR</span>
+    </div>
+    <table class="risk-table">
+      <thead><tr><th>Risk</th><th>Level</th><th>OKR Impact</th><th>Mitigation</th><th>Owner</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>AR SGN L2 tiếp tục không recover sau zone rollback</td>
+          <td><span class="risk-level rl-high">High</span></td>
+          <td>O2 · KR2.2</td>
+          <td>Slot rebalance + driver incentive patch</td>
+          <td>Driver Ops</td>
+        </tr>
+        <tr>
+          <td>Product delay AhaBenefits app feature</td>
+          <td><span class="risk-level rl-high">High</span></td>
+          <td>O3 · KR3.1</td>
+          <td>Manual voucher distribution interim</td>
+          <td>Product + Ops</td>
+        </tr>
+        <tr>
+          <td>Churn tăng đột biến do cạnh tranh từ Grab Q3</td>
+          <td><span class="risk-level rl-medium">Medium</span></td>
+          <td>O3</td>
+          <td>Monitor weekly, ready retention package</td>
+          <td>DM Lead</td>
+        </tr>
+        <tr>
+          <td>DQS data pipeline lỗi khi scale lên toàn quốc</td>
+          <td><span class="risk-level rl-medium">Medium</span></td>
+          <td>O1 · KR1.2</td>
+          <td>BI infra review trước go-live</td>
+          <td>BI Team</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /content -->
+</body>
+</html>

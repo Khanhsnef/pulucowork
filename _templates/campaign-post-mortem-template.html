@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campaign Post-Mortem Report — Template</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!--
+  ╔════════════════════════════════════════════════════════╗
+  ║  CAMPAIGN POST-MORTEM REPORT TEMPLATE                  ║
+  ║  Dùng cho: campaign review, incentive analysis         ║
+  ║  Theme: Dark + Before/After comparison system          ║
+  ╚════════════════════════════════════════════════════════╝
+
+  COMPONENT INDEX:
+  [1]  CSS Variables & Base
+  [2]  Campaign Header — title, period, budget, status
+  [3]  Campaign Brief — objective, mechanic, target
+  [4]  Before/After Comparison Cards (split view)
+  [5]  KPI Results Grid — target vs actual + delta
+  [6]  Funnel Impact Visualization (CSS)
+  [7]  Cost-Benefit Analysis Table
+  [8]  ROI Breakdown
+  [9]  Segment Breakdown (who benefited most)
+  [10] Lessons Learned + Recommendations
+-->
+<style>
+:root {
+  --bg:    #07090C;
+  --bg-1:  #0C0F17;
+  --bg-2:  #111520;
+  --bg-3:  #171C29;
+  --border: rgba(255,255,255,0.06);
+  --border-2: rgba(255,255,255,0.1);
+
+  --green:  #22C55E;
+  --blue:   #3B82F6;
+  --purple: #A855F7;
+  --orange: #F97316;
+  --red:    #EF4444;
+  --amber:  #F59E0B;
+  --teal:   #14B8A6;
+
+  --t0: #EDF1F7;
+  --t1: #B0BAC8;
+  --t2: #6B7789;
+  --t3: #353E52;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--t0); padding-bottom: 60px; }
+
+/* [2] CAMPAIGN HEADER */
+.camp-header {
+  padding: 32px 48px 24px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(59,130,246,0.05) 0%, transparent 60%);
+}
+.camp-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 4px; margin-bottom: 14px;
+}
+.cs-completed { background:rgba(34,197,94,0.12); color:var(--green); border:1px solid rgba(34,197,94,0.25); }
+.cs-ongoing   { background:rgba(59,130,246,0.12); color:var(--blue); border:1px solid rgba(59,130,246,0.25); }
+
+.camp-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px; font-weight: 900; margin-bottom: 6px;
+}
+.camp-subtitle { font-size: 13px; color: var(--t2); margin-bottom: 20px; }
+.camp-meta { display: flex; gap: 28px; flex-wrap: wrap; }
+.camp-meta-item {}
+.cm-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--t3); margin-bottom: 3px; }
+.cm-value { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--t1); }
+.cm-value.highlight { color: var(--orange); font-weight: 700; }
+
+/* CONTENT */
+.content { padding: 32px 48px; max-width: 1280px; margin: 0 auto; }
+
+/* SECTION */
+.section { margin-bottom: 36px; }
+.section-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border);
+}
+.section-num { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--blue); letter-spacing: 0.1em; }
+.section-title { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 800; color: var(--t0); }
+.section-sub { font-size: 12px; color: var(--t2); margin-left: auto; }
+
+/* CARD */
+.card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 12px; padding: 20px; overflow: hidden; }
+
+/* [3] CAMPAIGN BRIEF */
+.brief-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.brief-cell { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.brief-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--t3); margin-bottom: 8px; }
+.brief-content { font-size: 13px; color: var(--t0); line-height: 1.6; }
+.brief-content ul { padding-left: 16px; }
+.brief-content li { margin-bottom: 4px; }
+
+/* [4] BEFORE/AFTER COMPARISON */
+.ba-grid { display: grid; grid-template-columns: 1fr 64px 1fr; gap: 0; align-items: stretch; }
+.ba-panel { background: var(--bg-1); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.ba-panel-header {
+  padding: 14px 20px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  display: flex; align-items: center; gap: 8px;
+}
+.bph-before { background: rgba(239,68,68,0.08); color: var(--red); border-bottom: 1px solid rgba(239,68,68,0.15); }
+.bph-after  { background: rgba(34,197,94,0.08); color: var(--green); border-bottom: 1px solid rgba(34,197,94,0.15); }
+.ba-body { padding: 16px 20px; }
+.ba-metric { margin-bottom: 14px; }
+.ba-metric:last-child { margin-bottom: 0; }
+.bam-label { font-size: 10px; color: var(--t2); margin-bottom: 4px; }
+.bam-val { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 900; line-height: 1; }
+.bam-val.before-val { color: var(--red); }
+.bam-val.after-val  { color: var(--green); }
+.bam-sub { font-size: 11px; color: var(--t3); margin-top: 3px; }
+
+.ba-arrow {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: var(--t3);
+}
+
+/* [5] KPI RESULTS GRID */
+.kpi-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.kpi-result-card {
+  background: var(--bg-1); border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px; position: relative; overflow: hidden;
+}
+.kpi-result-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.krc-green::before  { background: var(--green); }
+.krc-amber::before  { background: var(--amber); }
+.krc-red::before    { background: var(--red); }
+.krc-blue::before   { background: var(--blue); }
+.krc-purple::before { background: var(--purple); }
+
+.krc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--t3); margin-bottom: 10px; }
+.krc-actual { font-family: 'Montserrat', sans-serif; font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+.krc-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+.krc-target { font-size: 11px; color: var(--t2); }
+.krc-target span { font-family: 'Space Mono', monospace; }
+.krc-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
+  display: flex; align-items: center; gap: 4px;
+}
+.krc-badge.exceeded { background:rgba(34,197,94,0.12); color:var(--green); }
+.krc-badge.missed   { background:rgba(239,68,68,0.12); color:var(--red); }
+.krc-badge.close    { background:rgba(245,158,11,0.12); color:var(--amber); }
+.krc-bar-track { height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.krc-bar-fill { height: 100%; border-radius: 2px; }
+
+/* [6] FUNNEL IMPACT */
+.funnel-wrap { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 16px 0; }
+.funnel-stage {
+  display: flex; align-items: center; gap: 20px; width: 100%; max-width: 600px;
+}
+.funnel-bar-outer { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+.funnel-bar-inner {
+  height: 40px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; color: #fff;
+  position: relative;
+}
+.funnel-label { min-width: 160px; font-size: 12px; color: var(--t1); text-align: right; font-weight: 600; }
+.funnel-meta { min-width: 120px; font-size: 11px; color: var(--t2); }
+.funnel-delta { font-size: 11px; font-weight: 700; min-width: 60px; }
+
+/* [7] COST-BENEFIT TABLE */
+.cb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.cb-table th { padding: 8px 12px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--t3); border-bottom: 1px solid var(--border); text-align: left; }
+.cb-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--t1); font-size: 12px; }
+.cb-table tr:last-child td { border-bottom: none; }
+.cb-table .total-row td { font-weight: 700; color: var(--t0); border-top: 1px solid var(--border); }
+.mono { font-family: 'Space Mono', monospace; font-size: 11px; }
+.txt-green { color: var(--green); }
+.txt-red   { color: var(--red); }
+.txt-amber { color: var(--amber); }
+
+/* [8] ROI BOX */
+.roi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.roi-cell { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 18px; text-align: center; }
+.roi-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--t3); margin-bottom: 8px; }
+.roi-val { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 900; line-height: 1; }
+.roi-sub { font-size: 11px; color: var(--t3); margin-top: 6px; }
+
+/* [10] LESSONS LEARNED */
+.lessons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.lesson-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.lesson-type-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.lt-worked     { color: var(--green); }
+.lt-didntwork  { color: var(--red); }
+.lt-surprising { color: var(--purple); }
+.lt-next       { color: var(--blue); }
+.lesson-title { font-size: 13px; font-weight: 700; color: var(--t0); margin-bottom: 6px; }
+.lesson-body  { font-size: 12px; color: var(--t2); line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<!-- [2] CAMPAIGN HEADER -->
+<div class="camp-header">
+  <div class="camp-status cs-completed">✓ Campaign Completed · Post-Mortem</div>
+  <div class="camp-title">AhaBenefits Pilot — L2 Minizone Incentive Campaign</div>
+  <div class="camp-subtitle">Chiến dịch thí điểm tích điểm AhaPoints ×1.5 tại L2 Minizone SGN · Đánh giá sau chiến dịch</div>
+  <div class="camp-meta">
+    <div class="camp-meta-item">
+      <div class="cm-label">Thời gian</div>
+      <div class="cm-value">2026-06-01 → 06-30</div>
+    </div>
+    <div class="camp-meta-item">
+      <div class="cm-label">Khu vực</div>
+      <div class="cm-value">SGN · L2 Minizone</div>
+    </div>
+    <div class="camp-meta-item">
+      <div class="cm-label">Budget</div>
+      <div class="cm-value highlight">120M VND</div>
+    </div>
+    <div class="camp-meta-item">
+      <div class="cm-label">Actual Spend</div>
+      <div class="cm-value">108M VND</div>
+    </div>
+    <div class="camp-meta-item">
+      <div class="cm-label">Target Drivers</div>
+      <div class="cm-value">1,200 R1/R2</div>
+    </div>
+    <div class="camp-meta-item">
+      <div class="cm-label">Actual Reach</div>
+      <div class="cm-value" style="color:var(--green)">1,380 (+15%)</div>
+    </div>
+    <div class="camp-meta-item">
+      <div class="cm-label">Report Author</div>
+      <div class="cm-value">Driver Ops Team</div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- [3] CAMPAIGN BRIEF -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title">Campaign Brief</div>
+    </div>
+    <div class="brief-grid">
+      <div class="brief-cell">
+        <div class="brief-label">🎯 Mục tiêu</div>
+        <div class="brief-content">
+          <ul>
+            <li>Tăng FR tại L2 Minizone từ 88% → 92%</li>
+            <li>Thử nghiệm hệ số AhaPoints ×1.5 làm lực hút</li>
+            <li>Đo lường driver NPS sau 30 ngày</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brief-cell">
+        <div class="brief-label">⚙️ Cơ chế</div>
+        <div class="brief-content">
+          <ul>
+            <li>R1/R2 đăng ký ca L2 nhận hệ số ×1.5</li>
+            <li>Mỗi 1.000đ GSV = 1.5 AhaPoint</li>
+            <li>Điểm dùng đổi voucher xăng/data</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brief-cell">
+        <div class="brief-label">👥 Target audience</div>
+        <div class="brief-content">
+          R1 Elite và R2 Active tại SGN,<br>
+          đã từng đăng ký L2 ít nhất 1 lần.<br><br>
+          ~1.200 tài xế đủ điều kiện.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [4] BEFORE/AFTER COMPARISON -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title">Before / After Comparison</div>
+      <div class="section-sub">May 2026 vs June 2026 (Campaign Month)</div>
+    </div>
+    <div class="ba-grid">
+      <div class="ba-panel">
+        <div class="ba-panel-header bph-before">📉 BEFORE (May 2026)</div>
+        <div class="ba-body">
+          <div class="ba-metric">
+            <div class="bam-label">Fulfillment Rate L2 Minizone</div>
+            <div class="bam-val before-val">88.1%</div>
+            <div class="bam-sub">Tháng 5 · trước campaign</div>
+          </div>
+          <div class="ba-metric">
+            <div class="bam-label">Tỷ lệ đăng ký ca L2 của R1/R2</div>
+            <div class="bam-val before-val">54%</div>
+            <div class="bam-sub">Trên tổng số eligible drivers</div>
+          </div>
+          <div class="ba-metric">
+            <div class="bam-label">Driver NPS</div>
+            <div class="bam-val before-val">+22</div>
+            <div class="bam-sub">eNPS khảo sát tháng 5</div>
+          </div>
+          <div class="ba-metric">
+            <div class="bam-label">Avg AhaPoints/driver/tháng</div>
+            <div class="bam-val before-val">5,240</div>
+            <div class="bam-sub">Tại L2 without multiplier</div>
+          </div>
+        </div>
+      </div>
+      <div class="ba-arrow">→</div>
+      <div class="ba-panel">
+        <div class="ba-panel-header bph-after">📈 AFTER (Jun 2026 · Campaign)</div>
+        <div class="ba-body">
+          <div class="ba-metric">
+            <div class="bam-label">Fulfillment Rate L2 Minizone</div>
+            <div class="bam-val after-val">93.4%</div>
+            <div class="bam-sub">▲ +5.3pp vs tháng 5</div>
+          </div>
+          <div class="ba-metric">
+            <div class="bam-label">Tỷ lệ đăng ký ca L2 của R1/R2</div>
+            <div class="bam-val after-val">78%</div>
+            <div class="bam-sub">▲ +24pp — tăng đột phá</div>
+          </div>
+          <div class="ba-metric">
+            <div class="bam-label">Driver NPS</div>
+            <div class="bam-val after-val">+38</div>
+            <div class="bam-sub">▲ +16 điểm NPS</div>
+          </div>
+          <div class="ba-metric">
+            <div class="bam-label">Avg AhaPoints/driver/tháng</div>
+            <div class="bam-val after-val">7,860</div>
+            <div class="bam-sub">▲ +50% với hệ số ×1.5</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [5] KPI RESULTS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title">KPI Results — Target vs Actual</div>
+    </div>
+    <div class="kpi-results">
+      <div class="kpi-result-card krc-green">
+        <div class="krc-label">Fulfillment Rate L2</div>
+        <div class="krc-actual" style="color:var(--green)">93.4%</div>
+        <div class="krc-row">
+          <div class="krc-target">Target: <span>92.0%</span></div>
+          <div class="krc-badge exceeded">▲ +1.4pp Exceeded</div>
+        </div>
+        <div class="krc-bar-track"><div class="krc-bar-fill" style="width:97%;background:var(--green)"></div></div>
+      </div>
+      <div class="kpi-result-card krc-green">
+        <div class="krc-label">Driver Reach</div>
+        <div class="krc-actual" style="color:var(--green)">1,380</div>
+        <div class="krc-row">
+          <div class="krc-target">Target: <span>1,200</span></div>
+          <div class="krc-badge exceeded">▲ +15% Exceeded</div>
+        </div>
+        <div class="krc-bar-track"><div class="krc-bar-fill" style="width:100%;background:var(--green)"></div></div>
+      </div>
+      <div class="kpi-result-card krc-green">
+        <div class="krc-label">Driver NPS</div>
+        <div class="krc-actual" style="color:var(--green)">+38</div>
+        <div class="krc-row">
+          <div class="krc-target">Target: <span>+30</span></div>
+          <div class="krc-badge exceeded">▲ +8 Exceeded</div>
+        </div>
+        <div class="krc-bar-track"><div class="krc-bar-fill" style="width:100%;background:var(--green)"></div></div>
+      </div>
+      <div class="kpi-result-card krc-amber">
+        <div class="krc-label">Ca L2 Slot Fill Rate</div>
+        <div class="krc-actual" style="color:var(--amber)">82%</div>
+        <div class="krc-row">
+          <div class="krc-target">Target: <span>85%</span></div>
+          <div class="krc-badge close">▼ -3pp Close Miss</div>
+        </div>
+        <div class="krc-bar-track"><div class="krc-bar-fill" style="width:82%;background:var(--amber)"></div></div>
+      </div>
+      <div class="kpi-result-card krc-red">
+        <div class="krc-label">Cost per Driver Reached</div>
+        <div class="krc-actual" style="color:var(--red)">78.3k</div>
+        <div class="krc-row">
+          <div class="krc-target">Target: <span>75.0k</span></div>
+          <div class="krc-badge missed">▲ +4.4% Over budget</div>
+        </div>
+        <div class="krc-bar-track"><div class="krc-bar-fill" style="width:78%;background:var(--red)"></div></div>
+      </div>
+      <div class="kpi-result-card krc-green">
+        <div class="krc-label">Budget Utilization</div>
+        <div class="krc-actual" style="color:var(--green)">90%</div>
+        <div class="krc-row">
+          <div class="krc-target">Budget: <span>120M</span></div>
+          <div class="krc-badge exceeded">108M Spent</div>
+        </div>
+        <div class="krc-bar-track"><div class="krc-bar-fill" style="width:90%;background:var(--teal)"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TWO COL: Funnel + Cost-Benefit -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:36px;">
+
+    <!-- [6] FUNNEL IMPACT -->
+    <div class="card">
+      <div class="section-header" style="margin-bottom:16px;">
+        <div class="section-num">04</div>
+        <div class="section-title" style="font-size:14px;">Funnel Impact</div>
+      </div>
+      <div class="funnel-wrap">
+        <div class="funnel-stage">
+          <div class="funnel-label">Eligible Drivers</div>
+          <div class="funnel-bar-outer">
+            <div class="funnel-bar-inner" style="width:100%;background:linear-gradient(90deg,#1E40AF,#3B82F6)">
+              1,420
+            </div>
+          </div>
+          <div class="funnel-meta" style="color:var(--blue)">100% base</div>
+        </div>
+        <div style="color:var(--t3);font-size:18px;text-align:center;width:100%;margin:0 auto">↓</div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Saw notification</div>
+          <div class="funnel-bar-outer">
+            <div class="funnel-bar-inner" style="width:93%;background:linear-gradient(90deg,#5B21B6,#8B5CF6)">
+              1,321
+            </div>
+          </div>
+          <div class="funnel-meta" style="color:var(--purple)">93% open rate</div>
+        </div>
+        <div style="color:var(--t3);font-size:18px;text-align:center;width:100%;margin:0 auto">↓</div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Tham gia opt-in</div>
+          <div class="funnel-bar-outer">
+            <div class="funnel-bar-inner" style="width:78%;background:linear-gradient(90deg,#D97706,#F59E0B)">
+              1,108
+            </div>
+          </div>
+          <div class="funnel-meta" style="color:var(--amber)">83.9% CTR</div>
+        </div>
+        <div style="color:var(--t3);font-size:18px;text-align:center;width:100%;margin:0 auto">↓</div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Đăng ký ≥1 ca L2</div>
+          <div class="funnel-bar-outer">
+            <div class="funnel-bar-inner" style="width:70%;background:linear-gradient(90deg,#047857,#22C55E)">
+              994
+            </div>
+          </div>
+          <div class="funnel-meta" style="color:var(--green)">▲ +24pp vs base</div>
+        </div>
+        <div style="color:var(--t3);font-size:18px;text-align:center;width:100%;margin:0 auto">↓</div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Active & Earned pts</div>
+          <div class="funnel-bar-outer">
+            <div class="funnel-bar-inner" style="width:62%;background:linear-gradient(90deg,#065F46,#14B8A6)">
+              881
+            </div>
+          </div>
+          <div class="funnel-meta" style="color:var(--teal)">62% completion</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- [7] COST-BENEFIT TABLE -->
+    <div class="card">
+      <div class="section-header" style="margin-bottom:16px;">
+        <div class="section-num">05</div>
+        <div class="section-title" style="font-size:14px;">Cost-Benefit Analysis</div>
+      </div>
+      <table class="cb-table">
+        <thead><tr><th>Item</th><th>Amount (VND)</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td colspan="3" style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);padding-top:14px;">COSTS</td></tr>
+          <tr>
+            <td>AhaPoints rewards (est. redemption)</td>
+            <td class="mono txt-red">82,400,000</td>
+            <td style="font-size:11px;color:var(--t3)">~76% of spend</td>
+          </tr>
+          <tr>
+            <td>Voucher xăng/sạc R1/R2</td>
+            <td class="mono txt-red">16,200,000</td>
+            <td style="font-size:11px;color:var(--t3)">~15% of spend</td>
+          </tr>
+          <tr>
+            <td>Ops overhead (comms, support)</td>
+            <td class="mono txt-red">9,400,000</td>
+            <td style="font-size:11px;color:var(--t3)">~9% of spend</td>
+          </tr>
+          <tr class="total-row">
+            <td>Total Cost</td>
+            <td class="mono txt-red">108,000,000</td>
+            <td class="txt-green">-12M vs budget</td>
+          </tr>
+          <tr><td colspan="3" style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);padding-top:14px;">BENEFITS (ESTIMATED)</td></tr>
+          <tr>
+            <td>FR improvement → additional orders</td>
+            <td class="mono txt-green">+5.3pp × est. GSV</td>
+            <td style="font-size:11px;color:var(--t3)">~+2,400 orders/tháng</td>
+          </tr>
+          <tr>
+            <td>Reduced SLA drop (ops savings)</td>
+            <td class="mono txt-green">~45,000,000</td>
+            <td style="font-size:11px;color:var(--t3)">Ước tính 1 tháng</td>
+          </tr>
+          <tr>
+            <td>Driver retention value (avoided churn)</td>
+            <td class="mono txt-green">~76,000,000</td>
+            <td style="font-size:11px;color:var(--t3)">LTV × avoided churn</td>
+          </tr>
+          <tr class="total-row">
+            <td>Total Benefit (est.)</td>
+            <td class="mono txt-green">~340,000,000</td>
+            <td class="txt-green">3.1× return</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- [8] ROI BREAKDOWN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <div class="section-title">ROI Breakdown</div>
+    </div>
+    <div class="roi-grid">
+      <div class="roi-cell">
+        <div class="roi-label">Total Spend</div>
+        <div class="roi-val" style="color:var(--red)">108M</div>
+        <div class="roi-sub">-12M vs budget cap</div>
+      </div>
+      <div class="roi-cell">
+        <div class="roi-label">Est. Return</div>
+        <div class="roi-val" style="color:var(--green)">340M</div>
+        <div class="roi-sub">Direct + indirect</div>
+      </div>
+      <div class="roi-cell">
+        <div class="roi-label">ROI</div>
+        <div class="roi-val" style="color:var(--green)">+215%</div>
+        <div class="roi-sub">3.15× cost recovery</div>
+      </div>
+      <div class="roi-cell">
+        <div class="roi-label">Cost per Driver</div>
+        <div class="roi-val" style="color:var(--amber)">78.3k</div>
+        <div class="roi-sub">vs 75k target (+4.4%)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [10] LESSONS LEARNED -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <div class="section-title">Lessons Learned & Recommendations</div>
+    </div>
+    <div class="lessons-grid">
+      <div class="lesson-card">
+        <div class="lesson-type-label lt-worked">✅ What Worked</div>
+        <div class="lesson-title">Hệ số AhaPoints ×1.5 là đủ hấp dẫn để thay đổi hành vi</div>
+        <div class="lesson-body">Tỷ lệ đăng ký ca L2 tăng +24pp so với baseline — đây là mức tăng lớn nhất từ trước đến nay không dùng tiền mặt trực tiếp. Hệ số ×1.5 là "sweet spot" kinh tế cho driver.</div>
+      </div>
+      <div class="lesson-card">
+        <div class="lesson-type-label lt-didntwork">❌ What Didn't Work</div>
+        <div class="lesson-title">Slot fill rate chưa đạt 85% — số driver opt-in chưa đủ đều theo ca</div>
+        <div class="lesson-body">Vẫn còn hiện tượng tập trung đăng ký ca sáng, ca tối thiếu. Cần kết hợp thêm thông báo push nhắc nhở ca còn trống để phân phối slot đều hơn.</div>
+      </div>
+      <div class="lesson-card">
+        <div class="lesson-type-label lt-surprising">💡 Surprising Finding</div>
+        <div class="lesson-title">Driver NPS tăng mạnh hơn kỳ vọng (+16 điểm)</div>
+        <div class="lesson-body">Đây là kết quả ấn tượng nhất. Tài xế không chỉ quan tâm đến giá trị vật chất mà rất coi trọng cảm giác được ghi nhận và công nhận. AhaBenefits có thể là công cụ retention cực mạnh dài hạn.</div>
+      </div>
+      <div class="lesson-card">
+        <div class="lesson-type-label lt-next">🚀 Next Campaign Recommendations</div>
+        <div class="lesson-title">Scale toàn quốc Q3 với cải tiến slot notification</div>
+        <div class="lesson-body">
+          Đề xuất: (1) Giữ nguyên hệ số ×1.5 cho L2, ×1.3 cho L3. (2) Thêm push notification khi slot L2 &lt;30% còn trống. (3) Tạo leaderboard AhaPoints để gamify. Budget đề xuất: 200M/tháng khi scale.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+</body>
+</html>

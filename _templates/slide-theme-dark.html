@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Theme: DARK — Slide Template</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!--
+  ╔══════════════════════════════════════════════════╗
+  ║  SLIDE THEME: DARK                               ║
+  ║  Nền: #080F1D (gần đen, deep navy)               ║
+  ║  Vibe: premium fintech / dark dashboard          ║
+  ║  Text: trắng, glassmorphism cards                ║
+  ╚══════════════════════════════════════════════════╝
+
+  CÁCH DÙNG:
+  Copy toàn bộ <style> block vào slide HTML của bạn.
+  Xem preview bằng cách mở file này trong browser.
+-->
+<style>
+/* ─── CORE PALETTE ─── */
+:root {
+  --bg-slide:       #080F1D;
+  --bg-grad-1:      rgba(255,127,50,.13);   /* orange glow bottom-right */
+  --bg-grad-2:      rgba(14,65,116,.5);     /* blue glow top-left */
+  --grid-line:      rgba(255,255,255,.03);
+  --accent-orange:  #FF7F32;
+  --accent-blue:    #0E4174;
+
+  --card-bg:        rgba(255,255,255,.04);
+  --card-border:    rgba(255,255,255,.08);
+  --card-border-hv: rgba(255,255,255,.12);
+
+  --text-primary:   #ffffff;
+  --text-secondary: rgba(255,255,255,.65);
+  --text-muted:     rgba(255,255,255,.35);
+  --text-faint:     rgba(255,255,255,.2);
+
+  --sep:            rgba(255,255,255,.07);
+  --prog-track:     rgba(255,255,255,.08);
+
+  --hero-bg:        rgba(255,127,50,.08);
+  --hero-border:    rgba(255,127,50,.2);
+
+  --surv-han-bg:    rgba(239,68,68,.08);
+  --surv-han-bdr:   rgba(239,68,68,.18);
+  --surv-sgn-bg:    rgba(16,185,129,.08);
+  --surv-sgn-bdr:   rgba(16,185,129,.18);
+
+  --svg-grid:       rgba(255,255,255,.06);
+  --svg-axis:       rgba(255,255,255,.25);
+  --svg-xlabel:     rgba(255,255,255,.35);
+  --svg-cost:       rgba(255,255,255,.2);
+  --svg-stat-bdr:   rgba(255,255,255,.06);
+
+  --action-bdr:     rgba(255,255,255,.05);
+  --action-txt:     rgba(255,255,255,.6);
+  --action-strong:  rgba(255,255,255,.9);
+
+  --footer-name:    rgba(255,255,255,.35);
+  --footer-tag:     rgba(255,255,255,.2);
+}
+
+/* ─── BASE ─── */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Lexend',sans-serif; background:#06080F; display:flex; flex-direction:column; align-items:center; }
+
+/* ─── SLIDE SHELL ─── */
+.slide { width:1280px; height:720px; position:relative; overflow:hidden; flex-shrink:0; }
+
+.slide-bg {
+  position:absolute; inset:0;
+  background: var(--bg-slide);
+}
+.slide-bg::before {
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 110%, var(--bg-grad-1) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 10% -10%, var(--bg-grad-2) 0%, transparent 55%);
+}
+.slide-bg::after {
+  content:''; position:absolute; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.4; pointer-events:none;
+}
+.grid-lines {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size:64px 64px;
+}
+.accent-line { position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#FF7F32 0%,#FF4E00 40%,transparent 100%); }
+.slide-content { position:relative; z-index:2; height:100%; display:flex; flex-direction:column; padding:40px 56px 36px; }
+
+/* ─── HEADER ─── */
+.s-eyebrow { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.eyebrow-dot { width:8px; height:8px; background:#FF7F32; border-radius:50%; box-shadow:0 0 8px rgba(255,127,50,.8); }
+.eyebrow-text { font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#FF7F32; }
+.s-title { font-size:30px; font-weight:800; color:var(--text-primary); letter-spacing:-.8px; line-height:1.15; }
+.s-subtitle { font-size:13px; color:var(--text-secondary); margin-top:4px; }
+.s-slide-num { font-size:13px; font-weight:700; color:var(--text-faint); letter-spacing:1px; }
+.s-slide-num span { color:rgba(255,255,255,.6); }
+
+/* ─── GLASS CARD ─── */
+.glass {
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:20px;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+/* ─── TYPOGRAPHY ─── */
+.label-xs { font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); }
+.num-hero  { font-size:64px; font-weight:900; letter-spacing:-3px; line-height:1; color:var(--text-primary); }
+.num-lg    { font-size:42px; font-weight:900; letter-spacing:-1.5px; line-height:1; color:var(--text-primary); }
+.num-md    { font-size:28px; font-weight:800; letter-spacing:-1px; line-height:1; color:var(--text-primary); }
+.body-sm   { font-size:12px; color:rgba(255,255,255,.45); line-height:1.6; }
+.sep       { height:1px; background:var(--sep); margin:14px 0; }
+.prog-track { height:6px; background:var(--prog-track); border-radius:999px; overflow:hidden; margin:8px 0 4px; }
+.prog-fill  { height:100%; border-radius:999px; }
+
+/* ─── PILLS ─── */
+.pill      { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700; }
+.pill-warn { background:rgba(239,68,68,.15);   color:#F87171; border:1px solid rgba(239,68,68,.25); }
+.pill-ok   { background:rgba(16,185,129,.15);  color:#34D399; border:1px solid rgba(16,185,129,.25); }
+.pill-info { background:rgba(255,127,50,.15);  color:#FF9F62; border:1px solid rgba(255,127,50,.25); }
+
+/* ─── HERO CARD ─── */
+.s1-hero {
+  background:var(--hero-bg); border:1px solid var(--hero-border);
+  border-radius:20px; position:relative; overflow:hidden;
+}
+.s1-hero::before {
+  content:''; position:absolute; bottom:-40px; right:-40px;
+  width:160px; height:160px;
+  background:radial-gradient(circle,rgba(255,127,50,.2) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+/* ─── SURVIVAL ─── */
+.surv-block.han { background:var(--surv-han-bg); border:1px solid var(--surv-han-bdr); }
+.surv-block.sgn { background:var(--surv-sgn-bg); border:1px solid var(--surv-sgn-bdr); }
+.surv-pct { font-size:44px; font-weight:900; letter-spacing:-2px; line-height:1; }
+.surv-block.han .surv-pct { color:#F87171; }
+.surv-block.sgn .surv-pct { color:#34D399; }
+.surv-row { display:flex; justify-content:space-between; font-size:11px; color:rgba(255,255,255,.4); }
+.surv-row span { color:rgba(255,255,255,.75); font-weight:600; }
+
+/* ─── ACTIONS ─── */
+.act-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--action-bdr); }
+.act-item:last-child { border-bottom:none; }
+.act-num { width:20px; height:20px; background:rgba(255,127,50,.15); border:1px solid rgba(255,127,50,.3); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:800; color:#FF7F32; flex-shrink:0; }
+.act-txt { font-size:11.5px; color:var(--action-txt); line-height:1.5; }
+.act-txt strong { color:var(--action-strong); font-weight:600; }
+
+/* ─── FOOTER ─── */
+.footer-logo { width:20px; height:20px; background:#FF7F32; border-radius:50%; box-shadow:0 0 8px rgba(255,127,50,.5); }
+.footer-name { font-size:11px; font-weight:700; color:var(--footer-name); letter-spacing:1px; }
+.footer-tag  { font-size:10px; color:var(--footer-tag); letter-spacing:1px; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="accent-line"></div>
+  <div class="slide-content" style="justify-content:center;align-items:center;gap:16px">
+    <div style="text-align:center">
+      <div class="s-eyebrow" style="justify-content:center"><div class="eyebrow-dot"></div><span class="eyebrow-text">Theme Preview</span></div>
+      <div class="s-title">DARK Theme</div>
+      <div class="s-subtitle">Nền #080F1D · Deep navy · Glassmorphism cards · White text</div>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:8px">
+      <div class="glass" style="padding:20px 28px;min-width:200px;text-align:center">
+        <div class="label-xs" style="margin-bottom:8px">Metric</div>
+        <div class="num-lg">7,365</div>
+        <div class="body-sm" style="margin-top:4px">Tài xế có baga</div>
+        <div class="sep"></div>
+        <div style="display:flex;gap:8px;justify-content:center">
+          <span class="pill pill-ok">✓ SGN 49%</span>
+          <span class="pill pill-warn">⚠ HAN 39%</span>
+        </div>
+      </div>
+      <div class="glass" style="padding:20px 28px;min-width:200px">
+        <div class="label-xs" style="margin-bottom:8px">Survival Rate</div>
+        <div style="display:flex;gap:12px">
+          <div class="surv-block han" style="padding:12px;border-radius:12px;flex:1">
+            <div style="font-size:10px;color:rgba(248,113,113,.7);font-weight:700;letter-spacing:1px;text-transform:uppercase">HAN</div>
+            <div class="surv-pct" style="font-size:32px">34%</div>
+          </div>
+          <div class="surv-block sgn" style="padding:12px;border-radius:12px;flex:1">
+            <div style="font-size:10px;color:rgba(52,211,153,.7);font-weight:700;letter-spacing:1px;text-transform:uppercase">SGN</div>
+            <div class="surv-pct" style="font-size:32px">55%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

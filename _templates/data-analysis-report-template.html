@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Driver Funnel Analysis — Ahamove</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue: #0E4174; --blue-light: #1a5fa8; --orange: #FF7F32;
+  --success: #10B981; --danger: #EF4444; --warn: #F59E0B;
+  --purple: #8B5CF6; --teal: #06B6D4;
+  --gray-50: #F9FAFB; --gray-100: #F3F4F6; --gray-200: #E5E7EB;
+  --gray-400: #9CA3AF; --gray-600: #4B5563; --gray-800: #1F2937;
+  --white: #FFFFFF;
+}
+body { font-family: 'Lexend', sans-serif; background: var(--gray-50); color: var(--gray-800); font-size: 13px; line-height: 1.5; }
+
+/* HEADER */
+.header { background: var(--blue); padding: 28px 40px 24px; color: white; display: flex; align-items: flex-end; justify-content: space-between; }
+.header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
+.header p { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 4px; }
+.badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.85); display: inline-block; margin-top: 4px; }
+.badge.orange { background: var(--orange); border-color: var(--orange); color: white; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 28px 28px 56px; }
+.section-title { font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--gray-400); margin-bottom: 12px; margin-top: 36px; }
+
+/* FUNNEL */
+.funnel-wrap { background: var(--white); border-radius: 20px; border: 1px solid var(--gray-100); padding: 28px 32px; }
+.funnel-title { font-size: 15px; font-weight: 800; color: var(--blue); margin-bottom: 4px; }
+.funnel-sub { font-size: 11px; color: var(--gray-400); margin-bottom: 24px; }
+.funnel-flow { display: flex; align-items: stretch; gap: 0; }
+.funnel-stage { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+.funnel-arrow { width: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
+.funnel-arrow svg { width: 28px; }
+.stage-box { width: 100%; border-radius: 14px; padding: 16px 12px; text-align: center; border: 2px solid; }
+.stage-label { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; }
+.stage-name { font-size: 10px; font-weight: 600; margin-top: 2px; opacity: 0.8; }
+.stage-def { font-size: 9.5px; margin-top: 6px; opacity: 0.7; line-height: 1.4; }
+.stage-nums { margin-top: 10px; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.stage-num { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; }
+
+.conv-badge { margin-top: 8px; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: rgba(0,0,0,0.06); }
+
+/* RISK CARDS */
+.risk-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.risk-card { background: var(--white); border-radius: 16px; padding: 16px; border: 1.5px solid var(--gray-100); position: relative; overflow: hidden; }
+.risk-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.rc-critical::before { background: var(--danger); }
+.rc-high::before { background: var(--orange); }
+.rc-watch::before { background: var(--warn); }
+.rc-stable::before { background: var(--success); }
+.rc-anomaly::before { background: var(--purple); }
+.risk-level { font-size: 9.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 5px; }
+.rc-critical .risk-level { color: var(--danger); }
+.rc-high .risk-level { color: var(--orange); }
+.rc-watch .risk-level { color: var(--warn); }
+.rc-stable .risk-level { color: var(--success); }
+.rc-anomaly .risk-level { color: var(--purple); }
+.risk-seg { font-size: 22px; font-weight: 900; color: var(--blue); letter-spacing: -1px; }
+.risk-name { font-size: 10px; color: var(--gray-400); margin-bottom: 10px; }
+.risk-row { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+.risk-city { font-size: 9.5px; font-weight: 700; color: var(--gray-400); }
+.chips { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+.chip { font-size: 9.5px; font-weight: 700; padding: 1px 6px; border-radius: 20px; }
+.chip-r { background: #FEE2E2; color: var(--danger); }
+.chip-g { background: #D1FAE5; color: #059669; }
+.chip-o { background: #FEF3C7; color: #D97706; }
+.chip-p { background: #EDE9FE; color: #7C3AED; }
+.chip-n { background: var(--gray-100); color: var(--gray-600); }
+.risk-note { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--gray-100); font-size: 9.5px; color: var(--gray-600); line-height: 1.5; }
+
+/* CHARTS */
+.chart-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.chart-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.chart-card { background: var(--white); border-radius: 16px; padding: 20px; border: 1px solid var(--gray-100); }
+.chart-title { font-size: 13px; font-weight: 700; color: var(--blue); }
+.chart-sub { font-size: 10px; color: var(--gray-400); margin-top: 2px; }
+.legend { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 6px; }
+.leg-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--gray-600); font-weight: 500; }
+.leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+svg.trend { width: 100%; overflow: visible; }
+
+/* FT RATIO */
+.ft-ratio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* HEATMAP */
+.heatmap-wrap { background: var(--white); border-radius: 16px; border: 1px solid var(--gray-100); overflow: hidden; }
+.heatmap-header { padding: 14px 20px; border-bottom: 1px solid var(--gray-100); display: flex; justify-content: space-between; align-items: center; }
+.heatmap-header span { font-size: 13px; font-weight: 700; color: var(--blue); }
+table.hmap { width: 100%; border-collapse: collapse; font-size: 11px; }
+table.hmap th { padding: 7px 10px; font-weight: 700; font-size: 9.5px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--gray-400); background: var(--gray-50); text-align: center; border-bottom: 1px solid var(--gray-100); }
+table.hmap th:first-child { text-align: left; }
+table.hmap td { padding: 6px 10px; text-align: center; font-weight: 600; font-size: 10.5px; border-bottom: 1px solid var(--gray-100); }
+table.hmap td:first-child { text-align: left; font-weight: 500; color: var(--gray-600); font-size: 10px; }
+.city-row td { background: var(--gray-50) !important; font-weight: 700 !important; color: var(--blue) !important; font-size: 10px !important; letter-spacing: 0.8px; text-transform: uppercase; }
+
+/* INSIGHTS */
+.insight-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.ins { background: var(--white); border-radius: 16px; padding: 18px; border: 1.5px solid var(--gray-100); }
+.ins.red { border-color: #FECACA; background: #FFF8F8; }
+.ins.orange { border-color: #FDE68A; background: #FFFDF0; }
+.ins.blue { border-color: #BFDBFE; background: #F0F7FF; }
+.ins-icon { font-size: 18px; margin-bottom: 8px; }
+.ins-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.ins-body { font-size: 11px; color: var(--gray-600); line-height: 1.65; }
+.ins-body strong { color: var(--gray-800); }
+
+.footer { margin-top: 40px; padding: 14px 0; border-top: 1px solid var(--gray-200); font-size: 10px; color: var(--gray-400); display: flex; justify-content: space-between; }
+
+/* PROD BARS */
+.prod-seg-row { margin-bottom: 10px; }
+.prod-seg-label { display: flex; justify-content: space-between; margin-bottom: 3px; }
+.prod-seg-name { font-size: 10px; font-weight: 700; }
+.prod-seg-val { font-size: 10px; font-weight: 600; color: var(--gray-600); }
+.prod-track { height: 10px; background: var(--gray-100); border-radius: 5px; overflow: hidden; }
+.prod-fill { height: 100%; border-radius: 5px; }
+
+/* NIM CONV TABLE */
+.conv-table-wrap { background: var(--white); border-radius: 16px; border: 1px solid var(--gray-100); overflow: hidden; }
+table.conv { width: 100%; border-collapse: collapse; font-size: 11px; }
+table.conv th { padding: 8px 12px; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-400); background: var(--gray-50); border-bottom: 1px solid var(--gray-100); text-align: center; }
+table.conv th:first-child { text-align: left; }
+table.conv td { padding: 7px 12px; text-align: center; border-bottom: 1px solid var(--gray-100); font-size: 11px; }
+table.conv td:first-child { text-align: left; color: var(--gray-600); font-weight: 500; }
+table.conv tr:last-child td { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Active Driver Funnel Analysis</h1>
+    <p>Phân tích xu hướng & Risk Assessment · Jan 2025 → Apr 2026 · HAN & SGN</p>
+  </div>
+  <div style="text-align:right;">
+    <div><span class="badge orange">5 Segments · 2 Cities · 16 Months</span></div>
+    <div><span class="badge">active trend.xlsx · Base = service_type 1.ALL · 2026-05-06</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- DRIVER LIFECYCLE FUNNEL -->
+  <div class="section-title">Driver Lifecycle Funnel</div>
+  <div class="funnel-wrap">
+    <div class="funnel-title">Vòng đời Tài xế Ahamove</div>
+    <div class="funnel-sub">Mỗi tài xế đi qua các stage theo thứ tự — segment xác định dựa trên hành vi tháng hiện tại</div>
+    <div class="funnel-flow">
+
+      <!-- NIM -->
+      <div class="funnel-stage">
+        <div class="stage-box" style="background:#EFF6FF;border-color:#BFDBFE;">
+          <div class="stage-label" style="color:#1D4ED8;">NIM</div>
+          <div class="stage-name" style="color:#1D4ED8;">New In Month</div>
+          <div class="stage-def" style="color:#3B82F6;">Đăng ký & active lần đầu trong tháng</div>
+          <div class="stage-nums">
+            <span class="stage-num" style="background:#DBEAFE;color:#1D4ED8;">HAN ~1,700 avg</span>
+            <span class="stage-num" style="background:#DBEAFE;color:#1D4ED8;">SGN ~1,400 avg</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 1 -->
+      <div class="funnel-arrow">
+        <svg viewBox="0 0 28 40" fill="none">
+          <path d="M4 20 H20 M14 12 L22 20 L14 28" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div style="font-size:9px;font-weight:700;color:var(--success);text-align:center;margin-top:2px;">HAN 81%<br>SGN 76%</div>
+      </div>
+
+      <!-- NLM -->
+      <div class="funnel-stage">
+        <div class="stage-box" style="background:#F0FDF4;border-color:#A7F3D0;">
+          <div class="stage-label" style="color:#065F46;">NLM</div>
+          <div class="stage-name" style="color:#065F46;">New Last Month</div>
+          <div class="stage-def" style="color:#059669;">NIM tháng trước → còn active tháng này (tháng 2)</div>
+          <div class="stage-nums">
+            <span class="stage-num" style="background:#D1FAE5;color:#065F46;">HAN ~1,400 avg</span>
+            <span class="stage-num" style="background:#D1FAE5;color:#065F46;">SGN ~1,000 avg</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 2 -->
+      <div class="funnel-arrow">
+        <svg viewBox="0 0 28 40" fill="none">
+          <path d="M4 20 H20 M14 12 L22 20 L14 28" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div style="font-size:9px;font-weight:700;color:var(--gray-400);text-align:center;margin-top:2px;">Tháng 3+</div>
+      </div>
+
+      <!-- FT / PT split -->
+      <div class="funnel-stage">
+        <div style="display:flex;flex-direction:column;gap:8px;width:100%;">
+          <div class="stage-box" style="background:#FFF7ED;border-color:#FED7AA;">
+            <div class="stage-label" style="color:#C2410C;">FT</div>
+            <div class="stage-name" style="color:#C2410C;">Full-Time</div>
+            <div class="stage-def" style="color:#EA580C;">&gt;150 giờ hoạt động/tháng</div>
+            <div class="stage-nums">
+              <span class="stage-num" style="background:#FEF3C7;color:#92400E;">HAN 13.3% share</span>
+              <span class="stage-num" style="background:#FEF3C7;color:#92400E;">SGN 27.6% share</span>
+            </div>
+          </div>
+          <div class="stage-box" style="background:#F5F3FF;border-color:#DDD6FE;">
+            <div class="stage-label" style="color:#5B21B6;">PT</div>
+            <div class="stage-name" style="color:#5B21B6;">Part-Time</div>
+            <div class="stage-def" style="color:#7C3AED;">≤150 giờ hoạt động/tháng</div>
+            <div class="stage-nums">
+              <span class="stage-num" style="background:#EDE9FE;color:#5B21B6;">HAN 86.7% share</span>
+              <span class="stage-num" style="background:#EDE9FE;color:#5B21B6;">SGN 72.4% share</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 3 -->
+      <div class="funnel-arrow">
+        <svg viewBox="0 0 28 40" fill="none">
+          <path d="M4 20 H20 M14 12 L22 20 L14 28" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div style="font-size:9px;font-weight:700;color:var(--gray-400);text-align:center;margin-top:2px;">Skip 1M</div>
+      </div>
+
+      <!-- Return -->
+      <div class="funnel-stage">
+        <div class="stage-box" style="background:#FFF1F2;border-color:#FECDD3;">
+          <div class="stage-label" style="color:#BE123C;">Return</div>
+          <div class="stage-name" style="color:#BE123C;">Returning</div>
+          <div class="stage-def" style="color:#E11D48;">Active N → Inactive N+1 → Active N+2</div>
+          <div class="stage-nums">
+            <span class="stage-num" style="background:#FFE4E6;color:#BE123C;">HAN ~1,500 avg</span>
+            <span class="stage-num" style="background:#FFE4E6;color:#BE123C;">SGN ~1,100 avg</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Prod gap callout -->
+    <div style="margin-top:20px;padding:14px 18px;background:var(--gray-50);border-radius:12px;display:flex;gap:32px;flex-wrap:wrap;">
+      <div style="font-size:11px;color:var(--gray-600);">
+        <span style="font-weight:700;color:var(--gray-800);">Productivity Gap (Apr 2026):</span>
+        &nbsp;FT avg <strong style="color:#C2410C;">322 stoppoints</strong> (HAN) /
+        <strong style="color:#C2410C;">298</strong> (SGN) &nbsp;·&nbsp;
+        PT avg <strong style="color:#5B21B6;">84</strong> (HAN) /
+        <strong style="color:#5B21B6;">91</strong> (SGN) &nbsp;·&nbsp;
+        <span style="font-weight:700;color:var(--danger);">FT = 3.3–3.8× productive hơn PT</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RISK SNAPSHOT -->
+  <div class="section-title">Risk Snapshot — Apr 2026</div>
+  <div class="risk-grid">
+
+    <div class="risk-card rc-high">
+      <div class="risk-level">⚠ HIGH RISK</div>
+      <div class="risk-seg">FT</div>
+      <div class="risk-name">Full-time · &gt;150h/tháng</div>
+      <div class="risk-row"><span class="risk-city">HAN</span><div class="chips"><span class="chip chip-n">1,307</span><span class="chip chip-r">MoM −35%</span><span class="chip chip-r">YoY −26%</span></div></div>
+      <div class="risk-row"><span class="risk-city">SGN</span><div class="chips"><span class="chip chip-n">2,866</span><span class="chip chip-r">MoM −19%</span><span class="chip chip-r">YoY −18%</span></div></div>
+      <div class="risk-row" style="margin-top:5px;"><span class="risk-city">FT/(FT+PT)</span><div class="chips"><span class="chip chip-r">HAN 13.3%</span><span class="chip chip-r">SGN 27.6%</span></div></div>
+      <div class="risk-note">FT share giảm −7.4pp (HAN) và −5.3pp (SGN) trong 16 tháng. Mỗi FT mất đi = 3.8× PT về capacity. Đây là rủi ro lớn nhất về cấu trúc supply.</div>
+    </div>
+
+    <div class="risk-card rc-critical">
+      <div class="risk-level">🔴 CRITICAL</div>
+      <div class="risk-seg">Return</div>
+      <div class="risk-name">Inactive 1M → Quay lại N+2</div>
+      <div class="risk-row"><span class="risk-city">HAN</span><div class="chips"><span class="chip chip-n">1,242</span><span class="chip chip-r">MoM −42%</span></div></div>
+      <div class="risk-row"><span class="risk-city">SGN</span><div class="chips"><span class="chip chip-n">1,074</span><span class="chip chip-r">MoM −37%</span></div></div>
+      <div class="risk-row" style="margin-top:5px;"><span class="risk-city">Prod (Apr)</span><div class="chips"><span class="chip chip-r">HAN 32 pts</span><span class="chip chip-r">SGN 37 pts</span></div></div>
+      <div class="risk-note">Drop mạnh nhất tháng 4. Prod thấp nhất trong 5 segments. Return driver quay lại nhưng không duy trì được engagement — dấu hiệu incentive chasing.</div>
+    </div>
+
+    <div class="risk-card rc-watch">
+      <div class="risk-level">👁 WATCH</div>
+      <div class="risk-seg">NIM</div>
+      <div class="risk-name">Tài xế mới (tháng đăng ký)</div>
+      <div class="risk-row"><span class="risk-city">HAN</span><div class="chips"><span class="chip chip-n">1,813</span><span class="chip chip-r">MoM −29%</span><span class="chip chip-g">YoY +61%</span></div></div>
+      <div class="risk-row"><span class="risk-city">SGN</span><div class="chips"><span class="chip chip-n">1,585</span><span class="chip chip-r">MoM −31%</span><span class="chip chip-g">YoY +59%</span></div></div>
+      <div class="risk-row" style="margin-top:5px;"><span class="risk-city">Conv → NLM</span><div class="chips"><span class="chip chip-g">HAN 81.2%</span><span class="chip chip-o">SGN 75.9%</span></div></div>
+      <div class="risk-note">NIM Apr giảm sau spike Mar. Conversion rate NIM→NLM ổn định (~76–81%) — vấn đề không phải dropout tháng đầu mà là volume tuyển mới dao động mạnh.</div>
+    </div>
+
+    <div class="risk-card rc-stable">
+      <div class="risk-level">✓ STABLE</div>
+      <div class="risk-seg">PT</div>
+      <div class="risk-name">Part-time · ≤150h/tháng</div>
+      <div class="risk-row"><span class="risk-city">HAN</span><div class="chips"><span class="chip chip-n">8,493</span><span class="chip chip-o">MoM −8%</span><span class="chip chip-g">YoY +2%</span></div></div>
+      <div class="risk-row"><span class="risk-city">SGN</span><div class="chips"><span class="chip chip-n">7,531</span><span class="chip chip-g">MoM +6%</span><span class="chip chip-n">YoY −1%</span></div></div>
+      <div class="risk-row" style="margin-top:5px;"><span class="risk-city">Prod (Apr)</span><div class="chips"><span class="chip chip-n">HAN 84 pts</span><span class="chip chip-n">SGN 91 pts</span></div></div>
+      <div class="risk-note">Ổn định nhất — chiếm ~55% tổng active. HAN nhẹ giảm tháng 4. Cần monitor vì tuyệt đối lớn nhất — 1% thay đổi = ~85 driver.</div>
+    </div>
+
+    <div class="risk-card rc-anomaly">
+      <div class="risk-level">⚡ ANOMALY</div>
+      <div class="risk-seg">NLM</div>
+      <div class="risk-name">NIM tháng trước (tháng 2)</div>
+      <div class="risk-row"><span class="risk-city">HAN</span><div class="chips"><span class="chip chip-n">1,991</span><span class="chip chip-p">MoM +171%</span></div></div>
+      <div class="risk-row"><span class="risk-city">SGN</span><div class="chips"><span class="chip chip-n">1,654</span><span class="chip chip-p">MoM +148%</span></div></div>
+      <div class="risk-row" style="margin-top:5px;"><span class="risk-city">Nguồn gốc</span><div class="chips"><span class="chip chip-p">NIM Mar tăng spike</span></div></div>
+      <div class="risk-note">NLM Apr cao vì NIM Mar rất cao (2,550/2,281). Đây là lag effect tự nhiên, không phải anomaly thực. NLM Apr-26 = carry-over của NIM Mar-26.</div>
+    </div>
+
+  </div>
+
+  <!-- TREND CHARTS -->
+  <div class="section-title" style="margin-top:36px;">Trend 16 Tháng — Active Unique Driver (1.ALL)</div>
+  <div class="chart-grid-2">
+    <div class="chart-card">
+      <div class="chart-title">HAN — Số Tài Xế Active</div>
+      <div class="chart-sub">Số tài xế duy nhất mỗi tháng, theo segment</div>
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#0E4174"></div>PT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#FF7F32"></div>FT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#10B981"></div>NIM</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#8B5CF6"></div>NLM</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#EF4444"></div>Return</div>
+      </div>
+      <svg class="trend" id="hanTrend" viewBox="0 0 560 180" height="180"></svg>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">SGN — Số Tài Xế Active</div>
+      <div class="chart-sub">Số tài xế duy nhất mỗi tháng, theo segment</div>
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#0E4174"></div>PT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#FF7F32"></div>FT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#10B981"></div>NIM</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#8B5CF6"></div>NLM</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#EF4444"></div>Return</div>
+      </div>
+      <svg class="trend" id="sgnTrend" viewBox="0 0 560 180" height="180"></svg>
+    </div>
+  </div>
+
+  <!-- FT RATIO DECLINE -->
+  <div class="section-title" style="margin-top:28px;">FT/(FT+PT) Ratio — Xu hướng Suy giảm Chất lượng Supply</div>
+  <div class="chart-grid-2">
+    <div class="chart-card">
+      <div class="chart-title">HAN — FT Share trong Established Drivers</div>
+      <div class="chart-sub">FT/(FT+PT) · Jan-25: 20.7% → Apr-26: 13.3% <span style="color:var(--danger);font-weight:700;">(-7.4pp)</span></div>
+      <svg class="trend" id="hanFTRatio" viewBox="0 0 560 130" height="130"></svg>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">SGN — FT Share trong Established Drivers</div>
+      <div class="chart-sub">FT/(FT+PT) · Jan-25: 32.9% → Apr-26: 27.6% <span style="color:var(--danger);font-weight:700;">(-5.3pp)</span></div>
+      <svg class="trend" id="sgnFTRatio" viewBox="0 0 560 130" height="130"></svg>
+    </div>
+  </div>
+
+  <!-- NIM CONVERSION TABLE -->
+  <div class="section-title" style="margin-top:28px;">NIM → NLM Conversion Rate — Retention Tháng Đầu Tài Xế Mới</div>
+  <div class="chart-grid-2">
+    <div class="conv-table-wrap">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--gray-100);font-size:13px;font-weight:700;color:var(--blue);">HAN — Avg: 81.2%</div>
+      <table class="conv" id="hanConv"></table>
+    </div>
+    <div class="conv-table-wrap">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--gray-100);font-size:13px;font-weight:700;color:var(--blue);">SGN — Avg: 75.9%</div>
+      <table class="conv" id="sgnConv"></table>
+    </div>
+  </div>
+
+  <!-- MOM HEATMAP -->
+  <div class="section-title" style="margin-top:28px;">MoM% Heatmap — Biến động từng tháng</div>
+  <div class="heatmap-wrap">
+    <div class="heatmap-header">
+      <span>Month-over-Month Change (%) theo Segment</span>
+      <div style="display:flex;gap:8px;font-size:9.5px;font-weight:700;">
+        <span style="color:var(--danger)">■ &lt;−15%</span>
+        <span style="color:#D97706">■ −5→−15%</span>
+        <span style="color:var(--gray-400)">■ Flat</span>
+        <span style="color:#059669">■ +5→+15%</span>
+        <span style="color:#1D4ED8">■ &gt;+15%</span>
+        <span style="color:#7C3AED">■ &gt;+50%</span>
+      </div>
+    </div>
+    <table class="hmap" id="momTable"></table>
+  </div>
+
+  <!-- PROD BARS -->
+  <div class="section-title" style="margin-top:28px;">Avg Stoppoints Completed — Apr 2026 vs Mar 2026</div>
+  <div class="chart-grid-2">
+    <div class="chart-card">
+      <div class="chart-title">HAN</div>
+      <div class="chart-sub">Trung bình stoppoints hoàn thành / driver (tháng)</div>
+      <div style="margin-top:14px;" id="hanProd"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">SGN</div>
+      <div class="chart-sub">Trung bình stoppoints hoàn thành / driver (tháng)</div>
+      <div style="margin-top:14px;" id="sgnProd"></div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="section-title" style="margin-top:36px;">Key Insights & Recommended Actions</div>
+  <div class="insight-grid">
+
+    <div class="ins red">
+      <div class="ins-icon">📉</div>
+      <div class="ins-title">FT: Sụt giảm cấu trúc — Rủi ro capacity cao nhất</div>
+      <div class="ins-body">
+        FT share HAN giảm <strong>20.7% → 13.3%</strong> (−7.4pp), SGN <strong>32.9% → 27.6%</strong> (−5.3pp). FT có prod <strong>3.3–3.8× PT</strong> → mỗi FT rời đi ảnh hưởng lớn hơn nhiều so với số tuyệt đối.<br><br>
+        <strong>Hypothesis:</strong> FT driver đang giảm giờ hoạt động xuống dưới 150h/tháng → "hạ tầng" sang PT, hoặc rời platform. Cần track income FT vs ngưỡng 150h — liệu driver có đủ đơn để duy trì FT status?<br><br>
+        <strong>Action:</strong> Deep-dive EPH của FT theo service. Nếu EPH ổn → vấn đề là giờ cơ hội; nếu EPH giảm → vấn đề supply-demand mismatch.
+      </div>
+    </div>
+
+    <div class="ins orange">
+      <div class="ins-icon">🔄</div>
+      <div class="ins-title">Return: Quay lại nhưng không bền — Incentive chasing</div>
+      <div class="ins-body">
+        Return prod chỉ <strong>32–37 stoppoints</strong>/tháng — thấp nhất trong tất cả segments (PT=84–91, FT=298–322). Pattern biên độ rộng: Mar +47% → Apr −42%.<br><br>
+        <strong>Hypothesis:</strong> Return driver quay lại theo incentive ngắn hạn (campaign tháng 3?), sau đó rút khi campaign kết thúc. Đây là "chất lượng thấp" — chi incentive nhưng contribution thực thấp.<br><br>
+        <strong>Action:</strong> Phân tích trigger nào kéo Return tháng 3 (campaign? seasonal?). Xem xét cohort Return theo nguồn gốc — Return từ FT khác Return từ PT về giá trị.
+      </div>
+    </div>
+
+    <div class="ins blue">
+      <div class="ins-icon">🔬</div>
+      <div class="ins-title">NIM: Volume ổn định — Pipeline recruitment cần đa dạng hóa</div>
+      <div class="ins-body">
+        Conversion NIM→NLM ổn định <strong>81.2% (HAN) / 75.9% (SGN)</strong> → tháng đầu tiên không phải điểm rò rỉ chính. Vấn đề là volume NIM dao động ±60% giữa các tháng.<br><br>
+        <strong>Tín hiệu tích cực:</strong> YoY NIM tăng +61% HAN, +59% SGN → recruitment năm 2026 tốt hơn 2025.<br><br>
+        <strong>Action:</strong> Focus vào ổn định hóa monthly NIM (target floor ~1,500 HAN / ~1,200 SGN). Thiếu ổn định NIM → NLM cũng dao động → khó forecast supply tháng tới.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COHORT RETENTION MATRIX -->
+  <div class="section-title" style="margin-top:36px;">NIM Cohort Retention Matrix</div>
+  <div style="font-size:10px;color:var(--gray-400);margin-bottom:12px;">% drivers còn active sau N tháng kể từ tháng NIM · <span style="background:#FEF3C7;color:#92400E;padding:1px 6px;border-radius:4px;font-weight:600;">*</span> = data tháng 5/2026 chưa đầy đủ (query ngày 6/5)</div>
+  <div class="chart-grid-2" style="margin-bottom:16px;">
+    <div class="heatmap-wrap"><div class="heatmap-header"><span>📍 HÀ NỘI</span></div><table class="hmap" id="retHAN"></table></div>
+    <div class="heatmap-wrap"><div class="heatmap-header"><span>📍 TP.HỒ CHÍ MINH</span></div><table class="hmap" id="retSGN"></table></div>
+  </div>
+
+  <!-- FT TRANSITION TREND -->
+  <div class="section-title" style="margin-top:28px;">FT Driver Transition — Downgrade là nguyên nhân chính mất FT</div>
+  <div class="chart-grid-2">
+    <div class="chart-card">
+      <div class="chart-title">HÀ NỘI — % FT Downgrade → PT mỗi tháng</div>
+      <div class="chart-sub">Tháng 4/2026 bị loại (data artifact — May chưa đủ)</div>
+      <div class="legend" style="margin-top:8px;">
+        <div class="leg-item"><div class="leg-dot" style="background:#10B981"></div>Retain FT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#F59E0B"></div>Downgrade → PT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#EF4444"></div>Churn hẳn</div>
+      </div>
+      <svg class="trend" id="ftHAN" viewBox="0 0 560 160" style="margin-top:4px;"></svg>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">TP.HỒ CHÍ MINH — % FT Downgrade → PT mỗi tháng</div>
+      <div class="chart-sub">Tháng 4/2026 bị loại (data artifact — May chưa đủ)</div>
+      <div class="legend" style="margin-top:8px;">
+        <div class="leg-item"><div class="leg-dot" style="background:#10B981"></div>Retain FT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#F59E0B"></div>Downgrade → PT</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#EF4444"></div>Churn hẳn</div>
+      </div>
+      <svg class="trend" id="ftSGN" viewBox="0 0 560 160" style="margin-top:4px;"></svg>
+    </div>
+  </div>
+
+  <!-- APRIL CAUSES -->
+  <div class="section-title" style="margin-top:28px;">Phân Tích — Tháng 4 & Xu Hướng Cohort 2026</div>
+  <div class="insight-grid">
+    <div class="ins orange">
+      <div class="ins-icon">📅</div>
+      <div class="ins-title">Apr-26 M+1 thấp = Data Artifact, không phải thực</div>
+      <div class="ins-body">
+        M+1 Apr-26 <strong>47.8% HAN / 51.6% SGN</strong> trông bất thường nhưng query chạy ngày 6/5 — chỉ capture <strong>6 ngày đầu tháng 5</strong>. Driver active từ 7/5 trở đi chưa được tính. Con số thực khi tháng 5 kết thúc sẽ phục hồi về ~78–81% HAN và ~72–75% SGN.<br><br>
+        <strong>Tương tự:</strong> Mar-26 M+2 = 30.6%, Feb-26 M+3 = 28.9% — đều là May-26 partial. Bỏ qua các ô có dấu * khi ra quyết định.
+      </div>
+    </div>
+    <div class="ins red">
+      <div class="ins-icon">📉</div>
+      <div class="ins-title">Cohort 2026 Q1 yếu hơn Mid-2025 rõ rệt</div>
+      <div class="ins-body">
+        M+3 HAN của cohort <strong>Jul–Nov 2025: 48–56%</strong>. Cohort 2026 đã rụng về <strong>Jan-26: 35.8% / Feb-26: 28.9%</strong> — thấp hơn 12–20pp.<br><br>
+        <strong>3 nguyên nhân khả dĩ:</strong><br>
+        (1) <strong>Feb-26 shock</strong>: downgrade FT HAN tăng vọt 51.2%, lan ra toàn bộ cohort đang active tháng đó<br>
+        (2) <strong>Chất lượng NIM thay đổi</strong>: Dec-25/Jan-26 có NIM lớn (2,299–2,552 HAN) có thể do campaign thu hút driver cơ hội<br>
+        (3) <strong>Cạnh tranh</strong>: Grab/Be tăng promo đầu năm 2026 kéo giờ online sang platform khác
+      </div>
+    </div>
+    <div class="ins blue">
+      <div class="ins-icon">🎯</div>
+      <div class="ins-title">Jul–Oct 2025 làm đúng điều gì? — Lever cần tái tạo</div>
+      <div class="ins-body">
+        Cohort Jul–Oct 2025 có M+3 cao nhất toàn timeline — <strong>48–56% HAN, 42–44% SGN</strong>, vượt trội 12–16pp so với Q1/Q2 2025 và Q1 2026.<br><br>
+        <strong>Điểm khác biệt cần điều tra:</strong><br>
+        · Có campaign onboarding NLM đặc biệt trong tháng 9–11/2025?<br>
+        · EPH / incentive tháng đó có cao hơn bình thường?<br>
+        · Điều kiện thị trường (demand cao) giúp driver kiếm đủ để ở lại?<br><br>
+        Nếu xác định được trigger → đây là playbook để apply lại Q3/Q4 2026.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Driver Management · Lê Phương Khanh · Ahamove 2026</span>
+    <span>active trend.xlsx + Q3 Cohort Retention + Q4 FT Transition · 2026-05-06</span>
+  </div>
+
+</div>
+
+<script>
+const months = ['Jan-25','Feb-25','Mar-25','Apr-25','May-25','Jun-25','Jul-25','Aug-25','Sep-25','Oct-25','Nov-25','Dec-25','Jan-26','Feb-26','Mar-26','Apr-26'];
+const segs = ['PT','FT','NIM','NLM','Return'];
+const segColors = { PT:'#0E4174', FT:'#FF7F32', NIM:'#10B981', NLM:'#8B5CF6', Return:'#EF4444' };
+
+const data = {
+  HAN: {
+    PT:     [8334,6670,8253,8311,8074,7819,7882,7544,8053,8825,9541,10013,10122,10350,9191,8493],
+    FT:     [2176,2859,1471,1759,2018,1765,1601,1692,1681,1658,1584,1419,1729,1643,2007,1307],
+    NIM:    [1172,1502,1778,1125,1986,2086,2236,1788,2117,1768,2031,2299,1878,875,2550,1813],
+    NLM:    [1775,883,1284,1417,926,1587,1593,1839,1513,1788,1471,1730,1818,1461,735,1991],
+    Return: [1245,1108,1804,1229,1275,1182,1332,1278,1617,1619,1560,1743,1786,1467,2152,1242]
+  },
+  SGN: {
+    PT:     [8075,6871,8245,7596,7234,7308,7549,6978,7004,7084,7028,7309,7192,7165,7091,7531],
+    FT:     [3968,4541,3133,3479,3498,3163,2852,3185,2956,2880,2906,2815,3267,3346,3520,2866],
+    NIM:    [645,1205,1159,997,1417,1480,1415,1071,1176,1416,1612,2679,1908,793,2281,1585],
+    NLM:    [995,461,943,861,734,1083,1061,1081,830,930,1098,1313,1976,1349,668,1654],
+    Return: [928,1414,1372,973,1213,1132,1117,1028,1049,1054,1034,1220,1066,910,1695,1074]
+  }
+};
+
+const nimConv = {
+  HAN: [75.3,85.5,79.7,82.3,79.9,76.4,82.2,84.6,84.5,83.2,85.2,79.1,77.8,84.0,78.1],
+  SGN: [71.5,78.3,74.3,73.6,76.4,71.7,76.4,77.5,79.1,77.5,81.5,73.8,70.7,84.2,72.5]
+};
+
+const ftRatio = {
+  HAN: [20.7,30.0,15.1,17.5,20.0,18.4,16.9,18.3,17.3,15.8,14.2,12.4,14.6,13.7,17.9,13.3],
+  SGN: [32.9,39.8,27.5,31.4,32.6,30.2,27.4,31.3,29.7,28.9,29.3,27.8,31.2,31.8,33.2,27.6]
+};
+
+const prodData = {
+  HAN: { FT:[299.2,354.2,328.8,232.7,278.0,321.5], NIM:[53.8,57.9,57.7,34.4,54.9,51.1], NLM:[88.2,89.7,77.9,62.0,81.2,68.6], PT:[81.2,91.6,85.2,64.7,78.8,84.0], Return:[38.8,38.8,37.1,25.5,35.3,32.3] },
+  SGN: { FT:[277.0,310.9,297.9,215.2,261.5,298.3], NIM:[51.4,48.1,51.1,39.6,57.7,59.2], NLM:[107.2,101.1,89.8,77.3,110.6,93.8], PT:[94.3,99.2,93.4,72.4,89.6,91.0], Return:[35.9,48.2,45.3,32.0,47.9,37.1] }
+};
+
+function drawLine(svgId, cityData, viewH=180) {
+  const svg = document.getElementById(svgId);
+  const W=560, padL=36, padR=14, padT=10, padB=24;
+  const chartW=W-padL-padR, chartH=viewH-padT-padB, n=months.length;
+  let all=[]; segs.forEach(s=>all=all.concat(cityData[s]));
+  const maxV=Math.max(...all), minV=0;
+  const xS=i=>padL+(i/(n-1))*chartW, yS=v=>padT+chartH-((v-minV)/(maxV-minV))*chartH;
+  let h='';
+  [0,0.25,0.5,0.75,1].forEach(t=>{
+    const y=padT+chartH*(1-t), val=Math.round(t*maxV);
+    h+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#F3F4F6" stroke-width="1"/>`;
+    h+=`<text x="${padL-4}" y="${y+3}" font-size="8" fill="#9CA3AF" text-anchor="end" font-family="Lexend">${val>=1000?Math.round(val/100)/10+'K':val}</text>`;
+  });
+  months.forEach((m,i)=>{ if(i%3===0||i===n-1) h+=`<text x="${xS(i)}" y="${viewH-4}" font-size="7.5" fill="#9CA3AF" text-anchor="middle" font-family="Lexend">${m}</text>`; });
+  segs.forEach(seg=>{
+    const vals=cityData[seg];
+    const pts=vals.map((v,i)=>`${xS(i).toFixed(1)},${yS(v).toFixed(1)}`).join(' ');
+    h+=`<polyline points="${pts}" fill="none" stroke="${segColors[seg]}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>`;
+    h+=`<circle cx="${xS(n-1)}" cy="${yS(vals[n-1])}" r="3" fill="${segColors[seg]}"/>`;
+  });
+  svg.innerHTML=h;
+}
+
+function drawRatioLine(svgId, ratioArr, color, minPct, maxPct, viewH=130) {
+  const svg=document.getElementById(svgId);
+  const W=560, padL=36, padR=14, padT=10, padB=24;
+  const chartW=W-padL-padR, chartH=viewH-padT-padB, n=months.length;
+  const xS=i=>padL+(i/(n-1))*chartW;
+  const yS=v=>padT+chartH-((v-minPct)/(maxPct-minPct))*chartH;
+  let h='';
+  [minPct, (minPct+maxPct)/2, maxPct].forEach(t=>{
+    const y=yS(t);
+    h+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#F3F4F6" stroke-width="1"/>`;
+    h+=`<text x="${padL-4}" y="${y+3}" font-size="8" fill="#9CA3AF" text-anchor="end" font-family="Lexend">${t.toFixed(0)}%</text>`;
+  });
+  months.forEach((m,i)=>{ if(i%3===0||i===n-1) h+=`<text x="${xS(i)}" y="${viewH-4}" font-size="7.5" fill="#9CA3AF" text-anchor="middle" font-family="Lexend">${m}</text>`; });
+  // Shade area under
+  const pts=ratioArr.map((v,i)=>`${xS(i).toFixed(1)},${yS(v).toFixed(1)}`).join(' ');
+  const areaBot=padT+chartH;
+  h+=`<polygon points="${xS(0)},${areaBot} ${pts} ${xS(n-1)},${areaBot}" fill="${color}" opacity="0.08"/>`;
+  h+=`<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  ratioArr.forEach((v,i)=>{ if(i===0||i===n-1) h+=`<circle cx="${xS(i)}" cy="${yS(v)}" r="4" fill="${color}"/>`; });
+  // Trend line (simple linear)
+  const xMean=(n-1)/2, yMean=ratioArr.reduce((a,b)=>a+b,0)/n;
+  let num=0,den=0;
+  ratioArr.forEach((v,i)=>{ num+=(i-xMean)*(v-yMean); den+=(i-xMean)**2; });
+  const slope=num/den, intercept=yMean-slope*xMean;
+  const tx1=xS(0), ty1=yS(intercept), tx2=xS(n-1), ty2=yS(slope*(n-1)+intercept);
+  h+=`<line x1="${tx1}" y1="${ty1}" x2="${tx2}" y2="${ty2}" stroke="${color}" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>`;
+  svg.innerHTML=h;
+}
+
+function buildConvTable(tableId, city) {
+  const t=document.getElementById(tableId);
+  const nim_vals={HAN:[1172,1502,1778,1125,1986,2086,2236,1788,2117,1768,2031,2299,1878,875,2550],SGN:[645,1205,1159,997,1417,1480,1415,1071,1176,1416,1612,2679,1908,793,2281]};
+  const nlm_vals={HAN:[883,1284,1417,926,1587,1593,1839,1513,1788,1471,1730,1818,1461,735,1991],SGN:[461,943,861,734,1083,1061,1081,830,930,1098,1313,1976,1349,668,1654]};
+  const convRates=nimConv[city];
+  let h=`<thead><tr><th>NIM Month</th><th>NIM</th><th>NLM Next</th><th>Conv%</th></tr></thead><tbody>`;
+  months.slice(0,15).forEach((m,i)=>{
+    const cv=convRates[i];
+    const col=cv>=83?'color:#059669;background:#D1FAE5':cv>=78?'color:#D97706;background:#FEF3C7':'color:#DC2626;background:#FEE2E2';
+    h+=`<tr><td>${m}</td><td>${nim_vals[city][i].toLocaleString()}</td><td>${nlm_vals[city][i].toLocaleString()}</td><td style="${col};font-weight:700;font-size:11px;">${cv}%</td></tr>`;
+  });
+  h+=`</tbody>`;
+  t.innerHTML=h;
+}
+
+function buildMomTable() {
+  const t=document.getElementById('momTable');
+  const momColor=v=>{
+    if(v===null) return 'background:#F9FAFB;color:#9CA3AF';
+    if(v<-15) return 'background:#FEE2E2;color:#DC2626';
+    if(v<-5)  return 'background:#FEF3C7;color:#D97706';
+    if(v<5)   return 'background:#F9FAFB;color:#9CA3AF';
+    if(v<15)  return 'background:#D1FAE5;color:#059669';
+    if(v<50)  return 'background:#DBEAFE;color:#1D4ED8';
+    return 'background:#EDE9FE;color:#7C3AED';
+  };
+  let h=`<thead><tr><th>Period</th>${segs.map(s=>`<th>${s}</th>`).join('')}<th>Total</th></tr></thead><tbody>`;
+  ['HAN','SGN'].forEach(city=>{
+    h+=`<tr class="city-row"><td colspan="${segs.length+2}">${city==='HAN'?'📍 HÀ NỘI':'📍 TP.HỒ CHÍ MINH'}</td></tr>`;
+    const totals=months.map((_,i)=>segs.reduce((s,seg)=>s+data[city][seg][i],0));
+    months.forEach((m,i)=>{
+      h+=`<tr><td style="padding-left:16px">${m}</td>`;
+      segs.forEach(seg=>{
+        const vals=data[city][seg];
+        const mom=i===0?null:(vals[i]-vals[i-1])/vals[i-1]*100;
+        const style=momColor(mom);
+        h+=`<td style="${style}">${mom===null?'—':(mom>0?'+':'')+mom.toFixed(1)+'%'}</td>`;
+      });
+      const tm=i===0?null:(totals[i]-totals[i-1])/totals[i-1]*100;
+      h+=`<td style="${momColor(tm)}">${tm===null?'—':(tm>0?'+':'')+tm.toFixed(1)+'%'}</td></tr>`;
+    });
+  });
+  h+=`</tbody>`;
+  t.innerHTML=h;
+}
+
+function drawProd(containerId, city) {
+  const c=document.getElementById(containerId);
+  const pd=prodData[city];
+  const maxVal=370;
+  let h='';
+  segs.forEach(seg=>{
+    const vals=pd[seg], apr=vals[5], mar=vals[4];
+    const diff=(apr-mar), diffStr=(diff>=0?'+':'')+diff.toFixed(1);
+    const diffColor=diff>=0?'var(--success)':'var(--danger)';
+    const pct=(apr/maxVal*100).toFixed(1);
+    h+=`<div class="prod-seg-row">
+      <div class="prod-seg-label">
+        <span class="prod-seg-name" style="color:${segColors[seg]}">${seg}</span>
+        <span class="prod-seg-val">${apr} pts <span style="color:${diffColor};font-size:9.5px;">(${diffStr} vs Mar)</span></span>
+      </div>
+      <div class="prod-track"><div class="prod-fill" style="width:${pct}%;background:${segColors[seg]};opacity:0.8;"></div></div>
+    </div>`;
+  });
+  c.innerHTML=h;
+}
+
+// Render all
+drawLine('hanTrend', data.HAN, 180);
+drawLine('sgnTrend', data.SGN, 180);
+drawRatioLine('hanFTRatio', ftRatio.HAN, '#FF7F32', 8, 35, 130);
+drawRatioLine('sgnFTRatio', ftRatio.SGN, '#FF7F32', 20, 45, 130);
+buildConvTable('hanConv', 'HAN');
+buildConvTable('sgnConv', 'SGN');
+buildMomTable();
+drawProd('hanProd', 'HAN');
+drawProd('sgnProd', 'SGN');
+</script>
+</body>
+</html>

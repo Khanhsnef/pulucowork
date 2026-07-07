@@ -8,23 +8,23 @@
 
 > Cả 3 rank đều xét bằng **DQS** (Driver Quality Score). Không dùng AR/FR/Rating riêng lẻ.
 
-| Rank | DQS | DCR (%) | Productivity (stp/tháng) |
-| --- | --- | --- | --- |
-| R1 Elite | ≥ 80 | ≤ 10 | ≥ 280 |
-| R2 Active | ≥ 75 | ≤ 10 | ≥ 210 |
-| R3 Standard | ≥ 75 | ≤ 15 | ≥ 70 |
-| Unranked | < 75 | — | — |
+| Rank | DQS | Productivity (stp/tháng) |
+| --- | --- | --- |
+| R1 Elite | ≥ 80 | ≥ 280 |
+| R2 Active | ≥ 75 | ≥ 210 |
+| R3 Standard | ≥ 75 | ≥ 70 |
+| Unranked | < 75 | — |
 
 ---
 
-## 2. Fleet Target Ratio (% of weekly actives)
+## 2. Fleet Target Ratio (% of monthly actives)
 
-| Rank | Target % | Số lượng (~10.5k weekly) |
+| Rank | Target % | Số lượng |
 |------|----------|--------------------------|
-| R1 💎 Kim Cương | 15% | ~1.575 |
-| R2 🥇 Vàng | 35% | ~3.675 |
-| R3 🥈 Bạc | 35% | ~3.675 |
-| Unranked | 15% | ~1.575 |
+| R1 💎 Kim Cương | 10-15% | ~1.000 - 1.500 |
+| R2 🥇 Vàng | 10-15% | ~1.000 - 1.500 |
+| R3 🥈 Bạc | 30-40% | ~4.000 - 6.000 |
+| Unranked | 30-40% | ~4.000 - 6.000 |
 
 ---
 
@@ -35,7 +35,7 @@
 | R1 Elite | Tất cả (L2 - L6) | **00:00 - 10:00** | Ưu tiên tuyệt đối FCFS |
 | R2 Active | Tất cả (L2 - L6) | **10:00 - 14:00** | Ưu tiên sau R1 |
 | R3 Standard | Tất cả (L2 - L6) | **14:00 - 24:00** | Ưu tiên sau R2 |
-| Unranked | L6 MASS (slot trống còn lại) | **Ngày 2+** | Chỉ đăng ký slot thừa |
+| Unranked | L5-6 MASS (slot trống còn lại) | **Ngày 2+** | Chỉ đăng ký slot thừa |
 
 ---
 
@@ -57,65 +57,63 @@
 | Ca Tối | 15% | 40% | 45% |
 | Ca Full-day | 50% | 50% | — |
 
-> Unranked không có structured slot — nhận đơn on-demand từ khi đơn từ các layer tràn xuống.
-
 ---
 
-## 7. AhaBenefits — Point Economy
+## 7. Quyền lợi theo Layer (AhaBenefits)
 
 ### Công thức tích điểm
 ```
-earned_pts = round( round(trip_GSV ÷ 5,000) × layer_multiplier )
+earned_pts = round( round(trip_GSV ÷ 1,000) × layer_multiplier )
 ```
 
-> Tỉ lệ quy đổi: **5.000đ thu nhập = 1 điểm base**
+> Tỉ lệ quy đổi: **1.000đ thu nhập = 1 điểm base**
 
-### Hệ số Layer & Bonus/ca
+### Hệ số Layer & Đội trưởng
 
-| Layer | Hệ số × | Bonus/ca | Ghi chú |
+| Layer | Hệ số × | Hỗ trợ | Ghi chú |
 | --- | --- | --- | --- |
-| L2 Minizone | ×1.5 | +30 pts | R1 priority zone |
-| L3 Mediumzone | ×1.3 | +25 pts | R2 priority zone |
-| L4 Bigzone | ×1.1 | +20 pts | R3 priority zone |
-| L5 Cityzone | ×1.0 | — | |
-| L6 MASS | ×1.0 | — | Unranked |
-| **Overflow** | **×1.0** | — | Đơn tràn ngoài layer hoạt động |
+| L2 Minizone | ×1.5 | Có Đội trưởng hỗ trợ | R1 priority zone |
+| L3 Mediumzone | ×1.3 | Có Đội trưởng hỗ trợ | R2 priority zone |
+| L4 Bigzone | ×1.1 | Không | R3 priority zone |
+| L5 Cityzone | ×1.0 | Không | |
+| L6 MASS | ×1.0 | Không | Unranked |
+| **Overflow** | **×1.0** | Không | Đơn tràn ngoài layer hoạt động |
 
-> Hệ số áp theo **đơn hàng**, không theo rank tài xế. Tài xế R1 nhận đơn overflow từ L3 vẫn chỉ được ×1.3 (hệ số L3), không phải ×1.5.
+> Hệ số áp theo **đơn hàng** và tài xế Layer, không theo rank tài xế. Tài xế R1 đăng ký ca L3 và nhận đơn overflow từ L3 vẫn chỉ được ×1.3 (hệ số L3), không phải ×1.5. Khi Tài xế không đăng ký hoặc không trong ca hoạt động thì thì hệ số nhân điểm của đơn hàng đó là 1.0. 
 
-### Ước tính pts/ca (EPH trung bình × Ca 4 tiếng + Bonus)
+### Ước tính pts/ca (EPH trung bình × Ca 4 tiếng)
 
-| Rank | EPH giả định | Base pts | × Hệ số | Bonus ca | Tổng/ca |
-| --- | --- | --- | --- | --- | --- |
-| R1 · L2 | ~70k/h → 280k/ca | 56 | 56 × 1.5 = 84 | +30 | **114** |
-| R2 · L3 | ~65k/h → 260k/ca | 52 | 52 × 1.3 = 68 | +25 | **93** |
-| R3 · L4 | ~60k/h → 240k/ca | 48 | 48 × 1.1 = 53 | +20 | **73** |
-| L6 MASS | ~55k/h → 220k/ca | 44 | 44 × 1.0 = 44 | — | **44** |
-| Overflow (any) | — | base | ×1.0 | — | base only |
+| Rank | EPH giả định | Base pts | × Hệ số | Tổng/ca |
+| --- | --- | --- | --- | --- |
+| R1 · L2 | ~70k/h → 280k/ca | 280 | 280 × 1.5 = 420 | **420** |
+| R2 · L3 | ~65k/h → 260k/ca | 260 | 260 × 1.3 = 338 | **338** |
+| R3 · L4 | ~60k/h → 240k/ca | 240 | 240 × 1.1 = 264 | **264** |
+| L6 MASS | ~55k/h → 220k/ca | 220 | 220 × 1.0 = 220 | **220** |
+| Overflow (any) | — | base | ×1.0 | base only |
 
 ### Calibration Formula — Mục tiêu đổi điểm/tháng
 
 ```text
 Pts tích/tháng (avg, 22 ca):
-  R1: 114 × 22 = 2.508 pts  (15% fleet)
-  R2: 93 × 22 = 2.046 pts  (35% fleet)
-  R3: 73 × 22 = 1.606 pts  (35% fleet)
-  L6: 44 × 22 = 968 pts  (15% fleet)
-  Weighted avg ≈ 1.836 pts/tháng
+  R1: 420 × 22 = 9.240 pts  (15% fleet)
+  R2: 338 × 22 = 7.436 pts  (35% fleet)
+  R3: 264 × 22 = 5.808 pts  (35% fleet)
+  L6: 220 × 22 = 4.840 pts  (15% fleet)
+  Weighted avg ≈ 6.747 pts/tháng
 
-80% burn → paid reward:  1.836 × 80% = ~1.468 pts ≈ 50.000 VND
-  → Paid reward 50k = 1.500 pts (làm tròn)
+80% burn → paid reward:  6.747 × 80% = ~5.398 pts ≈ 50.000 VND
+  → Paid reward 50k = 5.000 pts (cân chỉnh lại giá trị điểm: 1 điểm = 10đ)
 
-20% còn lại → free partner:  ~360 pts/tháng
-  → Free items giá 40–170 pts → đổi được 2–5 món/tháng
+20% còn lại → free partner:  ~1.349 pts/tháng
+  → Free items giá 200–850 pts → đổi được 1–4 món/tháng
 ```
 
-| Rank | Pts/tháng | 80% → Paid 50k | 20% → Free items |
+| Rank | Pts/tháng | 80% → Paid 50k (5.000p) | 20% → Free items |
 | --- | --- | --- | --- |
-| R1 | 2.508 | ✅ 1.500 pts (dư ~1.008) | ~1.000 pts free |
-| R2 | 2.046 | ✅ 1.500 pts (dư ~546) | ~500 pts free |
-| R3 | 1.606 | ✅ 1.500 pts (~1 tháng) | ~100 pts free |
-| L6 | 968 | ❌ cần ~1.5 tháng | — động lực lên R3 |
+| R1 | 9.240 | ✅ 5.000 pts (dư ~4.240) | ~4.000 pts free |
+| R2 | 7.436 | ✅ 5.000 pts (dư ~2.436) | ~2.000 pts free |
+| R3 | 5.808 | ✅ 5.000 pts (dư ~808) | ~4.000 pts free |
+| L6 | 4.840 | ❌ cần ~1.1 tháng | — động lực lên R3 |
 
 ### Quy tắc điểm
 
@@ -127,48 +125,48 @@ Pts tích/tháng (avg, 22 ca):
 
 ## 8. AhaBenefits Catalog — Point Costs
 
-> **Công thức giá điểm: Điểm = Giá trị thực (VND) ÷ 35** (đối với Paid Items)
+> **Công thức giá điểm: Điểm = Giá trị thực (VND) ÷ 10** (đối với Paid Items)
 > Catalog đổi điểm mới chia làm Free Items (Partnership tài trợ) và Paid Items (Ahamove trả tiền).
 
 ### A. Partner Rewards — Phân theo Rank
 
-> Unranked / L6 không có quyền truy cập catalog — tạo động lực đạt R3.
+> Unranked / L6 không có quyền truy cập catalog, chỉ truy cập được các rewards mass — tạo động lực đạt R3.
 
 #### Free Items (Partnership — 0 cash cost cho Ahamove)
 
 ##### 🥈 R3+ Bạc trở lên — Quyền lợi cơ bản
-- **Voucher xăng 30k:** 170 pts (Giá trị: 30.000đ)
-- **Voucher sạc EV 30k:** 170 pts (Giá trị: 30.000đ)
-- **Thay nhớt cơ bản:** 65 pts (Giá trị: ~50.000đ)
-- **Voucher cơm/bún 20k:** 55 pts (Giá trị: 20.000đ)
+- **Voucher xăng 30k:** 3.000 pts (Giá trị: 30.000đ)
+- **Voucher sạc EV 30k:** 3.000 pts (Giá trị: 30.000đ)
+- **Thay nhớt cơ bản:** 5.000 pts (Giá trị: ~50.000đ)
+- **Voucher cơm/bún 20k:** 2.000 pts (Giá trị: 20.000đ)
 
 ##### 🥇 R2+ Vàng trở lên — Quyền lợi nâng cao
-- **Voucher xăng 50k:** 285 pts (Giá trị: 50.000đ)
-- **Voucher sạc EV 50k:** 285 pts (Giá trị: 50.000đ)
-- **Gói bảo dưỡng tiêu chuẩn:** 170 pts (Giá trị: ~150.000đ)
-- **Voucher F&B đối tác 50k:** 140 pts (Giá trị: 50.000đ)
-- **Khám sức khỏe cơ bản:** 40 pts
+- **Voucher xăng 50k:** 5.000 pts (Giá trị: 50.000đ)
+- **Voucher sạc EV 50k:** 5.000 pts (Giá trị: 50.000đ)
+- **Gói bảo dưỡng tiêu chuẩn:** 15.000 pts (Giá trị: ~150.000đ)
+- **Voucher F&B đối tác 50k:** 5.000 pts (Giá trị: 50.000đ)
+- **Khám sức khỏe cơ bản:** 4.000 pts
 
 ##### 💎 R1 Kim Cương — Đặc quyền cao nhất
-- **Gói bảo dưỡng ưu tiên R1:** 255 pts (Giá trị: ~250.000đ)
-- **Voucher F&B đối tác 100k:** 285 pts (Giá trị: 100.000đ)
-- **Gói khám đầy đủ:** 170 pts
+- **Gói bảo dưỡng ưu tiên R1:** 25.000 pts (Giá trị: ~250.000đ)
+- **Voucher F&B đối tác 100k:** 10.000 pts (Giá trị: 100.000đ)
+- **Gói khám đầy đủ:** 17.000 pts
 
 #### Paid Items (Ahamove-funded)
 
 ##### 🥈 R3+ Bạc trở lên
-- **Data 4G 5GB (30 ngày):** 400 pts (Chi phí Aha: ~50.000đ)
-- **Áo thun Ahamove:** 1.400 pts (Chi phí Aha: ~120.000đ)
+- **Data 4G 5GB (30 ngày):** 5.000 pts (Chi phí Aha: ~50.000đ)
+- **Áo thun Ahamove:** 12.000 pts (Chi phí Aha: ~120.000đ)
 
 ##### 🥇 R2+ Vàng trở lên
-- **Data 4G 10GB (30 ngày):** 700 pts (Chi phí Aha: ~80.000đ)
-- **Combo (áo + túi nhiệt):** 2.300 pts (Chi phí Aha: ~250.000đ)
-- **Bộ phụ kiện xe (gương, đèn):** 3.400 pts (Chi phí Aha: ~300.000đ)
+- **Data 4G 10GB (30 ngày):** 8.000 pts (Chi phí Aha: ~80.000đ)
+- **Combo (áo + túi nhiệt):** 25.000 pts (Chi phí Aha: ~250.000đ)
+- **Bộ phụ kiện xe (gương, đèn):** 30.000 pts (Chi phí Aha: ~300.000đ)
 
 ##### 💎 R1 Kim Cương
-- **Data 4G 20GB (30 ngày):** 1.400 pts (Chi phí Aha: ~150.000đ)
-- **Bảo hiểm tai nạn 10k/tháng:** 285 pts/tháng
-- **Bảo hiểm tai nạn 30k/tháng:** 857 pts/tháng
+- **Data 4G 20GB (30 ngày):** 15.000 pts (Chi phí Aha: ~150.000đ)
+- **Bảo hiểm tai nạn 10k/tháng:** 1.000 pts/tháng
+- **Bảo hiểm tai nạn 30k/tháng:** 3.000 pts/tháng
 
 ---
 
@@ -177,13 +175,13 @@ Pts tích/tháng (avg, 22 ca):
 | | 💎 R1 Kim Cương | 🥇 R2 Vàng | 🥈 R3 Bạc |
 | --- | --- | --- | --- |
 | Voucher xăng/EV | 50k/tháng | 30k/tháng | — |
-| Bảo hiểm tai nạn Mini | 285–857 pts/tháng | — | — |
+| Bảo hiểm tai nạn Mini | 1.000–3.000 pts/tháng | — | — |
 | Cost Ahamove | ~59M/tháng (voucher) + biến phí BH | ~83M/tháng | — |
 
 **Cơ chế Bảo hiểm tai nạn R1:**
 
 - Đăng ký trong app **trước ngày 25**, hiệu lực từ **ngày 01 tháng kế tiếp**
-- Thanh toán bằng điểm: 10k/tháng = 285 pts · 30k/tháng = 857 pts
+- Thanh toán bằng điểm: 10k/tháng = 1.000 pts · 30k/tháng = 3.000 pts
 - Huỷ trước ngày 25 → ngừng hiệu lực cuối tháng; mất R1 → không gia hạn được
 
 > Budget 200M: Voucher xăng R1+R2 = **~142M** · Buffer ~58M. BH tai nạn là biến phí ngoài budget, cần duyệt riêng (tối đa ~47M nếu 100% R1 đăng ký gói 30k).
@@ -196,9 +194,10 @@ Pts tích/tháng (avg, 22 ca):
 
 | Benefit | 💎 R1 Kim Cương | 🥇 R2 Vàng | 🥈 R3 Bạc | Unranked |
 | --- | --- | --- | --- | --- |
-| **Điều kiện xét** | DQS ≥80, DCR <10%, Prod ≥280 | DQS ≥75, DCR <10%, Prod ≥210 | DQS ≥75, DCR ≤15%, Prod ≥70 | Dưới R3 |
+| **Điều kiện xét** | DQS ≥80, Prod ≥280 | DQS ≥75, Prod ≥210 | DQS ≥75, Prod ≥70 | Dưới R3 |
 | **Primary Layer** | L2 Minizone | L3 Mediumzone | L4 Bigzone | L6 MASS |
 | **Ca Full-day** | ✅ 08:00–18:00 | ✅ 08:00–18:00 | ❌ | ❌ |
+| **Slot đăng ký** | Tất cả L2-L6 | Tất cả L2-L6 | Tất cả L2-L6 | L5-6 MASS |
 | **Khung giờ đăng ký ca (Ngày 1)** | 00:00 - 10:00 | 10:00 - 14:00 | 14:00 - 24:00 | Ngày 2+ |
 | **AhaBenefits** | 💎 Kim Cương | 🥇 Vàng | 🥈 Bạc | ❌ |
 | ↳ Hệ số AhaPoints | ×1.5 | ×1.3 | ×1.1 | ×1.0 |
@@ -213,6 +212,7 @@ Pts tích/tháng (avg, 22 ca):
 | | **L2 Minizone** | **L3 Mediumzone** | **L4 Bigzone** | **L5 Cityzone** | **L6 MASS** |
 | --- | --- | --- | --- | --- | --- |
 | **Hạng ưu tiên** | R1 | R2 | R3 | Bất kỳ | Unranked |
+| **Hỗ trợ** | Đội trưởng | Đội trưởng | Không | Không | Không |
 | **AhaBenefits ×** | ×1.5 | ×1.3 | ×1.1 | ×1.0 | ×1.0 |
 | **Cơ chế mở cổng** | Mở theo khung giờ | Mở theo khung giờ | Mở theo khung giờ | Mở tự do | Mở tự do |
 

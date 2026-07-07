@@ -266,7 +266,7 @@
     <div class="rank-grid" style="margin-bottom:20px;">
       <div class="rc r1">
         <div class="rc-name">R1 · Elite / Kim Cương</div>
-        <div class="rc-target">Mục tiêu: ~15% fleet</div>
+        <div class="rc-target">Mục tiêu: ~10-15% fleet</div>
         <div class="kpi-row"><span class="kpi-k">DQS</span><span class="kpi-v">≥ 80</span></div>
         <div class="kpi-row"><span class="kpi-k">Productivity</span><span class="kpi-v">≥ 280 stp</span></div>
         <div class="kpi-row"><span class="kpi-k">Thâm niên</span><span class="kpi-v">≥ 1 tháng</span></div>
@@ -682,7 +682,7 @@
             <tr>
               <th>Rank</th>
               <th>Layer ưu tiên</th>
-              <th>AhaBenefits (× hệ số + bonus)</th>
+              <th>AhaBenefits (× hệ số)</th>
               <th>Voucher xăng/EV</th>
               <th>Ca Full-day</th>
               <th>Đội trưởng</th>
@@ -693,7 +693,7 @@
             <tr class="r1-row">
               <td><span class="tag-sm t-r1">R1 Elite/Kim Cương</span><br><span style="font-size:11px;color:var(--g400)">~15% fleet</span></td>
               <td><strong style="color:var(--r1)">L2 Minizone</strong><br><span style="font-size:11px;color:var(--g400)">↩ L3 fallback</span></td>
-              <td><span class="mult m15">×1.5 +30 pts</span></td>
+              <td><span class="mult m15">×1.5</span></td>
               <td><span class="tag-sm t-r1">50.000đ/tháng</span></td>
               <td style="color:#065F46;font-weight:700">✅ 50% slot (100-200)</td>
               <td>✅ Trưởng</td>
@@ -702,7 +702,7 @@
             <tr class="r2-row">
               <td><span class="tag-sm t-r2">R2 Active/Vàng</span><br><span style="font-size:11px;color:var(--g400)">~35% fleet</span></td>
               <td><strong style="color:var(--r2)">L3 Mediumzone</strong><br><span style="font-size:11px;color:var(--g400)">↩ L4 fallback</span></td>
-              <td><span class="mult m13">×1.3 +25 pts</span></td>
+              <td><span class="mult m13">×1.3</span></td>
               <td><span class="tag-sm t-r2">30.000đ/tháng</span></td>
               <td style="color:#065F46;font-weight:700">✅ 50% slot (100-200)</td>
               <td>✅ Trưởng</td>
@@ -711,7 +711,7 @@
             <tr class="r3-row">
               <td><span class="tag-sm t-r3">R3 Standard/Bạc</span><br><span style="font-size:11px;color:var(--g400)">~35% fleet</span></td>
               <td><strong style="color:var(--r3)">L4 Bigzone</strong><br><span style="font-size:11px;color:var(--g400)">↩ L5 fallback</span></td>
-              <td><span class="mult m11">×1.1 +20 pts</span></td>
+              <td><span class="mult m11">×1.1</span></td>
               <td class="val-no">❌ Không</td>
               <td class="val-no">❌ Không</td>
               <td style="color:var(--blue);font-weight:700">✅ Phó</td>
@@ -746,7 +746,7 @@
         <div class="ab-pillar">
           <div class="ab-pillar-num">01</div>
           <div class="ab-pillar-name">Earn</div>
-          <div class="ab-pillar-desc">5.000đ thu nhập = 1 điểm · Nhân hệ số theo layer + bonus ca.</div>
+          <div class="ab-pillar-desc">5.000đ thu nhập = 1 điểm · Nhân hệ số theo layer.</div>
         </div>
         <div class="ab-pillar">
           <div class="ab-pillar-num">02</div>
@@ -767,29 +767,28 @@
       <div class="card">
         <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:12px;">Công thức</div>
         <div class="ab2-formula">
-earned_pts = round( round(trip_GSV ÷ 5.000) × layer_multiplier ) + Điểm thưởng hoàn ca
+earned_pts = round( round(trip_GSV ÷ 1.000) × layer_multiplier )
  
 Ví dụ R1 (L2 · EPH ~70k/h · Ca 4 tiếng doanh thu 280k):
-  Base : 280k ÷ 5.000 = 56 base pts
-  × 1.5 : 56 × 1.5 = 84 pts
-  Bonus ca : +30 pts
-  → Tổng : 114 pts/ca
+  Base : 280k ÷ 1.000 = 280 base pts
+  × 1.5 : 280 × 1.5 = 420 pts
+  → Tổng : 420 pts/ca
         </div>
       </div>
       <div class="card" style="padding:0;overflow:hidden;">
-        <div style="padding:12px 16px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">Hệ số Layer &amp; Bonus/ca</div>
+        <div style="padding:12px 16px 10px;font-size:13px;font-weight:800;color:var(--blue);border-bottom:1px solid var(--g100)">Hệ số Layer &amp; Hỗ trợ</div>
         <table style="width:100%;border-collapse:collapse;font-size:13px;">
           <thead><tr style="background:var(--g100);">
             <th style="padding:8px 14px;text-align:left;font-weight:700;color:var(--g600);font-size:11px;">Layer</th>
             <th style="padding:8px 10px;text-align:center;font-weight:700;color:var(--g600);font-size:11px;">Hệ số ×</th>
-            <th style="padding:8px 10px;text-align:center;font-weight:700;color:var(--g600);font-size:11px;">Bonus ca</th>
+            <th style="padding:8px 10px;text-align:center;font-weight:700;color:var(--g600);font-size:11px;">Hỗ trợ</th>
           </tr></thead>
           <tbody>
-            <tr style="background:#FFF7F2;"><td style="padding:9px 14px;font-weight:700;color:var(--r1);">L2 Minizone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m15">×1.5</span></td><td style="padding:9px 10px;text-align:center;color:var(--orange);font-weight:700;">+30 pts</td></tr>
-            <tr style="background:#F0F5FF;"><td style="padding:9px 14px;font-weight:700;color:var(--r2);">L3 Mediumzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m13">×1.3</span></td><td style="padding:9px 10px;text-align:center;color:var(--blue);font-weight:700;">+25 pts</td></tr>
-            <tr><td style="padding:9px 14px;font-weight:700;color:var(--r3);">L4 Bigzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m11">×1.1</span></td><td style="padding:9px 10px;text-align:center;color:var(--blue);font-weight:700;">+20 pts</td></tr>
-            <tr><td style="padding:9px 14px;color:var(--g600);">L5 Cityzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m10">×1.0</span></td><td style="padding:9px 10px;text-align:center;color:var(--g400);">—</td></tr>
-            <tr><td style="padding:9px 14px;color:var(--g400);">L6 MASS</td><td style="padding:9px 10px;text-align:center;"><span class="mult m10">×1.0</span></td><td style="padding:9px 10px;text-align:center;color:var(--g400);">—</td></tr>
+            <tr style="background:#FFF7F2;"><td style="padding:9px 14px;font-weight:700;color:var(--r1);">L2 Minizone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m15">×1.5</span></td><td style="padding:9px 10px;text-align:center;color:var(--orange);font-weight:700;">Đội trưởng</td></tr>
+            <tr style="background:#F0F5FF;"><td style="padding:9px 14px;font-weight:700;color:var(--r2);">L3 Mediumzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m13">×1.3</span></td><td style="padding:9px 10px;text-align:center;color:var(--blue);font-weight:700;">Đội trưởng</td></tr>
+            <tr><td style="padding:9px 14px;font-weight:700;color:var(--r3);">L4 Bigzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m11">×1.1</span></td><td style="padding:9px 10px;text-align:center;color:var(--blue);font-weight:700;">Đội trưởng</td></tr>
+            <tr><td style="padding:9px 14px;color:var(--g600);">L5 Cityzone</td><td style="padding:9px 10px;text-align:center;"><span class="mult m10">×1.0</span></td><td style="padding:9px 10px;text-align:center;color:var(--g400);">Đội trưởng</td></tr>
+            <tr><td style="padding:9px 14px;color:var(--g400);">L6 MASS</td><td style="padding:9px 10px;text-align:center;"><span class="mult m10">×1.0</span></td><td style="padding:9px 10px;text-align:center;color:var(--g400);">Không</td></tr>
           </tbody>
         </table>
       </div>

@@ -1,806 +1,210 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Driver Ranking & AhaBenefits v2.0 — Params Sheet</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
+  <title>Driver Ranking Params — Ahamove</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-base: #0D1117;
-      --bg-card: #161B22;
-      --bg-card2: #1C2430;
-      --bg-code: #0A0F15;
-      --bg-hover: #1F2937;
-      --border: rgba(255, 255, 255, 0.07);
-      --text-prime: #F4F8FD;
-      --text-sec: #C4CDD8;
-      --text-muted: #9DA7B3;
-      --orange: #FF7F32;
-      --orange-dim: rgba(255, 127, 50, 0.12);
-      --yellow: #F59E0B;
-      --yellow-dim: rgba(245, 158, 11, 0.12);
-      --blue: #58A6FF;
-      --blue-dim: rgba(88, 166, 255, 0.12);
-      --teal: #22D3EE;
-      --teal-dim: rgba(34, 211, 238, 0.1);
+      --bg-main: #0B0E14;
+      --bg-side: #151921;
+      --card-bg: #1A1F26;
+      --border: #2A2F38;
+      --orange: #FF6A00;
+      --orange-dim: rgba(255,106,0,0.15);
+      --text-prime: #F3F4F6;
+      --text-sec: #9CA3AF;
+      --blue: #3B82F6;
+      --blue-dim: rgba(59,130,246,0.15);
       --green: #10B981;
-      --green-dim: rgba(16, 185, 129, 0.12);
-      --red: #EF4444;
-      --red-dim: rgba(239, 68, 68, 0.12);
-      --purple: #A78BFA;
-      --gray-dim: rgba(139, 148, 158, 0.1);
-      --r1-c: #FF7F32;
-      --r2-c: #F59E0B;
-      --r3-c: #58A6FF;
+      --green-dim: rgba(16,185,129,0.15);
+      --yellow: #F59E0B;
+      --yellow-dim: rgba(245,158,11,0.15);
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--bg-base);
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-main);
       color: var(--text-prime);
-      font-family: 'Montserrat', sans-serif;
+      line-height: 1.6;
       font-size: 14px;
-      line-height: 1.7;
       display: flex;
       min-height: 100vh;
     }
-
-    /* ── SIDEBAR ── */
-    #sidebar {
-      width: 230px;
-      min-width: 230px;
-      background: var(--bg-card);
+    
+    /* SIDEBAR */
+    .sidebar {
+      width: 260px;
+      background-color: var(--bg-side);
       border-right: 1px solid var(--border);
+      padding: 24px 0;
+      flex-shrink: 0;
       position: sticky;
       top: 0;
       height: 100vh;
       overflow-y: auto;
-      padding: 24px 0;
-      flex-shrink: 0;
     }
-
-    #sidebar::-webkit-scrollbar {
-      width: 3px;
-    }
-
-    #sidebar::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 4px;
-    }
-
-    .sb-logo {
-      padding: 0 18px 18px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 14px;
-    }
-
-    .sb-tag {
-      display: inline-block;
-      background: var(--orange-dim);
-      color: var(--orange);
-      border: 1px solid rgba(255, 127, 50, 0.25);
-      border-radius: 6px;
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      padding: 3px 8px;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-    }
-
-    .sb-logo h2 {
-      font-size: 12.5px;
-      font-weight: 700;
-      color: var(--text-prime);
-      line-height: 1.45;
-    }
-
-    .sb-logo p {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .sb-group {
-      padding: 8px 18px 2px;
-      font-size: 9.5px;
-      font-weight: 700;
-      color: var(--text-muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    #sidebar a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 7px 18px;
+    .sb-header { padding: 0 24px 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .sb-tag { font-size: 10px; font-weight: 700; color: var(--orange); background: var(--orange-dim); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 12px; }
+    .sb-title { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700; line-height: 1.3; margin-bottom: 4px; }
+    .sb-sub { font-size: 11px; color: var(--text-sec); }
+    
+    .nav-group { margin-bottom: 24px; }
+    .nav-head { font-size: 10px; font-weight: 700; color: var(--text-sec); letter-spacing: 1px; padding: 0 24px; margin-bottom: 8px; text-transform: uppercase; }
+    .sidebar ul { list-style: none; }
+    .sidebar li a {
+      display: block;
+      padding: 8px 24px;
       color: var(--text-sec);
       text-decoration: none;
-      font-size: 12px;
-      border-left: 2px solid transparent;
-      transition: all 0.15s;
-    }
-
-    #sidebar a:hover {
-      color: var(--text-prime);
-      background: var(--bg-hover);
-      border-left-color: var(--orange);
-    }
-
-    .sb-num {
-      font-family: 'Montserrat', monospace;
-      font-size: 10px;
-      color: var(--text-muted);
-      min-width: 18px;
-    }
-
-    .sb-footer {
-      padding: 14px 18px;
-      margin-top: 8px;
-      border-top: 1px solid var(--border);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .sb-footer strong {
-      color: var(--text-sec);
-    }
-
-    /* ── MAIN ── */
-    #main {
-      flex: 1;
-      padding: 36px 44px;
-      max-width: 980px;
-      overflow-x: hidden;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      background: linear-gradient(135deg, #0D1A2B 0%, #172030 60%, #0F1620 100%);
-      border: 1px solid rgba(255, 127, 50, 0.12);
-      border-radius: 16px;
-      padding: 32px 36px;
-      margin-bottom: 36px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -40px;
-      right: -40px;
-      width: 180px;
-      height: 180px;
-      background: radial-gradient(circle, rgba(255, 127, 50, 0.07) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--orange-dim);
-      color: var(--orange);
-      border: 1px solid rgba(255, 127, 50, 0.25);
-      border-radius: 20px;
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      padding: 4px 12px;
-      margin-bottom: 14px;
-      text-transform: uppercase;
-    }
-
-    .hero h1 {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--text-prime);
-      letter-spacing: -0.02em;
-      line-height: 1.3;
-      margin-bottom: 8px;
-    }
-
-    .hero h1 span {
-      color: var(--orange);
-    }
-
-    .hero-sub {
       font-size: 13px;
-      color: var(--text-sec);
-      margin-bottom: 20px;
+      font-weight: 500;
+      transition: all 0.2s;
     }
+    .sidebar li a:hover { background: rgba(255,255,255,0.05); color: #fff; }
+    .sidebar li a .n { opacity: 0.5; margin-right: 8px; font-family: monospace; }
 
-    .hero-meta {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
+    /* MAIN CONTENT */
+    .main {
+      flex: 1;
+      padding: 40px 60px;
+      max-width: 1000px;
     }
-
-    .hm-item .label {
-      font-size: 10px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 600;
-      display: block;
-    }
-
-    .hm-item .value {
-      font-size: 12px;
-      font-family: 'Montserrat', monospace;
-      color: var(--text-sec);
-    }
-
-    /* ── RANK BADGES ── */
-    .rank-r1 {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(255, 127, 50, 0.12);
-      color: var(--orange);
-      border: 1px solid rgba(255, 127, 50, 0.25);
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .rank-r2 {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(245, 158, 11, 0.12);
-      color: var(--yellow);
-      border: 1px solid rgba(245, 158, 11, 0.25);
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .rank-r3 {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: var(--blue-dim);
-      color: var(--blue);
-      border: 1px solid rgba(88, 166, 255, 0.25);
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .rank-un {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: var(--gray-dim);
-      color: var(--text-sec);
-      border: 1px solid rgba(139, 148, 158, 0.2);
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    /* ── LAYER BADGES ── */
-    .layer-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 30px;
-      height: 20px;
-      border-radius: 6px;
-      font-family: 'Montserrat', monospace;
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .l2 {
-      background: rgba(255, 127, 50, 0.15);
-      color: var(--orange);
-      border: 1px solid rgba(255, 127, 50, 0.3);
-    }
-
-    .l3 {
-      background: rgba(245, 158, 11, 0.15);
-      color: var(--yellow);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
-    .l4 {
-      background: var(--blue-dim);
-      color: var(--blue);
-      border: 1px solid rgba(88, 166, 255, 0.3);
-    }
-
-    .l5 {
-      background: var(--teal-dim);
-      color: var(--teal);
-      border: 1px solid rgba(34, 211, 238, 0.3);
-    }
-
-    .l6 {
-      background: var(--gray-dim);
-      color: var(--text-sec);
-      border: 1px solid rgba(139, 148, 158, 0.2);
-    }
-
-    /* ── SECTIONS ── */
-    section {
+    
+    /* HEADER CARD */
+    .hero-card {
+      background: linear-gradient(145deg, #1A1F26 0%, #151921 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
       margin-bottom: 48px;
-      scroll-margin-top: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
+    .hero-tag { border: 1px solid var(--orange); color: var(--orange); font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 999px; display: inline-block; margin-bottom: 16px; letter-spacing: 1px; }
+    .hero-card h1 { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+    .hero-card h1 span { color: var(--orange); }
+    .hero-card p { color: var(--text-sec); font-size: 14px; margin-bottom: 24px; }
+    .hero-meta { display: flex; gap: 40px; border-top: 1px solid var(--border); padding-top: 20px; }
+    .hm-item { display: flex; flex-direction: column; }
+    .hm-label { font-size: 10px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; margin-bottom: 4px; }
+    .hm-val { font-size: 13px; font-weight: 500; color: #fff; }
+    .hm-val.org { color: var(--orange); }
 
-    .sec-hdr {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 20px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--border);
-    }
+    /* SECTION HEADER */
+    .sec-hdr { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+    .sec-num { background: var(--orange); color: #fff; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; font-family: 'Montserrat'; }
+    .sec-title h2 { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+    .sec-title p { font-size: 13px; color: var(--text-sec); font-weight: 500; }
+    section { margin-bottom: 56px; }
 
-    .sec-num {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      min-width: 44px;
-      background: var(--orange-dim);
-      border: 1px solid rgba(255, 127, 50, 0.25);
-      border-radius: 11px;
-      font-family: 'Montserrat', monospace;
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--orange);
-    }
+    /* CALLOUT */
+    .callout { background: var(--blue-dim); border-left: 3px solid var(--blue); padding: 12px 16px; border-radius: 4px 8px 8px 4px; font-size: 13px; font-weight: 500; display: flex; gap: 12px; align-items: center; margin-bottom: 24px; color: #93C5FD; }
+    
+    /* TABLES */
+    .tw { background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    thead { border-bottom: 1px solid var(--orange); }
+    th { padding: 14px 20px; font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 13px; }
+    tr:last-child td { border-bottom: none; }
+    
+    /* PILLS & BADGES */
+    .rank-pill { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 999px; border: 1px solid; font-size: 12px; font-weight: 700; background: rgba(0,0,0,0.2); }
+    .rp-r1 { border-color: var(--orange); color: var(--orange); }
+    .rp-r2 { border-color: var(--yellow); color: var(--yellow); }
+    .rp-r3 { border-color: var(--blue); color: var(--blue); }
+    .rp-un { border-color: var(--text-sec); color: var(--text-sec); }
+    
+    .kpi-pill { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+    .kpi-green { background: var(--green-dim); color: var(--green); }
+    .kpi-blue { background: var(--blue-dim); color: var(--blue); }
+    .kpi-gray { background: rgba(255,255,255,0.05); color: var(--text-sec); }
+    
+    .layer-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 700; color: white; }
+    .layer-badge.l2 { background: var(--orange); }
+    .layer-badge.l3 { background: var(--yellow); }
+    .layer-badge.l4 { background: var(--blue); }
+    .layer-badge.l5 { background: var(--text-sec); }
+    .layer-badge.l6 { background: #4B5563; }
 
-    .sec-title h2 {
-      font-size: 18.5px;
-      font-weight: 700;
-      color: var(--text-prime);
-      letter-spacing: -0.01em;
-    }
-
-    .sec-title p {
-      font-size: 12.5px;
-      color: var(--text-sec);
-      margin-top: 3px;
-    }
-
-    /* ── TABLES ── */
-    .tw {
-      overflow-x: auto;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 14px;
-      background: var(--bg-card);
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 1px 6px rgba(0, 0, 0, 0.3);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    thead tr {
-      background: #0C1624;
-      border-bottom: 2px solid rgba(255, 127, 50, 0.25);
-    }
-
-    th {
-      padding: 12px 16px;
-      text-align: left;
-      font-size: 11.5px;
-      font-weight: 800;
-      color: #E2E8F1;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      border-bottom: none;
-      white-space: nowrap;
-    }
-
-    td {
-      padding: 12px 16px;
-      font-size: 13.5px;
-      color: #D2DBE4;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-    }
-
-    tbody tr:nth-child(even) {
-      background: rgba(255, 255, 255, 0.018);
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    tbody tr:hover {
-      background: var(--bg-hover);
-    }
-
-    td strong {
-      color: var(--text-prime);
-      font-weight: 700;
-    }
-
-    td.num {
-      font-family: 'Montserrat', monospace;
-      font-size: 12.5px;
-      color: var(--text-prime);
-    }
-
-    td.good {
-      color: var(--green);
-      font-weight: 600;
-    }
-
-    td.warn {
-      color: var(--yellow);
-    }
-
-    td.na {
-      color: var(--text-muted);
-    }
-
-    /* ── CODE BLOCKS ── */
-    .code-block {
-      background: var(--bg-code);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--orange);
-      border-radius: 10px;
-      padding: 16px 20px;
-      margin-bottom: 14px;
-      overflow-x: auto;
-    }
-
-    .code-block pre {
-      font-family: 'Montserrat', monospace;
-      font-size: 12px;
-      line-height: 1.8;
-      color: #C9D1D9;
-      white-space: pre;
-    }
-
-    .code-label {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--orange);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 10px;
-      font-family: 'Montserrat', monospace;
-    }
-
-    /* ── CALLOUTS ── */
-    .callout {
-      border-radius: 10px;
-      padding: 12px 16px;
-      margin-bottom: 14px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      border: 1px solid;
-      font-size: 12.5px;
-    }
-
-    .ci {
-      background: var(--blue-dim);
-      border-color: rgba(88, 166, 255, 0.2);
-      color: #93C5FD;
-    }
-
-    .cw {
-      background: var(--yellow-dim);
-      border-color: rgba(245, 158, 11, 0.25);
-      color: #FCD34D;
-    }
-
-    .cs {
-      background: var(--green-dim);
-      border-color: rgba(16, 185, 129, 0.25);
-      color: #6EE7B7;
-    }
-
-    .co {
-      background: var(--orange-dim);
-      border-color: rgba(255, 127, 50, 0.25);
-      color: #FDB68F;
-    }
-
-    .callout-body strong {
-      font-weight: 700;
-    }
-
-    /* ── KPI THRESHOLD PILLS ── */
-    .kpi-pill {
-      display: inline-block;
-      font-family: 'Montserrat', monospace;
-      font-size: 11.5px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 8px;
-    }
-
-    .kpi-green {
-      background: var(--green-dim);
-      color: var(--green);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .kpi-orange {
-      background: var(--orange-dim);
-      color: var(--orange);
-      border: 1px solid rgba(255, 127, 50, 0.3);
-    }
-
-    .kpi-blue {
-      background: var(--blue-dim);
-      color: var(--blue);
-      border: 1px solid rgba(88, 166, 255, 0.3);
-    }
-
-    .kpi-red {
-      background: var(--red-dim);
-      color: var(--red);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    .kpi-gray {
-      background: var(--gray-dim);
-      color: var(--text-sec);
-      border: 1px solid rgba(139, 148, 158, 0.2);
-    }
-
-    /* ── MULT BIG ── */
-    .mult-big {
-      font-family: 'Montserrat', monospace;
-      font-size: 22px;
-      font-weight: 800;
-      line-height: 1;
-    }
-
-    /* ── CITY TAB ── */
-    .city-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    @media(max-width:680px) {
-      .city-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .city-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .city-header {
-      padding: 10px 16px;
-      border-bottom: 1px solid var(--border);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    /* ── CATALOG TIER ── */
-    .catalog-tier {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-
-    .ct-header {
-      padding: 12px 18px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .ct-title {
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .ct-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    /* ── SUMMARY GRID (section 9) ── */
-    .s9-note {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      margin-top: 8px;
-    }
-
-    /* ── PROGRESS BAR ── */
-    .pbar-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .pbar {
-      flex: 1;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .pbar-fill {
-      height: 100%;
-      border-radius: 3px;
-    }
-
-    .pbar-val {
-      font-family: 'Montserrat', monospace;
-      font-size: 11px;
-      font-weight: 700;
-      min-width: 32px;
-      text-align: right;
-    }
-
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-    }
-
-    code {
-      font-family: 'Montserrat', monospace;
-      font-size: 11.5px;
-      background: rgba(255, 127, 50, 0.1);
-      color: var(--orange);
-      padding: 1px 5px;
-      border-radius: 4px;
-    }
-
-    /* ── FREE / PAID BADGES ── */
-    .type-free { display: inline-flex; align-items: center; gap: 3px; background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.3); padding: 2px 9px; border-radius: 6px; font-size: 10px; font-weight: 700; white-space: nowrap; letter-spacing: 0.04em; }
-    .type-paid { display: inline-flex; align-items: center; gap: 3px; background: rgba(139,148,158,0.1); color: #8B949E; border: 1px solid rgba(139,148,158,0.2); padding: 2px 9px; border-radius: 6px; font-size: 10px; font-weight: 700; white-space: nowrap; letter-spacing: 0.04em; }
-
-    /* ── LAYER MATRIX ICONS ── */
-    .lc-cell { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 15px; font-weight: 700; }
-    .lc-check { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.35); color: var(--green); }
-    .lc-cascade { background: rgba(245,158,11,0.13); border: 1px solid rgba(245,158,11,0.32); color: var(--yellow); }
-    .lc-block { background: rgba(139,148,158,0.08); border: 1px solid rgba(139,148,158,0.16); color: var(--text-muted); font-size: 13px; }
-    .lc-star { background: rgba(255,127,50,0.13); border: 1px solid rgba(255,127,50,0.32); color: var(--orange); font-size: 13px; }
-    .lc-legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-sec); align-items: center; padding: 12px 16px; background: var(--bg-card2); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 14px; }
-    .lc-legend span { display: flex; align-items: center; gap: 7px; }
-    .lc-lg { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
-    .lc-supply-row td { padding: 10px 14px; border-top: 2px solid rgba(255,127,50,0.18); background: rgba(255,127,50,0.04); font-size: 11px; line-height: 1.5; vertical-align: top; }
-    .lc-supply-label { font-size: 12px; font-weight: 700; color: var(--text-prime); }
-
-    /* ── CA CARDS ── */
-    .ca-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
-    @media(max-width:720px){ .ca-grid { grid-template-columns: repeat(2,1fr); } }
-    .ca-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 16px 18px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 7px; box-shadow: 0 4px 16px rgba(0,0,0,0.35); }
-    .ca-card-featured { border: 2px solid var(--orange); background: rgba(255,127,50,0.04); box-shadow: 0 4px 24px rgba(255,127,50,0.12), 0 2px 8px rgba(0,0,0,0.4); }
-    .ca-name { font-size: 13px; font-weight: 700; color: var(--text-sec); }
-    .ca-name-featured { color: var(--orange); }
-    .ca-time { font-size: 22px; font-weight: 800; color: var(--text-prime); letter-spacing: -0.02em; line-height: 1.1; }
-    .ca-dur { background: var(--bg-card2); color: var(--text-muted); font-size: 11px; font-weight: 600; padding: 3px 12px; border-radius: 20px; border: 1px solid var(--border); }
-    .ca-peak { background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.28); font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
-    .ca-normal { background: var(--gray-dim); color: var(--text-sec); border: 1px solid rgba(139,148,158,0.18); font-size: 11px; font-weight: 600; padding: 3px 12px; border-radius: 20px; }
-    .ca-rank { background: rgba(255,127,50,0.1); color: var(--orange); border: 1px solid rgba(255,127,50,0.25); font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
-    .ca-guarantee { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.3); font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
-
-    /* ── CA MATRIX ── */
-    .ca-matrix-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 24px rgba(0,0,0,0.5), 0 1px 6px rgba(0,0,0,0.3); background: var(--bg-card); margin-bottom: 14px; }
-    .ca-matrix-wrap table { width: 100%; border-collapse: collapse; }
-    .ca-th-label { padding: 14px 14px; background: #0C1624; border-bottom: 2px solid rgba(255,127,50,0.18); width: 110px; min-width: 90px; }
-    .ca-th-card { padding: 16px 14px 13px; text-align: center; vertical-align: top; background: #0C1624; border-bottom: 2px solid rgba(255,127,50,0.18); border-left: 1px solid var(--border); }
-    .ca-th-featured { background: rgba(255,127,50,0.07); border-left: 2px solid rgba(255,127,50,0.35); border-right: 2px solid rgba(255,127,50,0.35); border-bottom: 2px solid rgba(255,127,50,0.35); }
-    .ca-col-name { font-size: 12px; font-weight: 700; color: var(--text-sec); margin-bottom: 5px; }
-    .ca-col-name-featured { color: var(--orange); }
-    .ca-col-time { font-size: 19px; font-weight: 800; color: var(--text-prime); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 8px; }
-    .ca-col-tags { display: flex; flex-direction: column; gap: 5px; align-items: center; }
-    .ca-matrix-wrap td { padding: 11px 14px; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); vertical-align: middle; font-size: 13px; color: #C8D3DC; }
-    .ca-matrix-wrap td:first-child { border-left: none; font-weight: 700; }
-    .ca-matrix-wrap tr:last-child td { border-bottom: none; }
-    .ca-matrix-wrap tbody tr:hover td { background: var(--bg-hover); }
-    .ca-td-featured { background: rgba(255,127,50,0.04); border-left: 2px solid rgba(255,127,50,0.2) !important; border-right: 2px solid rgba(255,127,50,0.2); }
-    .ca-slot { font-size: 15px; font-weight: 800; }
+    .good { color: var(--green); font-weight: 600; }
+    .warn { color: var(--text-sec); font-style: italic; }
+    
+    a { color: var(--blue); text-decoration: none; }
   </style>
 </head>
-
 <body>
 
-  <!-- ── SIDEBAR ── -->
-  <nav id="sidebar">
-    <div class="sb-logo">
-      <div class="sb-tag">Params Sheet</div>
-      <h2>Driver Ranking &<br>AhaBenefits v2.0</h2>
-      <p>Driver Management · 2026</p>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-header">
+      <span class="sb-tag">PARAMS SHEET</span>
+      <div class="sb-title">Driver Ranking &<br>AhaBenefits v2.0</div>
+      <div class="sb-sub">Driver Management · 2026</div>
     </div>
-
-    <div class="sb-group">Ranking</div>
-    <a href="#s1"><span class="sb-num">01</span><span>KPI Thresholds</span></a>
-    <a href="#s2"><span class="sb-num">02</span><span>Fleet Target Ratio</span></a>
-    <a href="#s3"><span class="sb-num">03</span><span>Layer Access</span></a>
-
-    <div class="sb-group">Earnings & Benefits</div>
-    <a href="#s4"><span class="sb-num">04</span><span>Target Earning/h</span></a>
-    <a href="#s5"><span class="sb-num">05</span><span>Rank Benefits</span></a>
-    <a href="#s6"><span class="sb-num">06</span><span>Ca Làm Việc</span></a>
-
-    <div class="sb-group">AhaBenefits</div>
-    <a href="#s7"><span class="sb-num">07</span><span>Point Economy</span></a>
-    <a href="#s8"><span class="sb-num">08</span><span>Catalog</span></a>
-
-    <div class="sb-group">Summary</div>
-    <a href="#s9"><span class="sb-num">09</span><span>Bảng Tổng Hợp</span></a>
-
-    <div class="sb-footer">
-      <strong>Tham chiếu</strong><br>
-      2026-05-ahabenefits-points-flow.html<br>
-      2026-05-driver-ranking-layer-benefits.html
+    
+    <div class="nav-group">
+      <div class="nav-head">RANKING</div>
+      <ul>
+        <li><a href="#s1"><span class="n">01</span> KPI Thresholds</a></li>
+        <li><a href="#s2"><span class="n">02</span> Layer Access</a></li>
+        <li><a href="#s3"><span class="n">03</span> Quyền lợi theo Rank</a></li>
+      </ul>
     </div>
-  </nav>
+    
+    <div class="nav-group">
+      <div class="nav-head">AHABENEFITS</div>
+      <ul>
+        <li><a href="#s4"><span class="n">04</span> Quyền lợi Layer</a></li>
+        <li><a href="#s5"><span class="n">05</span> Catalog</a></li>
+      </ul>
+    </div>
+    
+    <div class="nav-group">
+      <div class="nav-head">SUMMARY</div>
+      <ul>
+        <li><a href="#s6"><span class="n">06</span> Bảng Tổng Hợp</a></li>
+        <li><a href="#s7"><span class="n">07</span> Timeline Triển Khai</a></li>
+      </ul>
+    </div>
+    
+    <div class="nav-group" style="margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">
+      <div class="nav-head">Tham chiếu</div>
+      <ul>
+        <li><a href="2026-05-driver-ranking-layer-benefits.html" style="font-size:11px; line-height:1.4;">2026-05-driver-ranking-layer-benefits.html</a></li>
+        <li><a href="2026-05-driver-ranking-diagram.html" style="font-size:11px; line-height:1.4;">2026-05-driver-ranking-diagram.html</a></li>
+      </ul>
+    </div>
+  </aside>
 
-  <!-- ── MAIN ── -->
-  <main id="main">
-
-    <!-- HERO -->
-    <div class="hero">
-      <div class="hero-tag">⚙ Editable Params</div>
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    
+    <div class="hero-card">
+      <div class="hero-tag">⚡ EDITABLE PARAMS</div>
       <h1>Driver Ranking & <span>AhaBenefits v2.0</span><br>Params Sheet</h1>
-      <p class="hero-sub">Toàn bộ con số có thể điều chỉnh. Sau khi sửa → cập nhật vào HTML tương ứng.</p>
+      <p>Toàn bộ con số có thể điều chỉnh. Sau khi sửa → cập nhật vào HTML tương ứng.</p>
       <div class="hero-meta">
-        <div class="hm-item"><span class="label">Cập nhật</span><span class="value">2026-05-27</span></div>
-        <div class="hm-item"><span class="label">Owner</span><span class="value">Driver Management</span></div>
-        <div class="hm-item"><span class="label">Scope</span><span class="value">SGN + HAN · Bike</span></div>
-        <div class="hm-item"><span class="label">Version</span><span class="value"
-            style="color:var(--orange);">v2.0</span></div>
+        <div class="hm-item">
+          <span class="hm-label">CẬP NHẬT</span>
+          <span class="hm-val">2026-07-07</span>
+        </div>
+        <div class="hm-item">
+          <span class="hm-label">OWNER</span>
+          <span class="hm-val">Driver Management</span>
+        </div>
+        <div class="hm-item">
+          <span class="hm-label">SCOPE</span>
+          <span class="hm-val">SGN + HAN - Bike</span>
+        </div>
+        <div class="hm-item">
+          <span class="hm-label">VERSION</span>
+          <span class="hm-val org">v2.0</span>
+        </div>
       </div>
     </div>
 
-    <!-- ── S1: KPI THRESHOLDS ── -->
     <section id="s1">
       <div class="sec-hdr">
         <div class="sec-num">01</div>
@@ -827,22 +231,22 @@
           </thead>
           <tbody>
             <tr>
-              <td><span class="rank-r1">💎 R1 Elite</span></td>
+              <td><span class="rank-pill rp-r1">💎 R1 Elite</span></td>
               <td><span class="kpi-pill kpi-green">≥ 80</span></td>
               <td><span class="kpi-pill kpi-blue">≥ 280 stp</span></td>
             </tr>
             <tr>
-              <td><span class="rank-r2">🥇 R2 Active</span></td>
+              <td><span class="rank-pill rp-r2">🥇 R2 Active</span></td>
               <td><span class="kpi-pill kpi-green">≥ 75</span></td>
               <td><span class="kpi-pill kpi-blue">≥ 210 stp</span></td>
             </tr>
             <tr>
-              <td><span class="rank-r3">🥈 R3 Standard</span></td>
+              <td><span class="rank-pill rp-r3">🥈 R3 Standard</span></td>
               <td><span class="kpi-pill kpi-green">≥ 75</span></td>
               <td><span class="kpi-pill kpi-blue">≥ 70 stp</span></td>
             </tr>
             <tr>
-              <td><span class="rank-un">Unranked</span></td>
+              <td><span class="rank-pill rp-un">Unranked</span></td>
               <td><span class="kpi-pill kpi-gray">&lt; 75</span></td>
               <td class="na">—</td>
             </tr>
@@ -851,91 +255,12 @@
       </div>
     </section>
 
-    <!-- ── S2: FLEET RATIO ── -->
-    <section id="s2">
+<section id="s2">
       <div class="sec-hdr">
         <div class="sec-num">02</div>
         <div class="sec-title">
-          <h2>Fleet Target Ratio</h2>
-          <p>% monthly actives (~30k SGN+HAN)</p>
-        </div>
-      </div>
-
-      <div class="tw">
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Target %</th>
-              <th>Số lượng (~30k)</th>
-              <th>Phân bổ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="rank-r1">💎 R1 Kim Cương</span></td>
-              <td class="num" style="color:var(--orange);">15%</td>
-              <td class="num">~4.500</td>
-              <td>
-                <div class="pbar-wrap">
-                  <div class="pbar">
-                    <div class="pbar-fill" style="width:15%;background:var(--orange);"></div>
-                  </div>
-                  <span class="pbar-val" style="color:var(--orange);">15%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><span class="rank-r2">🥇 R2 Vàng</span></td>
-              <td class="num" style="color:var(--yellow);">35%</td>
-              <td class="num">~10.500</td>
-              <td>
-                <div class="pbar-wrap">
-                  <div class="pbar">
-                    <div class="pbar-fill" style="width:35%;background:var(--yellow);"></div>
-                  </div>
-                  <span class="pbar-val" style="color:var(--yellow);">35%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><span class="rank-r3">🥈 R3 Bạc</span></td>
-              <td class="num" style="color:var(--blue);">35%</td>
-              <td class="num">~10.500</td>
-              <td>
-                <div class="pbar-wrap">
-                  <div class="pbar">
-                    <div class="pbar-fill" style="width:35%;background:var(--blue);"></div>
-                  </div>
-                  <span class="pbar-val" style="color:var(--blue);">35%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><span class="rank-un">Unranked</span></td>
-              <td class="num">15%</td>
-              <td class="num">~4.500</td>
-              <td>
-                <div class="pbar-wrap">
-                  <div class="pbar">
-                    <div class="pbar-fill" style="width:15%;background:var(--text-muted);"></div>
-                  </div>
-                  <span class="pbar-val">15%</span>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ── S3: LAYER ACCESS ── -->
-    <section id="s3">
-      <div class="sec-hdr">
-        <div class="sec-num">03</div>
-        <div class="sec-title">
           <h2>Layer Access & Priority</h2>
-          <p>Tài xế mọi Rank đều được đăng ký vào tất cả các zone — ưu tiên theo giờ đăng ký</p>
+          <p>Tài xế mọi Rank đều được đăng ký vào tất cả các zone — ưu tiên theo khung giờ</p>
         </div>
       </div>
 
@@ -947,50 +272,51 @@
         </div>
       </div>
 
+      
       <div class="tw" style="margin-bottom:16px;">
         <table>
           <thead>
             <tr>
               <th style="min-width:130px;">Rank</th>
-              <th style="text-align:center;color:var(--orange);">L1<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">KA/MP ★</div></th>
-              <th style="text-align:center;color:var(--orange);">L2<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">Minizone</div></th>
-              <th style="text-align:center;color:var(--yellow);">L3<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">Mediumzone</div></th>
-              <th style="text-align:center;color:var(--blue);">L4<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">Bigzone</div></th>
-              <th style="text-align:center;color:var(--teal);">L5<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">Cityzone</div></th>
-              <th style="text-align:center;color:var(--text-sec);">L6<div style="font-size:9.5px;font-weight:500;color:var(--text-muted);margin-top:2px;text-transform:none;letter-spacing:0;">MASS</div></th>
+              <th>Zone được phép đăng ký</th>
+              <th style="color:var(--purple);">Giờ mở cổng (Ngày 1)</th>
+              <th>Ghi chú ưu tiên</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><span class="rank-r1">💎 R1 Elite</span></td>
-              <td style="text-align:center;"><div class="lc-cell lc-star">★</div></td>
-              <td style="text-align:center;" colspan="5"><strong style="color:var(--orange);">Ưu tiên 1</strong> (Mở đăng ký sớm nhất)</td>
+              <td><span class="rank-pill rp-r1">💎 R1 Elite</span></td>
+              <td>Tất cả (L2 - L6)</td>
+              <td><strong style="color:var(--orange);">00:00 - 10:00</strong></td>
+              <td class="good">Ưu tiên tuyệt đối FCFS</td>
             </tr>
             <tr>
-              <td><span class="rank-r2">🥇 R2 Active</span></td>
-              <td style="text-align:center;"><div class="lc-cell lc-star">★</div></td>
-              <td style="text-align:center;" colspan="5"><strong style="color:var(--yellow);">Ưu tiên 2</strong></td>
+              <td><span class="rank-pill rp-r2">🥇 R2 Active</span></td>
+              <td>Tất cả (L2 - L6)</td>
+              <td><strong style="color:var(--yellow);">10:00 - 14:00</strong></td>
+              <td class="good">Ưu tiên sau R1</td>
             </tr>
             <tr>
-              <td><span class="rank-r3">🥈 R3 Standard</span></td>
-              <td style="text-align:center;"><div class="lc-cell lc-star">★</div></td>
-              <td style="text-align:center;" colspan="5"><strong style="color:var(--blue);">Ưu tiên 3</strong></td>
+              <td><span class="rank-pill rp-r3">🥈 R3 Standard</span></td>
+              <td>Tất cả (L2 - L6)</td>
+              <td><strong style="color:var(--blue);">14:00 - 24:00</strong></td>
+              <td class="good">Ưu tiên sau R2</td>
             </tr>
             <tr>
-              <td><span class="rank-un">Unranked</span></td>
-              <td style="text-align:center;"><div class="lc-cell lc-star">★</div></td>
-              <td style="text-align:center;" colspan="5"><strong style="color:var(--text-muted);">Ưu tiên 4</strong></td>
+              <td><span class="rank-pill rp-un">Unranked</span></td>
+              <td>L5-6 MASS (slot trống còn lại)</td>
+              <td><strong style="color:var(--text-sec);">Ngày 2+</strong></td>
+              <td class="warn">Chỉ đăng ký slot thừa</td>
             </tr>
           </tbody>
         </table>
       </div>
+
     </section>
 
-    <!-- S4 removed per user request -->
-    <!-- ── S5: RANK BENEFITS ── -->
-    <section id="s5">
+<section id="s3">
       <div class="sec-hdr">
-        <div class="sec-num">05</div>
+        <div class="sec-num">03</div>
         <div class="sec-title">
           <h2>Quyền lợi theo Rank</h2>
           <p>Thay thế đảm bảo thu nhập bằng hệ sinh thái phúc lợi đặc quyền</p>
@@ -1041,87 +367,11 @@
       </div>
     </section>
 
-    <!-- ── S6: CA LÀM VIỆC ── -->
-    <section id="s6">
+<section id="s4">
       <div class="sec-hdr">
-        <div class="sec-num">06</div>
+        <div class="sec-num">04</div>
         <div class="sec-title">
-          <h2>Ca Làm Việc</h2>
-          <p>Cấu trúc ca & Slot allocation theo rank</p>
-        </div>
-      </div>
-
-      <div class="ca-matrix-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th class="ca-th-label" style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">Rank · Slot %</th>
-              <!-- Ca Sáng -->
-              <th class="ca-th-card">
-                <div class="ca-col-name">Ca Sáng</div>
-                <div class="ca-col-time">08:00–12:00</div>
-                <div class="ca-col-tags">
-                  <span class="ca-dur">Ca 4 tiếng</span>
-                  <span class="ca-peak">⚡ Peak sáng</span>
-                </div>
-              </th>
-              <!-- Ca Chiều -->
-              <th class="ca-th-card">
-                <div class="ca-col-name">Ca Chiều</div>
-                <div class="ca-col-time">13:00–17:00</div>
-                <div class="ca-col-tags">
-                  <span class="ca-dur">Ca 4 tiếng</span>
-                  <span class="ca-peak">⚡ Peak chiều</span>
-                </div>
-              </th>
-              <!-- Ca Tối -->
-              <th class="ca-th-card">
-                <div class="ca-col-name">Ca Tối</div>
-                <div class="ca-col-time">17:00–21:00</div>
-                <div class="ca-col-tags">
-                  <span class="ca-dur">Ca 4 tiếng</span>
-                  <span class="ca-normal">Bình thường</span>
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="rank-r1">💎 R1</span></td>
-              <td style="text-align:center;"><span class="ca-slot" style="color:var(--orange);">20%</span></td>
-              <td style="text-align:center;"><span class="ca-slot" style="color:var(--orange);">20%</span></td>
-              <td style="text-align:center;"><span class="ca-slot" style="color:var(--orange);">15%</span></td>
-            </tr>
-            <tr>
-              <td><span class="rank-r2">🥇 R2</span></td>
-              <td style="text-align:center;"><span class="ca-slot" style="color:var(--yellow);">40%</span></td>
-              <td style="text-align:center;"><span class="ca-slot" style="color:var(--yellow);">40%</span></td>
-              <td style="text-align:center;"><span class="ca-slot" style="color:var(--yellow);">40%</span></td>
-            </tr>
-            <tr>
-              <td><span class="rank-r3">🥈 R3</span></td>
-              <td style="text-align:center;"><span class="ca-slot" style="color:var(--blue);">40%</span></td>
-              <td style="text-align:center;"><span class="ca-slot" style="color:var(--blue);">40%</span></td>
-              <td style="text-align:center;"><span class="ca-slot" style="color:var(--blue);">45%</span></td>
-            </tr>
-            <tr>
-              <td><span class="rank-un">Unranked</span></td>
-              <td style="text-align:center;font-size:12px;color:var(--text-muted);">on-demand</td>
-              <td style="text-align:center;font-size:12px;color:var(--text-muted);">on-demand</td>
-              <td style="text-align:center;font-size:12px;color:var(--text-muted);">on-demand</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="font-size:12.5px;color:var(--text-sec);">Unranked không có structured slot — nhận đơn on-demand khi đơn từ các layer tràn xuống.</p>
-    </section>
-
-    <!-- ── S7: POINT ECONOMY ── -->
-    <section id="s7">
-      <div class="sec-hdr">
-        <div class="sec-num">07</div>
-        <div class="sec-title">
-          <h2>AhaBenefits — Point Economy</h2>
+          <h2>Quyền lợi theo Layer (AhaBenefits)</h2>
           <p>Công thức tích điểm · Hệ số Layer · Calibration</p>
         </div>
       </div>
@@ -1134,8 +384,7 @@
           thức</span>
         <div style="font-family:'Montserrat',monospace;font-size:14px;color:#C9D1D9;flex:1;min-width:300px;">
           <span style="color:var(--text-muted);">earned_pts = </span>
-          <span style="color:var(--blue);">round( round(trip_GSV ÷ 5.000) × layer_multiplier )</span>
-          <span style="color:var(--text-muted);"> + Điểm thưởng hoàn ca</span>
+          <span style="color:var(--blue);">round( round(trip_GSV ÷ 1.000) × layer_multiplier )</span>
         </div>
       </div>
 
@@ -1146,8 +395,7 @@
             <tr>
               <th>Layer</th>
               <th>Hệ số ×</th>
-              <th>Bonus ca</th>
-              <th>Đội trưởng hỗ trợ</th>
+              <th>Hỗ trợ</th>
               <th>Ghi chú</th>
             </tr>
           </thead>
@@ -1156,38 +404,33 @@
               <td><span class="layer-badge l2">L2</span> <span
                   style="margin-left:6px;font-weight:600;color:var(--text-prime);">Minizone</span></td>
               <td><span class="mult-big" style="color:var(--orange);">×1.5</span></td>
-              <td><strong style="color:var(--orange);">+30 pts</strong></td>
-              <td><strong style="color:var(--green);">Có</strong></td>
-              <td style="font-size:12px;">R1 ưu tiên chọn</td>
+              <td><strong style="color:var(--orange);">Đội trưởng</strong></td>
+              <td style="font-size:12px;">R1 priority zone</td>
             </tr>
             <tr>
               <td><span class="layer-badge l3">L3</span> <span
                   style="margin-left:6px;font-weight:600;color:var(--text-prime);">Mediumzone</span></td>
               <td><span class="mult-big" style="color:var(--yellow);">×1.3</span></td>
-              <td><strong style="color:var(--yellow);">+25 pts</strong></td>
-              <td><strong style="color:var(--green);">Có</strong></td>
-              <td style="font-size:12px;">R2 ưu tiên chọn</td>
+              <td><strong style="color:var(--yellow);">Đội trưởng</strong></td>
+              <td style="font-size:12px;">R2 priority zone</td>
             </tr>
             <tr>
               <td><span class="layer-badge l4">L4</span> <span
                   style="margin-left:6px;font-weight:600;color:var(--text-prime);">Bigzone</span></td>
               <td><span class="mult-big" style="color:var(--blue);">×1.1</span></td>
-              <td><strong style="color:var(--blue);">+20 pts</strong></td>
-              <td><strong style="color:var(--text-sec);">Không</strong></td>
-              <td style="font-size:12px;">R3 ưu tiên chọn</td>
+              <td><span class="warn">Không</span></td>
+              <td style="font-size:12px;">R3 priority zone</td>
             </tr>
             <tr>
               <td><span class="layer-badge l5">L5</span> <span style="margin-left:6px;">Cityzone</span></td>
               <td><span class="mult-big" style="color:var(--teal);">×1.0</span></td>
-              <td><strong>—</strong></td>
-              <td><strong style="color:var(--text-sec);">Không</strong></td>
+              <td><span class="warn">Không</span></td>
               <td></td>
             </tr>
             <tr>
               <td><span class="layer-badge l6">L6</span> <span style="margin-left:6px;">MASS</span></td>
               <td><span class="mult-big">×1.0</span></td>
-              <td><strong>—</strong></td>
-              <td><strong style="color:var(--text-sec);">Không</strong></td>
+              <td>Không</td>
               <td style="font-size:12px;">Unranked on-demand</td>
             </tr>
             <tr style="background:rgba(139,148,158,0.04);">
@@ -1195,8 +438,7 @@
                   style="font-family:'Montserrat',monospace;font-size:11px;color:var(--text-muted);background:var(--gray-dim);border:1px solid rgba(139,148,158,0.2);border-radius:6px;padding:2px 8px;">OVERFLOW</span>
               </td>
               <td><span class="mult-big" style="color:var(--text-muted);">×1.0</span></td>
-              <td><strong>—</strong></td>
-              <td><strong style="color:var(--text-sec);">Không</strong></td>
+              <td>Không</td>
               <td style="font-size:12px;color:var(--text-muted);">Nhận đơn ngoài layer đăng ký</td>
             </tr>
           </tbody>
@@ -1215,7 +457,6 @@
               <th>EPH giả định</th>
               <th>Base pts</th>
               <th>× Hệ số</th>
-              <th>Bonus ca</th>
               <th>Tổng/ca</th>
             </tr>
           </thead>
@@ -1223,44 +464,56 @@
             <tr>
               <td><span class="rank-r1">R1</span> <span class="layer-badge l2" style="margin-left:4px;">L2</span></td>
               <td class="num">~70k/h · 280k/ca</td>
-              <td class="num">56</td>
-              <td class="num" style="color:var(--orange);">56 × 1.5 = 84</td>
-              <td class="num" style="color:var(--orange);">+30</td>
+              <td class="num">280</td>
+              <td class="num" style="color:var(--orange);">280 × 1.5 = 420</td>
               <td><span
-                  style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--orange);">114</span>
+                  style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--orange);">420</span>
               </td>
             </tr>
             <tr>
               <td><span class="rank-r2">R2</span> <span class="layer-badge l3" style="margin-left:4px;">L3</span></td>
               <td class="num">~65k/h · 260k/ca</td>
-              <td class="num">52</td>
-              <td class="num" style="color:var(--yellow);">52 × 1.3 = 68</td>
-              <td class="num" style="color:var(--yellow);">+25</td>
+              <td class="num">260</td>
+              <td class="num" style="color:var(--yellow);">260 × 1.3 = 338</td>
               <td><span
-                  style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--yellow);">93</span>
+                  style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--yellow);">338</span>
               </td>
             </tr>
             <tr>
               <td><span class="rank-r3">R3</span> <span class="layer-badge l4" style="margin-left:4px;">L4</span></td>
               <td class="num">~60k/h · 240k/ca</td>
               <td class="num">48</td>
-              <td class="num" style="colo      <!-- CALIBRATION -->
+              <td class="num" style="color:var(--blue);">240 × 1.1 = 264</td>
+              <td><span style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--blue);">264</span></td>
+            </tr>
+            <tr>
+              <td><span class="rank-un">L6</span> <span class="layer-badge l6" style="margin-left:4px;">L6</span></td>
+              <td class="num">~55k/h · 220k/ca</td>
+              <td class="num">220</td>
+              <td class="num" style="color:var(--text-sec);">220 × 1.0 = 220</td>
+              <td><span style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--text-sec);">220</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CALIBRATION -->
       <div
         style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">
         Calibration — Mục tiêu đổi điểm/tháng</div>
       <div class="code-block" style="margin-bottom:16px;">
         <pre>Pts tích/tháng (avg, 22 ca):
-  R1: 114 × 22 = 2.508 pts  (15% fleet)
-  R2: 93 × 22 = 2.046 pts  (35% fleet)
-  R3: 73 × 22 = 1.606 pts  (35% fleet)
-  L6: 44 × 22 = 968 pts  (15% fleet)
-  Weighted avg ≈ 1.836 pts/tháng
+  R1: 420 × 22 = 9.240 pts  (10-15% fleet)
+  R2: 338 × 22 = 7.436 pts  (35% fleet)
+  R3: 264 × 22 = 5.808 pts  (35% fleet)
+  L6: 220 × 22 = 4.840 pts  (15% fleet)
+  Weighted avg ≈ 6.747 pts/tháng
 
-80% burn → paid reward:  1.836 × 80% = ~1.468 pts ≈ 50.000 VND
-  → Paid reward 50k = 1.500 pts (làm tròn)
+80% burn → paid reward:  6.747 × 80% = ~5.398 pts ≈ 50.000 VND
+  → Paid reward 50k = 1.000 pts (cân chỉnh lại)
 
-20% còn lại → free partner:  ~360 pts/tháng
-  → Free items giá 40–170 pts → đổi được 2–5 món/tháng</pre>
+20% còn lại → free partner:  ~1.349 pts/tháng
+  → Free items giá 200–850 pts → đổi được 1–4 món/tháng</pre>
       </div>
 
       <div class="tw">
@@ -1269,34 +522,34 @@
             <tr>
               <th>Rank</th>
               <th>Pts/tháng</th>
-              <th>80% → Paid 50k (1.500p)</th>
+              <th>80% → Paid 50k (1.000p)</th>
               <th>20% → Free items</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><span class="rank-r1">💎 R1</span></td>
-              <td class="num" style="color:var(--orange);">2.508</td>
-              <td class="good">✅ 1.500 pts <span style="color:var(--text-muted);font-size:11px;">(dư ~1.008)</span></td>
-              <td style="color:var(--text-sec);">~1.000 pts free</td>
+              <td class="num" style="color:var(--orange);">9.240</td>
+              <td class="good">✅ 5.000 pts <span style="color:var(--text-muted);font-size:11px;">(dư ~4.240)</span></td>
+              <td style="color:var(--text-sec);">~4.000 pts free</td>
             </tr>
             <tr>
               <td><span class="rank-r2">🥇 R2</span></td>
-              <td class="num" style="color:var(--yellow);">2.046</td>
-              <td class="good">✅ 1.500 pts <span style="color:var(--text-muted);font-size:11px;">(dư ~546)</span></td>
-              <td style="color:var(--text-sec);">~500 pts free</td>
+              <td class="num" style="color:var(--yellow);">7.436</td>
+              <td class="good">✅ 5.000 pts <span style="color:var(--text-muted);font-size:11px;">(dư ~2.436)</span></td>
+              <td style="color:var(--text-sec);">~2.000 pts free</td>
             </tr>
             <tr>
               <td><span class="rank-r3">🥈 R3</span></td>
-              <td class="num" style="color:var(--blue);">1.606</td>
-              <td class="warn">✅ 1.500 pts <span style="color:var(--text-muted);font-size:11px;">(dư ~106)</span>
+              <td class="num" style="color:var(--blue);">5.808</td>
+              <td class="warn">✅ 5.000 pts <span style="color:var(--text-muted);font-size:11px;">(dư ~808)</span>
               </td>
-              <td style="color:var(--text-sec);">~100 pts free</td>
+              <td style="color:var(--text-sec);">~800 pts free</td>
             </tr>
             <tr>
               <td><span class="rank-un">L6</span></td>
-              <td class="num">968</td>
-              <td style="color:var(--red);">❌ cần ~1.5 tháng</td>
+              <td class="num">4.840</td>
+              <td style="color:var(--red);">❌ cần ~1.1 tháng</td>
               <td style="color:var(--text-muted);font-size:11.5px;font-style:italic;">Động lực lên R3</td>
             </tr>
           </tbody>
@@ -1309,7 +562,7 @@
           <div
             style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-family:'Montserrat',monospace;">
             1 Điểm</div>
-          <div style="font-family:'Montserrat',monospace;font-size:20px;font-weight:800;color:var(--orange);">≈ 35đ
+          <div style="font-family:'Montserrat',monospace;font-size:20px;font-weight:800;color:var(--orange);">≈ 50đ
           </div>
           <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">giá trị kinh tế</div>
         </div>
@@ -1318,7 +571,7 @@
           <div
             style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-family:'Montserrat',monospace;">
             Paid 50k</div>
-          <div style="font-family:'Montserrat',monospace;font-size:20px;font-weight:800;color:var(--green);">1.500 pts
+          <div style="font-family:'Montserrat',monospace;font-size:20px;font-weight:800;color:var(--green);">1.000 pts
           </div>
           <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">(đổi voucher)</div>
         </div>
@@ -1346,13 +599,12 @@
       </div>
     </section>
 
-    <!-- ── S8: CATALOG ── -->
-    <section id="s8">
+<section id="s5">
       <div class="sec-hdr">
-        <div class="sec-num">08</div>
+        <div class="sec-num">05</div>
         <div class="sec-title">
           <h2>AhaBenefits Catalog — Point Costs</h2>
-          <p>Công thức giá điểm: <code>Điểm = Giá trị thực (VND) ÷ 35</code> (đối với Paid Items)</p>
+          <p>Công thức giá điểm: <code>Điểm = Giá trị thực (VND) ÷ 10</code> (đối với Paid Items)</p>
         </div>
       </div>
 
@@ -1388,42 +640,42 @@
                 <td>Voucher xăng 30k</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">30.000đ</td>
-                <td><strong class="num" style="color:var(--blue);">170</strong></td>
+                <td><strong class="num" style="color:var(--blue);">3.000</strong></td>
               </tr>
               <tr>
                 <td>⛽ Xăng/EV</td>
                 <td>Voucher sạc EV 30k</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">30.000đ</td>
-                <td><strong class="num" style="color:var(--blue);">170</strong></td>
+                <td><strong class="num" style="color:var(--blue);">3.000</strong></td>
               </tr>
               <tr>
                 <td>🔧 Bảo dưỡng</td>
                 <td>Thay nhớt cơ bản</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">~50.000đ</td>
-                <td><strong class="num" style="color:var(--blue);">65</strong></td>
+                <td><strong class="num" style="color:var(--blue);">5.000</strong></td>
               </tr>
               <tr>
                 <td>🍜 F&amp;B</td>
                 <td>Voucher cơm/bún 20k</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">20.000đ</td>
-                <td><strong class="num" style="color:var(--blue);">55</strong></td>
+                <td><strong class="num" style="color:var(--blue);">5.000</strong></td>
               </tr>
               <tr>
                 <td>📱 Data</td>
                 <td>Data 4G 5GB (30 ngày)</td>
                 <td><span class="type-paid">Paid</span></td>
                 <td class="num">~50.000đ</td>
-                <td><strong class="num" style="color:var(--blue);">400</strong></td>
+                <td><strong class="num" style="color:var(--blue);">5.000</strong></td>
               </tr>
               <tr>
                 <td>🎽 CCDC</td>
                 <td>Áo thun Ahamove</td>
                 <td><span class="type-paid">Paid</span></td>
                 <td class="num">~120.000đ</td>
-                <td><strong class="num" style="color:var(--blue);">1.400</strong></td>
+                <td><strong class="num" style="color:var(--blue);">12.000</strong></td>
               </tr>
             </tbody>
           </table>
@@ -1456,56 +708,56 @@
                 <td>Voucher xăng 50k</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">50.000đ</td>
-                <td><strong class="num" style="color:var(--yellow);">285</strong></td>
+                <td><strong class="num" style="color:var(--yellow);">25.000</strong></td>
               </tr>
               <tr>
                 <td>⛽ Xăng/EV</td>
                 <td>Voucher sạc EV 50k</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">50.000đ</td>
-                <td><strong class="num" style="color:var(--yellow);">285</strong></td>
+                <td><strong class="num" style="color:var(--yellow);">25.000</strong></td>
               </tr>
               <tr>
                 <td>🔧 Bảo dưỡng</td>
                 <td>Gói bảo dưỡng tiêu chuẩn</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">~150.000đ</td>
-                <td><strong class="num" style="color:var(--yellow);">170</strong></td>
+                <td><strong class="num" style="color:var(--yellow);">15.000</strong></td>
               </tr>
               <tr>
                 <td>🍜 F&amp;B</td>
                 <td>Voucher F&amp;B đối tác 50k</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">50.000đ</td>
-                <td><strong class="num" style="color:var(--yellow);">140</strong></td>
+                <td><strong class="num" style="color:var(--yellow);">25.000</strong></td>
               </tr>
               <tr>
                 <td>🏥 Sức khoẻ</td>
                 <td>Khám sức khỏe cơ bản</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">—</td>
-                <td><strong class="num" style="color:var(--yellow);">40</strong></td>
+                <td><strong class="num" style="color:var(--yellow);">4.000</strong></td>
               </tr>
               <tr>
                 <td>📱 Data</td>
                 <td>Data 4G 10GB (30 ngày)</td>
                 <td><span class="type-paid">Paid</span></td>
                 <td class="num">~80.000đ</td>
-                <td><strong class="num" style="color:var(--yellow);">700</strong></td>
+                <td><strong class="num" style="color:var(--yellow);">8.000</strong></td>
               </tr>
               <tr>
                 <td>🎽 CCDC</td>
                 <td>Combo (áo + túi nhiệt)</td>
                 <td><span class="type-paid">Paid</span></td>
                 <td class="num">~250.000đ</td>
-                <td><strong class="num" style="color:var(--yellow);">2.300</strong></td>
+                <td><strong class="num" style="color:var(--yellow);">25.000</strong></td>
               </tr>
               <tr>
                 <td>🛵 Phụ kiện</td>
                 <td>Bộ phụ kiện xe (gương, đèn)</td>
                 <td><span class="type-paid">Paid</span></td>
                 <td class="num">~300.000đ</td>
-                <td><strong class="num" style="color:var(--yellow);">3.400</strong></td>
+                <td><strong class="num" style="color:var(--yellow);">30.000</strong></td>
               </tr>
             </tbody>
           </table>
@@ -1538,42 +790,42 @@
                 <td>Gói bảo dưỡng ưu tiên R1</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">~250.000đ</td>
-                <td><strong class="num" style="color:var(--orange);">255</strong></td>
+                <td><strong class="num" style="color:var(--orange);">25.000</strong></td>
               </tr>
               <tr>
                 <td>🍜 F&amp;B</td>
                 <td>Voucher F&amp;B đối tác 100k</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">100.000đ</td>
-                <td><strong class="num" style="color:var(--orange);">285</strong></td>
+                <td><strong class="num" style="color:var(--orange);">10.000</strong></td>
               </tr>
               <tr>
                 <td>🏥 Sức khoẻ</td>
                 <td>Gói khám đầy đủ</td>
                 <td><span class="type-free">Free</span></td>
                 <td class="num">—</td>
-                <td><strong class="num" style="color:var(--orange);">170</strong></td>
+                <td><strong class="num" style="color:var(--orange);">17.000</strong></td>
               </tr>
               <tr>
                 <td>📱 Data</td>
                 <td>Data 4G 20GB (30 ngày)</td>
                 <td><span class="type-paid">Paid</span></td>
                 <td class="num">~150.000đ</td>
-                <td><strong class="num" style="color:var(--orange);">1.400</strong></td>
+                <td><strong class="num" style="color:var(--orange);">15.000</strong></td>
               </tr>
               <tr style="background:rgba(167,139,250,0.05);">
                 <td>🛡 Bảo hiểm</td>
                 <td>Bảo hiểm tai nạn 10k/tháng</td>
                 <td><span class="type-paid">Paid</span></td>
                 <td class="num">10.000đ/tháng</td>
-                <td><strong class="num" style="color:var(--purple);">285</strong></td>
+                <td><strong class="num" style="color:var(--purple);">1.000</strong></td>
               </tr>
               <tr style="background:rgba(167,139,250,0.05);">
                 <td>🛡 Bảo hiểm</td>
                 <td>Bảo hiểm tai nạn 30k/tháng</td>
                 <td><span class="type-paid">Paid</span></td>
                 <td class="num">30.000đ/tháng</td>
-                <td><strong class="num" style="color:var(--purple);">857</strong></td>
+                <td><strong class="num" style="color:var(--purple);">3.000</strong></td>
               </tr>
             </tbody>
           </table>
@@ -1638,10 +890,9 @@
       </div>
     </section>
 
-    <!-- ── S9: SUMMARY ── -->
-    <section id="s9">
+<section id="s6">
       <div class="sec-hdr">
-        <div class="sec-num">09</div>
+        <div class="sec-num">06</div>
         <div class="sec-title">
           <h2>Bảng Tổng Hợp</h2>
           <p>Overview nhanh theo Rank · Layer · Ca làm việc</p>
@@ -1651,7 +902,7 @@
       <!-- 9.1 By Rank -->
       <div
         style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">
-        9.1 Theo Rank</div>
+        6.1 Theo Rank</div>
       <div class="tw" style="margin-bottom:24px;">
         <table>
           <thead>
@@ -1677,6 +928,13 @@
               <td><span class="layer-badge l3">L3</span> Mediumzone</td>
               <td><span class="layer-badge l4">L4</span> Bigzone</td>
               <td><span class="layer-badge l6">L6</span> MASS</td>
+            </tr>
+            <tr>
+              <td style="font-size:12.5px;color:var(--text-sec);">Ca Full-day</td>
+              <td class="good">✅ 08:00–18:00</td>
+              <td class="good">✅ 08:00–18:00</td>
+              <td class="na">❌</td>
+              <td class="na">❌</td>
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">Ưu tiên đăng ký Layer</td>
@@ -1738,7 +996,7 @@
       <!-- 9.2 By Layer -->
       <div
         style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">
-        9.2 Theo Layer</div>
+        6.2 Theo Layer</div>
       <div class="tw" style="margin-bottom:24px;">
         <table>
           <thead>
@@ -1757,8 +1015,16 @@
               <td><span class="rank-r1">R1</span></td>
               <td><span class="rank-r2">R2</span></td>
               <td><span class="rank-r3">R3</span></td>
-              <td style="font-size:12px;color:var(--text-sec);">Overflow R3</td>
-              <td><span class="rank-un">Unranked</span></td>
+              <td style="font-size:12px;color:var(--text-sec);">Bất kỳ</td>
+              <td><span class="rank-pill rp-un">Unranked</span></td>
+            </tr>
+            <tr>
+              <td style="font-size:12.5px;color:var(--text-sec);">Hỗ trợ</td>
+              <td>Đội trưởng</td>
+              <td>Đội trưởng</td>
+              <td>Đội trưởng</td>
+              <td>Đội trưởng</td>
+              <td style="font-size:12px;color:var(--text-sec);">Không</td>
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">AhaPoints ×</td>
@@ -1768,14 +1034,7 @@
               <td><span class="mult-big" style="color:var(--teal);font-size:18px;">×1.0</span></td>
               <td><span class="mult-big" style="font-size:18px;">×1.0</span></td>
             </tr>
-            <tr>
-              <td style="font-size:12.5px;color:var(--text-sec);">Đội trưởng hỗ trợ</td>
-              <td class="good">✅ Có</td>
-              <td class="good">✅ Có</td>
-              <td class="na">❌ Không</td>
-              <td class="na">❌ Không</td>
-              <td class="na">❌ Không</td>
-            </tr>
+
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">Overflow</td>
               <td style="font-size:12.5px;color:var(--text-sec);">×1.0</td>
@@ -1807,7 +1066,7 @@
       <!-- 9.3 By Shift -->
       <div
         style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">
-        9.3 Theo Ca làm việc</div>
+        6.3 Theo Ca làm việc (Reference)</div>
       <div class="tw" style="margin-bottom:16px;">
         <table>
           <thead>
@@ -1816,6 +1075,7 @@
               <th>Ca Sáng</th>
               <th>Ca Chiều</th>
               <th>Ca Tối</th>
+              <th>Ca Full-day</th>
             </tr>
           </thead>
           <tbody>
@@ -1824,42 +1084,49 @@
               <td class="num">08:00–12:00</td>
               <td class="num">13:00–17:00</td>
               <td class="num">17:00–21:00</td>
+              <td class="num">08:00–18:00</td>
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">Loại</td>
               <td><span style="color:var(--yellow);font-weight:700;font-size:11.5px;">⚡ Peak · 4h</span></td>
               <td><span style="color:var(--yellow);font-weight:700;font-size:11.5px;">⚡ Peak · 4h</span></td>
               <td style="font-size:11.5px;">4h</td>
+              <td style="font-size:11.5px;">10h</td>
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">Slot R1</td>
               <td class="num" style="color:var(--orange);">20%</td>
               <td class="num" style="color:var(--orange);">20%</td>
               <td class="num" style="color:var(--orange);">15%</td>
+              <td class="num" style="color:var(--orange);">50%</td>
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">Slot R2</td>
               <td class="num" style="color:var(--yellow);">40%</td>
               <td class="num" style="color:var(--yellow);">40%</td>
               <td class="num" style="color:var(--yellow);">40%</td>
+              <td class="num" style="color:var(--yellow);">50%</td>
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">Slot R3</td>
               <td class="num" style="color:var(--blue);">40%</td>
               <td class="num" style="color:var(--blue);">40%</td>
               <td class="num" style="color:var(--blue);">45%</td>
+              <td class="na">—</td>
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">Unranked</td>
               <td class="na">on-demand</td>
               <td class="na">on-demand</td>
               <td class="na">on-demand</td>
+              <td class="na">❌</td>
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">Thu nhập target</td>
               <td style="font-size:11.5px;color:var(--text-sec);">Theo Layer</td>
               <td style="font-size:11.5px;color:var(--text-sec);">Theo Layer</td>
               <td style="font-size:11.5px;color:var(--text-sec);">Theo Layer</td>
+              <td style="font-size:11.5px;color:var(--text-sec);">Giờ mở R1/R2</td>
             </tr>
           </tbody>
         </table>
@@ -1884,7 +1151,57 @@
 
     </section>
 
-  </main>
-</body>
+<section id="s7">
+      <div class="sec-hdr">
+        <div class="sec-num">07</div>
+        <div class="sec-title">
+          <h2>Timeline Triển Khai (Từ giữa tháng 7/2026)</h2>
+          <p>Lộ trình áp dụng Ranking & Benefits v2.0</p>
+        </div>
+      </div>
 
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        
+        <!-- Giai đoạn 1 -->
+        <div style="background:var(--bg-card);border-left:4px solid var(--blue);border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-size:16px;font-weight:700;color:var(--text-prime);">Giai đoạn 1: Chuẩn bị & Phát triển</div>
+            <div style="font-size:12px;font-weight:600;color:var(--blue);background:var(--blue-dim);padding:4px 8px;border-radius:4px;">Giữa Tháng 7/2026</div>
+          </div>
+          <ul style="margin:0;padding-left:20px;font-size:13px;color:var(--text-sec);line-height:1.6;">
+            <li>Điều chỉnh ranking, apply <strong>DQS</strong>, truyền thông, đào tạo, chỉnh sửa các document.</li>
+            <li>Xây dựng <strong>AhaBenefits</strong> song song, xây dựng cơ chế ưu tiên đăng ký/tự động mở ca.</li>
+          </ul>
+        </div>
+
+        <!-- Giai đoạn 2 -->
+        <div style="background:var(--bg-card);border-left:4px solid var(--yellow);border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-size:16px;font-weight:700;color:var(--text-prime);">Giai đoạn 2: Shadow Mode (Chạy ngầm)</div>
+            <div style="font-size:12px;font-weight:600;color:var(--yellow);background:var(--yellow-dim);padding:4px 8px;border-radius:4px;">Tháng 8/2026</div>
+          </div>
+          <ul style="margin:0;padding-left:20px;font-size:13px;color:var(--text-sec);line-height:1.6;">
+            <li>Hệ thống tính điểm DQS chạy thực tế, hiển thị Rank dự kiến trên app nhưng chưa áp dụng chặn đăng ký Layer.</li>
+            <li>Chạy test ở <strong>HAN</strong> trước, sau đó triển khai mở rộng ở <strong>SGN</strong>.</li>
+          </ul>
+        </div>
+
+        <!-- Giai đoạn 3 -->
+        <div style="background:var(--bg-card);border-left:4px solid var(--orange);border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-size:16px;font-weight:700;color:var(--text-prime);">Giai đoạn 3: Triển khai Chính thức</div>
+            <div style="font-size:12px;font-weight:600;color:var(--orange);background:var(--orange-dim);padding:4px 8px;border-radius:4px;">Tháng 9/2026</div>
+          </div>
+          <ul style="margin:0;padding-left:20px;font-size:13px;color:var(--text-sec);line-height:1.6;">
+            <li>Triển khai Chính thức, đồng bộ áp dụng <strong>AhaBenefits</strong>.</li>
+            <li>Kích hoạt cổng đổi điểm lấy Voucher, Data, Bảo hiểm, Công cụ dụng cụ...</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+</body>
 </html>

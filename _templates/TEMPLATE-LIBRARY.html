@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulu Template Library — Demo & Trailer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08090B;
+      --bg-card: #111318;
+      --bg-card2: #1A1D24;
+      --border: rgba(255,255,255,0.07);
+      --orange: #FF7F32;
+      --yellow: #F59E0B;
+      --blue: #3B82F6;
+      --green: #10B981;
+      --purple: #A855F7;
+      --teal: #14B8A6;
+      --red: #EF4444;
+      --text-prime: #F0F2F5;
+      --text-sec: #8B95A7;
+      --text-muted: #50586A;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-prime);
+      line-height: 1.6;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      text-align: center;
+      padding: 80px 40px 60px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,0.12) 0%, transparent 70%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-badge {
+      display: inline-block;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--blue);
+      border: 1px solid rgba(59,130,246,0.35);
+      padding: 5px 14px; border-radius: 20px;
+      background: rgba(59,130,246,0.08);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--orange) 0%, var(--yellow) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p { font-size: 18px; color: var(--text-sec); max-width: 640px; margin: 0 auto 40px; }
+    .stat-row {
+      display: flex; gap: 40px; justify-content: center; flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-family: 'Montserrat', sans-serif; font-size: 28px; font-weight: 800; color: var(--text-prime); }
+    .stat-label { font-size: 12px; color: var(--text-sec); margin-top: 4px; }
+
+    /* ─── LAYOUT ─── */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+
+    /* ─── SECTION ─── */
+    .section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+    .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
+    .section-num {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.1em;
+      color: var(--orange); opacity: 0.7;
+    }
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px; font-weight: 800; color: var(--text-prime);
+    }
+    .section-tag {
+      margin-left: auto;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 6px;
+    }
+
+    /* ─── TEMPLATE CARD ─── */
+    .template-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 24px; }
+    .template-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .template-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,0.15);
+    }
+    .card-preview {
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px;
+      position: relative; overflow: hidden;
+    }
+    .card-preview .preview-label {
+      position: absolute; top: 12px; left: 12px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
+      background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.6);
+    }
+    .card-preview .preview-link {
+      position: absolute; bottom: 12px; right: 12px;
+    }
+    .preview-link a {
+      font-size: 11px; font-weight: 600; text-decoration: none;
+      padding: 5px 12px; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.05);
+      transition: all 0.2s;
+    }
+    .preview-link a:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+    .card-body { padding: 20px 22px 22px; }
+    .card-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px; font-weight: 700;
+      margin-bottom: 6px; color: var(--text-prime);
+    }
+    .card-desc { font-size: 13px; color: var(--text-sec); margin-bottom: 14px; line-height: 1.5; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .tag {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
+    }
+    .tag-blue { background: rgba(59,130,246,0.12); color: #60A5FA; }
+    .tag-orange { background: rgba(255,127,50,0.12); color: #FB923C; }
+    .tag-green { background: rgba(16,185,129,0.12); color: #34D399; }
+    .tag-purple { background: rgba(168,85,247,0.12); color: #C084FC; }
+    .tag-yellow { background: rgba(245,158,11,0.12); color: #FCD34D; }
+    .tag-teal { background: rgba(20,184,166,0.12); color: #2DD4BF; }
+
+    .card-components { border-top: 1px solid var(--border); padding-top: 12px; }
+    .card-components-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 8px; }
+    .component-list { display: flex; flex-wrap: wrap; gap: 5px; }
+    .comp-item {
+      font-size: 11px; color: var(--text-sec);
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      padding: 2px 7px; border-radius: 4px;
+    }
+
+    /* ─── PREVIEW THUMBNAILS (mini simulations) ─── */
+    .thumb-presentation {
+      background: linear-gradient(135deg, #0A0A0B 0%, #111318 100%);
+      padding: 24px;
+    }
+    .thumb-presentation .t-slide-num { font-size: 10px; color: rgba(255,127,50,0.5); font-family: monospace; }
+    .thumb-presentation .t-title { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 800; color: #fff; margin-top: 4px; }
+    .thumb-presentation .t-lead { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+    .thumb-presentation .t-bar { width: 100%; height: 2px; background: rgba(255,255,255,0.08); border-radius: 1px; margin-top: 16px; position: relative; }
+    .thumb-presentation .t-bar-fill { height: 100%; width: 30%; background: #FF7F32; border-radius: 1px; }
+
+    .thumb-analytics {
+      background: #F8FAFC; padding: 16px;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+    }
+    .thumb-analytics .t-kpi { background: #fff; border: 1px solid #E2E8F0; border-radius: 6px; padding: 8px 10px; }
+    .thumb-analytics .t-kpi-val { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 800; color: #1E293B; }
+    .thumb-analytics .t-kpi-lbl { font-size: 9px; color: #94A3B8; margin-top: 2px; }
+    .thumb-analytics .t-kpi-delta { font-size: 9px; font-weight: 600; color: #10B981; }
+
+    .thumb-landing {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 24px; text-align: center;
+    }
+    .thumb-landing .t-badge { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #60A5FA; border: 1px solid rgba(96,165,250,0.3); padding: 3px 8px; border-radius: 10px; margin-bottom: 10px; }
+    .thumb-landing .t-title { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 800; color: #fff; }
+    .thumb-landing .t-cta { margin-top: 12px; background: #3B82F6; color: #fff; font-size: 10px; font-weight: 700; padding: 5px 14px; border-radius: 6px; }
+
+    .thumb-intel {
+      background: #0A0F1A; padding: 16px;
+    }
+    .thumb-intel .t-row { display: flex; gap: 8px; margin-bottom: 6px; align-items: center; }
+    .thumb-intel .t-brand { font-size: 9px; font-weight: 700; color: #60A5FA; }
+    .thumb-intel .t-bar-h { flex: 1; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.08); position: relative; }
+    .thumb-intel .t-bar-h-fill { height: 100%; border-radius: 2px; }
+    .thumb-intel .t-val { font-size: 9px; color: rgba(255,255,255,0.5); }
+
+    .thumb-dark { background: linear-gradient(135deg, #080F1D 0%, #0F1B2D 100%); display: flex; align-items: center; justify-content: center; }
+    .thumb-dark .t-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 14px 18px; text-align: center; }
+    .thumb-dark .t-card-title { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 800; }
+    .thumb-dark .t-card-sub { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+    .thumb-navy { background: linear-gradient(135deg, #1A2E48 0%, #0F1E32 100%); display: flex; align-items: center; justify-content: center; }
+    .thumb-light { background: linear-gradient(135deg, #F2F4F8 0%, #E8EBF0 100%); display: flex; align-items: center; justify-content: center; }
+    .thumb-light .t-card { background: #fff; border: 1px solid #D1D9E6; border-radius: 8px; padding: 14px 18px; text-align: center; }
+    .thumb-light .t-card-title { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 800; color: #1E293B; }
+    .thumb-light .t-card-sub { font-size: 10px; color: #94A3B8; margin-top: 4px; }
+
+    .thumb-weekly {
+      background: #0D1117; padding: 14px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+    }
+    .thumb-weekly .t-metric { background: rgba(255,255,255,0.04); border-radius: 5px; padding: 7px 8px; text-align: center; }
+    .thumb-weekly .t-m-val { font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 800; }
+    .thumb-weekly .t-m-lbl { font-size: 8px; color: rgba(255,255,255,0.3); margin-top: 2px; }
+
+    .thumb-tier {
+      background: #0A0A0B; padding: 14px;
+    }
+    .thumb-tier table { width: 100%; border-collapse: collapse; }
+    .thumb-tier th { font-size: 8px; font-weight: 700; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 4px 6px; text-align: left; }
+    .thumb-tier td { font-size: 10px; color: rgba(255,255,255,0.7); padding: 4px 6px; border-top: 1px solid rgba(255,255,255,0.05); }
+    .thumb-tier .t-badge-r1 { background: rgba(255,127,50,0.2); color: #FB923C; font-size: 8px; font-weight: 700; padding: 2px 5px; border-radius: 3px; }
+    .thumb-tier .t-badge-r2 { background: rgba(245,158,11,0.2); color: #FCD34D; font-size: 8px; font-weight: 700; padding: 2px 5px; border-radius: 3px; }
+    .thumb-tier .t-badge-r3 { background: rgba(59,130,246,0.2); color: #60A5FA; font-size: 8px; font-weight: 700; padding: 2px 5px; border-radius: 3px; }
+
+    /* ─── QUICK REFERENCE ─── */
+    .quick-ref { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-top: 48px; }
+    .quick-ref h3 { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 800; margin-bottom: 20px; }
+    .quick-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .quick-table th { text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .quick-table td { padding: 12px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); vertical-align: top; color: var(--text-sec); }
+    .quick-table td:first-child { font-weight: 600; color: var(--text-prime); }
+    .quick-table tr:last-child td { border-bottom: none; }
+    .quick-table a { color: var(--blue); text-decoration: none; }
+    .quick-table a:hover { text-decoration: underline; }
+
+    /* ─── FOOTER ─── */
+    footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 13px; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="container">
+      <div class="hero-badge">📦 Pulu Template Library</div>
+      <h1>Bộ Sưu Tập <span>Templates</span><br>Cho Mọi Use Case</h1>
+      <p>Toàn bộ HTML templates được xây dựng và tối ưu hóa trong dự án Ahamove — sẵn sàng tái sử dụng ngay lập tức.</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="stat-num">14</div><div class="stat-label">Templates có sẵn</div></div>
+        <div class="stat-item"><div class="stat-num">5</div><div class="stat-label">Nhóm Use Case</div></div>
+        <div class="stat-item"><div class="stat-num">Dark</div><div class="stat-label">Theme mặc định</div></div>
+        <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">Dependencies ngoài (CSS)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: PRESENTATIONS -->
+  <div class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-num">01</div>
+        <div class="section-title">Presentation Slide Decks</div>
+        <div class="section-tag tag-orange">3 Templates</div>
+      </div>
+      <div class="template-grid">
+
+        <!-- Card 1: Dark Slide Fullscreen -->
+        <div class="template-card">
+          <div class="card-preview thumb-presentation">
+            <div class="preview-label">DARK · FULLSCREEN</div>
+            <div style="width:100%;">
+              <div class="t-slide-num">SLIDE 01 / 09</div>
+              <div class="t-title">Driver Ranking<br><span style="color:#FF7F32">v2.0</span></div>
+              <div class="t-lead">Strategy Presentation · Driver Management</div>
+              <div class="t-bar"><div class="t-bar-fill"></div></div>
+            </div>
+            <div class="preview-link">
+              <a href="presentation-dark-slide-template.html" target="_blank">↗ Xem demo</a>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Presentation Dark Slide</div>
+            <div class="card-desc">Slide deck fullscreen dark mode, điều hướng phím mũi tên. Progress bar, animated transition, 9 slide mẫu đầy đủ nội dung chiến lược.</div>
+            <div class="card-tags">
+              <span class="tag tag-orange">Dark Mode</span>
+              <span class="tag tag-blue">Fullscreen</span>
+              <span class="tag tag-purple">Animated</span>
+              <span class="tag tag-green">Strategy</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">Components có sẵn</div>
+              <div class="component-list">
+                <span class="comp-item">data-table</span>
+                <span class="comp-item">kpi-grid</span>
+                <span class="comp-item">loop-diagram SVG</span>
+                <span class="comp-item">pyramid SVG</span>
+                <span class="comp-item">timeline-box</span>
+                <span class="comp-item">insight-bar</span>
+                <span class="comp-item">grid-2</span>
+                <span class="comp-item">progress-bar</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Slide Dark Theme CSS -->
+        <div class="template-card">
+          <div class="card-preview thumb-dark">
+            <div class="preview-label">THEME CSS · DARK</div>
+            <div class="t-card">
+              <div class="t-card-title" style="background:linear-gradient(135deg,#FF7F32,#F59E0B);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Slide Theme</div>
+              <div class="t-card-sub">Dark · Premium Fintech</div>
+            </div>
+            <div class="preview-link"><a href="slide-theme-dark.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Slide Theme — Dark</div>
+            <div class="card-desc">CSS theme library cho slide với nền deep navy #080F1D. Chứa toàn bộ CSS variables, typography scale, card styles.</div>
+            <div class="card-tags">
+              <span class="tag tag-blue">CSS Variables</span>
+              <span class="tag tag-orange">Navy Dark</span>
+              <span class="tag tag-purple">Fintech Vibe</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">Classes có sẵn</div>
+              <div class="component-list">
+                <span class="comp-item">.glass</span>
+                <span class="comp-item">.label-xs</span>
+                <span class="comp-item">.num-hero</span>
+                <span class="comp-item">.pill-ok/warn</span>
+                <span class="comp-item">.prog-track</span>
+                <span class="comp-item">.s1-body grid</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Slide Navy Theme -->
+        <div class="template-card">
+          <div class="card-preview thumb-navy">
+            <div class="preview-label">THEME CSS · NAVY</div>
+            <div class="t-card" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:14px 18px;text-align:center;">
+              <div class="t-card-title" style="font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;color:#fff;">Slide Theme</div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:4px;">Navy · Corporate Premium</div>
+            </div>
+            <div class="preview-link"><a href="slide-theme-navy.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Slide Theme — Navy</div>
+            <div class="card-desc">Theme nền navy mid-tone #1A2E48. Cân bằng giữa premium và corporate. Phù hợp báo cáo lãnh đạo, meeting formal.</div>
+            <div class="card-tags">
+              <span class="tag tag-teal">Navy Mid</span>
+              <span class="tag tag-blue">Corporate</span>
+              <span class="tag tag-green">Formal</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">Classes có sẵn</div>
+              <div class="component-list">
+                <span class="comp-item">.glass</span>
+                <span class="comp-item">.card</span>
+                <span class="comp-item">.pill</span>
+                <span class="comp-item">.sep</span>
+                <span class="comp-item">.hero-num</span>
+                <span class="comp-item">.survival-row</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Slide Light Theme -->
+        <div class="template-card">
+          <div class="card-preview thumb-light">
+            <div class="preview-label" style="color:rgba(0,0,0,0.4);background:rgba(255,255,255,0.6);">THEME CSS · LIGHT</div>
+            <div class="t-card">
+              <div class="t-card-title">Slide Theme</div>
+              <div class="t-card-sub">Light · Clean Consulting</div>
+            </div>
+            <div class="preview-link"><a href="slide-theme-light.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Slide Theme — Light</div>
+            <div class="card-desc">Theme nền xám nhạt #F2F4F8 kiểu consulting. Printable, dễ đọc, phù hợp tài liệu chia sẻ external hoặc in ấn.</div>
+            <div class="card-tags">
+              <span class="tag tag-yellow">Light Mode</span>
+              <span class="tag tag-teal">Consulting</span>
+              <span class="tag tag-green">Printable</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">Classes có sẵn</div>
+              <div class="component-list">
+                <span class="comp-item">.card white</span>
+                <span class="comp-item">.accent-border</span>
+                <span class="comp-item">.kpi-block</span>
+                <span class="comp-item">.badge</span>
+                <span class="comp-item">.sep-line</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION NEW: ADVANCED REPORTS -->
+  <div class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-num">02</div>
+        <div class="section-title">Advanced Reports (Mới)</div>
+        <div class="section-tag tag-purple">4 Templates Mới</div>
+      </div>
+      <div class="template-grid">
+
+        <!-- Executive One-Pager -->
+        <div class="template-card">
+          <div class="card-preview" style="background:linear-gradient(135deg,#08090C,#111318);padding:0;flex-direction:column;align-items:stretch;">
+            <div class="preview-label">EXEC · ONE-PAGER</div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);height:100%;">
+              <div style="background:#111318;border-right:1px solid rgba(255,255,255,0.05);padding:10px 8px;border-top:2px solid #FF7F32;">
+                <div style="font-size:8px;color:rgba(255,127,50,0.5);font-family:monospace;">FR</div>
+                <div style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:900;color:#fff;">94.2<span style="font-size:9px;color:#666;">%</span></div>
+                <div style="display:flex;align-items:flex-end;gap:1px;height:14px;margin-top:6px;">
+                  <div style="flex:1;border-radius:1px 1px 0 0;background:rgba(255,127,50,0.3);height:40%;"></div>
+                  <div style="flex:1;border-radius:1px 1px 0 0;background:rgba(255,127,50,0.5);height:60%;"></div>
+                  <div style="flex:1;border-radius:1px 1px 0 0;background:#FF7F32;height:85%;"></div>
+                </div>
+              </div>
+              <div style="background:#111318;border-right:1px solid rgba(255,255,255,0.05);padding:10px 8px;">
+                <div style="font-size:8px;color:rgba(255,255,255,0.3);font-family:monospace;">ACT</div>
+                <div style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:900;color:#fff;">12.4<span style="font-size:9px;color:#666;">k</span></div>
+                <div style="display:flex;align-items:flex-end;gap:1px;height:14px;margin-top:6px;">
+                  <div style="flex:1;border-radius:1px 1px 0 0;background:rgba(16,185,129,0.3);height:50%;"></div>
+                  <div style="flex:1;border-radius:1px 1px 0 0;background:rgba(16,185,129,0.5);height:70%;"></div>
+                  <div style="flex:1;border-radius:1px 1px 0 0;background:#10B981;height:88%;"></div>
+                </div>
+              </div>
+              <div style="background:#111318;border-right:1px solid rgba(255,255,255,0.05);padding:10px 8px;">
+                <div style="font-size:8px;color:rgba(255,255,255,0.3);font-family:monospace;">AR</div>
+                <div style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:900;color:#F59E0B;">87.3<span style="font-size:9px;color:#666;">%</span></div>
+              </div>
+              <div style="background:#111318;border-right:1px solid rgba(255,255,255,0.05);padding:10px 8px;">
+                <div style="font-size:8px;color:rgba(255,255,255,0.3);font-family:monospace;">DQS</div>
+                <div style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:900;color:#fff;">82.1</div>
+              </div>
+              <div style="background:#111318;padding:10px 8px;">
+                <div style="font-size:8px;color:rgba(255,255,255,0.3);font-family:monospace;">CHN</div>
+                <div style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:900;color:#EF4444;">3.2<span style="font-size:9px;color:#666;">%</span></div>
+              </div>
+            </div>
+            <div class="preview-link"><a href="executive-one-pager-template.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Executive One-Pager Dashboard</div>
+            <div class="card-desc">C-level weekly briefing: hero KPI với sparkline inline, comparison table RAG, city breakdown bars, SVG trend chart 8 tuần, action items 3 cột.</div>
+            <div class="card-tags">
+              <span class="tag tag-orange">C-Level</span>
+              <span class="tag tag-blue">Weekly</span>
+              <span class="tag tag-purple">Sparklines</span>
+              <span class="tag tag-green">RAG Status</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">10 Components</div>
+              <div class="component-list">
+                <span class="comp-item">hero-kpi + sparkline</span>
+                <span class="comp-item">alert-banner</span>
+                <span class="comp-item">comparison-table</span>
+                <span class="comp-item">city-bar-heatmap</span>
+                <span class="comp-item">svg-area-chart</span>
+                <span class="comp-item">action-3col</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RCA Report -->
+        <div class="template-card">
+          <div class="card-preview" style="background:#06080C;padding:16px;flex-direction:column;align-items:flex-start;justify-content:flex-start;">
+            <div class="preview-label">RCA · FORENSIC</div>
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:8px;font-weight:700;padding:3px 8px;border-radius:3px;background:rgba(249,115,22,0.15);color:#F97316;border:1px solid rgba(249,115,22,0.3);margin-bottom:8px;">⚠ SEV-2 · RCA COMPLETED</div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:12px;font-weight:900;color:#fff;margin-bottom:8px;">Sụt giảm AR tại SGN<br>L2 Minizone</div>
+            <div style="display:flex;flex-direction:column;gap:4px;width:100%;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:20px;height:20px;border-radius:50%;background:rgba(239,68,68,0.15);border:2px solid #EF4444;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#EF4444;flex-shrink:0;">W1</div>
+                <div style="font-size:9px;color:rgba(255,255,255,0.5);">AR giảm -3.9pp SGN</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:20px;height:20px;border-radius:50%;background:rgba(249,115,22,0.12);border:2px solid #F97316;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#F97316;flex-shrink:0;">W5</div>
+                <div style="font-size:9px;color:#F97316;font-weight:600;">Root: Zone expansion</div>
+              </div>
+            </div>
+            <div class="preview-link"><a href="rca-root-cause-analysis-template.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Root Cause Analysis (RCA)</div>
+            <div class="card-desc">Dark forensic-style. 5-Why issue tree, incident timeline, root cause matrix (probability × impact), evidence table, corrective actions, lessons learned.</div>
+            <div class="card-tags">
+              <span class="tag tag-orange">RCA</span>
+              <span class="tag tag-purple">Forensic Dark</span>
+              <span class="tag tag-blue">5-Why</span>
+              <span class="tag tag-teal">Incident Report</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">9 Components</div>
+              <div class="component-list">
+                <span class="comp-item">incident-header</span>
+                <span class="comp-item">impact-summary</span>
+                <span class="comp-item">5-why-tree</span>
+                <span class="comp-item">event-timeline</span>
+                <span class="comp-item">rc-matrix</span>
+                <span class="comp-item">evidence-table</span>
+                <span class="comp-item">corrective-actions</span>
+                <span class="comp-item">lessons-learned</span>
+                <span class="comp-item">sign-off</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OKR Tracker -->
+        <div class="template-card">
+          <div class="card-preview" style="background:#07090E;padding:16px;flex-direction:column;align-items:flex-start;justify-content:flex-start;">
+            <div class="preview-label">OKR · TRACKER</div>
+            <svg width="80" height="80" viewBox="0 0 80 80" style="position:absolute;right:12px;top:12px;">
+              <circle cx="40" cy="40" r="30" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="7"/>
+              <circle cx="40" cy="40" r="30" fill="none" stroke="#22C55E" stroke-width="7"
+                      stroke-dasharray="188" stroke-dashoffset="75" stroke-linecap="round"
+                      transform="rotate(-90 40 40)"/>
+              <text x="40" y="45" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="14" font-weight="900" fill="#EDF1F7">60%</text>
+            </svg>
+            <div style="font-size:8px;color:rgba(34,197,94,0.7);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Q3 2026</div>
+            <div style="width:100%;display:flex;flex-direction:column;gap:5px;margin-top:8px;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:#22C55E;box-shadow:0 0 4px #22C55E;"></div>
+                <div style="font-size:9px;color:rgba(255,255,255,0.6);">O1: Supply Quality</div>
+                <div style="margin-left:auto;font-size:9px;color:#22C55E;font-weight:700;">72%</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:#F59E0B;box-shadow:0 0 4px #F59E0B;"></div>
+                <div style="font-size:9px;color:rgba(255,255,255,0.6);">O2: Efficiency</div>
+                <div style="margin-left:auto;font-size:9px;color:#F59E0B;font-weight:700;">54%</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:#F59E0B;box-shadow:0 0 4px #F59E0B;"></div>
+                <div style="font-size:9px;color:rgba(255,255,255,0.6);">O3: Retention</div>
+                <div style="margin-left:auto;font-size:9px;color:#F59E0B;font-weight:700;">48%</div>
+              </div>
+            </div>
+            <div class="preview-link"><a href="okr-quarterly-tracker-template.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">OKR / KPI Quarterly Tracker</div>
+            <div class="card-desc">Progress ring SVG, RAG scorecard (Red/Amber/Green), OKR cards với KR rows + animated progress bars, initiatives mini-table và risk register.</div>
+            <div class="card-tags">
+              <span class="tag tag-green">OKR</span>
+              <span class="tag tag-blue">Quarterly</span>
+              <span class="tag tag-yellow">RAG Status</span>
+              <span class="tag tag-teal">Goal Tracking</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">7 Components</div>
+              <div class="component-list">
+                <span class="comp-item">progress-ring SVG</span>
+                <span class="comp-item">rag-scorecard</span>
+                <span class="comp-item">okr-card</span>
+                <span class="comp-item">kr-row + bar</span>
+                <span class="comp-item">initiatives-table</span>
+                <span class="comp-item">risk-register</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campaign Post-Mortem -->
+        <div class="template-card">
+          <div class="card-preview" style="background:#07090C;padding:0;flex-direction:column;align-items:stretch;">
+            <div class="preview-label">POST-MORTEM</div>
+            <div style="display:grid;grid-template-columns:1fr 24px 1fr;gap:4px;padding:12px;flex:1;">
+              <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:8px;">
+                <div style="font-size:8px;font-weight:700;color:#EF4444;margin-bottom:4px;">📉 BEFORE</div>
+                <div style="font-size:9px;color:rgba(255,255,255,0.4);">FR: 88.1%</div>
+                <div style="font-size:9px;color:rgba(255,255,255,0.4);">NPS: +22</div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.2);font-size:12px;">→</div>
+              <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:5px;padding:8px;">
+                <div style="font-size:8px;font-weight:700;color:#22C55E;margin-bottom:4px;">📈 AFTER</div>
+                <div style="font-size:9px;color:#22C55E;">FR: 93.4%</div>
+                <div style="font-size:9px;color:#22C55E;">NPS: +38</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.05);">
+              <div style="background:#0C0F17;padding:6px 8px;text-align:center;">
+                <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:900;color:#22C55E;">+215%</div>
+                <div style="font-size:7px;color:rgba(255,255,255,0.3);">ROI</div>
+              </div>
+              <div style="background:#0C0F17;padding:6px 8px;text-align:center;">
+                <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:900;color:#3B82F6;">108M</div>
+                <div style="font-size:7px;color:rgba(255,255,255,0.3);">Spend</div>
+              </div>
+              <div style="background:#0C0F17;padding:6px 8px;text-align:center;">
+                <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:900;color:#F59E0B;">62%</div>
+                <div style="font-size:7px;color:rgba(255,255,255,0.3);">Funnel</div>
+              </div>
+              <div style="background:#0C0F17;padding:6px 8px;text-align:center;">
+                <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:900;color:#A855F7;">1.38k</div>
+                <div style="font-size:7px;color:rgba(255,255,255,0.3);">Reach</div>
+              </div>
+            </div>
+            <div class="preview-link"><a href="campaign-post-mortem-template.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Campaign Post-Mortem Report</div>
+            <div class="card-desc">Before/After split view, KPI results grid với RAG badges, funnel impact visualization (CSS), cost-benefit analysis table, ROI breakdown và lessons learned.</div>
+            <div class="card-tags">
+              <span class="tag tag-purple">Post-Mortem</span>
+              <span class="tag tag-green">Before/After</span>
+              <span class="tag tag-orange">ROI</span>
+              <span class="tag tag-teal">Funnel</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">10 Components</div>
+              <div class="component-list">
+                <span class="comp-item">campaign-brief</span>
+                <span class="comp-item">before-after split</span>
+                <span class="comp-item">kpi-results-grid</span>
+                <span class="comp-item">funnel-viz CSS</span>
+                <span class="comp-item">cost-benefit-table</span>
+                <span class="comp-item">roi-breakdown</span>
+                <span class="comp-item">lessons-learned</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 (was 2): REPORTS & ANALYTICS -->
+  <div class="section" id="reports-analytics">
+  <div class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-num">02</div>
+        <div class="section-title">Reports & Analytics Dashboards</div>
+        <div class="section-tag tag-blue">3 Templates</div>
+      </div>
+      <div class="template-grid">
+
+        <!-- Card: Analytics Report -->
+        <div class="template-card">
+          <div class="card-preview thumb-analytics">
+            <div class="preview-label" style="color:rgba(0,0,0,0.5);background:rgba(255,255,255,0.7);">ANALYTICS · LIGHT</div>
+            <div class="t-kpi"><div class="t-kpi-val">94.2%</div><div class="t-kpi-lbl">FR Rate</div><div class="t-kpi-delta">▲ +2.1%</div></div>
+            <div class="t-kpi"><div class="t-kpi-val">12.4k</div><div class="t-kpi-lbl">Active TXe</div><div class="t-kpi-delta">▲ +380</div></div>
+            <div class="t-kpi"><div class="t-kpi-val">82.1</div><div class="t-kpi-lbl">DQS Avg</div><div class="t-kpi-delta" style="color:#EF4444">▼ -0.3</div></div>
+            <div class="t-kpi"><div class="t-kpi-val">87.3%</div><div class="t-kpi-lbl">AR Rate</div><div class="t-kpi-delta">▲ +1.5%</div></div>
+            <div class="preview-link"><a href="analytics-report-template.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Analytics Report (Deep Dive)</div>
+            <div class="card-desc">Báo cáo phân tích data dài, cuộn được. Light mode, font Lexend + Space Mono. 15 components đánh số sẵn để copy nhanh.</div>
+            <div class="card-tags">
+              <span class="tag tag-yellow">Light Mode</span>
+              <span class="tag tag-blue">Data-heavy</span>
+              <span class="tag tag-green">Long-form</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">15 Components [1]-[15]</div>
+              <div class="component-list">
+                <span class="comp-item">KPI strip</span>
+                <span class="comp-item">insight-box</span>
+                <span class="comp-item">data-table</span>
+                <span class="comp-item">progress-bar</span>
+                <span class="comp-item">SVG line chart</span>
+                <span class="comp-item">SVG bar chart</span>
+                <span class="comp-item">heatmap</span>
+                <span class="comp-item">correlation-bar</span>
+                <span class="comp-item">grid 2/3/4</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Weekly Performance Report -->
+        <div class="template-card">
+          <div class="card-preview thumb-weekly">
+            <div class="preview-label">WEEKLY · DARK</div>
+            <div class="t-metric"><div class="t-m-val" style="color:#FF7F32">94.2%</div><div class="t-m-lbl">FR Rate</div></div>
+            <div class="t-metric"><div class="t-m-val" style="color:#10B981">12.4k</div><div class="t-m-lbl">Active TXe</div></div>
+            <div class="t-metric"><div class="t-m-val" style="color:#3B82F6">87%</div><div class="t-m-lbl">AR Rate</div></div>
+            <div class="t-metric"><div class="t-m-val" style="color:#F59E0B">82.1</div><div class="t-m-lbl">DQS Avg</div></div>
+            <div class="t-metric"><div class="t-m-val" style="color:#A855F7">+3.2k</div><div class="t-m-lbl">New TXe</div></div>
+            <div class="t-metric"><div class="t-m-val" style="color:#14B8A6">95%</div><div class="t-m-lbl">Retain</div></div>
+            <div class="preview-link"><a href="weekly-performance-report-template.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Weekly Performance Report</div>
+            <div class="card-desc">Dashboard báo cáo tuần, dark mode, cuộn được. Hiển thị đầy đủ KPI theo tuần, biểu đồ so sánh, highlight thay đổi.</div>
+            <div class="card-tags">
+              <span class="tag tag-orange">Dark Mode</span>
+              <span class="tag tag-blue">Weekly Report</span>
+              <span class="tag tag-teal">KPI Dashboard</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">Components có sẵn</div>
+              <div class="component-list">
+                <span class="comp-item">metric-cards</span>
+                <span class="comp-item">sparkline</span>
+                <span class="comp-item">comparison-table</span>
+                <span class="comp-item">highlight-badge</span>
+                <span class="comp-item">city-breakdown</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Data Segment Analysis -->
+        <div class="template-card">
+          <div class="card-preview thumb-analytics">
+            <div class="preview-label" style="color:rgba(0,0,0,0.5);background:rgba(255,255,255,0.7);">SEGMENT · ANALYSIS</div>
+            <div class="t-kpi"><div class="t-kpi-val">Active</div><div class="t-kpi-lbl">Segment</div><div class="t-kpi-delta">Trend</div></div>
+            <div class="t-kpi"><div class="t-kpi-val">↗ +12%</div><div class="t-kpi-lbl">MoM Growth</div></div>
+            <div class="t-kpi" style="grid-column:span 2"><div class="t-kpi-val" style="font-size:13px;">Cohort Analysis · Churn · Retention · Funnel</div></div>
+            <div class="preview-link"><a href="data-analysis-report-template.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Data Segment Analysis Report</div>
+            <div class="card-desc">Report phân tích segment tài xế theo trạng thái hoạt động. Cohort analysis, trend chart, funnel visualization.</div>
+            <div class="card-tags">
+              <span class="tag tag-yellow">Light Mode</span>
+              <span class="tag tag-purple">Segmentation</span>
+              <span class="tag tag-blue">Cohort</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">Components có sẵn</div>
+              <div class="component-list">
+                <span class="comp-item">cohort-table</span>
+                <span class="comp-item">segment-bar</span>
+                <span class="comp-item">trend-line</span>
+                <span class="comp-item">funnel</span>
+                <span class="comp-item">filter-tabs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: LANDING PAGES -->
+  <div class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-num">03</div>
+        <div class="section-title">Landing Pages</div>
+        <div class="section-tag tag-purple">1 Template</div>
+      </div>
+      <div class="template-grid">
+
+        <!-- Card: Landing Page -->
+        <div class="template-card">
+          <div class="card-preview thumb-landing">
+            <div class="preview-label">LANDING PAGE</div>
+            <div class="t-badge">Partnership</div>
+            <div class="t-title">Product / Campaign<br>Landing Page</div>
+            <div class="t-cta">CTA Button →</div>
+            <div class="preview-link"><a href="landing-page-template.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Landing Page Template</div>
+            <div class="card-desc">Landing page chiến dịch/partnership đầy đủ. Hero section, benefits grid, CTA, responsive. Mẫu: Ahamove × Selex EV partnership.</div>
+            <div class="card-tags">
+              <span class="tag tag-purple">Landing Page</span>
+              <span class="tag tag-blue">Responsive</span>
+              <span class="tag tag-green">Campaign</span>
+              <span class="tag tag-orange">Partnership</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">Sections có sẵn</div>
+              <div class="component-list">
+                <span class="comp-item">hero-section</span>
+                <span class="comp-item">benefits-grid</span>
+                <span class="comp-item">how-it-works</span>
+                <span class="comp-item">testimonial</span>
+                <span class="comp-item">cta-section</span>
+                <span class="comp-item">footer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: DRIVER OPS SPECIFIC -->
+  <div class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-num">04</div>
+        <div class="section-title">Driver Operations Specific</div>
+        <div class="section-tag tag-teal">2 Templates</div>
+      </div>
+      <div class="template-grid">
+
+        <!-- Card: Driver Tier Table -->
+        <div class="template-card">
+          <div class="card-preview thumb-tier">
+            <div class="preview-label">DRIVER OPS · DARK</div>
+            <table>
+              <thead><tr><th>RANK</th><th>DQS</th><th>PROD</th><th>LAYER</th></tr></thead>
+              <tbody>
+                <tr><td><span class="t-badge-r1">R1 💎</span></td><td>≥80</td><td>≥280</td><td>L2</td></tr>
+                <tr><td><span class="t-badge-r2">R2 🥇</span></td><td>≥75</td><td>≥210</td><td>L3</td></tr>
+                <tr><td><span class="t-badge-r3">R3 🥈</span></td><td>≥75</td><td>≥70</td><td>L4</td></tr>
+              </tbody>
+            </table>
+            <div class="preview-link"><a href="driver-tier-table-template.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Driver Tier / Ranking Table</div>
+            <div class="card-desc">Tài liệu tham chiếu hệ thống xếp hạng tài xế theo Tier (R1/R2/R3). Bảng thông số, KPI thresholds, quyền lợi, điều kiện.</div>
+            <div class="card-tags">
+              <span class="tag tag-orange">Driver Ops</span>
+              <span class="tag tag-blue">Ranking</span>
+              <span class="tag tag-teal">Reference Doc</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">Nội dung có sẵn</div>
+              <div class="component-list">
+                <span class="comp-item">tier-table</span>
+                <span class="comp-item">kpi-thresholds</span>
+                <span class="comp-item">benefit-matrix</span>
+                <span class="comp-item">layer-access-map</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Competitive Intel Brief -->
+        <div class="template-card">
+          <div class="card-preview thumb-intel">
+            <div class="preview-label">COMPETITIVE INTEL</div>
+            <div class="t-row"><div class="t-brand">Grab</div><div class="t-bar-h"><div class="t-bar-h-fill" style="width:85%;background:#00B14F;"></div></div><div class="t-val">85%</div></div>
+            <div class="t-row"><div class="t-brand">Be</div><div class="t-bar-h"><div class="t-bar-h-fill" style="width:45%;background:#F59E0B;"></div></div><div class="t-val">45%</div></div>
+            <div class="t-row"><div class="t-brand">Aha</div><div class="t-bar-h"><div class="t-bar-h-fill" style="width:62%;background:#FF7F32;"></div></div><div class="t-val">62%</div></div>
+            <div class="t-row"><div class="t-brand">XanhSM</div><div class="t-bar-h"><div class="t-bar-h-fill" style="width:30%;background:#3B82F6;"></div></div><div class="t-val">30%</div></div>
+            <div class="preview-link"><a href="competitive-intel-weekly-brief-template.html" target="_blank">↗ Xem demo</a></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Competitive Intel Weekly Brief</div>
+            <div class="card-desc">Báo cáo động thái đối thủ tuần (Grab, Be, XanhSM...). Phân tích biến động giá, promo, chiến lược tài xế theo thị trường.</div>
+            <div class="card-tags">
+              <span class="tag tag-blue">Intel</span>
+              <span class="tag tag-purple">Competitive</span>
+              <span class="tag tag-orange">Weekly</span>
+            </div>
+            <div class="card-components">
+              <div class="card-components-title">Sections có sẵn</div>
+              <div class="component-list">
+                <span class="comp-item">market-summary</span>
+                <span class="comp-item">competitor-table</span>
+                <span class="comp-item">promo-tracker</span>
+                <span class="comp-item">signal-cards</span>
+                <span class="comp-item">action-items</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Reference Table -->
+      <div class="quick-ref">
+        <h3>⚡ Quick Reference — Chọn Template Nhanh</h3>
+        <table class="quick-table">
+          <thead>
+            <tr><th>Use Case</th><th>Template</th><th>Theme</th><th>Đặc điểm</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Present chiến lược cho C-Level</td><td><a href="presentation-dark-slide-template.html" target="_blank">presentation-dark-slide-template.html</a></td><td>Dark + Orange</td><td>Fullscreen, keyboard nav, 9 slide mẫu</td></tr>
+            <tr><td>Internal formal meeting</td><td><a href="slide-theme-navy.html" target="_blank">slide-theme-navy.html</a></td><td>Navy Mid</td><td>Corporate, balanced, CSS-only</td></tr>
+            <tr><td>Báo cáo phân tích data sâu</td><td><a href="analytics-report-template.html" target="_blank">analytics-report-template.html</a></td><td>Light + Lexend</td><td>15 components, scrollable, printable</td></tr>
+            <tr><td>Dashboard báo cáo tuần</td><td><a href="weekly-performance-report-template.html" target="_blank">weekly-performance-report-template.html</a></td><td>Dark</td><td>KPI cards, sparkline, city breakdown</td></tr>
+            <tr><td>Landing page chiến dịch/partnership</td><td><a href="landing-page-template.html" target="_blank">landing-page-template.html</a></td><td>Dark Hero</td><td>Responsive, hero + CTA + sections</td></tr>
+            <tr><td>Tài liệu tham chiếu Driver Ops</td><td><a href="driver-tier-table-template.html" target="_blank">driver-tier-table-template.html</a></td><td>Dark</td><td>Tier table, KPI thresholds, benefits</td></tr>
+            <tr><td>Phân tích đối thủ cạnh tranh</td><td><a href="competitive-intel-weekly-brief-template.html" target="_blank">competitive-intel-weekly-brief-template.html</a></td><td>Dark</td><td>Market summary, competitor table, signals</td></tr>
+            <tr><td>Phân tích segment tài xế</td><td><a href="data-analysis-report-template.html" target="_blank">data-analysis-report-template.html</a></td><td>Light</td><td>Cohort, funnel, segment breakdown</td></tr>
+            <tr><td>Slide share ra ngoài / in ấn</td><td><a href="slide-theme-light.html" target="_blank">slide-theme-light.html</a></td><td>Light Gray</td><td>Consulting style, clean, printable</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    📦 Pulu Template Library — Cập nhật: 2026-07 | Pulu Workspace / Driver Management Team
+  </footer>
+
+</body>
+</html>

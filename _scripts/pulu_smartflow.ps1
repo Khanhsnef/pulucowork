@@ -45,7 +45,7 @@ function SmartClaude {
 
     # ── Tier 2: GEMINI PRO — Ngôn ngữ, context lớn, viết lách ──────
     } elseif ($lower -match "dịch thuật|dịch |thông báo|tài xế|zalo|email|chính tả|ngữ pháp|viết lại|caption|kịch bản|nội dung|tóm tắt|đọc file|\.log") {
-        $model = "gc/gemini-3-pro-preview"
+        $model = "gc/gemini-2.5-pro"
         Write-Host "`n⚡ [Smart Router] Task Ngôn Ngữ / Context → GEMINI PRO" -ForegroundColor Cyan
 
     # ── Tier 3: DEEPSEEK FLASH — Hỏi đáp nhanh, tính toán nhẹ ─────
@@ -54,7 +54,7 @@ function SmartClaude {
         Write-Host "`n💨 [Smart Router] Task Nhanh → DEEPSEEK FLASH (Siêu Tốc)" -ForegroundColor Yellow
 
     # ── Tier 4: SONNET — Code, format, báo cáo, UI ──────────────────
-    } elseif ($lower -match "trình bày|code|lập trình|html|css|giao diện|ui|ux|lark|docs|báo cáo|định dạng|table|bảng|markdown|website|landing page|sql") {
+    } elseif ($lower -match "trình bày|code|lập trình|html|css|giao diện|ui|ux|lark|docs|báo cáo|định dạng|table|bảng|markdown|website|landing page|sql|git|docker|k8s") {
         $model = "cc/claude-sonnet-4-6"
         Write-Host "`n💻 [Smart Router] Task Code/Format → SONNET (Max Coding)" -ForegroundColor Green
 
@@ -82,12 +82,12 @@ function SmartChat {
         $model = "cc/claude-opus-4-8"
         Write-Host "`n🧠 [Smart Router] Task Tư Duy Sâu → OPUS" -ForegroundColor Magenta
     } elseif ($lower -match "dịch thuật|dịch |thông báo|tài xế|zalo|email|chính tả|ngữ pháp|viết lại|caption|kịch bản|nội dung|tóm tắt|đọc file|\.log") {
-        $model = "gc/gemini-3-pro-preview"
+        $model = "gc/gemini-2.5-pro"
         Write-Host "`n⚡ [Smart Router] Task Ngôn Ngữ / Context → GEMINI PRO" -ForegroundColor Cyan
     } elseif ($lower -match "hỏi nhanh|giải thích|tính toán|định nghĩa|là gì|như thế nào|thế nào|regex") {
         $model = "oc/deepseek-v4-flash-free"
         Write-Host "`n💨 [Smart Router] Task Nhanh → DEEPSEEK FLASH" -ForegroundColor Yellow
-    } elseif ($lower -match "trình bày|code|lập trình|html|css|giao diện|ui|ux|lark|docs|báo cáo|định dạng|table|bảng|markdown|website|landing page|sql") {
+    } elseif ($lower -match "trình bày|code|lập trình|html|css|giao diện|ui|ux|lark|docs|báo cáo|định dạng|table|bảng|markdown|website|landing page|sql|git|docker|k8s") {
         $model = "cc/claude-sonnet-4-6"
         Write-Host "`n💻 [Smart Router] Task Code/Format → SONNET" -ForegroundColor Green
     } else {
