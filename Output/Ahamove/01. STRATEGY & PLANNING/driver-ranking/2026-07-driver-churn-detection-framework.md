@@ -1,173 +1,312 @@
-# Driver Churn Prevention Framework — Ahamove Bike Instant
+# Driver Churn Detection Framework — Ahamove Bike Instant
+
 **Phiên bản:** 2026-07 | Driver Management Team | Tài liệu chiến lược nội bộ
 
 ---
 
 ## Executive Summary
 
-Ngưỡng churn 30 ngày = đã quá muộn để can thiệp có ý nghĩa. Lyft chứng minh: redefine churn theo gap analysis + uplift modeling tập trung vào nhóm "Persuadables" mang lại ROI retention cao nhất với chi phí thấp nhất. Framework này áp dụng trực tiếp cho Ahamove Bike, dùng data đang có sẵn và tích hợp vào hệ thống AhaBenefits hiện tại.
+Ngưỡng 30 ngày không hoạt động = đã quá muộn để can thiệp. Thay vào đó, framework này cluster tài xế **thuần theo hành vi thực tế** — số ngày hoạt động, tần suất chuyến, pattern giờ online, quỹ đạo thu nhập — không phụ thuộc vào tier R1/R2/R3.
 
-**3 kết luận then chốt:**
-1. Tài xế ở giai đoạn 15-30 ngày active (mới qua học việc, chưa gắn bó) = nhóm dễ churn nhất — cần priority alert riêng.
-2. Không chi budget retention vào "Sure Things" (tự ở lại) và "Lost Causes" (đã quyết nghỉ).
-3. AhaBenefits + Layer nudge là cơ chế can thiệp tự nhiên — không cần tạo incentive mới.
+**3 nguyên tắc cốt lõi:**
 
----
-
-## 1. Định Nghĩa Churn cho Ahamove Bike
-
-Thay ngưỡng cứng 30 ngày bằng hệ thống **Sliding Window Gap**:
-
-| Trạng thái | Định nghĩa | Rank R1/R2 | Rank R3/Unranked |
-| :--- | :--- | :--- | :--- |
-| **Active** | Có chuyến trong 7 ngày qua | Gap ≤ 5 ngày | Gap ≤ 7 ngày |
-| **At-Risk** | Gap tăng bất thường | Gap 5-10 ngày | Gap 7-14 ngày |
-| **Slipping** | Không hoạt động kéo dài | Gap 10-15 ngày | Gap 14-21 ngày |
-| **Churned** | Chi phí retention > acquisition | Gap > 15 ngày | Gap > 21 ngày |
-| **Reactivation** | Quay lại sau churned | Track riêng — reacquisition funnel | Track riêng |
-
-> R1/R2 dùng ngưỡng nghiêm hơn vì mất 1 tài xế R1 = mất capacity L2 Minizone (×1.5 EPH) — tác động trực tiếp đến FR và SLA.
+1. **Behavior beats label.** Tài xế cùng tier R3 có thể thuộc 3 nhóm hành vi hoàn toàn khác nhau — cần can thiệp khác nhau.
+2. **Cửa sổ can thiệp tối ưu: ngày 3–7 sau khi gap bắt đầu.** Trước đó = false positive; sau đó = đã muộn.
+3. **Chỉ chi budget cho "Persuadables"** — nhóm sẽ churn NẾU không được can thiệp, nhưng vẫn còn receptive.
 
 ---
 
-## 2. Feature Engineering
+## 1. Định Nghĩa Churn — Behavioral Gap Model
 
-| Feature | Công thức tính | Data source |
+Không dùng ngưỡng cứng 30 ngày. Churn được định nghĩa theo **pattern gap cá nhân hóa**:
+
+```text
+Personal Gap Baseline (PGB) = median(gap_days) của tài xế đó trong 60 ngày qua
+Churn Signal = gap hiện tại > MAX(PGB × 2.5, 7 ngày)
+```
+
+| Trạng thái | Định nghĩa behavioral |
+| :--- | :--- |
+| **Active** | Có chuyến trong 3 ngày qua; gap ≤ PGB |
+| **Cooling** | Gap = PGB × 1.0–1.5 — bắt đầu giảm frequency |
+| **At-Risk** | Gap = PGB × 1.5–2.5 — lệch rõ khỏi pattern cá nhân |
+| **Churned** | Gap > PGB × 2.5 **hoặc** > 14 ngày tuyệt đối (với tài xế mới < 60 ngày tenure) |
+| **Reactivation** | Quay lại sau Churned — track riêng, không nhập chung Active |
+
+> **Tại sao dùng PGB?** Tài xế chạy 1 ngày/tuần sẽ luôn bị flag sai nếu dùng ngưỡng cứng. PGB cá nhân hóa ngưỡng theo thực tế từng người.
+
+---
+
+## 2. Feature Engineering — Behavioral Dimensions
+
+| Feature | Công thức | Ý nghĩa |
 | :--- | :--- | :--- |
-| `gap_days_max_30d` | MAX số ngày liên tiếp không có chuyến trong 30 ngày gần nhất | `trips` table |
-| `ar_trend_7d` | AR tuần này / AR tuần trước − 1 (% thay đổi) | `dispatch_logs` |
-| `eph_trend_14d` | EPH trung bình 14 ngày / EPH trung bình 30 ngày trước − 1 | `earnings` table |
-| `online_time_drop` | Online hours/ngày TB 7 ngày / 30 ngày trước − 1 | `session_logs` |
-| `layer_downgrade_count` | Số lần không đăng ký L2/L3 dù đủ điều kiện trong 14 ngày | `layer_registration` |
-| `dqs_velocity` | DQS tuần này − DQS 4 tuần trước (delta tuyệt đối) | `quality_score` table |
+| `active_days_30d` | Số ngày có ≥1 chuyến trong 30 ngày gần nhất | Mức độ cam kết tổng thể |
+| `trips_per_active_day` | Tổng chuyến / active_days_30d | Cường độ khi đã online |
+| `online_hours_per_day` | Tổng giờ online / active_days_30d | Thời lượng làm việc |
+| `hour_consistency_score` | Std dev của giờ bắt đầu ca trong 30 ngày (thấp = ổn định) | Có pattern giờ cố định không |
+| `gap_days_current` | DATEDIFF(today, MAX(last_trip_date)) | Recency — gap đang kéo dài bao lâu |
+| `gap_trend` | gap_days_current / PGB − 1 | Lệch bao nhiêu so với pattern cá nhân |
+| `eph_trajectory` | EPH(7d) / EPH(30d) − 1 | Thu nhập/giờ đang tăng hay giảm |
+| `ar_trajectory` | AR(7d) / AR(30d) − 1 | Mức độ chấp nhận đơn đang thay đổi |
+| `tenure_days` | Số ngày kể từ chuyến đầu tiên | Độ gắn bó lịch sử |
 
 ---
 
-## 3. 4 Behavioral Clusters — Map Ahamove
+## 3. Behavioral Clusters — 5 Nhóm Tài Xế
 
-| Cluster | Tên Ahamove | % Churn ước tính | Đặc điểm hành vi | Rank phổ biến |
-| :--- | :--- | :--- | :--- | :--- |
-| **C1 — Anchor** | Tài xế Trụ cột | ~[5-10]% | Prod cao ổn định, AR >80%, gap <5 ngày, đang active L2/L3, đổi AhaPoints đều | R1, R2 |
-| **C2 — Drifter** | Tài xế Trôi dạt | ~[40-50]% | Prod giảm dần, AR giảm 10-20%, gap tăng lên 10-15 ngày, bắt đầu bỏ đăng ký ca Peak | R3 → Unranked |
-| **C3 — Fader** | Tài xế Nhạt dần | ~[65-75]% | Online time giảm >30%, EPH thấp, gap >15 ngày, gần như không đổi điểm | Unranked |
-| **C4 — Moonlighter** | Tài xế Thời vụ | ~[15-20]% | Chỉ active cuối tuần/giờ peak, gap trong tuần cao nhưng không rời hẳn | R3, Unranked |
+Clustering dựa trên `active_days_30d`, `hour_consistency_score`, `eph_trajectory`, `tenure_days`.
 
-> Số % churn là ước tính tham khảo Lyft — cần validate bằng 6 tháng cohort data Ahamove Bike.
+### B1 — Full-timer Ổn định
+
+> **"Cần cơm hàng ngày"**
+
+| Chỉ số | Giá trị điển hình |
+| :--- | :--- |
+| Active days/tháng | ≥ 20 ngày |
+| Online hours/ngày | 6–10h |
+| Hour consistency | Thấp (pattern rõ, giờ cố định sáng/chiều) |
+| EPH trajectory | Ổn định hoặc tăng nhẹ |
+| Gap current | 0–2 ngày |
+
+**Hành vi:** Chạy gần như mỗi ngày, có giờ làm cố định, thu nhập từ Ahamove là nguồn chính. Ít churn nhưng **rất nhạy với EPH giảm hoặc zone bị giảm đơn** — nếu kiếm được ít hơn tuần này, tuần sau sẽ thử platform khác.
+
+**Churn risk:** Thấp (~[5-15]%), nhưng khi churn thì mất đột ngột.
 
 ---
 
-## 4. Early Warning Signals — SQL Trigger Logic
+### B2 — Part-timer Đều Đặn
+
+> **"Chạy có kế hoạch"**
+
+| Chỉ số | Giá trị điển hình |
+| :--- | :--- |
+| Active days/tháng | 10–19 ngày |
+| Online hours/ngày | 3–5h |
+| Hour consistency | Trung bình (thường cuối tuần + 1-2 buổi chiều) |
+| EPH trajectory | Ổn định |
+| Gap current | 2–5 ngày (bình thường) |
+
+**Hành vi:** Coi Ahamove như nguồn thu nhập thứ hai, có việc khác. Chạy đều và chủ động, ít complain. Ổn định nếu giờ peak vẫn kiếm được tốt.
+
+**Churn risk:** Thấp–Trung bình (~[15-25]%). Dễ giữ nếu peak hours accessible.
+
+---
+
+### B3 — Newbie Chưa Gắn Bó
+
+> **"Đang thử xem có ổn không"**
+
+| Chỉ số | Giá trị điển hình |
+| :--- | :--- |
+| Tenure | < 60 ngày |
+| Active days/tháng | Biến động lớn (5–15 ngày, không đều) |
+| Hour consistency | Cao (chưa có pattern — giờ random) |
+| EPH trajectory | Không rõ xu hướng |
+| Gap current | Khó đoán — có thể 0 ngày hoặc 10 ngày |
+
+**Hành vi:** Đây là nhóm **nguy hiểm nhất** — đúng như Lyft phát hiện (15–30 ngày active dễ churn nhất). Mới vượt qua onboarding nhưng chưa hình thành thói quen. Một tuần thu nhập thấp = quyết định bỏ.
+
+**Churn risk:** Cao (~[45-65]%). **Priority alert riêng cho nhóm này.**
+
+---
+
+### B4 — Declining Drifter
+
+> **"Đang dần rút lui"**
+
+| Chỉ số | Giá trị điển hình |
+| :--- | :--- |
+| Tenure | ≥ 60 ngày (từng active) |
+| Active days/tháng | Giảm liên tục 3 tháng gần nhất |
+| EPH trajectory | Âm hoặc giảm |
+| AR trajectory | Giảm >10% so với 30 ngày trước |
+| Gap trend | gap_current / PGB > 1.5 |
+
+**Hành vi:** Từng là Full-timer hoặc Part-timer ổn định, đang dần giảm — có thể do tìm được việc khác, burn out, hoặc platform khác trả hơn. Pattern: giảm từ từ, không bỏ đột ngột.
+
+**Churn risk:** Rất cao (~[60-75]%). **Đây là nhóm "Persuadables" chính — ROI retention cao nhất.**
+
+---
+
+### B5 — Seasonal/Opportunist
+
+> **"Chỉ xuất hiện khi có lợi"**
+
+| Chỉ số | Giá trị điển hình |
+| :--- | :--- |
+| Active days/tháng | Thấp (3–8 ngày) nhưng **ổn định theo pattern tuần/tháng** |
+| Hour consistency | Cao (luôn chạy cuối tuần hoặc ngày lễ) |
+| EPH khi active | Cao — chọn giờ peak rất tốt |
+| Gap current | Cao tuyệt đối nhưng không lệch PGB |
+
+**Hành vi:** Không phải churn — đây là lựa chọn của họ. Xuất hiện đúng giờ cao điểm, EPH tốt, không cần push. **Push sai giờ tăng CPO vô ích.**
+
+**Churn risk:** Thấp ([10-20]%) nếu đo đúng cách. Không cần retention budget.
+
+---
+
+## 4. Churn Risk Matrix
+
+|  | **Tenure thấp (<60 ngày)** | **Tenure cao (≥60 ngày)** |
+| :--- | :--- | :--- |
+| **Active days giảm** | 🔴 B3 Newbie — CRITICAL | 🔴 B4 Declining — HIGH |
+| **Active days ổn định** | 🟡 B3 Newbie (theo dõi) | 🟢 B1/B2 — LOW |
+| **Gap >> PGB** | 🔴 CRITICAL — bất kể cluster | 🟠 HIGH — can thiệp ngay |
+| **EPH giảm >20%** | 🟠 HIGH | 🟠 HIGH |
+| **AR giảm >15%** | 🟡 MEDIUM | 🟡 MEDIUM |
+
+---
+
+## 5. Early Warning SQL — Behavioral Triggers
 
 ```sql
--- TRIGGER 1: Gap Alert (At-Risk detection)
-SELECT
-    driver_id,
-    DATEDIFF(CURRENT_DATE, MAX(completed_at)) AS gap_days,
-    rank_current,
-    layer_current
-FROM trips
-WHERE service_type = 'BIKE'
-GROUP BY driver_id, rank_current, layer_current
-HAVING gap_days BETWEEN 7 AND 14        -- R3/Unranked threshold
-    OR (gap_days BETWEEN 5 AND 10 AND rank_current IN ('R1','R2'));
--- Tag: AT_RISK | Priority: CRITICAL nếu R1/R2
+-- ==================================================
+-- STEP 1: Tính Personal Gap Baseline cho mỗi tài xế
+-- ==================================================
+WITH driver_gaps AS (
+    SELECT
+        driver_id,
+        completed_at,
+        DATEDIFF(completed_at, LAG(completed_at) OVER (
+            PARTITION BY driver_id ORDER BY completed_at
+        )) AS gap_days
+    FROM trips
+    WHERE service_type = 'BIKE'
+      AND completed_at >= DATE_SUB(CURRENT_DATE, INTERVAL 60 DAY)
+),
+pgb AS (
+    SELECT
+        driver_id,
+        PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY gap_days) AS personal_gap_baseline
+    FROM driver_gaps
+    WHERE gap_days IS NOT NULL
+    GROUP BY driver_id
+),
 
--- TRIGGER 2: AR Drop Alert (Disengagement signal)
-SELECT
-    driver_id,
-    ar_7d / NULLIF(ar_prev_7d, 0) - 1 AS ar_pct_change,
-    rank_current
-FROM driver_weekly_metrics
-WHERE ar_7d / NULLIF(ar_prev_7d, 0) - 1 < -0.15  -- AR giảm >15%
-  AND trips_7d > 0                                 -- vẫn còn active
-  AND service_type = 'BIKE';
--- Tag: AR_DEGRADING | Kết hợp gap_days → composite risk
+-- ==================================================
+-- STEP 2: Behavioral feature snapshot hiện tại
+-- ==================================================
+behavioral_snapshot AS (
+    SELECT
+        t.driver_id,
+        COUNT(DISTINCT DATE(t.completed_at))              AS active_days_30d,
+        COUNT(*)                                           AS trips_30d,
+        DATEDIFF(CURRENT_DATE, MAX(t.completed_at))       AS gap_current,
+        STDDEV(HOUR(t.created_at))                        AS hour_consistency_score,
+        DATEDIFF(CURRENT_DATE, MIN(t.completed_at))       AS tenure_days
+    FROM trips t
+    WHERE t.service_type = 'BIKE'
+      AND t.completed_at >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)
+    GROUP BY t.driver_id
+)
 
--- TRIGGER 3: EPH Drop Alert (Earning fatigue)
+-- ==================================================
+-- STEP 3: Gán cluster + churn risk
+-- ==================================================
 SELECT
-    driver_id,
-    eph_14d / NULLIF(eph_30d_lag, 0) - 1 AS eph_pct_change,
-    layer_current
-FROM driver_earnings_trend
-WHERE eph_14d / NULLIF(eph_30d_lag, 0) - 1 < -0.20  -- EPH giảm >20%
-  AND service_type = 'BIKE';
--- Tag: EARNING_FATIGUE | Risk cao nhất nhóm Fader
-
--- COMPOSITE RISK SCORE (0-1 scale)
--- risk_score = (gap_norm × 0.40) + (ar_drop × 0.35) + (eph_drop × 0.25)
--- Threshold: > 0.60 = HIGH_RISK → đưa vào Intervention queue
+    b.driver_id,
+    b.active_days_30d,
+    b.gap_current,
+    p.personal_gap_baseline                               AS pgb,
+    b.gap_current / NULLIF(p.personal_gap_baseline, 0)   AS gap_ratio,
+    b.tenure_days,
+    CASE
+        WHEN b.tenure_days < 60 AND b.active_days_30d < 12 THEN 'B3_NEWBIE'
+        WHEN b.tenure_days >= 60
+             AND b.gap_current > p.personal_gap_baseline * 1.5 THEN 'B4_DECLINING'
+        WHEN b.active_days_30d >= 20                           THEN 'B1_FULLTIME'
+        WHEN b.active_days_30d BETWEEN 10 AND 19               THEN 'B2_PARTTIME'
+        ELSE                                                        'B5_SEASONAL'
+    END AS behavior_cluster,
+    CASE
+        WHEN b.gap_current > GREATEST(p.personal_gap_baseline * 2.5, 7) THEN 'CHURNED'
+        WHEN b.gap_current > p.personal_gap_baseline * 1.5               THEN 'AT_RISK'
+        WHEN b.gap_current > p.personal_gap_baseline * 1.0               THEN 'COOLING'
+        ELSE                                                                   'ACTIVE'
+    END AS churn_status
+FROM behavioral_snapshot b
+JOIN pgb p USING (driver_id)
+WHERE b.gap_current > 3  -- chỉ lấy tài xế đang có gap đáng kể
+ORDER BY gap_ratio DESC;
 ```
 
 ---
 
-## 5. Intervention Matrix
+## 6. Intervention Playbook theo Cluster
 
-| Nhóm | Cluster map | Chiến lược | Công cụ AhaBenefits | Chi phí |
+| Cluster | Churn Status | Hành động | Kênh | Ưu tiên |
 | :--- | :--- | :--- | :--- | :--- |
-| **Sure Things** | C1 Anchor | Duy trì — không can thiệp thêm. Đảm bảo benefit flows ổn định. | Voucher xăng tự động R1/R2, ưu tiên slot L2/L3 đăng ký sớm | Thấp — nhúng sẵn |
-| **Persuadables** | C2 Drifter (gap 7-14 ngày, AR đang giảm) | Can thiệp có mục tiêu. **Đây là nhóm ROI cao nhất.** | AhaPoints nudge ("bạn cách [X] pts để đổi voucher xăng 50k"), Captain outreach, suggest shift sang Ca Peak | Trung bình — tập trung toàn bộ retention budget |
-| **Lost Causes** | C3 Fader (gap >21 ngày) | Không tốn budget. Offboarding survey. | Không trigger thêm benefit | Rất thấp |
-| **Sleeping Dogs** | C4 Moonlighter | Không push thêm — sẽ tự active vào peak. Push sai giờ tăng CPO không cần thiết. | Monitor passively, offer Weekend Layer slot ưu tiên | Gần 0 |
-
-**Playbook Persuadables — Chi tiết can thiệp:**
-
-| Trigger | Hành động | Kênh | SLA |
-| :--- | :--- | :--- | :--- |
-| Gap = 7 ngày | Push "Bạn đang bỏ lỡ [X] pts hôm nay" + EPH estimate nếu online giờ này | App notification | 24h |
-| Gap = 10 ngày | Captain/Đội trưởng liên hệ trực tiếp tài xế trong zone | Zalo / Call | 48h |
-| AR drop >15% | Auto-check: deactivate? app lỗi? → Support ticket tự động mở | In-app + CS | 4h |
-| EPH drop >20% | Suggest chuyển sang Ca Sáng/Ca Chiều (Peak) + show EPH estimate so sánh | App push | 24h |
+| **B3 Newbie** | AT_RISK (gap > 7 ngày) | Gọi điện trực tiếp + hỏi barrier (app lỗi? đơn ít? thu nhập thấp hơn kỳ vọng?) | Call/Zalo | 🔴 P0 |
+| **B4 Declining** | COOLING → AT_RISK | Earnings comparison: "Tháng trước bạn kiếm [X], tuần này chỉ [Y] — muốn chúng tôi giúp tìm giờ cao điểm tốt hơn?" | App push + Captain | 🔴 P0 |
+| **B1 Full-timer** | AT_RISK | Kiểm tra ngay: deactivate? tai nạn? app bug? → Open CS ticket tự động | Auto-CS + SMS | 🟠 P1 |
+| **B2 Part-timer** | AT_RISK | Nhẹ hơn — gợi ý ca phù hợp với pattern lịch sử của họ | App push | 🟡 P2 |
+| **B5 Seasonal** | Gap cao | **Không làm gì.** Gap cao là bình thường với họ. | — | ⬜ Skip |
+| **Bất kỳ** | CHURNED (>14 ngày) | Không tốn budget retention. Offboarding survey ngắn (1 câu): "Lý do chính bạn không chạy Ahamove?" | SMS 1 lần | ⬜ Data only |
 
 ---
 
-## 6. Revenue Impact Formula
+## 7. Cohort Survival — Ưu Tiên Theo Tenure
 
+Dựa trên Lyft survival analysis, **2 giai đoạn nguy hiểm nhất:**
+
+```text
+Tuần 2–4   (tenure 8–28 ngày)  → Newbie chưa hình thành thói quen
+Tháng 3–4  (tenure 60–120 ngày) → Honeymoon period kết thúc, so sánh với platform khác
 ```
+
+**Cohort alert tự động cần setup:**
+- D+7 sau chuyến đầu tiên: onboarding check-in ("bạn đã kiếm được [X] trong tuần đầu")
+- D+30: earnings summary + gợi ý giờ peak tốt nhất theo zone của họ
+- D+90: loyalty nudge — "Bạn đã hoàn thành [X] chuyến, cách [Y] chuyến để đổi [benefit]"
+
+---
+
+## 8. Revenue Impact Formula
+
+```text
 GSV recovered/tháng =
-    N_churned_persuadables × Churn_reduction_rate × Avg_trips_per_driver × Avg_GSV_per_trip
+    N_persuadables_at_risk × retention_rate_uplift × avg_trips_per_driver × avg_GSV_per_trip
 
-CPO impact =
-    Drivers_retained × AR_improvement_delta × Trips_recovered / Total_dispatches
-    → FR tăng → ít re-dispatch → CPO giảm
+Trong đó:
+    N_persuadables_at_risk = B3 + B4 có churn_status = AT_RISK trong tháng
+    retention_rate_uplift  = % tăng retention sau intervention (cần A/B test — target: +[X]%)
+    avg_trips_per_driver   = [X] chuyến/tháng (pull từ cohort B3/B4 trước khi AT_RISK)
+    avg_GSV_per_trip        = [X] VND (Bike Instant)
 ```
 
-**Bảng tham số (cần validate):**
-
-| Tham số | Placeholder | Nguồn data cần lấy |
+| Tham số | Placeholder | Nguồn |
 | :--- | :--- | :--- |
-| N tài xế Persuadables rời/tháng | [X] tài xế | `driver_activity` cohort 6 tháng |
-| Avg trips/driver/month — nhóm Drifter | [X] chuyến | `trips` history |
-| Avg GSV/trip — Bike Instant | [X] VND | `pricing` / `trip_revenue` table |
-| Churn reduction target (sau intervention) | [X]% | A/B test result |
-| **Tổng GSV recovered ước tính** | **[X]M VND/tháng** | Tổng hợp trên |
+| N B3 AT_RISK / tháng | [X] tài xế | `behavioral_snapshot` + cohort |
+| N B4 AT_RISK / tháng | [X] tài xế | `behavioral_snapshot` + cohort |
+| Avg trips trước churn — B3 | [X] chuyến | `trips` history 30d trước churn date |
+| Avg trips trước churn — B4 | [X] chuyến | `trips` history 30d trước churn date |
+| Avg GSV/trip Bike Instant | [X] VND | `trip_revenue` |
+| Retention uplift target | [X]% | A/B test Phase 3 |
 
 ---
 
-## 7. Implementation Roadmap
+## 9. Implementation Roadmap
 
-| Giai đoạn | Timeline | Hành động chính | Output | Owner |
-| :--- | :--- | :--- | :--- | :--- |
-| **Phase 1 — Define** | T1-T2 | Validate churn definition với 6 tháng cohort. Build bảng `driver_churn_signals` trong DWH. Xác định baseline churn rate theo Rank/Layer. | Churn baseline report | Data Eng + DM |
-| **Phase 2 — Detect** | T3-T4 | Deploy 3 SQL triggers. Tích hợp composite risk score vào Metabase dashboard. Pilot alert flow với Captain team tại 2-3 zone thí điểm. | "At-Risk heatmap" theo zone, daily refresh | DM Ops + DE |
-| **Phase 3 — Act** | T5-T6 | A/B test: intervention group vs control trên Persuadables. Đo ΔAR, ΔGDR, ΔGSV sau 30 ngày. Calibrate AhaPoints nudge messaging. Chính thức hóa playbook. | Uplift model validated. Intervention playbook v1 chính thức | DM + Product |
+| Phase | Timeline | Hành động | Output |
+| :--- | :--- | :--- | :--- |
+| **1 — Baseline** | T1–T2 | Pull PGB distribution cho toàn fleet. Validate 5 clusters bằng 6 tháng cohort. Đo churn rate thực tế từng cluster. | Cluster baseline report + validated thresholds |
+| **2 — Detect** | T3–T4 | Deploy SQL pipeline vào DWH. Dashboard "At-Risk by Cluster" trên Metabase. Pilot Captain alert cho B3/B4 tại 2–3 zone. | Daily at-risk feed; heatmap theo zone |
+| **3 — Act** | T5–T6 | A/B test intervention: B3 (call script) vs B4 (earnings nudge). Đo Δactive_days, ΔGDR, ΔGSV sau 30 ngày. | Uplift validated. Playbook v1 chính thức. |
 
 ---
 
-## Risks & Next Checks
+## Risks
 
-| Rủi ro | Mức độ | Mitigation |
+| Rủi ro | Mức | Mitigation |
 | :--- | :--- | :--- |
-| Gap threshold quá nhạy → false positive → alert fatigue cho Captain | Trung bình | Calibrate theo seasonality: Tết, mưa lớn, mega sales — điều chỉnh ngưỡng tạm thời |
-| Push Sleeping Dogs sai giờ → CPO tăng, dispatch lệch zone | Cao | Chỉ trigger trong Ca Peak; không push tài xế Moonlighter giờ thường |
-| AhaPoints nudge kém hiệu quả nếu catalog không đủ hấp dẫn | Trung bình | A/B test variant: "X pts = voucher xăng 50k" vs "hoàn thành [X] chuyến hôm nay" |
-| Không tách được tự-churn vs bị-deactivate trong data | Cao | Thêm field `churn_reason` vào offboarding flow trước Phase 1 |
-
-**Data cần validate trước Phase 1:**
-- Tỷ lệ churn thực tế theo Rank/Layer — 6 tháng gần nhất
-- Phân phối `gap_days` thực tế của fleet Bike Instant
-- Avg GSV/trip và Avg trips/month theo từng cluster tương đương
-- Tỷ lệ tự churn vs bị deactivate — cần tách riêng để không sai target nhóm can thiệp
+| PGB sai với tài xế mới (<30 ngày data) | Cao | Dùng fleet median làm fallback PGB cho tenure <30 ngày |
+| B5 Seasonal bị flag sai là AT_RISK | Trung bình | Thêm điều kiện `hour_consistency_score` thấp vào filter B5 |
+| Alert fatigue cho Captain nếu volume B3/B4 quá lớn | Trung bình | Cap alert tối đa 20 drivers/Captain/ngày; ưu tiên gap_ratio cao nhất |
+| Không phân biệt tự-churn vs deactivated | Cao | Thêm `churn_reason` field vào offboarding trước Phase 1 |
 
 ---
 
-*Driver Management Team | 2026-07 | Review định kỳ: Quý hoặc sau mỗi Mega Sales event*
+---
+
+_Driver Management Team | 2026-07 | Review định kỳ: Quý hoặc sau Mega Sales event_
