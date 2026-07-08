@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>BAGA PROJECT — Executive Summary</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family:'Lexend',sans-serif;
+  background:#C8D1DC;
+  display:flex; flex-direction:column; align-items:center;
+  padding:0; min-height:100vh;
+}
+
+.slide { width:1280px; height:720px; position:relative; overflow:hidden; flex-shrink:0; }
+
+.slide-bg { position:absolute; inset:0; background:#DDE3EC; }
+.slide-bg::before {
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 105% 105%, rgba(255,127,50,.14) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at -5%  -5%,  rgba(14,65,116,.12)  0%, transparent 50%);
+}
+.grid-lines {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(14,65,116,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14,65,116,.07) 1px, transparent 1px);
+  background-size:64px 64px;
+}
+.accent-line { position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#0E4174 0%,#FF7F32 55%,transparent 100%); }
+
+.slide-content { position:relative; z-index:2; height:100%; display:flex; flex-direction:column; padding:20px 36px 16px; }
+
+/* HEADER */
+.s-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+.s-eyebrow { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+.eyebrow-dot { width:7px; height:7px; background:#FF7F32; border-radius:50%; }
+.eyebrow-text { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#FF7F32; }
+.s-title { font-size:26px; font-weight:900; color:#0A1828; letter-spacing:-.8px; line-height:1.15; }
+.s-subtitle { font-size:12px; color:#5A6778; margin-top:2px; }
+.s-page { font-size:12px; font-weight:700; color:#9BAABB; letter-spacing:1px; }
+.s-page span { color:#0E4174; }
+
+/* CARD BASE */
+.card { border-radius:18px; box-shadow:0 2px 8px rgba(14,65,116,.10), 0 6px 24px rgba(14,65,116,.07); overflow:hidden; position:relative; }
+.card-blue {
+  background: linear-gradient(#F3F7FE,#F3F7FE) padding-box,
+              linear-gradient(140deg,rgba(59,130,246,.5) 0%,rgba(147,197,253,.4) 60%,rgba(219,234,254,.3) 100%) border-box;
+  border:1.5px solid transparent;
+}
+.card-orange {
+  background: linear-gradient(#FEF8F2,#FEF8F2) padding-box,
+              linear-gradient(140deg,rgba(255,127,50,.5) 0%,rgba(253,186,116,.4) 60%,rgba(253,232,208,.3) 100%) border-box;
+  border:1.5px solid transparent;
+}
+.card-insight {
+  background: linear-gradient(#F4F6FC,#F7F4FD) padding-box,
+              linear-gradient(140deg,rgba(14,65,116,.35) 0%,rgba(139,92,246,.25) 50%,rgba(255,127,50,.3) 100%) border-box;
+  border:1.5px solid transparent;
+}
+.card-navy {
+  background: linear-gradient(#EFF4FC,#F2F6FD) padding-box,
+              linear-gradient(140deg,rgba(14,65,116,.4) 0%,rgba(59,130,246,.3) 55%,rgba(147,197,253,.2) 100%) border-box;
+  border:1.5px solid transparent;
+}
+
+/* CARD INNER */
+.c-head { padding:8px 16px 7px; border-bottom:1px solid rgba(0,0,0,.07); display:flex; align-items:center; justify-content:space-between; }
+.c-head-blue   { background:linear-gradient(90deg,#DBEAFE,#C5D9F8); }
+.c-head-orange { background:linear-gradient(90deg,#FFEDD5,#FED7AA); }
+.c-head-navy   { background:linear-gradient(90deg,#DBEAFE,#C7D9F5); }
+.c-body { padding:12px 16px 14px; }
+.c-title { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; }
+.c-title-blue   { color:#1D4ED8; }
+.c-title-orange { color:#C2410C; }
+.c-title-navy   { color:#1E40AF; }
+
+/* TYPOGRAPHY */
+.label-xs { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#7A8898; }
+.num-xl  { font-size:52px; font-weight:900; letter-spacing:-2.5px; line-height:1; color:#0A1828; }
+.num-lg  { font-size:36px; font-weight:900; letter-spacing:-1.5px; line-height:1; color:#0A1828; }
+.num-md  { font-size:26px; font-weight:800; letter-spacing:-1px;   line-height:1; color:#0A1828; }
+.num-sm  { font-size:20px; font-weight:800; letter-spacing:-.5px;  line-height:1; }
+.body-sm { font-size:12px; color:#4E5D70; line-height:1.6; }
+
+/* PILLS */
+.pill      { display:inline-flex; align-items:center; gap:4px; padding:3px 9px; border-radius:999px; font-size:10.5px; font-weight:700; }
+.pill-warn { background:#FEE2E2; color:#B91C1C; border:1px solid #FCA5A5; }
+.pill-ok   { background:#DCFCE7; color:#15803D; border:1px solid #86EFAC; }
+.pill-info { background:#FFEDD5; color:#B45309; border:1px solid #FCD34D; }
+.pill-blue { background:#DBEAFE; color:#1D4ED8; border:1px solid #93C5FD; }
+
+/* PROGRESS BAR */
+.prog-track { height:7px; background:rgba(14,65,116,.12); border-radius:999px; overflow:hidden; margin:6px 0 3px; }
+.prog-fill  { height:100%; border-radius:999px; }
+
+/* SEP */
+.sep { height:1px; background:rgba(14,65,116,.10); margin:8px 0; }
+
+/* KPI CHIP */
+.kpi-chip { border-radius:12px; padding:8px 12px; display:flex; flex-direction:column; gap:2px; }
+.kpi-chip-blue   { background:#DBEAFE; border:1px solid #93C5FD; }
+.kpi-chip-orange { background:#FFEDD5; border:1px solid #FCD34D; }
+.kpi-chip-green  { background:#DCFCE7; border:1px solid #86EFAC; }
+.kpi-chip-red    { background:#FEE2E2; border:1px solid #FCA5A5; }
+
+/* ACTION ITEMS */
+.act-item { display:flex; align-items:flex-start; gap:10px; padding:5px 0; border-bottom:1px solid rgba(14,65,116,.08); }
+.act-item:last-child { border-bottom:none; padding-bottom:0; }
+.act-num { width:20px; height:20px; background:linear-gradient(135deg,#0E4174,#3B82F6); color:#fff; border-radius:7px; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.act-txt { font-size:11.5px; color:#3D4E62; line-height:1.5; }
+.act-txt strong { color:#0A1828; font-weight:700; }
+
+/* FOOTER */
+.s-footer { display:flex; align-items:center; justify-content:space-between; margin-top:10px; flex-shrink:0; }
+.footer-brand { display:flex; align-items:center; gap:6px; }
+.footer-logo  { width:16px; height:16px; background:linear-gradient(135deg,#FF7F32,#FF4E00); border-radius:50%; }
+.footer-name  { font-size:10px; font-weight:800; color:#0E4174; letter-spacing:1.5px; }
+.footer-tag   { font-size:10px; color:#8A97A8; letter-spacing:.8px; }
+
+/* CITY BLOCKS */
+.city-block { flex:1; border-radius:12px; padding:10px 12px; display:flex; flex-direction:column; gap:3px; }
+.city-han {
+  background: linear-gradient(145deg,#FEF2F2,#FEE2E2) padding-box,
+              linear-gradient(145deg,rgba(239,68,68,.45),rgba(220,38,38,.3)) border-box;
+  border:1.5px solid transparent;
+}
+.city-sgn {
+  background: linear-gradient(145deg,#F0FDF4,#DCFCE7) padding-box,
+              linear-gradient(145deg,rgba(34,197,94,.45),rgba(22,163,74,.3)) border-box;
+  border:1.5px solid transparent;
+}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="accent-line"></div>
+  <div class="slide-content">
+
+    <!-- ── HEADER ── -->
+    <div class="s-header">
+      <div>
+        <div class="s-eyebrow">
+          <div class="eyebrow-dot"></div>
+          <span class="eyebrow-text">Baga Project — Executive Summary</span>
+        </div>
+        <div class="s-title">Tổng hợp Hiệu suất Baga</div>
+        <div class="s-subtitle">Demand · Supply · Conversion | Jul 2026</div>
+      </div>
+      <div class="s-page">01 / <span>01</span></div>
+    </div>
+
+    <!-- ── KPI STRIP ── -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px;flex-shrink:0">
+
+      <div class="card card-orange" style="padding:14px 16px">
+        <div class="label-xs" style="margin-bottom:6px;color:#C2410C">Tỷ trọng Baga</div>
+        <div class="num-md" style="color:#C2410C">~14%</div>
+        <div class="body-sm" style="margin-top:4px">BIKE & ECO nationwide</div>
+        <div style="margin-top:8px"><span class="pill pill-info">▲ WoW tăng</span></div>
+      </div>
+
+      <div class="card card-blue" style="padding:14px 16px">
+        <div class="label-xs" style="margin-bottom:6px;color:#1D4ED8">Requests / ngày</div>
+        <div class="num-md" style="color:#1D4ED8">~6.000</div>
+        <div class="body-sm" style="margin-top:4px">Baga demand</div>
+        <div style="margin-top:8px"><span class="pill pill-blue">Cả HAN & SGN</span></div>
+      </div>
+
+      <div class="card card-blue" style="padding:14px 16px">
+        <div class="label-xs" style="margin-bottom:6px;color:#15803D">Active / Enabled</div>
+        <div class="num-md" style="color:#15803D">74%</div>
+        <div class="body-sm" style="margin-top:4px">SGN & HAN — WoW ↑</div>
+        <div style="margin-top:8px"><span class="pill pill-ok">↑ từ 60–67%</span></div>
+      </div>
+
+      <div class="card card-navy" style="padding:14px 16px">
+        <div class="label-xs" style="margin-bottom:6px;color:#1E40AF">AR / FR Gap</div>
+        <div class="num-md" style="color:#1E40AF">~2% / 4%</div>
+        <div class="body-sm" style="margin-top:4px">Baga vs All dịch vụ</div>
+        <div style="margin-top:8px"><span class="pill pill-ok">Ổn định</span></div>
+      </div>
+    </div>
+
+    <!-- ── MAIN BODY: 3 columns ── -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 220px;gap:10px;flex:1;min-height:0">
+
+      <!-- LEFT: Demand -->
+      <div class="card card-orange" style="display:flex;flex-direction:column">
+        <div class="c-head c-head-orange">
+          <span class="c-title c-title-orange">Demand Signal</span>
+          <span class="pill pill-info" style="font-size:9.5px">Tín hiệu tốt</span>
+        </div>
+        <div class="c-body" style="flex:1">
+          <!-- Mini bar chart: demand trend -->
+          <div style="margin-bottom:12px">
+            <div class="label-xs" style="margin-bottom:8px">Request Baga vs Tổng BIKE (tương đối)</div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="font-size:10px;color:#7A8898;width:36px">Baga</div>
+                <div class="prog-track" style="flex:1">
+                  <div class="prog-fill" style="width:14%;background:linear-gradient(90deg,#C2410C,#EA580C)"></div>
+                </div>
+                <div style="font-size:11px;font-weight:700;color:#C2410C;width:32px">14%</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="font-size:10px;color:#7A8898;width:36px">Others</div>
+                <div class="prog-track" style="flex:1">
+                  <div class="prog-fill" style="width:86%;background:linear-gradient(90deg,#1D4ED8,#3B82F6)"></div>
+                </div>
+                <div style="font-size:11px;font-weight:700;color:#1D4ED8;width:32px">86%</div>
+              </div>
+            </div>
+          </div>
+          <div class="sep"></div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div class="act-item">
+              <div class="act-num" style="background:linear-gradient(135deg,#C2410C,#EA580C)">→</div>
+              <div class="act-txt">Baga <strong>tăng WoW</strong> trong khi demand chung đang có xu hướng giảm</div>
+            </div>
+            <div class="act-item">
+              <div class="act-num" style="background:linear-gradient(135deg,#C2410C,#EA580C)">→</div>
+              <div class="act-txt">~6.000 request/ngày, dao động đều đặn — <strong>tín hiệu demand bền vững</strong></div>
+            </div>
+            <div class="act-item">
+              <div class="act-num" style="background:linear-gradient(135deg,#C2410C,#EA580C)">→</div>
+              <div class="act-txt">HAN và SGN đều ghi nhận <strong>tăng trưởng request</strong> tuần qua tuần</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MIDDLE: Supply & Quality -->
+      <div class="card card-blue" style="display:flex;flex-direction:column">
+        <div class="c-head c-head-blue">
+          <span class="c-title c-title-blue">Supply &amp; Quality</span>
+          <span class="pill pill-blue" style="font-size:9.5px">AR/FR ổn định</span>
+        </div>
+        <div class="c-body" style="flex:1">
+          <!-- AR/FR mini metrics -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+            <div class="kpi-chip kpi-chip-blue" style="text-align:center">
+              <div class="num-sm" style="color:#1D4ED8;font-size:22px">~2%</div>
+              <div class="label-xs" style="font-size:9px">AR Gap (Baga - All)</div>
+            </div>
+            <div class="kpi-chip kpi-chip-orange" style="text-align:center">
+              <div class="num-sm" style="color:#C2410C;font-size:22px">~4%</div>
+              <div class="label-xs" style="font-size:9px">FR Gap (Baga - All)</div>
+            </div>
+          </div>
+          <!-- 90% cancel warning -->
+          <div style="background:linear-gradient(135deg,#FEF2F2,#FEE2E2);border:1.5px solid rgba(239,68,68,.35);border-radius:12px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px">
+            <div style="font-size:18px;font-weight:900;color:#B91C1C">90%</div>
+            <div style="font-size:11px;color:#7F1D1D;line-height:1.4">Hủy đơn sau assign <strong>đến từ User</strong> — không phải tài xế từ chối</div>
+          </div>
+          <div class="sep"></div>
+          <!-- Conversion -->
+          <div class="label-xs" style="margin-bottom:6px">Enabled → Active Conversion</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="font-size:10px;font-weight:700;color:#5A6778;width:28px">SGN</div>
+              <div class="prog-track" style="flex:1">
+                <div class="prog-fill" style="width:74%;background:linear-gradient(90deg,#15803D,#22C55E)"></div>
+              </div>
+              <div style="font-size:11px;font-weight:700;color:#15803D;width:52px">67→<strong>74%</strong></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="font-size:10px;font-weight:700;color:#5A6778;width:28px">HAN</div>
+              <div class="prog-track" style="flex:1">
+                <div class="prog-fill" style="width:74%;background:linear-gradient(90deg,#1D4ED8,#3B82F6)"></div>
+              </div>
+              <div style="font-size:11px;font-weight:700;color:#1D4ED8;width:52px">60→<strong>74%</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: City breakdown + Next steps -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <!-- City active share -->
+        <div class="card card-insight" style="flex-shrink:0">
+          <div class="c-head" style="background:linear-gradient(90deg,#E0E7FF,#C7D2FE)">
+            <span class="c-title" style="color:#4338CA">Active Baga / Total</span>
+          </div>
+          <div class="c-body" style="padding:10px 14px">
+            <div style="display:flex;gap:8px">
+              <div class="city-han" style="text-align:center;padding:8px">
+                <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#B91C1C">HAN</div>
+                <div style="font-size:28px;font-weight:900;color:#B91C1C;letter-spacing:-1px;line-height:1.1">22%</div>
+                <div style="font-size:9.5px;color:#7F1D1D">total active</div>
+              </div>
+              <div class="city-sgn" style="text-align:center;padding:8px">
+                <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#15803D">SGN</div>
+                <div style="font-size:28px;font-weight:900;color:#15803D;letter-spacing:-1px;line-height:1.1">39%</div>
+                <div style="font-size:9.5px;color:#14532D">total active</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Next actions -->
+        <div class="card card-orange" style="flex:1">
+          <div class="c-head c-head-action" style="background:linear-gradient(90deg,#FFEDD5,#FDE8C8)">
+            <span class="c-title c-title-action" style="color:#B45309">Hướng tiếp theo</span>
+          </div>
+          <div class="c-body" style="padding:10px 14px">
+            <div class="act-item">
+              <div class="act-num">01</div>
+              <div class="act-txt" style="font-size:11px"><strong>Mở rộng Enabled</strong> drivers Baga tại HAN (22% → target 30%+)</div>
+            </div>
+            <div class="act-item">
+              <div class="act-num">02</div>
+              <div class="act-txt" style="font-size:11px"><strong>Giảm User-cancel</strong> sau assign (90% nguồn gốc hủy)</div>
+            </div>
+            <div class="act-item">
+              <div class="act-num">03</div>
+              <div class="act-txt" style="font-size:11px"><strong>Duy trì AR/FR gap</strong> ≤ 5pp để giữ chất lượng dịch vụ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <div class="s-footer">
+      <div class="footer-brand">
+        <div class="footer-logo"></div>
+        <span class="footer-name">AHAMOVE</span>
+      </div>
+      <span class="footer-tag">Driver Management · Baga Project Review · Jul 2026</span>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
