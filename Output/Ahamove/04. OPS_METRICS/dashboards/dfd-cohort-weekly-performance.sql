@@ -57,8 +57,8 @@ perf_weekly AS (
         SUM(p.cancel_order)                                                     AS cancel_order,
         SUM(p.order_income)                                                     AS order_income,
         SUM(p.reward_income_pit1_5)                                            AS reward_income,
-        SUM(p.rating_star)                                                      AS rating_star,
-        SUM(p.rating_order)                                                     AS rating_order
+        SUM(p.rating_5star*5 + p.rating_4star*4 + p.rating_3star*3 + p.rating_2star*2 + p.rating_1star) AS rating_star,
+        SUM(p.rating_5star + p.rating_4star + p.rating_3star + p.rating_2star + p.rating_1star)          AS rating_order
     FROM dfd_drivers d
     JOIN ahamove_archive_ops.fct_supplier_performance p
         ON  p.supplier_id = d.supplier_id
