@@ -2,13 +2,9 @@
 -- CHURN FEATURE MART — training set cho Driver Churn Scoring Model
 -- Grain: 1 dòng = 1 supplier_id × 1 observation_month
 -- Label: activity-gap (NEW ≥14 ngày, OLD ≥30 ngày không có đơn complete)
--- Cohort: NEW = NIM+NLM | OLD = N2M+OLD → train 2 model riêng
+-- Cohort: NEW = NIM+NLM | OLD = OLD → train 2 model riêng
 -- Scope: Bike Instant (MOTORBIKE + EV-BIKE)
--- ------------------------------------------------------------
--- ⚠️ VERIFY trước khi chạy prod:
---   • driver_life_time values: 'NIM','NLM','N2M','OLD' (đặc biệt N2M)
---   • active_days: đang count từ daily fct — đổi nếu monthly có sẵn
---   • sanction_cnt: nối supplier_sanction khi đã confirm tên field
+-- active_day: 1 ngày có ≥1 đơn COMPLETED (theo order_date) = active
 -- ============================================================
 
 {{snippet: @yenhm GBQ.date_trunc}}
@@ -50,12 +46,13 @@ obs AS (
     -- Cohort NEW vs OLD
     CASE
       WHEN m.driver_life_time IN ('NIM','NLM') THEN 'NEW'
-      WHEN m.driver_life_time IN ('N2M','OLD') THEN 'OLD'
+      WHEN m.driver_life_time = 'OLD'          THEN 'OLD'
       ELSE 'OLD'                                                -- fallback an toàn
     END                                                         AS cohort,
     CASE WHEN m.driver_life_time IN ('NIM','NLM') THEN 14 ELSE 30 END AS gap_threshold_days
   FROM ahamove_archive_ops.driver_performance_monthly m
   WHERE m.period BETWEEN start_month AND end_month
+    AND m.driver_life_time IN ('NIM','NLM','OLD')
     AND m.stp_complete > 0
 ),
 
@@ -140,12 +137,21 @@ perf_month AS (
   WINDOW w AS (PARTITION BY m.supplier_id ORDER BY m.period)
 ),
 
--- Quality + active_days từ daily fct (gộp theo tháng)
+-- active_days: đếm số ngày có ≥1 đơn COMPLETED theo order_date
+active_days AS (
+  SELECT
+    supplier_id,
+    DATE_TRUNC(order_date, MONTH)                              AS obs_month,
+    COUNT(DISTINCT order_date)                                 AS active_days_m
+  FROM completed_orders
+  GROUP BY 1,2
+),
+
+-- Quality từ daily fct (gộp theo tháng)
 quality_month AS (
   SELECT
     supplier_id,
     DATE_TRUNC(DATE(first_complete_time,'Asia/Saigon'), MONTH)  AS obs_month,  -- ⚠️ dùng period của fct
-    COUNT(DISTINCT DATE(first_complete_time,'Asia/Saigon'))     AS active_days_m,
     SAFE_DIVIDE(SUM(stp_success), NULLIF(SUM(stp_complete),0))  AS fr_proxy,
     SAFE_DIVIDE(
       SUM(rating_5star*5 + rating_4star*4 + rating_3star*3 + rating_2star*2 + rating_1star),
@@ -173,7 +179,7 @@ SELECT
   p.online_hours_m,
   p.online_hours_mom_delta,
   p.online_hours_3m_slope,
-  q.active_days_m,
+  ad.active_days_m,
   -- Earnings
   p.income_m,
   p.income_mom_pct,
@@ -191,6 +197,7 @@ FROM obs o
 JOIN base_supplier b   ON b.supplier_id = o.supplier_id
 JOIN label_final  lf   ON lf.supplier_id = o.supplier_id AND lf.obs_month = o.obs_month
 LEFT JOIN perf_month p ON p.supplier_id = o.supplier_id AND p.obs_month = o.obs_month
+LEFT JOIN active_days ad ON ad.supplier_id = o.supplier_id AND ad.obs_month = o.obs_month
 LEFT JOIN quality_month q ON q.supplier_id = o.supplier_id AND q.obs_month = o.obs_month
 WHERE lf.is_churn IS NOT NULL
   AND (EXTRACT(YEAR FROM o.obs_month) - b.birth_year) >= 22    -- đồng bộ Retention KPI

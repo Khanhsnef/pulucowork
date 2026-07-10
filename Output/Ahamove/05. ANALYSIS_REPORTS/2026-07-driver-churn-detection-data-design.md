@@ -13,7 +13,9 @@
 | Cohort | Định nghĩa cohort | Gap churn |
 |---|---|---|
 | **NEW** | `driver_life_time IN ('NIM','NLM')` — 2 tháng đầu | ≥ **14 ngày** không có đơn complete |
-| **OLD** | `driver_life_time IN ('N2M','OLD')` — từ tháng 3 | ≥ **30 ngày** không có đơn complete |
+| **OLD** | `driver_life_time = 'OLD'` — từ tháng 3 trở đi | ≥ **30 ngày** không có đơn complete |
+
+> `active_day` = 1 ngày có ≥1 đơn **COMPLETED** (đếm theo `order_date`).
 
 - **Gran**: `1 dòng = 1 supplier_id × 1 observation_month`.
 - **At-risk flag** (early warning cho serving): 7 ngày im lặng đầu tiên → cờ vàng.
@@ -47,7 +49,7 @@
 | **Engagement** | `online_hours_m`, `online_hours_mom_delta`, `online_hours_3m_slope`, `active_days_m` | `driver_performance_monthly`, `ops_suppliers_online_hours` |
 | **Earnings** | `income_m`, `income_mom_pct`, `rph` (income/online_hour) | monthly |
 | **Quality** | `ar`, `cr_poc`, `rating_star`, `fr` | `fct_supplier_performance` |
-| **Friction** | `noti_timeout_rate`, `sanction_cnt_3m` | `fct`, `supplier_sanction` |
+| **Friction** | `noti_timeout_rate` | `fct_supplier_performance` |
 | **Recency** | `days_since_last_order`, `atrisk_flag` | `raw_performance` / `fct` |
 | **Static** | `age`, `gender`, `city_id`, `is_ev`, `driver_life_time` | `supplier_raw` |
 
@@ -75,6 +77,5 @@ partitioned_create_time >= '2010-01-01'
 
 ## ⚠️ Cần verify trước khi chạy production
 
-- Giá trị thực của `driver_life_time`: có đúng `'NIM','NLM','N2M','OLD'` không (đặc biệt `'N2M'`).
-- Field `sanction_cnt` từ `supplier_sanction` — tên bảng/field chính xác.
-- `active_days` — có field sẵn trong monthly hay phải count từ daily `fct`.
+- Giá trị thực của `driver_life_time`: chốt dùng `'NIM','NLM','OLD'` — cần confirm không còn giá trị lạ (N2M/Return...) rơi vào cohort OLD.
+- `order_raw` filter đơn complete đã đủ chuẩn Bike Instant chưa (đang loại GHN/truck/test).
