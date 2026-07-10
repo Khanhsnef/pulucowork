@@ -171,6 +171,7 @@ Output/Ahamove/
 | `q2-driver-monthly-activity.sql` | Query monthly activity breakdown |
 | `q3-cohort-retention.sql` | Query cohort retention analysis |
 | `q4-segment-transition.sql` | Query segment transition tracking |
+| `churn-feature-mart.sql` | **Feature mart cho Churn Scoring Model** — label activity-gap (NEW 14d/OLD 30d), 12 features, tách cohort NEW/OLD |
 
 #### `raw-data/`
 | File | Mô tả |
@@ -196,6 +197,7 @@ Output/Ahamove/
 | `2026-05-fr-decline-all-services-analysis.html` | FR decline — full services breakdown |
 | `2026-05-fr-decline-root-cause-analysis.html` | FR decline root cause analysis |
 | `2026-06-pulu-smartflow-risk-assessment.md` | **Đánh giá rủi ro & đề xuất bảo mật/hiệu năng** hệ thống PuluSmartFlow |
+| `2026-07-driver-churn-detection-data-design.md` | **Data design cho Churn Detection Framework** — label activity-gap, kiến trúc 3 bảng, 12 features, roadmap scoring model |
 | `data-spec-driver-analysis.html` | Data spec cho driver analysis queries |
 
 ---
