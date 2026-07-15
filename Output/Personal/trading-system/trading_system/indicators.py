@@ -123,6 +123,9 @@ def compute_ta_features(df: pd.DataFrame) -> pd.DataFrame:
     for p in (7, 10, 14, 21):
         feats[f"rsi_{p}"] = rsi(c, p)
     feats["atr_14"] = atr(h, l, c, 14)
+    feats["ema_9"] = ema(c, 9)
+    feats["ema_21"] = ema(c, 21)
+    feats["sma_20"] = sma(c, 20)
     feats["sma_50"] = sma(c, 50)
     feats["sma_200"] = sma(c, 200)
     feats["adx_14"] = adx(h, l, c, 14)

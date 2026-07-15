@@ -99,6 +99,15 @@ def gold_dashboard(force: bool = False) -> dict:
     except Exception as e:
         out["errors"].append(f"Vàng thế giới (Binance PAXG): {e}")
 
+    # Phân tích kỹ thuật đầy đủ PAXGUSDT làm proxy cho Vàng
+    try:
+        from .main import analyze
+        from dataclasses import asdict
+        analysis_dec = analyze("PAXGUSDT", lookback_years=5, verbose=False)
+        out["analysis"] = asdict(analysis_dec)
+    except Exception as e:
+        out["errors"].append(f"Phân tích kỹ thuật Vàng lỗi: {e}")
+
     vn = None
     try:
         vn = fetch_vn_gold()

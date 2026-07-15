@@ -55,8 +55,12 @@ class Decision:
     fa_notes: list[str]
     warnings: list[str]
     fold_summary: list[dict] = field(default_factory=list)
-    chart_data: dict = field(default_factory=dict)   # {dates: [...], closes: [...]} 12 tháng cho web UI
+    chart_data: dict = field(default_factory=dict)   # OHLCV 12 tháng cho web UI (nến + volume)
     price_action: dict = field(default_factory=dict) # PAResult: BOS/CHoCH, OB/FVG, liquidity, tiers, invalidation
+    technical_rating: dict = field(default_factory=dict)  # gauge kiểu TV Technicals: votes từng chỉ báo
+    technical_rating: dict = field(default_factory=dict) # Kết quả votes của đồng hồ tín hiệu
+    insights: list[str] = field(default_factory=list) # Nhận định chuyên sâu về xu hướng và hợp lưu
+    volume_pressure: dict = field(default_factory=dict) # Lực mua/bán dựa trên volume nến tăng/giảm trong 14 ngày
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -108,6 +112,47 @@ def _assess_trends(df: pd.DataFrame, feats: pd.DataFrame) -> list[TrendView]:
     views.append(TrendView("Dài hạn (3-12 tháng)",
                            "TĂNG" if long_score >= 2 else ("GIẢM" if long_score <= -2 else "ĐI NGANG"), ev))
     return views
+
+
+def _technical_rating(df: pd.DataFrame, feats: pd.DataFrame) -> dict:
+    """Đồng hồ tín hiệu kiểu TradingView Technicals: mỗi chỉ báo bỏ 1 phiếu
+    MUA/BÁN/TRUNG LẬP, tổng hợp thành rating -1..+1."""
+    c = float(df["close"].iloc[-1])
+    f = feats.iloc[-1]
+    votes: list[dict] = []
+
+    def vote(name, val, sig):
+        votes.append({"name": name, "value": val, "signal": sig})
+
+    rsi = float(f["rsi_14"])
+    vote("RSI(14)", round(rsi, 1), "MUA" if rsi < 30 else ("BÁN" if rsi > 70 else "TRUNG LẬP"))
+    vote("MACD", round(float(f["macd_hist"]), 4),
+         "MUA" if f["macd_hist"] > 0 else "BÁN")
+    k = float(f["stoch_k"]) if pd.notna(f["stoch_k"]) else 50.0
+    vote("Stochastic %K", round(k, 1), "MUA" if k < 20 else ("BÁN" if k > 80 else "TRUNG LẬP"))
+    if pd.notna(f["sma_50"]):
+        vote("SMA50", round(float(f["sma_50"]), 2), "MUA" if c > f["sma_50"] else "BÁN")
+    if pd.notna(f["sma_200"]):
+        vote("SMA200", round(float(f["sma_200"]), 2), "MUA" if c > f["sma_200"] else "BÁN")
+    if pd.notna(f["bb_mid"]):
+        vote("Bollinger mid", round(float(f["bb_mid"]), 2), "MUA" if c > f["bb_mid"] else "BÁN")
+    adx = float(f["adx_14"]) if pd.notna(f["adx_14"]) else 0.0
+    if adx > 25:
+        trend_sig = "MUA" if (pd.notna(f["sma_50"]) and c > f["sma_50"]) else "BÁN"
+        vote("ADX(14) trend", round(adx, 1), trend_sig)
+    else:
+        vote("ADX(14) trend", round(adx, 1), "TRUNG LẬP")
+    vote("OBV slope", round(float(f["obv_slope"]), 0) if pd.notna(f["obv_slope"]) else 0,
+         "MUA" if f["obv_slope"] > 0 else "BÁN")
+
+    n_buy = sum(1 for v in votes if v["signal"] == "MUA")
+    n_sell = sum(1 for v in votes if v["signal"] == "BÁN")
+    n_neutral = len(votes) - n_buy - n_sell
+    score = (n_buy - n_sell) / max(1, len(votes))   # -1..+1
+    label = ("MUA MẠNH" if score >= 0.5 else "MUA" if score >= 0.15 else
+             "BÁN MẠNH" if score <= -0.5 else "BÁN" if score <= -0.15 else "TRUNG LẬP")
+    return {"score": round(score, 3), "label": label,
+            "n_buy": n_buy, "n_sell": n_sell, "n_neutral": n_neutral, "votes": votes}
 
 
 def _count_similar_setups(optim: OptimResult, df: pd.DataFrame) -> tuple[str, int, float]:
@@ -197,11 +242,121 @@ def make_decision(
             position_size_pct=round(pos_pct, 4),
         )
 
-    # dữ liệu chart 12 tháng cho web UI (downsample còn ~250 điểm)
+    # ── Phân tích Chuyên Sâu (Insights & Confluence) ──────────────────────────
+    insights = []
+    f_last = feats.iloc[-1]
+    f_prev = feats.iloc[-2] if len(feats) >= 2 else f_last
+    ema9_last, ema21_last = float(f_last.get("ema_9", 0)), float(f_last.get("ema_21", 0))
+    ema9_prev, ema21_prev = float(f_prev.get("ema_9", 0)), float(f_prev.get("ema_21", 0))
+    
+    if ema9_last > ema21_last:
+        if ema9_prev <= ema21_prev:
+            insights.append("EMA 9 vừa cắt LÊN EMA 21: Tín hiệu đảo chiều tăng ngắn hạn (EMA Golden Cross).")
+        else:
+            insights.append("Xu hướng ngắn hạn TĂNG: EMA 9 nằm trên EMA 21 duy trì đà tăng giá ngắn hạn.")
+    else:
+        if ema9_prev >= ema21_prev:
+            insights.append("⚠️ EMA 9 vừa cắt XUỐNG EMA 21: Tín hiệu đảo chiều giảm ngắn hạn (EMA Death Cross).")
+        else:
+            insights.append("Xu hướng ngắn hạn GIẢM: EMA 9 nằm dưới EMA 21 duy trì đà giảm giá ngắn hạn.")
+            
+    sma200 = float(f_last.get("sma_200", 0)) if pd.notna(f_last.get("sma_200")) else 0
+    if sma200 > 0:
+        if last > sma200:
+            insights.append(f"Bệ đỡ dài hạn: Giá nằm trên SMA 200 ({last:,.2f} > {sma200:,.2f}) xác nhận xu hướng tăng dài hạn vững chắc.")
+        else:
+            insights.append(f"⚠️ Áp lực dài hạn: Giá nằm dưới SMA 200 ({last:,.2f} < {sma200:,.2f}) cảnh báo xu hướng giảm dài hạn chi phối.")
+            
+    fib = fibonacci_retracements(df["close"])
+    poc = volume_profile_poc(df["close"].iloc[-252:], df["volume"].iloc[-252:])
+    
+    confluences = []
+    for k, v in fib.items():
+        if k.startswith("fib_") and abs(v - poc) / poc < 0.012:
+            confluences.append(f"{k.replace('fib_', 'Fib ')} ({v:,.2f})")
+            
+    if confluences:
+        insights.append(f"🎯 Vùng hợp lưu mạnh: Mức POC tập trung volume ({poc:,.2f}) hội tụ sát với {', '.join(confluences)}, củng cố vùng hỗ trợ/kháng cự cực kỳ vững chắc.")
+    else:
+        insights.append(f"Mốc hỗ trợ/kháng cự tĩnh: POC (Point of Control) giao dịch nhiều nhất nằm ở {poc:,.2f}.")
+        
+    rsi_val = float(f_last.get(f"rsi_{p['rsi_period']}", 50))
+    if rsi_val <= p["rsi_entry"]:
+        insights.append(f"🔥 Điểm mua hấp dẫn: RSI({p['rsi_period']}) đạt {rsi_val:.1f} đi vào vùng quá bán (oversold), tăng cao xác suất phục hồi.")
+    elif rsi_val >= 70:
+        insights.append(f"⚠️ Đề phòng rung lắc: RSI({p['rsi_period']}) chạm {rsi_val:.1f} quá mua (overbought), có khả năng xuất hiện nhịp điều chỉnh ngắn hạn.")
+
+    # ── Tính toán Lực Mua / Lực Bán (Volume Pressure) trong 14 ngày ──
+    tail_vol = df.tail(14)
+    buy_v = 0.0
+    sell_v = 0.0
+    if len(tail_vol) > 0:
+        c_vals = tail_vol["close"].to_numpy()
+        o_vals = tail_vol["open"].to_numpy()
+        v_vals = tail_vol["volume"].to_numpy()
+        for idx in range(len(c_vals)):
+            vol_val = float(v_vals[idx]) if pd.notna(v_vals[idx]) else 0.0
+            if pd.isna(c_vals[idx]) or pd.isna(o_vals[idx]):
+                continue
+            if c_vals[idx] > o_vals[idx]:
+                buy_v += vol_val
+            elif c_vals[idx] < o_vals[idx]:
+                sell_v += vol_val
+            else:
+                buy_v += vol_val * 0.5
+                sell_v += vol_val * 0.5
+                
+    tot_v = buy_v + sell_v
+    buy_pct = round(buy_v / tot_v * 100.0, 1) if tot_v > 0 else 50.0
+    sell_pct = round(100.0 - buy_pct, 1) if tot_v > 0 else 50.0
+    vol_press = {
+        "buy_pct": buy_pct,
+        "sell_pct": sell_pct,
+        "buy_vol": round(buy_v, 1),
+        "sell_vol": round(sell_v, 1)
+    }
+
+    # Bổ sung insights về cấu trúc thị trường SMC
+    if pa and not pa.get("error"):
+        pa_trend = pa.get("trend")
+        if pa_trend == "up":
+            insights.append("Cấu trúc SMC: Xu hướng tăng (Bullish Structure) được duy trì nhờ các cú BOS liên tục.")
+        elif pa_trend == "down":
+            insights.append("⚠️ Cấu trúc SMC: Xu hướng giảm (Bearish Structure) chi phối với các cấu trúc phá vỡ đi xuống.")
+            
+        last_ev = pa.get("last_event")
+        if last_ev:
+            kind = last_ev.get("kind")
+            dir_str = "TĂNG" if last_ev.get("direction") == "up" else "GIẢM"
+            insights.append(f"Sự kiện SMC gần nhất: Xuất hiện cấu trúc {kind} {dir_str} tại mức giá {float(last_ev.get('level', 0)):,.2f}.")
+            
+        inv_val = pa.get("invalidation")
+        if inv_val:
+            insights.append(f"Ngưỡng vô hiệu hóa: Kịch bản hiện tại sẽ bị hủy nếu giá đóng cửa vượt qua mức {inv_val:,.2f}.")
+
+    # Bổ sung insights về volume pressure
+    if buy_pct > 58.0:
+        insights.append(f"Lượng mua áp đảo: Khối lượng phiên tăng chiếm {buy_pct}% tổng volume 14 ngày qua, thể hiện lực mua chủ động chiếm ưu thế.")
+    elif sell_pct > 58.0:
+        insights.append(f"⚠️ Áp lực bán lớn: Khối lượng phiên giảm chiếm {sell_pct}% tổng volume 14 ngày qua, thể hiện lực bán chủ động áp đảo.")
+    else:
+        insights.append(f"Cân bằng cung cầu: Lực mua ({buy_pct}%) và lực bán ({sell_pct}%) dao động trong biên độ cân bằng 14 ngày qua.")
+
+    # tính đồng hồ tín hiệu kỹ thuật
+    tech_rating = _technical_rating(df, feats)
+
+    # dữ liệu chart 12 tháng cho web UI — OHLCV đầy đủ để vẽ nến + volume
     tail = df.iloc[-252:]
+    tail_feats = feats.iloc[-252:]
     chart_data = {
         "dates": [d.strftime("%Y-%m-%d") for d in tail.index],
+        "opens": [round(float(v), 4) for v in tail["open"]],
+        "highs": [round(float(v), 4) for v in tail["high"]],
+        "lows": [round(float(v), 4) for v in tail["low"]],
         "closes": [round(float(v), 4) for v in tail["close"]],
+        "volumes": [round(float(v), 2) for v in tail["volume"]],
+        "ma20": [round(float(v), 4) if pd.notna(v) else None for v in tail_feats["sma_20"]],
+        "ma50": [round(float(v), 4) if pd.notna(v) else None for v in tail_feats["sma_50"]],
     }
 
     fold_summary = [
@@ -233,6 +388,9 @@ def make_decision(
         fold_summary=fold_summary,
         chart_data=chart_data,
         price_action=pa,
+        technical_rating=tech_rating,
+        insights=insights,
+        volume_pressure=vol_press,
     )
 
 

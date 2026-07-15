@@ -16,14 +16,14 @@
   --mono:'JetBrains Mono',ui-monospace,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13.5px}
-.container{max-width:1320px;margin:0 auto;padding:0 18px 80px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Trebuchet MS",Roboto,Ubuntu,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;letter-spacing:-0.01em;}
+.container{max-width:100%;margin:0 auto;padding:0 16px 60px}
 ::selection{background:rgba(41,98,255,.35)}
 a{color:var(--text);text-decoration:none}
 a:hover{color:var(--blue-soft)}
 
 /* ── Top bar (sticky, kiểu TV toolbar) ── */
-.topbar{position:sticky;top:0;z-index:50;background:rgba(19,23,34,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border-soft);margin:0 -18px;padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(19,23,34,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border-soft);margin:0 -16px;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;margin-right:6px}
 .brand-mark{width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,var(--blue),#1E53E5);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px}
 .brand h1{font-size:14.5px;font-weight:700;color:var(--text-strong);white-space:nowrap}
@@ -111,14 +111,24 @@ td.num{font-family:var(--mono);font-weight:500}
 .pill-ĐỨNG_NGOÀI,.pill-ĐI_NGANG{background:rgba(120,123,134,.15);color:var(--muted)}
 
 /* ── Zone bar (Entry/TP/SL trực quan) ── */
-.zone-ladder{margin-top:4px}
-.zl-row{display:flex;align-items:center;gap:10px;padding:6px 0}
+/* ── Zone bar (Entry/TP/SL trực quan) ── */
+.zone-ladder{margin-top:4px;border-radius:6px;overflow:hidden;}
+.zl-row{display:flex;align-items:center;gap:10px;padding:8px 12px;margin-bottom:2px;border-radius:4px;}
+.zl-row-tp{background:rgba(38,166,154,.06);border-left:3px solid var(--up);}
+.zl-row-entry{background:rgba(41,98,255,.06);border-left:3px solid var(--blue-soft);}
+.zl-row-sl{background:rgba(239,83,80,.06);border-left:3px solid var(--down);}
+.zl-row-size{background:var(--bg);border-left:3px solid var(--muted);}
+.vp-bar-wrap{display:flex;height:12px;background:var(--border);border-radius:6px;overflow:hidden;margin:10px 0;border:1px solid rgba(255,255,255,0.05);}
+.vp-bar-buy{background:var(--up);height:100%;transition:width 0.3s ease;}
+.vp-bar-sell{background:var(--down);height:100%;transition:width 0.3s ease;}
+.vp-stats{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-family:var(--mono);font-variant-numeric:tabular-nums;}
 .zl-tag{width:64px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;text-align:right;flex-shrink:0}
-.zl-val{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--text-strong);width:110px;flex-shrink:0;text-align:right}
-.zl-note{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.zl-val{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--text-strong);width:110px;flex-shrink:0;text-align:right;font-variant-numeric:tabular-nums;}
+.zl-note{font-size:11.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-.warn{background:rgba(255,183,77,.08);border:1px solid rgba(255,183,77,.35);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--yellow);margin-bottom:6px}
-.info{background:rgba(41,98,255,.08);border:1px solid rgba(41,98,255,.35);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--text);margin-top:10px;line-height:1.55}
+.warn{background:rgba(255,183,77,.06);border:1px solid rgba(255,183,77,.25);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--yellow);margin-bottom:6px}
+.info{background:rgba(41,98,255,.05);border:1px solid rgba(41,98,255,.2);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--text);margin-top:10px;line-height:1.55}
+.num, .sym-price, td, .v, .zl-val { font-variant-numeric: tabular-nums; }
 svg text{font-family:var(--mono)}
 .spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;vertical-align:-2px;margin-right:7px}
 @keyframes rot{to{transform:rotate(360deg)}}
@@ -159,7 +169,7 @@ textarea:focus{border-color:var(--blue)}
   <!-- ═══════════ TAB: ANALYZE ═══════════ -->
   <div id="tab-analyze">
     <div class="card">
-      <div class="input-row">
+      <div class="input-row" style="margin-bottom: 12px;">
         <input type="text" class="symbol-input" id="symInput" placeholder="FPT / BTCUSDT" onkeydown="if(event.key==='Enter')startAnalyze()">
         <select id="yearsSel">
           <option value="3">3 năm</option>
@@ -167,6 +177,10 @@ textarea:focus{border-color:var(--blue)}
           <option value="7">7 năm</option>
         </select>
         <button class="btn btn-primary" id="analyzeBtn" onclick="startAnalyze()">Phân tích</button>
+      </div>
+      <div class="input-row" style="border-top: 1px solid var(--border-soft); padding-top: 12px; margin-bottom: 12px; display: flex; gap: 8px;">
+        <input type="text" id="filterInput" placeholder="🔍 Lọc danh sách hoặc nhập mã để thêm..." style="flex: 1; max-width: 320px;" oninput="renderFilteredChips(this.value)" onkeydown="if(event.key==='Enter')quickAddSymbol()">
+        <button class="btn btn-ghost" onclick="quickAddSymbol()">➕ Thêm vào Watchlist</button>
       </div>
       <div class="chips" id="presetChips"></div>
       <div class="progress-wrap" id="progressWrap">
@@ -181,8 +195,22 @@ textarea:focus{border-color:var(--blue)}
   <div id="tab-batch" class="hidden">
     <div class="card">
       <div class="flex-between">
-        <h2 style="margin:0">Batch Scan — quét toàn bộ watchlist</h2>
-        <button class="btn btn-primary" id="batchBtn" onclick="startBatch()">▶ Chạy Batch Scan</button>
+        <h2 style="margin:0">Batch Scan — Quét chọn lọc danh sách theo dõi</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div class="dropdown" style="position:relative; display:inline-block;">
+            <button class="btn btn-ghost" id="batchSelectBtn" onclick="toggleBatchDropdown(event)" style="display:inline-flex; align-items:center; gap:6px;">
+              Chọn mã quét (Tất cả) ▾
+            </button>
+            <div id="batchDropdownContent" class="hidden" style="position:absolute; top:100%; right:0; background:var(--panel2); border:1px solid var(--border); border-radius:6px; min-width:240px; max-height:260px; overflow-y:auto; padding:10px; z-index:1000; box-shadow:0 8px 24px rgba(0,0,0,0.4); margin-top:4px;">
+              <label style="display:flex; align-items:center; gap:8px; padding:6px 4px; font-weight:bold; cursor:pointer; border-bottom:1px solid var(--border-soft); margin-bottom:6px;">
+                <input type="checkbox" id="selectAllBatch" checked onchange="toggleSelectAllBatch(this)">
+                <span>[ Chọn tất cả ]</span>
+              </label>
+              <div id="batchCheckboxList" style="display:flex; flex-direction:column; gap:4px;"></div>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="batchBtn" onclick="startBatch()">▶ Chạy Batch Scan</button>
+        </div>
       </div>
       <p class="muted" style="margin-top:8px">Chạy tuần tự từng mã. Kết quả tự lưu — xem lại ở tab Lịch sử.</p>
       <div class="progress-wrap" id="batchProgressWrap">
@@ -213,18 +241,31 @@ textarea:focus{border-color:var(--blue)}
   <!-- ═══════════ TAB: WATCHLIST ═══════════ -->
   <div id="tab-watchlist" class="hidden">
     <div class="card">
-      <h2>Watchlist — mã theo dõi hàng ngày</h2>
-      <p class="muted">Scheduler quét lúc 10:00 sáng mỗi ngày. Phân tách bằng dấu phẩy.</p>
-      <div class="wl-label">Chứng khoán VN</div>
-      <textarea id="wlVn" placeholder="FPT, HPG, MWG, VNM"></textarea>
-      <div class="wl-label">Crypto (Binance)</div>
-      <textarea id="wlCx" placeholder="BTCUSDT, ETHUSDT"></textarea>
-      <div class="input-row" style="margin-top:14px">
-        <label class="muted">Dữ liệu lịch sử:</label>
-        <select id="wlYears">
-          <option value="3">3 năm</option><option value="5" selected>5 năm</option><option value="7">7 năm</option>
-        </select>
-        <button class="btn btn-primary" onclick="saveWatchlist()">💾 Lưu Watchlist</button>
+      <div class="flex-between" style="border-bottom: 1px solid var(--border-soft); padding-bottom: 12px; margin-bottom: 12px;">
+        <h2 style="margin:0">Watchlist — Mã Theo Dõi Hàng Ngày (Scheduler lúc 10:00)</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <label class="muted">Dữ liệu lịch sử:</label>
+          <select id="wlYears" onchange="saveWatchlistFromUI()">
+            <option value="3">3 năm</option><option value="5" selected>5 năm</option><option value="7">7 năm</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="input-row" style="margin-bottom: 16px; display:flex; gap:12px; flex-wrap:wrap;">
+        <input type="text" id="wlFilterInput" placeholder="🔍 Lọc nhanh danh mục..." style="flex:1; max-width:280px;" oninput="renderWatchlistTab(this.value)">
+        <input type="text" id="wlAddInput" placeholder="Nhập mã mới (ví dụ: ACB, SOLUSDT)..." style="flex:1; max-width:280px;" onkeydown="if(event.key==='Enter')addSymbolFromWatchlistTab()">
+        <button class="btn btn-primary" onclick="addSymbolFromWatchlistTab()">➕ Thêm Mã</button>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+        <div class="card" style="margin-bottom:0; background:var(--bg);">
+          <h3 style="font-size:12px; font-weight:700; color:var(--text-strong); margin-bottom:8px; border-bottom:1px solid var(--border); padding-bottom:4px;">CHỨNG KHOÁN VIỆT NAM</h3>
+          <div id="wlVnList" style="max-height:350px; overflow-y:auto; display:flex; flex-direction:column; gap:4px;"></div>
+        </div>
+        <div class="card" style="margin-bottom:0; background:var(--bg);">
+          <h3 style="font-size:12px; font-weight:700; color:var(--text-strong); margin-bottom:8px; border-bottom:1px solid var(--border); padding-bottom:4px;">TIỀN MÃ HÓA (CRYPTO)</h3>
+          <div id="wlCxList" style="max-height:350px; overflow-y:auto; display:flex; flex-direction:column; gap:4px;"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -256,14 +297,355 @@ fetch('/api/scheduler').then(r=>r.json()).then(s=>{
   if(!s.enabled)$('schedPill').querySelector('.sched-dot').style.background='var(--muted)';
 }).catch(()=>{$('schedText').textContent='offline'});
 
+/* ── Asset Names Map ── */
+const ASSET_NAMES = {
+  // VN Stocks
+  "FPT": "CTCP FPT",
+  "HPG": "Tập đoàn Hòa Phát",
+  "MWG": "CTCP Đầu tư Thế giới Di động",
+  "VNM": "CTCP Sữa Việt Nam (Vinamilk)",
+  "VCB": "Ngân hàng Vietcombank",
+  "ACB": "Ngân hàng Á Châu",
+  "TCB": "Ngân hàng Techcombank",
+  "MBB": "Ngân hàng Quân Đội (MBBank)",
+  "SSI": "CTCP Chứng khoán SSI",
+  "VRE": "CTCP Vincom Retail",
+  "REE": "CTCP Cơ Điện Lạnh",
+  "VIC": "Tập đoàn Vingroup",
+  "VHM": "CTCP Vinhomes",
+  "GAS": "PV GAS",
+  "STB": "Ngân hàng Sacombank",
+  "VPB": "Ngân hàng VPBank",
+  "HDB": "Ngân hàng HDBank",
+  "TPB": "Ngân hàng TPBank",
+  "CTG": "Ngân hàng VietinBank",
+  "MSN": "Tập đoàn Masan",
+  "PLX": "Tập đoàn Xăng dầu Petrolimex",
+  "POW": "Tổng công ty Điện lực Dầu khí",
+  "SAB": "Bia Sabeco",
+  "VJC": "VietJet Air",
+  "BID": "Ngân hàng BIDV",
+  "BVH": "Tập đoàn Bảo Việt",
+  "GVR": "Tập đoàn Cao su VN",
+  "SSB": "Ngân hàng SeABank",
+  "SHB": "Ngân hàng SHB",
+  "VIB": "Ngân hàng VIB",
+
+  // Crypto
+  "BTCUSDT": "Bitcoin",
+  "ETHUSDT": "Ethereum",
+  "SOLUSDT": "Solana",
+  "BNBUSDT": "BNB Coin",
+  "LINKUSDT": "Chainlink",
+  "AAVEUSDT": "Aave",
+  "UNIUSDT": "Uniswap",
+  "ADAUSDT": "Cardano",
+  "XRPUSDT": "Ripple",
+  "DOTUSDT": "Polkadot",
+  "DOGEUSDT": "Dogecoin",
+  "AVAXUSDT": "Avalanche",
+  "NEARUSDT": "Near Protocol",
+};
+
+function getAssetName(sym) {
+  return ASSET_NAMES[sym.toUpperCase()] || "Mã / Doanh nghiệp";
+}
+
+let currentWatchlist = { vn_stocks: [], crypto: [] };
+
 /* ── Preset chips ── */
 async function loadChips(){
   try{
-    const wl=await(await fetch('/api/watchlist')).json();
-    $('presetChips').innerHTML=[...wl.vn_stocks,...wl.crypto].map(s=>`<div class="chip" onclick="$('symInput').value='${s}';startAnalyze()">${s}</div>`).join('');
+    currentWatchlist = await(await fetch('/api/watchlist')).json();
+    renderFilteredChips("");
+    updateBatchSelectUI();
   }catch(e){}
 }
 loadChips();
+
+function renderFilteredChips(query) {
+  const q = query.trim().toLowerCase();
+  const allSymbols = [
+    ...currentWatchlist.vn_stocks.map(s => ({ symbol: s, type: 'vn_stocks' })),
+    ...currentWatchlist.crypto.map(s => ({ symbol: s, type: 'crypto' }))
+  ];
+  
+  const filtered = allSymbols.filter(item => {
+    const name = getAssetName(item.symbol).toLowerCase();
+    const sym = item.symbol.toLowerCase();
+    return sym.includes(q) || name.includes(q);
+  });
+  
+  $('presetChips').innerHTML = filtered.map(item => {
+    const fullName = getAssetName(item.symbol);
+    return `
+      <div class="chip" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; margin: 4px; border-radius: 6px;" onclick="selectSymbol('${item.symbol}')">
+        <span style="font-weight: 700; color: var(--text-strong);">${item.symbol}</span>
+        <span style="color: var(--muted); font-size: 11px;">(${fullName})</span>
+        <span style="color: var(--down); cursor: pointer; font-weight: 800; padding-left: 4px; font-size: 14px;" onclick="removeSymbol(event, '${item.symbol}', '${item.type}')">×</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function selectSymbol(sym) {
+  $('symInput').value = sym;
+  startAnalyze();
+}
+
+async function quickAddSymbol() {
+  const input = $('filterInput').value.trim().toUpperCase();
+  if (!input) {
+    toast("Vui lòng nhập mã để thêm!");
+    return;
+  }
+  
+  if (currentWatchlist.vn_stocks.includes(input) || currentWatchlist.crypto.includes(input)) {
+    toast("Mã này đã có trong danh sách!");
+    return;
+  }
+  
+  let type = '';
+  if (/^[A-Z]{3}$/.test(input)) {
+    type = 'vn_stocks';
+  } else if (/^[A-Z0-9]{4,12}$/.test(input)) {
+    type = 'crypto';
+  } else {
+    toast("Mã không hợp lệ! (3 chữ cái cho VN, hoặc kết thúc bằng USDT...)");
+    return;
+  }
+  
+  if (type === 'vn_stocks') {
+    currentWatchlist.vn_stocks.push(input);
+  } else {
+    currentWatchlist.crypto.push(input);
+  }
+  
+  try {
+    const body = {
+      vn_stocks: currentWatchlist.vn_stocks,
+      crypto: currentWatchlist.crypto,
+      lookback_years: currentWatchlist.lookback_years || 5
+    };
+    
+    const res = await fetch('/api/watchlist', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    
+    if (res.ok) {
+      toast(`Đã thêm mã ${input} thành công!`);
+      $('filterInput').value = "";
+      renderFilteredChips("");
+      updateBatchSelectUI();
+      if (typeof loadWatchlistUI === 'function') loadWatchlistUI();
+    } else {
+      toast("Lỗi khi lưu mã lên backend!");
+    }
+  } catch (e) {
+    toast("Lỗi kết nối: " + e.message);
+  }
+}
+
+async function removeSymbol(event, sym, type) {
+  event.stopPropagation();
+  if (!confirm(`Bạn muốn xóa mã ${sym} khỏi watchlist?`)) {
+    return;
+  }
+  
+  if (type === 'vn_stocks') {
+    currentWatchlist.vn_stocks = currentWatchlist.vn_stocks.filter(s => s !== sym);
+  } else {
+    currentWatchlist.crypto = currentWatchlist.crypto.filter(s => s !== sym);
+  }
+  
+  try {
+    const body = {
+      vn_stocks: currentWatchlist.vn_stocks,
+      crypto: currentWatchlist.crypto,
+      lookback_years: currentWatchlist.lookback_years || 5
+    };
+    
+    const res = await fetch('/api/watchlist', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    
+    if (res.ok) {
+      toast(`Đã xóa mã ${sym} thành công!`);
+      renderFilteredChips($('filterInput').value || "");
+      updateBatchSelectUI();
+      if (typeof loadWatchlistUI === 'function') loadWatchlistUI();
+    } else {
+      toast("Lỗi khi lưu mã lên backend!");
+    }
+  } catch (e) {
+    toast("Lỗi kết nối: " + e.message);
+  }
+}
+
+/* ── Dropdown Batch Scan Controls ── */
+function toggleBatchDropdown(event) {
+  event.stopPropagation();
+  $('batchDropdownContent').classList.toggle('hidden');
+}
+
+document.addEventListener('click', function(e) {
+  const dropdown = $('batchDropdownContent');
+  const btn = $('batchSelectBtn');
+  if (dropdown && !dropdown.classList.contains('hidden') && !dropdown.contains(e.target) && e.target !== btn) {
+    dropdown.classList.add('hidden');
+  }
+});
+
+function toggleSelectAllBatch(master) {
+  document.querySelectorAll('.batch-chk').forEach(cb => {
+    cb.checked = master.checked;
+  });
+  updateBatchSelectBtnText();
+}
+
+function updateBatchSelectBtnText() {
+  const allChks = document.querySelectorAll('.batch-chk');
+  const checked = document.querySelectorAll('.batch-chk:checked');
+  const btn = $('batchSelectBtn');
+  if (!btn) return;
+  
+  if (checked.length === allChks.length) {
+    btn.innerHTML = 'Chọn mã quét (Tất cả) ▾';
+    if ($('selectAllBatch')) $('selectAllBatch').checked = true;
+  } else if (checked.length === 0) {
+    btn.innerHTML = 'Chọn mã quét (Trống) ▾';
+    if ($('selectAllBatch')) $('selectAllBatch').checked = false;
+  } else {
+    btn.innerHTML = `Chọn mã quét (${checked.length} mã) ▾`;
+    if ($('selectAllBatch')) $('selectAllBatch').checked = false;
+  }
+}
+
+function updateBatchSelectUI() {
+  const list = $('batchCheckboxList');
+  if (!list) return;
+  const allSymbols = [...currentWatchlist.vn_stocks, ...currentWatchlist.crypto];
+  list.innerHTML = allSymbols.map(sym => `
+    <label style="display:flex; align-items:center; gap:8px; padding:4px; cursor:pointer; font-family:var(--mono);">
+      <input type="checkbox" class="batch-chk" value="${sym}" checked onchange="updateBatchSelectBtnText()">
+      <span>${sym}</span>
+    </label>
+  `).join('');
+  updateBatchSelectBtnText();
+}
+
+/* ── Watchlist Tab Functions ── */
+function renderWatchlistTab(query = "") {
+  const q = query.trim().toLowerCase();
+  
+  const filteredVn = currentWatchlist.vn_stocks.filter(sym => {
+    const name = getAssetName(sym).toLowerCase();
+    return sym.toLowerCase().includes(q) || name.includes(q);
+  });
+  
+  const filteredCx = currentWatchlist.crypto.filter(sym => {
+    const name = getAssetName(sym).toLowerCase();
+    return sym.toLowerCase().includes(q) || name.includes(q);
+  });
+  
+  const makeItem = (sym, type) => {
+    const fullName = getAssetName(sym);
+    return `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:var(--panel); border:1px solid var(--border-soft); border-radius:6px; margin-bottom:4px;">
+        <div style="display:flex; flex-direction:column;">
+          <span style="font-weight:700; color:var(--text-strong); font-family:var(--mono);">${sym}</span>
+          <span style="font-size:11px; color:var(--muted);">${fullName}</span>
+        </div>
+        <button class="btn btn-ghost" style="padding:4px 8px; border:none; color:var(--down); font-weight:800; font-size:14px;" onclick="removeSymbolFromWatchlistTab('${sym}', '${type}')">×</button>
+      </div>
+    `;
+  };
+  
+  $('wlVnList').innerHTML = filteredVn.length 
+    ? filteredVn.map(s => makeItem(s, 'vn_stocks')).join('')
+    : '<p class="muted" style="padding:10px; text-align:center;">Không tìm thấy mã</p>';
+    
+  $('wlCxList').innerHTML = filteredCx.length 
+    ? filteredCx.map(s => makeItem(s, 'crypto')).join('')
+    : '<p class="muted" style="padding:10px; text-align:center;">Không tìm thấy mã</p>';
+}
+
+async function addSymbolFromWatchlistTab() {
+  const input = $('wlAddInput').value.trim().toUpperCase();
+  if (!input) {
+    toast("Vui lòng nhập mã!");
+    return;
+  }
+  
+  if (currentWatchlist.vn_stocks.includes(input) || currentWatchlist.crypto.includes(input)) {
+    toast("Mã này đã tồn tại trong watchlist!");
+    return;
+  }
+  
+  let type = '';
+  if (/^[A-Z]{3}$/.test(input)) {
+    type = 'vn_stocks';
+  } else if (/^[A-Z0-9]{4,12}$/.test(input)) {
+    type = 'crypto';
+  } else {
+    toast("Mã không hợp lệ! (3 chữ cái cho VN, hoặc kết thúc bằng USDT...)");
+    return;
+  }
+  
+  if (type === 'vn_stocks') {
+    currentWatchlist.vn_stocks.push(input);
+  } else {
+    currentWatchlist.crypto.push(input);
+  }
+  
+  await saveWatchlistFromUI(true);
+}
+
+async function removeSymbolFromWatchlistTab(sym, type) {
+  if (!confirm(`Bạn chắc chắn muốn xóa mã ${sym} khỏi watchlist?`)) {
+    return;
+  }
+  
+  if (type === 'vn_stocks') {
+    currentWatchlist.vn_stocks = currentWatchlist.vn_stocks.filter(s => s !== sym);
+  } else {
+    currentWatchlist.crypto = currentWatchlist.crypto.filter(s => s !== sym);
+  }
+  
+  await saveWatchlistFromUI(false);
+}
+
+async function saveWatchlistFromUI(isAdd = true) {
+  try {
+    const body = {
+      vn_stocks: currentWatchlist.vn_stocks,
+      crypto: currentWatchlist.crypto,
+      lookback_years: +$('wlYears').value
+    };
+    
+    const res = await fetch('/api/watchlist', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    
+    if (res.ok) {
+      toast(isAdd ? "Đã thêm mã mới vào watchlist!" : "Đã xóa mã khỏi watchlist!");
+      if ($('wlAddInput')) $('wlAddInput').value = "";
+      renderFilteredChips($('filterInput').value || "");
+      renderWatchlistTab($('wlFilterInput').value || "");
+      updateBatchSelectUI();
+    } else {
+      toast("Lỗi khi lưu watchlist!");
+    }
+  } catch (e) {
+    toast("Lỗi kết nối: " + e.message);
+  }
+}
 
 async function pollJob(jobId,onTick){
   while(true){
@@ -298,20 +680,27 @@ async function startAnalyze(){
 function priceChart(d){
   if(!d.chart_data||!d.chart_data.dates||d.chart_data.dates.length<10)return'';
   const cd=d.chart_data,W=1240,H=380,P={t:18,r:110,b:28,l:66};
-  const closes=cd.closes,n=closes.length;
-  let lo=Math.min(...closes),hi=Math.max(...closes);
+  const opens=cd.opens, highs=cd.highs, lows=cd.lows, closes=cd.closes, volumes=cd.volumes;
+  const n=closes.length;
+  
+  let lo=Math.min(...lows),hi=Math.max(...highs);
+  const validMAs = [...(cd.ma20 || []), ...(cd.ma50 || [])].filter(v => v != null);
+  if (validMAs.length) {
+    lo = Math.min(lo, ...validMAs);
+    hi = Math.max(hi, ...validMAs);
+  }
   const zs=d.zones;
   if(zs){lo=Math.min(lo,zs.sl);hi=Math.max(hi,zs.tp2)}
   const pad=(hi-lo)*.05;lo-=pad;hi+=pad;
   const X=i=>P.l+i/(n-1)*(W-P.l-P.r), Y=v=>P.t+(1-(v-lo)/(hi-lo))*(H-P.t-P.b);
-  const path=closes.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+Y(v).toFixed(1)).join('');
-  const area=path+`L${X(n-1).toFixed(1)},${(H-P.b).toFixed(1)}L${X(0).toFixed(1)},${(H-P.b).toFixed(1)}Z`;
+  
   let grid='',labels='';
   for(let g=0;g<5;g++){const v=lo+(hi-lo)*g/4,y=Y(v);
     grid+=`<line x1="${P.l}" y1="${y}" x2="${W-P.r}" y2="${y}" stroke="#2A2E39"/>`;
     labels+=`<text x="${P.l-8}" y="${y+4}" text-anchor="end" font-size="10" fill="#787B86">${fmt(v,v>1000?0:2)}</text>`}
   for(let g=0;g<4;g++){const i=Math.floor((n-1)*g/3);
     labels+=`<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#787B86">${cd.dates[i]}</text>`}
+  
   let zlines='';
   const zone=(v,color,label)=>{const y=Y(v);return `<line x1="${P.l}" y1="${y}" x2="${W-P.r}" y2="${y}" stroke="${color}" stroke-width="1" stroke-dasharray="5 4"/><rect x="${W-P.r+4}" y="${y-9}" width="${P.r-10}" height="18" rx="3" fill="${color}" opacity="0.14"/><text x="${W-P.r+10}" y="${y+4}" font-size="10" font-weight="700" fill="${color}">${label} ${fmt(v,v>1000?0:2)}</text>`};
   if(zs){
@@ -319,21 +708,207 @@ function priceChart(d){
     zlines+=zone(zs.tp2,'#26A69A','TP2');zlines+=zone(zs.tp1,'#26A69A','TP1');
     zlines+=zone(zs.entry_high,'#5B8DEF','ENTRY');zlines+=zone(zs.sl,'#EF5350','SL');
   }
+  
+  let candlesHtml = '';
+  const maxVolume = Math.max(...volumes) || 1;
+  const candleWidth = Math.max(1.8, ((W - P.l - P.r) / n) * 0.65);
+  
+  for(let i=0; i<n; i++){
+    const o=opens[i], h=highs[i], l=lows[i], c=closes[i], v=volumes[i];
+    const x=X(i);
+    const color = c >= o ? 'var(--up)' : 'var(--down)';
+    
+    // Volume bars ở đáy
+    const volHeight = (v / maxVolume) * 55;
+    const volTop = H - P.b - volHeight;
+    candlesHtml += `<rect x="${x - candleWidth/2}" y="${volTop}" width="${candleWidth}" height="${volHeight}" fill="${color}" opacity="0.16"/>`;
+    
+    // Râu nến
+    candlesHtml += `<line x1="${x}" y1="${Y(h)}" x2="${x}" y2="${Y(l)}" stroke="${color}" stroke-width="1.1"/>`;
+    
+    // Thân nến
+    const yOpen = Y(o), yClose = Y(c);
+    const top = Math.min(yOpen, yClose);
+    const height = Math.max(1, Math.abs(yOpen - yClose));
+    candlesHtml += `<rect x="${x - candleWidth/2}" y="${top}" width="${candleWidth}" height="${height}" fill="${color}" stroke="${color}" stroke-width="0.3"/>`;
+  }
+  
+  let ma20Path = '', ma50Path = '';
+  if (cd.ma20) {
+    for (let i = 0; i < n; i++) {
+      if (cd.ma20[i] != null) {
+        ma20Path += (ma20Path === '' ? 'M' : 'L') + X(i).toFixed(1) + ',' + Y(cd.ma20[i]).toFixed(1);
+      }
+    }
+  }
+  if (cd.ma50) {
+    for (let i = 0; i < n; i++) {
+      if (cd.ma50[i] != null) {
+        ma50Path += (ma50Path === '' ? 'M' : 'L') + X(i).toFixed(1) + ',' + Y(cd.ma50[i]).toFixed(1);
+      }
+    }
+  }
+  
+  let maHtml = '';
+  if (ma20Path) maHtml += `<path d="${ma20Path}" fill="none" stroke="#FF9800" stroke-width="1.3" opacity="0.85"/>`;
+  if (ma50Path) maHtml += `<path d="${ma50Path}" fill="none" stroke="#2196F3" stroke-width="1.3" opacity="0.85"/>`;
+  
   const last=closes[n-1],yLast=Y(last);
   const lastTag=`<rect x="${W-P.r+4}" y="${yLast-9}" width="${P.r-10}" height="18" rx="3" fill="#FF9800"/><text x="${W-P.r+10}" y="${yLast+4}" font-size="10" font-weight="700" fill="#131722">${fmt(last,last>1000?0:2)}</text>`;
-  return `<div class="card"><h2>Chart 12 tháng</h2>
-  <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
-    <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#2962FF" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#2962FF" stop-opacity="0"/>
-    </linearGradient></defs>
-    ${grid}${zlines}
-    <path d="${area}" fill="url(#ag)"/>
-    <path d="${path}" fill="none" stroke="#2962FF" stroke-width="1.8"/>
+  
+  const legendHtml = `
+    <g transform="translate(${P.l + 10}, 24)" font-size="10" font-weight="500">
+      <text x="0" y="0" fill="#D1D4DC">OHLCV 12T</text>
+      <text x="90" y="0" fill="#FF9800">MA(20): ${cd.ma20 && cd.ma20[n-1] ? fmt(cd.ma20[n-1], cd.ma20[n-1]>1000?0:2) : '—'}</text>
+      <text x="200" y="0" fill="#2196F3">MA(50): ${cd.ma50 && cd.ma50[n-1] ? fmt(cd.ma50[n-1], cd.ma50[n-1]>1000?0:2) : '—'}</text>
+    </g>
+  `;
+  
+  return `<div class="card"><h2>Biểu đồ nến & Volume (MA20/MA50 overlay)</h2>
+  <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;background:var(--panel);">
+    ${grid}
+    ${candlesHtml}
+    ${maHtml}
+    ${zlines}
     <line x1="${P.l}" y1="${yLast}" x2="${W-P.r}" y2="${yLast}" stroke="#FF9800" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.7"/>
-    <circle cx="${X(n-1)}" cy="${yLast}" r="3.5" fill="#FF9800"/>
-    ${lastTag}${labels}
+    <circle cx="${X(n-1)}" cy="${yLast}" r="3" fill="#FF9800"/>
+    ${lastTag}${legendHtml}${labels}
   </svg></div>`;
+}
+
+/* ── Technical Gauge (TradingView style) ── */
+function renderTechnicalGauge(tr) {
+  if (!tr || tr.score == null) return '';
+  const score = tr.score;
+  const angle = score * 90;
+  
+  let statusColor = 'var(--muted)';
+  if (tr.label.includes('MUA')) {
+    statusColor = tr.label.includes('MẠNH') ? '#26A69A' : 'var(--blue-soft)';
+  } else if (tr.label.includes('BÁN')) {
+    statusColor = tr.label.includes('MẠNH') ? '#EF5350' : 'var(--orange)';
+  } else {
+    statusColor = 'var(--text-strong)';
+  }
+  
+  return `<div class="card" style="text-align:center;">
+    <h2>Tín hiệu kỹ thuật (TradingView)</h2>
+    <div style="position:relative; width:200px; height:105px; margin:14px auto 0; display:flex; justify-content:center; align-items:flex-end; overflow:visible;">
+      <svg width="200" height="110" viewBox="0 0 200 110" style="overflow:visible;">
+        <defs>
+          <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#EF5350"/>
+            <stop offset="35%" stop-color="#FF9800"/>
+            <stop offset="50%" stop-color="#787B86"/>
+            <stop offset="65%" stop-color="#FF9800"/>
+            <stop offset="100%" stop-color="#26A69A"/>
+          </linearGradient>
+        </defs>
+        <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gaugeGrad)" stroke-width="12" stroke-linecap="round" opacity="0.85"/>
+        <line x1="20" y1="100" x2="28" y2="100" stroke="#1E222D" stroke-width="2.5"/>
+        <line x1="180" y1="100" x2="172" y2="100" stroke="#1E222D" stroke-width="2.5"/>
+        <line x1="100" y1="20" x2="100" y2="28" stroke="#1E222D" stroke-width="2.5"/>
+        
+        <circle cx="100" cy="100" r="6" fill="#F0F3FA"/>
+        <g transform="translate(100,100)">
+          <g transform="rotate(${angle})">
+            <line x1="0" y1="0" x2="0" y2="-75" stroke="#F0F3FA" stroke-width="3" stroke-linecap="round"/>
+            <polygon points="-4,0 4,0 0,-12" fill="#F0F3FA" />
+          </g>
+        </g>
+        
+        <text x="25" y="110" font-size="8" fill="#787B86" text-anchor="middle" font-weight="bold">BÁN</text>
+        <text x="100" y="110" font-size="8" fill="#787B86" text-anchor="middle" font-weight="bold">TRUNG LẬP</text>
+        <text x="175" y="110" font-size="8" fill="#787B86" text-anchor="middle" font-weight="bold">MUA</text>
+      </svg>
+    </div>
+    
+    <div style="font-size:16px; font-weight:800; color:${statusColor}; margin-top:6px; font-family:var(--mono); letter-spacing:0.04em;">
+      ${tr.label}
+    </div>
+    <div class="muted" style="font-size:11px; margin-top:1px; font-family:var(--mono);">
+      Score: ${score > 0 ? '+' : ''}${score.toFixed(2)}
+    </div>
+    
+    <div style="display:flex; justify-content:space-around; margin-top:12px; padding-top:10px; border-top:1px solid var(--border-soft); font-size:11.5px; font-family:var(--mono);">
+      <span style="color:var(--down); font-weight:600;">BÁN: ${tr.n_sell}</span>
+      <span style="color:var(--muted); font-weight:600;">LƯỠNG LỰ: ${tr.n_neutral}</span>
+      <span style="color:var(--up); font-weight:600;">MUA: ${tr.n_buy}</span>
+    </div>
+  </div>`;
+}
+
+/* ── Volume & SMC Helpers ── */
+function renderVolumePressure(vp) {
+  if (!vp || vp.buy_pct == null) return '';
+  return `
+    <div class="card">
+      <h2>Lực mua vs Lực bán (Volume Pressure - 14 ngày)</h2>
+      <div class="vp-stats">
+        <span style="color:var(--up); font-weight:700;">MUA: ${vp.buy_pct}%</span>
+        <span style="color:var(--down); font-weight:700;">BÁN: ${vp.sell_pct}%</span>
+      </div>
+      <div class="vp-bar-wrap">
+        <div class="vp-bar-buy" style="width: ${vp.buy_pct}%"></div>
+        <div class="vp-bar-sell" style="width: ${vp.sell_pct}%"></div>
+      </div>
+      <div class="vp-stats" style="color:var(--muted); font-size:11px; margin-top:2px;">
+        <span>Vol mua: ${fmt(vp.buy_vol,0)}</span>
+        <span>Vol bán: ${fmt(vp.sell_vol,0)}</span>
+      </div>
+      <p class="muted" style="margin-top:6px; font-size:11px;">Tổng khối lượng giao dịch tích lũy của các phiên tăng (mua chủ động) vs phiên giảm (bán chủ động) trong 14 phiên.</p>
+    </div>
+  `;
+}
+
+function renderSMCStructure(pa) {
+  if (!pa || pa.error) return '';
+  const trendLabel = pa.trend === 'up' ? '<span class="pill pill-up">LONG (Bullish)</span>' : pa.trend === 'down' ? '<span class="pill pill-down">SHORT (Bearish)</span>' : '<span class="pill">CHƯA RÕ</span>';
+  
+  let supportRows = [];
+  let resistanceRows = [];
+  
+  if (pa.n_fresh_bull_ob > 0) supportRows.push(`Bullish OB (x${pa.n_fresh_bull_ob})`);
+  if (pa.liquidity_below && pa.liquidity_below.length > 0) {
+    supportRows.push(`Liquidity Lows (${pa.liquidity_below.map(x=>fmt(x)).join(', ')})`);
+  }
+  
+  if (pa.n_fresh_bear_ob > 0) resistanceRows.push(`Bearish OB (x${pa.n_fresh_bear_ob})`);
+  if (pa.liquidity_above && pa.liquidity_above.length > 0) {
+    resistanceRows.push(`Liquidity Highs (${pa.liquidity_above.map(x=>fmt(x)).join(', ')})`);
+  }
+  
+  let lastEventStr = '—';
+  if (pa.last_event) {
+    const ev = pa.last_event;
+    lastEventStr = `<b style="color:var(--text-strong)">${ev.kind} ${ev.direction === 'up' ? 'TĂNG' : 'GIẢM'}</b> tại mốc <b>${fmt(ev.level)}</b>`;
+  }
+  
+  return `
+    <div class="card">
+      <h2>Cấu Trúc Thị Trường & SMC (Smart Money Concepts)</h2>
+      <div class="kv"><span class="k">Cấu trúc SMC</span><span class="v">${trendLabel}</span></div>
+      <div class="kv"><span class="k">Sự kiện gần nhất</span><span class="v">${lastEventStr}</span></div>
+      ${pa.invalidation ? `<div class="kv"><span class="k" style="color:var(--down)">Chốt chặn xu hướng (SL)</span><span class="v" style="font-family:var(--mono); color:var(--down); font-weight:700;">${fmt(pa.invalidation)}</span></div>` : ''}
+      
+      <div style="margin-top:10px; display:grid; grid-template-columns:1fr 1fr; gap:12px; border-top:1px solid var(--border-soft); padding-top:10px;">
+        <div>
+          <h3 style="font-size:11px; font-weight:bold; color:var(--up); margin-bottom:6px;">VÙNG HỖ TRỢ SMC</h3>
+          <div style="font-size:11.5px; display:flex; flex-direction:column; gap:4px;">
+            ${supportRows.length > 0 ? supportRows.map(r=>`<div style="color:var(--text-strong);">• ${r}</div>`).join('') : '<div class="muted">• Chờ thiết lập hỗ trợ</div>'}
+          </div>
+        </div>
+        <div>
+          <h3 style="font-size:11px; font-weight:bold; color:var(--down); margin-bottom:6px;">VÙNG KHÁNG CỰ SMC</h3>
+          <div style="font-size:11.5px; display:flex; flex-direction:column; gap:4px;">
+            ${resistanceRows.length > 0 ? resistanceRows.map(r=>`<div style="color:var(--text-strong);">• ${r}</div>`).join('') : '<div class="muted">• Chờ thiết lập kháng cự</div>'}
+          </div>
+        </div>
+      </div>
+      
+      ${pa.invalidation_note ? `<p class="muted" style="margin-top:8px; font-size:11px; line-height:1.4;">⛔ <b>Vô hiệu hóa:</b> ${pa.invalidation_note}</p>` : ''}
+    </div>
+  `;
 }
 
 /* ── Report: symbol strip + chart + 2 cột ── */
@@ -361,15 +936,34 @@ function renderReport(d){
   /* ── 2 cột ── */
   html+=`<div class="rgrid"><div>`;   /* CỘT TRÁI */
 
+  /* Volume Pressure Widget */
+  html+=renderVolumePressure(d.volume_pressure);
+
+  /* SMC Structure Card */
+  html+=renderSMCStructure(d.price_action);
+
+  /* Insights chuyên sâu */
+  if(d.insights && d.insights.length){
+    html+=`<div class="card" style="border-left: 4px solid var(--blue);">
+      <h2>Phân tích chuyên sâu (Insights & Hợp lưu)</h2>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+        ${d.insights.map(ins => `<div style="font-size:12px; line-height:1.5; color:var(--text-strong); display:flex; gap:8px; align-items:start;">
+          <span style="color:var(--blue-soft);">•</span>
+          <span>${ins}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
   /* Mốc giá hành động */
   if(d.zones){
     const z=d.zones;
     html+=`<div class="card"><h2>Mốc giá hành động</h2><div class="zone-ladder">
-      <div class="zl-row"><div class="zl-tag" style="color:var(--up)">TP 2</div><div class="zl-val" style="color:var(--up)">${fmt(z.tp2)}</div><div class="zl-note">chốt phần còn lại</div></div>
-      <div class="zl-row"><div class="zl-tag" style="color:var(--up)">TP 1</div><div class="zl-val" style="color:var(--up)">${fmt(z.tp1)}</div><div class="zl-note">chốt 50% vị thế</div></div>
-      <div class="zl-row"><div class="zl-tag" style="color:var(--blue-soft)">Entry</div><div class="zl-val" style="color:var(--blue-soft)">${fmt(z.entry_low)}–${fmt(z.entry_high)}</div><div class="zl-note">neo Fib/POC hỗ trợ gần nhất</div></div>
-      <div class="zl-row"><div class="zl-tag" style="color:var(--down)">SL</div><div class="zl-val" style="color:var(--down)">${fmt(z.sl)}</div><div class="zl-note">${z.sl_basis}</div></div>
-      <div class="zl-row"><div class="zl-tag" style="color:var(--muted)">Size</div><div class="zl-val">${pct(z.position_size_pct)}</div><div class="zl-note">NAV · risk 2%/lệnh</div></div>
+      <div class="zl-row zl-row-tp"><div class="zl-tag" style="color:var(--up)">TP 2</div><div class="zl-val" style="color:var(--up)">${fmt(z.tp2)}</div><div class="zl-note">chốt phần còn lại</div></div>
+      <div class="zl-row zl-row-tp"><div class="zl-tag" style="color:var(--up)">TP 1</div><div class="zl-val" style="color:var(--up)">${fmt(z.tp1)}</div><div class="zl-note">chốt 50% vị thế</div></div>
+      <div class="zl-row zl-row-entry"><div class="zl-tag" style="color:var(--blue-soft)">Entry</div><div class="zl-val" style="color:var(--blue-soft)">${fmt(z.entry_low)}–${fmt(z.entry_high)}</div><div class="zl-note">neo Fib/POC hỗ trợ gần nhất</div></div>
+      <div class="zl-row zl-row-sl"><div class="zl-tag" style="color:var(--down)">SL</div><div class="zl-val" style="color:var(--down)">${fmt(z.sl)}</div><div class="zl-note">${z.sl_basis}</div></div>
+      <div class="zl-row zl-row-size"><div class="zl-tag" style="color:var(--muted)">Size</div><div class="zl-val">${pct(z.position_size_pct)}</div><div class="zl-note">NAV · risk 2%/lệnh</div></div>
     </div></div>`;
   }
 
@@ -407,6 +1001,9 @@ function renderReport(d){
   }
 
   html+=`</div><div>`;   /* CỘT PHẢI */
+
+  /* Đồng hồ tín hiệu kỹ thuật (TradingView) */
+  html+=renderTechnicalGauge(d.technical_rating);
 
   /* Tổng quan số liệu */
   html+=`<div class="card"><h2>Tổng quan</h2>
@@ -546,16 +1143,16 @@ async function loadGold(force){
   const area=$('goldArea');
   try{
     const g=await(await fetch('/api/gold'+(force?'?force=true':''))).json();
-    const w=g.world,vn=g.vn;
+    const w=g.world,vn=g.vn,analysis=g.analysis;
     const chg=w?w.change_24h_pct:0;
     let html='';
 
     /* strip: thế giới + quy đổi + premium */
     html+=`<div class="sym-strip">
       <div>
-        <div class="sym-name">GOLD</div>
-        <div class="sym-sub">XAU spot (PAXG proxy) · cập nhật ${g.generated_at}
-          <a href="#" onclick="loadGold(true);return false" style="color:var(--blue-soft)">↻ refresh</a></div>
+        <div class="sym-name">GOLD (PAXG)</div>
+        <div class="sym-sub">XAU spot proxy · cập nhật ${g.generated_at}
+          <a href="#" onclick="loadGold(true);return false" style="color:var(--blue-soft); margin-left:8px;">↻ refresh</a></div>
       </div>
       ${w?`<div><div class="sym-price">$${fmt(w.usd_oz)}</div>
         <div class="sym-sub" style="color:${chg>=0?'var(--up)':'var(--down)'};font-family:var(--mono)">${chg>=0?'+':''}${chg.toFixed(2)}% (24h)</div></div>`:''}
@@ -566,11 +1163,23 @@ async function loadGold(force){
         <div class="sym-sub">SJC premium vs thế giới (${g.sjc_premium_pct.toFixed(1)}%)</div></div>`:''}
     </div>`;
 
-    /* chart thế giới 12 tháng */
-    if(w&&w.chart)html+=`<div class="card"><h2>Vàng thế giới 12 tháng (USD/oz)</h2>${goldChart(w.chart)}</div>`;
+    /* chart thế giới 12 tháng (candlestick + volume nếu có analysis) */
+    if(analysis){
+      html+=priceChart(analysis);
+    } else if(w&&w.chart){
+      html+=`<div class="card"><h2>Vàng thế giới 12 tháng (USD/oz)</h2>${goldChart(w.chart)}</div>`;
+    }
 
-    /* 2 cột: bảng giá VN + phân tích chênh lệch */
-    html+=`<div class="rgrid"><div>`;
+    /* 2 cột phân tích */
+    html+=`<div class="rgrid"><div>`; // CỘT TRÁI GOLD
+    
+    // Volume Pressure Vàng
+    html+=renderVolumePressure(analysis ? analysis.volume_pressure : null);
+    
+    // SMC Structure Vàng
+    html+=renderSMCStructure(analysis ? analysis.price_action : null);
+    
+    // Bảng giá VN
     if(vn&&vn.items&&vn.items.length){
       html+=`<div class="card"><h2>Giá vàng Việt Nam (BTMC · ${vn.updated||''})</h2><table>
         <tr><th>Loại</th><th style="text-align:right">Mua vào</th><th style="text-align:right">Bán ra</th><th style="text-align:right">Chênh mua-bán</th></tr>
@@ -584,7 +1193,39 @@ async function loadGold(force){
           </tr>`}).join('')}
       </table><p class="muted" style="margin-top:8px">Đơn vị: VND/lượng (1 lượng = 37.5g)</p></div>`;
     }
-    html+=`</div><div>`;
+
+    // Mốc giá hành động của Vàng (lấy từ phân tích kỹ thuật)
+    if(analysis && analysis.zones){
+      const z=analysis.zones;
+      html+=`<div class="card"><h2>Mốc giá hành động Vàng (USD/oz)</h2><div class="zone-ladder">
+        <div class="zl-row zl-row-tp"><div class="zl-tag" style="color:var(--up)">TP 2</div><div class="zl-val" style="color:var(--up)">${fmt(z.tp2)}</div><div class="zl-note">chốt phần còn lại</div></div>
+        <div class="zl-row zl-row-tp"><div class="zl-tag" style="color:var(--up)">TP 1</div><div class="zl-val" style="color:var(--up)">${fmt(z.tp1)}</div><div class="zl-note">chốt 50% vị thế</div></div>
+        <div class="zl-row zl-row-entry"><div class="zl-tag" style="color:var(--blue-soft)">Entry</div><div class="zl-val" style="color:var(--blue-soft)">${fmt(z.entry_low)}–${fmt(z.entry_high)}</div><div class="zl-note">neo hỗ trợ mạnh</div></div>
+        <div class="zl-row zl-row-sl"><div class="zl-tag" style="color:var(--down)">SL</div><div class="zl-val" style="color:var(--down)">${fmt(z.sl)}</div><div class="zl-note">${z.sl_basis}</div></div>
+      </div></div>`;
+    }
+    
+    // Insights chuyên sâu của Vàng
+    if(analysis && analysis.insights && analysis.insights.length){
+      html+=`<div class="card" style="border-left: 4px solid var(--blue);">
+        <h2>Phân tích chuyên sâu & Hợp lưu (Vàng)</h2>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+          ${analysis.insights.map(ins => `<div style="font-size:12px; line-height:1.5; color:var(--text-strong); display:flex; gap:8px; align-items:start;">
+            <span style="color:var(--blue-soft);">•</span>
+            <span>${ins}</span>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }
+
+    html+=`</div><div>`; // CỘT PHẢI GOLD
+
+    // Đồng hồ tín hiệu cho Vàng
+    if(analysis && analysis.technical_rating){
+      html+=renderTechnicalGauge(analysis.technical_rating);
+    }
+    
+    // Phân tích chênh lệch
     if(g.world_vnd_luong){
       const sjc=vn&&vn.items?vn.items.find(x=>x.label==='SJC miếng'):null;
       html+=`<div class="card"><h2>Phân tích chênh lệch</h2>
@@ -592,11 +1233,21 @@ async function loadGold(force){
         ${sjc&&sjc.sell_luong?`<div class="kv"><span class="k">SJC bán ra</span><span class="v orange">${fmt(sjc.sell_luong,0)}</span></div>`:''}
         ${g.sjc_premium_vnd!=null?`<div class="kv"><span class="k">Premium</span><span class="v ${g.sjc_premium_pct>15?'red':'orange'}">+${fmt(g.sjc_premium_vnd,0)} (${g.sjc_premium_pct.toFixed(1)}%)</span></div>`:''}
         ${g.sjc_spread_vnd?`<div class="kv"><span class="k">Spread mua-bán SJC</span><span class="v">${fmt(g.sjc_spread_vnd,0)}</span></div>`:''}
-        <div class="info">Premium cao (>15%) thường phản ánh cầu nội địa nóng hoặc nguồn cung SJC khan — mua vàng miếng lúc này chịu rủi ro premium co lại dù giá thế giới đi ngang. Nhẫn trơn thường bám giá thế giới sát hơn.</div>
+        <div class="info">Premium cao (>15%) thường phản ánh cầu nội địa nóng hoặc nguồn cung SJC khan — mua vàng miếng lúc này chịu rủi ro premium co lại. Nhẫn trơn bám giá thế giới sát hơn.</div>
       </div>`;
     }
-    if(g.errors&&g.errors.length)html+=g.errors.map(e=>`<div class="warn">⚠️ ${e}</div>`).join('');
-    html+=`</div></div>`;
+
+    // Xu hướng 3 khung của Vàng
+    if(analysis && analysis.trends){
+      html+=`<div class="card"><h2>Xu hướng kỹ thuật Vàng</h2><table>
+        <tr><th style="width:130px">Khung</th><th style="width:90px">Xu hướng</th><th>Bằng chứng</th></tr>
+        ${analysis.trends.map(t=>`<tr><td style="font-weight:600;color:var(--text-strong)">${t.horizon}</td><td><span class="${pillCls(t.direction)}">${t.direction}</span></td><td class="evidence">${t.evidence.join(' · ')}</td></tr>`).join('')}
+      </table></div>`;
+    }
+
+    if(g.errors && g.errors.length) html+=g.errors.map(e=>`<div class="warn">⚠️ ${e}</div>`).join('');
+    
+    html+=`</div></div>`; // KẾT THÚC GRID GOLD
     area.innerHTML=html;
   }catch(e){
     area.innerHTML=`<div class="card"><p class="muted">Lỗi tải giá vàng: ${e.message}</p></div>`;
@@ -605,10 +1256,20 @@ async function loadGold(force){
 
 /* ═══════════ BATCH ═══════════ */
 async function startBatch(){
+  const selected = Array.from(document.querySelectorAll('.batch-chk:checked')).map(cb => cb.value);
+  if (selected.length === 0) {
+    toast("Vui lòng chọn ít nhất 1 mã để Batch Scan!");
+    return;
+  }
+  
+  const allChks = document.querySelectorAll('.batch-chk');
+  const allSelected = allChks.length === selected.length;
+  const symbolsPayload = allSelected ? null : selected;
+
   $('batchBtn').disabled=true;$('batchBtn').innerHTML='<span class="spin"></span>Đang quét';
   $('batchProgressWrap').style.display='block';$('batchResultArea').innerHTML='';
   try{
-    const {job_id}=await(await fetch('/api/batch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})})).json();
+    const {job_id}=await(await fetch('/api/batch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symbols:symbolsPayload})})).json();
     const j=await pollJob(job_id,j=>{
       $('batchProgressBar').style.width=(j.total?j.step/j.total*100:0)+'%';
       $('batchProgressMsg').textContent=j.message;
@@ -666,17 +1327,11 @@ async function openDetail(date,symbol){
 
 /* ═══════════ WATCHLIST ═══════════ */
 async function loadWatchlistUI(){
-  const wl=await(await fetch('/api/watchlist')).json();
-  $('wlVn').value=(wl.vn_stocks||[]).join(', ');
-  $('wlCx').value=(wl.crypto||[]).join(', ');
-  $('wlYears').value=wl.lookback_years||5;
-}
-async function saveWatchlist(){
-  const parse=s=>s.split(',').map(x=>x.trim().toUpperCase()).filter(Boolean);
-  const body={vn_stocks:parse($('wlVn').value),crypto:parse($('wlCx').value),lookback_years:+$('wlYears').value};
-  await fetch('/api/watchlist',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  toast('Đã lưu watchlist ('+(body.vn_stocks.length+body.crypto.length)+' mã)');
-  loadChips();
+  try {
+    currentWatchlist = await(await fetch('/api/watchlist')).json();
+    $('wlYears').value = currentWatchlist.lookback_years || 5;
+    renderWatchlistTab("");
+  } catch(e){}
 }
 </script>
 </body>
