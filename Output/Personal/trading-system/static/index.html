@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading Analysis System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#0E4174; --orange:#FF7F32; --green:#10B981; --red:#EF4444;
+  --gray50:#F9FAFB; --gray100:#F3F4F6; --gray200:#E5E7EB; --gray400:#9CA3AF;
+  --gray500:#6B7280; --gray700:#374151; --gray900:#111827;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Lexend',sans-serif;background:var(--gray50);color:var(--gray900);min-height:100vh}
+.container{max-width:1200px;margin:0 auto;padding:24px 20px 80px}
+
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-mark{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--blue),#1a5c9e);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;letter-spacing:-.05em}
+.brand h1{font-size:22px;font-weight:700;letter-spacing:-.03em}
+.brand p{font-size:12px;color:var(--gray500);margin-top:2px}
+.sched-pill{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--gray100);border-radius:999px;padding:8px 18px;font-size:12.5px;color:var(--gray500);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.sched-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.4}}
+
+/* Tabs */
+.tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.tab{padding:10px 22px;border-radius:999px;border:1px solid var(--gray200);background:#fff;font-family:inherit;font-size:14px;font-weight:500;color:var(--gray500);cursor:pointer;transition:.15s}
+.tab:hover{border-color:var(--blue);color:var(--blue)}
+.tab.active{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* Cards */
+.card{background:#fff;border:1px solid var(--gray100);border-radius:2.5rem;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,.03);margin-bottom:20px}
+.card-sm{border-radius:1.5rem;padding:20px}
+.card h2{font-size:16px;font-weight:600;margin-bottom:16px;letter-spacing:-.02em}
+.muted{color:var(--gray500);font-size:13px}
+
+/* Inputs */
+.input-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+input[type=text],input[type=number],select{font-family:inherit;font-size:15px;padding:13px 20px;border:1.5px solid var(--gray200);border-radius:999px;outline:none;transition:.15s;background:var(--gray50)}
+input[type=text]:focus{border-color:var(--blue);background:#fff}
+input.symbol-input{width:220px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.btn{font-family:inherit;font-size:14.5px;font-weight:600;padding:13px 28px;border-radius:999px;border:none;cursor:pointer;transition:.15s;letter-spacing:-.01em}
+.btn-primary{background:var(--orange);color:#fff}
+.btn-primary:hover{background:#e56d24;transform:translateY(-1px)}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover{background:#0a3159}
+.btn-ghost{background:var(--gray100);color:var(--gray700)}
+.btn-ghost:hover{background:var(--gray200)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{padding:7px 16px;border-radius:999px;background:var(--gray100);font-size:13px;font-weight:500;color:var(--gray700);cursor:pointer;border:1px solid transparent;transition:.15s}
+.chip:hover{border-color:var(--orange);color:var(--orange)}
+
+/* Progress */
+.progress-wrap{margin-top:20px;display:none}
+.progress-bar-bg{height:10px;background:var(--gray100);border-radius:999px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--orange));border-radius:999px;width:0%;transition:width .4s ease}
+.progress-msg{margin-top:10px;font-size:13px;color:var(--gray500)}
+
+/* Recommendation hero */
+.rec-hero{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.rec-badge{font-size:34px;font-weight:800;letter-spacing:-.04em;padding:18px 40px;border-radius:2rem;color:#fff}
+.rec-MUA{background:var(--green)}
+.rec-BÁN{background:var(--red)}
+.rec-ĐỨNG_NGOÀI{background:var(--gray500)}
+.rec-meta{flex:1;min-width:240px}
+.rec-meta .big{font-size:15px;font-weight:600;margin-bottom:6px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:22px}
+.stat{background:var(--gray50);border-radius:1.5rem;padding:18px 20px}
+.stat .label{font-size:11.5px;color:var(--gray500);text-transform:uppercase;letter-spacing:.06em;font-weight:500}
+.stat .value{font-size:26px;font-weight:800;letter-spacing:-.04em;margin-top:4px}
+.stat .value.green{color:var(--green)} .stat .value.red{color:var(--red)}
+.stat .value.blue{color:var(--blue)} .stat .value.orange{color:var(--orange)}
+.stat .sub{font-size:11px;color:var(--gray400);margin-top:2px}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;padding:10px 14px;color:var(--gray500);font-weight:500;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray100)}
+td{padding:12px 14px;border-bottom:1px solid var(--gray50)}
+tr:last-child td{border-bottom:none}
+tr.clickable{cursor:pointer;transition:.1s}
+tr.clickable:hover{background:var(--gray50)}
+td.num{font-variant-numeric:tabular-nums;font-weight:600}
+.pill{display:inline-block;padding:4px 12px;border-radius:999px;font-size:11.5px;font-weight:600}
+.pill-MUA{background:#d1fae5;color:#065f46}
+.pill-BÁN{background:#fee2e2;color:#991b1b}
+.pill-ĐỨNG_NGOÀI{background:var(--gray100);color:var(--gray500)}
+.pill-TĂNG{background:#d1fae5;color:#065f46}
+.pill-GIẢM{background:#fee2e2;color:#991b1b}
+.pill-ĐI_NGANG{background:var(--gray100);color:var(--gray500)}
+
+/* Zones */
+.zone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.zone{border-radius:1.5rem;padding:18px 20px;border:1.5px solid var(--gray100)}
+.zone.entry{border-color:var(--blue);background:#f0f6fc}
+.zone.tp{border-color:var(--green);background:#f0fdf9}
+.zone.sl{border-color:var(--red);background:#fef2f2}
+.zone .label{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.zone.entry .label{color:var(--blue)} .zone.tp .label{color:var(--green)} .zone.sl .label{color:var(--red)}
+.zone .value{font-size:21px;font-weight:800;letter-spacing:-.03em;margin-top:4px;font-variant-numeric:tabular-nums}
+.zone .sub{font-size:11px;color:var(--gray500);margin-top:3px}
+
+.warn{background:#fffbeb;border:1px solid #fde68a;border-radius:1.5rem;padding:14px 20px;font-size:13px;color:#92400e;margin-bottom:8px}
+svg text{font-family:'Lexend',sans-serif}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;vertical-align:-2px;margin-right:8px}
+@keyframes rot{to{transform:rotate(360deg)}}
+.hidden{display:none!important}
+.flex-between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+textarea{font-family:inherit;width:100%;border:1.5px solid var(--gray200);border-radius:1.5rem;padding:16px 20px;font-size:14px;outline:none;resize:vertical;min-height:70px}
+textarea:focus{border-color:var(--blue)}
+.wl-label{font-size:12px;font-weight:600;color:var(--gray500);text-transform:uppercase;letter-spacing:.05em;margin:14px 0 6px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--gray900);color:#fff;padding:14px 24px;border-radius:1rem;font-size:13.5px;box-shadow:0 8px 24px rgba(0,0,0,.18);opacity:0;transform:translateY(8px);transition:.25s;z-index:99}
+.toast.show{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="brand">
+      <div class="brand-mark">TA</div>
+      <div>
+        <h1>Trading Analysis System</h1>
+        <p>VN Stocks (vnstock) · Crypto (Binance) · Walk-Forward Optimized</p>
+      </div>
+    </div>
+    <div class="sched-pill" id="schedPill">
+      <div class="sched-dot"></div>
+      <span id="schedText">Đang kiểm tra scheduler...</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-tab="analyze">🔍 Phân tích 1 mã</button>
+    <button class="tab" data-tab="batch">📊 Batch Scan</button>
+    <button class="tab" data-tab="history">🗓 Lịch sử</button>
+    <button class="tab" data-tab="watchlist">⭐ Watchlist</button>
+  </div>
+
+  <!-- ═══════════ TAB: ANALYZE ═══════════ -->
+  <div id="tab-analyze">
+    <div class="card">
+      <h2>Nhập mã cần phân tích</h2>
+      <div class="input-row">
+        <input type="text" class="symbol-input" id="symInput" placeholder="FPT / BTCUSDT" onkeydown="if(event.key==='Enter')startAnalyze()">
+        <select id="yearsSel">
+          <option value="3">3 năm</option>
+          <option value="5" selected>5 năm</option>
+          <option value="7">7 năm</option>
+        </select>
+        <button class="btn btn-primary" id="analyzeBtn" onclick="startAnalyze()">Phân tích</button>
+      </div>
+      <div class="chips" id="presetChips"></div>
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-bar-bg"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="progress-msg" id="progressMsg"></div>
+      </div>
+    </div>
+    <div id="reportArea"></div>
+  </div>
+
+  <!-- ═══════════ TAB: BATCH ═══════════ -->
+  <div id="tab-batch" class="hidden">
+    <div class="card">
+      <div class="flex-between">
+        <h2 style="margin:0">Batch Scan — quét toàn bộ watchlist</h2>
+        <button class="btn btn-blue" id="batchBtn" onclick="startBatch()">▶ Chạy Batch Scan</button>
+      </div>
+      <p class="muted" style="margin-top:8px">Chạy tuần tự từng mã (tránh rate-limit). Mỗi mã mất ~30–90 giây. Kết quả tự lưu vào <b>reports/daily/</b> — xem lại ở tab Lịch sử.</p>
+      <div class="progress-wrap" id="batchProgressWrap">
+        <div class="progress-bar-bg"><div class="progress-bar" id="batchProgressBar"></div></div>
+        <div class="progress-msg" id="batchProgressMsg"></div>
+      </div>
+    </div>
+    <div id="batchResultArea"></div>
+  </div>
+
+  <!-- ═══════════ TAB: HISTORY ═══════════ -->
+  <div id="tab-history" class="hidden">
+    <div class="card">
+      <div class="flex-between">
+        <h2 style="margin:0">Báo cáo đã lưu</h2>
+        <select id="histDateSel" onchange="loadHistoryDate(this.value)"></select>
+      </div>
+      <div id="histArea" style="margin-top:16px"><p class="muted">Chưa có batch nào được lưu. Chạy Batch Scan trước.</p></div>
+    </div>
+    <div id="histDetailArea"></div>
+  </div>
+
+  <!-- ═══════════ TAB: WATCHLIST ═══════════ -->
+  <div id="tab-watchlist" class="hidden">
+    <div class="card">
+      <h2>Watchlist — danh sách mã theo dõi hàng ngày</h2>
+      <p class="muted">Scheduler quét các mã này lúc 8:00 sáng mỗi ngày. Phân tách bằng dấu phẩy.</p>
+      <div class="wl-label">Chứng khoán VN</div>
+      <textarea id="wlVn" placeholder="FPT, HPG, MWG, VNM"></textarea>
+      <div class="wl-label">Crypto (Binance)</div>
+      <textarea id="wlCx" placeholder="BTCUSDT, ETHUSDT"></textarea>
+      <div class="input-row" style="margin-top:16px">
+        <label class="muted">Dữ liệu lịch sử:</label>
+        <select id="wlYears">
+          <option value="3">3 năm</option><option value="5" selected>5 năm</option><option value="7">7 năm</option>
+        </select>
+        <button class="btn btn-primary" onclick="saveWatchlist()">💾 Lưu Watchlist</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmt=(n,d=2)=>n==null?'—':Number(n).toLocaleString('en-US',{maximumFractionDigits:d});
+const pct=n=>n==null?'—':(n*100).toFixed(0)+'%';
+const pillCls=s=>'pill pill-'+String(s).replaceAll(' ','_');
+
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+
+/* ── Tabs ── */
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  ['analyze','batch','history','watchlist'].forEach(t=>$('tab-'+t).classList.toggle('hidden',t!==b.dataset.tab));
+  if(b.dataset.tab==='history')refreshHistory();
+  if(b.dataset.tab==='watchlist')loadWatchlistUI();
+});
+
+/* ── Scheduler pill ── */
+fetch('/api/scheduler').then(r=>r.json()).then(s=>{
+  $('schedText').textContent=s.enabled?`Auto-refresh ${s.hour}:00 · kế tiếp: ${s.next_run?s.next_run.replace('T',' '):'—'}`:'Auto-refresh: TẮT';
+  if(!s.enabled)$('schedPill').querySelector('.sched-dot').style.background='var(--gray400)';
+}).catch(()=>{$('schedText').textContent='Scheduler: không kết nối được'});
+
+/* ── Preset chips từ watchlist ── */
+async function loadChips(){
+  try{
+    const wl=await(await fetch('/api/watchlist')).json();
+    $('presetChips').innerHTML=[...wl.vn_stocks,...wl.crypto].map(s=>`<div class="chip" onclick="$('symInput').value='${s}';startAnalyze()">${s}</div>`).join('');
+  }catch(e){}
+}
+loadChips();
+
+/* ── Poll job helper ── */
+async function pollJob(jobId,onTick){
+  while(true){
+    const j=await(await fetch('/api/jobs/'+jobId)).json();
+    onTick(j);
+    if(j.status==='done'||j.status==='error')return j;
+    await new Promise(r=>setTimeout(r,1200));
+  }
+}
+
+/* ═══════════ ANALYZE ═══════════ */
+async function startAnalyze(){
+  const sym=$('symInput').value.trim().toUpperCase();
+  if(!sym){toast('Nhập mã trước đã');return}
+  $('analyzeBtn').disabled=true;
+  $('analyzeBtn').innerHTML='<span class="spin"></span>Đang chạy';
+  $('progressWrap').style.display='block';
+  $('reportArea').innerHTML='';
+  try{
+    const {job_id}=await(await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symbol:sym,years:+$('yearsSel').value})})).json();
+    const j=await pollJob(job_id,j=>{
+      $('progressBar').style.width=(j.step/j.total*100)+'%';
+      $('progressMsg').textContent=j.message;
+    });
+    if(j.status==='error'){toast('Lỗi: '+j.error);$('progressMsg').textContent='❌ '+j.error}
+    else{$('reportArea').innerHTML=renderReport(j.result);$('progressWrap').style.display='none'}
+  }catch(e){toast('Lỗi kết nối: '+e.message)}
+  $('analyzeBtn').disabled=false;$('analyzeBtn').textContent='Phân tích';
+}
+
+/* ── SVG price chart với zones ── */
+function priceChart(d){
+  if(!d.chart_data||!d.chart_data.dates||d.chart_data.dates.length<10)return'';
+  const cd=d.chart_data,W=1100,H=340,P={t:20,r:110,b:30,l:64};
+  const closes=cd.closes,n=closes.length;
+  let lo=Math.min(...closes),hi=Math.max(...closes);
+  const zs=d.zones;
+  if(zs){lo=Math.min(lo,zs.sl);hi=Math.max(hi,zs.tp2)}
+  const pad=(hi-lo)*.05;lo-=pad;hi+=pad;
+  const X=i=>P.l+i/(n-1)*(W-P.l-P.r), Y=v=>P.t+(1-(v-lo)/(hi-lo))*(H-P.t-P.b);
+  const path=closes.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+Y(v).toFixed(1)).join('');
+  // gridlines
+  let grid='',labels='';
+  for(let g=0;g<5;g++){const v=lo+(hi-lo)*g/4,y=Y(v);
+    grid+=`<line x1="${P.l}" y1="${y}" x2="${W-P.r}" y2="${y}" stroke="#F3F4F6"/>`;
+    labels+=`<text x="${P.l-8}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#9CA3AF">${fmt(v,v>1000?0:2)}</text>`}
+  // x labels: 4 mốc thời gian
+  for(let g=0;g<4;g++){const i=Math.floor((n-1)*g/3);
+    labels+=`<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="10.5" fill="#9CA3AF">${cd.dates[i]}</text>`}
+  // zone lines
+  let zlines='';
+  const zone=(v,color,label)=>{const y=Y(v);return `<line x1="${P.l}" y1="${y}" x2="${W-P.r}" y2="${y}" stroke="${color}" stroke-width="1.3" stroke-dasharray="5 4"/><text x="${W-P.r+6}" y="${y+4}" font-size="10.5" font-weight="600" fill="${color}">${label} ${fmt(v,v>1000?0:2)}</text>`};
+  if(zs){
+    zlines+=`<rect x="${P.l}" y="${Y(zs.entry_high)}" width="${W-P.l-P.r}" height="${Math.max(2,Y(zs.entry_low)-Y(zs.entry_high))}" fill="#0E4174" opacity="0.07"/>`;
+    zlines+=zone(zs.tp2,'#10B981','TP2');zlines+=zone(zs.tp1,'#34D399','TP1');
+    zlines+=zone(zs.entry_high,'#0E4174','Entry');zlines+=zone(zs.sl,'#EF4444','SL');
+  }
+  const last=closes[n-1];
+  return `<div class="card"><h2>Biểu đồ giá ${cd.dates[0]} → ${cd.dates[n-1]}</h2>
+  <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
+    ${grid}${zlines}
+    <path d="${path}" fill="none" stroke="#0E4174" stroke-width="2"/>
+    <circle cx="${X(n-1)}" cy="${Y(last)}" r="4" fill="#FF7F32"/>
+    ${labels}
+  </svg></div>`;
+}
+
+function renderReport(d){
+  const recCls='rec-'+d.recommendation.replaceAll(' ','_');
+  let html=`<div class="card">
+    <div class="rec-hero">
+      <div class="rec-badge ${recCls}">${d.recommendation}</div>
+      <div class="rec-meta">
+        <div class="big">${d.symbol} · ${d.asset_type} · ${fmt(d.last_price)} </div>
+        <div class="muted">Độ tin cậy: <b>${d.conviction}</b> · Tạo lúc ${d.generated_at}</div>
+        <div class="muted" style="margin-top:8px">${d.win_rate_statement}</div>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="label">OOS Win Rate</div><div class="value ${d.oos_win_rate>=.5?'green':'red'}">${pct(d.oos_win_rate)}</div><div class="sub">${d.oos_n_trades} lệnh out-of-sample</div></div>
+      <div class="stat"><div class="label">FA Score</div><div class="value ${d.fa_score>=60?'green':d.fa_score>=40?'orange':'red'}">${fmt(d.fa_score,0)}/100</div></div>
+      <div class="stat"><div class="label">RSI Period</div><div class="value blue">${d.best_params.rsi_period}</div><div class="sub">entry ≤ ${d.best_params.rsi_entry}</div></div>
+      <div class="stat"><div class="label">SL Multiplier</div><div class="value orange">${d.best_params.atr_sl_mult}×ATR</div><div class="sub">TP ${d.best_params.tp_r_multiple}R</div></div>
+    </div>
+  </div>`;
+
+  html+=priceChart(d);
+
+  if(d.zones){
+    const z=d.zones;
+    html+=`<div class="card"><h2>Mốc giá hành động</h2><div class="zone-grid">
+      <div class="zone entry"><div class="label">Entry Zone</div><div class="value">${fmt(z.entry_low)} – ${fmt(z.entry_high)}</div><div class="sub">neo Fib/POC hỗ trợ</div></div>
+      <div class="zone tp"><div class="label">TP 1 (chốt 50%)</div><div class="value">${fmt(z.tp1)}</div></div>
+      <div class="zone tp"><div class="label">TP 2</div><div class="value">${fmt(z.tp2)}</div></div>
+      <div class="zone sl"><div class="label">Stop Loss</div><div class="value">${fmt(z.sl)}</div><div class="sub">${z.sl_basis}</div></div>
+      <div class="zone"><div class="label" style="color:var(--gray500)">Position Size</div><div class="value">${pct(z.position_size_pct)}</div><div class="sub">NAV · risk 2%/lệnh</div></div>
+    </div></div>`;
+  }
+
+  html+=`<div class="card"><h2>Xu hướng 3 khung thời gian</h2><table>
+    <tr><th>Khung</th><th>Xu hướng</th><th>Bằng chứng</th></tr>
+    ${d.trends.map(t=>`<tr><td style="font-weight:600">${t.horizon}</td><td><span class="${pillCls(t.direction)}">${t.direction}</span></td><td class="muted">${t.evidence.join(' · ')}</td></tr>`).join('')}
+  </table></div>`;
+
+  if(d.fold_summary&&d.fold_summary.length){
+    html+=`<div class="card"><h2>Walk-forward folds (out-of-sample)</h2><table>
+      <tr><th>Fold</th><th>Giai đoạn test</th><th style="text-align:right">Số lệnh</th><th style="text-align:right">Win rate</th></tr>
+      ${d.fold_summary.map(f=>`<tr><td>${f.fold}</td><td>${f.test_range}</td><td class="num" style="text-align:right">${f.test_trades}</td><td class="num" style="text-align:right">${f.test_win_rate!=null?pct(f.test_win_rate):'—'}</td></tr>`).join('')}
+    </table></div>`;
+  }
+
+  if(d.warnings&&d.warnings.length)
+    html+=`<div class="card"><h2>⚠️ Cảnh báo</h2>${d.warnings.map(w=>`<div class="warn">${w}</div>`).join('')}</div>`;
+
+  html+=`<p class="muted" style="text-align:center;margin-top:4px">Hệ thống hỗ trợ quyết định — không phải khuyến nghị đầu tư.</p>`;
+  return html;
+}
+
+/* ═══════════ BATCH ═══════════ */
+async function startBatch(){
+  $('batchBtn').disabled=true;$('batchBtn').innerHTML='<span class="spin"></span>Đang quét';
+  $('batchProgressWrap').style.display='block';$('batchResultArea').innerHTML='';
+  try{
+    const {job_id}=await(await fetch('/api/batch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})})).json();
+    const j=await pollJob(job_id,j=>{
+      $('batchProgressBar').style.width=(j.total?j.step/j.total*100:0)+'%';
+      $('batchProgressMsg').textContent=j.message;
+    });
+    if(j.status==='error'){toast('Lỗi: '+j.error)}
+    else{$('batchResultArea').innerHTML=renderBatchSummary(j.result);$('batchProgressWrap').style.display='none';toast('Batch xong: '+j.result.n_scanned+' mã')}
+  }catch(e){toast('Lỗi: '+e.message)}
+  $('batchBtn').disabled=false;$('batchBtn').textContent='▶ Chạy Batch Scan';
+}
+
+function renderBatchSummary(s,date){
+  const d=date||s.date;
+  return `<div class="card">
+    <div class="flex-between"><h2 style="margin:0">Kết quả ${s.date} · ${s.n_scanned} mã · ${s.duration_seconds}s${s.n_errors?` · <span style="color:var(--red)">${s.n_errors} lỗi</span>`:''}</h2></div>
+    <table style="margin-top:12px">
+      <tr><th>Mã</th><th>Khuyến nghị</th><th style="text-align:right">Giá</th><th style="text-align:right">Win OOS</th><th>Ngắn/Trung/Dài</th><th style="text-align:right">Entry</th><th style="text-align:right">SL</th><th style="text-align:right">FA</th></tr>
+      ${s.results.map(r=>`<tr class="clickable" onclick="openDetail('${d}','${r.symbol}')">
+        <td style="font-weight:700">${r.symbol}</td>
+        <td><span class="${pillCls(r.recommendation)}">${r.recommendation}</span></td>
+        <td class="num" style="text-align:right">${fmt(r.last_price)}</td>
+        <td class="num" style="text-align:right">${pct(r.oos_win_rate)} <span class="muted">(${r.oos_n_trades})</span></td>
+        <td><span class="${pillCls(r.trend_short)}">${r.trend_short[0]}</span> <span class="${pillCls(r.trend_mid)}">${r.trend_mid[0]}</span> <span class="${pillCls(r.trend_long)}">${r.trend_long[0]}</span></td>
+        <td class="num" style="text-align:right">${r.entry_low?fmt(r.entry_low)+'–'+fmt(r.entry_high):'—'}</td>
+        <td class="num" style="text-align:right;color:var(--red)">${r.sl?fmt(r.sl):'—'}</td>
+        <td class="num" style="text-align:right">${fmt(r.fa_score,0)}</td>
+      </tr>`).join('')}
+    </table>
+    ${s.errors&&s.errors.length?`<div style="margin-top:12px">${s.errors.map(e=>`<div class="warn">❌ ${e.symbol}: ${e.error}</div>`).join('')}</div>`:''}
+    <p class="muted" style="margin-top:10px">Click vào dòng để xem báo cáo chi tiết.</p>
+  </div>`;
+}
+
+/* ═══════════ HISTORY ═══════════ */
+async function refreshHistory(){
+  const dates=await(await fetch('/api/history')).json();
+  const sel=$('histDateSel');
+  sel.innerHTML=dates.map(d=>`<option value="${d}">${d}</option>`).join('')||'<option>—</option>';
+  if(dates.length)loadHistoryDate(dates[0]);
+  else $('histArea').innerHTML='<p class="muted">Chưa có batch nào được lưu. Chạy Batch Scan trước.</p>';
+}
+async function loadHistoryDate(date){
+  if(!date||date==='—')return;
+  const s=await(await fetch('/api/history/'+date)).json();
+  $('histArea').innerHTML='';$('histDetailArea').innerHTML='';
+  $('histArea').innerHTML=renderBatchSummary(s,date);
+}
+async function openDetail(date,symbol){
+  const d=await(await fetch(`/api/history/${date}/${symbol}`)).json();
+  const area=$('histDetailArea').offsetParent!==null?$('histDetailArea'):$('batchResultArea');
+  // batch tab dùng chung: render detail phía dưới summary
+  const target=document.querySelector('#tab-history').classList.contains('hidden')?$('batchResultArea'):$('histDetailArea');
+  const div=document.createElement('div');div.innerHTML=renderReport(d);
+  target.innerHTML='';target.appendChild(div);
+  div.scrollIntoView({behavior:'smooth'});
+}
+
+/* ═══════════ WATCHLIST ═══════════ */
+async function loadWatchlistUI(){
+  const wl=await(await fetch('/api/watchlist')).json();
+  $('wlVn').value=(wl.vn_stocks||[]).join(', ');
+  $('wlCx').value=(wl.crypto||[]).join(', ');
+  $('wlYears').value=wl.lookback_years||5;
+}
+async function saveWatchlist(){
+  const parse=s=>s.split(',').map(x=>x.trim().toUpperCase()).filter(Boolean);
+  const body={vn_stocks:parse($('wlVn').value),crypto:parse($('wlCx').value),lookback_years:+$('wlYears').value};
+  await fetch('/api/watchlist',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  toast('Đã lưu watchlist ('+(body.vn_stocks.length+body.crypto.length)+' mã)');
+  loadChips();
+}
+</script>
+</body>
+</html>

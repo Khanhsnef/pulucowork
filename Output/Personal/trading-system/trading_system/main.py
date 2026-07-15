@@ -25,14 +25,24 @@ from .indicators import compute_ta_features
 REPORTS_DIR = Path(__file__).resolve().parent.parent / "reports"
 
 
-def analyze(symbol: str, lookback_years: int = 5, verbose: bool = True) -> Decision:
-    """Pipeline đầy đủ: route → ingest → clean → TA + FA → walk-forward → decision."""
-    def log(msg: str):
+def analyze(
+    symbol: str,
+    lookback_years: int = 5,
+    verbose: bool = True,
+    progress: "callable | None" = None,
+) -> Decision:
+    """Pipeline đầy đủ: route → ingest → clean → TA + FA → walk-forward → decision.
+
+    progress: callback (step:int, total:int, message:str) — dùng cho web UI/batch.
+    """
+    def log(msg: str, step: int = 0):
         if verbose:
             print(msg, file=sys.stderr)
+        if progress is not None:
+            progress(step, 5, msg)
 
     asset = route_asset(symbol)
-    log(f"[1/5] {symbol} → {asset.value}. Đang tải dữ liệu ({lookback_years} năm)...")
+    log(f"[1/5] {symbol} → {asset.value}. Đang tải dữ liệu ({lookback_years} năm)...", 1)
 
     if asset == AssetType.VN_STOCK:
         raw = fetch_vn_ohlcv(symbol, lookback_years)
@@ -40,23 +50,23 @@ def analyze(symbol: str, lookback_years: int = 5, verbose: bool = True) -> Decis
         raw = fetch_crypto_ohlcv(symbol, "1d", lookback_years)
 
     df, clean_log = clean_ohlcv(raw)
-    log(f"[2/5] {len(df)} bars sạch." + (f" Cleaning: {'; '.join(clean_log)}" if clean_log else ""))
+    log(f"[2/5] {len(df)} bars sạch." + (f" Cleaning: {'; '.join(clean_log)}" if clean_log else ""), 2)
 
     feats = compute_ta_features(df)
-    log("[3/5] TA features xong. Đang lấy FA...")
+    log("[3/5] TA features xong. Đang lấy FA...", 3)
     fa = compute_fa_gate(asset, symbol)
-    log(f"      FA score: {fa.score:.0f}/100 ({'PASS' if fa.passed else 'FAIL'})")
+    log(f"      FA score: {fa.score:.0f}/100 ({'PASS' if fa.passed else 'FAIL'})", 3)
 
-    log("[4/5] Walk-forward optimization (grid search từng fold — mất 1-3 phút)...")
+    log("[4/5] Walk-forward optimization (grid search từng fold — mất 1-3 phút)...", 4)
     optim = walk_forward_optimize(
         df, feats,
         costs=get_cost_model(asset),
         constraints=get_market_constraints(asset),
     )
     log(f"      Best params: {optim.best_params} | stability {optim.stability:.0%} "
-        f"| OOS: {optim.oos_n_trades} lệnh, win {optim.oos_win_rate:.0%}")
+        f"| OOS: {optim.oos_n_trades} lệnh, win {optim.oos_win_rate:.0%}", 4)
 
-    log("[5/5] Sinh khuyến nghị...")
+    log("[5/5] Sinh khuyến nghị...", 5)
     risk = RiskConfig() if asset == AssetType.VN_STOCK else RiskConfig(initial_capital=10_000.0)
     return make_decision(symbol, asset, df, feats, fa, optim, risk)
 

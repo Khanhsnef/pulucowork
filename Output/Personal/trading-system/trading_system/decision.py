@@ -55,6 +55,7 @@ class Decision:
     fa_notes: list[str]
     warnings: list[str]
     fold_summary: list[dict] = field(default_factory=list)
+    chart_data: dict = field(default_factory=dict)   # {dates: [...], closes: [...]} 12 tháng cho web UI
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -178,6 +179,13 @@ def make_decision(
             position_size_pct=round(pos_pct, 4),
         )
 
+    # dữ liệu chart 12 tháng cho web UI (downsample còn ~250 điểm)
+    tail = df.iloc[-252:]
+    chart_data = {
+        "dates": [d.strftime("%Y-%m-%d") for d in tail.index],
+        "closes": [round(float(v), 4) for v in tail["close"]],
+    }
+
     fold_summary = [
         {
             "fold": f.fold_id,
@@ -205,6 +213,7 @@ def make_decision(
         fa_notes=fa.notes + [d.get("reason", "") for d in fa.details.values() if isinstance(d, dict)],
         warnings=optim.warnings,
         fold_summary=fold_summary,
+        chart_data=chart_data,
     )
 
 
