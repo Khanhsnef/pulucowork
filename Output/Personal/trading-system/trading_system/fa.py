@@ -112,6 +112,18 @@ def score_crypto_context(ctx: dict) -> FAGate:
         details["orderbook_imbalance"] = {"value": imb, "points": pts,
                                           "reason": f"bid/ask imbalance {imb:+.2f}"}
 
+    # DefiLlama MCap/TVL — dữ liệu on-chain (logic từ defi_valuation_analyzer.py)
+    ratio = ctx.get("mcap_tvl_ratio")
+    if ratio is not None:
+        val = ctx.get("valuation")
+        pts = 15 if val == "undervalued" else (-15 if val == "overvalued" else 5)
+        score += pts
+        label = {"undervalued": "TVL > MCap — có thể đang định giá thấp",
+                 "overvalued": "MCap gấp >3 lần TVL — cẩn trọng hype",
+                 "fair": "tỷ lệ trung bình, tương đối an toàn"}[val]
+        details["mcap_tvl"] = {"value": ratio, "points": pts,
+                               "reason": f"MCap/TVL = {ratio} ({ctx.get('defillama_slug')}): {label}"}
+
     score = max(0.0, min(100.0, score))
     return FAGate(score=score, passed=score >= 40, details=details, notes=notes)
 

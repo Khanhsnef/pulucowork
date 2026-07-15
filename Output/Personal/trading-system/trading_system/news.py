@@ -20,7 +20,7 @@ import re
 import sqlite3
 import urllib.request
 import xml.etree.ElementTree as ET
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from email.utils import parsedate_to_datetime
 from pathlib import Path
@@ -235,7 +235,12 @@ def rule_news_score(symbol: str, market: str, days: int = 7) -> dict:
         if direct:
             n_direct += 1
             items.append({"title": title, "score": score, "hits": hits})
-    final = int(max(1, min(100, 50 + weighted * 2)))
+    # Không có tin trực tiếp về mã → tin chung chỉ được kéo lệch tối đa ±15 điểm
+    # (tránh score cực đoan chỉ vì sentiment thị trường chung).
+    delta = weighted * 2
+    if n_direct == 0:
+        delta = max(-15.0, min(15.0, delta * 0.5))
+    final = int(max(1, min(100, 50 + delta)))
     return {"score": final, "n_scanned": len(rows), "n_direct": n_direct,
             "direct_items": items[:10],
             "label": "Tích cực" if final >= 60 else ("Tiêu cực" if final <= 40 else "Trung tính")}

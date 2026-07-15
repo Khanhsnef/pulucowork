@@ -23,6 +23,8 @@ from .news import recent_news, rule_news_score, save_llm_score
 
 CLAUDE_TIMEOUT = 240          # giây — headless lần đầu có thể chậm
 MAX_NEWS_FOR_PROMPT = 25
+# Máy Khanh route model qua 9Router (prefix cc/) — fallback alias chuẩn nếu fail
+LLM_MODELS = ["cc/claude-haiku-4-5-20251001", "haiku"]
 
 
 def claude_available() -> bool:
@@ -77,14 +79,19 @@ def run_llm_scoring(symbol: str, market: str) -> dict:
         raise RuntimeError("Không tìm thấy `claude` CLI trên máy này. Cài Claude Code trước.")
 
     prompt, n_items, rule_score = build_prompt(symbol, market)
-    cmd = ["claude", "-p", prompt, "--output-format", "text", "--model", "haiku"]
-    try:
-        r = subprocess.run(cmd, capture_output=True, text=True, timeout=CLAUDE_TIMEOUT)
-    except subprocess.TimeoutExpired:
-        raise RuntimeError(f"Claude CLI quá {CLAUDE_TIMEOUT}s — thử lại sau.")
-    if r.returncode != 0:
-        err = (r.stderr or r.stdout or "")[:300]
-        raise RuntimeError(f"Claude CLI lỗi (exit {r.returncode}): {err}")
+    r = None
+    last_err = ""
+    for model in LLM_MODELS:
+        cmd = ["claude", "-p", prompt, "--output-format", "text", "--model", model]
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=CLAUDE_TIMEOUT)
+        except subprocess.TimeoutExpired:
+            raise RuntimeError(f"Claude CLI quá {CLAUDE_TIMEOUT}s — thử lại sau.")
+        if r.returncode == 0:
+            break
+        last_err = (r.stderr or r.stdout or "")[:300]
+    if r is None or r.returncode != 0:
+        raise RuntimeError(f"Claude CLI lỗi: {last_err}")
 
     data = _extract_json(r.stdout)
     score = int(max(1, min(100, data.get("score", 50))))

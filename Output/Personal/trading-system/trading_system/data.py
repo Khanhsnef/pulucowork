@@ -139,6 +139,46 @@ def fetch_crypto_ohlcv(symbol: str, interval: str = "1d", lookback_years: int = 
     return df
 
 
+# Map coin → DefiLlama protocol slug (chỉ coin có protocol DeFi thật;
+# BTC là non-DeFi nên không map — logic MCap/TVL từ defi_valuation_analyzer.py của Khanh)
+DEFILLAMA_SLUGS = {
+    "ETH": "lido",          # proxy: staking protocol lớn nhất trên ETH
+    "BNB": "pancakeswap",
+    "SOL": "jito",
+    "UNI": "uniswap",
+    "AAVE": "aave",
+    "LINK": "chainlink-ccip",
+}
+
+
+def fetch_defillama_valuation(symbol: str) -> dict:
+    """MCap/TVL từ DefiLlama (nguồn on-chain 'không thể làm giả' theo
+    danh mục nguồn uy tín). Trả {} nếu coin không có protocol map."""
+    base = symbol.upper().replace("USDT", "").replace("BUSD", "").replace("USDC", "")
+    slug = DEFILLAMA_SLUGS.get(base)
+    if not slug:
+        return {}
+    try:
+        import urllib.request, json as _json
+        req = urllib.request.Request(f"https://api.llama.fi/protocol/{slug}",
+                                     headers={"User-Agent": "TradingSystem/2.0"})
+        with urllib.request.urlopen(req, timeout=12) as r:
+            data = _json.loads(r.read())
+        tvl_series = data.get("tvl") or []
+        current_tvl = tvl_series[-1].get("totalLiquidityUSD", 0) if tvl_series else 0
+        mcap = data.get("mcap") or 0
+        out = {"defillama_slug": slug, "tvl_usd": float(current_tvl), "mcap_usd": float(mcap)}
+        if mcap and current_tvl:
+            ratio = mcap / current_tvl
+            out["mcap_tvl_ratio"] = round(ratio, 4)
+            # Ngưỡng theo script defi_valuation_analyzer.py: <1 undervalued, >3 overvalued
+            out["valuation"] = ("undervalued" if ratio < 1.0
+                                else "overvalued" if ratio > 3.0 else "fair")
+        return out
+    except Exception:
+        return {}
+
+
 def fetch_crypto_context(symbol: str) -> dict:
     """FA-proxy cho crypto: 24h volume, funding rate, order-book imbalance."""
     out: dict = {}
@@ -162,6 +202,7 @@ def fetch_crypto_context(symbol: str) -> dict:
             pass
     except Exception as e:
         out["_error"] = f"Crypto context fetch failed: {e}"
+    out.update(fetch_defillama_valuation(symbol))
     return out
 
 

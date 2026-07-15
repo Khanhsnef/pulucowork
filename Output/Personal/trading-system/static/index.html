@@ -285,9 +285,85 @@ async function startAnalyze(){
       $('progressMsg').textContent=j.message;
     });
     if(j.status==='error'){toast('Lỗi: '+j.error);$('progressMsg').textContent='❌ '+j.error}
-    else{$('reportArea').innerHTML=renderReport(j.result);$('progressWrap').style.display='none'}
+    else{$('reportArea').innerHTML=renderReport(j.result);$('progressWrap').style.display='none';loadNewsCard(sym)}
   }catch(e){toast('Lỗi kết nối: '+e.message)}
   $('analyzeBtn').disabled=false;$('analyzeBtn').textContent='Phân tích';
+}
+
+/* ═══════════ NEWS & SENTIMENT ═══════════ */
+function scoreColor(s){return s>=60?'var(--up)':s<=40?'var(--down)':'var(--yellow)'}
+
+async function loadNewsCard(sym){
+  const holder=document.createElement('div');holder.id='newsCard';
+  $('reportArea').prepend(holder);
+  holder.innerHTML='<div class="card"><h2>Tin tức & Sentiment</h2><p class="muted">Đang tải tin...</p></div>';
+  try{
+    const n=await(await fetch('/api/news/'+sym)).json();
+    renderNewsCard(holder,sym,n);
+  }catch(e){holder.innerHTML=''}
+}
+
+function renderNewsCard(holder,sym,n){
+  const r=n.rule;
+  const llmBlock=n.llm
+    ?`<div class="value" style="color:${scoreColor(n.llm.score)}">${n.llm.score}</div>
+      <div class="sub">${n.llm.scored_at} · ${n.llm.n_items} tin</div>`
+    :`<div class="value" style="color:var(--muted);font-size:16px;padding-top:6px">chưa chạy</div>`;
+  const btnDisabled=n.claude_cli?'':'disabled title="Không tìm thấy claude CLI"';
+  holder.innerHTML=`<div class="card">
+    <div class="flex-between"><h2 style="margin:0">Tin tức & Sentiment · ${sym}</h2>
+      <button class="btn btn-ghost" onclick="refreshNews('${sym}')" id="newsRefreshBtn">↻ Refresh tin</button></div>
+    <div class="stat-grid" style="margin-top:14px">
+      <div class="stat"><div class="label">Điểm Rule-based (free)</div>
+        <div class="value" style="color:${scoreColor(r.score)}">${r.score}</div>
+        <div class="sub">${r.label} · quét ${r.n_scanned} tin · ${r.n_direct} tin trực tiếp</div></div>
+      <div class="stat"><div class="label">Điểm Claude LLM</div>${llmBlock}
+        <button class="btn btn-primary" style="margin-top:8px;padding:7px 14px;font-size:12px" ${btnDisabled}
+          id="llmBtn" onclick="runLLMScoring('${sym}')">⚡ Chấm điểm bằng Claude</button></div>
+    </div>
+    <div id="llmDetail">${n.llm&&n.llm.summary?`<div class="warn" style="border-color:rgba(41,98,255,.4);color:var(--text);margin-top:12px">🤖 ${n.llm.summary}</div>`:''}</div>
+    ${n.items&&n.items.length?`<table style="margin-top:14px">
+      <tr><th>Thời gian</th><th>Nguồn</th><th>Tiêu đề</th><th>Tác động</th></tr>
+      ${n.items.map(it=>`<tr>
+        <td class="num muted" style="white-space:nowrap">${it.published}</td>
+        <td class="muted">${it.source}</td>
+        <td><a href="${it.link}" target="_blank" style="color:var(--text);text-decoration:none">${it.title}</a></td>
+        <td><span class="pill ${it.rule_score>0?'pill-TĂNG':it.rule_score<0?'pill-GIẢM':'pill-ĐI_NGANG'}">${it.impact}</span></td>
+      </tr>`).join('')}
+    </table>`:'<p class="muted" style="margin-top:12px">Chưa có tin trong DB — bấm Refresh tin.</p>'}
+  </div>`;
+}
+
+async function refreshNews(sym){
+  $('newsRefreshBtn').disabled=true;$('newsRefreshBtn').textContent='Đang kéo RSS...';
+  try{
+    const s=await(await fetch('/api/news/refresh',{method:'POST'})).json();
+    toast(`Đã kéo ${s.new_items} tin mới (tổng ${s.total_items})`);
+    const holder=$('newsCard');
+    if(holder){const n=await(await fetch('/api/news/'+sym)).json();renderNewsCard(holder,sym,n)}
+  }catch(e){toast('Lỗi refresh: '+e.message)}
+}
+
+async function runLLMScoring(sym){
+  const btn=$('llmBtn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>Claude đang đọc tin (~30-60s)';
+  try{
+    const {job_id}=await(await fetch('/api/news/llm/'+sym,{method:'POST'})).json();
+    const j=await pollJob(job_id,()=>{});
+    if(j.status==='error'){toast('Lỗi: '+j.error);btn.disabled=false;btn.textContent='⚡ Chấm điểm bằng Claude';return}
+    const r=j.result;
+    toast(`Claude chấm ${sym}: ${r.score}/100`);
+    const holder=$('newsCard');
+    const n=await(await fetch('/api/news/'+sym)).json();
+    renderNewsCard(holder,sym,n);
+    const det=$('llmDetail');
+    if(det&&r){
+      let extra=`🤖 ${r.summary}`;
+      if(r.top_positive)extra+=`<br>▲ <span style="color:var(--up)">${r.top_positive}</span>`;
+      if(r.top_negative)extra+=`<br>▼ <span style="color:var(--down)">${r.top_negative}</span>`;
+      if(r.horizon_impact)extra+=`<br><span class="muted">Tác động: ngắn ${r.horizon_impact.short>0?'+':''}${r.horizon_impact.short} · trung ${r.horizon_impact.mid>0?'+':''}${r.horizon_impact.mid} · dài ${r.horizon_impact.long>0?'+':''}${r.horizon_impact.long} (thang -2..+2)</span>`;
+      det.innerHTML=`<div class="warn" style="border-color:rgba(41,98,255,.4);color:var(--text);margin-top:12px">${extra}</div>`;
+    }
+  }catch(e){toast('Lỗi: '+e.message);btn.disabled=false;btn.textContent='⚡ Chấm điểm bằng Claude'}
 }
 
 /* ── SVG price chart — dark, kiểu TradingView ── */

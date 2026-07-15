@@ -31,7 +31,9 @@ from .batch import (
     save_watchlist,
 )
 from .decision import render_markdown, Decision
+from .llm_scoring import claude_available, run_llm_scoring
 from .main import analyze
+from .news import latest_llm_score, recent_news, refresh_news, rule_news_score
 
 ROOT = Path(__file__).resolve().parent.parent
 STATIC_DIR = ROOT / "static"
@@ -187,6 +189,56 @@ def api_export_md(date: str, symbol: str):
     return JSONResponse({"markdown": render_markdown(d)})
 
 
+# ── News & Sentiment ─────────────────────────────────────────────────────────
+def _market_of(symbol: str) -> str:
+    from .data import route_asset
+    from .config import AssetType
+    return "vn" if route_asset(symbol) == AssetType.VN_STOCK else "crypto"
+
+
+@app.post("/api/news/refresh")
+def api_news_refresh():
+    """Kéo RSS mới nhất từ các nguồn uy tín (chạy ~5-15s)."""
+    return refresh_news(load_watchlist())
+
+
+@app.get("/api/news/{symbol}")
+def api_news(symbol: str):
+    """Điểm 1 (rule-based, free) + tin gần đây + điểm LLM đã lưu (nếu có)."""
+    sym = symbol.upper()
+    market = _market_of(sym)
+    return {
+        "symbol": sym,
+        "market": market,
+        "rule": rule_news_score(sym, market),
+        "items": recent_news(sym, market, limit=15),
+        "llm": latest_llm_score(sym),
+        "claude_cli": claude_available(),
+    }
+
+
+@app.post("/api/news/llm/{symbol}")
+def api_news_llm(symbol: str):
+    """Điểm 2 (on-demand): chạy Claude CLI headless trên máy — không cần API key."""
+    sym = symbol.upper()
+    if not claude_available():
+        raise HTTPException(400, "Không tìm thấy `claude` CLI trên máy này.")
+    market = _market_of(sym)
+    job_id = _new_job("llm_news", f"Claude scoring {sym}")
+
+    def _run(jid: str):
+        _update_job(jid, status="running", step=1, total=2,
+                    message=f"Đang gửi tin 7 ngày của {sym} cho Claude...")
+        try:
+            result = run_llm_scoring(sym, market)
+            _update_job(jid, status="done", step=2, message="Hoàn thành", result=result)
+        except Exception as e:
+            _update_job(jid, status="error", error=str(e), message=f"Lỗi: {e}")
+
+    _executor.submit(_run, job_id)
+    return {"job_id": job_id}
+
+
 @app.get("/api/scheduler")
 def api_scheduler_status():
     return {"enabled": _scheduler_enabled, "hour": SCHEDULE_HOUR,
@@ -212,6 +264,10 @@ def _scheduler_loop():
         wait, target = _seconds_until(SCHEDULE_HOUR)
         _next_run_at = target
         time.sleep(wait)
+        try:
+            refresh_news(load_watchlist())   # kéo tin mới trước khi scan
+        except Exception:
+            pass
         job_id = _new_job("batch", f"Auto-refresh {SCHEDULE_HOUR}:00")
         _run_batch_job(job_id, None)  # chạy trực tiếp trong thread scheduler
 
