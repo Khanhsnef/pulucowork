@@ -1,16 +1,15 @@
-"""Web server: FastAPI + scheduler auto-refresh 8:00 sáng.
+"""Web server: FastAPI + scheduler auto-refresh 10:00 sáng.
 
 Chạy:  python -m trading_system.server          # http://127.0.0.1:8899
        python -m trading_system.server --port 8899 --no-scheduler
 
 Job chạy trong ThreadPoolExecutor(1) — phân tích tuần tự, UI poll trạng thái.
-Scheduler: thread nền tính giây đến 8:00 kế tiếp, chạy batch, lặp.
+Scheduler: thread nền tính giây đến giờ SCHEDULE_HOUR kế tiếp, chạy batch, lặp.
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import threading
 import time
 import uuid
@@ -36,7 +35,7 @@ from .main import analyze
 
 ROOT = Path(__file__).resolve().parent.parent
 STATIC_DIR = ROOT / "static"
-SCHEDULE_HOUR = 8  # 8:00 sáng — đã chốt với user
+SCHEDULE_HOUR = 10  # 10:00 sáng
 
 app = FastAPI(title="Trading Analysis System", docs_url="/api/docs")
 
@@ -194,7 +193,7 @@ def api_scheduler_status():
             "next_run": _next_run_at.isoformat(timespec="seconds") if _next_run_at else None}
 
 
-# ── Scheduler 8:00 sáng ──────────────────────────────────────────────────────
+# ── Scheduler hàng ngày ──────────────────────────────────────────────────────
 _scheduler_enabled = False
 _next_run_at: datetime | None = None
 
@@ -228,7 +227,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8899)
-    ap.add_argument("--no-scheduler", action="store_true", help="Tắt auto-refresh 8:00")
+    ap.add_argument("--no-scheduler", action="store_true", help="Tắt auto-refresh hàng ngày")
     args = ap.parse_args()
 
     if not args.no_scheduler:

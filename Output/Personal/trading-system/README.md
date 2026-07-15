@@ -1,6 +1,6 @@
 # Automated Trading Analysis & Optimization System
 
-Hệ thống phân tích & tối ưu hóa giao dịch tự động cho **Chứng khoán VN** (vnstock) và **Crypto Binance** (python-binance), có **Web UI**, **batch scan** và **auto-refresh 8:00 sáng**.
+Hệ thống phân tích & tối ưu hóa giao dịch tự động cho **Chứng khoán VN** (vnstock) và **Crypto Binance** (python-binance), có **Web UI**, **batch scan** và **auto-refresh 10:00 sáng**.
 
 Pipeline: `Data Ingestion → Cleaning → TA + FA → Walk-Forward Backtest Optimization → Decision (MUA/BÁN/ĐỨNG NGOÀI)`
 
@@ -31,7 +31,7 @@ cd Output/Personal/trading-system && ./run.sh
 | 🗓 **Lịch sử** | Xem lại mọi batch đã chạy theo ngày (đọc từ `reports/daily/`) — không cần chạy lại |
 | ⭐ **Watchlist** | Sửa danh sách mã theo dõi ngay trên UI, lưu vào `watchlist.json` |
 
-**Auto-refresh:** server bật scheduler mặc định — **8:00 sáng mỗi ngày** tự batch scan toàn bộ watchlist và lưu vào `reports/daily/YYYY-MM-DD/`. Chỉ cần để server chạy (hoặc mở `run.bat` trước giờ đó). Tắt bằng `--no-scheduler`.
+**Auto-refresh:** server bật scheduler mặc định — **10:00 sáng mỗi ngày** tự batch scan toàn bộ watchlist và lưu vào `reports/daily/YYYY-MM-DD/`. Chỉ cần để server chạy (hoặc mở `run.bat` trước giờ đó). Tắt bằng `--no-scheduler`.
 
 ## Sử dụng khác
 
@@ -68,7 +68,7 @@ trading-system/
 │   ├── backtester.py    # Module 3: engine mô phỏng + grid search + walk-forward optimization
 │   ├── decision.py      # Module 4: trend 3 khung + entry/TP/SL zones + render JSON/Markdown
 │   ├── batch.py         # Batch scan watchlist → reports/daily/YYYY-MM-DD/
-│   └── server.py        # FastAPI web server + scheduler auto-refresh 8:00
+│   └── server.py        # FastAPI web server + scheduler auto-refresh 10:00
 ├── static/index.html    # Web UI (Lexend, SVG charts thuần, 4 tabs)
 ├── tests/test_smoke.py  # Smoke tests trên dữ liệu synthetic (6 tests)
 ├── analysis_notebook.ipynb
