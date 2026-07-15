@@ -56,6 +56,7 @@ class Decision:
     warnings: list[str]
     fold_summary: list[dict] = field(default_factory=list)
     chart_data: dict = field(default_factory=dict)   # {dates: [...], closes: [...]} 12 tháng cho web UI
+    price_action: dict = field(default_factory=dict) # PAResult: BOS/CHoCH, OB/FVG, liquidity, tiers, invalidation
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -136,6 +137,14 @@ def make_decision(
     trends = _assess_trends(df, feats)
     wr_stmt, _, _ = _count_similar_setups(optim, df)
 
+    # Price Action / SMC scan (không chặn pipeline nếu lỗi)
+    from dataclasses import asdict as _asdict
+    from .price_action import scan_price_action
+    try:
+        pa = _asdict(scan_price_action(df))
+    except Exception as e:
+        pa = {"error": f"PA scan failed: {e}"}
+
     # tín hiệu hiện tại theo best params?
     entry_now = bool(build_entry_signals(feats, df["close"], p).iloc[-1])
     rsi_now = float(feats[f"rsi_{p['rsi_period']}"].iloc[-1])
@@ -145,14 +154,23 @@ def make_decision(
     # MUA: có tín hiệu (hoặc RSI sát vùng mua) + FA pass + OOS win rate >= 50% + đủ mẫu
     # BÁN: đang quá mua (RSI > 70) và trend trung hạn GIẢM
     # còn lại: ĐỨNG NGOÀI
+    # Price Action làm bộ lọc xác nhận: cấu trúc cùng chiều → nâng conviction,
+    # ngược chiều (CHoCH chống lại lệnh) → hạ conviction một bậc.
     oos_ok = optim.oos_win_rate >= 0.5 and optim.oos_n_trades >= 10
     mid_trend = trends[1].direction
+    pa_trend = pa.get("trend")
 
     if (entry_now or near_oversold) and fa.passed and oos_ok:
         rec = "MUA"
         conviction = "CAO" if (entry_now and optim.stability >= 0.6 and fa.score >= 60) else "TRUNG BÌNH"
+        if pa_trend == "down":
+            conviction = "THẤP" if conviction == "TRUNG BÌNH" else "TRUNG BÌNH"
+        elif pa_trend == "up" and conviction == "TRUNG BÌNH" and optim.stability >= 0.6:
+            conviction = "CAO"
     elif rsi_now >= 70 and mid_trend == "GIẢM":
         rec, conviction = "BÁN", "TRUNG BÌNH"
+        if pa_trend == "down":
+            conviction = "CAO"
     else:
         rec, conviction = "ĐỨNG NGOÀI", "CAO" if not oos_ok else "TRUNG BÌNH"
 
@@ -214,6 +232,7 @@ def make_decision(
         warnings=optim.warnings,
         fold_summary=fold_summary,
         chart_data=chart_data,
+        price_action=pa,
     )
 
 
@@ -253,6 +272,42 @@ def render_markdown(d: Decision) -> str:
             f"| **SL bắt buộc** | **{z.sl:,.2f}** | {z.sl_basis} |",
             f"| Position size | {z.position_size_pct:.1%} NAV | risk 2%/lệnh theo khoảng SL |",
         ]
+
+    pa = d.price_action
+    if pa and not pa.get("error"):
+        trend_vn = {"up": "TĂNG (bullish structure)", "down": "GIẢM (bearish structure)"}.get(pa.get("trend"), "Chưa rõ")
+        lines += ["", "## Price Action & Smart Money Concepts",
+                  f"- **Cấu trúc thị trường:** {trend_vn}"]
+        if pa.get("last_event"):
+            ev = pa["last_event"]
+            lines.append(f"- **Sự kiện gần nhất:** {ev['kind']} {'lên' if ev['direction'] == 'up' else 'xuống'} "
+                         f"tại mức {ev['level']:,.2f}")
+        lines.append(f"- **Order Blocks fresh:** {pa.get('n_fresh_bull_ob', 0)} bull / "
+                     f"{pa.get('n_fresh_bear_ob', 0)} bear · **FVG còn mở:** {pa.get('n_open_fvg', 0)}")
+        if pa.get("liquidity_above") or pa.get("liquidity_below"):
+            la = ", ".join(f"{x:,.2f}" for x in pa.get("liquidity_above", [])) or "—"
+            lb = ", ".join(f"{x:,.2f}" for x in pa.get("liquidity_below", [])) or "—"
+            lines.append(f"- **Liquidity pools:** trên {la} · dưới {lb}")
+        if pa.get("vcp", {}).get("is_vcp"):
+            lines.append(f"- **VCP:** đang co thắt, pivot line {pa['vcp']['pivot_line']:,.2f}"
+                         + (" — **ĐÃ BREAKOUT**" if pa["vcp"].get("breakout") else ""))
+        for pt in pa.get("patterns", []):
+            lines.append(f"- **Nến đảo chiều:** {pt['pattern']}"
+                         + (" +VSA volume xác nhận" if pt.get("vsa_confirm") else " (volume chưa xác nhận)"))
+
+        if pa.get("tiers"):
+            lines += ["", "### Kịch bản hành động phân lớp (Multi-tier Zones)",
+                      "| Tier | Hướng | Entry | SL | TP1 | TP2 | R:R | Win rate lịch sử |",
+                      "| :--- | :--- | ---: | ---: | ---: | ---: | ---: | :--- |"]
+            for t in pa["tiers"]:
+                wr = f"{t['est_win_rate']:.0%} ({t['n_setups']} setup)" if t.get("est_win_rate") is not None \
+                     else f"chưa đủ mẫu ({t.get('n_setups', 0)} setup)"
+                lines.append(f"| {t['name']} | {t['side']} | {t['entry']:,.2f} | {t['sl']:,.2f} "
+                             f"| {t['tp1']:,.2f} | {t['tp2']:,.2f} | {t['rr_tp2']} | {wr} |")
+            for t in pa["tiers"]:
+                lines.append(f"- *{t['name']}*: {t['basis']}")
+        if pa.get("invalidation"):
+            lines += ["", f"⛔ **Invalidation:** {pa['invalidation_note']}"]
 
     lines += [
         "",

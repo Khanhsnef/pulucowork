@@ -366,6 +366,36 @@ function renderReport(d){
     </div></div>`;
   }
 
+  const pa=d.price_action;
+  if(pa&&!pa.error){
+    const tdir=pa.trend==='up'?'<span class="pill pill-TĂNG">BULLISH</span>':pa.trend==='down'?'<span class="pill pill-GIẢM">BEARISH</span>':'<span class="pill pill-ĐI_NGANG">N/A</span>';
+    const ev=pa.last_event?`${pa.last_event.kind} ${pa.last_event.direction==='up'?'↑':'↓'} @ ${fmt(pa.last_event.level)}`:'—';
+    html+=`<div class="card"><h2>Price Action · Smart Money Concepts</h2>
+      <div class="stat-grid">
+        <div class="stat"><div class="label">Market Structure</div><div class="value" style="font-size:16px;padding-top:4px">${tdir}</div><div class="sub">${ev}</div></div>
+        <div class="stat"><div class="label">Order Blocks Fresh</div><div class="value"><span style="color:var(--up)">${pa.n_fresh_bull_ob}B</span> / <span style="color:var(--down)">${pa.n_fresh_bear_ob}S</span></div><div class="sub">FVG mở: ${pa.n_open_fvg}</div></div>
+        <div class="stat"><div class="label">Liquidity trên</div><div class="value" style="font-size:14px">${(pa.liquidity_above||[]).slice(0,2).map(x=>fmt(x)).join(' · ')||'—'}</div></div>
+        <div class="stat"><div class="label">Liquidity dưới</div><div class="value" style="font-size:14px">${(pa.liquidity_below||[]).slice(0,2).map(x=>fmt(x)).join(' · ')||'—'}</div></div>
+      </div>
+      ${pa.vcp&&pa.vcp.is_vcp?`<div class="warn" style="border-color:rgba(38,166,154,.4);color:var(--up);margin-top:10px">📈 VCP đang co thắt — pivot line ${fmt(pa.vcp.pivot_line)}${pa.vcp.breakout?' · ĐÃ BREAKOUT':''}</div>`:''}
+      ${(pa.patterns||[]).map(p=>`<div class="muted" style="margin-top:8px">🕯 ${p.pattern}${p.vsa_confirm?' <span style="color:var(--up)">+VSA xác nhận</span>':' (volume chưa xác nhận)'}</div>`).join('')}
+      ${pa.tiers&&pa.tiers.length?`<table style="margin-top:14px">
+        <tr><th>Tier</th><th>Hướng</th><th style="text-align:right">Entry</th><th style="text-align:right">SL</th><th style="text-align:right">TP1</th><th style="text-align:right">TP2</th><th style="text-align:right">R:R</th><th style="text-align:right">Win rate</th></tr>
+        ${pa.tiers.map(t=>`<tr title="${t.basis}">
+          <td style="font-weight:600;color:var(--text-strong)">${t.name}</td>
+          <td><span class="pill ${t.side==='LONG'?'pill-TĂNG':'pill-GIẢM'}">${t.side}</span></td>
+          <td class="num" style="text-align:right;color:#5B8DEF">${fmt(t.entry)}</td>
+          <td class="num" style="text-align:right;color:var(--down)">${fmt(t.sl)}</td>
+          <td class="num" style="text-align:right;color:var(--up)">${fmt(t.tp1)}</td>
+          <td class="num" style="text-align:right;color:var(--up)">${fmt(t.tp2)}</td>
+          <td class="num" style="text-align:right">${t.rr_tp2}</td>
+          <td class="num" style="text-align:right">${t.est_win_rate!=null?pct(t.est_win_rate)+' <span class="muted">('+t.n_setups+')</span>':'<span class="muted">n='+t.n_setups+'</span>'}</td>
+        </tr>`).join('')}
+      </table><p class="muted" style="margin-top:8px">Hover vào dòng để xem cơ sở setup.</p>`:''}
+      ${pa.invalidation?`<div class="warn" style="margin-top:10px">⛔ ${pa.invalidation_note}</div>`:''}
+    </div>`;
+  }
+
   html+=`<div class="card"><h2>Xu hướng 3 khung thời gian</h2><table>
     <tr><th>Khung</th><th>Xu hướng</th><th>Bằng chứng</th></tr>
     ${d.trends.map(t=>`<tr><td style="font-weight:600;color:var(--text-strong)">${t.horizon}</td><td><span class="${pillCls(t.direction)}">${t.direction}</span></td><td class="muted">${t.evidence.join(' · ')}</td></tr>`).join('')}
