@@ -8,158 +8,157 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#131722;            /* TradingView canvas */
-  --panel:#1E222D;         /* card/panel */
-  --panel2:#2A2E39;        /* hover, borders */
-  --border:#2A2E39;
-  --border-soft:#232733;
-  --text:#D1D4DC;
-  --text-strong:#F0F3FA;
-  --muted:#787B86;
-  --blue:#2962FF;          /* TV accent */
-  --up:#26A69A;            /* TV green */
-  --down:#EF5350;          /* TV red */
-  --orange:#FF9800;
-  --yellow:#FFB74D;
+  --bg:#131722; --panel:#1E222D; --panel2:#2A2E39;
+  --border:#2A2E39; --border-soft:#232733;
+  --text:#D1D4DC; --text-strong:#F0F3FA; --muted:#787B86;
+  --blue:#2962FF; --blue-soft:#5B8DEF;
+  --up:#26A69A; --down:#EF5350; --orange:#FF9800; --yellow:#FFB74D;
   --mono:'JetBrains Mono',ui-monospace,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
-.container{max-width:1240px;margin:0 auto;padding:20px 20px 80px}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13.5px}
+.container{max-width:1320px;margin:0 auto;padding:0 18px 80px}
 ::selection{background:rgba(41,98,255,.35)}
+a{color:var(--text);text-decoration:none}
+a:hover{color:var(--blue-soft)}
 
-/* Header */
-.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border-soft)}
-.brand{display:flex;align-items:center;gap:12px}
-.brand-mark{width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,var(--blue),#1E53E5);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;letter-spacing:-.05em}
-.brand h1{font-size:17px;font-weight:700;letter-spacing:-.02em;color:var(--text-strong)}
-.brand p{font-size:11.5px;color:var(--muted);margin-top:2px}
-.sched-pill{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:8px 14px;font-size:12px;color:var(--muted)}
-.sched-dot{width:7px;height:7px;border-radius:50%;background:var(--up);animation:pulse 2s infinite}
-@keyframes pulse{50%{opacity:.35}}
-
-/* Tabs — segmented control kiểu TV */
-.tabs{display:inline-flex;gap:2px;margin-bottom:18px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:3px;flex-wrap:wrap}
-.tab{padding:8px 18px;border-radius:6px;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:.12s}
+/* ── Top bar (sticky, kiểu TV toolbar) ── */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(19,23,34,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border-soft);margin:0 -18px;padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;margin-right:6px}
+.brand-mark{width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,var(--blue),#1E53E5);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px}
+.brand h1{font-size:14.5px;font-weight:700;color:var(--text-strong);white-space:nowrap}
+.tabs{display:inline-flex;gap:2px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:3px}
+.tab{padding:7px 16px;border-radius:6px;border:none;background:transparent;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;transition:.12s;white-space:nowrap}
 .tab:hover{color:var(--text)}
 .tab.active{background:var(--panel2);color:var(--text-strong)}
+.sched-pill{display:flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:11.5px;color:var(--muted);margin-left:auto}
+.sched-dot{width:6px;height:6px;border-radius:50%;background:var(--up);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
 
-/* Cards */
-.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin-bottom:14px}
-.card h2{font-size:12px;font-weight:700;margin-bottom:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.muted{color:var(--muted);font-size:12.5px}
+.page{padding-top:16px}
 
-/* Inputs */
-.input-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-input[type=text],select{font-family:inherit;font-size:14px;padding:10px 14px;border:1px solid var(--border);border-radius:6px;outline:none;transition:.15s;background:var(--bg);color:var(--text-strong)}
-input[type=text]:focus,select:focus{border-color:var(--blue)}
-select{cursor:pointer}
-input.symbol-input{width:200px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-family:var(--mono)}
-.btn{font-family:inherit;font-size:13px;font-weight:600;padding:10px 20px;border-radius:6px;border:1px solid transparent;cursor:pointer;transition:.12s;letter-spacing:-.01em}
-.btn-primary{background:var(--blue);color:#fff}
-.btn-primary:hover{background:#1E53E5}
-.btn-blue{background:var(--blue);color:#fff}
-.btn-blue:hover{background:#1E53E5}
-.btn-ghost{background:transparent;color:var(--text);border-color:var(--border)}
-.btn-ghost:hover{background:var(--panel2)}
-.btn:disabled{opacity:.4;cursor:not-allowed}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
-.chip{padding:5px 12px;border-radius:4px;background:var(--bg);border:1px solid var(--border);font-size:12px;font-weight:600;font-family:var(--mono);color:var(--text);cursor:pointer;transition:.12s}
-.chip:hover{border-color:var(--blue);color:#fff;background:rgba(41,98,255,.12)}
+/* ── Cards & panels ── */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px 18px;margin-bottom:12px}
+.card h2{font-size:11px;font-weight:700;margin-bottom:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
+.card h2::after{content:'';flex:1;height:1px;background:var(--border-soft)}
+.muted{color:var(--muted);font-size:12px}
 
-/* Progress */
-.progress-wrap{margin-top:16px;display:none}
-.progress-bar-bg{height:5px;background:var(--bg);border-radius:99px;overflow:hidden;border:1px solid var(--border-soft)}
-.progress-bar{height:100%;background:linear-gradient(90deg,var(--blue),#5B8DEF);border-radius:99px;width:0%;transition:width .4s ease}
-.progress-msg{margin-top:8px;font-size:12px;color:var(--muted);font-family:var(--mono)}
-
-/* Recommendation hero */
-.rec-hero{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
-.rec-badge{font-size:26px;font-weight:800;letter-spacing:-.02em;padding:14px 32px;border-radius:8px;color:#fff;font-family:var(--mono)}
+/* ── Symbol header strip (kiểu trang symbol TV) ── */
+.sym-strip{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.sym-name{font-size:24px;font-weight:800;letter-spacing:-.02em;color:var(--text-strong);font-family:var(--mono)}
+.sym-sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+.sym-price{font-size:30px;font-weight:700;font-family:var(--mono);color:var(--text-strong);letter-spacing:-.02em}
+.sym-rec{font-size:16px;font-weight:800;padding:9px 22px;border-radius:6px;font-family:var(--mono);letter-spacing:.02em}
 .rec-MUA{background:rgba(38,166,154,.15);color:var(--up);border:1.5px solid var(--up)}
 .rec-BÁN{background:rgba(239,83,80,.15);color:var(--down);border:1.5px solid var(--down)}
 .rec-ĐỨNG_NGOÀI{background:rgba(120,123,134,.12);color:var(--muted);border:1.5px solid var(--muted)}
-.rec-meta{flex:1;min-width:240px}
-.rec-meta .big{font-size:15px;font-weight:700;margin-bottom:5px;color:var(--text-strong)}
-.rec-meta .big .px{font-family:var(--mono);color:var(--orange)}
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
-.stat{background:var(--bg);border:1px solid var(--border-soft);border-radius:8px;padding:14px 16px}
-.stat .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
-.stat .value{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:5px;font-family:var(--mono);color:var(--text-strong)}
-.stat .value.green{color:var(--up)} .stat .value.red{color:var(--down)}
-.stat .value.blue{color:#5B8DEF} .stat .value.orange{color:var(--orange)}
-.stat .sub{font-size:11px;color:var(--muted);margin-top:3px}
+.sym-right{margin-left:auto;text-align:right}
 
-/* Tables */
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:8px 12px;color:var(--muted);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border)}
-td{padding:10px 12px;border-bottom:1px solid var(--border-soft)}
+/* ── Report grid 2 cột ── */
+.rgrid{display:grid;grid-template-columns:1.55fr 1fr;gap:12px;align-items:start}
+.rgrid>div{min-width:0}
+@media(max-width:960px){.rgrid{grid-template-columns:1fr}}
+
+/* ── Inputs ── */
+.input-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input[type=text],select{font-family:inherit;font-size:13.5px;padding:9px 13px;border:1px solid var(--border);border-radius:6px;outline:none;transition:.15s;background:var(--bg);color:var(--text-strong)}
+input[type=text]:focus,select:focus{border-color:var(--blue)}
+select{cursor:pointer}
+input.symbol-input{width:190px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-family:var(--mono)}
+.btn{font-family:inherit;font-size:12.5px;font-weight:600;padding:9px 18px;border-radius:6px;border:1px solid transparent;cursor:pointer;transition:.12s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#1E53E5}
+.btn-ghost{background:transparent;color:var(--text);border-color:var(--border)}
+.btn-ghost:hover{background:var(--panel2)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chip{padding:4px 11px;border-radius:4px;background:var(--bg);border:1px solid var(--border);font-size:11.5px;font-weight:600;font-family:var(--mono);color:var(--text);cursor:pointer;transition:.12s}
+.chip:hover{border-color:var(--blue);color:#fff;background:rgba(41,98,255,.12)}
+
+/* ── Progress ── */
+.progress-wrap{margin-top:14px;display:none}
+.progress-bar-bg{height:4px;background:var(--bg);border-radius:99px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--blue-soft));width:0%;transition:width .4s ease}
+.progress-msg{margin-top:7px;font-size:11.5px;color:var(--muted);font-family:var(--mono)}
+
+/* ── Key-value rows (thay stat boxes — gọn kiểu TV overview) ── */
+.kv{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--border-soft);gap:12px}
+.kv:last-child{border-bottom:none}
+.kv .k{font-size:12px;color:var(--muted)}
+.kv .v{font-family:var(--mono);font-weight:700;font-size:13.5px;color:var(--text-strong);text-align:right}
+.kv .v.green{color:var(--up)} .kv .v.red{color:var(--down)}
+.kv .v.orange{color:var(--orange)} .kv .v.blue{color:var(--blue-soft)}
+.kv .v small{color:var(--muted);font-weight:500}
+
+/* ── Score dial (news) ── */
+.scores-row{display:flex;gap:10px}
+.score-box{flex:1;background:var(--bg);border:1px solid var(--border-soft);border-radius:8px;padding:12px 14px;text-align:center}
+.score-box .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.score-box .num{font-size:30px;font-weight:800;font-family:var(--mono);margin-top:2px}
+.score-box .sub{font-size:10.5px;color:var(--muted);margin-top:2px}
+
+/* ── Tables ── */
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;padding:7px 10px;color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border)}
+td{padding:8px 10px;border-bottom:1px solid var(--border-soft)}
 tr:last-child td{border-bottom:none}
 tr.clickable{cursor:pointer;transition:.1s}
 tr.clickable:hover{background:rgba(42,46,57,.5)}
 td.num{font-family:var(--mono);font-weight:500}
-.pill{display:inline-block;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:700;font-family:var(--mono);letter-spacing:.02em}
-.pill-MUA{background:rgba(38,166,154,.15);color:var(--up)}
-.pill-BÁN{background:rgba(239,83,80,.15);color:var(--down)}
-.pill-ĐỨNG_NGOÀI{background:rgba(120,123,134,.15);color:var(--muted)}
-.pill-TĂNG{background:rgba(38,166,154,.15);color:var(--up)}
-.pill-GIẢM{background:rgba(239,83,80,.15);color:var(--down)}
-.pill-ĐI_NGANG{background:rgba(120,123,134,.15);color:var(--muted)}
+.pill{display:inline-block;padding:2px 9px;border-radius:4px;font-size:10.5px;font-weight:700;font-family:var(--mono)}
+.pill-MUA,.pill-TĂNG,.pill-LONG{background:rgba(38,166,154,.15);color:var(--up)}
+.pill-BÁN,.pill-GIẢM,.pill-SHORT{background:rgba(239,83,80,.15);color:var(--down)}
+.pill-ĐỨNG_NGOÀI,.pill-ĐI_NGANG{background:rgba(120,123,134,.15);color:var(--muted)}
 
-/* Zones */
-.zone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px}
-.zone{border-radius:8px;padding:14px 16px;border:1px solid var(--border);background:var(--bg)}
-.zone.entry{border-color:rgba(41,98,255,.5);background:rgba(41,98,255,.07)}
-.zone.tp{border-color:rgba(38,166,154,.5);background:rgba(38,166,154,.06)}
-.zone.sl{border-color:rgba(239,83,80,.5);background:rgba(239,83,80,.06)}
-.zone .label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
-.zone.entry .label{color:#5B8DEF} .zone.tp .label{color:var(--up)} .zone.sl .label{color:var(--down)}
-.zone .value{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-top:5px;font-family:var(--mono);color:var(--text-strong)}
-.zone .sub{font-size:10.5px;color:var(--muted);margin-top:3px}
+/* ── Zone bar (Entry/TP/SL trực quan) ── */
+.zone-ladder{margin-top:4px}
+.zl-row{display:flex;align-items:center;gap:10px;padding:6px 0}
+.zl-tag{width:64px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;text-align:right;flex-shrink:0}
+.zl-val{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--text-strong);width:110px;flex-shrink:0;text-align:right}
+.zl-note{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-.warn{background:rgba(255,183,77,.08);border:1px solid rgba(255,183,77,.35);border-radius:8px;padding:12px 16px;font-size:12.5px;color:var(--yellow);margin-bottom:6px}
+.warn{background:rgba(255,183,77,.08);border:1px solid rgba(255,183,77,.35);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--yellow);margin-bottom:6px}
+.info{background:rgba(41,98,255,.08);border:1px solid rgba(41,98,255,.35);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--text);margin-top:10px;line-height:1.55}
 svg text{font-family:var(--mono)}
-.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;vertical-align:-2px;margin-right:8px}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;vertical-align:-2px;margin-right:7px}
 @keyframes rot{to{transform:rotate(360deg)}}
 .hidden{display:none!important}
 .flex-between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-textarea{font-family:var(--mono);width:100%;border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:13px;outline:none;resize:vertical;min-height:64px;background:var(--bg);color:var(--text-strong)}
+textarea{font-family:var(--mono);width:100%;border:1px solid var(--border);border-radius:6px;padding:11px 14px;font-size:12.5px;outline:none;resize:vertical;min-height:60px;background:var(--bg);color:var(--text-strong)}
 textarea:focus{border-color:var(--blue)}
-.wl-label{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:14px 0 6px}
-.toast{position:fixed;bottom:22px;right:22px;background:var(--panel2);color:var(--text-strong);border:1px solid #363A45;padding:12px 20px;border-radius:8px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;transform:translateY(8px);transition:.25s;z-index:99}
+.wl-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin:12px 0 6px}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--panel2);color:var(--text-strong);border:1px solid #363A45;padding:11px 18px;border-radius:6px;font-size:12.5px;box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;transform:translateY(8px);transition:.25s;z-index:99}
 .toast.show{opacity:1;transform:none}
+.evidence{font-size:11px;color:var(--muted);line-height:1.5}
 </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- HEADER -->
-  <div class="header">
+  <!-- TOP BAR -->
+  <div class="topbar">
     <div class="brand">
       <div class="brand-mark">TA</div>
-      <div>
-        <h1>Trading Analysis Terminal</h1>
-        <p>VN Stocks · Binance Crypto · Walk-Forward Optimized</p>
-      </div>
+      <h1>Trading Terminal</h1>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="analyze">Phân tích</button>
+      <button class="tab" data-tab="batch">Batch Scan</button>
+      <button class="tab" data-tab="gold">Vàng</button>
+      <button class="tab" data-tab="history">Lịch sử</button>
+      <button class="tab" data-tab="watchlist">Watchlist</button>
     </div>
     <div class="sched-pill" id="schedPill">
       <div class="sched-dot"></div>
-      <span id="schedText">Đang kiểm tra scheduler...</span>
+      <span id="schedText">...</span>
     </div>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab active" data-tab="analyze">Phân tích</button>
-    <button class="tab" data-tab="batch">Batch Scan</button>
-    <button class="tab" data-tab="history">Lịch sử</button>
-    <button class="tab" data-tab="watchlist">Watchlist</button>
-  </div>
+  <div class="page">
 
   <!-- ═══════════ TAB: ANALYZE ═══════════ -->
   <div id="tab-analyze">
     <div class="card">
-      <h2>Symbol</h2>
       <div class="input-row">
         <input type="text" class="symbol-input" id="symInput" placeholder="FPT / BTCUSDT" onkeydown="if(event.key==='Enter')startAnalyze()">
         <select id="yearsSel">
@@ -183,15 +182,20 @@ textarea:focus{border-color:var(--blue)}
     <div class="card">
       <div class="flex-between">
         <h2 style="margin:0">Batch Scan — quét toàn bộ watchlist</h2>
-        <button class="btn btn-blue" id="batchBtn" onclick="startBatch()">▶ Chạy Batch Scan</button>
+        <button class="btn btn-primary" id="batchBtn" onclick="startBatch()">▶ Chạy Batch Scan</button>
       </div>
-      <p class="muted" style="margin-top:8px">Chạy tuần tự từng mã (tránh rate-limit). Mỗi mã mất ~30–90 giây. Kết quả tự lưu vào <b>reports/daily/</b> — xem lại ở tab Lịch sử.</p>
+      <p class="muted" style="margin-top:8px">Chạy tuần tự từng mã. Kết quả tự lưu — xem lại ở tab Lịch sử.</p>
       <div class="progress-wrap" id="batchProgressWrap">
         <div class="progress-bar-bg"><div class="progress-bar" id="batchProgressBar"></div></div>
         <div class="progress-msg" id="batchProgressMsg"></div>
       </div>
     </div>
     <div id="batchResultArea"></div>
+  </div>
+
+  <!-- ═══════════ TAB: GOLD ═══════════ -->
+  <div id="tab-gold" class="hidden">
+    <div id="goldArea"><div class="card"><p class="muted">Đang tải giá vàng...</p></div></div>
   </div>
 
   <!-- ═══════════ TAB: HISTORY ═══════════ -->
@@ -201,7 +205,7 @@ textarea:focus{border-color:var(--blue)}
         <h2 style="margin:0">Báo cáo đã lưu</h2>
         <select id="histDateSel" onchange="loadHistoryDate(this.value)"></select>
       </div>
-      <div id="histArea" style="margin-top:14px"><p class="muted">Chưa có batch nào được lưu. Chạy Batch Scan trước.</p></div>
+      <div id="histArea" style="margin-top:12px"><p class="muted">Chưa có batch nào được lưu.</p></div>
     </div>
     <div id="histDetailArea"></div>
   </div>
@@ -209,13 +213,13 @@ textarea:focus{border-color:var(--blue)}
   <!-- ═══════════ TAB: WATCHLIST ═══════════ -->
   <div id="tab-watchlist" class="hidden">
     <div class="card">
-      <h2>Watchlist — danh sách mã theo dõi hàng ngày</h2>
-      <p class="muted">Scheduler quét các mã này lúc 10:00 sáng mỗi ngày. Phân tách bằng dấu phẩy.</p>
+      <h2>Watchlist — mã theo dõi hàng ngày</h2>
+      <p class="muted">Scheduler quét lúc 10:00 sáng mỗi ngày. Phân tách bằng dấu phẩy.</p>
       <div class="wl-label">Chứng khoán VN</div>
       <textarea id="wlVn" placeholder="FPT, HPG, MWG, VNM"></textarea>
       <div class="wl-label">Crypto (Binance)</div>
       <textarea id="wlCx" placeholder="BTCUSDT, ETHUSDT"></textarea>
-      <div class="input-row" style="margin-top:16px">
+      <div class="input-row" style="margin-top:14px">
         <label class="muted">Dữ liệu lịch sử:</label>
         <select id="wlYears">
           <option value="3">3 năm</option><option value="5" selected>5 năm</option><option value="7">7 năm</option>
@@ -225,6 +229,7 @@ textarea:focus{border-color:var(--blue)}
     </div>
   </div>
 
+  </div><!-- /page -->
 </div>
 <div class="toast" id="toast"></div>
 
@@ -233,25 +238,25 @@ const $=id=>document.getElementById(id);
 const fmt=(n,d=2)=>n==null?'—':Number(n).toLocaleString('en-US',{maximumFractionDigits:d});
 const pct=n=>n==null?'—':(n*100).toFixed(0)+'%';
 const pillCls=s=>'pill pill-'+String(s).replaceAll(' ','_');
-
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
 
 /* ── Tabs ── */
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
   b.classList.add('active');
-  ['analyze','batch','history','watchlist'].forEach(t=>$('tab-'+t).classList.toggle('hidden',t!==b.dataset.tab));
+  ['analyze','batch','gold','history','watchlist'].forEach(t=>$('tab-'+t).classList.toggle('hidden',t!==b.dataset.tab));
   if(b.dataset.tab==='history')refreshHistory();
   if(b.dataset.tab==='watchlist')loadWatchlistUI();
+  if(b.dataset.tab==='gold')loadGold();
 });
 
 /* ── Scheduler pill ── */
 fetch('/api/scheduler').then(r=>r.json()).then(s=>{
-  $('schedText').textContent=s.enabled?`Auto-refresh ${s.hour}:00 · kế tiếp: ${s.next_run?s.next_run.replace('T',' '):'—'}`:'Auto-refresh: TẮT';
+  $('schedText').textContent=s.enabled?`Auto ${s.hour}:00 · kế tiếp ${s.next_run?s.next_run.slice(5,16).replace('T',' '):'—'}`:'Auto-refresh: TẮT';
   if(!s.enabled)$('schedPill').querySelector('.sched-dot').style.background='var(--muted)';
-}).catch(()=>{$('schedText').textContent='Scheduler: không kết nối được'});
+}).catch(()=>{$('schedText').textContent='offline'});
 
-/* ── Preset chips từ watchlist ── */
+/* ── Preset chips ── */
 async function loadChips(){
   try{
     const wl=await(await fetch('/api/watchlist')).json();
@@ -260,7 +265,6 @@ async function loadChips(){
 }
 loadChips();
 
-/* ── Poll job helper ── */
 async function pollJob(jobId,onTick){
   while(true){
     const j=await(await fetch('/api/jobs/'+jobId)).json();
@@ -290,86 +294,10 @@ async function startAnalyze(){
   $('analyzeBtn').disabled=false;$('analyzeBtn').textContent='Phân tích';
 }
 
-/* ═══════════ NEWS & SENTIMENT ═══════════ */
-function scoreColor(s){return s>=60?'var(--up)':s<=40?'var(--down)':'var(--yellow)'}
-
-async function loadNewsCard(sym){
-  const holder=document.createElement('div');holder.id='newsCard';
-  $('reportArea').prepend(holder);
-  holder.innerHTML='<div class="card"><h2>Tin tức & Sentiment</h2><p class="muted">Đang tải tin...</p></div>';
-  try{
-    const n=await(await fetch('/api/news/'+sym)).json();
-    renderNewsCard(holder,sym,n);
-  }catch(e){holder.innerHTML=''}
-}
-
-function renderNewsCard(holder,sym,n){
-  const r=n.rule;
-  const llmBlock=n.llm
-    ?`<div class="value" style="color:${scoreColor(n.llm.score)}">${n.llm.score}</div>
-      <div class="sub">${n.llm.scored_at} · ${n.llm.n_items} tin</div>`
-    :`<div class="value" style="color:var(--muted);font-size:16px;padding-top:6px">chưa chạy</div>`;
-  const btnDisabled=n.claude_cli?'':'disabled title="Không tìm thấy claude CLI"';
-  holder.innerHTML=`<div class="card">
-    <div class="flex-between"><h2 style="margin:0">Tin tức & Sentiment · ${sym}</h2>
-      <button class="btn btn-ghost" onclick="refreshNews('${sym}')" id="newsRefreshBtn">↻ Refresh tin</button></div>
-    <div class="stat-grid" style="margin-top:14px">
-      <div class="stat"><div class="label">Điểm Rule-based (free)</div>
-        <div class="value" style="color:${scoreColor(r.score)}">${r.score}</div>
-        <div class="sub">${r.label} · quét ${r.n_scanned} tin · ${r.n_direct} tin trực tiếp</div></div>
-      <div class="stat"><div class="label">Điểm Claude LLM</div>${llmBlock}
-        <button class="btn btn-primary" style="margin-top:8px;padding:7px 14px;font-size:12px" ${btnDisabled}
-          id="llmBtn" onclick="runLLMScoring('${sym}')">⚡ Chấm điểm bằng Claude</button></div>
-    </div>
-    <div id="llmDetail">${n.llm&&n.llm.summary?`<div class="warn" style="border-color:rgba(41,98,255,.4);color:var(--text);margin-top:12px">🤖 ${n.llm.summary}</div>`:''}</div>
-    ${n.items&&n.items.length?`<table style="margin-top:14px">
-      <tr><th>Thời gian</th><th>Nguồn</th><th>Tiêu đề</th><th>Tác động</th></tr>
-      ${n.items.map(it=>`<tr>
-        <td class="num muted" style="white-space:nowrap">${it.published}</td>
-        <td class="muted">${it.source}</td>
-        <td><a href="${it.link}" target="_blank" style="color:var(--text);text-decoration:none">${it.title}</a></td>
-        <td><span class="pill ${it.rule_score>0?'pill-TĂNG':it.rule_score<0?'pill-GIẢM':'pill-ĐI_NGANG'}">${it.impact}</span></td>
-      </tr>`).join('')}
-    </table>`:'<p class="muted" style="margin-top:12px">Chưa có tin trong DB — bấm Refresh tin.</p>'}
-  </div>`;
-}
-
-async function refreshNews(sym){
-  $('newsRefreshBtn').disabled=true;$('newsRefreshBtn').textContent='Đang kéo RSS...';
-  try{
-    const s=await(await fetch('/api/news/refresh',{method:'POST'})).json();
-    toast(`Đã kéo ${s.new_items} tin mới (tổng ${s.total_items})`);
-    const holder=$('newsCard');
-    if(holder){const n=await(await fetch('/api/news/'+sym)).json();renderNewsCard(holder,sym,n)}
-  }catch(e){toast('Lỗi refresh: '+e.message)}
-}
-
-async function runLLMScoring(sym){
-  const btn=$('llmBtn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>Claude đang đọc tin (~30-60s)';
-  try{
-    const {job_id}=await(await fetch('/api/news/llm/'+sym,{method:'POST'})).json();
-    const j=await pollJob(job_id,()=>{});
-    if(j.status==='error'){toast('Lỗi: '+j.error);btn.disabled=false;btn.textContent='⚡ Chấm điểm bằng Claude';return}
-    const r=j.result;
-    toast(`Claude chấm ${sym}: ${r.score}/100`);
-    const holder=$('newsCard');
-    const n=await(await fetch('/api/news/'+sym)).json();
-    renderNewsCard(holder,sym,n);
-    const det=$('llmDetail');
-    if(det&&r){
-      let extra=`🤖 ${r.summary}`;
-      if(r.top_positive)extra+=`<br>▲ <span style="color:var(--up)">${r.top_positive}</span>`;
-      if(r.top_negative)extra+=`<br>▼ <span style="color:var(--down)">${r.top_negative}</span>`;
-      if(r.horizon_impact)extra+=`<br><span class="muted">Tác động: ngắn ${r.horizon_impact.short>0?'+':''}${r.horizon_impact.short} · trung ${r.horizon_impact.mid>0?'+':''}${r.horizon_impact.mid} · dài ${r.horizon_impact.long>0?'+':''}${r.horizon_impact.long} (thang -2..+2)</span>`;
-      det.innerHTML=`<div class="warn" style="border-color:rgba(41,98,255,.4);color:var(--text);margin-top:12px">${extra}</div>`;
-    }
-  }catch(e){toast('Lỗi: '+e.message);btn.disabled=false;btn.textContent='⚡ Chấm điểm bằng Claude'}
-}
-
-/* ── SVG price chart — dark, kiểu TradingView ── */
+/* ── SVG chart ── */
 function priceChart(d){
   if(!d.chart_data||!d.chart_data.dates||d.chart_data.dates.length<10)return'';
-  const cd=d.chart_data,W=1100,H=360,P={t:20,r:112,b:30,l:70};
+  const cd=d.chart_data,W=1240,H=380,P={t:18,r:110,b:28,l:66};
   const closes=cd.closes,n=closes.length;
   let lo=Math.min(...closes),hi=Math.max(...closes);
   const zs=d.zones;
@@ -378,14 +306,12 @@ function priceChart(d){
   const X=i=>P.l+i/(n-1)*(W-P.l-P.r), Y=v=>P.t+(1-(v-lo)/(hi-lo))*(H-P.t-P.b);
   const path=closes.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+Y(v).toFixed(1)).join('');
   const area=path+`L${X(n-1).toFixed(1)},${(H-P.b).toFixed(1)}L${X(0).toFixed(1)},${(H-P.b).toFixed(1)}Z`;
-  // gridlines
   let grid='',labels='';
   for(let g=0;g<5;g++){const v=lo+(hi-lo)*g/4,y=Y(v);
-    grid+=`<line x1="${P.l}" y1="${y}" x2="${W-P.r}" y2="${y}" stroke="#2A2E39" stroke-width="1"/>`;
+    grid+=`<line x1="${P.l}" y1="${y}" x2="${W-P.r}" y2="${y}" stroke="#2A2E39"/>`;
     labels+=`<text x="${P.l-8}" y="${y+4}" text-anchor="end" font-size="10" fill="#787B86">${fmt(v,v>1000?0:2)}</text>`}
   for(let g=0;g<4;g++){const i=Math.floor((n-1)*g/3);
     labels+=`<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#787B86">${cd.dates[i]}</text>`}
-  // zone lines
   let zlines='';
   const zone=(v,color,label)=>{const y=Y(v);return `<line x1="${P.l}" y1="${y}" x2="${W-P.r}" y2="${y}" stroke="${color}" stroke-width="1" stroke-dasharray="5 4"/><rect x="${W-P.r+4}" y="${y-9}" width="${P.r-10}" height="18" rx="3" fill="${color}" opacity="0.14"/><text x="${W-P.r+10}" y="${y+4}" font-size="10" font-weight="700" fill="${color}">${label} ${fmt(v,v>1000?0:2)}</text>`};
   if(zs){
@@ -395,14 +321,14 @@ function priceChart(d){
   }
   const last=closes[n-1],yLast=Y(last);
   const lastTag=`<rect x="${W-P.r+4}" y="${yLast-9}" width="${P.r-10}" height="18" rx="3" fill="#FF9800"/><text x="${W-P.r+10}" y="${yLast+4}" font-size="10" font-weight="700" fill="#131722">${fmt(last,last>1000?0:2)}</text>`;
-  return `<div class="card"><h2>Chart · ${cd.dates[0]} → ${cd.dates[n-1]}</h2>
+  return `<div class="card"><h2>Chart 12 tháng</h2>
   <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
-    <defs><linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#2962FF" stop-opacity="0.28"/>
+    <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2962FF" stop-opacity="0.25"/>
       <stop offset="100%" stop-color="#2962FF" stop-opacity="0"/>
     </linearGradient></defs>
     ${grid}${zlines}
-    <path d="${area}" fill="url(#areaGrad)"/>
+    <path d="${area}" fill="url(#ag)"/>
     <path d="${path}" fill="none" stroke="#2962FF" stroke-width="1.8"/>
     <line x1="${P.l}" y1="${yLast}" x2="${W-P.r}" y2="${yLast}" stroke="#FF9800" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.7"/>
     <circle cx="${X(n-1)}" cy="${yLast}" r="3.5" fill="#FF9800"/>
@@ -410,85 +336,271 @@ function priceChart(d){
   </svg></div>`;
 }
 
+/* ── Report: symbol strip + chart + 2 cột ── */
 function renderReport(d){
   const recCls='rec-'+d.recommendation.replaceAll(' ','_');
-  let html=`<div class="card">
-    <div class="rec-hero">
-      <div class="rec-badge ${recCls}">${d.recommendation}</div>
-      <div class="rec-meta">
-        <div class="big">${d.symbol} · ${d.asset_type} · <span class="px">${fmt(d.last_price)}</span></div>
-        <div class="muted">Độ tin cậy: <b style="color:var(--text)">${d.conviction}</b> · Tạo lúc ${d.generated_at}</div>
-        <div class="muted" style="margin-top:8px">${d.win_rate_statement}</div>
-      </div>
+  const pa=d.price_action||{};
+
+  /* Symbol strip */
+  let html=`<div class="sym-strip">
+    <div>
+      <div class="sym-name">${d.symbol}</div>
+      <div class="sym-sub">${d.asset_type} · ${d.generated_at}</div>
     </div>
-    <div class="stat-grid">
-      <div class="stat"><div class="label">OOS Win Rate</div><div class="value ${d.oos_win_rate>=.5?'green':'red'}">${pct(d.oos_win_rate)}</div><div class="sub">${d.oos_n_trades} lệnh out-of-sample</div></div>
-      <div class="stat"><div class="label">FA Score</div><div class="value ${d.fa_score>=60?'green':d.fa_score>=40?'orange':'red'}">${fmt(d.fa_score,0)}/100</div></div>
-      <div class="stat"><div class="label">RSI Period</div><div class="value blue">${d.best_params.rsi_period}</div><div class="sub">entry ≤ ${d.best_params.rsi_entry}</div></div>
-      <div class="stat"><div class="label">SL Multiplier</div><div class="value orange">${d.best_params.atr_sl_mult}×ATR</div><div class="sub">TP ${d.best_params.tp_r_multiple}R</div></div>
+    <div class="sym-price">${fmt(d.last_price)}</div>
+    <div class="sym-rec ${recCls}">${d.recommendation}</div>
+    <div class="sym-right">
+      <div class="muted">Độ tin cậy: <b style="color:var(--text-strong)">${d.conviction}</b></div>
+      <div class="muted" style="margin-top:3px;max-width:420px">${d.win_rate_statement}</div>
     </div>
   </div>`;
 
+  /* Chart full width */
   html+=priceChart(d);
 
+  /* ── 2 cột ── */
+  html+=`<div class="rgrid"><div>`;   /* CỘT TRÁI */
+
+  /* Mốc giá hành động */
   if(d.zones){
     const z=d.zones;
-    html+=`<div class="card"><h2>Mốc giá hành động</h2><div class="zone-grid">
-      <div class="zone entry"><div class="label">Entry Zone</div><div class="value">${fmt(z.entry_low)} – ${fmt(z.entry_high)}</div><div class="sub">neo Fib/POC hỗ trợ</div></div>
-      <div class="zone tp"><div class="label">TP 1 (chốt 50%)</div><div class="value">${fmt(z.tp1)}</div></div>
-      <div class="zone tp"><div class="label">TP 2</div><div class="value">${fmt(z.tp2)}</div></div>
-      <div class="zone sl"><div class="label">Stop Loss</div><div class="value">${fmt(z.sl)}</div><div class="sub">${z.sl_basis}</div></div>
-      <div class="zone"><div class="label">Position Size</div><div class="value">${pct(z.position_size_pct)}</div><div class="sub">NAV · risk 2%/lệnh</div></div>
+    html+=`<div class="card"><h2>Mốc giá hành động</h2><div class="zone-ladder">
+      <div class="zl-row"><div class="zl-tag" style="color:var(--up)">TP 2</div><div class="zl-val" style="color:var(--up)">${fmt(z.tp2)}</div><div class="zl-note">chốt phần còn lại</div></div>
+      <div class="zl-row"><div class="zl-tag" style="color:var(--up)">TP 1</div><div class="zl-val" style="color:var(--up)">${fmt(z.tp1)}</div><div class="zl-note">chốt 50% vị thế</div></div>
+      <div class="zl-row"><div class="zl-tag" style="color:var(--blue-soft)">Entry</div><div class="zl-val" style="color:var(--blue-soft)">${fmt(z.entry_low)}–${fmt(z.entry_high)}</div><div class="zl-note">neo Fib/POC hỗ trợ gần nhất</div></div>
+      <div class="zl-row"><div class="zl-tag" style="color:var(--down)">SL</div><div class="zl-val" style="color:var(--down)">${fmt(z.sl)}</div><div class="zl-note">${z.sl_basis}</div></div>
+      <div class="zl-row"><div class="zl-tag" style="color:var(--muted)">Size</div><div class="zl-val">${pct(z.position_size_pct)}</div><div class="zl-note">NAV · risk 2%/lệnh</div></div>
     </div></div>`;
   }
 
-  const pa=d.price_action;
-  if(pa&&!pa.error){
-    const tdir=pa.trend==='up'?'<span class="pill pill-TĂNG">BULLISH</span>':pa.trend==='down'?'<span class="pill pill-GIẢM">BEARISH</span>':'<span class="pill pill-ĐI_NGANG">N/A</span>';
-    const ev=pa.last_event?`${pa.last_event.kind} ${pa.last_event.direction==='up'?'↑':'↓'} @ ${fmt(pa.last_event.level)}`:'—';
-    html+=`<div class="card"><h2>Price Action · Smart Money Concepts</h2>
-      <div class="stat-grid">
-        <div class="stat"><div class="label">Market Structure</div><div class="value" style="font-size:16px;padding-top:4px">${tdir}</div><div class="sub">${ev}</div></div>
-        <div class="stat"><div class="label">Order Blocks Fresh</div><div class="value"><span style="color:var(--up)">${pa.n_fresh_bull_ob}B</span> / <span style="color:var(--down)">${pa.n_fresh_bear_ob}S</span></div><div class="sub">FVG mở: ${pa.n_open_fvg}</div></div>
-        <div class="stat"><div class="label">Liquidity trên</div><div class="value" style="font-size:14px">${(pa.liquidity_above||[]).slice(0,2).map(x=>fmt(x)).join(' · ')||'—'}</div></div>
-        <div class="stat"><div class="label">Liquidity dưới</div><div class="value" style="font-size:14px">${(pa.liquidity_below||[]).slice(0,2).map(x=>fmt(x)).join(' · ')||'—'}</div></div>
-      </div>
-      ${pa.vcp&&pa.vcp.is_vcp?`<div class="warn" style="border-color:rgba(38,166,154,.4);color:var(--up);margin-top:10px">📈 VCP đang co thắt — pivot line ${fmt(pa.vcp.pivot_line)}${pa.vcp.breakout?' · ĐÃ BREAKOUT':''}</div>`:''}
-      ${(pa.patterns||[]).map(p=>`<div class="muted" style="margin-top:8px">🕯 ${p.pattern}${p.vsa_confirm?' <span style="color:var(--up)">+VSA xác nhận</span>':' (volume chưa xác nhận)'}</div>`).join('')}
-      ${pa.tiers&&pa.tiers.length?`<table style="margin-top:14px">
-        <tr><th>Tier</th><th>Hướng</th><th style="text-align:right">Entry</th><th style="text-align:right">SL</th><th style="text-align:right">TP1</th><th style="text-align:right">TP2</th><th style="text-align:right">R:R</th><th style="text-align:right">Win rate</th></tr>
-        ${pa.tiers.map(t=>`<tr title="${t.basis}">
-          <td style="font-weight:600;color:var(--text-strong)">${t.name}</td>
-          <td><span class="pill ${t.side==='LONG'?'pill-TĂNG':'pill-GIẢM'}">${t.side}</span></td>
-          <td class="num" style="text-align:right;color:#5B8DEF">${fmt(t.entry)}</td>
-          <td class="num" style="text-align:right;color:var(--down)">${fmt(t.sl)}</td>
-          <td class="num" style="text-align:right;color:var(--up)">${fmt(t.tp1)}</td>
-          <td class="num" style="text-align:right;color:var(--up)">${fmt(t.tp2)}</td>
-          <td class="num" style="text-align:right">${t.rr_tp2}</td>
-          <td class="num" style="text-align:right">${t.est_win_rate!=null?pct(t.est_win_rate)+' <span class="muted">('+t.n_setups+')</span>':'<span class="muted">n='+t.n_setups+'</span>'}</td>
-        </tr>`).join('')}
-      </table><p class="muted" style="margin-top:8px">Hover vào dòng để xem cơ sở setup.</p>`:''}
-      ${pa.invalidation?`<div class="warn" style="margin-top:10px">⛔ ${pa.invalidation_note}</div>`:''}
+  /* PA tiers */
+  if(pa.tiers&&pa.tiers.length){
+    html+=`<div class="card"><h2>Kịch bản Price Action (SMC)</h2><table>
+      <tr><th>Tier</th><th></th><th style="text-align:right">Entry</th><th style="text-align:right">SL</th><th style="text-align:right">TP1</th><th style="text-align:right">TP2</th><th style="text-align:right">R:R</th><th style="text-align:right">Win rate</th></tr>
+      ${pa.tiers.map(t=>`<tr title="${t.basis}">
+        <td style="font-weight:600;color:var(--text-strong)">${t.name.replace('Tier 1 — ','① ').replace('Tier 2 — ','② ')}</td>
+        <td><span class="pill pill-${t.side}">${t.side}</span></td>
+        <td class="num" style="text-align:right;color:var(--blue-soft)">${fmt(t.entry)}</td>
+        <td class="num" style="text-align:right;color:var(--down)">${fmt(t.sl)}</td>
+        <td class="num" style="text-align:right;color:var(--up)">${fmt(t.tp1)}</td>
+        <td class="num" style="text-align:right;color:var(--up)">${fmt(t.tp2)}</td>
+        <td class="num" style="text-align:right">${t.rr_tp2}</td>
+        <td class="num" style="text-align:right">${t.est_win_rate!=null?pct(t.est_win_rate)+' <span class="muted">('+t.n_setups+')</span>':'<span class="muted">n='+(t.n_setups||0)+'</span>'}</td>
+      </tr>`).join('')}
+    </table>
+    ${pa.invalidation?`<div class="warn" style="margin-top:10px">⛔ ${pa.invalidation_note}</div>`:''}
     </div>`;
   }
 
+  /* Xu hướng 3 khung */
   html+=`<div class="card"><h2>Xu hướng 3 khung thời gian</h2><table>
-    <tr><th>Khung</th><th>Xu hướng</th><th>Bằng chứng</th></tr>
-    ${d.trends.map(t=>`<tr><td style="font-weight:600;color:var(--text-strong)">${t.horizon}</td><td><span class="${pillCls(t.direction)}">${t.direction}</span></td><td class="muted">${t.evidence.join(' · ')}</td></tr>`).join('')}
+    <tr><th style="width:130px">Khung</th><th style="width:90px">Xu hướng</th><th>Bằng chứng</th></tr>
+    ${d.trends.map(t=>`<tr><td style="font-weight:600;color:var(--text-strong)">${t.horizon}</td><td><span class="${pillCls(t.direction)}">${t.direction}</span></td><td class="evidence">${t.evidence.join(' · ')}</td></tr>`).join('')}
   </table></div>`;
 
+  /* Folds */
   if(d.fold_summary&&d.fold_summary.length){
     html+=`<div class="card"><h2>Walk-forward folds (out-of-sample)</h2><table>
-      <tr><th>Fold</th><th>Giai đoạn test</th><th style="text-align:right">Số lệnh</th><th style="text-align:right">Win rate</th></tr>
+      <tr><th>Fold</th><th>Giai đoạn test</th><th style="text-align:right">Lệnh</th><th style="text-align:right">Win</th></tr>
       ${d.fold_summary.map(f=>`<tr><td class="num">${f.fold}</td><td class="num muted">${f.test_range}</td><td class="num" style="text-align:right">${f.test_trades}</td><td class="num" style="text-align:right;color:${f.test_win_rate>=.5?'var(--up)':f.test_win_rate!=null?'var(--down)':'var(--muted)'}">${f.test_win_rate!=null?pct(f.test_win_rate):'—'}</td></tr>`).join('')}
     </table></div>`;
   }
 
-  if(d.warnings&&d.warnings.length)
-    html+=`<div class="card"><h2>⚠️ Cảnh báo</h2>${d.warnings.map(w=>`<div class="warn">${w}</div>`).join('')}</div>`;
+  html+=`</div><div>`;   /* CỘT PHẢI */
 
-  html+=`<p class="muted" style="text-align:center;margin-top:4px">Hệ thống hỗ trợ quyết định — không phải khuyến nghị đầu tư.</p>`;
+  /* Tổng quan số liệu */
+  html+=`<div class="card"><h2>Tổng quan</h2>
+    <div class="kv"><span class="k">OOS Win Rate</span><span class="v ${d.oos_win_rate>=.5?'green':'red'}">${pct(d.oos_win_rate)} <small>(${d.oos_n_trades} lệnh)</small></span></div>
+    <div class="kv"><span class="k">FA Score</span><span class="v ${d.fa_score>=60?'green':d.fa_score>=40?'orange':'red'}">${fmt(d.fa_score,0)}/100</span></div>
+    <div class="kv"><span class="k">RSI setup</span><span class="v blue">RSI-${d.best_params.rsi_period} ≤ ${d.best_params.rsi_entry}</span></div>
+    <div class="kv"><span class="k">Stop Loss</span><span class="v orange">${d.best_params.atr_sl_mult}×ATR</span></div>
+    <div class="kv"><span class="k">Take Profit</span><span class="v orange">${d.best_params.tp_r_multiple}R</span></div>
+    ${d.best_params.trend_filter!==undefined?`<div class="kv"><span class="k">Trend filter</span><span class="v">${d.best_params.trend_filter?'BẬT':'TẮT'}</span></div>`:''}
+  </div>`;
+
+  /* Market structure */
+  if(pa&&!pa.error){
+    const tdir=pa.trend==='up'?'<span class="pill pill-TĂNG">BULLISH</span>':pa.trend==='down'?'<span class="pill pill-GIẢM">BEARISH</span>':'<span class="pill pill-ĐI_NGANG">N/A</span>';
+    html+=`<div class="card"><h2>Market Structure</h2>
+      <div class="kv"><span class="k">Cấu trúc</span><span class="v">${tdir}</span></div>
+      ${pa.last_event?`<div class="kv"><span class="k">Sự kiện gần nhất</span><span class="v">${pa.last_event.kind} ${pa.last_event.direction==='up'?'↑':'↓'} <small>@ ${fmt(pa.last_event.level)}</small></span></div>`:''}
+      <div class="kv"><span class="k">Order Blocks fresh</span><span class="v"><span style="color:var(--up)">${pa.n_fresh_bull_ob}B</span> / <span style="color:var(--down)">${pa.n_fresh_bear_ob}S</span></span></div>
+      <div class="kv"><span class="k">FVG còn mở</span><span class="v">${pa.n_open_fvg}</span></div>
+      ${(pa.liquidity_above||[]).length?`<div class="kv"><span class="k">Liquidity trên</span><span class="v">${pa.liquidity_above.slice(0,2).map(x=>fmt(x)).join(' · ')}</span></div>`:''}
+      ${(pa.liquidity_below||[]).length?`<div class="kv"><span class="k">Liquidity dưới</span><span class="v">${pa.liquidity_below.slice(0,2).map(x=>fmt(x)).join(' · ')}</span></div>`:''}
+      ${pa.vcp&&pa.vcp.is_vcp?`<div class="info" style="border-color:rgba(38,166,154,.4);color:var(--up)">📈 VCP co thắt — pivot ${fmt(pa.vcp.pivot_line)}${pa.vcp.breakout?' · ĐÃ BREAKOUT':''}</div>`:''}
+      ${(pa.patterns||[]).map(p=>`<div class="muted" style="margin-top:7px">🕯 ${p.pattern}${p.vsa_confirm?' <span style="color:var(--up)">+VSA</span>':''}</div>`).join('')}
+    </div>`;
+  }
+
+  /* News slot — loadNewsCard() sẽ đổ vào đây */
+  html+=`<div id="newsSlot"></div>`;
+
+  /* Warnings */
+  if(d.warnings&&d.warnings.length)
+    html+=`<div class="card"><h2>Cảnh báo</h2>${d.warnings.map(w=>`<div class="warn">${w}</div>`).join('')}</div>`;
+
+  html+=`</div></div>`;  /* /rgrid */
+  html+=`<p class="muted" style="text-align:center;margin-top:6px">Hệ thống hỗ trợ quyết định — không phải khuyến nghị đầu tư.</p>`;
   return html;
+}
+
+/* ═══════════ NEWS ═══════════ */
+function scoreColor(s){return s>=60?'var(--up)':s<=40?'var(--down)':'var(--yellow)'}
+
+async function loadNewsCard(sym){
+  const holder=$('newsSlot')||(()=>{const h=document.createElement('div');h.id='newsSlot';$('reportArea').prepend(h);return h})();
+  holder.innerHTML='<div class="card"><h2>Tin tức & Sentiment</h2><p class="muted">Đang tải tin...</p></div>';
+  try{
+    const n=await(await fetch('/api/news/'+sym)).json();
+    renderNewsCard(holder,sym,n);
+  }catch(e){holder.innerHTML=''}
+}
+
+function renderNewsCard(holder,sym,n){
+  const r=n.rule;
+  const llmScore=n.llm?`<div class="num" style="color:${scoreColor(n.llm.score)};font-size:30px;font-weight:800;font-family:var(--mono)">${n.llm.score}</div><div class="sub">${n.llm.scored_at}</div>`
+                      :`<div class="num" style="color:var(--muted);font-size:15px;padding:8px 0">chưa chạy</div>`;
+  const btnDis=n.claude_cli?'':'disabled title="Không tìm thấy claude CLI"';
+  holder.innerHTML=`<div class="card">
+    <h2>Tin tức & Sentiment <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px;margin-left:auto" onclick="refreshNews('${sym}')" id="newsRefreshBtn">↻</button></h2>
+    <div class="scores-row">
+      <div class="score-box"><div class="label">Rule-based</div>
+        <div class="num" style="color:${scoreColor(r.score)}">${r.score}</div>
+        <div class="sub">${r.label} · ${r.n_direct} tin trực tiếp</div></div>
+      <div class="score-box"><div class="label">Claude LLM</div>${llmScore}
+        <button class="btn btn-primary" style="margin-top:6px;padding:6px 12px;font-size:11px" ${btnDis} id="llmBtn" onclick="runLLMScoring('${sym}')">⚡ Chấm bằng Claude</button></div>
+    </div>
+    <div id="llmDetail">${n.llm&&n.llm.summary?`<div class="info">🤖 ${n.llm.summary}</div>`:''}</div>
+    ${n.items&&n.items.length?`<table style="margin-top:12px">
+      ${n.items.slice(0,8).map(it=>`<tr>
+        <td style="padding:6px 8px 6px 0;width:16px">${it.rule_score>0?'<span style="color:var(--up)">▲</span>':it.rule_score<0?'<span style="color:var(--down)">▼</span>':'<span style="color:var(--muted)">•</span>'}</td>
+        <td style="padding:6px 0"><a href="${it.link}" target="_blank" style="font-size:12px;line-height:1.4">${it.title}</a>
+          <div class="muted" style="font-size:10.5px;margin-top:1px">${it.source} · ${it.published}</div></td>
+      </tr>`).join('')}
+    </table>`:'<p class="muted" style="margin-top:10px">Chưa có tin — bấm ↻ để kéo RSS.</p>'}
+  </div>`;
+}
+
+async function refreshNews(sym){
+  $('newsRefreshBtn').disabled=true;$('newsRefreshBtn').textContent='...';
+  try{
+    const s=await(await fetch('/api/news/refresh',{method:'POST'})).json();
+    toast(`Đã kéo ${s.new_items} tin mới (tổng ${s.total_items})`);
+    loadNewsCard(sym);
+  }catch(e){toast('Lỗi refresh: '+e.message)}
+}
+
+async function runLLMScoring(sym){
+  const btn=$('llmBtn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>Claude đọc tin (~30-60s)';
+  try{
+    const {job_id}=await(await fetch('/api/news/llm/'+sym,{method:'POST'})).json();
+    const j=await pollJob(job_id,()=>{});
+    if(j.status==='error'){toast('Lỗi: '+j.error);btn.disabled=false;btn.textContent='⚡ Chấm bằng Claude';return}
+    const r=j.result;
+    toast(`Claude chấm ${sym}: ${r.score}/100`);
+    await loadNewsCard(sym);
+    const det=$('llmDetail');
+    if(det&&r){
+      let extra=`🤖 ${r.summary}`;
+      if(r.top_positive)extra+=`<br>▲ <span style="color:var(--up)">${r.top_positive}</span>`;
+      if(r.top_negative)extra+=`<br>▼ <span style="color:var(--down)">${r.top_negative}</span>`;
+      if(r.horizon_impact)extra+=`<br><span class="muted">Tác động: ngắn ${r.horizon_impact.short>0?'+':''}${r.horizon_impact.short} · trung ${r.horizon_impact.mid>0?'+':''}${r.horizon_impact.mid} · dài ${r.horizon_impact.long>0?'+':''}${r.horizon_impact.long}</span>`;
+      det.innerHTML=`<div class="info">${extra}</div>`;
+    }
+  }catch(e){toast('Lỗi: '+e.message);btn.disabled=false;btn.textContent='⚡ Chấm bằng Claude'}
+}
+
+/* ═══════════ GOLD ═══════════ */
+function goldChart(chart){
+  if(!chart||!chart.closes||chart.closes.length<10)return'';
+  const W=1240,H=300,P={t:16,r:96,b:26,l:70};
+  const cs=chart.closes,n=cs.length;
+  let lo=Math.min(...cs),hi=Math.max(...cs);
+  const pad=(hi-lo)*.05;lo-=pad;hi+=pad;
+  const X=i=>P.l+i/(n-1)*(W-P.l-P.r), Y=v=>P.t+(1-(v-lo)/(hi-lo))*(H-P.t-P.b);
+  const path=cs.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+Y(v).toFixed(1)).join('');
+  const area=path+`L${X(n-1).toFixed(1)},${(H-P.b).toFixed(1)}L${X(0).toFixed(1)},${(H-P.b).toFixed(1)}Z`;
+  let grid='',labels='';
+  for(let g=0;g<4;g++){const v=lo+(hi-lo)*g/3,y=Y(v);
+    grid+=`<line x1="${P.l}" y1="${y}" x2="${W-P.r}" y2="${y}" stroke="#2A2E39"/>`;
+    labels+=`<text x="${P.l-8}" y="${y+4}" text-anchor="end" font-size="10" fill="#787B86">${fmt(v,0)}</text>`}
+  for(let g=0;g<4;g++){const i=Math.floor((n-1)*g/3);
+    labels+=`<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#787B86">${chart.dates[i]}</text>`}
+  const last=cs[n-1],yL=Y(last);
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
+    <defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF9800" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#FF9800" stop-opacity="0"/>
+    </linearGradient></defs>
+    ${grid}
+    <path d="${area}" fill="url(#gg)"/>
+    <path d="${path}" fill="none" stroke="#FF9800" stroke-width="1.8"/>
+    <rect x="${W-P.r+4}" y="${yL-9}" width="${P.r-10}" height="18" rx="3" fill="#FF9800"/>
+    <text x="${W-P.r+10}" y="${yL+4}" font-size="10" font-weight="700" fill="#131722">${fmt(last,0)}</text>
+    ${labels}
+  </svg>`;
+}
+
+async function loadGold(force){
+  const area=$('goldArea');
+  try{
+    const g=await(await fetch('/api/gold'+(force?'?force=true':''))).json();
+    const w=g.world,vn=g.vn;
+    const chg=w?w.change_24h_pct:0;
+    let html='';
+
+    /* strip: thế giới + quy đổi + premium */
+    html+=`<div class="sym-strip">
+      <div>
+        <div class="sym-name">GOLD</div>
+        <div class="sym-sub">XAU spot (PAXG proxy) · cập nhật ${g.generated_at}
+          <a href="#" onclick="loadGold(true);return false" style="color:var(--blue-soft)">↻ refresh</a></div>
+      </div>
+      ${w?`<div><div class="sym-price">$${fmt(w.usd_oz)}</div>
+        <div class="sym-sub" style="color:${chg>=0?'var(--up)':'var(--down)'};font-family:var(--mono)">${chg>=0?'+':''}${chg.toFixed(2)}% (24h)</div></div>`:''}
+      ${g.world_vnd_luong?`<div><div class="sym-price" style="font-size:22px">${fmt(g.world_vnd_luong/1e6,2)}tr</div>
+        <div class="sym-sub">quy đổi VND/lượng<br>tỷ giá ${fmt(g.usd_vnd,0)}</div></div>`:''}
+      ${g.sjc_premium_vnd!=null?`<div class="sym-right">
+        <div class="sym-price" style="font-size:22px;color:${g.sjc_premium_pct>15?'var(--down)':'var(--yellow)'}">+${fmt(g.sjc_premium_vnd/1e6,1)}tr</div>
+        <div class="sym-sub">SJC premium vs thế giới (${g.sjc_premium_pct.toFixed(1)}%)</div></div>`:''}
+    </div>`;
+
+    /* chart thế giới 12 tháng */
+    if(w&&w.chart)html+=`<div class="card"><h2>Vàng thế giới 12 tháng (USD/oz)</h2>${goldChart(w.chart)}</div>`;
+
+    /* 2 cột: bảng giá VN + phân tích chênh lệch */
+    html+=`<div class="rgrid"><div>`;
+    if(vn&&vn.items&&vn.items.length){
+      html+=`<div class="card"><h2>Giá vàng Việt Nam (BTMC · ${vn.updated||''})</h2><table>
+        <tr><th>Loại</th><th style="text-align:right">Mua vào</th><th style="text-align:right">Bán ra</th><th style="text-align:right">Chênh mua-bán</th></tr>
+        ${vn.items.map(it=>{
+          const spread=it.sell_luong&&it.buy_luong?it.sell_luong-it.buy_luong:null;
+          return `<tr>
+            <td style="font-weight:600;color:var(--text-strong)">${it.label}</td>
+            <td class="num" style="text-align:right">${fmt(it.buy_luong,0)}</td>
+            <td class="num" style="text-align:right;color:var(--orange)">${it.sell_luong?fmt(it.sell_luong,0):'—'}</td>
+            <td class="num" style="text-align:right;color:var(--muted)">${spread?fmt(spread,0):'—'}</td>
+          </tr>`}).join('')}
+      </table><p class="muted" style="margin-top:8px">Đơn vị: VND/lượng (1 lượng = 37.5g)</p></div>`;
+    }
+    html+=`</div><div>`;
+    if(g.world_vnd_luong){
+      const sjc=vn&&vn.items?vn.items.find(x=>x.label==='SJC miếng'):null;
+      html+=`<div class="card"><h2>Phân tích chênh lệch</h2>
+        <div class="kv"><span class="k">Thế giới quy đổi</span><span class="v">${fmt(g.world_vnd_luong,0)}</span></div>
+        ${sjc&&sjc.sell_luong?`<div class="kv"><span class="k">SJC bán ra</span><span class="v orange">${fmt(sjc.sell_luong,0)}</span></div>`:''}
+        ${g.sjc_premium_vnd!=null?`<div class="kv"><span class="k">Premium</span><span class="v ${g.sjc_premium_pct>15?'red':'orange'}">+${fmt(g.sjc_premium_vnd,0)} (${g.sjc_premium_pct.toFixed(1)}%)</span></div>`:''}
+        ${g.sjc_spread_vnd?`<div class="kv"><span class="k">Spread mua-bán SJC</span><span class="v">${fmt(g.sjc_spread_vnd,0)}</span></div>`:''}
+        <div class="info">Premium cao (>15%) thường phản ánh cầu nội địa nóng hoặc nguồn cung SJC khan — mua vàng miếng lúc này chịu rủi ro premium co lại dù giá thế giới đi ngang. Nhẫn trơn thường bám giá thế giới sát hơn.</div>
+      </div>`;
+    }
+    if(g.errors&&g.errors.length)html+=g.errors.map(e=>`<div class="warn">⚠️ ${e}</div>`).join('');
+    html+=`</div></div>`;
+    area.innerHTML=html;
+  }catch(e){
+    area.innerHTML=`<div class="card"><p class="muted">Lỗi tải giá vàng: ${e.message}</p></div>`;
+  }
 }
 
 /* ═══════════ BATCH ═══════════ */
@@ -510,9 +622,9 @@ async function startBatch(){
 function renderBatchSummary(s,date){
   const d=date||s.date;
   return `<div class="card">
-    <div class="flex-between"><h2 style="margin:0">Kết quả ${s.date} · ${s.n_scanned} mã · ${s.duration_seconds}s${s.n_errors?` · <span style="color:var(--down)">${s.n_errors} lỗi</span>`:''}</h2></div>
-    <table style="margin-top:12px">
-      <tr><th>Mã</th><th>Khuyến nghị</th><th style="text-align:right">Giá</th><th style="text-align:right">Win OOS</th><th>Ngắn/Trung/Dài</th><th style="text-align:right">Entry</th><th style="text-align:right">SL</th><th style="text-align:right">FA</th></tr>
+    <div class="flex-between"><h2 style="margin:0">Screener ${s.date} · ${s.n_scanned} mã · ${s.duration_seconds}s${s.n_errors?` · <span style="color:var(--down)">${s.n_errors} lỗi</span>`:''}</h2></div>
+    <table style="margin-top:10px">
+      <tr><th>Mã</th><th>Khuyến nghị</th><th style="text-align:right">Giá</th><th style="text-align:right">Win OOS</th><th>N/T/D</th><th style="text-align:right">Entry</th><th style="text-align:right">SL</th><th style="text-align:right">FA</th></tr>
       ${s.results.map(r=>`<tr class="clickable" onclick="openDetail('${d}','${r.symbol}')">
         <td style="font-weight:700;font-family:var(--mono);color:var(--text-strong)">${r.symbol}</td>
         <td><span class="${pillCls(r.recommendation)}">${r.recommendation}</span></td>
@@ -524,8 +636,8 @@ function renderBatchSummary(s,date){
         <td class="num" style="text-align:right">${fmt(r.fa_score,0)}</td>
       </tr>`).join('')}
     </table>
-    ${s.errors&&s.errors.length?`<div style="margin-top:12px">${s.errors.map(e=>`<div class="warn">❌ ${e.symbol}: ${e.error}</div>`).join('')}</div>`:''}
-    <p class="muted" style="margin-top:10px">Click vào dòng để xem báo cáo chi tiết.</p>
+    ${s.errors&&s.errors.length?`<div style="margin-top:10px">${s.errors.map(e=>`<div class="warn">❌ ${e.symbol}: ${e.error}</div>`).join('')}</div>`:''}
+    <p class="muted" style="margin-top:8px">Click vào dòng để xem báo cáo chi tiết.</p>
   </div>`;
 }
 
@@ -535,7 +647,7 @@ async function refreshHistory(){
   const sel=$('histDateSel');
   sel.innerHTML=dates.map(d=>`<option value="${d}">${d}</option>`).join('')||'<option>—</option>';
   if(dates.length)loadHistoryDate(dates[0]);
-  else $('histArea').innerHTML='<p class="muted">Chưa có batch nào được lưu. Chạy Batch Scan trước.</p>';
+  else $('histArea').innerHTML='<p class="muted">Chưa có batch nào được lưu.</p>';
 }
 async function loadHistoryDate(date){
   if(!date||date==='—')return;
@@ -548,6 +660,7 @@ async function openDetail(date,symbol){
   const target=document.querySelector('#tab-history').classList.contains('hidden')?$('batchResultArea'):$('histDetailArea');
   const div=document.createElement('div');div.innerHTML=renderReport(d);
   target.innerHTML='';target.appendChild(div);
+  loadNewsCard(symbol);
   div.scrollIntoView({behavior:'smooth'});
 }
 

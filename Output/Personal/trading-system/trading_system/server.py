@@ -239,6 +239,14 @@ def api_news_llm(symbol: str):
     return {"job_id": job_id}
 
 
+# ── Gold ─────────────────────────────────────────────────────────────────────
+@app.get("/api/gold")
+def api_gold(force: bool = False):
+    """Giá vàng thế giới (PAXG) + vàng VN (BTMC) + quy đổi/premium. Cache 10ph."""
+    from .gold import gold_dashboard
+    return gold_dashboard(force=force)
+
+
 @app.get("/api/scheduler")
 def api_scheduler_status():
     return {"enabled": _scheduler_enabled, "hour": SCHEDULE_HOUR,
