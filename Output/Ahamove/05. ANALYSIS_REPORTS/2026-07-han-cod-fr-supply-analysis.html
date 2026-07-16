@@ -28,7 +28,7 @@
   }
   .page-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px; }
   .page-header .subtitle { font-size: 14px; opacity: 0.75; font-weight: 400; }
-  .page-header .meta { margin-top: 16px; display: flex; gap: 24px; font-size: 12px; opacity: 0.65; }
+  .page-header .meta { margin-top: 16px; display: flex; gap: 24px; font-size: 12px; opacity: 0.65; flex-wrap: wrap; }
 
   .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; }
 
@@ -91,124 +91,102 @@
   /* FR HEATMAP TABLE */
   .heatmap-table { width: 100%; border-collapse: collapse; }
   .heatmap-table th {
-    font-size: 11px;
-    font-weight: 600;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 8px 12px;
-    text-align: center;
+    font-size: 11px; font-weight: 600; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 8px 10px; text-align: center;
     border-bottom: 1px solid #f1f5f9;
   }
   .heatmap-table th.left { text-align: left; }
   .heatmap-table td {
-    padding: 7px 12px;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 600;
+    padding: 6px 10px; text-align: center;
+    font-size: 12px; font-weight: 600;
     border-bottom: 1px solid #f8fafc;
   }
   .heatmap-table td.tier-label {
-    text-align: left;
-    font-weight: 500;
-    color: #475569;
-    white-space: nowrap;
+    text-align: left; font-weight: 500; color: #475569; white-space: nowrap;
   }
   .heatmap-table tr:last-child td { border-bottom: none; }
 
-  /* FR color cells */
-  .fr-cell { border-radius: 8px; padding: 5px 8px; display: inline-block; min-width: 52px; }
+  .fr-cell { border-radius: 7px; padding: 4px 6px; display: inline-block; min-width: 46px; }
   .fr-critical { background: #fef2f2; color: #b91c1c; }
-  .fr-low { background: #fff7ed; color: #c2410c; }
-  .fr-mid { background: #fefce8; color: #92400e; }
-  .fr-ok { background: #f0fdf4; color: #166534; }
-  .fr-good { background: #dcfce7; color: #15803d; }
+  .fr-low     { background: #fff7ed; color: #c2410c; }
+  .fr-mid     { background: #fefce8; color: #92400e; }
+  .fr-ok      { background: #f0fdf4; color: #166534; }
+  .fr-good    { background: #dcfce7; color: #15803d; }
 
-  /* SUPPLY/DEMAND CHART */
-  .sd-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  /* LOGIC EXPLAINER */
+  .logic-table { width: 100%; border-collapse: collapse; }
+  .logic-table th {
+    font-size: 11px; font-weight: 600; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 8px 12px; text-align: left;
+    border-bottom: 2px solid #f1f5f9;
+    background: #f8fafc;
+  }
+  .logic-table td {
+    padding: 9px 12px; font-size: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+  }
+  .logic-table tr:last-child td { border-bottom: none; }
+  .logic-table .tick { color: #10B981; font-weight: 700; }
+  .logic-table .cross { color: #94a3b8; }
+  .tag-balance {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 99px;
+    background: #eff6ff; color: #1e40af;
+    font-family: monospace; letter-spacing: 0;
+  }
+
+  /* SUPPLY/DEMAND BARS */
+  .sd-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
   .sd-row:last-child { margin-bottom: 0; }
-  .sd-tier { width: 90px; font-size: 12px; font-weight: 600; color: #475569; flex-shrink: 0; }
+  .sd-tier { width: 86px; font-size: 12px; font-weight: 600; color: #475569; flex-shrink: 0; }
   .sd-bars { flex: 1; display: flex; flex-direction: column; gap: 4px; }
   .bar-wrap { position: relative; height: 18px; background: #f1f5f9; border-radius: 6px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; font-size: 10px; font-weight: 700; color: white; transition: width 0.3s; white-space: nowrap; }
+  .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; font-size: 10px; font-weight: 700; color: white; white-space: nowrap; }
   .bar-eligible { background: linear-gradient(90deg, #0E4174, #1a6fbe); }
-  .bar-demand { background: linear-gradient(90deg, #FF7F32, #f59e0b); }
+  .bar-demand   { background: linear-gradient(90deg, #FF7F32, #f59e0b); }
   .bar-label { font-size: 10px; color: #94a3b8; margin-bottom: 2px; }
-  .sd-meta { width: 120px; flex-shrink: 0; text-align: right; }
-  .ratio-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 99px;
-  }
+  .sd-meta { width: 128px; flex-shrink: 0; text-align: right; }
+  .ratio-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
   .ratio-high { background: #dcfce7; color: #166534; }
-  .ratio-low { background: #fef2f2; color: #b91c1c; }
-  .ratio-med { background: #fff7ed; color: #c2410c; }
-
-  /* TREND SPARKLINE */
-  .spark-wrap { overflow-x: auto; }
-  .spark-chart { min-width: 600px; }
-  .spark-grid { display: grid; grid-template-columns: 90px repeat(8, 1fr); gap: 0; }
-  .spark-header { display: grid; grid-template-columns: 90px repeat(8, 1fr); margin-bottom: 4px; }
-  .spark-header-cell { font-size: 10px; color: #94a3b8; text-align: center; padding: 2px 0; font-weight: 500; }
-  .spark-header-cell.tier { text-align: left; }
-  .spark-row { display: contents; }
-  .spark-tier { font-size: 12px; font-weight: 600; color: #475569; display: flex; align-items: center; padding: 6px 0; }
-  .spark-cell { display: flex; align-items: center; justify-content: center; padding: 4px 2px; }
-  .spark-dot {
-    width: 40px; height: 24px;
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 700;
-  }
+  .ratio-low  { background: #fef2f2; color: #b91c1c; }
+  .ratio-med  { background: #fff7ed; color: #c2410c; }
 
   /* PROJECTION TABLE */
   .proj-table { width: 100%; border-collapse: collapse; }
   .proj-table th {
     font-size: 11px; font-weight: 600; color: #94a3b8;
     text-transform: uppercase; letter-spacing: 0.05em;
-    padding: 10px 14px;
-    text-align: right;
+    padding: 10px 14px; text-align: right;
     border-bottom: 2px solid #f1f5f9;
   }
   .proj-table th:first-child { text-align: left; }
   .proj-table td { padding: 10px 14px; text-align: right; font-size: 13px; border-bottom: 1px solid #f8fafc; }
   .proj-table td:first-child { text-align: left; font-weight: 600; color: #374151; }
-  .proj-table tr:last-child td { border-bottom: none; font-weight: 700; background: #f8fafc; }
-  .proj-table .delta { color: #10B981; font-weight: 700; }
-  .proj-table .bottleneck-chip {
-    display: inline-block;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 99px;
-    font-weight: 600;
-  }
+  .proj-table tr.total-row td { border-top: 2px solid #e2e8f0; font-weight: 700; background: #f8fafc; border-bottom: none; }
+  .delta-pos { color: #10B981; font-weight: 700; }
+  .chip { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 600; }
   .chip-activity { background: #fef3c7; color: #92400e; }
-  .chip-supply { background: #dbeafe; color: #1e40af; }
+  .chip-supply   { background: #dbeafe; color: #1e40af; }
 
   /* INSIGHT BOX */
   .insight-box {
-    border-radius: 16px;
-    padding: 18px 22px;
-    margin-bottom: 12px;
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
+    border-radius: 16px; padding: 16px 20px; margin-bottom: 12px;
+    display: flex; gap: 14px; align-items: flex-start;
   }
-  .insight-box.red { background: #fef2f2; border: 1px solid #fecaca; }
+  .insight-box.red    { background: #fef2f2; border: 1px solid #fecaca; }
   .insight-box.orange { background: #fff7ed; border: 1px solid #fed7aa; }
-  .insight-box.blue { background: #eff6ff; border: 1px solid #bfdbfe; }
-  .insight-box.green { background: #f0fdf4; border: 1px solid #bbf7d0; }
-  .insight-icon { font-size: 20px; flex-shrink: 0; line-height: 1; }
-  .insight-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .insight-box.blue   { background: #eff6ff; border: 1px solid #bfdbfe; }
+  .insight-box.green  { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .insight-box.gray   { background: #f8fafc; border: 1px solid #e2e8f0; }
+  .insight-icon { font-size: 18px; flex-shrink: 0; line-height: 1.3; }
+  .insight-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
   .insight-body { font-size: 12px; color: #4b5563; line-height: 1.6; }
 
-  /* DIVIDER */
   .divider { border: none; border-top: 1px solid #f1f5f9; margin: 28px 0; }
-
-  /* FOOTNOTE */
-  .footnote { font-size: 11px; color: #94a3b8; margin-top: 12px; line-height: 1.6; }
+  .footnote { font-size: 11px; color: #94a3b8; margin-top: 10px; line-height: 1.7; }
 
   @media (max-width: 768px) {
     .kpi-strip { grid-template-columns: repeat(2, 1fr); }
@@ -220,11 +198,10 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="page-header">
-  <div class="badge">Root Cause Analysis</div>
+  <div class="badge">Root Cause Analysis · v2 — corrected</div>
   <h1>HAN COD High — Supply Gap & FR Collapse</h1>
-  <div class="subtitle">Phân tích nguyên nhân FR sụt mạnh theo giá trị COD cao — HAN vs SGN benchmark</div>
+  <div class="subtitle">Phân tích FR sụt mạnh theo giá trị COD — HAN vs SGN benchmark · Eligibility logic đã được hiệu chỉnh</div>
   <div class="meta">
     <span>Ngày phân tích: 16/07/2026</span>
     <span>Dữ liệu: 09/07 – 16/07/2026</span>
@@ -238,24 +215,129 @@
   <!-- KPI STRIP -->
   <div class="kpi-strip" style="margin-top: 28px;">
     <div class="kpi-card danger">
-      <div class="kpi-label">FR đơn &gt;3M — HAN</div>
+      <div class="kpi-label">FR đơn &gt;3M — HAN hôm nay</div>
       <div class="kpi-value red">2.3%</div>
-      <div class="kpi-sub">vs SGN 40.8% · 906 đơn pending</div>
+      <div class="kpi-sub">vs SGN 40.8% · 906 đơn/ngày</div>
     </div>
     <div class="kpi-card warning">
-      <div class="kpi-label">FR đơn 1M–2M — HAN</div>
+      <div class="kpi-label">FR đơn 1M–2M — HAN hôm nay</div>
       <div class="kpi-value orange">5.8%</div>
-      <div class="kpi-sub">vs SGN 62.2% · 1,093 đơn pending</div>
+      <div class="kpi-sub">vs SGN 62.2% · 1,093 đơn/ngày</div>
     </div>
     <div class="kpi-card info">
-      <div class="kpi-label">Eligible tài xế &gt;1M balance</div>
+      <div class="kpi-label">Eligible tài xế ≥1M balance HAN</div>
       <div class="kpi-value" style="color:#0E4174;">717</div>
       <div class="kpi-sub">vs demand 1,093–906 đơn/ngày</div>
     </div>
     <div class="kpi-card success">
-      <div class="kpi-label">Gain ước tính nếu 2x supply</div>
-      <div class="kpi-value green">+174</div>
-      <div class="kpi-sub">đến +268 đơn hoàn thành/ngày</div>
+      <div class="kpi-label">Gain ước tính nếu 2× supply</div>
+      <div class="kpi-value green">+278</div>
+      <div class="kpi-sub">đến +429 đơn hoàn thành/ngày</div>
+    </div>
+  </div>
+
+  <!-- SECTION 0: ELIGIBILITY LOGIC -->
+  <div class="section">
+    <div class="section-title"><div class="dot"></div>Logic Eligibility — Tài xế balance cao serve được đơn COD thấp hơn</div>
+    <div class="card">
+      <div style="font-size:12px;color:#475569;margin-bottom:14px;">Mỗi tài xế có một mức ký quỹ (balance). Tài xế chỉ đủ điều kiện nhận đơn có giá trị COD ≤ balance của họ. Tài xế balance cao eligible cho <em>tất cả</em> các tier COD thấp hơn.</div>
+      <table class="logic-table">
+        <thead>
+          <tr>
+            <th>Nhóm balance tài xế</th>
+            <th>HAN</th>
+            <th>SGN</th>
+            <th>Eligible COD &lt;200k</th>
+            <th>Eligible COD 200–500k</th>
+            <th>Eligible COD 500k–1M</th>
+            <th>Eligible COD 1M–2M</th>
+            <th>Eligible COD 2M–3M</th>
+            <th>Eligible COD &gt;3M</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#fef2f2;">
+            <td><span class="tag-balance">balance &lt;200k</span></td>
+            <td><strong>883</strong></td>
+            <td><strong>726</strong></td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+          </tr>
+          <tr>
+            <td><span class="tag-balance">balance 200k–500k</span></td>
+            <td><strong>732</strong></td>
+            <td><strong>608</strong></td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+          </tr>
+          <tr>
+            <td><span class="tag-balance">balance 500k–1M</span></td>
+            <td><strong>2,300</strong></td>
+            <td><strong>2,595</strong></td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+          </tr>
+          <tr>
+            <td><span class="tag-balance">balance 1M–2M</span></td>
+            <td><strong>473</strong></td>
+            <td><strong>1,264</strong></td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+          </tr>
+          <tr>
+            <td><span class="tag-balance">balance 2M–3M</span></td>
+            <td><strong>126</strong></td>
+            <td><strong>626</strong></td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="cross">✗</td>
+          </tr>
+          <tr>
+            <td><span class="tag-balance">balance ≥3M</span></td>
+            <td><strong>118</strong></td>
+            <td><strong>852</strong></td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+            <td class="tick">✓</td>
+          </tr>
+          <tr style="background:#f8fafc;border-top:2px solid #e2e8f0;">
+            <td style="font-weight:700;color:#0E4174;">Eligible (cumulative)</td>
+            <td></td><td></td>
+            <td style="font-weight:700;color:#0f172a;">3,749</td>
+            <td style="font-weight:700;color:#0f172a;">3,749</td>
+            <td style="font-weight:700;color:#0f172a;">3,017</td>
+            <td style="font-weight:700;color:#0f172a;">717</td>
+            <td style="font-weight:700;color:#0f172a;">244</td>
+            <td style="font-weight:700;color:#0f172a;">118</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="footnote">
+        * 883 tài xế HAN có balance &lt;200k không đủ ký quỹ để nhận bất kỳ đơn COD nào trong 6 khoảng trên.<br>
+        * Tài xế balance 500k–1M eligible cho COD 500k–1M nhưng cũng có thể chọn nhận đơn COD &lt;200k hoặc 200–500k (đơn nhẹ hơn, nhanh hơn) → hiện tượng cannibalization supply sang tier thấp.
+      </div>
     </div>
   </div>
 
@@ -263,7 +345,6 @@
   <div class="section">
     <div class="section-title"><div class="dot"></div>FR Heatmap — 8 ngày gần nhất (HAN vs SGN)</div>
     <div class="grid-2">
-      <!-- HAN -->
       <div class="card">
         <div style="font-size:13px;font-weight:700;color:#0E4174;margin-bottom:14px;">HAN — Fulfillment Rate by COD Tier</div>
         <table class="heatmap-table">
@@ -342,12 +423,11 @@
             </tr>
           </tbody>
         </table>
-        <div class="footnote">Xu hướng: FR đơn COD cao sụt liên tục từ 13/7, crash mạnh nhất ngày 16/7.</div>
+        <div class="footnote">FR đơn COD cao sụt liên tục từ 13/7, crash mạnh nhất 16/7. Pattern sụt thứ 4–5 lặp lại 2 tuần liên tiếp.</div>
       </div>
 
-      <!-- SGN -->
       <div class="card">
-        <div style="font-size:13px;font-weight:700;color:#10B981;margin-bottom:14px;">SGN — Benchmark Reference (FR by COD Tier)</div>
+        <div style="font-size:13px;font-weight:700;color:#10B981;margin-bottom:14px;">SGN — Benchmark (FR ổn định, ratio eligible/demand &gt;3x mọi tier)</div>
         <table class="heatmap-table">
           <thead>
             <tr>
@@ -424,93 +504,143 @@
             </tr>
           </tbody>
         </table>
-        <div class="footnote">SGN duy trì FR ổn định xuyên suốt, không sụt theo ngày. Ratio eligible/demand &gt; 3x ở mọi tier.</div>
+        <div class="footnote">SGN duy trì FR ổn định nhờ ratio eligible/demand &gt;3x ở tất cả tier. FR chỉ thấp ở &gt;3M do ngưỡng ký quỹ cực cao.</div>
       </div>
     </div>
   </div>
 
   <!-- SECTION 2: SUPPLY/DEMAND GAP -->
   <div class="section">
-    <div class="section-title"><div class="dot"></div>Supply vs Demand Gap — HAN ngày 16/07 (Eligible tài xế vs Số đơn)</div>
+    <div class="section-title"><div class="dot"></div>Supply vs Demand Gap — HAN ngày 16/07 (Eligible cumulative vs Số đơn)</div>
     <div class="card">
-      <div class="grid-2" style="gap: 24px;">
+      <div class="grid-2" style="gap:28px;">
 
-        <!-- LEFT: HAN bars -->
         <div>
-          <div style="font-size:13px;font-weight:700;color:#0E4174;margin-bottom:18px;">HAN — Bottleneck map</div>
+          <div style="font-size:13px;font-weight:700;color:#0E4174;margin-bottom:16px;">HAN — Bottleneck map</div>
 
-          <!-- 500k-1M -->
+          <div class="sd-row">
+            <div class="sd-tier">&lt;200k</div>
+            <div class="sd-bars">
+              <div class="bar-label">Eligible (3,749)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:100%;">3,749</div></div>
+              <div class="bar-label">Demand (1,572)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:42%;">1,572</div></div>
+            </div>
+            <div class="sd-meta">
+              <span class="ratio-badge ratio-high">2.38x</span>
+              <div style="font-size:10px;color:#64748b;margin-top:4px;">Activity bottleneck · FR 45%</div>
+            </div>
+          </div>
+
+          <div class="sd-row">
+            <div class="sd-tier">200–500k</div>
+            <div class="sd-bars">
+              <div class="bar-label">Eligible (3,749)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:100%;">3,749</div></div>
+              <div class="bar-label">Demand (599)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:16%;">599</div></div>
+            </div>
+            <div class="sd-meta">
+              <span class="ratio-badge ratio-high">6.26x</span>
+              <div style="font-size:10px;color:#64748b;margin-top:4px;">Activity bottleneck · FR 34%</div>
+            </div>
+          </div>
+
           <div class="sd-row">
             <div class="sd-tier">500k–1M</div>
             <div class="sd-bars">
-              <div class="bar-label">Eligible tài xế (3,017)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:100%;">3,017</div></div>
-              <div class="bar-label">Demand (881 đơn)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:29%;">881</div></div>
+              <div class="bar-label">Eligible (3,017)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:80%;">3,017</div></div>
+              <div class="bar-label">Demand (881)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:24%;">881</div></div>
             </div>
             <div class="sd-meta">
               <span class="ratio-badge ratio-high">3.42x ⚡</span>
-              <div style="font-size:10px;color:#64748b;margin-top:4px;">Activity bottleneck</div>
+              <div style="font-size:10px;color:#64748b;margin-top:4px;">Activity bottleneck · FR 14%</div>
             </div>
           </div>
 
-          <!-- 1M-2M -->
           <div class="sd-row">
             <div class="sd-tier">1M–2M</div>
             <div class="sd-bars">
-              <div class="bar-label">Eligible tài xế (717)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:66%;">717</div></div>
-              <div class="bar-label">Demand (1,093 đơn)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:100%;">1,093</div></div>
+              <div class="bar-label">Eligible (717)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:19%;">717</div></div>
+              <div class="bar-label">Demand (1,093)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:29%;">1,093</div></div>
             </div>
             <div class="sd-meta">
               <span class="ratio-badge ratio-low">0.66x ⚠</span>
-              <div style="font-size:10px;color:#64748b;margin-top:4px;">Supply bottleneck</div>
+              <div style="font-size:10px;color:#64748b;margin-top:4px;">Supply bottleneck · FR 6%</div>
             </div>
           </div>
 
-          <!-- 2M-3M -->
           <div class="sd-row">
             <div class="sd-tier">2M–3M</div>
             <div class="sd-bars">
-              <div class="bar-label">Eligible tài xế (244)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:41%;">244</div></div>
-              <div class="bar-label">Demand (599 đơn)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:100%;">599</div></div>
+              <div class="bar-label">Eligible (244)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:7%;">244</div></div>
+              <div class="bar-label">Demand (599)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:16%;">599</div></div>
             </div>
             <div class="sd-meta">
               <span class="ratio-badge ratio-low">0.41x ⚠</span>
-              <div style="font-size:10px;color:#64748b;margin-top:4px;">Supply bottleneck</div>
+              <div style="font-size:10px;color:#64748b;margin-top:4px;">Supply bottleneck · FR 5%</div>
             </div>
           </div>
 
-          <!-- >3M -->
           <div class="sd-row">
             <div class="sd-tier">&gt;3M</div>
             <div class="sd-bars">
-              <div class="bar-label">Eligible tài xế (118)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:13%;">118</div></div>
-              <div class="bar-label">Demand (906 đơn)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:100%;">906</div></div>
+              <div class="bar-label">Eligible (118)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:3%;">118</div></div>
+              <div class="bar-label">Demand (906)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:24%;">906</div></div>
             </div>
             <div class="sd-meta">
               <span class="ratio-badge ratio-low">0.13x ⚠</span>
-              <div style="font-size:10px;color:#64748b;margin-top:4px;">Supply bottleneck</div>
+              <div style="font-size:10px;color:#64748b;margin-top:4px;">Supply bottleneck · FR 2%</div>
             </div>
           </div>
         </div>
 
-        <!-- RIGHT: SGN bars (benchmark) -->
         <div>
-          <div style="font-size:13px;font-weight:700;color:#10B981;margin-bottom:18px;">SGN — Benchmark (Ratio &gt; 3x ở mọi tier)</div>
+          <div style="font-size:13px;font-weight:700;color:#10B981;margin-bottom:16px;">SGN — Benchmark (ratio &gt;3x ở mọi tier)</div>
+
+          <div class="sd-row">
+            <div class="sd-tier">&lt;200k</div>
+            <div class="sd-bars">
+              <div class="bar-label">Eligible (5,945)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:100%;">5,945</div></div>
+              <div class="bar-label">Demand (4,233)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:71%;">4,233</div></div>
+            </div>
+            <div class="sd-meta">
+              <span class="ratio-badge ratio-high">1.40x</span>
+              <div style="font-size:10px;color:#64748b;margin-top:4px;">FR = 69%</div>
+            </div>
+          </div>
+
+          <div class="sd-row">
+            <div class="sd-tier">200–500k</div>
+            <div class="sd-bars">
+              <div class="bar-label">Eligible (5,945)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:100%;">5,945</div></div>
+              <div class="bar-label">Demand (1,424)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:24%;">1,424</div></div>
+            </div>
+            <div class="sd-meta">
+              <span class="ratio-badge ratio-high">4.17x</span>
+              <div style="font-size:10px;color:#64748b;margin-top:4px;">FR = 67%</div>
+            </div>
+          </div>
 
           <div class="sd-row">
             <div class="sd-tier">500k–1M</div>
             <div class="sd-bars">
-              <div class="bar-label">Eligible tài xế (5,337)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:100%;">5,337</div></div>
-              <div class="bar-label">Demand (1,099 đơn)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:21%;">1,099</div></div>
+              <div class="bar-label">Eligible (5,337)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:90%;">5,337</div></div>
+              <div class="bar-label">Demand (1,099)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:18%;">1,099</div></div>
             </div>
             <div class="sd-meta">
               <span class="ratio-badge ratio-high">4.86x</span>
@@ -521,10 +651,10 @@
           <div class="sd-row">
             <div class="sd-tier">1M–2M</div>
             <div class="sd-bars">
-              <div class="bar-label">Eligible tài xế (2,742)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:100%;">2,742</div></div>
-              <div class="bar-label">Demand (714 đơn)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:26%;">714</div></div>
+              <div class="bar-label">Eligible (2,742)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:46%;">2,742</div></div>
+              <div class="bar-label">Demand (714)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:12%;">714</div></div>
             </div>
             <div class="sd-meta">
               <span class="ratio-badge ratio-high">3.84x</span>
@@ -535,10 +665,10 @@
           <div class="sd-row">
             <div class="sd-tier">2M–3M</div>
             <div class="sd-bars">
-              <div class="bar-label">Eligible tài xế (1,478)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:100%;">1,478</div></div>
-              <div class="bar-label">Demand (278 đơn)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:19%;">278</div></div>
+              <div class="bar-label">Eligible (1,478)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:25%;">1,478</div></div>
+              <div class="bar-label">Demand (278)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:5%;">278</div></div>
             </div>
             <div class="sd-meta">
               <span class="ratio-badge ratio-high">5.32x</span>
@@ -549,10 +679,10 @@
           <div class="sd-row">
             <div class="sd-tier">&gt;3M</div>
             <div class="sd-bars">
-              <div class="bar-label">Eligible tài xế (852)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:100%;">852</div></div>
-              <div class="bar-label">Demand (223 đơn)</div>
-              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:26%;">223</div></div>
+              <div class="bar-label">Eligible (852)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-eligible" style="width:14%;">852</div></div>
+              <div class="bar-label">Demand (223)</div>
+              <div class="bar-wrap"><div class="bar-fill bar-demand" style="width:4%;">223</div></div>
             </div>
             <div class="sd-meta">
               <span class="ratio-badge ratio-high">3.82x</span>
@@ -561,22 +691,23 @@
           </div>
         </div>
       </div>
-      <div class="footnote" style="margin-top:16px;">
-        * Eligible = tài xế đăng ký có số dư ký quỹ ≥ mức COD của tier tương ứng (cumulative). Eligible ≠ Active online.
+      <div class="footnote" style="margin-top:14px;">
+        * Eligible = cumulative (tài xế balance cao được tính vào các tier thấp hơn). Bars normalize theo max eligible toàn bảng (SGN &lt;200k = 5,945).<br>
+        * SGN FR &lt;200k chỉ đạt 69% dù ratio 1.4x → cho thấy FR ceiling còn bị giới hạn bởi AR, routing, tài xế lựa chọn đơn.
       </div>
     </div>
   </div>
 
   <!-- SECTION 3: ROOT CAUSE -->
   <div class="section">
-    <div class="section-title"><div class="dot"></div>Root Cause — 2 Bottleneck khác nhau, 2 giải pháp khác nhau</div>
+    <div class="section-title"><div class="dot"></div>Root Cause — 2 Bottleneck, 2 Giải pháp Khác Nhau</div>
 
     <div class="insight-box orange">
       <div class="insight-icon">⚡</div>
       <div>
-        <div class="insight-title" style="color:#c2410c;">Tier 500k–1M: ACTIVITY bottleneck — 3,017 eligible nhưng FR chỉ 14%</div>
+        <div class="insight-title" style="color:#c2410c;">Tier &lt;200k, 200–500k, 500k–1M: ACTIVITY bottleneck — supply dư thừa nhưng tài xế không nhận đơn tier cao</div>
         <div class="insight-body">
-          Ratio 3.42x (eligible/demand) cao hơn cả SGN (4.86x → FR=64%). Nhưng HAN chỉ đạt 14%. Tài xế có đủ balance nhưng <strong>không online nhận đơn</strong>. Nguyên nhân có thể: low EPH incentive, preference đơn nhỏ/nhanh, thiếu kích hoạt. Doubling supply sẽ có tác động hạn chế — cần giải pháp activation thay vì tuyển thêm.
+          Ratio eligible/demand từ 3.4x đến 6.3x — nhiều hơn cả SGN. Nhưng FR HAN thấp hơn SGN 4–5 lần. Tài xế có balance đủ nhưng ưu tiên nhận đơn COD thấp/nhỏ hơn (nhanh hơn, ít rủi ro hơn). <strong>Tăng supply sẽ không giải quyết được vấn đề này.</strong> Cần routing priority, incentive đơn COD cao, hoặc audit AR theo COD tier.
         </div>
       </div>
     </div>
@@ -584,19 +715,19 @@
     <div class="insight-box red">
       <div class="insight-icon">🚨</div>
       <div>
-        <div class="insight-title" style="color:#b91c1c;">Tier 1M–2M, 2M–3M, &gt;3M: SUPPLY bottleneck — tài xế eligible thực sự thiếu</div>
+        <div class="insight-title" style="color:#b91c1c;">Tier 1M–2M, 2M–3M, &gt;3M: SUPPLY bottleneck — tài xế eligible thực sự thiếu nghiêm trọng</div>
         <div class="insight-body">
-          Ratio 0.66x / 0.41x / 0.13x — demand lớn hơn supply khả dụng. Đặc biệt &gt;3M: chỉ 118 eligible vs 906 đơn/ngày → FR tất yếu &lt;13%. Đây là nơi doubling supply có impact lớn nhất. Cần chương trình nạp ký quỹ, ưu đãi lãi suất, hoặc reallocation từ các tài xế đang có balance cao hơn mức cần.
+          Ratio 0.66x / 0.41x / 0.13x. Đặc biệt tier &gt;3M: 118 tài xế eligible vs 906 đơn/ngày → về mặt toán học FR không thể vượt 13% kể cả nếu 100% tài xế online 100% thời gian. <strong>Đây là nơi tăng supply tạo impact trực tiếp và lớn nhất.</strong> Target: đưa ratio ≥2x cho cả 3 tier này.
         </div>
       </div>
     </div>
 
     <div class="insight-box blue">
-      <div class="insight-icon">📊</div>
+      <div class="insight-icon">📅</div>
       <div>
-        <div class="insight-title" style="color:#1e40af;">Pattern: HAN FR crash thứ 4 & thứ 5 hàng tuần (11–12/7, lặp lại 15–16/7)</div>
+        <div class="insight-title" style="color:#1e40af;">Pattern: FR crash thứ 4–5 hàng tuần — có thể liên quan mid-week balance drain</div>
         <div class="insight-body">
-          Heatmap cho thấy FR sụt đặc biệt vào thứ 4–5 (11–12/7 và 15–16/7). Có thể liên quan đến chu kỳ thanh toán, tài xế nạp balance cuối tuần → cạn vào giữa tuần. Cần cross-check với dữ liệu replenishment balance theo ngày.
+          11–12/7 và 15–16/7 FR sụt mạnh ở tất cả tier COD cao. Giả thuyết: tài xế nạp balance cuối tuần → cạn dần vào thứ 4–5. Cần cross-check với data replenishment balance theo ngày để confirm trước khi thiết kế giải pháp.
         </div>
       </div>
     </div>
@@ -604,17 +735,19 @@
 
   <!-- SECTION 4: PROJECTION -->
   <div class="section">
-    <div class="section-title"><div class="dot"></div>Projection — Impact nếu Tăng Gấp Đôi Supply 500k+ (HAN)</div>
+    <div class="section-title"><div class="dot"></div>Projection — Impact nếu Tăng Gấp Đôi Supply 500k+ (HAN, ngày 16/07)</div>
     <div class="card">
       <table class="proj-table">
         <thead>
           <tr>
             <th>COD Tier</th>
             <th>Bottleneck</th>
+            <th>Eligible hiện tại</th>
+            <th>Eligible sau 2×</th>
+            <th>S/D Ratio (trước→sau)</th>
             <th>FR hiện tại</th>
-            <th>Demand (đơn)</th>
+            <th>FR dự kiến</th>
             <th>Complete hiện tại</th>
-            <th>FR dự kiến (2x)</th>
             <th>Complete dự kiến</th>
             <th>Δ đơn/ngày</th>
           </tr>
@@ -622,119 +755,128 @@
         <tbody>
           <tr>
             <td>500k–1M</td>
-            <td><span class="proj-table bottleneck-chip chip-activity">Activity</span></td>
+            <td><span class="chip chip-activity">Activity</span></td>
+            <td>3,017</td>
+            <td>6,034</td>
+            <td>3.42x → 6.84x</td>
             <td>13.8%</td>
-            <td>881</td>
+            <td>16.6–19.4%</td>
             <td>122</td>
-            <td>18–21%</td>
-            <td>159–183</td>
-            <td class="delta">+37 đến +61</td>
+            <td>146–171</td>
+            <td class="delta-pos">+24 đến +49</td>
           </tr>
           <tr>
             <td>1M–2M</td>
-            <td><span class="proj-table bottleneck-chip chip-supply">Supply</span></td>
+            <td><span class="chip chip-supply">Supply</span></td>
+            <td>717</td>
+            <td>1,434</td>
+            <td>0.66x → 1.31x</td>
             <td>5.8%</td>
-            <td>1,093</td>
+            <td>20.5–27.9%</td>
             <td>63</td>
-            <td>15–20%</td>
-            <td>168–221</td>
-            <td class="delta">+105 đến +158</td>
+            <td>224–305</td>
+            <td class="delta-pos">+161 đến +242</td>
           </tr>
           <tr>
             <td>2M–3M</td>
-            <td><span class="proj-table bottleneck-chip chip-supply">Supply</span></td>
+            <td><span class="chip chip-supply">Supply</span></td>
+            <td>244</td>
+            <td>488</td>
+            <td>0.41x → 0.81x</td>
             <td>4.7%</td>
-            <td>599</td>
+            <td>12.0–15.7%</td>
             <td>28</td>
-            <td>8–10%</td>
-            <td>48–60</td>
-            <td class="delta">+20 đến +31</td>
+            <td>72–94</td>
+            <td class="delta-pos">+44 đến +66</td>
           </tr>
           <tr>
             <td>&gt;3M</td>
-            <td><span class="proj-table bottleneck-chip chip-supply">Supply</span></td>
+            <td><span class="chip chip-supply">Supply</span></td>
+            <td>118</td>
+            <td>236</td>
+            <td>0.13x → 0.26x</td>
             <td>2.3%</td>
-            <td>906</td>
+            <td>7.6–10.3%</td>
             <td>21</td>
-            <td>3.6–4.3%</td>
-            <td>33–39</td>
-            <td class="delta">+12 đến +18</td>
+            <td>69–93</td>
+            <td class="delta-pos">+48 đến +72</td>
           </tr>
-          <tr>
-            <td><strong>TOTAL 500k+</strong></td>
+          <tr class="total-row">
+            <td>TOTAL (4 tier 500k+)</td>
             <td>—</td>
-            <td><strong>6.7%</strong></td>
-            <td><strong>3,479</strong></td>
-            <td><strong>234</strong></td>
-            <td><strong>11.7–14.4%</strong></td>
-            <td><strong>408–503</strong></td>
-            <td class="delta"><strong>+174 đến +268</strong></td>
+            <td>4,096</td>
+            <td>8,192</td>
+            <td>—</td>
+            <td>6.7%</td>
+            <td>14.7–19.1%</td>
+            <td>234</td>
+            <td>512–663</td>
+            <td class="delta-pos">+278 đến +429</td>
           </tr>
         </tbody>
       </table>
-      <div class="footnote" style="margin-top: 14px;">
-        * Giả định: FR cải thiện tỷ lệ thuận với ratio eligible/demand, capping tại 50–75% SGN benchmark cùng tier.<br>
-        * Tier 500k–1M: giả định +30–50% FR improvement vì bottleneck là activity (doubling supply tác động gián tiếp qua cạnh tranh đơn).<br>
-        * Tier supply-constrained: tính theo linear interpolation toward SGN ratio với 50–75% efficiency assumption.
+      <div class="footnote" style="margin-top:14px;">
+        * Activity tier (500k–1M): Doubling supply có tác động gián tiếp (cạnh tranh nội bộ tăng → tài xế active hơn). Ước tính FR tăng 20–40% tương đối.<br>
+        * Supply tier (1M+): FR cải thiện tỷ lệ thuận với ratio eligible/demand, capping tại SGN benchmark × 50–75% efficiency (HAN khó catch-up SGN hoàn toàn trong ngắn hạn).<br>
+        * Benchmark SGN: 500k–1M = 64% FR (ratio 4.86x) · 1M–2M = 62% (3.84x) · 2M–3M = 49% (5.32x) · &gt;3M = 41% (3.82x).
       </div>
     </div>
   </div>
 
   <!-- SECTION 5: ACTIONS -->
   <div class="section">
-    <div class="section-title"><div class="dot"></div>Action Items — Ưu tiên theo Bottleneck Type</div>
+    <div class="section-title"><div class="dot"></div>Action Items — Phân loại theo Bottleneck Type</div>
 
     <div class="grid-2">
       <div>
-        <div style="font-size:12px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">⚡ Tier 500k–1M: Fix Activity Rate (Không cần tuyển thêm)</div>
+        <div style="font-size:11px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">⚡ Activity bottleneck — Tier &lt;500k–1M</div>
         <div class="insight-box orange" style="margin-bottom:10px;">
           <div class="insight-icon">1</div>
           <div>
-            <div class="insight-title" style="color:#c2410c;">Activation campaign — tài xế đang ngủ đông</div>
-            <div class="insight-body">Push notification + incentive đặc biệt cho 3,017 tài xế eligible 500k+ đang inactive. Target: kéo thêm 20% online giờ cao điểm.</div>
+            <div class="insight-title" style="color:#c2410c;">Audit AR + reject rate theo COD tier</div>
+            <div class="insight-body">Xác định tỷ lệ tài xế eligible từ chối đơn COD 500k–1M. Nếu reject rate cao → điều chỉnh phí shipper COD cao hoặc thiết kế COD bonus per-trip.</div>
           </div>
         </div>
         <div class="insight-box orange">
           <div class="insight-icon">2</div>
           <div>
-            <div class="insight-title" style="color:#c2410c;">Kiểm tra AR & reject rate đơn COD cao</div>
-            <div class="insight-body">Eligible nhưng từ chối đơn? Cần audit AR theo COD tier. Nếu reject rate cao → điều chỉnh phí giao COD cao hoặc priority routing.</div>
+            <div class="insight-title" style="color:#c2410c;">Activation push — 3,017 tài xế eligible 500k+ tại HAN</div>
+            <div class="insight-body">Push notification + incentive đặc biệt giờ cao điểm. Target kéo thêm 20% active online. Không cần tuyển thêm — chỉ cần unlock supply đang ngủ đông.</div>
           </div>
         </div>
       </div>
 
       <div>
-        <div style="font-size:12px;font-weight:700;color:#1e40af;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">🚨 Tier 1M+: Fix Supply (Tăng tài xế có đủ balance)</div>
+        <div style="font-size:11px;font-weight:700;color:#1e40af;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">🚨 Supply bottleneck — Tier 1M+</div>
         <div class="insight-box blue" style="margin-bottom:10px;">
           <div class="insight-icon">3</div>
           <div>
-            <div class="insight-title" style="color:#1e40af;">Chương trình nạp ký quỹ hỗ trợ — focus tier 1M–3M</div>
-            <div class="insight-body">Phối hợp Finance: ưu đãi 0% lãi suất nạp balance 1M–3M trong 2 tuần. Mục tiêu: +300 tài xế eligible tier này tại HAN.</div>
+            <div class="insight-title" style="color:#1e40af;">Chương trình nạp ký quỹ hỗ trợ tier 1M–3M</div>
+            <div class="insight-body">Ưu đãi 0% lãi suất nạp balance 1M–3M trong 2 tuần. Mục tiêu: +300 tài xế eligible tại HAN. Impact trực tiếp đến FR tier 1M–2M (lớn nhất về lượng đơn bị miss).</div>
           </div>
         </div>
         <div class="insight-box blue">
           <div class="insight-icon">4</div>
           <div>
-            <div class="insight-title" style="color:#1e40af;">Khảo sát tài xế có balance 500k–1M → encourage topup</div>
-            <div class="insight-body">2,300 tài xế HAN đang ở tier này — nếu topup lên 1M+ thì eligible nhận đơn giá trị cao hơn. Cần campaign kết hợp edu + ưu đãi.</div>
+            <div class="insight-title" style="color:#1e40af;">Topup campaign — 2,300 tài xế balance 500k–1M HAN</div>
+            <div class="insight-body">Nếu 15% topup lên ≥1M = +345 tài xế eligible tier 1M+. Kết hợp edu (lý do) + incentive (thưởng nạp). Số lượng đủ lớn để shift ratio từ 0.66x lên ~1x.</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="insight-box green" style="margin-top: 16px;">
+    <div class="insight-box gray" style="margin-top:14px;">
       <div class="insight-icon">5</div>
       <div>
-        <div class="insight-title" style="color:#166534;">Cross-check chu kỳ balance replenishment — giả thuyết Mid-week drain</div>
-        <div class="insight-body">FR sụt thứ 4–5 (11–12/7 và 15–16/7) có thể do tài xế cạn balance giữa tuần. Nếu confirm → thiết kế chương trình nhắc nạp balance định kỳ (T4 sáng) hoặc auto-remind khi balance xuống ngưỡng.</div>
+        <div class="insight-title" style="color:#374151;">Investigate mid-week balance drain — thứ 4–5 hàng tuần</div>
+        <div class="insight-body" style="color:#4b5563;">Cross-check data replenishment balance theo ngày. Nếu confirm pattern → thiết kế auto-remind khi balance xuống ngưỡng (T4 sáng) hoặc ưu đãi nạp balance mid-week.</div>
       </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
   <hr class="divider">
   <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#94a3b8;">
-    <div>Ahamove Driver Management · Report date: 16/07/2026</div>
+    <div>Ahamove Driver Management · Report date: 16/07/2026 · v2 (corrected eligibility logic)</div>
     <div>Data: 09–16/07/2026 · Scope: HAN Bike Delivery (Instant)</div>
   </div>
 
