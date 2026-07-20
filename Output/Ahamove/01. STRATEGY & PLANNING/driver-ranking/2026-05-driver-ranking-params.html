@@ -371,8 +371,8 @@
       <div class="sec-hdr">
         <div class="sec-num">04</div>
         <div class="sec-title">
-          <h2>Quyền lợi theo Layer (AhaBenefits)</h2>
-          <p>Công thức tích điểm · Hệ số Layer · Calibration</p>
+          <h2>Quyền lợi theo Rank (AhaBenefits)</h2>
+          <p>Công thức tích điểm · Hệ số Rank · Calibration</p>
         </div>
       </div>
 
@@ -384,62 +384,45 @@
           thức</span>
         <div style="font-family:'Montserrat',monospace;font-size:14px;color:#C9D1D9;flex:1;min-width:300px;">
           <span style="color:var(--text-muted);">earned_pts = </span>
-          <span style="color:var(--blue);">round( round(trip_GSV ÷ 1.000) × layer_multiplier )</span>
+          <span style="color:var(--blue);">round( round(trip_GSV ÷ 1.000) × ranking_multiplier )</span>
         </div>
       </div>
 
-      <!-- LAYER MULTIPLIER TABLE -->
+      <!-- RANK MULTIPLIER TABLE -->
       <div class="tw" style="margin-bottom:20px;">
         <table>
           <thead>
             <tr>
-              <th>Layer</th>
+              <th>Rank tài xế</th>
               <th>Hệ số ×</th>
-              <th>Hỗ trợ</th>
-              <th>Ghi chú</th>
+              <th>Hỗ trợ vận hành</th>
+              <th>Ghi chú đặc quyền</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><span class="layer-badge l2">L2</span> <span
-                  style="margin-left:6px;font-weight:600;color:var(--text-prime);">Minizone</span></td>
+              <td><span class="rank-pill rp-r1">💎 R1 Elite</span></td>
               <td><span class="mult-big" style="color:var(--orange);">×1.5</span></td>
-              <td><strong style="color:var(--orange);">Đội trưởng</strong></td>
-              <td style="font-size:12px;">R1 priority zone</td>
+              <td><strong style="color:var(--orange);">Đội trưởng + VIP</strong></td>
+              <td style="font-size:12px;">Áp dụng cho mọi đơn hàng hoàn thành (bao gồm cả đơn overflow)</td>
             </tr>
             <tr>
-              <td><span class="layer-badge l3">L3</span> <span
-                  style="margin-left:6px;font-weight:600;color:var(--text-prime);">Mediumzone</span></td>
+              <td><span class="rank-pill rp-r2">🥇 R2 Active</span></td>
               <td><span class="mult-big" style="color:var(--yellow);">×1.3</span></td>
               <td><strong style="color:var(--yellow);">Đội trưởng</strong></td>
-              <td style="font-size:12px;">R2 priority zone</td>
+              <td style="font-size:12px;">Áp dụng cho mọi đơn hàng hoàn thành (bao gồm cả đơn overflow)</td>
             </tr>
             <tr>
-              <td><span class="layer-badge l4">L4</span> <span
-                  style="margin-left:6px;font-weight:600;color:var(--text-prime);">Bigzone</span></td>
+              <td><span class="rank-pill rp-r3">🥈 R3 Standard</span></td>
               <td><span class="mult-big" style="color:var(--blue);">×1.1</span></td>
-              <td><span class="warn">Không</span></td>
-              <td style="font-size:12px;">R3 priority zone</td>
+              <td><span class="warn">Cơ bản</span></td>
+              <td style="font-size:12px;">Áp dụng cho mọi đơn hàng hoàn thành (bao gồm cả đơn overflow)</td>
             </tr>
             <tr>
-              <td><span class="layer-badge l5">L5</span> <span style="margin-left:6px;">Cityzone</span></td>
-              <td><span class="mult-big" style="color:var(--teal);">×1.0</span></td>
-              <td><span class="warn">Không</span></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><span class="layer-badge l6">L6</span> <span style="margin-left:6px;">MASS</span></td>
+              <td><span class="rank-pill rp-un">Unranked</span></td>
               <td><span class="mult-big">×1.0</span></td>
               <td>Không</td>
-              <td style="font-size:12px;">Unranked on-demand</td>
-            </tr>
-            <tr style="background:rgba(139,148,158,0.04);">
-              <td><span
-                  style="font-family:'Montserrat',monospace;font-size:11px;color:var(--text-muted);background:var(--gray-dim);border:1px solid rgba(139,148,158,0.2);border-radius:6px;padding:2px 8px;">OVERFLOW</span>
-              </td>
-              <td><span class="mult-big" style="color:var(--text-muted);">×1.0</span></td>
-              <td>Không</td>
-              <td style="font-size:12px;color:var(--text-muted);">Nhận đơn ngoài layer đăng ký</td>
+              <td style="font-size:12px;color:var(--text-sec);">Mặc định tích điểm theo base, không nhân hệ số</td>
             </tr>
           </tbody>
         </table>
@@ -453,7 +436,7 @@
         <table>
           <thead>
             <tr>
-              <th>Rank · Layer</th>
+              <th>Rank tài xế</th>
               <th>EPH giả định</th>
               <th>Base pts</th>
               <th>× Hệ số</th>
@@ -462,7 +445,7 @@
           </thead>
           <tbody>
             <tr>
-              <td><span class="rank-r1">R1</span> <span class="layer-badge l2" style="margin-left:4px;">L2</span></td>
+              <td><span class="rank-pill rp-r1">💎 R1 Elite</span></td>
               <td class="num">~70k/h · 280k/ca</td>
               <td class="num">280</td>
               <td class="num" style="color:var(--orange);">280 × 1.5 = 420</td>
@@ -471,7 +454,7 @@
               </td>
             </tr>
             <tr>
-              <td><span class="rank-r2">R2</span> <span class="layer-badge l3" style="margin-left:4px;">L3</span></td>
+              <td><span class="rank-pill rp-r2">🥇 R2 Active</span></td>
               <td class="num">~65k/h · 260k/ca</td>
               <td class="num">260</td>
               <td class="num" style="color:var(--yellow);">260 × 1.3 = 338</td>
@@ -480,14 +463,14 @@
               </td>
             </tr>
             <tr>
-              <td><span class="rank-r3">R3</span> <span class="layer-badge l4" style="margin-left:4px;">L4</span></td>
+              <td><span class="rank-pill rp-r3">🥈 R3 Standard</span></td>
               <td class="num">~60k/h · 240k/ca</td>
-              <td class="num">48</td>
+              <td class="num">240</td>
               <td class="num" style="color:var(--blue);">240 × 1.1 = 264</td>
               <td><span style="font-family:'Montserrat',monospace;font-size:16px;font-weight:800;color:var(--blue);">264</span></td>
             </tr>
             <tr>
-              <td><span class="rank-un">L6</span> <span class="layer-badge l6" style="margin-left:4px;">L6</span></td>
+              <td><span class="rank-pill rp-un">Unranked</span></td>
               <td class="num">~55k/h · 220k/ca</td>
               <td class="num">220</td>
               <td class="num" style="color:var(--text-sec);">220 × 1.0 = 220</td>
@@ -952,7 +935,10 @@
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">Hệ số AhaPoints</td>
-              <td colspan="4" style="text-align:center;color:var(--text-sec);font-size:12.5px;">Áp dụng theo Layer đăng ký (L2: ×1.5, L3: ×1.3, L4: ×1.1)</td>
+              <td class="num" style="color:var(--orange);font-weight:700;">×1.5</td>
+              <td class="num" style="color:var(--yellow);font-weight:700;">×1.3</td>
+              <td class="num" style="color:var(--blue);font-weight:700;">×1.1</td>
+              <td class="num" style="color:var(--text-sec);">×1.0</td>
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">Sự kiện Ahamove</td>
@@ -1028,20 +1014,7 @@
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">AhaPoints ×</td>
-              <td><span class="mult-big" style="color:var(--orange);font-size:18px;">×1.5</span></td>
-              <td><span class="mult-big" style="color:var(--yellow);font-size:18px;">×1.3</span></td>
-              <td><span class="mult-big" style="color:var(--blue);font-size:18px;">×1.1</span></td>
-              <td><span class="mult-big" style="color:var(--teal);font-size:18px;">×1.0</span></td>
-              <td><span class="mult-big" style="font-size:18px;">×1.0</span></td>
-            </tr>
-
-            <tr>
-              <td style="font-size:12.5px;color:var(--text-sec);">Overflow</td>
-              <td style="font-size:12.5px;color:var(--text-sec);">×1.0</td>
-              <td style="font-size:12.5px;color:var(--text-sec);">×1.0</td>
-              <td style="font-size:12.5px;color:var(--text-sec);">×1.0</td>
-              <td class="na">—</td>
-              <td class="na">—</td>
+              <td colspan="5" style="text-align:center;color:var(--text-sec);font-size:12px;padding:12px 20px;">Áp dụng trực tiếp theo Rank tài xế (R1: ×1.5, R2: ×1.3, R3: ×1.1, Unranked: ×1.0). Đơn overflow vẫn giữ nguyên hệ số theo Rank.</td>
             </tr>
             <tr>
               <td style="font-size:12.5px;color:var(--text-sec);">Target SGN</td>

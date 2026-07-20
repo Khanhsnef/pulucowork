@@ -59,37 +59,34 @@
 
 ---
 
-## 7. Quyền lợi theo Layer (AhaBenefits)
+## 7. Quyền lợi theo Rank (AhaBenefits)
 
 ### Công thức tích điểm
 ```
-earned_pts = round( round(trip_GSV ÷ 1,000) × layer_multiplier )
+earned_pts = round( round(trip_GSV ÷ 1,000) × ranking_multiplier )
 ```
 
 > Tỉ lệ quy đổi: **1.000đ thu nhập = 1 điểm base**
 
-### Hệ số Layer & Đội trưởng
+### Hệ số Rank & Đội trưởng
 
-| Layer | Hệ số × | Hỗ trợ | Ghi chú |
+| Rank tài xế | Hệ số × | Hỗ trợ vận hành | Ghi chú đặc quyền |
 | --- | --- | --- | --- |
-| L2 Minizone | ×1.5 | Có Đội trưởng hỗ trợ | R1 priority zone |
-| L3 Mediumzone | ×1.3 | Có Đội trưởng hỗ trợ | R2 priority zone |
-| L4 Bigzone | ×1.1 | Không | R3 priority zone |
-| L5 Cityzone | ×1.0 | Không | |
-| L6 MASS | ×1.0 | Không | Unranked |
-| **Overflow** | **×1.0** | Không | Đơn tràn ngoài layer hoạt động |
+| R1 Elite | ×1.5 | Đội trưởng + VIP | Áp dụng cho mọi đơn hàng hoàn thành (bao gồm cả đơn overflow) |
+| R2 Active | ×1.3 | Đội trưởng | Áp dụng cho mọi đơn hàng hoàn thành (bao gồm cả đơn overflow) |
+| R3 Standard | ×1.1 | Cơ bản | Áp dụng cho mọi đơn hàng hoàn thành (bao gồm cả đơn overflow) |
+| Unranked | ×1.0 | Không | Mặc định tích điểm theo base, không nhân hệ số |
 
-> Hệ số áp theo **đơn hàng** và tài xế Layer, không theo rank tài xế. Tài xế R1 đăng ký ca L3 và nhận đơn overflow từ L3 vẫn chỉ được ×1.3 (hệ số L3), không phải ×1.5. Khi Tài xế không đăng ký hoặc không trong ca hoạt động thì thì hệ số nhân điểm của đơn hàng đó là 1.0. 
+> Hệ số áp dụng trực tiếp theo **Rank của tài xế**, không phụ thuộc vào Layer của đơn hàng hay việc đăng ký ca. Tài xế hạng nào sẽ nhận hệ số điểm của hạng đó cho mọi đơn hàng hoàn thành (R1: ×1.5, R2: ×1.3, R3: ×1.1, Unranked: ×1.0).
 
 ### Ước tính pts/ca (EPH trung bình × Ca 4 tiếng)
 
-| Rank | EPH giả định | Base pts | × Hệ số | Tổng/ca |
+| Rank tài xế | EPH giả định | Base pts | × Hệ số | Tổng/ca |
 | --- | --- | --- | --- | --- |
-| R1 · L2 | ~70k/h → 280k/ca | 280 | 280 × 1.5 = 420 | **420** |
-| R2 · L3 | ~65k/h → 260k/ca | 260 | 260 × 1.3 = 338 | **338** |
-| R3 · L4 | ~60k/h → 240k/ca | 240 | 240 × 1.1 = 264 | **264** |
-| L6 MASS | ~55k/h → 220k/ca | 220 | 220 × 1.0 = 220 | **220** |
-| Overflow (any) | — | base | ×1.0 | base only |
+| R1 Elite | ~70k/h → 280k/ca | 280 | 280 × 1.5 = 420 | **420** |
+| R2 Active | ~65k/h → 260k/ca | 260 | 260 × 1.3 = 338 | **338** |
+| R3 Standard | ~60k/h → 240k/ca | 240 | 240 × 1.1 = 264 | **264** |
+| Unranked | ~55k/h → 220k/ca | 220 | 220 × 1.0 = 220 | **220** |
 
 ### Calibration Formula — Mục tiêu đổi điểm/tháng
 
@@ -213,7 +210,7 @@ Pts tích/tháng (avg, 22 ca):
 | --- | --- | --- | --- | --- | --- |
 | **Hạng ưu tiên** | R1 | R2 | R3 | Bất kỳ | Unranked |
 | **Hỗ trợ** | Đội trưởng | Đội trưởng | Không | Không | Không |
-| **AhaBenefits ×** | ×1.5 | ×1.3 | ×1.1 | ×1.0 | ×1.0 |
+| **AhaPoints ×** | Áp dụng theo Rank (R1: ×1.5) | Áp dụng theo Rank (R2: ×1.3) | Áp dụng theo Rank (R3: ×1.1) | Áp dụng theo Rank (×1.0) | Áp dụng theo Rank (×1.0) |
 | **Cơ chế mở cổng** | Mở theo khung giờ | Mở theo khung giờ | Mở theo khung giờ | Mở tự do | Mở tự do |
 
 ---
