@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 # github-auto-sync.sh — Chạy ngầm để tự động push code lên Github
 
 PROJECT_DIR="/Users/ts-1148/Desktop/Pulu-workspace"
