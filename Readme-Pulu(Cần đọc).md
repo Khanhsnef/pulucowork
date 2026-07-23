@@ -72,7 +72,7 @@ Trong lệnh `chat` có một chế độ cực kỳ thông minh gọi là **Hyb
 - **Luồng 1 (Hỏi đáp, Phân tích, Viết lách):** Hệ thống tự động đẩy vào chế độ Ẩn (Text Mode). Lúc này chữ sẽ được sinh ra siêu mượt mà, đổi Model ngầm theo nội dung, không có thanh Loading phức tạp cản trở tốc độ.
 - **Luồng 2 (Tạo file, Xuất Docx, Viết Code, Chạy Script):** Khi hệ thống quét thấy các từ khóa như `tạo file`, `xuất`, `docx`, `lưu file`... nó sẽ **tự động chuyển sang Chế độ Tool (Tool Mode)**. Màn hình sẽ hiện dòng cảnh báo màu vàng, và toàn bộ Giao diện Gốc của Claude (Thanh tiến trình, Progress Bar, Form hỏi Yes/No cấp quyền) sẽ bung ra để phục vụ bạn.
 
-⚠️ **Lưu ý nhỏ ở Chế độ Tool:** Sau khi tạo file / chạy Tool xong, màn hình sẽ dừng ở dấu nhắc `> `. Bạn chỉ cần gõ `/exit` để thoát khỏi giao diện Tool và trở lại tiếp tục trò chuyện trong lệnh `chat`.
+⚠️ **Lưu ý nhỏ:** Khi câu hỏi của bạn được gửi đi, hệ thống sẽ thực thi và trả về kết quả ngay lập tức. Sau khi hoàn thành, bạn có thể tiếp tục sử dụng terminal bình thường hoặc gõ `chat` cho câu hỏi tiếp theo.
 
 **Tóm lại Workflow Chuẩn nhất:** 
 Bạn chỉ cần nhớ 1 chữ duy nhất: gõ `chat`. Mọi việc còn lại (chọn model gì, dùng chế độ nào) hãy để hệ thống tự động lo liệu giúp bạn!
