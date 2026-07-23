@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Lưu đồ – Quy trình Booking Xe</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    padding: 36px 24px;
+  }
+  .page {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 28px 32px 40px;
+    width: 880px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.1);
+  }
+  h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h3>2.&nbsp;&nbsp;Lưu đồ</h3>
+
+  <svg width="820" height="620" viewBox="0 0 820 620"
+       xmlns="http://www.w3.org/2000/svg"
+       font-family="Arial, sans-serif" font-size="11.5">
+
+    <defs>
+      <!-- Default grey arrowhead -->
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#555"/>
+      </marker>
+      <!-- Red arrowhead -->
+      <marker id="ah-red" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#cc0000"/>
+      </marker>
+    </defs>
+
+    <!-- ═══ TITLE ═══ -->
+    <rect x="0" y="0" width="820" height="38" rx="5" ry="5" fill="#F28B8B"/>
+    <text x="410" y="24" text-anchor="middle" font-size="13.5"
+          font-weight="700" fill="#fff" letter-spacing="0.3">
+      QUY TRÌNH BOOKING XE CHO PICKUP BY TRUCK &amp; DIRECT TO SOC
+    </text>
+
+    <!-- ═══ OUTER BORDER ═══ -->
+    <rect x="0" y="38" width="820" height="582" fill="none" stroke="#aaa" stroke-width="1.2"/>
+
+    <!-- ═══ LANE DIVIDERS ═══ -->
+    <!-- Lane 1: 0–273 | Lane 2: 273–547 | Lane 3: 547–820 -->
+    <line x1="273" y1="38" x2="273" y2="620" stroke="#aaa" stroke-width="1.2"/>
+    <line x1="547" y1="38" x2="547" y2="620" stroke="#aaa" stroke-width="1.2"/>
+
+    <!-- ═══ LANE HEADERS ═══ -->
+    <rect x="0"   y="38" width="273" height="32" fill="#ebebeb"/>
+    <rect x="273" y="38" width="274" height="32" fill="#ebebeb"/>
+    <rect x="547" y="38" width="273" height="32" fill="#ebebeb"/>
+
+    <text x="136"  y="59" text-anchor="middle" font-weight="700" font-size="13" fill="#222">Hub (FM/LM)</text>
+    <text x="410"  y="59" text-anchor="middle" font-weight="700" font-size="13" fill="#222">ROH (FM/LM)</text>
+    <text x="683"  y="59" text-anchor="middle" font-weight="700" font-size="13" fill="#222">Transportation</text>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- LANE 1: HUB -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <!-- [A] START oval -->
+    <ellipse cx="136" cy="108" rx="50" ry="22" fill="#c8e6b0" stroke="#5a9e3a" stroke-width="1.8"/>
+    <text x="136" y="113" text-anchor="middle" font-weight="700" fill="#2a6000">Bắt đầu</text>
+
+    <!-- ↓ arrow -->
+    <line x1="136" y1="130" x2="136" y2="156"
+          stroke="#555" stroke-width="1.5" marker-end="url(#ah)"/>
+
+    <!-- [B] Hub phát sinh nhu cầu -->
+    <rect x="52" y="156" width="168" height="50" rx="4"
+          fill="#fff" stroke="#555" stroke-width="1.5"/>
+    <text x="136" y="176" text-anchor="middle" fill="#222">Hub phát sinh</text>
+    <text x="136" y="193" text-anchor="middle" fill="#222">nhu cầu book truck</text>
+
+    <!-- → to ROH -->
+    <line x1="220" y1="181" x2="320" y2="181"
+          stroke="#555" stroke-width="1.5" marker-end="url(#ah)"/>
+
+    <!-- ĐẠT ← from diamond (x=410,y=356) back left to Hub lane -->
+    <!-- horizontal line from (350,356) → (136,356) -->
+    <line x1="350" y1="356" x2="136" y2="356"
+          stroke="#cc0000" stroke-width="1.8" marker-end="url(#ah-red)"/>
+    <text x="243" y="348" text-anchor="middle" font-weight="700" font-size="11" fill="#cc0000">ĐẠT</text>
+
+    <!-- ↓ from (136,356) down -->
+    <line x1="136" y1="356" x2="136" y2="385"
+          stroke="#555" stroke-width="1.5" marker-end="url(#ah)"/>
+
+    <!-- [C] Hub thỏa điều kiện cấp xe -->
+    <rect x="48" y="385" width="176" height="50" rx="4"
+          fill="#fff" stroke="#555" stroke-width="1.5"/>
+    <text x="136" y="405" text-anchor="middle" fill="#222">Hub thỏa điều kiện</text>
+    <text x="136" y="422" text-anchor="middle" fill="#222">cấp xe</text>
+
+    <!-- ↓ -->
+    <line x1="136" y1="435" x2="136" y2="464"
+          stroke="#555" stroke-width="1.5" marker-end="url(#ah)"/>
+
+    <!-- [D] Hub gửi email yêu cầu cấp xe -->
+    <rect x="48" y="464" width="176" height="50" rx="4"
+          fill="#fff" stroke="#555" stroke-width="1.5"/>
+    <text x="136" y="484" text-anchor="middle" fill="#222">Hub gửi email yêu</text>
+    <text x="136" y="501" text-anchor="middle" fill="#222">cầu cấp xe</text>
+
+    <!-- ↓ to connector A -->
+    <line x1="136" y1="514" x2="136" y2="544"
+          stroke="#555" stroke-width="1.5" marker-end="url(#ah)"/>
+
+    <!-- [E] Connector A (green circle) -->
+    <circle cx="136" cy="565" r="20" fill="#c8e6b0" stroke="#5a9e3a" stroke-width="1.8"/>
+    <text x="136" y="570" text-anchor="middle" font-weight="700" font-size="14" fill="#2a6000">A</text>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- LANE 2: ROH -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <!-- [F] Hub gửi yêu cầu book truck (in ROH lane) -->
+    <rect x="320" y="156" width="180" height="50" rx="4"
+          fill="#fff" stroke="#555" stroke-width="1.5"/>
+    <text x="410" y="176" text-anchor="middle" fill="#222">Hub gửi yêu cầu</text>
+    <text x="410" y="193" text-anchor="middle" fill="#222">book truck</text>
+
+    <!-- ↓ -->
+    <line x1="410" y1="206" x2="410" y2="240"
+          stroke="#555" stroke-width="1.5" marker-end="url(#ah)"/>
+
+    <!-- [G] ROH xét duyệt -->
+    <rect x="310" y="240" width="200" height="58" rx="4"
+          fill="#fff" stroke="#555" stroke-width="1.5"/>
+    <text x="410" y="262" text-anchor="middle" fill="#222">ROH (hoặc PIC được</text>
+    <text x="410" y="279" text-anchor="middle" font-style="italic" fill="#333">assign) xét duyệt</text>
+
+    <!-- ↓ -->
+    <line x1="410" y1="298" x2="410" y2="328"
+          stroke="#555" stroke-width="1.5" marker-end="url(#ah)"/>
+
+    <!-- [H] Diamond: Kết quả xét duyệt?  center=(410,356) -->
+    <polygon points="410,328 470,356 410,384 350,356"
+             fill="#fff" stroke="#555" stroke-width="1.5"/>
+    <text x="410" y="351" text-anchor="middle" fill="#222">Kết quả</text>
+    <text x="410" y="366" text-anchor="middle" fill="#222">xét duyệt?</text>
+
+    <!-- KHÔNG ĐẠT → right -->
+    <line x1="470" y1="356" x2="512" y2="356"
+          stroke="#555" stroke-width="1.5" marker-end="url(#ah)"/>
+    <text x="491" y="346" text-anchor="middle" font-size="10" font-weight="700" fill="#333">KHÔNG ĐẠT</text>
+
+    <!-- [I] Hub không đủ điều kiện -->
+    <rect x="512" y="331" width="178" height="50" rx="4"
+          fill="#fff" stroke="#555" stroke-width="1.5"/>
+    <text x="601" y="351" text-anchor="middle" fill="#222">Hub không đủ điều</text>
+    <text x="601" y="368" text-anchor="middle" fill="#222">kiện cấp xe</text>
+
+    <!-- → to Kết thúc in Transportation lane -->
+    <line x1="690" y1="356" x2="718" y2="356"
+          stroke="#555" stroke-width="1.5" marker-end="url(#ah)"/>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- LANE 3: TRANSPORTATION -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <!-- [J] Connector A (top of Transportation) -->
+    <circle cx="683" cy="108" r="20" fill="#c8e6b0" stroke="#5a9e3a" stroke-width="1.8"/>
+    <text x="683" y="113" text-anchor="middle" font-weight="700" font-size="14" fill="#2a6000">A</text>
+
+    <!-- ↓ from A to "Nhận tin" box -->
+    <line x1="683" y1="128" x2="683" y2="198"
+          stroke="#555" stroke-width="1.5" marker-end="url(#ah)"/>
+
+    <!-- [K] Nhận tin và tiến hành sắp xếp xe -->
+    <rect x="596" y="198" width="174" height="58" rx="4"
+          fill="#fff" stroke="#555" stroke-width="1.5"/>
+    <text x="683" y="220" text-anchor="middle" fill="#222">Nhận tin và tiến hành</text>
+    <text x="683" y="238" text-anchor="middle" fill="#222">sắp xếp xe</text>
+
+    <!-- ↓ to Kết thúc -->
+    <line x1="683" y1="256" x2="683" y2="310"
+          stroke="#555" stroke-width="1.5" marker-end="url(#ah)"/>
+
+    <!-- [L] Kết thúc oval -->
+    <ellipse cx="683" cy="334" rx="58" ry="24" fill="#c8e6b0" stroke="#5a9e3a" stroke-width="1.8"/>
+    <text x="683" y="339" text-anchor="middle" font-weight="700" font-size="13" fill="#2a6000">Kết thúc</text>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- CONNECTOR: Hub A (565) → Transportation A (108) -->
+    <!-- Route: down from Hub A, right along bottom, up right edge outside, back in -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <path d="M136,585 Q136,605 156,605 L800,605 Q816,605 816,589 L816,90
+             Q816,74 800,74 L703,74 Q683,74 683,90"
+          fill="none" stroke="#555" stroke-width="1.5"
+          stroke-dasharray="6,3" marker-end="url(#ah)"/>
+
+  </svg>
+</div>
+</body>
+</html>
