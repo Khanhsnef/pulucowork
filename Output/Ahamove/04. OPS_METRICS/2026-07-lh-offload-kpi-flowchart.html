@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Lưu đồ KPI LH Offload</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f5f7;
+    display: flex;
+    justify-content: center;
+    padding: 36px 20px 60px;
+  }
+  .page {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 28px 28px 40px;
+    width: 980px;
+    box-shadow: 0 2px 14px rgba(0,0,0,.10);
+  }
+  h3 { font-size: 13px; font-weight: 700; color: #222; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <h3>2.&nbsp;&nbsp;Lưu đồ — Quy trình tính KPI LH Offload</h3>
+
+<svg width="920" height="1050" viewBox="0 0 920 1050"
+     xmlns="http://www.w3.org/2000/svg"
+     font-family="Arial, sans-serif" font-size="11">
+
+<defs>
+  <marker id="a" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0,0 L10,4 L0,8 Z" fill="#444"/>
+  </marker>
+  <marker id="a-r" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0,0 L10,4 L0,8 Z" fill="#c00"/>
+  </marker>
+  <marker id="a-g" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0,0 L10,4 L0,8 Z" fill="#1a7f3c"/>
+  </marker>
+</defs>
+
+<!-- ═══ TITLE ═══ -->
+<rect x="0" y="0" width="920" height="38" rx="5" fill="#F07070"/>
+<text x="460" y="25" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" letter-spacing="0.2">
+  QUY TRÌNH TÍNH KPI LH OFFLOAD — FM &amp; SOC
+</text>
+
+<!-- ═══ OUTER BORDER ═══ -->
+<rect x="0" y="38" width="920" height="1012" fill="none" stroke="#bbb" stroke-width="1.2"/>
+
+<!-- ═══ LANE DIVIDERS ═══ -->
+<line x1="307" y1="38" x2="307" y2="1050" stroke="#bbb" stroke-width="1.2"/>
+<line x1="614" y1="38" x2="614" y2="1050" stroke="#bbb" stroke-width="1.2"/>
+
+<!-- ═══ LANE HEADERS ═══ -->
+<rect x="0"   y="38" width="307" height="34" fill="#e8edf5"/>
+<rect x="307" y="38" width="307" height="34" fill="#e8edf5"/>
+<rect x="614" y="38" width="306" height="34" fill="#e8edf5"/>
+
+<text x="153"  y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#0E4174">FM Offload</text>
+<text x="460"  y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#0E4174">SOC Offload</text>
+<text x="767"  y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#0E4174">Phán định KPI &amp; Output</text>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- LANE 1: FM OFFLOAD (cx=153) -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<!-- START -->
+<ellipse cx="153" cy="104" rx="58" ry="23" fill="#c8e6b0" stroke="#4a9230" stroke-width="1.8"/>
+<text x="153" y="109" text-anchor="middle" font-weight="700" font-size="12" fill="#1a5c0a">Bắt đầu</text>
+
+<line x1="153" y1="127" x2="153" y2="148" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Box: Raw data FM -->
+<rect x="54" y="148" width="198" height="58" rx="4" fill="#fff" stroke="#555" stroke-width="1.4"/>
+<text x="153" y="168" text-anchor="middle" fill="#222">Lấy raw data FM tracking</text>
+<text x="153" y="183" text-anchor="middle" fill="#555" font-style="italic" font-size="10">spx_mart.dwd_spx_fleet_order_tracking</text>
+<text x="153" y="197" text-anchor="middle" fill="#555" font-style="italic" font-size="10">Loại: hub_to_hub, sdd_cto</text>
+
+<line x1="153" y1="206" x2="153" y2="226" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Box: actual_start_offload -->
+<rect x="48" y="226" width="210" height="68" rx="4" fill="#EBF3FF" stroke="#4a7fc1" stroke-width="1.4"/>
+<text x="153" y="246" text-anchor="middle" font-weight="700" fill="#0E4174">actual_start_offload</text>
+<text x="153" y="261" text-anchor="middle" fill="#222">COALESCE(soc_packed, soc_received)</text>
+<text x="153" y="276" text-anchor="middle" fill="#c05000" font-size="10">+ Hard-code deadline ngày lễ</text>
+<text x="153" y="288" text-anchor="middle" fill="#555" font-size="9.5" font-style="italic">(Tết/30-4/2-9/2026...)</text>
+
+<line x1="153" y1="294" x2="153" y2="314" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Box: COT Mapping FM -->
+<rect x="48" y="314" width="210" height="68" rx="4" fill="#FFF3E8" stroke="#cc7a00" stroke-width="1.4"/>
+<text x="153" y="334" text-anchor="middle" font-weight="700" fill="#7a3c00">COT Mapping FM</text>
+<text x="153" y="350" text-anchor="middle" fill="#222">4 điều kiện đồng thời:</text>
+<text x="153" y="365" text-anchor="middle" fill="#444" font-size="10">group_cot · next_station · ngày · giờ</text>
+<text x="153" y="378" text-anchor="middle" fill="#555" font-size="9.5" font-style="italic">→ sla_end = actual_start + eta_offload</text>
+
+<line x1="153" y1="382" x2="153" y2="404" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Diamond: soc_lhpacked IS NULL? -->
+<polygon points="153,404 223,430 153,456 83,430" fill="#fff" stroke="#555" stroke-width="1.4"/>
+<text x="153" y="425" text-anchor="middle" fill="#222">soc_lhpacked</text>
+<text x="153" y="440" text-anchor="middle" fill="#222">IS NULL?</text>
+
+<!-- YES right → Remove Adhoc -->
+<line x1="223" y1="430" x2="256" y2="430" stroke="#888" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="256" y="418" width="44" height="24" rx="3" fill="#ddd" stroke="#888" stroke-width="1"/>
+<text x="278" y="434" text-anchor="middle" font-size="9.5" fill="#444">Remove</text>
+
+<!-- NO ↓ -->
+<line x1="153" y1="456" x2="153" y2="478" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="133" y="470" font-size="9.5" fill="#444">KHÔNG</text>
+
+<!-- YES label on right arrow -->
+<text x="236" y="426" font-size="9.5" fill="#444">CÓ</text>
+
+<!-- Diamond: soc_lhpacked ≤ sla_end? -->
+<polygon points="153,478 231,508 153,538 75,508" fill="#fff" stroke="#555" stroke-width="1.4"/>
+<text x="153" y="501" text-anchor="middle" fill="#222">soc_lhpacked</text>
+<text x="153" y="516" text-anchor="middle" fill="#222">≤ sla_end?</text>
+
+<!-- YES → Pass -->
+<line x1="75" y1="508" x2="46" y2="508" stroke="#1a7f3c" stroke-width="1.5" marker-end="url(#a-g)"/>
+<text x="63" y="503" font-size="9" fill="#1a7f3c" font-weight="700">CÓ</text>
+<rect x="4" y="495" width="42" height="26" rx="12" fill="#c8e6b0" stroke="#4a9230" stroke-width="1.3"/>
+<text x="25" y="512" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1a5c0a">Pass</text>
+
+<!-- NO → Fail -->
+<line x1="231" y1="508" x2="263" y2="508" stroke="#c00" stroke-width="1.5" marker-end="url(#a-r)"/>
+<text x="246" y="503" font-size="9" fill="#c00" font-weight="700">KHÔNG</text>
+<rect x="263" y="495" width="36" height="26" rx="12" fill="#fecaca" stroke="#c00" stroke-width="1.3"/>
+<text x="281" y="512" text-anchor="middle" font-size="9.5" font-weight="700" fill="#c00">Fail</text>
+
+<!-- kpi_month FM -->
+<line x1="153" y1="538" x2="153" y2="562" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="129" y="554" font-size="9.5" fill="#444">KHÔNG</text>
+<rect x="66" y="562" width="174" height="44" rx="4" fill="#fff" stroke="#555" stroke-width="1.4"/>
+<text x="153" y="581" text-anchor="middle" font-weight="700" fill="#222">kpi_month FM</text>
+<text x="153" y="597" text-anchor="middle" fill="#555" font-size="10">theo sla_end (sla_end &lt; 2026-03-15 →</text>
+<!-- wrap -->
+<text x="153" y="610" text-anchor="middle" fill="#777" font-size="9" font-style="italic">ngày&lt;15: tháng trước; ngày≥15: tháng này)</text>
+
+<line x1="153" y1="606" x2="153" y2="626" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Loại trừ FM -->
+<rect x="52" y="626" width="202" height="46" rx="4" fill="#FEF9C3" stroke="#b59a00" stroke-width="1.4"/>
+<text x="153" y="646" text-anchor="middle" font-weight="700" fill="#7a6600">Loại trừ cuối FM</text>
+<text x="153" y="661" text-anchor="middle" fill="#555" font-size="10">fm_miss_fifo | gsheet_offload_remove</text>
+
+<!-- Arrow to L3 -->
+<line x1="254" y1="649" x2="640" y2="649" stroke="#0E4174" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a)"/>
+<text x="450" y="642" text-anchor="middle" font-size="9.5" fill="#0E4174">→ FM kpi_offload data</text>
+
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- LANE 2: SOC OFFLOAD (cx=460) -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<!-- Box: Raw data SOC -->
+<rect x="334" y="86" width="252" height="56" rx="4" fill="#fff" stroke="#555" stroke-width="1.4"/>
+<text x="460" y="106" text-anchor="middle" fill="#222">Lấy raw data SOC KPI</text>
+<text x="460" y="120" text-anchor="middle" fill="#555" font-style="italic" font-size="10">dev_vnbi_spx.dwd_soc_kpi_ontime_history_v2</text>
+<text x="460" y="134" text-anchor="middle" fill="#555" font-size="10">Ghép: onsite_register_time, hub_zone</text>
+
+<line x1="460" y1="142" x2="460" y2="162" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Box: actual_start_kpi_offload -->
+<rect x="334" y="162" width="252" height="72" rx="4" fill="#EBF3FF" stroke="#4a7fc1" stroke-width="1.4"/>
+<text x="460" y="182" text-anchor="middle" font-weight="700" fill="#0E4174">actual_start_kpi_offload</text>
+<text x="460" y="198" text-anchor="middle" fill="#222">TO Transit → LEAST(ATA, onsite_register)</text>
+<text x="460" y="213" text-anchor="middle" fill="#222">Bulky → soc_packed</text>
+<text x="460" y="228" text-anchor="middle" fill="#555" font-size="10">Others → soc_packed</text>
+
+<line x1="460" y1="234" x2="460" y2="254" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Box: COT Prep -->
+<rect x="334" y="254" width="252" height="80" rx="4" fill="#FFF3E8" stroke="#cc7a00" stroke-width="1.4"/>
+<text x="460" y="274" text-anchor="middle" font-weight="700" fill="#7a3c00">Chuẩn bị bảng COT</text>
+<text x="460" y="290" text-anchor="middle" fill="#222">① Cleanse: Thứ 2/CN → start_time_exclude</text>
+<text x="460" y="305" text-anchor="middle" fill="#222">② Dedup: buyer_city → 'ALL' nếu không có</text>
+<text x="460" y="320" text-anchor="middle" fill="#c05000" font-size="10">③ Extend ETA: Tết/30-4/Bão/sự cố SOC</text>
+<text x="460" y="333" text-anchor="middle" fill="#555" font-size="9.5" font-style="italic">④ LEAD: next_cot, eta_extend_1/2/3_cot</text>
+
+<line x1="460" y1="334" x2="460" y2="354" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Box: COT Mapping 3TH -->
+<rect x="334" y="354" width="252" height="80" rx="4" fill="#F0FDF4" stroke="#3a9a5c" stroke-width="1.4"/>
+<text x="460" y="374" text-anchor="middle" font-weight="700" fill="#1a5c0a">COT Mapping — 3 Trường Hợp</text>
+<text x="460" y="392" text-anchor="middle" fill="#222">TH3: next_station_name IS NOT NULL</text>
+<text x="460" y="408" text-anchor="middle" fill="#222">TH2: buyer_city ≠ 'ALL' → theo quận</text>
+<text x="460" y="422" text-anchor="middle" fill="#555" font-size="10">TH1: buyer_city = 'ALL' → theo tỉnh</text>
+<text x="460" y="435" text-anchor="middle" fill="#1a7f3c" font-size="9.5" font-style="italic">→ MIN(COALESCE(TH3, TH2, TH1))</text>
+
+<line x1="460" y1="434" x2="460" y2="454" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Box: SLA Output -->
+<rect x="360" y="454" width="200" height="54" rx="4" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.4"/>
+<text x="460" y="474" text-anchor="middle" font-weight="700" fill="#0369a1">SLA Output</text>
+<text x="460" y="489" text-anchor="middle" fill="#222">sla_start_offload</text>
+<text x="460" y="504" text-anchor="middle" fill="#222">sla_eta_offload · sla_next_cot</text>
+
+<!-- Arrow from SLA Output → Lane 3 -->
+<line x1="560" y1="481" x2="638" y2="481" stroke="#0284c7" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="600" y="474" text-anchor="middle" font-size="9" fill="#0369a1">SLA data</text>
+
+<line x1="460" y1="508" x2="460" y2="528" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Diamond: Ngoại lệ? -->
+<polygon points="460,528 544,558 460,588 376,558" fill="#fff" stroke="#555" stroke-width="1.4"/>
+<text x="460" y="551" text-anchor="middle" fill="#222">Ngoại lệ?</text>
+<text x="460" y="566" text-anchor="middle" fill="#555" font-size="10">(LH trễ/CS/GSheet/SIP)</text>
+
+<!-- YES → right → Exclude box -->
+<line x1="544" y1="558" x2="574" y2="558" stroke="#888" stroke-width="1.3" marker-end="url(#a)"/>
+<text x="555" y="552" font-size="9" fill="#555">CÓ</text>
+<rect x="574" y="545" width="36" height="26" rx="3" fill="#e5e7eb" stroke="#888" stroke-width="1"/>
+<text x="592" y="562" text-anchor="middle" font-size="9" fill="#444">Excl.</text>
+
+<!-- NO ↓ -->
+<line x1="460" y1="588" x2="460" y2="608" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="440" y="602" font-size="9.5" fill="#444">KHÔNG</text>
+
+<!-- Diamond: sla_start NULL? -->
+<polygon points="460,608 540,632 460,656 380,632" fill="#fff" stroke="#555" stroke-width="1.4"/>
+<text x="460" y="626" text-anchor="middle" fill="#222">sla_start</text>
+<text x="460" y="642" text-anchor="middle" fill="#222">IS NULL?</text>
+
+<!-- YES → right -->
+<line x1="540" y1="632" x2="574" y2="632" stroke="#888" stroke-width="1.3" marker-end="url(#a)"/>
+<text x="554" y="626" font-size="9" fill="#555">CÓ</text>
+<rect x="574" y="619" width="36" height="26" rx="3" fill="#e5e7eb" stroke="#888" stroke-width="1"/>
+<text x="592" y="636" text-anchor="middle" font-size="9" fill="#444">Miss</text>
+<text x="592" y="647" text-anchor="middle" font-size="8" fill="#555">COT</text>
+
+<!-- NO ↓ -->
+<line x1="460" y1="656" x2="460" y2="676" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="440" y="670" font-size="9.5" fill="#444">KHÔNG</text>
+
+<!-- Diamond: actual_end ≤ sla_eta? -->
+<polygon points="460,676 548,706 460,736 372,706" fill="#fff" stroke="#555" stroke-width="1.4"/>
+<text x="460" y="699" text-anchor="middle" fill="#222">actual_end</text>
+<text x="460" y="714" text-anchor="middle" fill="#222">≤ sla_eta?</text>
+
+<!-- YES right → Not Offload -->
+<line x1="548" y1="706" x2="580" y2="706" stroke="#1a7f3c" stroke-width="1.5" marker-end="url(#a-g)"/>
+<text x="562" y="700" font-size="9" fill="#1a7f3c" font-weight="700">CÓ</text>
+<rect x="580" y="694" width="28" height="24" rx="3" fill="#c8e6b0" stroke="#4a9230" stroke-width="1"/>
+<text x="594" y="710" text-anchor="middle" font-size="8.5" fill="#1a5c0a">Not</text>
+
+<!-- NO ↓ → Offload -->
+<line x1="460" y1="736" x2="460" y2="756" stroke="#c00" stroke-width="1.5" marker-end="url(#a-r)"/>
+<text x="440" y="750" font-size="9.5" fill="#c00">KHÔNG</text>
+
+<!-- Diamond: Ticket extend / SLA origin OK? -->
+<polygon points="460,756 548,784 460,812 372,784" fill="#fff" stroke="#555" stroke-width="1.4"/>
+<text x="460" y="778" text-anchor="middle" fill="#222">Ticket extend</text>
+<text x="460" y="793" text-anchor="middle" fill="#222">/ SLA origin OK?</text>
+
+<!-- YES → Not Offload -->
+<line x1="372" y1="784" x2="340" y2="784" stroke="#1a7f3c" stroke-width="1.5" marker-end="url(#a-g)"/>
+<text x="358" y="779" font-size="9" fill="#1a7f3c" font-weight="700">CÓ</text>
+<rect x="312" y="773" width="28" height="22" rx="3" fill="#c8e6b0" stroke="#4a9230" stroke-width="1"/>
+<text x="326" y="788" text-anchor="middle" font-size="8.5" fill="#1a5c0a">Not</text>
+
+<!-- NO → Offload ✗ → L3 -->
+<line x1="548" y1="784" x2="580" y2="784" stroke="#c00" stroke-width="1.5" marker-end="url(#a-r)"/>
+<text x="562" y="778" font-size="9" fill="#c00" font-weight="700">KHÔNG</text>
+<rect x="580" y="772" width="28" height="24" rx="3" fill="#fecaca" stroke="#c00" stroke-width="1"/>
+<text x="594" y="788" text-anchor="middle" font-size="8.5" font-weight="700" fill="#c00">Off!</text>
+
+<!-- Arrow: SOC result → L3 -->
+<line x1="460" y1="812" x2="460" y2="842" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+<rect x="370" y="842" width="180" height="44" rx="4" fill="#FEF9C3" stroke="#b59a00" stroke-width="1.4"/>
+<text x="460" y="862" text-anchor="middle" font-weight="700" fill="#7a6600">Loại trừ cuối SOC</text>
+<text x="460" y="876" text-anchor="middle" fill="#555" font-size="10">hub_hold | soc_miss_fifo | portal | gsheet</text>
+
+<line x1="608" y1="862" x2="640" y2="862" stroke="#0E4174" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a)"/>
+<text x="625" y="855" font-size="9" fill="#0E4174">SOC data</text>
+
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- LANE 3: KPI OUTPUT (cx=767) -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<!-- Box: Nhận SLA data (from L2) -->
+<!-- SLA arrives at y=481 (horizontal from L2) -->
+<rect x="640" y="458" width="260" height="56" rx="4" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.4"/>
+<text x="770" y="478" text-anchor="middle" font-weight="700" fill="#0369a1">Nhận SLA từ COT Mapping</text>
+<text x="770" y="494" text-anchor="middle" fill="#222">sla_start · sla_eta · sla_next_cot</text>
+<text x="770" y="509" text-anchor="middle" fill="#555" font-size="10">sla_ext_1/2/3_cot (cho Adhoc Extend)</text>
+
+<line x1="770" y1="514" x2="770" y2="538" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Box: offload_fault -->
+<rect x="640" y="538" width="260" height="86" rx="4" fill="#FEF2F2" stroke="#e53e3e" stroke-width="1.4"/>
+<text x="770" y="558" text-anchor="middle" font-weight="700" fill="#9b1c1c">offload_fault — Phân lỗi</text>
+<text x="770" y="574" text-anchor="middle" fill="#222">SOC Fault · LH Fault · No Fault</text>
+<text x="770" y="590" text-anchor="middle" fill="#444" font-size="10">LH Fault Late COT SOC</text>
+<text x="770" y="605" text-anchor="middle" fill="#444" font-size="10">LH Fault Late Near COT SOC</text>
+<text x="770" y="618" text-anchor="middle" fill="#555" font-size="9.5" font-style="italic">Exclude LH Fault · SOC–LH Fault · ...</text>
+
+<line x1="770" y1="624" x2="770" y2="644" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Box: FIFO -->
+<rect x="650" y="644" width="240" height="56" rx="4" fill="#FEF9C3" stroke="#b59a00" stroke-width="1.4"/>
+<text x="770" y="664" text-anchor="middle" font-weight="700" fill="#7a6600">FIFO Detection</text>
+<text x="770" y="680" text-anchor="middle" fill="#222">don_thuoc_cot_sau · don_late_trong_cot</text>
+<text x="770" y="695" text-anchor="middle" fill="#555" font-size="10">Loại miss_fifo khỏi TỬ &amp; MẪU KPI</text>
+
+<line x1="770" y1="700" x2="770" y2="720" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Box: kpi_month -->
+<rect x="650" y="720" width="240" height="64" rx="4" fill="#EBF3FF" stroke="#4a7fc1" stroke-width="1.4"/>
+<text x="770" y="740" text-anchor="middle" font-weight="700" fill="#0E4174">kpi_month</text>
+<text x="770" y="757" text-anchor="middle" fill="#222">FM: theo sla_end</text>
+<text x="770" y="772" text-anchor="middle" fill="#222">SOC: theo sla_eta_offload</text>
+<text x="770" y="785" text-anchor="middle" fill="#555" font-size="9.5" font-style="italic">(ngày &lt; 15 → tháng trước; ≥15 → tháng này)</text>
+
+<line x1="770" y1="784" x2="770" y2="808" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- Box: explain_reason -->
+<rect x="648" y="808" width="244" height="64" rx="4" fill="#F0FDF4" stroke="#3a9a5c" stroke-width="1.4"/>
+<text x="770" y="828" text-anchor="middle" font-weight="700" fill="#1a5c0a">explain_reason (Dashboard)</text>
+<text x="770" y="845" text-anchor="middle" fill="#222">SOC chuyển đơn late · LH trễ COT</text>
+<text x="770" y="860" text-anchor="middle" fill="#444" font-size="10">Lỗi check-in ngoài phạm vi · Thiếu COT</text>
+<text x="770" y="874" text-anchor="middle" fill="#555" font-size="9.5">LH Late Near/Late COT SOC · Checking...</text>
+
+<!-- FM + SOC data arrives at L3 -->
+<!-- FM arrives at y=649 (already drawn) -->
+<!-- SOC arrives at y=862 (already drawn) -->
+
+<line x1="770" y1="872" x2="770" y2="906" stroke="#444" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- END -->
+<ellipse cx="770" cy="930" rx="72" ry="26" fill="#c8e6b0" stroke="#4a9230" stroke-width="2"/>
+<text x="770" y="935" text-anchor="middle" font-weight="700" font-size="13" fill="#1a5c0a">Kết thúc</text>
+
+<!-- ═══ LEGEND ═══ -->
+<rect x="4" y="686" width="300" height="80" rx="4" fill="#f9f9f9" stroke="#ccc" stroke-width="1"/>
+<text x="12" y="702" font-size="10" font-weight="700" fill="#333">Chú thích:</text>
+<rect x="12" y="710" width="14" height="10" rx="2" fill="#EBF3FF" stroke="#4a7fc1" stroke-width="1"/>
+<text x="32" y="720" font-size="9.5" fill="#444">Mốc thời gian / SLA</text>
+<rect x="12" y="726" width="14" height="10" rx="2" fill="#FFF3E8" stroke="#cc7a00" stroke-width="1"/>
+<text x="32" y="736" font-size="9.5" fill="#444">COT Mapping logic</text>
+<rect x="12" y="742" width="14" height="10" rx="2" fill="#F0FDF4" stroke="#3a9a5c" stroke-width="1"/>
+<text x="32" y="752" font-size="9.5" fill="#444">Pass / Not Offload / Output</text>
+<rect x="140" y="710" width="14" height="10" rx="2" fill="#FEF2F2" stroke="#e53e3e" stroke-width="1"/>
+<text x="160" y="720" font-size="9.5" fill="#444">Fail / Offload (trễ)</text>
+<rect x="140" y="726" width="14" height="10" rx="2" fill="#FEF9C3" stroke="#b59a00" stroke-width="1"/>
+<text x="160" y="736" font-size="9.5" fill="#444">Loại trừ / FIFO</text>
+<rect x="140" y="742" width="14" height="10" rx="2" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
+<text x="160" y="752" font-size="9.5" fill="#444">SLA Data (từ COT)</text>
+
+</svg>
+</div>
+</body>
+</html>
