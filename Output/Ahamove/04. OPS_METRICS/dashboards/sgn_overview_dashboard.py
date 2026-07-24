@@ -293,42 +293,29 @@ st.markdown(
 
 # ── SOURCE CONFIGURATION ──────────────────────────────────────────────────────
 SHEET_ID = "1Nbc4NYg3u8TxEh1acuWvDH-p6_8Nz8bDNF3j4bLGWvM"
-SHEET_GID = "743032311"
-SHEET_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/edit?gid={SHEET_GID}#gid={SHEET_GID}"
-SHEET_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={SHEET_GID}"
+SHEET_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/edit"
 CACHE_TTL_SECONDS = 900
-
+DAILY_START_COL = 5  # virtual column offset kept for compatibility
 COL_LM = 2
 COL_MTD = 3
 COL_MOM = 4
-DAILY_START_COL = 5
 REPORT_YEAR = 2026
 
-# ── ROW MAPPINGS (verified against live sheet) ────────────────────────────────
-# FC rows (row 5 = Total, 6=SME+MP+KA, 7=GHN, 8=KA, 9=MP, 10=SME, 11=TRUCK, 12=WH)
+# ── VIRTUAL ROW INDEX MAP (emulates legacy SGN Overview sheet row positions) ──
+# Demand / Request rows (from `demand actual` tab)
 FC_REQUEST_ROW = 5
 FC_DEMAND_ROW = 13
-
-# Actual rows (row 21=Total, 22=SME+MP+KA, 23=GHN, 24=KA, 25=MP, 26=SME, 27=WH)
 ACTUAL_REQUEST_ROW = 21
 ACTUAL_DEMAND_ROW = 28
+PCT_REQUEST_ROW = 35
+PCT_DEMAND_ROW = 42
 
-# % FC Achievement rows
-PCT_REQUEST_ROW = 35     # row 35 = Total % Request
-PCT_DEMAND_ROW = 42      # row 42 = Total % Demand
-
-# FR % by channel rows (row 180=Total, 181=SME+MP+KA, 182=GHN, 183=KA, 184=MP, 185=SME, 186=WH)
 FR_ROWS = {
-    "Total": 180,
-    "SME+MP+KA": 181,
-    "GHN": 182,
-    "KA": 183,
-    "MP": 184,
-    "SME": 185,
-    "WH": 186,
+    "Total": 180, "SME+MP+KA": 181, "GHN": 182,
+    "KA": 183, "MP": 184, "SME": 185, "WH": 186,
 }
 
-# Supply rows
+# Supply rows (from `active actual` tab)
 ACTIVE_TOTAL_ROW = 50
 CAPACITY_TOTAL_ROW = 58
 ONLINE_HOURS_TOTAL_ROW = 66
@@ -336,7 +323,6 @@ PRODUCTIVITY_TOTAL_ROW = 74
 ONLINE_PER_DRIVER_TOTAL_ROW = 82
 PROD_PER_ONLINEHOUR_TOTAL_ROW = 90
 
-# Active by segment (rows 50-57: total, FT, PT, NLM, Return, NIM, NID, NIM)
 ACTIVE_SEG_ROWS = {"FT": 51, "PT": 52, "NLM": 53, "Return": 54, "NIM": 55, "NID": 56}
 CAP_SEG_ROWS = {"FT": 59, "PT": 60, "NLM": 61, "Return": 62, "NIM": 63, "NID": 64}
 SH_SEG_ROWS = {"FT": 67, "PT": 68, "NLM": 69, "Return": 70, "NIM": 71, "NID": 72}
@@ -344,16 +330,15 @@ PROD_SEG_ROWS = {"FT": 75, "PT": 76, "NLM": 77, "Return": 78, "NIM": 79}
 ONLINE_DR_SEG_ROWS = {"FT": 83, "PT": 84, "NLM": 85, "Return": 86, "NIM": 87}
 PROD_ONLINE_SEG_ROWS = {"FT": 91, "PT": 92, "NLM": 93, "Return": 94, "NIM": 95}
 
-# Active by time window (active_1h/2h/4h per segment)
+# Active by time window (from `active by service` tab)
 ACTIVE_TIME_ROWS = {
-    "FT":     {"total": 99,  "1h": 100, "2h": 105, "4h": 110},
-    "PT":     {"total": 112, "1h": 113, "2h": 118, "4h": 123},
-    "NLM":    {"total": 125, "1h": 126, "2h": 131, "4h": 136},
-    "NIM":    {"total": 151, "1h": 154, "2h": 159, "4h": 164},
-    "Total":  {"total": 166, "1h": 167, "2h": 172, "4h": 177},
+    "FT":    {"total": 99,  "1h": 100, "2h": 105, "4h": 110},
+    "PT":    {"total": 112, "1h": 113, "2h": 118, "4h": 123},
+    "NLM":   {"total": 125, "1h": 126, "2h": 131, "4h": 136},
+    "NIM":   {"total": 151, "1h": 154, "2h": 159, "4h": 164},
+    "Total": {"total": 166, "1h": 167, "2h": 172, "4h": 177},
 }
 
-# Channel FC rows
 CHANNEL_FC_REQ_ROWS = {"GHN": 7, "KA": 8, "MP": 9, "SME": 10, "TRUCK": 11, "WH": 12}
 CHANNEL_FC_DEM_ROWS = {"GHN": 15, "KA": 16, "MP": 17, "SME": 18, "TRUCK": 19, "WH": 20}
 CHANNEL_ACT_REQ_ROWS = {"GHN": 23, "KA": 24, "MP": 25, "SME": 26, "WH": 27}
@@ -362,21 +347,14 @@ PCT_REQ_CH_ROWS = {"GHN": 37, "KA": 38, "MP": 39, "SME": 40, "TRUCK": 41, "WH": 
 PCT_DEM_CH_ROWS = {"GHN": 44, "KA": 45, "MP": 46, "SME": 47, "TRUCK": 48, "WH": 48}
 
 METRIC_ROWS = {
-    "request": ACTUAL_REQUEST_ROW,
-    "demand": ACTUAL_DEMAND_ROW,
-    "active_actual": ACTIVE_TOTAL_ROW,
-    "capacity": CAPACITY_TOTAL_ROW,
-    "online_hours": ONLINE_HOURS_TOTAL_ROW,
-    "productivity": PRODUCTIVITY_TOTAL_ROW,
+    "request": ACTUAL_REQUEST_ROW, "demand": ACTUAL_DEMAND_ROW,
+    "active_actual": ACTIVE_TOTAL_ROW, "capacity": CAPACITY_TOTAL_ROW,
+    "online_hours": ONLINE_HOURS_TOTAL_ROW, "productivity": PRODUCTIVITY_TOTAL_ROW,
     "online_per_driver": ONLINE_PER_DRIVER_TOTAL_ROW,
     "prod_per_online_hour": PROD_PER_ONLINEHOUR_TOTAL_ROW,
 }
-
-CHANNEL_ROWS = {
-    "GHN": 7, "KA": 8, "MP": 9, "SME": 10, "TRUCK": 11, "WH": 12,
-}
+CHANNEL_ROWS = {"GHN": 7, "KA": 8, "MP": 9, "SME": 10, "TRUCK": 11, "WH": 12}
 SEGMENT_ROWS = {"FT": 51, "PT": 52, "NLM": 53, "Return": 54, "NIM": 55}
-
 ACHIEVEMENT_REQUEST_ROWS = {"GHN": 37, "KA": 38, "MP": 39, "SME": 40, "TRUCK": 41, "WH": 41}
 ACHIEVEMENT_DEMAND_ROWS = {"GHN": 44, "KA": 45, "MP": 46, "SME": 47, "TRUCK": 48, "WH": 48}
 
@@ -392,19 +370,601 @@ SEGMENT_COLORS = {
 
 
 # ── DATA LOADING & TRANSFORMATION ────────────────────────────────────────────
-@st.cache_data(ttl=CACHE_TTL_SECONDS, show_spinner="Đang tải dữ liệu từ Google Sheet...")
+# Raw tab URLs (public gviz/tq endpoint — no auth required)
+_BASE_GVIZ = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet="
+
+
+def _fetch_tab(tab_name: str) -> pd.DataFrame:
+    url = _BASE_GVIZ + requests.utils.quote(tab_name)
+    resp = requests.get(url, timeout=25)
+    resp.raise_for_status()
+    head = resp.text[:300].lower()
+    if "<html" in head or "accounts.google" in head:
+        raise ValueError(f"Tab '{tab_name}': Google Sheet không trả về CSV — kiểm tra quyền public.")
+    return pd.read_csv(io.StringIO(resp.text), dtype=str, keep_default_na=False)
+
+
+@st.cache_data(ttl=CACHE_TTL_SECONDS, show_spinner="Đang tải demand actual...")
+def _load_demand_actual() -> pd.DataFrame:
+    df = _fetch_tab("demand actual")
+    df.columns = [c.strip() for c in df.columns]
+    # Filter SGN, drop TRUCK from bike scope
+    df = df[df["province"].str.strip().str.upper() == "SGN"].copy()
+    for col in ["total_request", "completed_order", "completed_stp",
+                "accepted_order", "total_tracking_request", "completed_tracking"]:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col].str.replace(",", ""), errors="coerce")
+    df["day"] = pd.to_datetime(df["day"], errors="coerce")
+    df["ops_sector"] = df["ops_sector"].str.strip().str.upper()
+    return df
+
+
+@st.cache_data(ttl=CACHE_TTL_SECONDS, show_spinner="Đang tải FC log...")
+def _load_fc_log() -> pd.DataFrame:
+    df = _fetch_tab("FC log")
+    raw_cols = list(df.columns)
+    # Rename positionally: col[0]=date_ref, col[1]=city, col[2]=fc_date,
+    # col[3-8]=FC_req_GHN/KA/MP/SME/TRUCK/WH, col[9-14]=FC_dem_GHN/KA/MP/SME/TRUCK/WH
+    rename_map = {
+        raw_cols[0]: "date_ref", raw_cols[1]: "city", raw_cols[2]: "fc_date",
+        raw_cols[3]: "fc_req_GHN", raw_cols[4]: "fc_req_KA", raw_cols[5]: "fc_req_MP",
+        raw_cols[6]: "fc_req_SME", raw_cols[7]: "fc_req_TRUCK", raw_cols[8]: "fc_req_WH",
+        raw_cols[9]: "fc_dem_GHN", raw_cols[10]: "fc_dem_KA", raw_cols[11]: "fc_dem_MP",
+        raw_cols[12]: "fc_dem_SME", raw_cols[13]: "fc_dem_TRUCK", raw_cols[14]: "fc_dem_WH",
+    }
+    df = df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns})
+    df = df[df["city"].str.strip() == "SGN"].copy()
+    df["date_ref"] = pd.to_datetime(df["date_ref"], errors="coerce")
+    df["fc_date"] = pd.to_datetime(df["fc_date"], errors="coerce")
+    num_cols = [c for c in df.columns if c.startswith("fc_")]
+    for c in num_cols:
+        df[c] = pd.to_numeric(df[c].str.replace(",", ""), errors="coerce")
+    # Latest budget per fc_date
+    df = df.sort_values("date_ref", ascending=False).groupby("fc_date", as_index=False).first()
+    df["fc_req_total"] = df[["fc_req_GHN","fc_req_KA","fc_req_MP","fc_req_SME","fc_req_WH"]].sum(axis=1)
+    df["fc_dem_total"] = df[["fc_dem_GHN","fc_dem_KA","fc_dem_MP","fc_dem_SME","fc_dem_WH"]].sum(axis=1)
+    # SME+MP+KA aggregate
+    df["fc_req_SMPKA"] = df[["fc_req_SME","fc_req_MP","fc_req_KA"]].sum(axis=1)
+    df["fc_dem_SMPKA"] = df[["fc_dem_SME","fc_dem_MP","fc_dem_KA"]].sum(axis=1)
+    return df
+
+
+@st.cache_data(ttl=CACHE_TTL_SECONDS, show_spinner="Đang tải active actual...")
+def _load_active_actual() -> pd.DataFrame:
+    df = _fetch_tab("active actual")
+    df.columns = [c.strip() for c in df.columns]
+    df = df[df["province"].str.strip().str.upper() == "SGN"].copy()
+    df["order_date"] = pd.to_datetime(df["order_date"], errors="coerce")
+    for col in ["active", "completed_stp", "online_hours"]:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col].str.replace(",", ""), errors="coerce")
+    df["segment_view"] = df["segment_view"].str.strip()
+    if "segment_detail" in df.columns:
+        df["segment_detail"] = df["segment_detail"].str.strip()
+    return df
+
+
+@st.cache_data(ttl=CACHE_TTL_SECONDS, show_spinner="Đang tải active by service...")
+def _load_active_by_service() -> pd.DataFrame:
+    df = _fetch_tab("active by service")
+    # Use only first 18 columns (duplicate block exists from col 19+)
+    df = df.iloc[:, :18].copy()
+    df.columns = [c.strip() for c in df.columns]
+    # Rename positionally if headers are missing/messy
+    expected = ["city_id","month","week","order_date","tag",
+                "total_active","active_1h","active_2h","active_4h",
+                "bike","eco","aibot","pool","aifood","TMDT","_2H","_2HBULKY","INDAY"]
+    if len(df.columns) == 18:
+        df.columns = expected
+    df = df[df["city_id"].str.strip().str.upper() == "SGN"].copy()
+    df["order_date"] = pd.to_datetime(df["order_date"], errors="coerce")
+    num_cols = expected[5:]
+    for col in num_cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col].str.replace(",", ""), errors="coerce")
+    df["tag"] = df["tag"].str.strip()
+    return df
+
+
+def _build_synthetic_sheet(da: pd.DataFrame, fc: pd.DataFrame,
+                            aa: pd.DataFrame, abs_df: pd.DataFrame):
+    """
+    Build a synthetic wide-format DataFrame that mimics the SGN Overview tab layout
+    so that all existing val(), daily_columns(), daily_series() code continues to work.
+
+    Row layout:
+        Row 0:  (blank header row)
+        Row 1:  (blank)
+        Row 2:  (blank)
+        Row 3:  (blank)
+        Row 4:  Date header row  → col[5..] = sorted dates ascending
+        ---- FC Request block ----
+        Row 5:  FC Request Total
+        Row 6:  FC Request SME+MP+KA
+        Row 7:  FC Request GHN
+        Row 8:  FC Request KA
+        Row 9:  FC Request MP
+        Row 10: FC Request SME
+        Row 11: FC Request TRUCK
+        Row 12: FC Request WH
+        ---- FC Demand block ----
+        Row 13: FC Demand Total
+        Row 14: FC Demand SME+MP+KA
+        Row 15: FC Demand GHN
+        Row 16: FC Demand KA
+        Row 17: FC Demand MP
+        Row 18: FC Demand SME
+        Row 19: FC Demand TRUCK
+        Row 20: FC Demand WH
+        ---- Actual Request block ----
+        Row 21: Act Request Total
+        Row 22: Act Request SME+MP+KA
+        Row 23: Act Request GHN
+        Row 24: Act Request KA
+        Row 25: Act Request MP
+        Row 26: Act Request SME
+        Row 27: Act Request WH
+        ---- Actual Demand block ----
+        Row 28: Act Demand Total
+        Row 29: Act Demand SME+MP+KA
+        Row 30: Act Demand GHN
+        Row 31: Act Demand KA
+        Row 32: Act Demand MP
+        Row 33: Act Demand SME
+        Row 34: Act Demand WH
+        ---- (rows 35-49 blank placeholders) ----
+        ---- Active block ----
+        Row 50: Active Total
+        Row 51: Active FT
+        Row 52: Active PT
+        Row 53: Active NLM
+        Row 54: Active Return
+        Row 55: Active NIM
+        Row 56: Active NID
+        ---- Capacity block ----
+        Row 58: Capacity Total
+        Row 59: Capacity FT
+        Row 60: Capacity PT
+        Row 61: Capacity NLM
+        Row 62: Capacity Return
+        Row 63: Capacity NIM
+        Row 64: Capacity NID
+        ---- Online Hours block ----
+        Row 66: Online Hours Total
+        Row 67: Online Hours FT
+        Row 68: Online Hours PT
+        Row 69: Online Hours NLM
+        Row 70: Online Hours Return
+        Row 71: Online Hours NIM
+        Row 72: Online Hours NID
+        ---- Productivity block ----
+        Row 74: Productivity Total
+        Row 75: Productivity FT
+        Row 76: Productivity PT
+        Row 77: Productivity NLM
+        Row 78: Productivity Return
+        Row 79: Productivity NIM
+        ---- Online/Driver block ----
+        Row 82: Online/Driver Total
+        Row 83: Online/Driver FT
+        Row 84: Online/Driver PT
+        Row 85: Online/Driver NLM
+        Row 86: Online/Driver Return
+        Row 87: Online/Driver NIM
+        ---- Prod/OnlineHour block ----
+        Row 90: Prod/OnlineHour Total
+        Row 91: Prod/OnlineHour FT
+        Row 92: Prod/OnlineHour PT
+        Row 93: Prod/OnlineHour NLM
+        Row 94: Prod/OnlineHour Return
+        Row 95: Prod/OnlineHour NIM
+        ---- (rows 96-165 active by service — reserved) ----
+        ---- FR block ----
+        Row 180: FR Total
+        Row 181: FR SME+MP+KA
+        Row 182: FR GHN
+        Row 183: FR KA
+        Row 184: FR MP
+        Row 185: FR SME
+        Row 186: FR WH
+
+    Columns:
+        col[0] = row number label
+        col[1] = metric label
+        col[2] = LM value (full month sum/mean)
+        col[3] = MTD value (1st→yesterday, current month)
+        col[4] = MoM delta (placeholder, 0)
+        col[5..] = daily values, chronologically DESC (yesterday first)
+    """
+    import numpy as np
+
+    # ── Build sorted date list ────────────────────────────────────────────────
+    all_dates_set = set()
+    if not da.empty:
+        all_dates_set.update(da["day"].dropna().dt.normalize().unique())
+    if not aa.empty:
+        all_dates_set.update(aa["order_date"].dropna().dt.normalize().unique())
+    if not abs_df.empty:
+        all_dates_set.update(abs_df["order_date"].dropna().dt.normalize().unique())
+
+    today_ts = pd.Timestamp(datetime.now().date())
+    # Include today so col_today[0] = today (FC-only), col_yesterday[1] = last actual day
+    all_dates_set.add(today_ts)
+    # Also add FC future dates that are in FC log for today's planning
+    if not fc.empty and "fc_date" in fc.columns:
+        fc_dates = fc["fc_date"].dropna().dt.normalize().unique()
+        all_dates_set.update([d for d in fc_dates if d <= today_ts])
+    sorted_dates = sorted([d for d in all_dates_set if d <= today_ts], reverse=True)
+
+    n_date_cols = len(sorted_dates)
+    n_cols = 5 + n_date_cols  # col0..col4 + daily cols
+
+    MAX_ROW = 192
+    out = np.full((MAX_ROW, n_cols), "", dtype=object)
+
+    # Row 4: date header
+    for ci, dt in enumerate(sorted_dates):
+        out[4, 5 + ci] = dt.strftime("%-d-%b")
+
+    # ── Helper: aggregate demand actual by date ──────────────────────────────
+    def _da_daily(sector_filter=None, field="total_request") -> dict:
+        sub = da.copy()
+        if sector_filter:
+            if isinstance(sector_filter, list):
+                sub = sub[sub["ops_sector"].isin(sector_filter)]
+            else:
+                sub = sub[sub["ops_sector"] == sector_filter]
+        grp = sub.groupby("day")[field].sum()
+        return grp.to_dict()
+
+    def _da_month_sum(sector_filter=None, field="total_request",
+                      month=None, year=None, up_to_day=None) -> float:
+        sub = da.copy()
+        if sector_filter:
+            if isinstance(sector_filter, list):
+                sub = sub[sub["ops_sector"].isin(sector_filter)]
+            else:
+                sub = sub[sub["ops_sector"] == sector_filter]
+        if month:
+            sub = sub[sub["day"].dt.month == month]
+        if year:
+            sub = sub[sub["day"].dt.year == year]
+        if up_to_day:
+            sub = sub[sub["day"].dt.day <= up_to_day]
+        return float(sub[field].sum())
+
+    # ── Helper: aggregate FC by date ─────────────────────────────────────────
+    def _fc_daily(col) -> dict:
+        if fc.empty or col not in fc.columns:
+            return {}
+        return fc.set_index("fc_date")[col].to_dict()
+
+    def _fc_month_sum(col, month=None, year=None, up_to_day=None) -> float:
+        if fc.empty or col not in fc.columns:
+            return 0.0
+        sub = fc.copy()
+        if month:
+            sub = sub[sub["fc_date"].dt.month == month]
+        if year:
+            sub = sub[sub["fc_date"].dt.year == year]
+        if up_to_day:
+            sub = sub[sub["fc_date"].dt.day <= up_to_day]
+        return float(sub[col].sum())
+
+    # ── Helper: aggregate active actual by date ───────────────────────────────
+    def _aa_daily(seg=None, seg_col="segment_view", field="active") -> dict:
+        sub = aa.copy()
+        if seg:
+            sub = sub[sub[seg_col] == seg]
+        grp = sub.groupby("order_date")[field].sum()
+        return grp.to_dict()
+
+    def _aa_month_sum(field="active", seg=None, seg_col="segment_view",
+                      month=None, year=None, up_to_day=None) -> float:
+        sub = aa.copy()
+        if seg:
+            sub = sub[sub[seg_col] == seg]
+        if month:
+            sub = sub[sub["order_date"].dt.month == month]
+        if year:
+            sub = sub[sub["order_date"].dt.year == year]
+        if up_to_day:
+            sub = sub[sub["order_date"].dt.day <= up_to_day]
+        return float(sub[field].sum())
+
+    # ── Helper: active by service daily ─────────────────────────────────────
+    def _abs_daily(tag=None, col="total_active") -> dict:
+        sub = abs_df.copy()
+        if tag:
+            sub = sub[sub["tag"] == tag]
+        grp = sub.groupby("order_date")[col].sum()
+        return grp.to_dict()
+
+    # ── Determine current period context ─────────────────────────────────────
+    if sorted_dates:
+        yest = sorted_dates[0]
+        cur_month = yest.month
+        cur_year = yest.year
+        cur_day = yest.day
+        lm_month = cur_month - 1 if cur_month > 1 else 12
+        lm_year = cur_year if cur_month > 1 else cur_year - 1
+    else:
+        yest = today_ts - pd.Timedelta(days=1)
+        cur_month, cur_year, cur_day = yest.month, yest.year, yest.day
+        lm_month = cur_month - 1 if cur_month > 1 else 12
+        lm_year = cur_year if cur_month > 1 else cur_year - 1
+
+    # ── Write rows ────────────────────────────────────────────────────────────
+    def _fill_row(row_idx, label, daily_dict, lm_val, mtd_val):
+        out[row_idx, 1] = label
+        out[row_idx, 2] = "" if lm_val is None else lm_val
+        out[row_idx, 3] = "" if mtd_val is None else mtd_val
+        out[row_idx, 4] = ""
+        for ci, dt in enumerate(sorted_dates):
+            v = daily_dict.get(dt)
+            out[row_idx, 5 + ci] = "" if v is None or (isinstance(v, float) and np.isnan(v)) else v
+
+    # ── FC Request block (rows 5-12) ──────────────────────────────────────────
+    _fc_req_specs = [
+        (5,  "Request",      "fc_req_total"),
+        (6,  "SME+MP+KA",   "fc_req_SMPKA"),
+        (7,  "GHN",         "fc_req_GHN"),
+        (8,  "KA",          "fc_req_KA"),
+        (9,  "MP",          "fc_req_MP"),
+        (10, "SME",         "fc_req_SME"),
+        (11, "TRUCK",       "fc_req_TRUCK"),
+        (12, "WH",          "fc_req_WH"),
+    ]
+    for row_idx, label, col in _fc_req_specs:
+        d = _fc_daily(col)
+        lm = _fc_month_sum(col, month=lm_month, year=lm_year)
+        mtd = _fc_month_sum(col, month=cur_month, year=cur_year, up_to_day=cur_day)
+        _fill_row(row_idx, label, d, lm, mtd)
+
+    # ── FC Demand block (rows 13-20) ──────────────────────────────────────────
+    _fc_dem_specs = [
+        (13, "Demand",      "fc_dem_total"),
+        (14, "SME+MP+KA",  "fc_dem_SMPKA"),
+        (15, "GHN",        "fc_dem_GHN"),
+        (16, "KA",         "fc_dem_KA"),
+        (17, "MP",         "fc_dem_MP"),
+        (18, "SME",        "fc_dem_SME"),
+        (19, "TRUCK",      "fc_dem_TRUCK"),
+        (20, "WH",         "fc_dem_WH"),
+    ]
+    for row_idx, label, col in _fc_dem_specs:
+        d = _fc_daily(col)
+        lm = _fc_month_sum(col, month=lm_month, year=lm_year)
+        mtd = _fc_month_sum(col, month=cur_month, year=cur_year, up_to_day=cur_day)
+        _fill_row(row_idx, label, d, lm, mtd)
+
+    # ── Actual Request block (rows 21-27) ─────────────────────────────────────
+    _bike_sectors = ["KA", "MP", "SME", "GHN", "WH"]  # exclude TRUCK
+    _act_req_specs = [
+        (21, "Request",    None,                    _bike_sectors, "total_request"),
+        (22, "SME+MP+KA", None,                    ["KA","MP","SME"], "total_request"),
+        (23, "GHN",       "GHN",                   None, "total_request"),
+        (24, "KA",        "KA",                    None, "total_request"),
+        (25, "MP",        "MP",                    None, "total_request"),
+        (26, "SME",       "SME",                   None, "total_request"),
+        (27, "WH",        "WH",                    None, "total_request"),
+    ]
+    for row_idx, label, single_sec, multi_sec, field in _act_req_specs:
+        sec = single_sec if single_sec else multi_sec
+        d = _da_daily(sector_filter=sec, field=field)
+        lm = _da_month_sum(sector_filter=sec, field=field, month=lm_month, year=lm_year)
+        mtd = _da_month_sum(sector_filter=sec, field=field,
+                            month=cur_month, year=cur_year, up_to_day=cur_day)
+        _fill_row(row_idx, label, d, lm, mtd)
+
+    # ── Actual Demand block (rows 28-34) ──────────────────────────────────────
+    _act_dem_specs = [
+        (28, "Demand",    None,                    _bike_sectors, "completed_stp"),
+        (29, "SME+MP+KA", None,                   ["KA","MP","SME"], "completed_stp"),
+        (30, "GHN",       "GHN",                  None, "completed_stp"),
+        (31, "KA",        "KA",                   None, "completed_stp"),
+        (32, "MP",        "MP",                   None, "completed_stp"),
+        (33, "SME",       "SME",                  None, "completed_stp"),
+        (34, "WH",        "WH",                   None, "completed_stp"),
+    ]
+    for row_idx, label, single_sec, multi_sec, field in _act_dem_specs:
+        sec = single_sec if single_sec else multi_sec
+        d = _da_daily(sector_filter=sec, field=field)
+        lm = _da_month_sum(sector_filter=sec, field=field, month=lm_month, year=lm_year)
+        mtd = _da_month_sum(sector_filter=sec, field=field,
+                            month=cur_month, year=cur_year, up_to_day=cur_day)
+        _fill_row(row_idx, label, d, lm, mtd)
+
+    # ── Active block (rows 50-56) ─────────────────────────────────────────────
+    _seg_view_map = {"FT": "FT", "PT": "PT", "NLM": "NLM", "Return": "Return", "NIM": "NIM"}
+    _seg_detail_nid = "NID"
+
+    def _aa_lm_mtd(field, seg=None, seg_col="segment_view"):
+        return _aa_month_sum(field=field, seg=seg, seg_col=seg_col,
+                             month=lm_month, year=lm_year, up_to_day=cur_day)
+
+    def _aa_mtd(field, seg=None, seg_col="segment_view"):
+        return _aa_month_sum(field=field, seg=seg, seg_col=seg_col,
+                             month=cur_month, year=cur_year, up_to_day=cur_day)
+
+    def _aa_lm_full(field, seg=None, seg_col="segment_view"):
+        return _aa_month_sum(field=field, seg=seg, seg_col=seg_col,
+                             month=lm_month, year=lm_year)
+
+    _act_seg_specs = [
+        (50, "Active actual", None, "segment_view", "active"),
+        (51, "FT",            "FT", "segment_view", "active"),
+        (52, "PT",            "PT", "segment_view", "active"),
+        (53, "NLM",           "NLM","segment_view", "active"),
+        (54, "Return",        "Return","segment_view","active"),
+        (55, "NIM",           "NIM","segment_view", "active"),
+        (56, "NID",           "NID","segment_detail","active"),
+    ]
+    for row_idx, label, seg, seg_col, field in _act_seg_specs:
+        d = _aa_daily(seg=seg, seg_col=seg_col, field=field)
+        lm = _aa_lm_full(field=field, seg=seg, seg_col=seg_col)
+        mtd = _aa_mtd(field=field, seg=seg, seg_col=seg_col)
+        _fill_row(row_idx, label, d, lm, mtd)
+
+    # ── Capacity block (rows 58-64) ───────────────────────────────────────────
+    _cap_specs = [
+        (58, "Capacity",  None, "segment_view", "completed_stp"),
+        (59, "FT",        "FT", "segment_view", "completed_stp"),
+        (60, "PT",        "PT", "segment_view", "completed_stp"),
+        (61, "NLM",       "NLM","segment_view", "completed_stp"),
+        (62, "Return",    "Return","segment_view","completed_stp"),
+        (63, "NIM",       "NIM","segment_view", "completed_stp"),
+        (64, "NID",       "NID","segment_detail","completed_stp"),
+    ]
+    for row_idx, label, seg, seg_col, field in _cap_specs:
+        d = _aa_daily(seg=seg, seg_col=seg_col, field=field)
+        lm = _aa_lm_full(field=field, seg=seg, seg_col=seg_col)
+        mtd = _aa_mtd(field=field, seg=seg, seg_col=seg_col)
+        _fill_row(row_idx, label, d, lm, mtd)
+
+    # ── Online Hours block (rows 66-72) ──────────────────────────────────────
+    _sh_specs = [
+        (66, "Online Hours", None, "segment_view", "online_hours"),
+        (67, "FT",           "FT", "segment_view", "online_hours"),
+        (68, "PT",           "PT", "segment_view", "online_hours"),
+        (69, "NLM",          "NLM","segment_view", "online_hours"),
+        (70, "Return",       "Return","segment_view","online_hours"),
+        (71, "NIM",          "NIM","segment_view", "online_hours"),
+        (72, "NID",          "NID","segment_detail","online_hours"),
+    ]
+    for row_idx, label, seg, seg_col, field in _sh_specs:
+        d = _aa_daily(seg=seg, seg_col=seg_col, field=field)
+        lm = _aa_lm_full(field=field, seg=seg, seg_col=seg_col)
+        mtd = _aa_mtd(field=field, seg=seg, seg_col=seg_col)
+        _fill_row(row_idx, label, d, lm, mtd)
+
+    # ── Productivity, Online/Driver, Prod/OnlineHour (derived, rows 74-95) ────
+    def _ratio_daily(num_dict, den_dict) -> dict:
+        result = {}
+        for dt in sorted_dates:
+            n = num_dict.get(dt)
+            d = den_dict.get(dt)
+            if n is not None and d and d != 0:
+                result[dt] = n / d
+        return result
+
+    def _ratio_period(num_fn, den_fn, **kwargs):
+        n = num_fn(**kwargs)
+        d = den_fn(**kwargs)
+        return n / d if d and d != 0 else None
+
+    _derived_specs = [
+        # (row, label, seg, seg_col, num_field, den_field)
+        (74, "Productivity",  None, "segment_view", "completed_stp", "active"),
+        (75, "FT",   "FT",   "segment_view", "completed_stp", "active"),
+        (76, "PT",   "PT",   "segment_view", "completed_stp", "active"),
+        (77, "NLM",  "NLM",  "segment_view", "completed_stp", "active"),
+        (78, "Return","Return","segment_view","completed_stp", "active"),
+        (79, "NIM",  "NIM",  "segment_view", "completed_stp", "active"),
+        (82, "Online/Driver", None,"segment_view","online_hours","active"),
+        (83, "FT",   "FT",  "segment_view", "online_hours", "active"),
+        (84, "PT",   "PT",  "segment_view", "online_hours", "active"),
+        (85, "NLM",  "NLM", "segment_view", "online_hours", "active"),
+        (86, "Return","Return","segment_view","online_hours","active"),
+        (87, "NIM",  "NIM", "segment_view", "online_hours", "active"),
+        (90, "Prod/Onlinehour",None,"segment_view","completed_stp","online_hours"),
+        (91, "FT",   "FT",  "segment_view", "completed_stp", "online_hours"),
+        (92, "PT",   "PT",  "segment_view", "completed_stp", "online_hours"),
+        (93, "NLM",  "NLM", "segment_view", "completed_stp", "online_hours"),
+        (94, "Return","Return","segment_view","completed_stp","online_hours"),
+        (95, "NIM",  "NIM", "segment_view", "completed_stp", "online_hours"),
+    ]
+    for row_idx, label, seg, seg_col, num_f, den_f in _derived_specs:
+        n_daily = _aa_daily(seg=seg, seg_col=seg_col, field=num_f)
+        d_daily = _aa_daily(seg=seg, seg_col=seg_col, field=den_f)
+        ratio_d = _ratio_daily(n_daily, d_daily)
+        lm_n = _aa_lm_full(field=num_f, seg=seg, seg_col=seg_col)
+        lm_d = _aa_lm_full(field=den_f, seg=seg, seg_col=seg_col)
+        lm_ratio = lm_n / lm_d if lm_d else None
+        mtd_n = _aa_mtd(field=num_f, seg=seg, seg_col=seg_col)
+        mtd_d = _aa_mtd(field=den_f, seg=seg, seg_col=seg_col)
+        mtd_ratio = mtd_n / mtd_d if mtd_d else None
+        _fill_row(row_idx, label, ratio_d, lm_ratio, mtd_ratio)
+
+    # ── Active by service window rows (99-177) ────────────────────────────────
+    _abs_seg_map = {"FT": "FT", "PT": "PT", "NLM": "NLM", "NIM": "NIM"}
+    _abs_window_col = {"1h": "active_1h", "2h": "active_2h", "4h": "active_4h"}
+
+    def _abs_month_sum(col, tag=None, month=None, year=None, up_to_day=None):
+        sub = abs_df.copy()
+        if tag:
+            sub = sub[sub["tag"] == tag]
+        if month:
+            sub = sub[sub["order_date"].dt.month == month]
+        if year:
+            sub = sub[sub["order_date"].dt.year == year]
+        if up_to_day:
+            sub = sub[sub["order_date"].dt.day <= up_to_day]
+        if col not in sub.columns:
+            return 0.0
+        return float(sub[col].sum())
+
+    for seg_label, abs_seg in [("FT","FT"),("PT","PT"),("NLM","NLM"),("NIM","NIM")]:
+        base_row = ACTIVE_TIME_ROWS[seg_label]["total"]
+        # total row
+        d = _abs_daily(tag=abs_seg, col="total_active")
+        lm = _abs_month_sum("total_active", tag=abs_seg, month=lm_month, year=lm_year)
+        mtd = _abs_month_sum("total_active", tag=abs_seg, month=cur_month, year=cur_year, up_to_day=cur_day)
+        _fill_row(base_row, seg_label, d, lm, mtd)
+        # window sub-rows
+        for win_key, win_col in _abs_window_col.items():
+            win_row = ACTIVE_TIME_ROWS[seg_label][win_key]
+            d = _abs_daily(tag=abs_seg, col=win_col)
+            lm = _abs_month_sum(win_col, tag=abs_seg, month=lm_month, year=lm_year)
+            mtd = _abs_month_sum(win_col, tag=abs_seg, month=cur_month, year=cur_year, up_to_day=cur_day)
+            _fill_row(win_row, win_key, d, lm, mtd)
+
+    # Total service window rows (166-177)
+    for win_key, win_col in [("total","total_active"),("1h","active_1h"),("2h","active_2h"),("4h","active_4h")]:
+        win_row = ACTIVE_TIME_ROWS["Total"][win_key]
+        d = _abs_daily(tag=None, col=win_col)
+        lm = _abs_month_sum(win_col, tag=None, month=lm_month, year=lm_year)
+        mtd = _abs_month_sum(win_col, tag=None, month=cur_month, year=cur_year, up_to_day=cur_day)
+        _fill_row(win_row, win_key, d, lm, mtd)
+
+    # ── FR block (rows 180-186) ───────────────────────────────────────────────
+    _fr_specs = [
+        (180, "Total",      _bike_sectors, None,              "total_request", "completed_stp"),
+        (181, "SME+MP+KA", ["KA","MP","SME"], None,           "total_request", "completed_stp"),
+        (182, "GHN",       "GHN",            None,            "total_request", "completed_stp"),
+        (183, "KA",        "KA",             None,            "total_request", "completed_stp"),
+        (184, "MP",        "MP",             None,            "total_request", "completed_stp"),
+        (185, "SME",       "SME",            None,            "total_request", "completed_stp"),
+        (186, "WH",        "WH",             None,            "total_request", "completed_stp"),
+    ]
+    for row_idx, label, sec, _, req_f, dem_f in _fr_specs:
+        req_daily = _da_daily(sector_filter=sec, field=req_f)
+        dem_daily = _da_daily(sector_filter=sec, field=dem_f)
+        fr_daily = {dt: (dem_daily.get(dt, 0) / req_daily[dt])
+                    for dt in req_daily if req_daily.get(dt)}
+        req_lm = _da_month_sum(sector_filter=sec, field=req_f, month=lm_month, year=lm_year)
+        dem_lm = _da_month_sum(sector_filter=sec, field=dem_f, month=lm_month, year=lm_year)
+        req_mtd = _da_month_sum(sector_filter=sec, field=req_f,
+                                month=cur_month, year=cur_year, up_to_day=cur_day)
+        dem_mtd = _da_month_sum(sector_filter=sec, field=dem_f,
+                                month=cur_month, year=cur_year, up_to_day=cur_day)
+        lm_fr = dem_lm / req_lm if req_lm else None
+        mtd_fr = dem_mtd / req_mtd if req_mtd else None
+        _fill_row(row_idx, label, fr_daily, lm_fr, mtd_fr)
+
+    result_df = pd.DataFrame(out)
+    return result_df
+
+
+@st.cache_data(ttl=CACHE_TTL_SECONDS, show_spinner="Đang tổng hợp dữ liệu...")
 def load_raw_sheet():
-    response = requests.get(SHEET_CSV_URL, timeout=20)
-    response.raise_for_status()
-
-    content_type = response.headers.get("content-type", "").lower()
-    text_head = response.text[:300].lower()
-    if "text/html" in content_type or "<html" in text_head or "accounts.google" in text_head:
-        raise ValueError("Google Sheet không trả về CSV. Kiểm tra quyền public/share của file.")
-
-    raw_df = pd.read_csv(io.StringIO(response.text), header=None, dtype=str, keep_default_na=False)
+    da = _load_demand_actual()
+    fc = _load_fc_log()
+    aa = _load_active_actual()
+    abs_df = _load_active_by_service()
+    synthetic_df = _build_synthetic_sheet(da, fc, aa, abs_df)
     fetched_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    return raw_df, fetched_at
+    return synthetic_df, fetched_at
 
 
 def parse_value(value):
@@ -443,20 +1003,8 @@ def row_label(df, row_idx):
 
 
 def validate_sheet_structure(df):
-    checks = {
-        5: "Request",
-        13: "Demand",
-        50: "Active actual",
-        58: "Capacity",
-        74: "Productivity",
-        90: "Prod/Onlinehour",
-    }
-    mismatches = []
-    for row_idx, expected in checks.items():
-        actual = row_label(df, row_idx)
-        if actual.lower() != expected.lower():
-            mismatches.append(f"Row {row_idx + 1}: expected '{expected}', got '{actual}'")
-    return mismatches
+    # Synthetic sheet built from raw tabs — structure is always valid
+    return []
 
 
 def parse_sheet_date(label):
@@ -897,9 +1445,11 @@ if lm_same_day_col is None:
                 lm_same_day_col = col_idx
 
 # Calculate LM MTD Column Indexes (same period last month)
+_lm_month_idx = date_yesterday.month - 1 if date_yesterday.month > 1 else 12
+_lm_year_idx = date_yesterday.year if date_yesterday.month > 1 else date_yesterday.year - 1
 lm_mtd_cols = []
 for col_idx, d_val in columns_with_dates:
-    if d_val.month == 5 and d_val.year == 2026 and d_val.day <= date_yesterday.day:
+    if d_val.month == _lm_month_idx and d_val.year == _lm_year_idx and d_val.day <= date_yesterday.day:
         lm_mtd_cols.append(col_idx)
 
 # WTD (Week to Date): Monday of current week → yesterday
