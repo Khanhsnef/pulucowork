@@ -672,6 +672,21 @@ def _build_synthetic_sheet(da: pd.DataFrame, fc: pd.DataFrame,
             sub = sub[sub["order_date"].dt.day <= up_to_day]
         return float(sub[field].sum())
 
+    def _aa_month_mean(field="active", seg=None, seg_col="segment_view",
+                       month=None, year=None, up_to_day=None) -> float:
+        """Daily average within period — dùng cho Active (headcount), Online Hours."""
+        sub = aa.copy()
+        if seg:
+            sub = sub[sub[seg_col] == seg]
+        if month:
+            sub = sub[sub["order_date"].dt.month == month]
+        if year:
+            sub = sub[sub["order_date"].dt.year == year]
+        if up_to_day:
+            sub = sub[sub["order_date"].dt.day <= up_to_day]
+        daily = sub.groupby("order_date")[field].sum()
+        return float(daily.mean()) if not daily.empty else 0.0
+
     # ── Helper: active by service daily ─────────────────────────────────────
     def _abs_daily(tag=None, col="total_active") -> dict:
         sub = abs_df.copy()
@@ -791,6 +806,16 @@ def _build_synthetic_sheet(da: pd.DataFrame, fc: pd.DataFrame,
         return _aa_month_sum(field=field, seg=seg, seg_col=seg_col,
                              month=lm_month, year=lm_year)
 
+    def _aa_mtd_mean(field, seg=None, seg_col="segment_view"):
+        """Daily average MTD — dùng cho Active (headcount) và Online Hours."""
+        return _aa_month_mean(field=field, seg=seg, seg_col=seg_col,
+                              month=cur_month, year=cur_year, up_to_day=cur_day)
+
+    def _aa_lm_full_mean(field, seg=None, seg_col="segment_view"):
+        """Daily average toàn tháng LM — dùng cho cột LM của Active và Online Hours."""
+        return _aa_month_mean(field=field, seg=seg, seg_col=seg_col,
+                              month=lm_month, year=lm_year)
+
     _act_seg_specs = [
         (50, "Active actual", None, "segment_view", "active"),
         (51, "FT",            "FT", "segment_view", "active"),
@@ -802,8 +827,8 @@ def _build_synthetic_sheet(da: pd.DataFrame, fc: pd.DataFrame,
     ]
     for row_idx, label, seg, seg_col, field in _act_seg_specs:
         d = _aa_daily(seg=seg, seg_col=seg_col, field=field)
-        lm = _aa_lm_full(field=field, seg=seg, seg_col=seg_col)
-        mtd = _aa_mtd(field=field, seg=seg, seg_col=seg_col)
+        lm = _aa_lm_full_mean(field=field, seg=seg, seg_col=seg_col)
+        mtd = _aa_mtd_mean(field=field, seg=seg, seg_col=seg_col)
         _fill_row(row_idx, label, d, lm, mtd)
 
     # ── Capacity block (rows 58-64) ───────────────────────────────────────────
@@ -834,8 +859,8 @@ def _build_synthetic_sheet(da: pd.DataFrame, fc: pd.DataFrame,
     ]
     for row_idx, label, seg, seg_col, field in _sh_specs:
         d = _aa_daily(seg=seg, seg_col=seg_col, field=field)
-        lm = _aa_lm_full(field=field, seg=seg, seg_col=seg_col)
-        mtd = _aa_mtd(field=field, seg=seg, seg_col=seg_col)
+        lm = _aa_lm_full_mean(field=field, seg=seg, seg_col=seg_col)
+        mtd = _aa_mtd_mean(field=field, seg=seg, seg_col=seg_col)
         _fill_row(row_idx, label, d, lm, mtd)
 
     # ── Productivity, Online/Driver, Prod/OnlineHour (derived, rows 74-95) ────
