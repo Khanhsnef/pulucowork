@@ -435,7 +435,7 @@ def _load_active_actual() -> pd.DataFrame:
     df.columns = [c.strip() for c in df.columns]
     df = df[df["province"].str.strip().str.upper() == "SGN"].copy()
     df["order_date"] = pd.to_datetime(df["order_date"], errors="coerce")
-    for col in ["active", "completed_stp", "online_hours"]:
+    for col in ["active", "completed_stp", "online_hours", "active_mtd"]:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col].str.replace(",", ""), errors="coerce")
     df["segment_view"] = df["segment_view"].str.strip()
@@ -807,14 +807,48 @@ def _build_synthetic_sheet(da: pd.DataFrame, fc: pd.DataFrame,
                              month=lm_month, year=lm_year)
 
     def _aa_mtd_mean(field, seg=None, seg_col="segment_view"):
-        """Daily average MTD — dùng cho Active (headcount) và Online Hours."""
+        """Daily average MTD — dùng cho Online Hours."""
         return _aa_month_mean(field=field, seg=seg, seg_col=seg_col,
                               month=cur_month, year=cur_year, up_to_day=cur_day)
 
     def _aa_lm_full_mean(field, seg=None, seg_col="segment_view"):
-        """Daily average toàn tháng LM — dùng cho cột LM của Active và Online Hours."""
+        """Daily average toàn tháng LM — dùng cho Online Hours LM."""
         return _aa_month_mean(field=field, seg=seg, seg_col=seg_col,
                               month=lm_month, year=lm_year)
+
+    def _aa_active_mtd_latest(seg=None, seg_col="segment_view") -> float:
+        """active_mtd = distinct drivers từ ngày 1 đến ngày mới nhất.
+        Mỗi segment_view có nhiều sub-rows — lấy max(active_mtd) per segment_view
+        tại ngày mới nhất (row có active lớn nhất = toàn bộ pool)."""
+        sub = aa.copy()
+        if seg:
+            sub = sub[sub[seg_col] == seg]
+        sub = sub[(sub["order_date"].dt.month == cur_month) &
+                  (sub["order_date"].dt.year == cur_year) &
+                  (sub["order_date"].dt.day <= cur_day)]
+        if sub.empty:
+            return 0.0
+        latest_day = sub["order_date"].max()
+        snap = sub[sub["order_date"] == latest_day]
+        if seg:
+            return float(snap["active_mtd"].max())
+        # Total = max per segment_view rồi sum (mỗi seg đã distinct riêng)
+        return float(snap.groupby("segment_view")["active_mtd"].max().sum())
+
+    def _aa_active_lm_latest(seg=None, seg_col="segment_view") -> float:
+        """active_mtd LM — row mới nhất của tháng trước."""
+        sub = aa.copy()
+        if seg:
+            sub = sub[sub[seg_col] == seg]
+        sub = sub[(sub["order_date"].dt.month == lm_month) &
+                  (sub["order_date"].dt.year == lm_year)]
+        if sub.empty:
+            return 0.0
+        latest_day = sub["order_date"].max()
+        snap = sub[sub["order_date"] == latest_day]
+        if seg:
+            return float(snap["active_mtd"].max())
+        return float(snap.groupby("segment_view")["active_mtd"].max().sum())
 
     _act_seg_specs = [
         (50, "Active actual", None, "segment_view", "active"),
@@ -825,10 +859,10 @@ def _build_synthetic_sheet(da: pd.DataFrame, fc: pd.DataFrame,
         (55, "NIM",           "NIM","segment_view", "active"),
         (56, "NID",           "NID","segment_detail","active"),
     ]
-    for row_idx, label, seg, seg_col, field in _act_seg_specs:
-        d = _aa_daily(seg=seg, seg_col=seg_col, field=field)
-        lm = _aa_lm_full_mean(field=field, seg=seg, seg_col=seg_col)
-        mtd = _aa_mtd_mean(field=field, seg=seg, seg_col=seg_col)
+    for row_idx, label, seg, seg_col, _field in _act_seg_specs:
+        d = _aa_daily(seg=seg, seg_col=seg_col, field=_field)
+        lm = _aa_active_lm_latest(seg=seg, seg_col=seg_col)
+        mtd = _aa_active_mtd_latest(seg=seg, seg_col=seg_col)
         _fill_row(row_idx, label, d, lm, mtd)
 
     # ── Capacity block (rows 58-64) ───────────────────────────────────────────
