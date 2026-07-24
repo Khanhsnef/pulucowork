@@ -416,7 +416,7 @@ def _load_fc_log() -> pd.DataFrame:
     df = df[df["city"].str.strip() == "SGN"].copy()
     df["date_ref"] = pd.to_datetime(df["date_ref"], errors="coerce")
     df["fc_date"] = pd.to_datetime(df["fc_date"], errors="coerce")
-    num_cols = [c for c in df.columns if c.startswith("fc_")]
+    num_cols = [c for c in df.columns if c.startswith("fc_req") or c.startswith("fc_dem")]
     for c in num_cols:
         df[c] = pd.to_numeric(df[c].str.replace(",", ""), errors="coerce")
     # Latest budget per fc_date
