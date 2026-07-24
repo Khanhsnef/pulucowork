@@ -1382,7 +1382,7 @@ with st.expander("🎛️ Bộ lọc Dashboard", expanded=False):
             max_value=max_date.date(),
         )
     with col3:
-        fr_target_int = st.slider("Target FR% (ngưỡng đạt)", min_value=60, max_value=90, value=81, step=1, format="%d%%")
+        fr_target_int = st.slider("Target FR% (ngưỡng đạt)", min_value=60, max_value=90, value=84, step=1, format="%d%%")
         fr_target = fr_target_int / 100.0
     if isinstance(selected_range, tuple) and len(selected_range) == 2:
         start_date, end_date = selected_range
