@@ -192,7 +192,7 @@
       <div class="nav-head">VALUE & ROADMAP</div>
       <ul>
         <li><a href="#s7"><span class="n">07</span> Closed-Loop Flywheel</a></li>
-        <li><a href="#s8"><span class="n">08</span> Value Realization</a></li>
+        <li><a href="#s8"><span class="n">08</span> Value Realization & Roadmap</a></li>
       </ul>
     </div>
   </aside>
@@ -204,7 +204,7 @@
     <div class="hero-card">
       <div class="hero-tag">⚡ FINAL MASTER SPECIFICATIONS v2.0</div>
       <h1>Driver Ranking & <span>Layer Allocation v2.0</span><br>Master Params Sheet</h1>
-      <p>Báo cáo chiến lược tổng hợp quy chuẩn Phân hạng đối tác 5 cấp (SUPER, PROFESSIONAL, SEMI_PRO, AMATEUR, UNRANKED), kiến trúc phân lớp vùng (L1–L6), cơ chế gán đơn ưu tiên, và cắt giảm 100% chi phí Đảm bảo thu nhập cố định.</p>
+      <p>Báo cáo chiến lược tổng hợp quy chuẩn Phân hạng đối tác 5 cấp (SUPER, PROFESSIONAL, SEMI_PRO, AMATEUR, UNRANKED), kiến trúc phân lớp vùng (L1–L6), và cơ chế gán đơn ưu tiên.</p>
       <div class="hero-meta">
         <div class="hm-item">
           <span class="hm-label">CẬP NHẬT</span>
@@ -219,8 +219,8 @@
           <span class="hm-val">SGN + HAN - Bike Fleet</span>
         </div>
         <div class="hm-item">
-          <span class="hm-label">P&L BUDGET</span>
-          <span class="hm-val org">~142M / 200M/tháng</span>
+          <span class="hm-label">STATUS</span>
+          <span class="hm-val org">Approved Strategy</span>
         </div>
       </div>
     </div>
@@ -231,16 +231,16 @@
         <div class="sec-num">01</div>
         <div class="sec-title">
           <h2>Executive Summary & Core Objectives</h2>
-          <p>Tái cấu trúc mô hình quản trị nguồn cung — Chuyển dịch từ chi phí cố định sang phúc lợi biến đổi tự vận động</p>
+          <p>Tái cấu trúc mô hình quản trị nguồn cung — Chuyển dịch sang phúc lợi biến đổi tự vận động</p>
         </div>
       </div>
 
       <div class="callout success">
         <span style="font-size:16px;flex-shrink:0;">🎯</span>
         <div>
-          <strong>Mục tiêu cốt lõi:</strong> Loại bỏ hoàn toàn các khoản Đảm bảo thu nhập ca/ngày (Guarantee) và hệ số nhân thưởng tiền mặt. 
-          Điều phối nguồn cung tự nguyện bằng <strong>Hệ số nhân tích điểm AhaPoints của Layer (L2 ×1.5, L3 ×1.3)</strong> 
-          và <strong>Khung giờ ưu tiên mở cổng đăng ký ca (Priority Window)</strong> theo Thứ hạng tài xế.
+          <strong>Mục tiêu cốt lõi:</strong> 
+          Điều phối nguồn cung bằng <strong>Hệ số nhân tích điểm AhaPoints theo RANK tài xế (SUPER ×1.5, PRO ×1.3, SEMI_PRO ×1.1)</strong> 
+          và <strong>Thuật toán gán đơn ưu tiên theo Ca tại L2–L5 & Ưu tiên theo Rank thuần túy tại L6 MASS (SUPER ➔ PRO ➔ SEMI_PRO)</strong>.
         </div>
       </div>
 
@@ -265,14 +265,9 @@
               <td class="good">Tăng 35% lấp đầy ca làm việc giờ cao điểm</td>
             </tr>
             <tr>
-              <td><strong>Guarantee Cost (Bù ca/ngày)</strong></td>
-              <td><span class="kpi-pill kpi-yellow">Cắt giảm 100%</span></td>
-              <td class="good">Triệt tiêu rủi ro bù tiền ca gây thủng P&L</td>
-            </tr>
-            <tr>
-              <td><strong>CPO / Promo Budget</strong></td>
-              <td><span class="kpi-pill kpi-green">~142M VNĐ / tháng</span></td>
-              <td class="good">Kiểm soát an toàn trong hạn mức 200M/tháng</td>
+              <td><strong>CPO / Promo Optimization</strong></td>
+              <td><span class="kpi-pill kpi-green">Chuyển dịch sang quà phi tiền mặt</span></td>
+              <td class="good">Tối ưu hóa chi phí CPO thực tế</td>
             </tr>
           </tbody>
         </table>
@@ -301,8 +296,8 @@
           <tbody>
             <tr>
               <td><strong>Hệ Số Nhân Điểm AhaPoints</strong></td>
-              <td><strong style="color:var(--orange);">QUYẾT ĐỊNH HỆ SỐ NHÂN LAYER</strong><br><span style="font-size:11px;color:var(--text-sec);">L2 (×1.5), L3 (×1.3), L4 (×1.1), L5/L6 (×1.0)</span></td>
-              <td><span class="danger">❌ KHÔNG quyết định hệ số nhân điểm</span></td>
+              <td><span class="warn">Định nghĩa môi trường cắm vùng (bán kính/cự ly)</span></td>
+              <td><strong style="color:var(--blue);">QUYẾT ĐỊNH HỆ SỐ NHÂN TÍCH ĐIỂM (`rank_multiplier`)</strong><br><span style="font-size:11px;color:var(--text-sec);">SUPER (×1.5), PRO (×1.3), SEMI_PRO (×1.1), AMATEUR (×1.0)</span></td>
             </tr>
             <tr>
               <td><strong>Hỗ Trợ Vận Hành</strong></td>
@@ -310,24 +305,17 @@
               <td>VIP CSKB Support (Dành riêng cho SUPER)</td>
             </tr>
             <tr>
-              <td><strong>Bù Thu Nhập Ca/Ngày</strong></td>
-              <td><span class="danger">❌ ĐÃ BỎ HOÀN TOÀN</span></td>
-              <td><span class="danger">❌ ĐÃ BỎ HOÀN TOÀN</span></td>
-            </tr>
-            <tr>
-              <td><strong>Hệ Số Thưởng Incentive</strong></td>
-              <td><span class="danger">❌ ĐÃ BỎ HOÀN TOÀN</span></td>
-              <td><span class="danger">❌ ĐÃ BỎ HOÀN TOÀN</span></td>
-            </tr>
-            <tr>
               <td><strong>Khung Giờ Mở Chọn Ca</strong></td>
               <td><span class="warn">Mở slot ca theo khả năng chứa</span></td>
               <td><strong style="color:var(--blue);">QUYẾT ĐỊNH GIỜ MỞ CỔNG (Priority Window)</strong><br><span style="font-size:11px;color:var(--text-sec);">SUPER 00:00 ➔ PRO 10:00 ➔ SEMI_PRO 14:00 ➔ AMATEUR 02+</span></td>
             </tr>
             <tr>
-              <td><strong>Ưu Tiên Gán Đơn Trong Zone</strong></td>
-              <td><span class="warn">Áp dụng trong phạm vi Zone</span></td>
-              <td><strong style="color:var(--blue);">ƯU TIÊN GÁN ĐƠN THEO RANK (Dispatch Priority)</strong><br><span style="font-size:11px;color:var(--text-sec);">Quét gán đơn ưu tiên theo thứ tự thứ hạng trong cùng Layer</span></td>
+              <td><strong>Ưu Tiên Gán Đơn Trong Layer</strong></td>
+              <td>
+                <strong style="color:var(--orange);">LAYER CÓ CA (L2–L5):</strong> Ưu tiên Tài xế ĐĂNG KÝ CA trước.<br>
+                <strong style="color:var(--orange);">LAYER MASS (L6):</strong> Quét gán đơn trực tiếp theo thứ tự RANK.
+              </td>
+              <td><strong style="color:var(--blue);">ƯU TIÊN THEO HẠNG RANK (SUPER ➔ PRO ➔ SEMI_PRO)</strong><br><span style="font-size:11px;color:var(--text-sec);">Tại L6 MASS: SUPER được ưu tiên nhận đơn đầu tiên.</span></td>
             </tr>
             <tr>
               <td><strong>Phúc Lợi Trực Tiếp</strong></td>
@@ -345,7 +333,7 @@
         <div class="sec-num">03</div>
         <div class="sec-title">
           <h2>Bộ Tiêu Chí 5-Tier Driver Taxonomy</h2>
-          <p>Điều kiện xét duyệt thứ hạng hàng tháng bằng DQS & Năng suất hoàn thành cuốc (stp)</p>
+          <p>Điều kiện xét duyệt thứ hạng hàng tháng bằng DQS, Năng suất cuốc (stp) & Hệ số nhân tích điểm</p>
         </div>
       </div>
 
@@ -357,6 +345,7 @@
               <th>Tên Tiếng Việt</th>
               <th>Chỉ Số DQS</th>
               <th>Năng Suất (stp/tháng)</th>
+              <th>Hệ Số Điểm Rank</th>
               <th>Fleet Target %</th>
               <th>Mô Tả & Định Vị Nguồn Cung</th>
             </tr>
@@ -367,14 +356,16 @@
               <td><strong>Siêu cấp</strong></td>
               <td><span class="kpi-pill kpi-green">≥ 80</span></td>
               <td><span class="kpi-pill kpi-blue">≥ 240 stp</span></td>
+              <td><span class="mult-tag">× 1.5</span></td>
               <td class="num" style="color:var(--orange);">10% - 15%</td>
-              <td style="font-size:12px;">Nguồn cung xuất sắc toàn diện, cắm vùng cốt lõi L2 Minizone</td>
+              <td style="font-size:12px;">Nguồn cung xuất sắc toàn diện, cắm vùng L2 & chủ lực L6 MASS</td>
             </tr>
             <tr>
               <td><span class="rank-pill rp-pro">🥇 PROFESSIONAL</span></td>
               <td><strong>Chuyên nghiệp</strong></td>
               <td><span class="kpi-pill kpi-green">≥ 75</span></td>
               <td><span class="kpi-pill kpi-blue">≥ 150 stp</span></td>
+              <td><span class="mult-tag" style="background:var(--yellow);">× 1.3</span></td>
               <td class="num" style="color:var(--yellow);">15% - 20%</td>
               <td style="font-size:12px;">Nguồn cung hoạt động chuyên nghiệp, chủ lực L3 Mediumzone</td>
             </tr>
@@ -383,6 +374,7 @@
               <td><strong>Bán chuyên</strong></td>
               <td><span class="kpi-pill kpi-green">≥ 75</span></td>
               <td><span class="kpi-pill kpi-blue">≥ 70 stp</span></td>
+              <td><span class="mult-tag" style="background:var(--blue);">× 1.1</span></td>
               <td class="num" style="color:var(--blue);">30% - 35%</td>
               <td style="font-size:12px;">Nguồn cung bán thời gian ổn định, chủ lực L4 Bigzone</td>
             </tr>
@@ -391,6 +383,7 @@
               <td><strong>Phổ thông</strong></td>
               <td><span class="kpi-pill kpi-gray">&lt; 75</span></td>
               <td><span class="kpi-pill kpi-gray">&lt; 70 stp</span></td>
+              <td><span class="mult-tag" style="background:#4B5563;">× 1.0</span></td>
               <td class="num">20% - 25%</td>
               <td style="font-size:12px;color:var(--text-sec);">Tài xế chất lượng dưới chuẩn hoặc sản lượng thấp (L5/L6)</td>
             </tr>
@@ -399,6 +392,7 @@
               <td><strong>Chưa xếp hạng</strong></td>
               <td><span class="kpi-pill kpi-gray">—</span></td>
               <td><span class="kpi-pill kpi-gray">—</span></td>
+              <td><span class="mult-tag" style="background:#374151;">× 1.0</span></td>
               <td class="num">5% - 10%</td>
               <td style="font-size:12px;color:var(--text-sec);">Tài xế mới onboarding (&lt;1 tháng) hoặc chưa đủ data cuốc</td>
             </tr>
@@ -410,22 +404,22 @@
         <span style="font-size:16px;flex-shrink:0;">⚠️</span>
         <div>
           <strong>Quy tắc xét duyệt DQS:</strong> Đánh giá tự động vào ngày cuối tháng dựa trên dữ liệu rolling 30 ngày. 
-          Thứ hạng có hiệu lực từ ngày 01 tháng tiếp theo. Vi phạm ĐBCL nghiêm trọng sẽ bị giáng trực tiếp xuống AMATEUR.
+          Thứ hạng quyết định hệ số nhân điểm cuốc xe (`earned_pts = round(round(trip_GSV ÷ 1.000) × rank_multiplier)`).
         </div>
       </div>
     </section>
 
-    <!-- SECTION 04: PRIORITY WINDOWS & SHIFTS -->
+    <!-- SECTION 04: PRIORITY WINDOWS -->
     <section id="s4">
       <div class="sec-hdr">
         <div class="sec-num">04</div>
         <div class="sec-title">
-          <h2>Priority Registration Windows & Shifts</h2>
-          <p>Khung giờ ưu tiên đăng ký ca làm việc Ngày 01 hàng tháng & phân bổ slot ca</p>
+          <h2>Priority Registration Windows</h2>
+          <p>Khung giờ ưu tiên đăng ký ca làm việc Ngày 01 hàng tháng</p>
         </div>
       </div>
 
-      <div class="tw" style="margin-bottom:20px;">
+      <div class="tw">
         <table>
           <thead>
             <tr>
@@ -463,57 +457,6 @@
           </tbody>
         </table>
       </div>
-
-      <!-- SHIFTS MATRIX -->
-      <div style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Phân Bổ Slot Ca (% Tổng Slot Mỗi Ca)</div>
-      <div class="tw">
-        <table>
-          <thead>
-            <tr>
-              <th>Ca Làm Việc</th>
-              <th>Khung Giờ</th>
-              <th>Loại Ca</th>
-              <th>Slot SUPER</th>
-              <th>Slot PRO</th>
-              <th>Slot SEMI_PRO</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Ca Sáng</strong></td>
-              <td class="num">08:00 – 12:00 (4h)</td>
-              <td>⚡ Peak Sáng</td>
-              <td class="num" style="color:var(--orange);">20%</td>
-              <td class="num" style="color:var(--yellow);">40%</td>
-              <td class="num" style="color:var(--blue);">40%</td>
-            </tr>
-            <tr>
-              <td><strong>Ca Chiều</strong></td>
-              <td class="num">13:00 – 17:00 (4h)</td>
-              <td>⚡ Peak Chiều</td>
-              <td class="num" style="color:var(--orange);">20%</td>
-              <td class="num" style="color:var(--yellow);">40%</td>
-              <td class="num" style="color:var(--blue);">40%</td>
-            </tr>
-            <tr>
-              <td><strong>Ca Tối</strong></td>
-              <td class="num">17:00 – 21:00 (4h)</td>
-              <td>Ca Tối Bình thường</td>
-              <td class="num" style="color:var(--orange);">15%</td>
-              <td class="num" style="color:var(--yellow);">40%</td>
-              <td class="num" style="color:var(--blue);">45%</td>
-            </tr>
-            <tr>
-              <td><strong>Ca Full-day</strong></td>
-              <td class="num">08:00 – 18:00 (10h)</td>
-              <td>Ca Trọn ngày</td>
-              <td class="num" style="color:var(--orange);">50%</td>
-              <td class="num" style="color:var(--yellow);">50%</td>
-              <td class="danger">❌ Không mở</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </section>
 
     <!-- SECTION 05: LAYER ARCHITECTURE & DISPATCH -->
@@ -521,8 +464,8 @@
       <div class="sec-hdr">
         <div class="sec-num">05</div>
         <div class="sec-title">
-          <h2>Layer Architecture L1–L6 & Dispatch Priority</h2>
-          <p>Cơ chế tích điểm AhaPoints theo Layer, gán đơn ưu tiên và đăng ký ca tuần tại L5 Cityzone</p>
+          <h2>Layer Architecture L1–L6 & Intra-Layer Dispatch Priority</h2>
+          <p>Phân lớp vùng hoạt động và Thuật toán quét gán đơn ưu tiên theo Ca (L2–L5) và Thuần Rank (L6 MASS)</p>
         </div>
       </div>
 
@@ -533,8 +476,7 @@
               <th>Layer</th>
               <th>Tên Layer</th>
               <th>Phạm Vi / Bán Kính</th>
-              <th>Hệ Số Điểm Layer</th>
-              <th>Hỗ Trợ Đội Trưởng</th>
+              <th>Cơ Chế Quét Gán Đơn Ưu Tiên (Dispatch Order)</th>
               <th>Đặc Tính & Cơ Chế Vận Hành</th>
             </tr>
           </thead>
@@ -543,59 +485,59 @@
               <td><span class="layer-badge l1">L1</span></td>
               <td><strong>KA / MP Assigned</strong></td>
               <td>Gán kho KA/TMĐT</td>
-              <td>Thu nhập HĐ cam kết</td>
-              <td>❌ Không</td>
+              <td>Gán trực tiếp cho tài xế hợp đồng KA</td>
               <td>Gán trực tiếp (Assigned), không qua đăng ký ca app</td>
             </tr>
             <tr>
               <td><span class="layer-badge l2">L2</span></td>
               <td><strong>Minizone</strong></td>
               <td>Bán kính ngắn <strong>≤ 4km</strong></td>
-              <td><span class="mult-tag">× 1.5</span></td>
-              <td><strong style="color:var(--green);">Đội trưởng + VIP Support</strong></td>
-              <td>Đăng ký ca tháng · Mật độ ghép đơn & EPH cao nhất</td>
+              <td><strong style="color:var(--orange);">Ưu tiên Đăng ký Ca L2</strong> ➔ Rank (SUPER ➔ PRO)</td>
+              <td>Đăng ký ca tháng · Đội trưởng + VIP Support</td>
             </tr>
             <tr>
               <td><span class="layer-badge l3">L3</span></td>
               <td><strong>Mediumzone</strong></td>
               <td>Bán kính trung bình <strong>≤ 8km</strong></td>
-              <td><span class="mult-tag">× 1.3</span></td>
-              <td><strong style="color:var(--green);">Đội trưởng hỗ trợ</strong></td>
-              <td>Đăng ký ca tháng · Cân bằng cự ly & thu nhập cuốc</td>
+              <td><strong style="color:var(--orange);">Ưu tiên Đăng ký Ca L3</strong> ➔ Rank (SUPER ➔ PRO)</td>
+              <td>Đăng ký ca tháng · Đội trưởng hỗ trợ</td>
             </tr>
             <tr>
               <td><span class="layer-badge l4">L4</span></td>
               <td><strong>Bigzone</strong></td>
               <td>Vùng Quận / Huyện</td>
-              <td><span class="mult-tag">× 1.1</span></td>
-              <td>❌ CSKB tiêu chuẩn</td>
-              <td>Đăng ký ca tháng · Đơn cự ly dài toàn quận</td>
+              <td><strong style="color:var(--orange);">Ưu tiên Đăng ký Ca L4</strong> ➔ Rank (SUPER ➔ PRO)</td>
+              <td>Đăng ký ca tháng · CSKB tiêu chuẩn</td>
             </tr>
             <tr>
               <td><span class="layer-badge l5">L5</span></td>
               <td><strong>Cityzone</strong></td>
               <td>Toàn Thành phố</td>
-              <td><span class="mult-tag" style="background:#4B5563;">× 1.0</span></td>
-              <td>❌ Không</td>
-              <td><strong>Đăng ký ca tuần & ca tháng</strong> · Smart Zone Suggestion</td>
+              <td><strong style="color:var(--orange);">Ưu tiên Đăng ký Ca L5</strong> ➔ Rank (SUPER ➔ PRO)</td>
+              <td>Đăng ký ca tuần & ca tháng · Smart Zone Suggest</td>
             </tr>
             <tr>
               <td><span class="layer-badge l6">L6</span></td>
               <td><strong>MASS On-Demand</strong></td>
               <td>Toàn hệ thống</td>
-              <td><span class="mult-tag" style="background:#374151;">× 1.0</span></td>
-              <td>❌ Không</td>
-              <td>On-demand tự do · Buffer co giãn cho tài xế ngoài ca</td>
+              <td><strong style="color:var(--blue);">ƯU TIÊN THEO RANK THUẦN TÚY: SUPER ➔ PRO ➔ SEMI_PRO</strong></td>
+              <td>On-demand tự do · Khẩu độ quét ưu tiên Rank cao nhất</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <div class="code-block" style="margin-bottom:20px;">
-        <pre>🔥 INTRA-LAYER DISPATCH PRIORITY (GÁN ĐƠN ƯU TIÊN TRONG L6 MASS):
-Khi tài xế Rank cao (SUPER / PRO) chạy tại L6 MASS (chạy tự do ngoài ca):
-  Matching Algorithm Sweep Order: SUPER ➔ PROFESSIONAL ➔ SEMI_PRO ➔ AMATEUR ➔ UNRANKED
-  100% Phúc lợi Rank (Voucher Xăng/EV 50k/30k, BH Tai nạn, VIP Support) được bảo toàn trọn vẹn!</pre>
+        <pre>🔥 CHI TIẾT THUẬT TOÁN QUÉT GÁN ĐƠN THEO LAYER:
+
+1. ĐỐI VỚI LAYER CÓ ĐĂNG KÝ CA (L2 Minizone, L3 Mediumzone, L4 Bigzone, L5 Cityzone):
+   • ƯU TIÊN 1: Tài xế ĐÃ ĐĂNG KÝ CA tại Zone đó (Quét theo Rank: In-Shift SUPER ➔ In-Shift PRO ➔ In-Shift SEMI_PRO).
+   • ƯU TIÊN 2: Tài xế ngoài ca / vãng lai (Quét theo Rank: Off-Shift SUPER ➔ Off-Shift PRO ➔ Off-Shift SEMI_PRO...).
+
+2. ĐỐI VỚI LAYER 6 MASS (ON-DEMAND TỰ DO):
+   • Do L6 không có ca cố định, thuật toán quét gán đơn ƯU TIÊN TRỰC TIẾP THEO RANK THỨ HẠNG TÀI XẾ:
+     SUPER ➔ PROFESSIONAL ➔ SEMI_PROFESSIONAL ➔ AMATEUR ➔ UNRANKED
+   • Tài xế SUPER cắm app tại L6 MASS luôn được quét gán đơn đầu tiên trước các tài xế Rank thấp hơn!</pre>
       </div>
     </section>
 
@@ -605,7 +547,7 @@ Khi tài xế Rank cao (SUPER / PRO) chạy tại L6 MASS (chạy tự do ngoài
         <div class="sec-num">06</div>
         <div class="sec-title">
           <h2>AhaBenefits v2.0 Catalog & Rank Entitlements</h2>
-          <p>Hệ sinh thái phúc lợi phi tiền mặt — Công thức tích điểm: <code>earned_pts = round(round(trip_GSV ÷ 1.000) × layer_multiplier)</code></p>
+          <p>Hệ sinh thái phúc lợi phi tiền mặt — Công thức tích điểm: <code>earned_pts = round(round(trip_GSV ÷ 1.000) × rank_multiplier)</code></p>
         </div>
       </div>
 
@@ -624,18 +566,32 @@ Khi tài xế Rank cao (SUPER / PRO) chạy tại L6 MASS (chạy tự do ngoài
           </thead>
           <tbody>
             <tr>
+              <td><strong>Hệ Số Nhân Điểm AhaPoints</strong></td>
+              <td><strong style="color:var(--orange);">× 1.5</strong></td>
+              <td><strong style="color:var(--yellow);">× 1.3</strong></td>
+              <td><strong style="color:var(--blue);">× 1.1</strong></td>
+              <td>× 1.0 (Base)</td>
+            </tr>
+            <tr>
+              <td><strong>Ưu Tiên Gán Đơn L6 MASS</strong></td>
+              <td><strong style="color:var(--orange);">Ưu tiên 1 (Số 1)</strong></td>
+              <td><strong style="color:var(--yellow);">Ưu tiên 2</strong></td>
+              <td><strong style="color:var(--blue);">Ưu tiên 3</strong></td>
+              <td>Baseline FCFS</td>
+            </tr>
+            <tr>
               <td><strong>Voucher Xăng/EV Cố Định</strong></td>
               <td><strong style="color:var(--orange);">50.000 VNĐ / tháng</strong></td>
               <td><strong style="color:var(--yellow);">30.000 VNĐ / tháng</strong></td>
               <td>Đổi bằng điểm AhaPoints</td>
-              <td class="danger">❌ Không có</td>
+              <td class="danger">Không hỗ trợ</td>
             </tr>
             <tr>
               <td><strong>Bảo Hiểm Tai Nạn Cá Nhân</strong></td>
               <td><strong style="color:var(--green);">Hỗ trợ 100%</strong> (Gói 1k/3k pts)</td>
-              <td class="danger">❌ Không có</td>
-              <td class="danger">❌ Không có</td>
-              <td class="danger">❌ Không có</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
             </tr>
             <tr>
               <td><strong>Ưu Tiên Driver Kit (CCDC)</strong></td>
@@ -649,14 +605,7 @@ Khi tài xế Rank cao (SUPER / PRO) chạy tại L6 MASS (chạy tự do ngoài
               <td><strong style="color:var(--orange);">Vé VIP Vinh danh</strong></td>
               <td><strong style="color:var(--yellow);">Ưu tiên Mời dự</strong></td>
               <td>Đăng ký slot tự do</td>
-              <td class="danger">❌ Không có</td>
-            </tr>
-            <tr>
-              <td><strong>Bù Ca / Guarantee / Incentive</strong></td>
-              <td><span class="danger">❌ ĐÃ BỎ HOÀN TOÀN</span></td>
-              <td><span class="danger">❌ ĐÃ BỎ HOÀN TOÀN</span></td>
-              <td><span class="danger">❌ ĐÃ BỎ HOÀN TOÀN</span></td>
-              <td><span class="danger">❌ ĐÃ BỎ HOÀN TOÀN</span></td>
+              <td>—</td>
             </tr>
           </tbody>
         </table>
@@ -672,7 +621,7 @@ Khi tài xế Rank cao (SUPER / PRO) chạy tại L6 MASS (chạy tự do ngoài
               <th>Nhóm Quà</th>
               <th>Rank Được Đổi</th>
               <th>Chi Phí Điểm</th>
-              <th>Chi Phí Thật Ahamove</th>
+              <th>Nguồn Hỗ Trợ</th>
             </tr>
           </thead>
           <tbody>
@@ -681,42 +630,42 @@ Khi tài xế Rank cao (SUPER / PRO) chạy tại L6 MASS (chạy tự do ngoài
               <td>Partner Free Item</td>
               <td><span class="rank-pill rp-semi">SEMI_PRO+</span></td>
               <td class="num" style="color:var(--blue);">3.000 pts</td>
-              <td class="good">0đ (Đối tác tài trợ)</td>
+              <td class="good">Đối tác tài trợ</td>
             </tr>
             <tr>
               <td>Voucher Xăng 50k / Sạc EV VinFast 50k</td>
               <td>Partner Free Item</td>
               <td><span class="rank-pill rp-pro">PRO+</span></td>
               <td class="num" style="color:var(--yellow);">5.000 pts</td>
-              <td class="good">0đ (Đối tác tài trợ)</td>
+              <td class="good">Đối tác tài trợ</td>
             </tr>
             <tr>
               <td>Data 4G Viettel/Mobi 5GB (30 ngày)</td>
               <td>Aha Paid Item</td>
               <td><span class="rank-pill rp-semi">SEMI_PRO+</span></td>
               <td class="num" style="color:var(--blue);">5.000 pts</td>
-              <td class="num">~50.000 VNĐ</td>
+              <td class="num">Gói ưu đãi đối tác</td>
             </tr>
             <tr>
               <td>Data 4G Viettel/Mobi 10GB (30 ngày)</td>
               <td>Aha Paid Item</td>
               <td><span class="rank-pill rp-pro">PRO+</span></td>
               <td class="num" style="color:var(--yellow);">8.000 pts</td>
-              <td class="num">~80.000 VNĐ</td>
+              <td class="num">Gói ưu đãi đối tác</td>
             </tr>
             <tr>
               <td>Combo Áo khoác + Túi giữ nhiệt v2</td>
               <td>Aha Paid Item</td>
               <td><span class="rank-pill rp-pro">PRO+</span></td>
               <td class="num" style="color:var(--yellow);">25.000 pts</td>
-              <td class="num">~250.000 VNĐ</td>
+              <td class="num">Trợ giá đồng phục</td>
             </tr>
             <tr>
               <td>Data 4G 20GB + BH Tai nạn Mini</td>
               <td>Aha Paid Item</td>
               <td><span class="rank-pill rp-super">SUPER</span></td>
               <td class="num" style="color:var(--orange);">15.000 pts</td>
-              <td class="num">~150.000 VNĐ</td>
+              <td class="num">Gói đặc quyền VIP</td>
             </tr>
           </tbody>
         </table>
@@ -738,7 +687,7 @@ Khi tài xế Rank cao (SUPER / PRO) chạy tại L6 MASS (chạy tự do ngoài
 
 [1. DQS ≥ 80 & stp ≥ 240] ──➔ [2. Đạt Rank SUPER] ──➔ [3. Mở cổng 00:00 chọn trước L2 Minizone]
                                                                         │
-[6. Phân hạng chất lượng] ◄── [5. Đổi Voucher Xăng 50k & BH] ◄── [4. Tích điểm Layer L2 x1.5]</pre>
+[6. Phân hạng chất lượng] ◄── [5. Đổi Voucher Xăng 50k & BH] ◄── [4. Tích điểm Rank SUPER x1.5 & Ưu tiên gán L6 MASS]</pre>
       </div>
     </section>
 
@@ -747,8 +696,8 @@ Khi tài xế Rank cao (SUPER / PRO) chạy tại L6 MASS (chạy tự do ngoài
       <div class="sec-hdr">
         <div class="sec-num">08</div>
         <div class="sec-title">
-          <h2>Value Realization & Execution Roadmap</h2>
-          <p>Tác động P&L đo lường được và lộ trình triển khai 3 giai đoạn</p>
+          <h2>Value Realization & Implementation Roadmap</h2>
+          <p>Tác động vận hành đo lường được và Lộ trình triển khai thực tế theo từng giai đoạn</p>
         </div>
       </div>
 
@@ -764,42 +713,41 @@ Khi tài xế Rank cao (SUPER / PRO) chạy tại L6 MASS (chạy tự do ngoài
           </thead>
           <tbody>
             <tr>
-              <td>Gây thủng P&L do duy trì các khoản thưởng Đảm bảo thu nhập ca/ngày.</td>
-              <td><strong style="color:var(--orange);">↓ BỎ GUARANTEE & INCENTIVE MULTIPLIER ↓</strong></td>
-              <td>Chuyển 100% thưởng sang tích điểm <strong>AhaPoints biến đổi</strong>.</td>
-              <td class="good">Cắt giảm 25–30% tổng chi phí Promo/CPO; kiểm soát P&L an toàn.</td>
+              <td>Duy trì chi phí cố định không hiệu quả.</td>
+              <td><strong style="color:var(--orange);">↓ CHUYỂN DỊCH SANG AHAPOINTS VÀ QUÀ TÀI TRỢ ↓</strong></td>
+              <td>Chuyển 100% thưởng sang tích điểm <strong>AhaPoints biến đổi theo Rank</strong> & đối tác tài trợ.</td>
+              <td class="good">Tối ưu hóa tổng chi phí CPO thực tế.</td>
             </tr>
             <tr>
               <td>Nhầm lẫn giữa quyền lợi Hạng tài xế và đặc tính Vùng hoạt động.</td>
               <td><strong style="color:var(--orange);">↓ PHÂN ĐỊNH RẠCH RÒI LAYER VS RANK ↓</strong></td>
-              <td>Layer quyết định <strong>Hệ số nhân điểm (L2: ×1.5)</strong>; Rank quyết định <strong>Giờ chọn ca & Phúc lợi</strong>.</td>
-              <td class="good">Minh bạch hóa 100% chính sách vận hành; triệt tiêu tranh chấp.</td>
+              <td>Rank quyết định <strong>Hệ số nhân điểm (SUPER: ×1.5)</strong> & Phúc lợi; Layer quyết định <strong>Bán kính & Đăng ký ca</strong>.</td>
+              <td class="good">Minh bạch hóa 100% chính sách vận hành; loại bỏ tranh chấp quyền lợi của đối tác.</td>
             </tr>
             <tr>
               <td>Tài xế Rank cao chạy tại L6 MASS bị cào bằng quyền lợi gán đơn với tài xế mới.</td>
-              <td><strong style="color:var(--orange);">↓ GÁN ĐƠN ƯU TIÊN (DISPATCH PRIORITY) ↓</strong></td>
-              <td>Trong cùng Layer, thuật toán gán đơn ưu tiên theo thứ tự thứ hạng: SUPER ➔ PRO ➔ SEMI_PRO.</td>
+              <td><strong style="color:var(--orange);">↓ GÁN ĐƠN L6 MASS THUẦN THEO RANK ↓</strong></td>
+              <td>Tại L6 MASS, gán đơn ưu tiên trực tiếp theo thứ tự Rank: <strong>SUPER ➔ PRO ➔ SEMI_PRO</strong>.</td>
               <td class="good">Tăng 35% hài lòng & giữ chân 80% tài xế Rank cao khi chạy tự do.</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- ROADMAP -->
-      <div style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Lộ Trình Triển Khai 3 Giai Đoạn</div>
+      <!-- REALISTIC ROADMAP -->
+      <div style="font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">📌 Lộ Trình Triển Khai Thực Tế (Execution Roadmap)</div>
       <div class="code-block">
-        <pre>Giai đoạn 1: Prep & Cut Guarantee (15/07/2026 – 31/07/2026)
-  • Loại bỏ toàn bộ code tính Đảm bảo thu nhập ca/ngày và Hệ số Incentive trên App.
-  • Cập nhật thuật toán Tích điểm theo Layer (L2: x1.5, L3: x1.3, L4: x1.1, L5/L6: x1.0).
-  • Tích hợp tính năng Đăng ký ca tuần tại L5 & Smart Zone Recommendation.
+        <pre>• Giai đoạn 1: Hiện tại (Tháng 07/2026) — Chuẩn Hóa Phân Hạng Ranking 5-Tier
+  - Áp dụng đổi trước tiêu chuẩn phân hạng Ranking 5-Tier (SUPER, PROFESSIONAL, SEMI_PRO, AMATEUR, UNRANKED) dựa trên DQS & Năng suất (stp).
 
-Giai đoạn 2: Shadow Mode Pilot tại HAN & SGN (01/08/2026 – 31/08/2026)
-  • Chạy thử nghiệm Shadow Mode (Tính 5-Tier & Gợi ý Zone thông minh).
-  • Validate tỷ lệ lấp đầy ca và đo lường mức độ cắt giảm CPO thực tế.
+• Giai đoạn 2: Dự kiến Tháng 08 – 09/2026 — Triển Khai Hệ Số Tích Điểm Theo Rank
+  - Triển khai thuật toán tính điểm AhaPoints theo hệ số nhân Rank (SUPER x1.5, PRO x1.3, SEMI_PRO x1.1, AMATEUR/UNRANKED x1.0).
 
-Giai đoạn 3: Full Go-Live toàn hệ thống (Từ 01/09/2026)
-  • Khóa mở cổng đăng ký ca cứng theo giờ (SUPER: 0-10h, PRO: 10-14h, SEMI_PRO: 14-24h).
-  • Kích hoạt cơ chế Ưu tiên gán đơn Dispatch Priority trong cùng Layer.</pre>
+• Giai đoạn 3: Trong Quý 3 (Tháng 09/2026) — Backend AhaPoints & UI/UX App
+  - Triển khai hệ thống tính toán AhaPoints backend và hoàn thiện giao diện UI/UX hiển thị điểm/hạng trên App Tài xế.
+
+• Giai đoạn 4: Kế Hoạch Phúc Lợi Phi Tiền Mặt (In Planning / Partnership)
+  - Hoàn thiện kế hoạch & đàm phán thương lượng với đối tác (Petrolimex, VinFast EV, PTI) để phát hành Voucher Xăng/EV & Bảo hiểm tai nạn.</pre>
       </div>
     </section>
 

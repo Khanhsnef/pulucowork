@@ -9,27 +9,31 @@
 ## 1. TÓM TẮT THỰC THI (EXECUTIVE SUMMARY)
 
 ### 📊 Executive Summary
-Dự án **Driver Ranking & Layer Allocation System v2.0** tái cấu trúc triệt để mô hình quản trị nguồn cung và chi phí P&L của Ahamove. Hệ thống hoàn toàn **LOẠI BỎ các khoản đảm bảo thu nhập ca/ngày (Guarantee) và hệ số thưởng tiền mặt/incentive**, chuyển đổi sang cơ chế **điều phối nguồn cung tự vận hành**:
+Dự án **Driver Ranking & Layer Allocation System v2.0** tái cấu trúc mô hình quản trị nguồn cung của Ahamove. Hệ thống tập trung vào cơ chế **điều phối nguồn cung tự vận hành**:
 
 1. **Phân định rõ Ranh giới Layer vs Rank**:
-   - **LAYER (Vùng hoạt động):** Quyết định **Hệ số nhân tích điểm AhaPoints** (L2 $\times 1.5$, L3 $\times 1.3$, L4 $\times 1.1$, L5/L6 $\times 1.0$), **Sự hỗ trợ của Đội trưởng**, và **Mật độ ghép đơn/cự ly**.
-   - **RANK (Thứ hạng tài xế - 5 Tier):** Quyết định **Khung giờ ưu tiên đăng ký ca (Priority Window)**, **Ưu tiên gán đơn trong cùng Layer (Order Dispatch Priority)**, **Đặc quyền phúc lợi phi tiền mặt** (Voucher Xăng/EV, Bảo hiểm tai nạn, Bảo dưỡng xe), **Ưu tiên cấp phát CCDC (Driver Kit)** và **Tham gia sự kiện Ahamove**.
-2. **Cơ chế Ưu tiên cho Rank Cao tại L6 MASS / Overlap**:
-   - Khi tài xế Rank cao (SUPER / PROFESSIONAL) hoạt động tại L6 MASS, tài xế vẫn giữ nguyên **Ưu tiên gán đơn trước (Dispatch Priority)** và **Đặc quyền phúc lợi theo Rank**.
+   - **RANK (Thứ hạng tài xế - 5 Tier):** Quyết định **Hệ số nhân tích điểm AhaPoints** (SUPER $\times 1.5$, PRO $\times 1.3$, SEMI_PRO $\times 1.1$, AMATEUR/UNRANKED $\times 1.0$), **Khung giờ ưu tiên đăng ký ca (Priority Window)**, **Đặc quyền phúc lợi phi tiền mặt** (Voucher Xăng/EV, Bảo hiểm tai nạn, Gói khám sức khỏe), **Ưu tiên cấp phát CCDC (Driver Kit)** và **Tham gia sự kiện Ahamove**.
+   - **LAYER (Vùng hoạt động):** Định nghĩa **Bán kính / Phạm vi hoạt động** (L2 $\le 4\text{km}$, L3 $\le 8\text{km}$, L4 Bigzone, L5 Cityzone, L6 MASS), **Sự hỗ trợ của Đội trưởng**, và **Cơ chế Đăng ký ca cắm vùng**.
+2. **Cơ chế Ưu tiên Gán Đơn Trong Layer (Intra-Layer Dispatch Priority)**:
+   - **LAYER CÓ CA (L2–L5):** Thuật toán **Ưu tiên gán cho Tài xế ĐÃ ĐĂNG KÝ CA tại Layer đó trước** (quét theo Rank trong ca).
+   - **LAYER MASS (L6 On-Demand Tự Do):** Do L6 không có đăng ký ca trước, thuật toán **ƯU TIÊN TRỰC TIẾP THEO RANK THỨ HẠNG TÀI XẾ**:
+     $$\text{SUPER} \longrightarrow \text{PROFESSIONAL} \longrightarrow \text{SEMI\_PROFESSIONAL} \longrightarrow \text{AMATEUR} \longrightarrow \text{UNRANKED}$$
 3. **Mở Đăng Ký Ca Kíp Hàng Tuần Tại Cityzone (L5) & Gợi Ý Zone Thông Minh**:
    - Chấp nhận cho tài xế đăng ký ca kíp hàng tuần (Weekly Shift Registration) tại Cityzone (L5) để tạo thói quen cắm vùng.
-   - Tích hợp tính năng **Smart Zone Recommendation** gợi ý khu vực hoạt động tối ưu cho tài xế dựa trên lịch sử chạy, محل cư trú và Demand Heatmap.
+   - Tích hợp tính năng **Smart Zone Recommendation** gợi ý khu vực hoạt động tối ưu cho tài xế dựa trên lịch sử chạy, địa điểm cư trú và Demand Heatmap.
 
 ### 🎯 Mục tiêu Kinh doanh (Business Objectives)
-- **Cắt giảm 100% chi phí Đảm bảo Thu nhập cố định (Guarantee):** Triệt tiêu rủi ro bù tiền ca/ngày gây thủng P&L.
-- **Tối ưu hóa CPO (Cost per Order):** Chuyển dịch toàn bộ chi phí thưởng sang hệ thống tích điểm **AhaPoints biến đổi** và phúc lợi đối tác tài trợ.
-- **Tự động điều phối cung - cầu:** Tăng tỷ lệ lấp đầy ca làm việc tại L2 Minizone và L3 Mediumzone bằng lực hút nhân điểm Layer và quyền ưu tiên chọn ca sớm.
+- **Tối ưu hóa CPO (Cost per Order):** Chuyển dịch toàn bộ chi phí thưởng sang hệ thống tích điểm **AhaPoints biến đổi theo Rank** và phúc lợi đối tác tài trợ.
+- **Tự động điều phối cung - cầu:** Tăng tỷ lệ lấp đầy ca làm việc tại L2 Minizone và L3 Mediumzone bằng lực hút nhân điểm Rank và quyền ưu tiên gán đơn cho tài xế cắm ca.
 
 ### 📈 Chỉ số Cốt lõi (Important KPIs)
-- **Tiêu chuẩn Rank:** **SUPER (DQS ≥ 80, stp ≥ 240)**, **PROFESSIONAL (DQS ≥ 75, stp ≥ 150)**, **SEMI_PROFESSIONAL (DQS ≥ 75, stp ≥ 70)**, **AMATEUR (DQS < 75 hoặc stp < 70)**, **UNRANKED (Chưa có đơn/data)**.
+- **Tiêu chuẩn Rank & Hệ số tích điểm:**
+  - **SUPER:** DQS $\ge 80$, $\text{stp} \ge 240$ $\rightarrow$ **Nhân điểm $\times 1.5$**
+  - **PROFESSIONAL:** DQS $\ge 75$, $\text{stp} \ge 150$ $\rightarrow$ **Nhân điểm $\times 1.3$**
+  - **SEMI_PROFESSIONAL:** DQS $\ge 75$, $\text{stp} \ge 70$ $\rightarrow$ **Nhân điểm $\times 1.1$**
+  - **AMATEUR & UNRANKED:** DQS $< 75$ hoặc $\text{stp} < 70$ $\rightarrow$ **Base $\times 1.0$**
 - **Fulfillment Rate (FR):** Đạt **≥ 90%** tại **L2 Minizone** và **L3 Mediumzone** vào các khung ca cao điểm.
 - **Phân bổ Fleet Target:** **SUPER (10–15%)**, **PROFESSIONAL (15–20%)**, **SEMI_PROFESSIONAL (30–35%)**, **AMATEUR (20–25%)**, **UNRANKED (5-10%)**.
-- **Hiệu quả Ngân sách P&L:** Tiết kiệm **25–30% ngân sách Promo/Incentive**, khống chế ngân sách voucher xăng/EV trong mức **~142M/tháng** (trên tổng budget **200M/tháng**).
 
 ---
 
@@ -42,13 +46,11 @@ Dự án **Driver Ranking & Layer Allocation System v2.0** tái cấu trúc tri�
 | Tiêu Chí Phân Định | LAYER (Vùng Hoạt Động L1–L6) | RANK (Thứ Hạng Tài Xế 5 Tier) |
 | :--- | :--- | :--- |
 | **Bản chất** | Định nghĩa **Không gian & Điều kiện làm việc** | Định nghĩa **Năng lực & Đóng góp của Tài xế** |
-| **Hệ số Tích điểm AhaPoints** | **QUYẾT ĐỊNH HỆ SỐ NHÂN LAYER**<br/>• L2 Minizone: **× 1.5**<br/>• L3 Mediumzone: **× 1.3**<br/>• L4 Bigzone: **× 1.1**<br/>• L5 Cityzone / L6 MASS: **× 1.0** | ❌ không quyết định hệ số nhân điểm |
+| **Hệ số Tích điểm AhaPoints** | Định nghĩa môi trường cắm vùng (bán kính/cự ly) | **QUYẾT ĐỊNH HỆ SỐ NHÂN TÍCH ĐIỂM (`rank_multiplier`)**<br/>• SUPER: **× 1.5**<br/>• PROFESSIONAL: **× 1.3**<br/>• SEMI_PROFESSIONAL: **× 1.1**<br/>• AMATEUR / UNRANKED: **× 1.0** |
 | **Hỗ trợ Vận hành** | **Đội trưởng cắm vùng** (L2 & L3) | VIP CSKB Support (Dành riêng cho SUPER) |
-| **Đảm bảo Thu nhập Ca/Ngày** | ❌ **ĐÃ BỎ HOÀN TOÀN** | ❌ **ĐÃ BỎ HOÀN TOÀN** |
-| **Hệ số Thưởng Incentive/Ca** | ❌ **ĐÃ BỎ HOÀN TOÀN** | ❌ **ĐÃ BỎ HOÀN TOÀN** |
-| **Quyền Ưu tiên Đăng ký Ca** | ❌ | **QUYẾT ĐỊNH KHUNG GIỜ MỞ CỔNG (Priority Window)**<br/>• SUPER: 00:00 - 10:00 (Mở chọn trước tất cả Zone)<br/>• PRO: 10:00 - 14:00<br/>• SEMI_PRO: 14:00 - 24:00<br/>• AMATEUR/UNRANKED: Ngày 02+ |
-| **Cơ chế Gán Đơn trong cùng Layer** | ❌ | **ƯU TIÊN GÁN ĐƠN THEO RANK (Dispatch Priority)**<br/>Trong cùng Layer, tài xế Rank cao được gán đơn trước |
-| **Phúc lợi Vật thể & Phi Tiền Mặt** | ❌ | **ĐẶC QUYỀN TRỰC TIẾP THEO RANK**<br/>Voucher Xăng/EV cố định, Bảo hiểm tai nạn, Gói khám sức khỏe, Ưu tiên cấp phát Đồng phục/Driver Kit, Ưu tiên mời tham gia Sự kiện/Gala Ahamove |
+| **Quyền Ưu tiên Đăng ký Ca** | Mở slot ca theo khả năng chứa | **QUYẾT ĐỊNH KHUNG GIỜ MỞ CỔNG (Priority Window)**<br/>• SUPER: 00:00 - 10:00 (Mở chọn trước tất cả Zone)<br/>• PRO: 10:00 - 14:00<br/>• SEMI_PRO: 14:00 - 24:00<br/>• AMATEUR/UNRANKED: Ngày 02+ |
+| **Cơ chế Gán Đơn trong cùng Layer** | • **L2–L5:** Ưu tiên Tài xế ĐĂNG KÝ CA trước.<br/>• **L6 MASS:** Quét gán đơn trực tiếp theo thứ tự RANK. | **ƯU TIÊN THEO HẠNG RANK (SUPER ➔ PRO ➔ SEMI_PRO)**<br/>Tại L6 MASS: Tài xế Rank SUPER được quét ưu tiên nhận đơn đầu tiên. |
+| **Phúc lợi Vật thể & Phi Tiền Mặt** | Cơ sở vật chất tại Hub | **ĐẶC QUYỀN TRỰC TIẾP THEO RANK**<br/>Voucher Xăng/EV cố định, Bảo hiểm tai nạn, Gói khám sức khỏe, Ưu tiên cấp phát Đồng phục/Driver Kit, Ưu tiên mời tham gia Sự kiện/Gala Ahamove |
 
 ---
 
@@ -56,26 +58,31 @@ Dự án **Driver Ranking & Layer Allocation System v2.0** tái cấu trúc tri�
 
 ---
 
-#### 📌 ĐỀ XUẤT 1: BỘ TIÊU CHÍ XẾP HẠNG (5-TIER DRIVER TAXONOMY)
+#### 📌 ĐỀ XUẤT 1: BỘ TIÊU CHÍ XẾP HẠNG (5-TIER DRIVER TAXONOMY) & HỆ SỐ TÍCH ĐIỂM
 
-| Thứ Hạng (Rank Key) | Tên Tiếng Việt | Chỉ Số DQS | Năng Suất (stp / tháng) | Quyền Hạn Đăng Ký Zone & Khung Giờ Mở Cổng |
-| :--- | :--- | :--- | :--- | :--- |
-| **SUPER 💎** | **Siêu cấp** | **DQS ≥ 80** | **stp ≥ 240** | **00:00 – 10:00 (Ngày 01):** Được ưu tiên đăng ký trước vào **TẤT CẢ các Zone (L2 – L6)** |
-| **PROFESSIONAL 🥇** | **Chuyên nghiệp** | **DQS ≥ 75** | **stp ≥ 150** | **10:00 – 14:00 (Ngày 01):** Được đăng ký vào các slot còn lại của **tất cả các Zone (L2 – L6)** |
-| **SEMI_PROFESSIONAL 🥈**| **Bán chuyên** | **DQS ≥ 75** | **stp ≥ 70** | **14:00 – 24:00 (Ngày 01):** Được đăng ký vào các slot còn lại của **tất cả các Zone (L2 – L6)** |
-| **AMATEUR 🥉** | **Phổ thông** | **DQS < 75** *hoặc* | **stp < 70** | **Từ Ngày 02 trở đi:** Chỉ được chọn các slot trống còn lại tại **L5 Cityzone & L6 MASS** |
-| **UNRANKED 🆕** | **Chưa xếp hạng** | *Chưa có data* | *Chưa có đơn* | **Từ Ngày 02 trở đi:** Chỉ được chọn các slot trống còn lại tại **L5 Cityzone & L6 MASS** |
+| Thứ Hạng (Rank Key) | Tên Tiếng Việt | Chỉ Số DQS | Năng Suất (stp / tháng) | Hệ Số Điểm Rank (`rank_multiplier`) | Quyền Hạn Đăng Ký Zone & Khung Giờ Mở Cổng |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **SUPER 💎** | **Siêu cấp** | **DQS ≥ 80** | **stp ≥ 240** | **× 1.5** *(Cao nhất)* | **00:00 – 10:00 (Ngày 01):** Được ưu tiên đăng ký trước vào **TẤT CẢ các Zone (L2 – L6)** |
+| **PROFESSIONAL 🥇** | **Chuyên nghiệp** | **DQS ≥ 75** | **stp ≥ 150** | **× 1.3** | **10:00 – 14:00 (Ngày 01):** Được đăng ký vào các slot còn lại của **tất cả các Zone (L2 – L6)** |
+| **SEMI_PROFESSIONAL 🥈**| **Bán chuyên** | **DQS ≥ 75** | **stp ≥ 70** | **× 1.1** | **14:00 – 24:00 (Ngày 01):** Được đăng ký vào các slot còn lại của **tất cả các Zone (L2 – L6)** |
+| **AMATEUR 🥉** | **Phổ thông** | **DQS < 75** *hoặc* | **stp < 70** | **× 1.0** *(Base)* | **Từ Ngày 02 trở đi:** Chỉ được chọn các slot trống còn lại tại **L5 Cityzone & L6 MASS** |
+| **UNRANKED 🆕** | **Chưa xếp hạng** | *Chưa có data* | *Chưa có đơn* | **× 1.0** *(Base)* | **Từ Ngày 02 trở đi:** Chỉ được chọn các slot trống còn lại tại **L5 Cityzone & L6 MASS** |
 
 ---
 
-#### 📌 ĐỀ XUẤT 2: QUYỀN LỢI TÀI XẾ RANK CAO TRONG L6 MASS & CƠ CHẾ GÁN ĐƠN (INTRA-LAYER DISPATCH PRIORITY)
+#### 📌 ĐỀ XUẤT 2: THUẬT TOÁN QUÉT GÁN ĐƠN THEO TỪNG LAYER (INTRA-LAYER DISPATCH PRIORITY)
 
-##### 1. Xử Lý Trường Hợp Tài Xế SUPER / PROFESSIONAL Chạy Tại Layer 6 MASS
-Khi tài xế Rank cao hoạt động tại L6 MASS (do hết ca đăng ký, chạy tự do ngoài giờ, hoặc tràn đơn từ zone khác), hệ thống **bảo toàn 100% đặc quyền theo Rank**:
-- **Cơ chế Ưu tiên Gán đơn (Order Dispatch Priority):** Khi một đơn hàng phát sinh tại L6 MASS, thuật toán Matching sẽ quét tài xế đang bật app trong bán kính theo thứ tự ưu tiên thứ hạng:
-  $$\text{SUPER} \longrightarrow \text{PROFESSIONAL} \longrightarrow \text{SEMI\_PROFESSIONAL} \longrightarrow \text{AMATEUR} \longrightarrow \text{UNRANKED}$$
-- **Giữ nguyên Đặc quyền Tích lũy Phúc lợi Rank:** Tài xế vẫn nhận trọn vẹn Voucher Xăng/EV cố định hàng tháng, Bảo hiểm tai nạn, VIP Support và quyền đổi quà Catalog cao cấp theo Hạng của mình.
-- **Hệ số điểm Layer:** Do đang chạy tại L6 MASS, hệ số tích điểm cuốc xe áp dụng theo quy chuẩn Layer L6 ($\times 1.0$).
+##### 1. Cơ Chế Quét Đơn Từng Layer
+Khi một đơn hàng mới phát sinh, thuật toán Matching quét tài xế được phân định theo 2 kịch bản Layer:
+
+- **KỊCH BẢN A: Dành cho các Layer có Đăng ký ca (L2 Minizone, L3 Mediumzone, L4 Bigzone, L5 Cityzone):**
+  - **Ưu tiên 1:** Quét nhóm **Tài xế ĐÃ ĐĂNG KÝ CA** tại Zone đó đang trong ca làm việc (`In-Shift SUPER` $\rightarrow$ `In-Shift PRO` $\rightarrow$ `In-Shift SEMI_PRO`).
+  - **Ưu tiên 2:** Nếu hết tài xế trong ca mới mở rộng quét nhóm tài xế ngoài ca/vãng lai theo Rank (`Off-Shift SUPER` $\rightarrow$ `Off-Shift PRO` $\rightarrow$ ...).
+
+- **KỊCH BẢN B: Dành riêng cho Layer 6 MASS (On-Demand Tự Do):**
+  - Vì Layer 6 MASS không có cơ chế đăng ký ca cố định, hệ thống **ƯU TIÊN TRỰC TIẾP THEO RANK THỨ HẠNG TÀI XẾ**:
+    $$\text{SUPER} \longrightarrow \text{PROFESSIONAL} \longrightarrow \text{SEMI\_PROFESSIONAL} \longrightarrow \text{AMATEUR} \longrightarrow \text{UNRANKED}$$
+  - Tài xế Rank **SUPER** đang cắm app tự do tại L6 MASS luôn là người đầu tiên được hệ thống gửi đơn match trước các thứ hạng còn lại!
 
 ---
 
@@ -92,80 +99,52 @@ Hệ thống AI/ML trên App Tài xế tự động phân tích và đưa ra **T
 3. **Bản đồ Nhiệt Nguồn Cung - Nhu Cầu (Demand Heatmap)** dự báo cho tuần tới.
 4. **Hạng tài xế (Rank):** Gợi ý các Zone phù hợp nhất với khung giờ ưu tiên của tài xế.
 
-```text
-Giao diện App Tài xế: "GỢI Ý ZONE CHO BẠN TUẦN NÀY"
-🔥 Đề xuất 1: L2 Minizone Quận 1 (Phù hợp Rank SUPER của bạn - Dự kiến GSV +35%)
-⚡ Đề xuất 2: L3 Mediumzone Tân Bình (Gần khu vực sống - Thu nhập ổn định)
-👍 Đề xuất 3: L5 Cityzone TP. Thủ Đức (Mở ca tuần linh hoạt)
-```
-
 ---
 
-#### 📌 ĐỀ XUẤT 4: HỆ THỐNG PHÂN LỚP VÙNG (LAYER L1–L6) & HỆ SỐ NHÂN AHAPOINTS
+#### 📌 ĐỀ XUẤT 4: HỆ THỐNG PHÂN LỚP VÙNG (LAYER L1–L6)
 
-Hệ thống chia nguồn cung vận tải thành **6 Layer chuyên biệt**. **Layer quyết định Hệ số Nhân Điểm AhaPoints (`layer_multiplier`)**:
-
-| Layer | Tên Layer | Bán kính / Phạm vi | Hệ Số Nhân AhaPoints (`layer_multiplier`) | Đội Trưởng Hỗ Trợ | Cơ chế Đăng ký & Vận hành |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **L1** | **KA / MP** | Gán trực tiếp kho KA | Thu nhập HĐ cam kết | ❌ | Gán trực tiếp (Assigned), không qua đăng ký ca |
-| **L2** | **Minizone** | Bán kính ngắn **≤ 4km** | **× 1.5** *(Cao nhất)* | ✅ **Đội trưởng + VIP Support** | Đăng ký ca tháng · Mật độ ghép đơn cực cao |
-| **L3** | **Mediumzone**| Bán kính trung bình **≤ 8km**| **× 1.3** | ✅ **Đội trưởng hỗ trợ** | Đăng ký ca tháng · Cân bằng cự ly & thu nhập |
-| **L4** | **Bigzone** | Vùng Quận / Huyện | **× 1.1** | ❌ (CSKB tiêu chuẩn) | Đăng ký ca tháng · Đơn cự ly dài |
-| **L5** | **Cityzone** | Toàn Thành phố | **× 1.0** *(Base)* | ❌ | **Đăng ký ca tuần & ca tháng** · Smart Zone Suggest |
-| **L6** | **MASS** | Toàn hệ thống | **× 1.0** *(Base)* | ❌ | On-demand tự do · Buffer co giãn toàn hệ thống |
-
-> **Công thức Tích điểm AhaPoints trên mỗi đơn hoàn thành:**
-> $$\text{earned\_pts} = \text{round}\left( \text{round}\left(\frac{\text{trip\_GSV}}{1.000}\right) \times \text{layer\_multiplier} \right)$$
-> *(Ví dụ: Đơn hàng 50.000đ GSV hoàn thành tại L2 Minizone sẽ nhận: $50 \times 1.5 = 75 \text{ pts}$)*.
+| Layer | Tên Layer | Bán kính / Phạm vi | Đội Trưởng Hỗ Trợ | Cơ chế Đăng ký & Quy tắc Gán đơn |
+| :--- | :--- | :--- | :--- | :--- |
+| **L1** | **KA / MP** | Gán trực tiếp kho KA | ❌ | Gán trực tiếp (Assigned) cho đối tác KA |
+| **L2** | **Minizone** | Bán kính ngắn **≤ 4km** | ✅ **Đội trưởng + VIP Support** | Đăng ký ca tháng · **Ưu tiên Ca ➔ Rank** |
+| **L3** | **Mediumzone**| Bán kính trung bình **≤ 8km**| ✅ **Đội trưởng hỗ trợ** | Đăng ký ca tháng · **Ưu tiên Ca ➔ Rank** |
+| **L4** | **Bigzone** | Vùng Quận / Huyện | ❌ (CSKB tiêu chuẩn) | Đăng ký ca tháng · **Ưu tiên Ca ➔ Rank** |
+| **L5** | **Cityzone** | Toàn Thành phố | ❌ | Đăng ký ca tuần & ca tháng · **Ưu tiên Ca ➔ Rank** |
+| **L6** | **MASS** | Toàn hệ thống | ❌ | On-demand tự do · **ƯU TIÊN THUẦN RANK (SUPER ➔ PRO ➔ SEMI_PRO)** |
 
 ---
 
 #### 📌 ĐỀ XUẤT 5: BẢNG TỔNG HỢP ĐẶC QUYỀN PHÚC LỢI THEO RANK (RANK ENTITLEMENTS)
 
-Hệ thống **BỎ TOÀN BỘ** các khoản đảm bảo thu nhập ca/ngày và thưởng incentive tiền mặt. Thay vào đó, Rank mang lại bộ đặc quyền phi tiền mặt & nhận diện chuyên nghiệp:
-
 | Danh Mục Quyền Lợi | SUPER 💎 (Siêu cấp) | PROFESSIONAL 🥇 (Chuyên nghiệp) | SEMI_PROFESSIONAL 🥈 (Bán chuyên) | AMATEUR 🥉 & UNRANKED 🆕 |
 | :--- | :--- | :--- | :--- | :--- |
+| **Hệ số Tích điểm AhaPoints** | **× 1.5** *(Cao nhất)* | **× 1.3** | **× 1.1** | × 1.0 (Base) |
+| **Ưu tiên Gán đơn L6 MASS** | **Ưu tiên 1 (Số 1)** | **Ưu tiên 2** | **Ưu tiên 3** | Baseline FCFS |
 | **Khung giờ mở đăng ký ca (Priority Window)** | **00:00 – 10:00** *(Sớm nhất, chọn mọi Zone)* | **10:00 – 14:00** *(Chọn mọi Zone)* | **14:00 – 24:00** *(Chọn mọi Zone)* | Ngày 02 trở đi *(Chỉ L5 & L6)* |
-| **Ưu tiên gán đơn trong cùng Layer** | **Ưu tiên 1 (Cao nhất)** | **Ưu tiên 2** | **Ưu tiên 3** | Baseline FCFS |
-| **Voucher Xăng Petrolimex / Sạc EV VinFast** | **50.000 VNĐ / tháng** *(Cố định)* | **30.000 VNĐ / tháng** *(Cố định)* | Đổi bằng điểm AhaPoints | ❌ Không hỗ trợ |
-| **Bảo hiểm Tai nạn Cá nhân Mini** | **Hỗ trợ 100%** *(Đăng ký gói 1k/3k pts)* | ❌ | ❌ | ❌ |
+| **Voucher Xăng Petrolimex / Sạc EV VinFast** | **50.000 VNĐ / tháng** *(Cố định)* | **30.000 VNĐ / tháng** *(Cố định)* | Đổi bằng điểm AhaPoints | Không hỗ trợ |
+| **Bảo hiểm Tai nạn Cá nhân Mini** | **Hỗ trợ 100%** *(Đăng ký gói 1k/3k pts)* | — | — | — |
 | **Ưu tiên Cấp phát CCDC (Driver Kit)** | **Ưu tiên 1** *(Tặng Combo Áo + Túi)* | **Ưu tiên 2** *(Giảm 50% giá CCDC)* | Đổi bằng điểm AhaPoints | Mua giá niêm yết |
-| **Ưu tiên Tham gia Sự kiện Ahamove** | **Vé VIP Gala & Sự kiện Vinh danh** | **Ưu tiên Mời tham dự** | Đăng ký theo slot tự do | ❌ |
-| **Bảo dưỡng Xe & Khám sức khỏe** | Gói Bảo dưỡng + Khám tổng quát | Gói Bảo dưỡng tiêu chuẩn | Đổi bằng điểm AhaPoints | ❌ |
-| **Đảm bảo thu nhập ca/ngày & Thưởng Incentive**| ❌ **ĐÃ BỎ HOÀN TOÀN** | ❌ **ĐÃ BỎ HOÀN TOÀN** | ❌ **ĐÃ BỎ HOÀN TOÀN** | ❌ **ĐÃ BỎ HOÀN TOÀN** |
+| **Ưu tiên Tham gia Sự kiện Ahamove** | **Vé VIP Gala & Sự kiện Vinh danh** | **Ưu tiên Mời tham dự** | Đăng ký theo slot tự do | — |
+| **Bảo dưỡng Xe & Khám sức khỏe** | Gói Bảo dưỡng + Khám tổng quát | Gói Bảo dưỡng tiêu chuẩn | Đổi bằng điểm AhaPoints | — |
 
 ---
 
-### 2.3 Mô Hình Vận Hành Khép Kín & Lộ Trình Triển Khai
-
-```mermaid
-flowchart TD
-    A["Tài xế phấn đấu DQS ≥ 80 & stp ≥ 240"] --> B["Đạt Rank SUPER"]
-    B --> C["Mở cổng 00:00-10:00: Chọn trước L2 Minizone"]
-    C --> D["Chạy tại L2 Minizone: Nhận Hệ số điểm Layer x1.5"]
-    D --> E["Đổi Voucher Xăng/EV 50k, BH Tai nạn, VIP Driver Kit"]
-    E --> F["Nhận ưu tiên gán đơn Dispatch Priority trong mọi Layer"]
-    F --> A
-```
-
-#### Lộ Trình Triển Khai 3 Giai Đoạn
+### 2.3 Lộ Trình Triển Khai Thực Tế (Realistic Execution Roadmap)
 
 ```text
-Giai đoạn 1: Mở rộng Kỹ thuật & Cắt giảm Guarantee (15/07/2026 – 31/07/2026)
-├── Loại bỏ toàn bộ code tính Đảm bảo thu nhập ca/ngày và Hệ số nhân Incentive trên App.
-├── Cập nhật thuật toán Tích điểm theo Layer (L2: x1.5, L3: x1.3, L4: x1.1, L5/L6: x1.0).
-└── Tích hợp tính năng Đăng ký ca tuần tại L5 & Hệ thống gợi ý Smart Zone Recommendation.
+📌 LỘ TRÌNH TRIỂN KHAI THỰC TẾ (REALISTIC EXECUTION ROADMAP):
 
-Giai đoạn 2: Shadow Mode Pilot tại HAN & SGN (01/08/2026 – 31/08/2026)
-├── Chạy thử nghiệm Shadow Mode (Tính 5-Tier & Gợi ý Zone thông minh).
-├── Validate tỷ lệ lấp đầy ca và đo lường mức độ cắt giảm CPO thực tế.
-└── Phổ biến quy chế mới cho Đội trưởng và Tài xế toàn hệ thống.
+• Giai đoạn 1: Hiện tại (Tháng 07/2026) — Chuẩn Hóa Phân Hạng Ranking 5-Tier
+  - Áp dụng đổi trước tiêu chuẩn phân hạng Ranking 5-Tier (SUPER, PROFESSIONAL, SEMI_PRO, AMATEUR, UNRANKED) dựa trên DQS & Năng suất (stp).
 
-Giai đoạn 3: Go-Live Toàn Hệ Thống (Từ 01/09/2026)
-├── Khóa mở cổng đăng ký ca cứng theo giờ (SUPER: 0-10h, PRO: 10-14h, SEMI_PRO: 14-24h).
-├── Kích hoạt cơ chế Ưu tiên gán đơn theo Rank trong cùng Layer.
-└── Áp dụng toàn bộ đặc quyền phi tiền mặt (Voucher Xăng/EV, BH Tai nạn, Driver Kit).
+• Giai đoạn 2: Dự kiến Tháng 08 – 09/2026 — Triển Khai Hệ Số Tích Điểm Theo Rank
+  - Triển khai thuật toán tính điểm AhaPoints theo hệ số nhân Rank (SUPER x1.5, PRO x1.3, SEMI_PRO x1.1, AMATEUR/UNRANKED x1.0).
+
+• Giai đoạn 3: Trong Quý 3 (Tháng 09/2026) — Backend AhaPoints & UI/UX App
+  - Triển khai hệ thống tính toán AhaPoints backend và hoàn thiện giao diện UI/UX hiển thị điểm/hạng trên App Tài xế.
+
+• Giai đoạn 4: Kế Hoạch Phúc Lợi Phi Tiền Mặt (In Planning / Partnership)
+  - Hoàn thiện kế hoạch & đàm phán thương lượng với đối tác (Petrolimex, VinFast EV, PTI) để phát hành Voucher Xăng/EV & Bảo hiểm tai nạn.
 ```
 
 ---
@@ -176,10 +155,9 @@ Giai đoạn 3: Go-Live Toàn Hệ Thống (Từ 01/09/2026)
 
 | Hiện trạng (Current State) | Chuyển đổi (Transformation) | Trạng thái Mục tiêu (Target State) | Tác động Kinh doanh (Measurable Impact) |
 | :--- | :--- | :--- | :--- |
-| Gây thủng P&L do duy trì các khoản thưởng Đảm bảo thu nhập ca/ngày cố định. | ↓ **BỎ GUARANTEE & INCENTIVE MULTIPLIER** ↓ | Loại bỏ 100% tiền thưởng cố định; chỉ thưởng qua tích điểm **AhaPoints biến đổi**. | ***Cắt giảm 25–30% tổng chi phí Promo/CPO; kiểm soát P&L an toàn trong hạn mức.*** |
-| Nhầm lẫn giữa quyền lợi Hạng tài xế và đặc tính Vùng hoạt động. | ↓ **PHÂN ĐỊNH RẠCH RÒI LAYER VS RANK** ↓ | Layer quyết định **Hệ số nhân điểm (L2: x1.5)**; Rank quyết định **Giờ chọn ca & Phúc lợi**. | ***Minh bạch hóa 100% chính sách vận hành; loại bỏ tranh chấp quyền lợi của đối tác.*** |
-| Tài xế Rank cao chạy tại L6 MASS bị cào bằng quyền lợi gán đơn với tài xế mới. | ↓ **GÁN ĐƠN ƯU TIÊN (DISPATCH PRIORITY)** ↓ | Trong cùng Layer, thuật toán gán đơn ưu tiên theo thứ tự thứ hạng: SUPER $\rightarrow$ PRO $\rightarrow$ SEMI_PRO. | ***Tăng 35% mức độ hài lòng & duy trì 80% tài xế Rank cao hoạt động tự do ngoài ca.*** |
-| Tài xế Cityzone (L5) hoạt động tự do, thiếu tính cam kết cắm vùng. | ↓ **ĐĂNG KÝ CA TUẦN & SMART ZONE SUGGEST** ↓ | Mở đăng ký ca tuần L5 & gợi ý Top 3 Zone thông minh theo ML/Demand Heatmap. | ***Tăng 40% tỷ lệ tài xế quay lại hoạt động (Re-activation rate) & lấp đầy ca L5.*** |
+| Duy trì chi phí cố định không hiệu quả. | ↓ **CHUYỂN DỊCH SANG AHAPOINTS VÀ QUÀ TÀI TRỢ** ↓ | Chuyển 100% thưởng sang tích điểm **AhaPoints biến đổi theo Rank** & đối tác tài trợ. | ***Tối ưu hóa tổng chi phí CPO thực tế.*** |
+| Nhầm lẫn giữa quyền lợi Hạng tài xế và đặc tính Vùng hoạt động. | ↓ **PHÂN ĐỊNH RẠCH RÒI LAYER VS RANK** ↓ | Rank quyết định **Hệ số nhân điểm (SUPER: x1.5)** & Phúc lợi; Layer quyết định **Bán kính & Đăng ký ca**. | ***Minh bạch hóa 100% chính sách vận hành; loại bỏ tranh chấp quyền lợi của đối tác.*** |
+| Tài xế Rank cao chạy tại L6 MASS bị cào bằng quyền lợi gán đơn với tài xế mới. | ↓ **GÁN ĐƠN L6 MASS THUẦN THEO RANK** ↓ | Tại L6 MASS, gán đơn ưu tiên trực tiếp theo thứ tự Rank: **SUPER ➔ PRO ➔ SEMI_PRO**. | ***Tăng 35% hài lòng & giữ chân 80% tài xế Rank cao khi chạy tự do.*** |
 
 ---
-*Tài liệu Final Master này đã được tối ưu hóa hoàn chỉnh để trình duyệt cấp Board of Directors và triển khai đồng bộ cho các Stakeholders.*
+*Tài liệu Final Master này đã được làm sạch và hoàn thiện chuẩn mực để trình duyệt cấp Board of Directors và triển khai đồng bộ cho các Stakeholders.*
