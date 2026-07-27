@@ -369,19 +369,30 @@ SEGMENT_COLORS = {
 }
 
 
-# ── DATA LOADING & TRANSFORMATION ────────────────────────────────────────────
-# Raw tab URLs (public gviz/tq endpoint — no auth required)
+# Raw tab URLs (public endpoints — no auth required)
 _BASE_GVIZ = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet="
+_BASE_EXPORT = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&sheet="
 
 
 def _fetch_tab(tab_name: str) -> pd.DataFrame:
-    url = _BASE_GVIZ + requests.utils.quote(tab_name)
-    resp = requests.get(url, timeout=25)
-    resp.raise_for_status()
-    head = resp.text[:300].lower()
-    if "<html" in head or "accounts.google" in head:
-        raise ValueError(f"Tab '{tab_name}': Google Sheet không trả về CSV — kiểm tra quyền public.")
-    return pd.read_csv(io.StringIO(resp.text), dtype=str, keep_default_na=False)
+    encoded_tab = requests.utils.quote(tab_name)
+    urls = [
+        _BASE_EXPORT + encoded_tab,
+        _BASE_GVIZ + encoded_tab,
+    ]
+    last_err = None
+    for url in urls:
+        try:
+            resp = requests.get(url, timeout=30)
+            resp.raise_for_status()
+            head = resp.text[:300].lower()
+            if "<html" in head or "accounts.google" in head:
+                raise ValueError(f"Tab '{tab_name}': Google Sheet không trả về CSV — kiểm tra quyền public.")
+            return pd.read_csv(io.StringIO(resp.text), dtype=str, keep_default_na=False)
+        except Exception as e:
+            last_err = e
+            continue
+    raise last_err or ValueError(f"Không thể tải tab '{tab_name}' từ Google Sheets.")
 
 
 @st.cache_data(ttl=CACHE_TTL_SECONDS, show_spinner="Đang tải demand actual...")
