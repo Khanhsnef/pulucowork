@@ -369,19 +369,14 @@ SEGMENT_COLORS = {
 }
 
 
-# Raw tab URLs (public endpoints — no auth required)
+# Raw tab URLs (public gviz/tq endpoint — preserves exact sheet tab names & schemas)
 _BASE_GVIZ = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet="
-_BASE_EXPORT = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&sheet="
 
 
 def _fetch_tab(tab_name: str) -> pd.DataFrame:
-    encoded_tab = requests.utils.quote(tab_name)
-    urls = [
-        _BASE_EXPORT + encoded_tab,
-        _BASE_GVIZ + encoded_tab,
-    ]
-    last_err = None
-    for url in urls:
+    url = _BASE_GVIZ + requests.utils.quote(tab_name)
+    last_exc = None
+    for attempt in range(3):
         try:
             resp = requests.get(url, timeout=30)
             resp.raise_for_status()
@@ -390,9 +385,8 @@ def _fetch_tab(tab_name: str) -> pd.DataFrame:
                 raise ValueError(f"Tab '{tab_name}': Google Sheet không trả về CSV — kiểm tra quyền public.")
             return pd.read_csv(io.StringIO(resp.text), dtype=str, keep_default_na=False)
         except Exception as e:
-            last_err = e
-            continue
-    raise last_err or ValueError(f"Không thể tải tab '{tab_name}' từ Google Sheets.")
+            last_exc = e
+    raise last_exc or ValueError(f"Không thể tải tab '{tab_name}' từ Google Sheet.")
 
 
 @st.cache_data(ttl=CACHE_TTL_SECONDS, show_spinner="Đang tải demand actual...")
@@ -406,7 +400,10 @@ def _load_demand_actual() -> pd.DataFrame:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col].str.replace(",", ""), errors="coerce")
     df["day"] = pd.to_datetime(df["day"], errors="coerce")
-    df["ops_sector"] = df["ops_sector"].str.strip().str.upper()
+    if "ops_sector" in df.columns:
+        df["ops_sector"] = df["ops_sector"].str.strip().str.upper()
+    else:
+        df["ops_sector"] = "SME"
     return df
 
 
@@ -1105,10 +1102,11 @@ def daily_series(df, row_idx):
 
     series_df = pd.DataFrame(values)
     if series_df.empty:
-        return pd.Series(dtype="float64")
+        return pd.Series(dtype="float64", index=pd.DatetimeIndex([]))
 
     series_df = series_df.dropna(subset=["value"]).sort_values("date")
-    return pd.Series(series_df["value"].values, index=series_df["date"], dtype="float64")
+    idx = pd.to_datetime(series_df["date"])
+    return pd.Series(series_df["value"].values, index=idx, dtype="float64")
 
 
 def metric_snapshot(df, row_idx):
@@ -1411,6 +1409,7 @@ except Exception as exc:
     st.info("Vui lòng kiểm tra quyền chia sẻ public của sheet hoặc kết nối mạng.")
     st.caption(f"Chi tiết lỗi: {exc}")
     st.stop()
+    raise SystemExit(exc)
 
 structure_warnings = validate_sheet_structure(raw_df)
 available_dates = [date for _, date in daily_columns(raw_df)]
@@ -2741,7 +2740,9 @@ with dem_tab5:
     fr_group_data = []
     for group_name, req_row, dem_row, color_key in USER_GROUP_ROWS:
         fr_s = _period_fr_series(req_row, dem_row, fr_group_granularity)
-        fr_s = fr_s[(fr_s.index >= pd.Timestamp(start_date)) & (fr_s.index <= pd.Timestamp(end_date))]
+        if not fr_s.empty:
+            fr_s.index = pd.to_datetime(fr_s.index)
+            fr_s = fr_s[(fr_s.index >= pd.Timestamp(start_date)) & (fr_s.index <= pd.Timestamp(end_date))]
         if fr_s.empty:
             continue
         latest_val = fr_s.iloc[-1]
