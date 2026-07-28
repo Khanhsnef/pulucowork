@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linehaul Offload KPI Architecture & Visualizer</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0E4174;
+            --primary-light: #1A599B;
+            --accent: #FF7F32;
+            --accent-hover: #E06318;
+            --bg-main: #0F172A;
+            --bg-card: #1E293B;
+            --bg-card-hover: #2D3748;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+            --purple: #8B5CF6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        /* HEADER & HERO */
+        .hero {
+            background: linear-gradient(135deg, #0B132B 0%, #1C2541 50%, #0E4174 100%);
+            padding: 40px 5%;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,127,50,0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 127, 50, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(255, 127, 50, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #FFFFFF 0%, #E2E8F0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .hero-desc {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 850px;
+            margin-bottom: 24px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-chip {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            padding: 10px 18px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(14, 65, 116, 0.5);
+            color: #60A5FA;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .stat-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* NAVIGATION TABS */
+        .nav-tabs-container {
+            background: #1E293B;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 12px 5%;
+            overflow-x: auto;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            color: #FFFFFF;
+            background: var(--primary);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(14, 65, 116, 0.4);
+        }
+
+        /* CONTAINER & CARDS */
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 5%;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-title i {
+            color: var(--accent);
+        }
+
+        /* TABLES */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        th {
+            background: #0F172A;
+            color: var(--accent);
+            padding: 14px 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: #E2E8F0;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        tr:hover {
+            background: rgba(255, 127, 50, 0.05);
+        }
+
+        /* BADGES & PILLS */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-info { background: rgba(59, 130, 246, 0.2); color: var(--info); border: 1px solid rgba(59, 130, 246, 0.3); }
+
+        /* SIMULATOR & INTERACTIVE COMPONENTS */
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .sim-grid { grid-template-columns: 1fr; }
+        }
+
+        .scenario-box {
+            background: #0F172A;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .btn-scenario {
+            width: 100%;
+            text-align: left;
+            background: #1E293B;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .btn-scenario:hover {
+            border-color: var(--accent);
+            background: rgba(255, 127, 50, 0.1);
+        }
+
+        .btn-scenario.active {
+            border-color: var(--accent);
+            background: rgba(255, 127, 50, 0.2);
+            font-weight: 700;
+        }
+
+        .sim-result {
+            background: #182234;
+            border: 1px solid var(--primary-light);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .result-header {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .result-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .result-detail {
+            background: #0F172A;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        /* FIFO SLIDER COMPONENT */
+        .slider-group {
+            margin-bottom: 20px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 8px;
+            background: #334155;
+            border-radius: 4px;
+            outline: none;
+            accent-color: var(--accent);
+        }
+
+        .code-snippet {
+            background: #090D16;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #A5B4FC;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .flow-step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .step-item {
+            background: #0F172A;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .step-body {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            color: var(--text-main);
+        }
+
+        .step-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO HEADER -->
+    <header class="hero">
+        <div class="hero-badge">
+            <i class="fa-solid fa-diagram-project"></i> ARCHITECTURE & WORKFLOW VISUALIZER
+        </div>
+        <h1 class="hero-title">Linehaul Offload KPI Architecture</h1>
+        <p class="hero-desc">
+            Trực quan hóa toàn bộ quy trình tính toán KPI Offload (FM & SOC), bộ quy tắc phán định trách nhiệm lỗi <code>offload_fault</code> và thuật toán loại trừ vi phạm thứ tự <code>FIFO</code>.
+        </p>
+        <div class="hero-stats">
+            <div class="stat-chip">
+                <div class="stat-icon"><i class="fa-solid fa-database"></i></div>
+                <div class="stat-text">
+                    <span class="stat-label">File Nguồn Root</span>
+                    <span class="stat-value">2 Source Files (213 Lines SQL)</span>
+                </div>
+            </div>
+            <div class="stat-chip">
+                <div class="stat-icon"><i class="fa-solid fa-file-excel"></i></div>
+                <div class="stat-text">
+                    <span class="stat-label">File Báo Cáo Explored</span>
+                    <span class="stat-value">2 Master Excel Files</span>
+                </div>
+            </div>
+            <div class="stat-chip">
+                <div class="stat-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div class="stat-text">
+                    <span class="stat-label">Rules Phán Định</span>
+                    <span class="stat-value">11 Rules offload_fault</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- STICKY NAVIGATION TABS -->
+    <div class="nav-tabs-container">
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('tab-mapping')">
+                <i class="fa-solid fa-map"></i> 1. Bản Đồ Đối Soát Nguồn
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-tree')">
+                <i class="fa-solid fa-network-wired"></i> 2. Cây Phán Định offload_fault
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-fifo')">
+                <i class="fa-solid fa-sliders"></i> 3. Thuật Toán Mô Phỏng FIFO
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-steps')">
+                <i class="fa-solid fa-list-check"></i> 4. Các Bước FM (7B) & SOC (10B)
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- TAB 1: BẢN ĐỒ ĐỐI SOÁT NGUỒN (SOURCE MAPPING) -->
+        <div id="tab-mapping" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-table-cells"></i> Đối Soát Dữ Liệu Nguồn (Data Source Mapping Table)
+                    </div>
+                    <span class="badge badge-info">Source to Output Mapping</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+                    Tra cứu 1:1 các vị trí Sheet, Mục và Dòng/Cột của 2 File Output được trích xuất từ 2 File Source trong thư mục <code>Data sources/</code>.
+                </p>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sheet Trong File Output</th>
+                                <th>Nội Dung Diễn Giải</th>
+                                <th>File Nguồn Tương Ứng (Source File)</th>
+                                <th>Vị Trí Cột / Dòng Nguồn (Source Location)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>0. Source Mapping</strong></td>
+                                <td>Bản đồ tra cứu đối soát 1:1 nguồn dữ liệu</td>
+                                <td>Cả 2 File Source</td>
+                                <td>Sheet Info, FM_offload, SOC_offload</td>
+                            </tr>
+                            <tr>
+                                <td><strong>1. Tổng Quan</strong></td>
+                                <td>Sơ đồ luồng KPI & Metadata Ticket Jira</td>
+                                <td>Review workflow LH offload KPI.xlsx</td>
+                                <td>Sheet Info & Code review (Dòng 1-3)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. FM Offload COT</strong></td>
+                                <td>Logic 7 bước FM & Công thức SLA End</td>
+                                <td>LH logic review (1) (1).xlsx</td>
+                                <td>Sheet FM_offload <strong>(Dòng 1 – 81)</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. SOC Offload COT</strong></td>
+                                <td>
+                                    • Cleanse Data & 3TH COT (Province, City, Linehaul)<br>
+                                    • <strong>Phán định lỗi offload_fault (11 Rules)</strong><br>
+                                    • Thuật toán kiểm soát FIFO (lh_adhoc_soc_miss_fifo)<br>
+                                    • Logic KPI Month & 4 Loại trừ cuối
+                                </td>
+                                <td>LH logic review (1) (1).xlsx</td>
+                                <td>
+                                    Sheet SOC_offload:<br>
+                                    • Dòng 1–77 (Cột A-M)<br>
+                                    • <strong>Dòng 80–95 (Cột N, O, P & Cột A)</strong><br>
+                                    • <strong>Dòng 130–178 (Cột A-P)</strong><br>
+                                    • Dòng 181–213 (Cột A-E)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. KPI Month & Status</strong></td>
+                                <td>Bảng Status Code ID FMS & REGEXP Name Station</td>
+                                <td>Review workflow LH offload KPI.xlsx</td>
+                                <td>Sheet Code review & Station Classification</td>
+                            </tr>
+                            <tr>
+                                <td><strong>5. Glossary</strong></td>
+                                <td>Từ điển thuật ngữ Vận hành chuẩn hóa</td>
+                                <td>Cả 2 File Source</td>
+                                <td>Tất cả các Sheet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: CÂY PHÁN ĐỊNH OFFLOAD_FAULT (DECISION TREE SIMULATOR) -->
+        <div id="tab-tree" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-code-branch"></i> Mô Phỏng Cây Quyết Định Phán Định Lỗi (offload_fault Decision Simulator)
+                    </div>
+                    <span class="badge badge-warning">Source: SOC_offload Dòng 80-95 (Cột N, O, P)</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+                    Chọn một kịch bản vận hành bên dưới để xem hệ thống phân định trách nhiệm lỗi (SOC Fault vs Linehaul Fault vs Exclude) theo đúng ma trận SQL:
+                </p>
+
+                <div class="sim-grid">
+                    <div class="scenario-box">
+                        <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: var(--accent);">
+                            <i class="fa-solid fa-hand-pointer"></i> Chọn Kịch Bản Vận Hành:
+                        </h4>
+                        
+                        <button class="btn-scenario active" onclick="simulateScenario(1)">
+                            <span>1. Xe LH không check-in 500m & SOC trễ SLA</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        
+                        <button class="btn-scenario" onclick="simulateScenario(2)">
+                            <span>2. Xe LH check-in 500m & đến sớm ≥30p so với COT SOC</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+
+                        <button class="btn-scenario" onclick="simulateScenario(3)">
+                            <span>3. Xe LH check-in 500m & đến sát giờ COT SOC (±30p)</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+
+                        <button class="btn-scenario" onclick="simulateScenario(4)">
+                            <span>4. Xe LH check-in 500m & đến sau giờ COT SOC</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+
+                        <button class="btn-scenario" onclick="simulateScenario(5)">
+                            <span>5. Đơn có Ticket Cấp xe / Overcap được duyệt</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+
+                        <button class="btn-scenario" onclick="simulateScenario(6)">
+                            <span>6. SOC thiếu trạng thái scan Linehaul Packed (dù có COT)</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="sim-result">
+                        <div>
+                            <div class="result-header">Kết Quả Phán Định SQL (offload_fault)</div>
+                            <div class="result-title" id="res-fault-code">Linehaul Fault</div>
+                            
+                            <div class="result-detail" id="res-detail">
+                                Điều kiện: ckin_gof_outbound = 'NO' và actual_end > SLA_ontime.<br>
+                                LH không vào cổng/không check-in đúng toạ độ 500m làm SOC bị trễ dây chuyền.
+                            </div>
+
+                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">
+                                <strong>Hiển Thị Vận Hành (explain_reason):</strong>
+                            </div>
+                            <span class="badge badge-danger" id="res-explain-reason">LH trễ COT SOC</span>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">SQL Condition Match:</div>
+                            <div class="code-snippet" id="res-sql-snippet">WHEN fact.ckin_gof_outbound = 'NO' AND actual_end > SLA_ontime THEN 'Linehaul Fault'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: THUẬT TOÁN FIFO SIMULATOR -->
+        <div id="tab-fifo" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-arrow-down-short-wide"></i> Mô Phỏng Thuật Toán Phát Hiện Miss FIFO (lh_adhoc_soc_miss_fifo)
+                    </div>
+                    <span class="badge badge-warning">Source: SOC_offload Dòng 130-178</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+                    Điều chỉnh số lượng đơn hàng trong cùng một slot <code>(date, station, cot_lh, cot_soc)</code> để kiểm tra công thức phân bổ <code>soc_miss_fifo</code>:
+                </p>
+
+                <div class="sim-grid">
+                    <div class="scenario-box">
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>Số đơn COT sau (don_thuoc_cot_sau):</span>
+                                <span id="val-cot-sau" style="color: var(--accent);">5</span>
+                            </div>
+                            <input type="range" id="input-cot-sau" min="0" max="15" value="5" oninput="updateFifoSim()">
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Đơn có deadline LH sớm hơn SOC (SOC có thể pack sau)</span>
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>Số đơn thực tế trễ (don_late_trong_cot):</span>
+                                <span id="val-late" style="color: var(--danger);">3</span>
+                            </div>
+                            <input type="range" id="input-late" min="0" max="15" value="3" oninput="updateFifoSim()">
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Đơn thực tế bị trễ SLA trong slot</span>
+                        </div>
+
+                        <div style="background: rgba(14, 65, 116, 0.3); border: 1px solid var(--primary-light); padding: 12px; border-radius: 8px; font-size: 0.85rem;">
+                            <i class="fa-solid fa-circle-info" style="color: #60A5FA;"></i> 
+                            <strong>Điều kiện kích hoạt:</strong> Có đồng thời cả 2 cờ <code>vol_don_cot_sau > 0</code> VÀ <code>vol_don_late > 0</code> trong cùng slot.
+                        </div>
+                    </div>
+
+                    <div class="sim-result">
+                        <div>
+                            <div class="result-header">Kết Quả Phân Bổ Miss FIFO</div>
+                            <div class="result-title" id="fifo-res-title">3 Đơn bị gán miss_fifo</div>
+                            
+                            <div class="result-detail" id="fifo-res-desc">
+                                <strong>Trường hợp Nhánh 1 (vol_cot_sau ≥ vol_late):</strong> 5 ≥ 3<br>
+                                Có đủ 5 đơn COT sau để giải thích tại sao 3 đơn deadline sớm bị trễ. Toàn bộ 3 đơn trễ đều bị gán <code>miss_fifo</code>.
+                            </div>
+
+                            <div style="background: #0F172A; padding: 14px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 14px;">
+                                <strong>Xử lý trong KPI:</strong><br>
+                                <span style="color: var(--success); font-weight: 700;">Loại khỏi cả TỬ SỐ và MẪU SỐ KPI</span> (tránh phạt oan SOC do đảo thứ tự pack).
+                            </div>
+                        </div>
+
+                        <div class="code-snippet" id="fifo-sql-snippet">GREATEST(vol_don_late - vol_don_cot_sau, vol_don_cot_sau)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: CÁC BƯỚC QUY TRÌNH FM & SOC -->
+        <div id="tab-steps" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-diagram-next"></i> Quy Trình 7 Bước FM Offload & 10 Bước SOC Offload
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.1rem; color: var(--accent); margin-bottom: 16px;">
+                    <i class="fa-solid fa-truck-ramp-box"></i> FM Offload (7 Bước)
+                </h3>
+                <div class="flow-step-list" style="margin-bottom: 30px;">
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-body">
+                            <div class="step-title">Raw Tracking Event</div>
+                            <div class="step-desc">Trích xuất sự kiện tracking từ spx_mart.dwd_spx_fleet_order_tracking_ri_vn.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-body">
+                            <div class="step-title">First Inbound Time (fm_inbound)</div>
+                            <div class="step-desc">MIN(CASE WHEN status IN (8, 400, 42) THEN FROM_UNIXTIME(ctime - 3600) END).</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-body">
+                            <div class="step-title">Inbound Station (inbound_hub)</div>
+                            <div class="step-desc">MIN_BY(station_id, ctime) WHERE status IN (8, 400, 42).</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">4</div>
+                        <div class="step-body">
+                            <div class="step-title">Next Station (next_station_id)</div>
+                            <div class="step-desc">MIN_BY(next_station_id, ctime) WHERE status IN (8, 42, 15, 36, 415, 47, 48).</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">5</div>
+                        <div class="step-body">
+                            <div class="step-title">Start Offload Time (actual_start_offload)</div>
+                            <div class="step-desc">Mốc thời gian FM thực tế bắt đầu offload.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">6</div>
+                        <div class="step-body">
+                            <div class="step-title">SLA End Offload Calculation</div>
+                            <div class="step-desc">sla_end = actual_start_offload + eta_offload.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">7</div>
+                        <div class="step-body">
+                            <div class="step-title">Phán định FM Offload Result</div>
+                            <div class="step-desc">So sánh thời gian hoàn thành thực tế với mốc sla_end.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.1rem; color: var(--accent); margin-bottom: 16px;">
+                    <i class="fa-solid fa-warehouse"></i> SOC Offload (10 Bước)
+                </h3>
+                <div class="flow-step-list">
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-body">
+                            <div class="step-title">Cleanse COT Window (cot_time_exclude_interval)</div>
+                            <div class="step-desc">Mở rộng cửa sổ COT vào Thứ 2 / Chủ Nhật.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-body">
+                            <div class="step-title">Dedup & Chuẩn hóa buyer_city (cot_time_dedup)</div>
+                            <div class="step-desc">Fallback buyer_city = 'ALL' nếu không có COT theo quận.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-body">
+                            <div class="step-title">Extend COT Holiday</div>
+                            <div class="step-desc">Gia hạn ETA cho Tết, Lễ 30/4, 2/9, Bão Yagi,...</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">4</div>
+                        <div class="step-body">
+                            <div class="step-title">Output COT & LEAD COT</div>
+                            <div class="step-desc">Thêm next_cot và các mốc gia hạn 1/2/3 COT tiếp theo.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">5</div>
+                        <div class="step-body">
+                            <div class="step-title">actual_start_kpi_offload theo Category</div>
+                            <div class="step-desc">TO Transit ➔ LEAST(onsite_register_time, ATA); Bulky/Khác ➔ soc_packed.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">6</div>
+                        <div class="step-body">
+                            <div class="step-title">Mapping Địa chỉ Hub Zone (old_st vs old_ct)</div>
+                            <div class="step-desc">JOIN bảng hub_zone theo buyer_sort_code để lấy địa chỉ cũ.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">7</div>
+                        <div class="step-body">
+                            <div class="step-title">COT Mapping 3 Trường Hợp</div>
+                            <div class="step-desc">TH3 (Next Station) ➔ TH2 (County) ➔ TH1 (Province). Công thức MIN(COALESCE()).</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">8</div>
+                        <div class="step-body">
+                            <div class="step-title">Phán định offload_fault (11 Rules)</div>
+                            <div class="step-desc">Áp dụng ma trận phân lỗi SOC vs Linehaul.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">9</div>
+                        <div class="step-body">
+                            <div class="step-title">Quy tắc KPI Month</div>
+                            <div class="step-desc">Áp dụng mốc 15/03/2026 cho sla_eta_offload.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">10</div>
+                        <div class="step-body">
+                            <div class="step-title">4 Quy tắc Loại trừ Cuối & Output</div>
+                            <div class="step-desc">Loại bỏ hub_hold_hang, soc_miss_fifo, remove_portal, gsheet_offload_remove.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        const scenarios = {
+            1: {
+                fault: "Linehaul Fault",
+                detail: "Điều kiện: ckin_gof_outbound = 'NO' và actual_end > SLA_ontime.<br>Tài xế Linehaul không check-in trong bán kính 500m từ Hub làm SOC bị trễ dây chuyền.",
+                reason: "LH trễ COT SOC",
+                badgeClass: "badge-danger",
+                sql: "WHEN fact.ckin_gof_outbound = 'NO' AND actual_end > SLA_ontime THEN 'Linehaul Fault'"
+            },
+            2: {
+                fault: "Exclude LH Fault",
+                detail: "Điều kiện: ckin_gof_outbound = 'YES', từ 15/09/2024, xe LH đến sớm hơn SLA SOC ≥30 phút.<br>Xe Linehaul đến sớm đủ, đơn trễ là do SOC tự xử lý chậm.",
+                reason: "LH đến sớm đủ, SOC tự trễ",
+                badgeClass: "badge-warning",
+                sql: "WHEN ckin_gof = 'YES' AND trip_ata < sla_soc - INTERVAL '30' MINUTE THEN 'Exclude LH Fault'"
+            },
+            3: {
+                fault: "Linehaul Fault Late Near COT SOC",
+                detail: "Điều kiện: ckin_gof_outbound = 'YES', từ 15/09/2024, xe LH đến sát SLA SOC (trong khoảng ±30 phút).<br>Linehaul đến quá sát giờ COT làm SOC không kịp xử lý (trễ vừa phải).",
+                reason: "LH đến sát COT SOC",
+                badgeClass: "badge-warning",
+                sql: "WHEN ckin_gof = 'YES' AND trip_ata BETWEEN (sla_soc - 30m) AND (sla_soc + 2h) THEN 'Linehaul Fault Late Near COT SOC'"
+            },
+            4: {
+                fault: "Linehaul Fault Late COT SOC",
+                detail: "Điều kiện: ckin_gof_outbound = 'YES', xe LH đến sau SLA SOC.<br>Linehaul đến quá muộn / sau COT SOC (lỗi hoàn toàn thuộc về xe Linehaul).",
+                reason: "LH trễ COT SOC",
+                badgeClass: "badge-danger",
+                sql: "WHEN ckin_gof = 'YES' AND trip_ata > sla_soc THEN 'Linehaul Fault Late COT SOC'"
+            },
+            5: {
+                fault: "No Fault",
+                detail: "Điều kiện: Đơn có Ticket tăng năng lực/quá tải xe được duyệt và actual_end <= SLA extend.<br>Trường hợp có lý do hợp lệ được duyệt ticket.",
+                reason: "Loại trừ hợp lệ (No Fault)",
+                badgeClass: "badge-success",
+                sql: "WHEN (reason_cap_xe IS NOT NULL OR reason_overcap IS NOT NULL) AND actual_end <= SLA_extend THEN 'No Fault'"
+            },
+            6: {
+                fault: "SOC Fault",
+                detail: "Điều kiện: (lh_out IS NULL hoặc min_soc_lhpacked IS NULL) và sla_start_offload IS NOT NULL.<br>SOC thiếu trạng thái scan Linehaul Packed dù đã có cấu hình COT.",
+                reason: "Lỗi SOC missing scan LH",
+                badgeClass: "badge-danger",
+                sql: "WHEN (lh_out IS NULL OR min_soc_lhpacked IS NULL) AND sla_start IS NOT NULL THEN 'SOC Fault'"
+            }
+        };
+
+        function simulateScenario(id) {
+            document.querySelectorAll('.btn-scenario').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const sc = scenarios[id];
+            document.getElementById('res-fault-code').innerText = sc.fault;
+            document.getElementById('res-detail').innerHTML = sc.detail;
+            
+            const expEl = document.getElementById('res-explain-reason');
+            expEl.innerText = sc.reason;
+            expEl.className = 'badge ' + sc.badgeClass;
+
+            document.getElementById('res-sql-snippet').innerText = sc.sql;
+        }
+
+        function updateFifoSim() {
+            const cotSau = parseInt(document.getElementById('input-cot-sau').value);
+            const late = parseInt(document.getElementById('input-late').value);
+
+            document.getElementById('val-cot-sau').innerText = cotSau;
+            document.getElementById('val-late').innerText = late;
+
+            const resTitle = document.getElementById('fifo-res-title');
+            const resDesc = document.getElementById('fifo-res-desc');
+            const sqlSnip = document.getElementById('fifo-sql-snippet');
+
+            if (cotSau === 0 || late === 0) {
+                resTitle.innerText = "0 Đơn bị gán miss_fifo";
+                resDesc.innerHTML = "<strong>Không đủ điều kiện nghi ngờ:</strong> Cần có đồng thời cả 2 cờ <code>vol_don_cot_sau > 0</code> VÀ <code>vol_don_late > 0</code> trong cùng slot.";
+                sqlSnip.innerText = "-- Không vi phạm FIFO";
+                return;
+            }
+
+            if (cotSau >= late) {
+                resTitle.innerText = late + " Đơn bị gán miss_fifo";
+                resDesc.innerHTML = `<strong>Trường hợp Nhánh 1 (vol_cot_sau ≥ vol_late):</strong> ${cotSau} ≥ ${late}<br>Có đủ ${cotSau} đơn COT sau để giải thích tại sao toàn bộ ${late} đơn deadline sớm bị trễ. Toàn bộ ${late} đơn trễ đều bị gán <code>miss_fifo</code>.`;
+                sqlSnip.innerText = `IF(${cotSau} >= ${late}, ${late}, GREATEST(${late} - ${cotSau}, ${cotSau})) -> Output: ${late}`;
+            } else {
+                const missCnt = Math.max(late - cotSau, cotSau);
+                resTitle.innerText = missCnt + " Đơn bị gán miss_fifo";
+                resDesc.innerHTML = `<strong>Trường hợp Nhánh 2 (vol_late > vol_cot_sau):</strong> ${late} > ${cotSau}<br>Số đơn miss_fifo = GREATEST(${late} - ${cotSau}, ${cotSau}) = ${missCnt}.<br>Chỉ ${missCnt} đơn trễ đầu tiên (theo soc_received) bị gán miss_fifo, số đơn trễ còn lại là do lý do khác.`;
+                sqlSnip.innerText = `GREATEST(${late} - ${cotSau}, ${cotSau}) -> Output: ${missCnt}`;
+            }
+        }
+    </script>
+</body>
+</html>
