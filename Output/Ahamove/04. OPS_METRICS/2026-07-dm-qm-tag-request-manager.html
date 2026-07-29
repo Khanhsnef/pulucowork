@@ -212,7 +212,8 @@
     .qm-inline select option { background:var(--bg-secondary); color:var(--text-primary); }
     .ms-wait { font-size:11px; color:var(--text-muted); font-style:italic; }
     /* Lý do reject ở cột Chi Tiết */
-    .reject-note { margin-top:6px; font-size:10px; line-height:1.4; color:#F87171; max-width:120px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .reject-note { margin-top:6px; font-size:10px; line-height:1.45; color:#F87171; text-align:left; max-width:180px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; cursor:help; }
+    .reject-note b { color:#FCA5A5; }
     .ms-wait.ok  { color:var(--accent-emerald); font-style:normal; font-weight:600; }
     .ms-wait.rej { color:#F87171; font-style:normal; }
     /* Chi tiết hơn: link chữ, không nền không viền, ở cuối */
@@ -440,7 +441,7 @@
         <div class="table-responsive"><table>
           <thead><tr>
             <th style="min-width:110px;">Mã Request</th><th style="min-width:96px;">Hình Thức</th><th style="min-width:120px;">Team / Người Tạo</th><th style="min-width:120px;">Tag</th>
-            <th style="min-width:500px;">Tiến Trình · Hành Động</th><th style="width:90px;">Chi Tiết</th>
+            <th style="min-width:500px;">Tiến Trình · Hành Động</th><th style="width:190px;">Chi Tiết</th>
           </tr></thead>
           <tbody id="master-tbody"></tbody>
         </table></div>
@@ -657,9 +658,10 @@
     function detailCell(r) {
       const link = `<a class="link-detail" onclick="event.stopPropagation(); openTimeline('${r.id}')">Chi tiết hơn →</a>`;
       if (r.state === 'REJECTED') {
-        const reason = (r.leadNote || r.dmNote || '-');
+        const reason = (r.leadNote || r.dmNote || r.rejectReason || 'Không có ghi chú');
         const by = r.dmDecision === 'REJECTED' ? 'DM' : 'Lead';
-        return link + `<div class="reject-note" title="${reason.replace(/"/g,'')}">❗ ${by} từ chối: ${reason}</div>`;
+        const who = shortEmail(r.dmDecision === 'REJECTED' ? r.dmReviewer : r.leadApprover) || by;
+        return link + `<div class="reject-note" title="${reason.replace(/"/g,'')}">❗ <b>${by} (${who}) từ chối</b><br>${reason}</div>`;
       }
       return link;
     }
