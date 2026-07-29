@@ -114,8 +114,12 @@
     .table-responsive { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
     th { background: rgba(15, 23, 42, 0.8); color: var(--text-secondary); padding: 12px 14px; font-weight: 700; text-transform: uppercase; font-size: 11px; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
-    td { padding: 12px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); vertical-align: middle; }
+    td { padding: 12px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); vertical-align: middle; white-space: nowrap; }
     tr:hover td { background: rgba(255, 255, 255, 0.03); }
+    .code-tag { white-space: nowrap; }
+    .date-note { font-size: 11px; color: var(--text-secondary); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+    .dl-note { font-size: 10px; color: var(--text-muted); margin-top: 5px; white-space: nowrap; }
+    .dl-note.hot { color: #F87171; }
 
     .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
     .status-approved { background: rgba(5, 150, 105, 0.2); color: #34D399; border: 1px solid rgba(5, 150, 105, 0.4); }
@@ -300,8 +304,8 @@
         </div>
         <div class="table-responsive"><table>
           <thead><tr>
-            <th>Mã Request</th><th>Ngày</th><th>Hình Thức</th><th>Team</th><th>Người Tạo</th><th>Tag</th>
-            <th>Trạng Thái Tổng</th><th>Lead</th><th>DM</th><th>QM</th><th>TX</th><th style="min-width:220px;">Hành Động (Theo Lượt)</th>
+            <th style="min-width:130px;">Mã Request</th><th style="min-width:150px;">Hình Thức</th><th style="min-width:150px;">Team</th><th style="min-width:110px;">Người Tạo</th><th style="min-width:180px;">Tag</th>
+            <th style="min-width:130px;">Trạng Thái Tổng</th><th style="min-width:110px;">Lead</th><th style="min-width:110px;">DM</th><th style="min-width:120px;">QM</th><th>TX</th><th style="min-width:240px;">Hành Động (Theo Lượt)</th>
           </tr></thead>
           <tbody id="master-tbody"></tbody>
         </table></div>
