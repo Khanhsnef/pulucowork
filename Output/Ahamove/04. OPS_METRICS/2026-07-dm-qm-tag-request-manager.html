@@ -130,19 +130,23 @@
     .flow-legend i { width:11px; height:11px; border-radius:3px; display:inline-block; }
     .fl-active { animation: flpulse 1.4s ease-in-out infinite; }
     @keyframes flpulse { 0%,100%{ opacity:1 } 50%{ opacity:.5 } }
-    /* ===== Mini stepper trên từng dòng (ảnh #4) ===== */
+    /* ===== Mini stepper gộp actor + deadline (ảnh #4/#7) ===== */
     .mini-stepper { display:flex; align-items:flex-start; justify-content:center; gap:0; }
-    .ms-step { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:52px; }
-    .ms-dot { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; border:2px solid transparent; }
+    .ms-step { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:84px; }
+    .ms-dot { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; border:2px solid transparent; box-shadow:0 2px 6px rgba(0,0,0,.35); }
     .ms-dot.done { background:var(--accent-emerald); color:#fff; }
     .ms-dot.active { background:var(--accent-amber); color:#fff; border-color:#FBBF24; animation:flpulse 1.4s ease-in-out infinite; }
     .ms-dot.todo { background:rgba(100,116,139,0.35); color:var(--text-muted); }
     .ms-dot.skip { background:var(--accent-indigo); color:#fff; }
     .ms-dot.rej  { background:var(--accent-rose); color:#fff; }
-    .ms-label { font-size:9px; color:var(--text-secondary); white-space:nowrap; }
-    .ms-conn { height:2px; width:16px; margin-top:10px; background:rgba(100,116,139,0.35); }
+    .ms-label { font-size:10px; font-weight:600; color:var(--text-secondary); white-space:nowrap; }
+    .ms-meta { font-size:10px; color:var(--text-muted); white-space:nowrap; line-height:1.35; min-height:14px; }
+    .ms-meta.actor { color:var(--accent-teal-light); font-family:'JetBrains Mono',monospace; }
+    .ms-meta.hot { color:#F87171; font-weight:600; }
+    .ms-meta.skip { color:var(--accent-indigo-light); font-weight:600; }
+    .ms-conn { height:2px; width:22px; margin-top:12px; background:rgba(100,116,139,0.35); border-radius:2px; }
     .ms-conn.done { background:var(--accent-emerald); }
-    .btn-detail { display:block; margin:8px auto 0; background:rgba(20,184,166,0.12); color:var(--accent-teal-light); border:1px solid rgba(20,184,166,0.35); border-radius:8px; padding:3px 10px; font-size:11px; font-weight:600; cursor:pointer; transition:var(--transition); }
+    .btn-detail { display:block; margin:6px auto 0; background:rgba(20,184,166,0.12); color:var(--accent-teal-light); border:1px solid rgba(20,184,166,0.35); border-radius:8px; padding:3px 12px; font-size:11px; font-weight:600; cursor:pointer; transition:var(--transition); }
     .btn-detail:hover { background:rgba(20,184,166,0.25); }
     /* ===== Timeline audit log modal (ảnh #5) ===== */
     .tl-head { display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--text-secondary); margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border-color); }
@@ -366,7 +370,7 @@
         <div class="table-responsive"><table>
           <thead><tr>
             <th style="min-width:130px;">Mã Request</th><th style="min-width:140px;">Hình Thức</th><th style="min-width:150px;">Team / Người Tạo</th><th style="min-width:170px;">Tag</th>
-            <th style="min-width:150px;">Tiến Trình</th><th style="min-width:120px;">Lead</th><th style="min-width:120px;">DM</th><th style="min-width:120px;">QM</th><th>TX</th><th style="min-width:230px;">Hành Động (Theo Lượt)</th>
+            <th style="min-width:420px;">Tiến Trình (Actor · Deadline)</th><th>TX</th><th style="min-width:230px;">Hành Động (Theo Lượt)</th>
           </tr></thead>
           <tbody id="master-tbody"></tbody>
         </table></div>
@@ -612,7 +616,7 @@
       let list = requestsData.slice();
       if (currentFilter === 'MINE') list = list.filter(isMine);
       else if (currentFilter !== 'ALL') list = list.filter(r => r.state === currentFilter);
-      if (!list.length) { tbody.innerHTML = `<tr><td colspan="10" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
+      if (!list.length) { tbody.innerHTML = `<tr><td colspan="7" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
       list.forEach(r => {
         const tr = document.createElement('tr');
         tr.className = 'row-click';
@@ -626,9 +630,6 @@
           `<td><span class="code-tag">${r.team}</span><div class="sub-name">👤 ${r.name}</div></td>`+
           `<td><strong>${r.tagName}</strong>${(r.dmTagCode && r.dmTagCode!=='-') ? `<br><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span>`:''}</td>`+
           `<td>${miniStepper(r)}</td>`+
-          `<td>${getGateBadge(r.leadDecision)}${byNote(r.leadApprover)}${dlNote(r.deadlineLead, r, 'PENDING_TEAM_LEAD')}</td>`+
-          `<td>${getGateBadge(r.dmDecision)}${byNote(r.dmReviewer)}${dlNote(r.deadlineDM, r, 'PENDING_DM')}</td>`+
-          `<td>${getQMStatusBadge(r.qmStatus)}${byNote(r.qmSpecialist)}${dlNote(r.deadlineQM, r, 'PENDING_QM')}</td>`+
           `<td><strong>${r.qmSuccessCount}</strong></td>`+
           `<td>${actionCell(r)}</td>`;
         tbody.appendChild(tr);
@@ -659,16 +660,43 @@
       st.qm = (s==='PENDING_QM') ? 'active' : (s==='DONE' ? 'done' : 'todo');
       return st;
     }
+    // meta 1-2 dòng dưới mỗi chấm: người action (nếu đã xử lý) hoặc deadline (nếu đang chờ)
+    function stepMeta(r, step, state) {
+      const actor = (v) => `<div class="ms-meta actor">${shortEmail(v)}</div>`;
+      const when  = (v) => (v && v !== '-') ? `<div class="ms-meta">${v}</div>` : '';
+      const dl    = (d, hot) => d ? `<div class="ms-meta ${hot?'hot':''}">⏰ ${d}</div>` : '';
+      const breach = (g) => (r.breach === 'QUÁ HẠN SLA' && r.state === g);
+      if (step === 'req')  return actor(r.name) + when(r.date);
+      if (step === 'lead') {
+        if (state === 'active') return dl(r.deadlineLead, breach('PENDING_TEAM_LEAD'));
+        if (state === 'done' || state === 'rej') return (r.leadApprover && r.leadApprover!=='-' ? actor(r.leadApprover) : '') + when(r.leadDate);
+        return '';
+      }
+      if (step === 'dm') {
+        if (state === 'skip')   return `<div class="ms-meta skip">⤵ Bỏ qua</div>`;
+        if (state === 'active') return dl(r.deadlineDM, breach('PENDING_DM'));
+        if (state === 'done' || state === 'rej') return (r.dmReviewer && r.dmReviewer!=='-' ? actor(r.dmReviewer) : '') + when(r.dmReviewDate);
+        return '';
+      }
+      if (step === 'qm') {
+        if (state === 'active') return dl(r.deadlineQM, breach('PENDING_QM'));
+        if (state === 'done') return (r.qmSpecialist && r.qmSpecialist!=='-' ? actor(r.qmSpecialist) : '') + when(r.qmDate);
+        return '';
+      }
+      return '';
+    }
     function miniStepper(r) {
       const st = stepStates(r);
-      const dot = (cls, icon) => `<div class="ms-dot ${cls}">${icon}</div>`;
       const ic = { done:'✓', active:'⏳', todo:'', skip:'⤵', rej:'✕' };
       const conn = (a) => `<div class="ms-conn ${a==='done'?'done':''}"></div>`;
+      const step = (key, label) =>
+        `<div class="ms-step"><div class="ms-dot ${st[key]}">${ic[st[key]]}</div>`+
+        `<div class="ms-label">${label}</div>${stepMeta(r, key, st[key])}</div>`;
       return `<div class="mini-stepper">`+
-        `<div class="ms-step">${dot(st.req, ic[st.req])}<div class="ms-label">Request</div></div>`+ conn(st.req)+
-        `<div class="ms-step">${dot(st.lead, ic[st.lead])}<div class="ms-label">Lead</div></div>`+ conn(st.lead)+
-        `<div class="ms-step">${dot(st.dm, ic[st.dm])}<div class="ms-label">DM</div></div>`+ conn(st.dm)+
-        `<div class="ms-step">${dot(st.qm, ic[st.qm])}<div class="ms-label">QM</div></div>`+
+        step('req','Request') + conn(st.req) +
+        step('lead','Lead')   + conn(st.lead) +
+        step('dm','DM')       + conn(st.dm) +
+        step('qm','QM')       +
       `</div>`+
       `<button class="btn-detail" onclick="event.stopPropagation(); openTimeline('${r.id}')">📜 Chi tiết hơn</button>`;
     }
@@ -689,50 +717,72 @@
       if (selEl) selEl.textContent = r ? r.id + ' · ' + r.tagName : '—';
       const st = r ? stepStates(r) : { req:'todo', lead:'todo', dm:'todo', qm:'todo' };
       const rejected = r && r.state === 'REJECTED';
-      const COL = { done:'#059669', active:'#D97706', todo:'rgba(100,116,139,.45)', skip:'#4F46E5', rej:'#E11D48' };
-      // toạ độ các node chính (hàng ngang) + node Reject (dưới)
+      // dải gradient 2 tông cho từng state
+      const GRAD = {
+        done:  ['#10B981','#047857'], active:['#F59E0B','#B45309'],
+        todo:  ['#475569','#334155'], skip:  ['#6366F1','#4338CA'], rej:['#F43F5E','#9F1239']
+      };
+      const RING = { done:'#34D399', active:'#FBBF24', todo:'rgba(148,163,184,.35)', skip:'#818CF8', rej:'#FB7185' };
       const nodes = [
-        { key:'req',  x:60,  y:70, label:'Request', icon:'▶', state:st.req },
-        { key:'lead', x:260, y:70, label:'Lead',    icon:'✔', state:st.lead },
-        { key:'dm',   x:460, y:70, label:'DM',      icon:'🛡', state:st.dm },
-        { key:'qm',   x:660, y:70, label:'QM',      icon:'🏷', state:st.qm },
-        { key:'done', x:860, y:70, label:'Done',    icon:'■', state:(r&&r.state==='DONE')?'done':'todo' },
+        { key:'req',  x:70,  label:'Request', sub:'Người tạo', icon:'▶', state:st.req },
+        { key:'lead', x:266, label:'Lead',    sub:'Gate 1',    icon:'✔', state:st.lead },
+        { key:'dm',   x:462, label:'DM',      sub:'Gate 2',    icon:'🛡', state:st.dm },
+        { key:'qm',   x:658, label:'QM',      sub:'Gate 3',    icon:'🏷', state:st.qm },
+        { key:'done', x:854, label:'Done',    sub:'Hoàn tất',  icon:'★', state:(r&&r.state==='DONE')?'done':'todo' },
       ];
-      const w = 140, h = 54;
+      const w = 150, h = 68, y = 66, midY = y + h/2;
       const box = (n) => {
-        const c = COL[n.state] || COL.todo;
-        const cls = (n.state==='active') ? 'fl-active' : '';
-        return `<g class="${cls}">`+
-          `<rect x="${n.x}" y="${n.y}" width="${w}" height="${h}" rx="12" fill="rgba(30,41,59,.85)" stroke="${c}" stroke-width="2.5"/>`+
-          `<circle cx="${n.x+22}" cy="${n.y+h/2}" r="13" fill="${c}"/>`+
-          `<text x="${n.x+22}" y="${n.y+h/2+4}" font-size="12" fill="#fff" text-anchor="middle">${n.icon}</text>`+
-          `<text x="${n.x+44}" y="${n.y+h/2-3}" font-size="13" font-weight="700" fill="#F8FAFC">${n.label}</text>`+
-          `<text x="${n.x+44}" y="${n.y+h/2+13}" font-size="10" fill="#94A3B8">${flowStateText(n.state)}</text>`+
+        const g = GRAD[n.state] || GRAD.todo, ring = RING[n.state] || RING.todo;
+        const active = n.state==='active';
+        const dim = (n.state==='todo') ? 'opacity="0.72"' : '';
+        return `<g class="${active?'fl-active':''}" ${dim} filter="url(#soft)">`+
+          `<rect x="${n.x}" y="${y}" width="${w}" height="${h}" rx="18" fill="url(#card)" stroke="${ring}" stroke-width="${active?2.6:1.6}"/>`+
+          `<rect x="${n.x}" y="${y}" width="6" height="${h}" rx="3" fill="${g[0]}"/>`+
+          `<circle cx="${n.x+34}" cy="${midY}" r="17" fill="url(#dot-${n.state})" ${active?'filter="url(#glow)"':''}/>`+
+          `<text x="${n.x+34}" y="${midY+5}" font-size="15" fill="#fff" text-anchor="middle">${n.icon}</text>`+
+          `<text x="${n.x+60}" y="${midY-6}" font-size="15" font-weight="700" fill="#F8FAFC">${n.label}</text>`+
+          `<text x="${n.x+60}" y="${midY+11}" font-size="10.5" fill="${ring}" font-weight="600">${flowStateText(n.state)}</text>`+
+          `<text x="${n.x+w-12}" y="${y+16}" font-size="8.5" fill="#64748B" text-anchor="end" letter-spacing="1">${n.sub.toUpperCase()}</text>`+
         `</g>`;
       };
+      // connector cong nhẹ, gradient theo trạng thái đã "thông"
+      const conn = (x1, x2, flowed) => {
+        const stroke = flowed ? 'url(#flow-on)' : 'rgba(100,116,139,.28)';
+        const mk = flowed ? 'url(#arr-on)' : 'url(#arr-off)';
+        return `<path d="M${x1},${midY} L${x2},${midY}" fill="none" stroke="${stroke}" stroke-width="3" stroke-linecap="round" marker-end="${mk}" ${flowed?'':'stroke-dasharray="1,7"'}/>`;
+      };
+      let defs = `<defs>`+
+        `<linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(51,65,85,.55)"/><stop offset="1" stop-color="rgba(15,23,42,.85)"/></linearGradient>`+
+        `<linearGradient id="flow-on" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#10B981"/><stop offset="1" stop-color="#34D399"/></linearGradient>`+
+        Object.keys(GRAD).map(k=>`<radialGradient id="dot-${k}" cx="0.35" cy="0.3" r="0.9"><stop offset="0" stop-color="${GRAD[k][0]}"/><stop offset="1" stop-color="${GRAD[k][1]}"/></radialGradient>`).join('')+
+        `<filter id="soft" x="-20%" y="-40%" width="140%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.45"/></filter>`+
+        `<filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#F59E0B" flood-opacity="0.9"/></filter>`+
+        `<marker id="arr-on" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#34D399"/></marker>`+
+        `<marker id="arr-off" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="rgba(148,163,184,.5)"/></marker>`+
+      `</defs>`;
+      let svg = `<svg class="flow-svg" viewBox="0 0 1020 210" preserveAspectRatio="xMidYMid meet">` + defs;
       // connectors ngang
-      const conn = (x1, x2, y, active) => `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${active?COL.done:'rgba(100,116,139,.4)'}" stroke-width="2.5" marker-end="url(#arr)"/>`;
-      const midY = 70 + h/2;
-      let svg = `<svg class="flow-svg" viewBox="0 0 1010 200" preserveAspectRatio="xMidYMid meet">`+
-        `<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="rgba(148,163,184,.7)"/></marker></defs>`;
-      // ngang: req→lead→dm→qm→done
-      svg += conn(200, 258, midY, st.lead==='done');
-      svg += conn(400, 458, midY, st.dm==='done'||st.dm==='skip');
-      svg += conn(600, 658, midY, st.qm==='done');
-      svg += conn(800, 858, midY, r&&r.state==='DONE');
-      // nhánh Reject: từ dưới lead xuống node reject
+      svg += conn(220, 262, st.lead==='done');
+      svg += conn(416, 458, st.dm==='done'||st.dm==='skip');
+      svg += conn(612, 654, st.qm==='done');
+      svg += conn(808, 850, r&&r.state==='DONE');
+      // nhánh Reject cong xuống
       const rejActive = rejected;
-      const rc = rejActive ? COL.rej : 'rgba(100,116,139,.3)';
-      svg += `<path d="M330,124 L330,160 L500,160" fill="none" stroke="${rc}" stroke-width="2.5" marker-end="url(#arr)" ${rejActive?'':'stroke-dasharray="5,4"'}/>`;
-      const rejNode = { x:500, y:133, label:'Reject', icon:'✕', state: rejActive?'rej':'todo' };
-      // vẽ node reject
+      const rc = rejActive ? '#FB7185' : 'rgba(100,116,139,.28)';
+      svg += `<path d="M341,${y+h} C341,168 420,178 500,178" fill="none" stroke="${rc}" stroke-width="3" stroke-linecap="round" marker-end="${rejActive?'url(#arr-rej)':'url(#arr-off)'}" ${rejActive?'':'stroke-dasharray="1,7"'}/>`;
+      if (rejActive) svg += `<marker id="arr-rej" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#FB7185"/></marker>`;
+      // node Reject
+      const rejN = { key:'rej', x:500, y2:151, label:'Reject', sub:'Từ chối', icon:'✕', state: rejActive?'rej':'todo' };
       {
-        const c = rejActive ? COL.rej : COL.todo;
-        svg += `<g class="${rejActive?'fl-active':''}"><rect x="${rejNode.x}" y="${rejNode.y}" width="${w}" height="${h}" rx="12" fill="rgba(30,41,59,.85)" stroke="${c}" stroke-width="2.5"/>`+
-          `<circle cx="${rejNode.x+22}" cy="${rejNode.y+h/2}" r="13" fill="${c}"/>`+
-          `<text x="${rejNode.x+22}" y="${rejNode.y+h/2+4}" font-size="12" fill="#fff" text-anchor="middle">${rejNode.icon}</text>`+
-          `<text x="${rejNode.x+44}" y="${rejNode.y+h/2-3}" font-size="13" font-weight="700" fill="#F8FAFC">Reject</text>`+
-          `<text x="${rejNode.x+44}" y="${rejNode.y+h/2+13}" font-size="10" fill="#94A3B8">${rejActive?'Đã từ chối':'—'}</text></g>`;
+        const g = rejActive?GRAD.rej:GRAD.todo, ring = rejActive?RING.rej:RING.todo, yy=rejN.y2, mm=yy+h/2;
+        svg += `<g class="${rejActive?'fl-active':''}" ${rejActive?'':'opacity="0.6"'} filter="url(#soft)">`+
+          `<rect x="${rejN.x}" y="${yy}" width="${w}" height="${h}" rx="18" fill="url(#card)" stroke="${ring}" stroke-width="${rejActive?2.6:1.6}"/>`+
+          `<rect x="${rejN.x}" y="${yy}" width="6" height="${h}" rx="3" fill="${g[0]}"/>`+
+          `<circle cx="${rejN.x+34}" cy="${mm}" r="17" fill="url(#dot-${rejActive?'rej':'todo'})" ${rejActive?'filter="url(#glow-rej)"':''}/>`+
+          `<text x="${rejN.x+34}" y="${mm+5}" font-size="15" fill="#fff" text-anchor="middle">✕</text>`+
+          `<text x="${rejN.x+60}" y="${mm-6}" font-size="15" font-weight="700" fill="#F8FAFC">Reject</text>`+
+          `<text x="${rejN.x+60}" y="${mm+11}" font-size="10.5" fill="${ring}" font-weight="600">${rejActive?'Đã từ chối':'—'}</text></g>`;
+        if (rejActive) svg += `<filter id="glow-rej" x="-80%" y="-80%" width="260%" height="260%"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#F43F5E" flood-opacity="0.9"/></filter>`;
       }
       svg += nodes.map(box).join('');
       svg += `</svg>`;
