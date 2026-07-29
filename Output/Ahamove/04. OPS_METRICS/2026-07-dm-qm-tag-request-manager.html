@@ -142,6 +142,8 @@
     .ms-label { font-size:9px; color:var(--text-secondary); white-space:nowrap; }
     .ms-conn { height:2px; width:16px; margin-top:10px; background:rgba(100,116,139,0.35); }
     .ms-conn.done { background:var(--accent-emerald); }
+    .btn-detail { display:block; margin:8px auto 0; background:rgba(20,184,166,0.12); color:var(--accent-teal-light); border:1px solid rgba(20,184,166,0.35); border-radius:8px; padding:3px 10px; font-size:11px; font-weight:600; cursor:pointer; transition:var(--transition); }
+    .btn-detail:hover { background:rgba(20,184,166,0.25); }
     /* ===== Timeline audit log modal (ảnh #5) ===== */
     .tl-head { display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--text-secondary); margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border-color); }
     .tl-head b { color:var(--text-primary); }
@@ -667,15 +669,15 @@
         `<div class="ms-step">${dot(st.lead, ic[st.lead])}<div class="ms-label">Lead</div></div>`+ conn(st.lead)+
         `<div class="ms-step">${dot(st.dm, ic[st.dm])}<div class="ms-label">DM</div></div>`+ conn(st.dm)+
         `<div class="ms-step">${dot(st.qm, ic[st.qm])}<div class="ms-label">QM</div></div>`+
-      `</div>`;
+      `</div>`+
+      `<button class="btn-detail" onclick="event.stopPropagation(); openTimeline('${r.id}')">📜 Chi tiết hơn</button>`;
     }
 
-    // ===== Chọn dòng → cập nhật sơ đồ luồng + mở timeline =====
+    // ===== Chọn dòng → chỉ cập nhật sơ đồ luồng + highlight (KHÔNG mở modal) =====
     function selectRow(id) {
       selectedReqId = id;
       renderFlow();
       renderMasterTable();
-      openTimeline(id);
     }
 
     // ===== Sơ đồ luồng state machine (SVG ngang, highlight theo request đang chọn) =====
