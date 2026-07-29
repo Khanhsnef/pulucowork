@@ -175,16 +175,16 @@
     /* top = Duyệt (✓) góc PHẢI-trên; bot = Từ chối (✕) góc TRÁI-trên */
     .dot-btn.top { left:calc(50% + 3px); }
     .dot-btn.bot { right:calc(50% + 3px); flex-direction:row-reverse; }
-    .dot-btn.btn-success { background:linear-gradient(135deg,#14B8A6,#059669); box-shadow:0 2px 8px rgba(5,150,105,.45); }
-    .dot-btn.btn-danger  { background:linear-gradient(135deg,#FB7185,#E11D48); box-shadow:0 2px 8px rgba(225,29,72,.4); }
+    .dot-btn.btn-success { background:linear-gradient(135deg,#14B8A6,#059669); border-color:rgba(52,211,153,.9); box-shadow:0 0 8px rgba(16,185,129,.75), 0 0 16px rgba(16,185,129,.5); }
+    .dot-btn.btn-danger  { background:linear-gradient(135deg,#FB7185,#E11D48); border-color:rgba(251,113,133,.9); box-shadow:0 0 8px rgba(244,63,94,.75), 0 0 16px rgba(244,63,94,.5); }
     .dot-btn .bi { line-height:1; }
     .dot-btn .bl { max-width:0; opacity:0; overflow:hidden; transition:max-width .22s ease, opacity .16s ease, margin .18s ease; }
     /* HOVER-REVEAL: rê vào step active → 2 nút bung thành pill có chữ, xòe ra 2 phía + nhấc cao lên */
     .ms-step.has-btns:hover .dot-btn { width:auto; padding:5px 13px; bottom:calc(100% + 2px); filter:brightness(1.08); }
     .ms-step.has-btns:hover .dot-btn.top .bl { max-width:130px; opacity:1; margin-left:5px; }
     .ms-step.has-btns:hover .dot-btn.bot .bl { max-width:130px; opacity:1; margin-right:5px; }
-    .ms-step.has-btns:hover .dot-btn.btn-success { box-shadow:0 5px 18px rgba(16,185,129,.6); }
-    .ms-step.has-btns:hover .dot-btn.btn-danger  { box-shadow:0 5px 18px rgba(244,63,94,.6); }
+    .ms-step.has-btns:hover .dot-btn.btn-success { box-shadow:0 0 12px rgba(16,185,129,.95), 0 0 24px rgba(16,185,129,.65); }
+    .ms-step.has-btns:hover .dot-btn.btn-danger  { box-shadow:0 0 12px rgba(244,63,94,.95), 0 0 24px rgba(244,63,94,.65); }
     /* Gradient pill + glow cho nút inline trên line tiến trình */
     .ms-action .btn-xs {
       border-radius:999px; padding:7px 16px; font-size:12px; font-weight:700; letter-spacing:.2px;
