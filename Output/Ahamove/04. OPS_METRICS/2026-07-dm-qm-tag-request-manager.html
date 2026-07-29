@@ -118,6 +118,48 @@
     tr:hover td { background: rgba(255, 255, 255, 0.03); }
     .by-note { font-size: 10px; color: var(--text-secondary); margin-top: 4px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
     .sub-name { font-size: 11px; color: var(--text-secondary); margin-top: 4px; white-space: nowrap; }
+    /* ===== Flow Diagram (state machine) ===== */
+    .flow-wrap { background: rgba(15,23,42,0.5); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 16px; }
+    .flow-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:6px; flex-wrap:wrap; }
+    .flow-head h3 { font-size:14px; font-weight:700; color:var(--text-primary); margin:0; }
+    .flow-sel { font-size:12px; color:var(--text-secondary); }
+    .flow-sel strong { color:var(--accent-teal-light); font-family:'JetBrains Mono',monospace; }
+    .flow-svg { width:100%; height:auto; display:block; overflow:visible; }
+    .flow-legend { display:flex; gap:16px; flex-wrap:wrap; font-size:11px; color:var(--text-secondary); margin-top:8px; }
+    .flow-legend span { display:inline-flex; align-items:center; gap:5px; }
+    .flow-legend i { width:11px; height:11px; border-radius:3px; display:inline-block; }
+    .fl-active { animation: flpulse 1.4s ease-in-out infinite; }
+    @keyframes flpulse { 0%,100%{ opacity:1 } 50%{ opacity:.5 } }
+    /* ===== Mini stepper trên từng dòng (ảnh #4) ===== */
+    .mini-stepper { display:flex; align-items:flex-start; justify-content:center; gap:0; }
+    .ms-step { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:52px; }
+    .ms-dot { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; border:2px solid transparent; }
+    .ms-dot.done { background:var(--accent-emerald); color:#fff; }
+    .ms-dot.active { background:var(--accent-amber); color:#fff; border-color:#FBBF24; animation:flpulse 1.4s ease-in-out infinite; }
+    .ms-dot.todo { background:rgba(100,116,139,0.35); color:var(--text-muted); }
+    .ms-dot.skip { background:var(--accent-indigo); color:#fff; }
+    .ms-dot.rej  { background:var(--accent-rose); color:#fff; }
+    .ms-label { font-size:9px; color:var(--text-secondary); white-space:nowrap; }
+    .ms-conn { height:2px; width:16px; margin-top:10px; background:rgba(100,116,139,0.35); }
+    .ms-conn.done { background:var(--accent-emerald); }
+    /* ===== Timeline audit log modal (ảnh #5) ===== */
+    .tl-head { display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--text-secondary); margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border-color); }
+    .tl-head b { color:var(--text-primary); }
+    .timeline { position:relative; padding-left:8px; }
+    .tl-item { position:relative; padding:0 0 18px 30px; }
+    .tl-item:before { content:''; position:absolute; left:9px; top:20px; bottom:-4px; width:2px; background:var(--border-color); }
+    .tl-item:last-child:before { display:none; }
+    .tl-node { position:absolute; left:0; top:0; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; }
+    .tl-node.ok { background:var(--accent-emerald); }
+    .tl-node.rej { background:var(--accent-rose); }
+    .tl-node.skip { background:var(--accent-indigo); }
+    .tl-node.wait { background:var(--accent-amber); }
+    .tl-title { font-size:13px; font-weight:700; color:var(--text-primary); }
+    .tl-meta { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+    .tl-meta .tl-actor { color:var(--accent-teal-light); font-family:'JetBrains Mono',monospace; }
+    .tl-ts { font-size:11px; color:var(--text-muted); font-family:'JetBrains Mono',monospace; }
+    .tl-note { font-size:12px; color:var(--text-secondary); margin-top:5px; background:rgba(15,23,42,0.5); border-left:3px solid var(--accent-amber); padding:6px 10px; border-radius:6px; }
+    .row-click { cursor:pointer; }
     .code-tag { white-space: nowrap; }
     .date-note { font-size: 11px; color: var(--text-secondary); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
     .dl-note { font-size: 10px; color: var(--text-muted); margin-top: 5px; white-space: nowrap; }
@@ -304,10 +346,25 @@
             <span class="chip" data-filter="REJECTED" onclick="setFilter('REJECTED')">Rejected</span>
           </div>
         </div>
+        <!-- ===== Flow diagram (state machine, highlight theo request đang chọn) ===== -->
+        <div class="flow-wrap">
+          <div class="flow-head">
+            <h3>🔀 Sơ Đồ Luồng Duyệt</h3>
+            <div class="flow-sel" id="flow-sel">Bấm 1 dòng bên dưới để xem request đang ở bước nào · <strong id="flow-sel-id">—</strong></div>
+          </div>
+          <div id="flow-svg-host"></div>
+          <div class="flow-legend">
+            <span><i style="background:#059669"></i> Đã qua</span>
+            <span><i style="background:#D97706"></i> Đang chờ</span>
+            <span><i style="background:rgba(100,116,139,.5)"></i> Chưa tới</span>
+            <span><i style="background:#4F46E5"></i> Bỏ qua (Add tag)</span>
+            <span><i style="background:#E11D48"></i> Từ chối</span>
+          </div>
+        </div>
         <div class="table-responsive"><table>
           <thead><tr>
             <th style="min-width:130px;">Mã Request</th><th style="min-width:140px;">Hình Thức</th><th style="min-width:150px;">Team / Người Tạo</th><th style="min-width:170px;">Tag</th>
-            <th style="min-width:130px;">Trạng Thái Tổng</th><th style="min-width:120px;">Lead</th><th style="min-width:120px;">DM</th><th style="min-width:120px;">QM</th><th>TX</th><th style="min-width:230px;">Hành Động (Theo Lượt)</th>
+            <th style="min-width:150px;">Tiến Trình</th><th style="min-width:120px;">Lead</th><th style="min-width:120px;">DM</th><th style="min-width:120px;">QM</th><th>TX</th><th style="min-width:230px;">Hành Động (Theo Lượt)</th>
           </tr></thead>
           <tbody id="master-tbody"></tbody>
         </table></div>
@@ -340,6 +397,15 @@
     </div>
   </div>
 
+  <!-- ===== Timeline / Audit Log modal (ảnh #5) ===== -->
+  <div class="modal-overlay" id="timeline-modal">
+    <div class="modal-card" style="max-width:560px;">
+      <div class="modal-header"><h3>📜 Tiến Trình & Nhật Ký: <span id="tl-req-id"></span></h3><button class="btn btn-secondary" onclick="closeModal('timeline-modal')">✖</button></div>
+      <div class="tl-head" id="tl-head"></div>
+      <div class="timeline" id="tl-body"></div>
+    </div>
+  </div>
+
   <script>
     // ===== DEMO STANDALONE: offline, mock data, role switcher, approve inline =====
     var CURRENT_ROLE = 'DM';
@@ -348,6 +414,7 @@
     let currentFilter = 'ALL';
     let rejectCtx = { id: null, gate: null };
     let dmCtx = { id: null };
+    let selectedReqId = null;
 
     document.addEventListener("DOMContentLoaded", () => {
       requestsData = mockData();
@@ -375,13 +442,14 @@
     function mockData() {
       return [
         { id:'REQ-2026-001', date:'2026-07-29 09:10', requestCategory:'Tạo tag mới', team:'Hub Linehaul Operations', name:'Trần B', type:'Priority Dispatch', tagName:'TAG_HUB_NIGHT', driverListSource:'-', reason:'Tăng offload đêm', duration:'2026-08', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 13:10', deadlineDM:'', deadlineQM:'', breach:'' },
-        { id:'REQ-2026-002', date:'2026-07-28 15:00', requestCategory:'Add tag', team:'Marketing Campaign', name:'Lê C', type:'Incentive Campaign', tagName:'TAG_MKT_AUG', driverListSource:'[Card Metabase] https://metabase.ahamove.com/card/123', reason:'Campaign tháng 8', duration:'2026-08', state:'PENDING_QM', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', dmDecision:'SKIPPED', qmStatus:'PENDING_QM', qmSuccessCount:0, qmRef:'', dmTagCode:'TAG_MKT_AUG', deadlineLead:'', deadlineDM:'', deadlineQM:'2026-07-29 15:00', breach:'QUÁ HẠN SLA' },
-        { id:'REQ-2026-003', date:'2026-07-27 10:00', requestCategory:'Tạo tag mới', team:'Risk & Fraud Control', name:'Phạm D', type:'Penalty / Block', tagName:'TAG_RISK_BLOCK', driverListSource:'-', reason:'Chặn TX gian lận', duration:'2026-08', state:'PENDING_DM', leadApprover:'lead2@ahamove.com', leadDecision:'APPROVED', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'2026-07-27 18:00', deadlineQM:'', breach:'' },
-        { id:'REQ-2026-004', date:'2026-07-26 08:00', requestCategory:'Tạo tag mới', team:'Fleet Operations', name:'Vũ E', type:'Special Training', tagName:'TAG_VIP_TRAIN', driverListSource:'[Link GoogleSheet] https://docs.google.com/...', reason:'Đào tạo VIP', duration:'2026-08', state:'DONE', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', dmReviewer:'khanh@ahamove.com', dmDecision:'APPROVED', qmStatus:'TAGGED_SUCCESS', qmSpecialist:'qm1@ahamove.com', qmSuccessCount:120, qmRef:'BATCH-0726', dmTagCode:'DM_TAG_VIP_TRAIN_V1', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' }
+        { id:'REQ-2026-002', date:'2026-07-28 15:00', requestCategory:'Add tag', team:'Marketing Campaign', name:'Lê C', type:'Incentive Campaign', tagName:'TAG_MKT_AUG', driverListSource:'[Card Metabase] https://metabase.ahamove.com/card/123', reason:'Campaign tháng 8', duration:'2026-08', state:'PENDING_QM', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-28 16:20', dmDecision:'SKIPPED', qmStatus:'PENDING_QM', qmSuccessCount:0, qmRef:'', dmTagCode:'TAG_MKT_AUG', deadlineLead:'', deadlineDM:'', deadlineQM:'2026-07-29 15:00', breach:'QUÁ HẠN SLA' },
+        { id:'REQ-2026-003', date:'2026-07-27 10:00', requestCategory:'Tạo tag mới', team:'Risk & Fraud Control', name:'Phạm D', type:'Penalty / Block', tagName:'TAG_RISK_BLOCK', driverListSource:'-', reason:'Chặn TX gian lận', duration:'2026-08', state:'PENDING_DM', leadApprover:'lead2@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-27 11:05', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'2026-07-27 18:00', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-004', date:'2026-07-26 08:00', requestCategory:'Tạo tag mới', team:'Fleet Operations', name:'Vũ E', type:'Special Training', tagName:'TAG_VIP_TRAIN', driverListSource:'[Link GoogleSheet] https://docs.google.com/...', reason:'Đào tạo VIP', duration:'2026-08', state:'DONE', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-26 09:30', dmReviewer:'khanh@ahamove.com', dmDecision:'APPROVED', dmReviewDate:'2026-07-26 14:10', qmStatus:'TAGGED_SUCCESS', qmSpecialist:'qm1@ahamove.com', qmDate:'2026-07-27 10:45', qmSuccessCount:120, qmRef:'BATCH-0726', dmTagCode:'DM_TAG_VIP_TRAIN_V1', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-005', date:'2026-07-25 13:40', requestCategory:'Tạo tag mới', team:'Customer Service (CS)', name:'Đỗ F', type:'Area Restriction', tagName:'TAG_CS_LIMIT_Q7', driverListSource:'-', reason:'Giới hạn TX khu Q7 giờ cao điểm', duration:'2026-08', state:'REJECTED', leadApprover:'lead2@ahamove.com', leadDecision:'REJECTED', leadDate:'2026-07-25 15:00', rejectReason:'Chưa rõ tiêu chí chọn TX & phạm vi khu vực. Đề nghị bổ sung card Metabase danh sách TX rồi gửi lại.', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' }
       ];
     }
 
-    function renderAll() { updateKPIs(); renderMasterTable(); }
+    function renderAll() { updateKPIs(); renderMasterTable(); renderFlow(); }
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -545,13 +613,17 @@
       if (!list.length) { tbody.innerHTML = `<tr><td colspan="10" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
       list.forEach(r => {
         const tr = document.createElement('tr');
+        tr.className = 'row-click';
         if (isMine(r)) tr.style.background = 'rgba(20,184,166,0.06)';
+        if (r.id === selectedReqId) tr.style.outline = '2px solid var(--accent-teal-light)';
+        // click chọn dòng (không kích hoạt khi bấm nút/ô nhập trong cột hành động)
+        tr.onclick = (e) => { if (e.target.closest('button,select,input,a')) return; selectRow(r.id); };
         tr.innerHTML =
           `<td><strong>${r.id}</strong>${breachTag(r)}<div class="date-note">🕓 ${r.date}</div></td>`+
           `<td><span class="status-badge ${r.requestCategory==='Add tag'?'status-bypass':'status-approved'}">${r.requestCategory}</span></td>`+
           `<td><span class="code-tag">${r.team}</span><div class="sub-name">👤 ${r.name}</div></td>`+
           `<td><strong>${r.tagName}</strong>${(r.dmTagCode && r.dmTagCode!=='-') ? `<br><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span>`:''}</td>`+
-          `<td>${getStateBadge(r.state)}</td>`+
+          `<td>${miniStepper(r)}</td>`+
           `<td>${getGateBadge(r.leadDecision)}${byNote(r.leadApprover)}${dlNote(r.deadlineLead, r, 'PENDING_TEAM_LEAD')}</td>`+
           `<td>${getGateBadge(r.dmDecision)}${byNote(r.dmReviewer)}${dlNote(r.deadlineDM, r, 'PENDING_DM')}</td>`+
           `<td>${getQMStatusBadge(r.qmStatus)}${byNote(r.qmSpecialist)}${dlNote(r.deadlineQM, r, 'PENDING_QM')}</td>`+
@@ -560,6 +632,173 @@
         tbody.appendChild(tr);
       });
     }
+
+    // ===== Tiến trình 4 bước trên từng dòng (Request → Lead → DM → QM) =====
+    // Trả về mảng trạng thái mỗi bước: 'done' | 'active' | 'todo' | 'skip' | 'rej'
+    function stepStates(r) {
+      const s = r.state;
+      const rejected = (s === 'REJECTED');
+      const isAdd = (r.requestCategory === 'Add tag');
+      // Bước 1 Request luôn done (đã gửi)
+      const st = { req:'done', lead:'todo', dm:'todo', qm:'todo' };
+      if (rejected) {
+        // đánh dấu bước bị từ chối theo decision
+        st.lead = (r.leadDecision==='REJECTED') ? 'rej' : (r.leadDecision==='APPROVED' ? 'done' : 'todo');
+        st.dm   = (r.dmDecision==='REJECTED') ? 'rej' : (r.dmDecision==='APPROVED' ? 'done' : (isAdd?'skip':'todo'));
+        st.qm   = 'todo';
+        return st;
+      }
+      const order = ['PENDING_TEAM_LEAD','PENDING_DM','PENDING_QM','DONE'];
+      st.lead = (order.indexOf(s) > 0 || s==='PENDING_TEAM_LEAD') ? (s==='PENDING_TEAM_LEAD'?'active':'done') : 'todo';
+      // DM
+      if (isAdd) st.dm = 'skip';
+      else st.dm = (s==='PENDING_DM') ? 'active' : (order.indexOf(s) > order.indexOf('PENDING_DM') ? 'done' : 'todo');
+      // QM
+      st.qm = (s==='PENDING_QM') ? 'active' : (s==='DONE' ? 'done' : 'todo');
+      return st;
+    }
+    function miniStepper(r) {
+      const st = stepStates(r);
+      const dot = (cls, icon) => `<div class="ms-dot ${cls}">${icon}</div>`;
+      const ic = { done:'✓', active:'⏳', todo:'', skip:'⤵', rej:'✕' };
+      const conn = (a) => `<div class="ms-conn ${a==='done'?'done':''}"></div>`;
+      return `<div class="mini-stepper">`+
+        `<div class="ms-step">${dot(st.req, ic[st.req])}<div class="ms-label">Request</div></div>`+ conn(st.req)+
+        `<div class="ms-step">${dot(st.lead, ic[st.lead])}<div class="ms-label">Lead</div></div>`+ conn(st.lead)+
+        `<div class="ms-step">${dot(st.dm, ic[st.dm])}<div class="ms-label">DM</div></div>`+ conn(st.dm)+
+        `<div class="ms-step">${dot(st.qm, ic[st.qm])}<div class="ms-label">QM</div></div>`+
+      `</div>`;
+    }
+
+    // ===== Chọn dòng → cập nhật sơ đồ luồng + mở timeline =====
+    function selectRow(id) {
+      selectedReqId = id;
+      renderFlow();
+      renderMasterTable();
+      openTimeline(id);
+    }
+
+    // ===== Sơ đồ luồng state machine (SVG ngang, highlight theo request đang chọn) =====
+    function renderFlow() {
+      const host = document.getElementById('flow-svg-host');
+      if (!host) return;
+      const r = requestsData.find(x => x.id === selectedReqId);
+      const selEl = document.getElementById('flow-sel-id');
+      if (selEl) selEl.textContent = r ? r.id + ' · ' + r.tagName : '—';
+      const st = r ? stepStates(r) : { req:'todo', lead:'todo', dm:'todo', qm:'todo' };
+      const rejected = r && r.state === 'REJECTED';
+      const COL = { done:'#059669', active:'#D97706', todo:'rgba(100,116,139,.45)', skip:'#4F46E5', rej:'#E11D48' };
+      // toạ độ các node chính (hàng ngang) + node Reject (dưới)
+      const nodes = [
+        { key:'req',  x:60,  y:70, label:'Request', icon:'▶', state:st.req },
+        { key:'lead', x:260, y:70, label:'Lead',    icon:'✔', state:st.lead },
+        { key:'dm',   x:460, y:70, label:'DM',      icon:'🛡', state:st.dm },
+        { key:'qm',   x:660, y:70, label:'QM',      icon:'🏷', state:st.qm },
+        { key:'done', x:860, y:70, label:'Done',    icon:'■', state:(r&&r.state==='DONE')?'done':'todo' },
+      ];
+      const w = 140, h = 54;
+      const box = (n) => {
+        const c = COL[n.state] || COL.todo;
+        const cls = (n.state==='active') ? 'fl-active' : '';
+        return `<g class="${cls}">`+
+          `<rect x="${n.x}" y="${n.y}" width="${w}" height="${h}" rx="12" fill="rgba(30,41,59,.85)" stroke="${c}" stroke-width="2.5"/>`+
+          `<circle cx="${n.x+22}" cy="${n.y+h/2}" r="13" fill="${c}"/>`+
+          `<text x="${n.x+22}" y="${n.y+h/2+4}" font-size="12" fill="#fff" text-anchor="middle">${n.icon}</text>`+
+          `<text x="${n.x+44}" y="${n.y+h/2-3}" font-size="13" font-weight="700" fill="#F8FAFC">${n.label}</text>`+
+          `<text x="${n.x+44}" y="${n.y+h/2+13}" font-size="10" fill="#94A3B8">${flowStateText(n.state)}</text>`+
+        `</g>`;
+      };
+      // connectors ngang
+      const conn = (x1, x2, y, active) => `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${active?COL.done:'rgba(100,116,139,.4)'}" stroke-width="2.5" marker-end="url(#arr)"/>`;
+      const midY = 70 + h/2;
+      let svg = `<svg class="flow-svg" viewBox="0 0 1010 200" preserveAspectRatio="xMidYMid meet">`+
+        `<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="rgba(148,163,184,.7)"/></marker></defs>`;
+      // ngang: req→lead→dm→qm→done
+      svg += conn(200, 258, midY, st.lead==='done');
+      svg += conn(400, 458, midY, st.dm==='done'||st.dm==='skip');
+      svg += conn(600, 658, midY, st.qm==='done');
+      svg += conn(800, 858, midY, r&&r.state==='DONE');
+      // nhánh Reject: từ dưới lead xuống node reject
+      const rejActive = rejected;
+      const rc = rejActive ? COL.rej : 'rgba(100,116,139,.3)';
+      svg += `<path d="M330,124 L330,160 L500,160" fill="none" stroke="${rc}" stroke-width="2.5" marker-end="url(#arr)" ${rejActive?'':'stroke-dasharray="5,4"'}/>`;
+      const rejNode = { x:500, y:133, label:'Reject', icon:'✕', state: rejActive?'rej':'todo' };
+      // vẽ node reject
+      {
+        const c = rejActive ? COL.rej : COL.todo;
+        svg += `<g class="${rejActive?'fl-active':''}"><rect x="${rejNode.x}" y="${rejNode.y}" width="${w}" height="${h}" rx="12" fill="rgba(30,41,59,.85)" stroke="${c}" stroke-width="2.5"/>`+
+          `<circle cx="${rejNode.x+22}" cy="${rejNode.y+h/2}" r="13" fill="${c}"/>`+
+          `<text x="${rejNode.x+22}" y="${rejNode.y+h/2+4}" font-size="12" fill="#fff" text-anchor="middle">${rejNode.icon}</text>`+
+          `<text x="${rejNode.x+44}" y="${rejNode.y+h/2-3}" font-size="13" font-weight="700" fill="#F8FAFC">Reject</text>`+
+          `<text x="${rejNode.x+44}" y="${rejNode.y+h/2+13}" font-size="10" fill="#94A3B8">${rejActive?'Đã từ chối':'—'}</text></g>`;
+      }
+      svg += nodes.map(box).join('');
+      svg += `</svg>`;
+      host.innerHTML = svg;
+    }
+    function flowStateText(s) {
+      return ({ done:'Đã qua', active:'Đang chờ', todo:'Chưa tới', skip:'Bỏ qua', rej:'Từ chối' })[s] || '';
+    }
+
+    // ===== Audit log: dựng các bước đã diễn ra từ dữ liệu request =====
+    // (DEMO: suy ra actor + timestamp từ field sẵn có; bản thật sẽ đọc cột Audit Log JSON)
+    function buildAuditLog(r) {
+      const log = [];
+      log.push({ node:'ok', title:'📝 Tạo Request', actor:r.name, ts:r.date, note:r.reason || '' });
+      if (r.leadDecision === 'APPROVED')
+        log.push({ node:'ok', title:'✔ Lead Duyệt', actor:r.leadApprover, ts:r.leadDate || deriveTs(r.date,1), note:'' });
+      else if (r.leadDecision === 'REJECTED')
+        log.push({ node:'rej', title:'✕ Lead Từ Chối', actor:r.leadApprover, ts:r.leadDate || deriveTs(r.date,1), note:r.rejectReason || '' });
+      if (r.requestCategory === 'Add tag' && r.leadDecision === 'APPROVED')
+        log.push({ node:'skip', title:'⤵ Bỏ qua DM (Add tag có sẵn)', actor:'Hệ thống', ts:r.leadDate || deriveTs(r.date,1), note:'Tag đã tồn tại — không cần DM tạo mới.' });
+      if (r.dmDecision === 'APPROVED')
+        log.push({ node:'ok', title:'🛡 DM Duyệt & Gán Mã Tag', actor:r.dmReviewer, ts:r.dmReviewDate || deriveTs(r.date,2), note: r.dmTagCode && r.dmTagCode!=='-' ? ('Mã tag chuẩn: ' + r.dmTagCode) : '' });
+      else if (r.dmDecision === 'REJECTED')
+        log.push({ node:'rej', title:'✕ DM Từ Chối', actor:r.dmReviewer, ts:r.dmReviewDate || deriveTs(r.date,2), note:r.rejectReason || '' });
+      if (r.qmStatus === 'TAGGED_SUCCESS')
+        log.push({ node:'ok', title:'🏷 QM Add Tag Thành Công', actor:r.qmSpecialist, ts:r.qmDate || deriveTs(r.date,3), note: (r.qmSuccessCount?('Add '+r.qmSuccessCount+' TX'):'') + (r.qmRef?(' · Ref '+r.qmRef):'') });
+      else if (r.qmStatus === 'TAGGED_FAILED')
+        log.push({ node:'rej', title:'🏷 QM Add Tag Thất Bại', actor:r.qmSpecialist, ts:r.qmDate || deriveTs(r.date,3), note:r.qmRef || '' });
+      // bước đang chờ hiện tại
+      const waitMap = {
+        'PENDING_TEAM_LEAD': '⏳ Đang chờ Lead duyệt',
+        'PENDING_DM': '⏳ Đang chờ DM review',
+        'PENDING_QM': '⏳ Đang chờ QM add tag'
+      };
+      if (waitMap[r.state]) {
+        const dl = r.state==='PENDING_TEAM_LEAD'?r.deadlineLead : r.state==='PENDING_DM'?r.deadlineDM : r.deadlineQM;
+        log.push({ node:'wait', title:waitMap[r.state], actor:'—', ts:'', note: dl ? ('Deadline SLA: ' + dl + (r.breach==='QUÁ HẠN SLA'?' ⚠️ QUÁ HẠN':'')) : '' });
+      }
+      return log;
+    }
+    // DEMO helper: nếu thiếu timestamp thật, cộng thêm vài giờ cho có thứ tự (không dùng ở bản thật)
+    function deriveTs(base, addH) {
+      if (!base) return '';
+      return base + ' (+' + (addH*2) + 'h)';
+    }
+
+    // ===== Mở modal timeline =====
+    function openTimeline(id) {
+      const r = requestsData.find(x => x.id === id);
+      if (!r) return;
+      document.getElementById('tl-req-id').textContent = r.id;
+      document.getElementById('tl-head').innerHTML =
+        `<span>👤 Người tạo: <b>${r.name}</b></span>`+
+        `<span>🏢 Team: <b>${r.team}</b></span>`+
+        `<span>🏷 Tag: <b>${r.tagName}</b></span>`+
+        `<span>📌 Trạng thái: ${getStateBadge(r.state)}</span>`;
+      const log = buildAuditLog(r);
+      document.getElementById('tl-body').innerHTML = log.map(e =>
+        `<div class="tl-item">`+
+          `<div class="tl-node ${e.node}">${e.node==='ok'?'✓':e.node==='rej'?'✕':e.node==='skip'?'⤵':'⏳'}</div>`+
+          `<div class="tl-title">${e.title}</div>`+
+          `<div class="tl-meta">${e.actor && e.actor!=='—' ? ('bởi <span class="tl-actor">'+shortEmail(e.actor)+'</span>') : ''} ${e.ts ? ('<span class="tl-ts">· 🕓 '+e.ts+'</span>') : ''}</div>`+
+          `${e.note ? ('<div class="tl-note">'+e.note+'</div>') : ''}`+
+        `</div>`
+      ).join('');
+      document.getElementById('timeline-modal').classList.add('open');
+    }
+    function shortEmail(v) { return String(v||'').replace(/@ahamove\.com$/i, ''); }
     // Deadline note dưới mỗi badge gate; đỏ nếu đang ở gate đó & breach SLA
     function dlNote(dl, r, gateState) {
       if (!dl) return '';
