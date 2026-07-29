@@ -186,6 +186,7 @@ function getSheetDataJson() {
         dmReviewer: r[COL.DM_REVIEWER-1] || '-', dmReviewDate: r[COL.DM_DATE-1] || '-',
         dmDecision: r[COL.DM_DECISION-1] || 'PENDING', dmNote: r[COL.DM_NOTE-1] || '', dmTagCode: r[COL.DM_TAGCODE-1] || '-',
         qmHandover: r[COL.QM_HANDOVER-1] || 'HOLD', qmStatus: r[COL.QM_STATUS-1] || 'PENDING_QM',
+        qmSpecialist: r[COL.QM_SPECIALIST-1] || '-',
         qmSuccessCount: r[COL.QM_SUCCESS-1] || 0, qmRef: r[COL.QM_NOTE-1] || '',
         state: r[COL.STATE-1] || 'PENDING_TEAM_LEAD',
         deadlineLead: r[COL.DL_LEAD-1] ? fmtCell(r[COL.DL_LEAD-1]) : '',

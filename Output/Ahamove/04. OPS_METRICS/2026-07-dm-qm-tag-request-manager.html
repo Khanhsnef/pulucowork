@@ -112,10 +112,12 @@
     .btn-xs { padding: 5px 11px; font-size: 12px; }
 
     .table-responsive { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
-    th { background: rgba(15, 23, 42, 0.8); color: var(--text-secondary); padding: 12px 14px; font-weight: 700; text-transform: uppercase; font-size: 11px; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
-    td { padding: 12px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); vertical-align: middle; white-space: nowrap; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; }
+    th { background: rgba(15, 23, 42, 0.8); color: var(--text-secondary); padding: 9px 10px; font-weight: 700; text-transform: uppercase; font-size: 11px; border-bottom: 2px solid var(--border-color); white-space: nowrap; text-align: center; }
+    td { padding: 9px 10px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); vertical-align: middle; white-space: nowrap; text-align: center; }
     tr:hover td { background: rgba(255, 255, 255, 0.03); }
+    .by-note { font-size: 10px; color: var(--text-secondary); margin-top: 4px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+    .sub-name { font-size: 11px; color: var(--text-secondary); margin-top: 4px; white-space: nowrap; }
     .code-tag { white-space: nowrap; }
     .date-note { font-size: 11px; color: var(--text-secondary); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
     .dl-note { font-size: 10px; color: var(--text-muted); margin-top: 5px; white-space: nowrap; }
@@ -304,8 +306,8 @@
         </div>
         <div class="table-responsive"><table>
           <thead><tr>
-            <th style="min-width:130px;">Mã Request</th><th style="min-width:150px;">Hình Thức</th><th style="min-width:150px;">Team</th><th style="min-width:110px;">Người Tạo</th><th style="min-width:180px;">Tag</th>
-            <th style="min-width:130px;">Trạng Thái Tổng</th><th style="min-width:110px;">Lead</th><th style="min-width:110px;">DM</th><th style="min-width:120px;">QM</th><th>TX</th><th style="min-width:240px;">Hành Động (Theo Lượt)</th>
+            <th style="min-width:130px;">Mã Request</th><th style="min-width:140px;">Hình Thức</th><th style="min-width:150px;">Team / Người Tạo</th><th style="min-width:170px;">Tag</th>
+            <th style="min-width:130px;">Trạng Thái Tổng</th><th style="min-width:120px;">Lead</th><th style="min-width:120px;">DM</th><th style="min-width:120px;">QM</th><th>TX</th><th style="min-width:230px;">Hành Động (Theo Lượt)</th>
           </tr></thead>
           <tbody id="master-tbody"></tbody>
         </table></div>
@@ -375,7 +377,7 @@
         { id:'REQ-2026-001', date:'2026-07-29 09:10', requestCategory:'Tạo tag mới', team:'Hub Linehaul Operations', name:'Trần B', type:'Priority Dispatch', tagName:'TAG_HUB_NIGHT', driverListSource:'-', reason:'Tăng offload đêm', duration:'2026-08', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 13:10', deadlineDM:'', deadlineQM:'', breach:'' },
         { id:'REQ-2026-002', date:'2026-07-28 15:00', requestCategory:'Add tag', team:'Marketing Campaign', name:'Lê C', type:'Incentive Campaign', tagName:'TAG_MKT_AUG', driverListSource:'[Card Metabase] https://metabase.ahamove.com/card/123', reason:'Campaign tháng 8', duration:'2026-08', state:'PENDING_QM', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', dmDecision:'SKIPPED', qmStatus:'PENDING_QM', qmSuccessCount:0, qmRef:'', dmTagCode:'TAG_MKT_AUG', deadlineLead:'', deadlineDM:'', deadlineQM:'2026-07-29 15:00', breach:'QUÁ HẠN SLA' },
         { id:'REQ-2026-003', date:'2026-07-27 10:00', requestCategory:'Tạo tag mới', team:'Risk & Fraud Control', name:'Phạm D', type:'Penalty / Block', tagName:'TAG_RISK_BLOCK', driverListSource:'-', reason:'Chặn TX gian lận', duration:'2026-08', state:'PENDING_DM', leadApprover:'lead2@ahamove.com', leadDecision:'APPROVED', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'2026-07-27 18:00', deadlineQM:'', breach:'' },
-        { id:'REQ-2026-004', date:'2026-07-26 08:00', requestCategory:'Tạo tag mới', team:'Fleet Operations', name:'Vũ E', type:'Special Training', tagName:'TAG_VIP_TRAIN', driverListSource:'[Link GoogleSheet] https://docs.google.com/...', reason:'Đào tạo VIP', duration:'2026-08', state:'DONE', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', dmDecision:'APPROVED', qmStatus:'TAGGED_SUCCESS', qmSuccessCount:120, qmRef:'BATCH-0726', dmTagCode:'DM_TAG_VIP_TRAIN_V1', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' }
+        { id:'REQ-2026-004', date:'2026-07-26 08:00', requestCategory:'Tạo tag mới', team:'Fleet Operations', name:'Vũ E', type:'Special Training', tagName:'TAG_VIP_TRAIN', driverListSource:'[Link GoogleSheet] https://docs.google.com/...', reason:'Đào tạo VIP', duration:'2026-08', state:'DONE', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', dmReviewer:'khanh@ahamove.com', dmDecision:'APPROVED', qmStatus:'TAGGED_SUCCESS', qmSpecialist:'qm1@ahamove.com', qmSuccessCount:120, qmRef:'BATCH-0726', dmTagCode:'DM_TAG_VIP_TRAIN_V1', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' }
       ];
     }
 
@@ -540,21 +542,20 @@
       let list = requestsData.slice();
       if (currentFilter === 'MINE') list = list.filter(isMine);
       else if (currentFilter !== 'ALL') list = list.filter(r => r.state === currentFilter);
-      if (!list.length) { tbody.innerHTML = `<tr><td colspan="11" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
+      if (!list.length) { tbody.innerHTML = `<tr><td colspan="10" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
       list.forEach(r => {
         const tr = document.createElement('tr');
         if (isMine(r)) tr.style.background = 'rgba(20,184,166,0.06)';
         tr.innerHTML =
           `<td><strong>${r.id}</strong>${breachTag(r)}<div class="date-note">🕓 ${r.date}</div></td>`+
           `<td><span class="status-badge ${r.requestCategory==='Add tag'?'status-bypass':'status-approved'}">${r.requestCategory}</span></td>`+
-          `<td><span class="code-tag">${r.team}</span></td>`+
-          `<td>${r.name}</td>`+
+          `<td><span class="code-tag">${r.team}</span><div class="sub-name">👤 ${r.name}</div></td>`+
           `<td><strong>${r.tagName}</strong>${(r.dmTagCode && r.dmTagCode!=='-') ? `<br><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span>`:''}</td>`+
           `<td>${getStateBadge(r.state)}</td>`+
-          `<td>${getGateBadge(r.leadDecision)}${dlNote(r.deadlineLead, r, 'PENDING_TEAM_LEAD')}</td>`+
-          `<td>${getGateBadge(r.dmDecision)}${dlNote(r.deadlineDM, r, 'PENDING_DM')}</td>`+
-          `<td>${getQMStatusBadge(r.qmStatus)}${dlNote(r.deadlineQM, r, 'PENDING_QM')}</td>`+
-          `<td style="text-align:right;"><strong>${r.qmSuccessCount}</strong></td>`+
+          `<td>${getGateBadge(r.leadDecision)}${byNote(r.leadApprover)}${dlNote(r.deadlineLead, r, 'PENDING_TEAM_LEAD')}</td>`+
+          `<td>${getGateBadge(r.dmDecision)}${byNote(r.dmReviewer)}${dlNote(r.deadlineDM, r, 'PENDING_DM')}</td>`+
+          `<td>${getQMStatusBadge(r.qmStatus)}${byNote(r.qmSpecialist)}${dlNote(r.deadlineQM, r, 'PENDING_QM')}</td>`+
+          `<td><strong>${r.qmSuccessCount}</strong></td>`+
           `<td>${actionCell(r)}</td>`;
         tbody.appendChild(tr);
       });
@@ -564,6 +565,12 @@
       if (!dl) return '';
       const hot = (r.breach === 'QUÁ HẠN SLA' && r.state === gateState);
       return `<div class="dl-note ${hot?'hot':''}">⏰ ${dl}</div>`;
+    }
+    // Email người duyệt (bỏ đuôi @ahamove.com cho gọn)
+    function byNote(email) {
+      if (!email || email === '-') return '';
+      const short = String(email).replace(/@ahamove\.com$/i, '');
+      return `<div class="by-note">${short}</div>`;
     }
 
     // ===== LEAD approve inline =====
