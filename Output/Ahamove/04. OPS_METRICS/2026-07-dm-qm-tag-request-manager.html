@@ -147,14 +147,14 @@
     .ms-conn { height:3px; width:40px; margin-top:16px; background:rgba(100,116,139,0.35); border-radius:2px; }
     .ms-conn.done { background:var(--accent-emerald); }
     /* Hành động gộp ngay dưới line tiến trình */
-    .ms-action-row { display:flex; justify-content:center; margin-top:10px; }
+    .ms-action-row { display:flex; justify-content:center; margin-bottom:10px; }
     .ms-action { display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap; }
     .ms-action select { background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border-color); border-radius:8px; padding:5px 8px; font-size:12px; }
     .ms-wait { font-size:11px; color:var(--text-muted); font-style:italic; }
     .ms-wait.ok  { color:var(--accent-emerald); font-style:normal; font-weight:600; }
     .ms-wait.rej { color:#F87171; font-style:normal; }
     /* Chi tiết hơn: link chữ, không nền không viền, ở cuối */
-    .link-detail { display:block; text-align:center; margin-top:8px; color:var(--text-muted); font-size:11px; cursor:pointer; text-decoration:none; transition:var(--transition); }
+    .link-detail { display:block; text-align:center; color:var(--text-muted); font-size:11px; cursor:pointer; text-decoration:none; transition:var(--transition); white-space:nowrap; }
     .link-detail:hover { color:var(--accent-teal-light); }
     /* ===== Timeline audit log modal (ảnh #5) ===== */
     .tl-head { display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--text-secondary); margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border-color); }
@@ -377,8 +377,8 @@
         </div>
         <div class="table-responsive"><table>
           <thead><tr>
-            <th style="min-width:130px;">Mã Request</th><th style="min-width:140px;">Hình Thức</th><th style="min-width:150px;">Team / Người Tạo</th><th style="min-width:170px;">Tag</th>
-            <th style="min-width:460px;">Tiến Trình · Hành Động</th><th>TX</th>
+            <th style="min-width:110px;">Mã Request</th><th style="min-width:96px;">Hình Thức</th><th style="min-width:120px;">Team / Người Tạo</th><th style="min-width:120px;">Tag</th>
+            <th style="min-width:500px;">Tiến Trình · Hành Động</th><th style="width:48px;">TX</th><th style="width:90px;">Chi Tiết</th>
           </tr></thead>
           <tbody id="master-tbody"></tbody>
         </table></div>
@@ -623,7 +623,7 @@
       let list = requestsData.slice();
       if (currentFilter === 'MINE') list = list.filter(isMine);
       else if (currentFilter !== 'ALL') list = list.filter(r => r.state === currentFilter);
-      if (!list.length) { tbody.innerHTML = `<tr><td colspan="6" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
+      if (!list.length) { tbody.innerHTML = `<tr><td colspan="7" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
       list.forEach(r => {
         const tr = document.createElement('tr');
         tr.className = 'row-click';
@@ -637,7 +637,8 @@
           `<td><span class="code-tag">${r.team}</span><div class="sub-name">👤 ${r.name}</div></td>`+
           `<td><strong>${r.tagName}</strong>${(r.dmTagCode && r.dmTagCode!=='-') ? `<br><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span>`:''}</td>`+
           `<td>${miniStepper(r)}</td>`+
-          `<td><strong>${r.qmSuccessCount}</strong></td>`;
+          `<td><strong>${r.qmSuccessCount}</strong></td>`+
+          `<td><a class="link-detail" onclick="event.stopPropagation(); openTimeline('${r.id}')">Chi tiết hơn →</a></td>`;
         tbody.appendChild(tr);
       });
     }
@@ -707,14 +708,13 @@
       const actionRow = actionHtml
         ? `<div class="ms-action-row" style="transform:translateX(${shift}px);">${actionHtml}</div>`
         : '';
-      return `<div class="mini-stepper">`+
+      return actionRow +
+      `<div class="mini-stepper">`+
         step('req','Request') + conn(st.req) +
         step('lead','Lead')   + conn(st.lead) +
         step('dm','DM')       + conn(st.dm) +
         step('qm','QM')       +
-      `</div>`+
-      actionRow +
-      `<a class="link-detail" onclick="event.stopPropagation(); openTimeline('${r.id}')">Chi tiết hơn →</a>`;
+      `</div>`;
     }
 
     // ===== Chọn dòng → chỉ cập nhật sơ đồ luồng + highlight (KHÔNG mở modal) =====
