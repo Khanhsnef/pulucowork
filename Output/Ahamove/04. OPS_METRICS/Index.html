@@ -120,6 +120,61 @@
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border-color); }
     .card-header h2 { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
 
+    /* SEGMENTED CATEGORY OPTION BUTTONS WITH CHECKMARK TICK BADGES */
+    .category-toggle-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 8px;
+    }
+
+    .category-option {
+      position: relative;
+      background: rgba(15, 23, 42, 0.4); border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md); padding: 16px 20px; cursor: pointer;
+      display: flex; align-items: center; gap: 14px; transition: var(--transition);
+      user-select: none; opacity: 0.65;
+    }
+
+    .category-option:hover {
+      opacity: 0.95; border-color: rgba(20, 184, 166, 0.5); background: rgba(30, 41, 59, 0.8);
+    }
+
+    .category-option.active {
+      opacity: 1;
+      border-color: var(--accent-teal-light); background: rgba(13, 148, 136, 0.18);
+      box-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
+    }
+
+    .category-option.active.add-tag-active {
+      opacity: 1;
+      border-color: #818CF8; background: rgba(99, 102, 241, 0.18);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .opt-icon { font-size: 28px; }
+    .opt-text { flex: 1; }
+    .opt-title { font-size: 15px; font-weight: 700; color: #FFF; }
+    .opt-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+    .opt-check {
+      margin-left: auto;
+      background: var(--accent-emerald);
+      color: #FFF;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+      box-shadow: 0 0 12px rgba(5, 150, 105, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    .add-tag-active .opt-check {
+      background: #6366F1;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
+    }
+
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group.full-width { grid-column: 1 / -1; }
@@ -135,6 +190,7 @@
     }
     .btn-secondary { background: rgba(255, 255, 255, 0.1); }
     .btn-success { background: linear-gradient(135deg, var(--accent-emerald), #047857); }
+    .btn-warning { background: linear-gradient(135deg, var(--accent-amber), #B45309); }
 
     .table-responsive { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
@@ -147,8 +203,11 @@
     .status-pending { background: rgba(217, 119, 6, 0.2); color: #FBBF24; border: 1px solid rgba(217, 119, 6, 0.4); }
     .status-rejected { background: rgba(225, 29, 72, 0.2); color: #F87171; border: 1px solid rgba(225, 29, 72, 0.4); }
     .status-processing { background: rgba(14, 165, 233, 0.2); color: #38BDF8; border: 1px solid rgba(14, 165, 233, 0.4); }
+    .status-bypass { background: rgba(99, 102, 241, 0.2); color: #A5B4FC; border: 1px solid rgba(99, 102, 241, 0.4); }
 
     .code-tag { font-family: 'JetBrains Mono', monospace; background: rgba(0, 0, 0, 0.4); padding: 3px 8px; border-radius: 4px; color: #38BDF8; font-size: 12px; border: 1px solid rgba(56, 189, 248, 0.2); }
+
+    .workflow-notice { background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: #7DD3FC; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 999; opacity: 0; pointer-events: none; transition: var(--transition); }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
@@ -164,11 +223,12 @@
       <div class="brand-title">
         <div class="brand-icon">🏷️</div>
         <div class="brand-text">
-          <h1><?= (typeof config !== 'undefined' && config.APP_TITLE) ? config.APP_TITLE : "Tag Request Portal" ?></h1>
+          <h1 id="view-app-title"><?= (typeof config !== 'undefined' && config.APP_TITLE) ? config.APP_TITLE : "Tag Request Portal" ?></h1>
           <p>Spreadsheet Target: <a href="https://docs.google.com/spreadsheets/d/1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4/edit?gid=407438001#gid=407438001" target="_blank">Google Sheet Target</a></p>
         </div>
       </div>
-      <div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-warning" onclick="openLiveConfigEditor()">✏️ Sửa Chữ Trực Tiếp (Live UI Editor)</button>
         <button class="btn btn-secondary" onclick="loadDataFromSheet()">🔄 Tự Động Đồng Bộ Sheet</button>
       </div>
     </header>
@@ -195,27 +255,27 @@
       <div class="kpi-card pending-qm">
         <div class="kpi-title">Chờ QM Add Tags</div>
         <div class="kpi-value" id="kpi-pending-qm">0</div>
-        <div class="kpi-sub">Yêu cầu DM đã duyệt</div>
+        <div class="kpi-sub">Yêu cầu DM đã duyệt / Add Tag trực tiếp</div>
       </div>
     </div>
 
     <!-- TABS READ DYNAMICALLY FROM GOOGLE SHEET CONFIG -->
     <div class="tabs-nav">
-      <button class="tab-btn active" onclick="switchTab('tab-request')">
+      <button class="tab-btn active" id="view-tab1" onclick="switchTab('tab-request')">
         <?= (typeof config !== 'undefined' && config.TAB1_NAME) ? config.TAB1_NAME : "📝 Bước 1: Request" ?>
       </button>
 
-      <button class="tab-btn" onclick="switchTab('tab-dm-review')">
-        <?= (typeof config !== 'undefined' && config.TAB2_NAME) ? config.TAB2_NAME : "🛡️ Bước 2: DM Review" ?>
+      <button class="tab-btn" id="view-tab2" onclick="switchTab('tab-dm-review')">
+        <span id="view-tab2-text"><?= (typeof config !== 'undefined' && config.TAB2_NAME) ? config.TAB2_NAME : "🛡️ Bước 2: DM Review" ?></span>
         <span class="badge-count" id="badge-pending-count">0</span>
       </button>
 
-      <button class="tab-btn" onclick="switchTab('tab-qm-queue')">
-        <?= (typeof config !== 'undefined' && config.TAB3_NAME) ? config.TAB3_NAME : "⚙️ Bước 3: QM Add Tags" ?>
+      <button class="tab-btn" id="view-tab3" onclick="switchTab('tab-qm-queue')">
+        <span id="view-tab3-text"><?= (typeof config !== 'undefined' && config.TAB3_NAME) ? config.TAB3_NAME : "⚙️ Bước 3: QM Add Tags" ?></span>
         <span class="badge-count" id="badge-qm-count">0</span>
       </button>
 
-      <button class="tab-btn" onclick="switchTab('tab-master')">
+      <button class="tab-btn" id="view-tab4" onclick="switchTab('tab-master')">
         <?= (typeof config !== 'undefined' && config.TAB4_NAME) ? config.TAB4_NAME : "📊 Master Request Tracker" ?>
       </button>
     </div>
@@ -224,10 +284,40 @@
     <div id="tab-request" class="tab-panel active">
       <div class="panel-card">
         <div class="card-header">
-          <h2><?= (typeof config !== 'undefined' && config.FORM_TITLE) ? config.FORM_TITLE : "📝 Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM" ?></h2>
+          <h2 id="view-form-title"><?= (typeof config !== 'undefined' && config.FORM_TITLE) ? config.FORM_TITLE : "📝 Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM" ?></h2>
         </div>
 
         <form id="tag-request-form" onsubmit="handleFormSubmit(event)">
+          
+          <!-- HÌNH THỨC REQUEST: 2 BUTTONS NỔI BẬT VỚI TICK BADGE HIGHLIGHT -->
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 14px; font-weight: 700; color: #F8FAFC; margin-bottom: 10px; display: block;">Chọn Hình Thức Request *</label>
+            <div class="category-toggle-grid">
+              <div class="category-option active" id="btn-cat-create" onclick="selectRequestCategory('Tạo tag mới')">
+                <div class="opt-icon">🏷️</div>
+                <div class="opt-text">
+                  <div class="opt-title">Tạo Tag Mới</div>
+                  <div class="opt-desc">Dành cho Tag mới - Cần DM Lead Review & Phê duyệt</div>
+                </div>
+                <div class="opt-check" id="check-cat-create">✓ Đã chọn</div>
+              </div>
+
+              <div class="category-option" id="btn-cat-add" onclick="selectRequestCategory('Add tag')">
+                <div class="opt-icon">⚡</div>
+                <div class="opt-text">
+                  <div class="opt-title">Add Tag (Gắn Thêm TX)</div>
+                  <div class="opt-desc">Dành cho Tag có sẵn - Bỏ qua DM, chuyển thẳng QM xử lý</div>
+                </div>
+                <div class="opt-check" id="check-cat-add" style="display:none;">✓ Đã chọn</div>
+              </div>
+            </div>
+            <input type="hidden" id="req-category" value="Tạo tag mới">
+          </div>
+
+          <div class="workflow-notice full-width" id="workflow-notice-bar">
+            <span>🛡️ <strong>Luồng Tạo Tag Mới:</strong> Yêu cầu sẽ được gửi tới <strong>Bước 2: DM Review</strong> để DM Lead thẩm định & phê duyệt mã tag.</span>
+          </div>
+
           <div class="form-grid">
             <div class="form-group">
               <label>Team Đề Xuất *</label>
@@ -264,13 +354,22 @@
             </div>
 
             <div class="form-group">
-              <label>Tên Tag Gợi Ý / Mục Tiêu *</label>
+              <label id="lbl-tag-name">Tên Tag Gợi Ý / Mục Tiêu *</label>
               <input type="text" id="req-tag-name" placeholder="VD: TAG_HUB_SOC_NIGHT_OFFLOAD" required>
             </div>
 
-            <div class="form-group">
-              <label>Số Lượng Tài Xế Cần Tag *</label>
-              <input type="number" id="req-driver-count" min="1" placeholder="VD: 150" required>
+            <!-- DYNAMIC DRIVER LIST SOURCE FIELDS (ONLY METABASE CARD & GOOGLE SHEET LINK) -->
+            <div class="form-group" id="group-driver-source-type" style="display:none;">
+              <label style="color:#FBBF24;">Phương Thức Cung Cấp Danh Sách TX *</label>
+              <select id="req-driver-source-type" onchange="updateDriverSourcePlaceholder()">
+                <option value="Link GoogleSheet">Link GoogleSheet Target</option>
+                <option value="Card Metabase">Card Metabase URL</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width" id="group-driver-source-url" style="display:none;">
+              <label style="color:#FBBF24;" id="lbl-driver-source-url">Đường Dẫn Danh Sách Tài Xế (GoogleSheet / Metabase) *</label>
+              <input type="text" id="req-driver-source-val" placeholder="https://docs.google.com/spreadsheets/d/...">
             </div>
 
             <div class="form-group">
@@ -285,7 +384,7 @@
           </div>
 
           <div style="margin-top: 20px; display:flex; justify-content:flex-end; gap:12px;">
-            <button type="submit" class="btn"><?= (typeof config !== 'undefined' && config.SUBMIT_BTN_TEXT) ? config.SUBMIT_BTN_TEXT : "🚀 Gửi Đề Xuất Tới DM Lead" ?></button>
+            <button type="submit" class="btn" id="view-submit-btn"><?= (typeof config !== 'undefined' && config.SUBMIT_BTN_TEXT) ? config.SUBMIT_BTN_TEXT : "🚀 Gửi Đề Xuất Tới Hệ Thống" ?></button>
           </div>
         </form>
       </div>
@@ -302,7 +401,7 @@
           <table>
             <thead>
               <tr>
-                <th>Mã Request</th><th>Ngày Tạo</th><th>Team</th><th>Tên Tag Yêu Cầu</th><th>Số TX</th><th>Trạng Thái DM</th><th>Mã Tag Chuẩn Hóa</th><th>Hành Động</th>
+                <th>Mã Request</th><th>Ngày Tạo</th><th>Hình Thức</th><th>Team</th><th>Tên Tag Yêu Cầu</th><th>Trạng Thái DM</th><th>Mã Tag Chuẩn Hóa</th><th>Hành Động</th>
               </tr>
             </thead>
             <tbody id="dm-review-tbody"></tbody>
@@ -322,7 +421,7 @@
           <table>
             <thead>
               <tr>
-                <th>Mã Request</th><th>Team Đề Xuất</th><th>Mã Tag Chuẩn Hóa</th><th>Số TX Cần Tag</th><th>Trạng Thái QM</th><th>Số TX Add Thành Công</th><th>QM Batch Ref / Ghi Chú</th><th>Cập Nhật QM</th>
+                <th>Mã Request</th><th>Hình Thức</th><th>Team</th><th>Mã Tag Chuẩn</th><th>Nguồn Danh Sách TX</th><th>Trạng Thái QM</th><th>Số TX Thành Công</th><th>QM Ref / Batch</th><th>Cập Nhật QM</th>
               </tr>
             </thead>
             <tbody id="qm-queue-tbody"></tbody>
@@ -342,7 +441,7 @@
           <table>
             <thead>
               <tr>
-                <th>Mã Request</th><th>Ngày Tạo</th><th>Team</th><th>Người Tạo</th><th>Tên Tag Yêu Cầu</th><th>Số TX</th><th>DM Status</th><th>DM Tag Code</th><th>QM Status</th><th>TX Thắng</th><th>Batch Ref</th>
+                <th>Mã Request</th><th>Ngày Tạo</th><th>Hình Thức</th><th>Team</th><th>Người Tạo</th><th>Tên Tag</th><th>Nguồn TX</th><th>DM Status</th><th>QM Status</th><th>TX Thắng</th><th>Batch Ref</th>
               </tr>
             </thead>
             <tbody id="master-tbody"></tbody>
@@ -351,6 +450,67 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- LIVE VISUAL TEXT EDITOR MODAL -->
+  <div class="modal-overlay" id="editor-modal">
+    <div class="modal-card" style="max-width: 750px;">
+      <div class="modal-header">
+        <h3>✏️ Live UI Visual Editor - Chỉnh Sửa Chữ Trực Tiếp</h3>
+        <button class="btn btn-secondary" onclick="closeModal('editor-modal')">✖</button>
+      </div>
+      <div class="form-grid" style="max-height: 70vh; overflow-y: auto; padding-right: 10px;">
+        <div class="form-group full-width">
+          <label>1. Tiêu Đề Ứng Dụng (App Title)</label>
+          <input type="text" id="edit-app-title" value="<?= (typeof config !== 'undefined' && config.APP_TITLE) ? config.APP_TITLE : "Tag Request Portal" ?>">
+        </div>
+
+        <div class="form-group full-width">
+          <label>2. Tiêu Đề Biểu Mẫu Tạo Request (Form Title)</label>
+          <input type="text" id="edit-form-title" value="<?= (typeof config !== 'undefined' && config.FORM_TITLE) ? config.FORM_TITLE : "📝 Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM" ?>">
+        </div>
+
+        <div class="form-group">
+          <label>Tên Tab 1</label>
+          <input type="text" id="edit-tab1" value="<?= (typeof config !== 'undefined' && config.TAB1_NAME) ? config.TAB1_NAME : "📝 Bước 1: Request" ?>">
+        </div>
+
+        <div class="form-group">
+          <label>Tên Tab 2</label>
+          <input type="text" id="edit-tab2" value="<?= (typeof config !== 'undefined' && config.TAB2_NAME) ? config.TAB2_NAME : "🛡️ Bước 2: DM Review" ?>">
+        </div>
+
+        <div class="form-group">
+          <label>Tên Tab 3</label>
+          <input type="text" id="edit-tab3" value="<?= (typeof config !== 'undefined' && config.TAB3_NAME) ? config.TAB3_NAME : "⚙️ Bước 3: QM Add Tags" ?>">
+        </div>
+
+        <div class="form-group">
+          <label>Tên Tab 4</label>
+          <input type="text" id="edit-tab4" value="<?= (typeof config !== 'undefined' && config.TAB4_NAME) ? config.TAB4_NAME : "📊 Master Request Tracker" ?>">
+        </div>
+
+        <div class="form-group full-width">
+          <label>Chữ Trên Nút Gửi Đề Xuất (Submit Button)</label>
+          <input type="text" id="edit-submit-btn" value="<?= (typeof config !== 'undefined' && config.SUBMIT_BTN_TEXT) ? config.SUBMIT_BTN_TEXT : "🚀 Gửi Đề Xuất Tới Hệ Thống" ?>">
+        </div>
+
+        <div class="form-group full-width">
+          <label>Danh Sách Team Đề Xuất (Phân cách bằng dấu phẩy)</label>
+          <textarea id="edit-team-list" rows="2"><?= (typeof config !== 'undefined' && config.TEAM_LIST) ? config.TEAM_LIST : "Business Operations, Marketing Campaign, Hub Linehaul Operations, Customer Service (CS), Risk & Fraud Control, Fleet Operations" ?></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Danh Sách Loại Tag Mong Muốn (Phân cách bằng dấu phẩy)</label>
+          <textarea id="edit-tag-types" rows="2"><?= (typeof config !== 'undefined' && config.TAG_TYPES) ? config.TAG_TYPES : "Priority Dispatch (Ưu tiên phát đơn), Incentive Campaign (Thưởng/Thách thức), Area Restriction (Giới hạn khu vực), Special Training (Đào tạo dịch vụ VIP), Penalty / Block (Khóa/Tạm dừng)" ?></textarea>
+        </div>
+      </div>
+
+      <div style="margin-top: 18px; display:flex; justify-content:flex-end; gap:10px;">
+        <button class="btn btn-secondary" onclick="closeModal('editor-modal')">Hủy</button>
+        <button class="btn btn-success" onclick="saveLiveUIConfig()">💾 Lưu Cấu Hình Trực Tiếp Về Google Sheet</button>
+      </div>
+    </div>
   </div>
 
   <!-- Modal DM Review -->
@@ -398,7 +558,102 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       loadDataFromSheet();
+      selectRequestCategory('Tạo tag mới');
     });
+
+    function selectRequestCategory(cat) {
+      document.getElementById('req-category').value = cat;
+      const btnCreate = document.getElementById('btn-cat-create');
+      const btnAdd = document.getElementById('btn-cat-add');
+      const checkCreate = document.getElementById('check-cat-create');
+      const checkAdd = document.getElementById('check-cat-add');
+      
+      btnCreate.classList.remove('active', 'add-tag-active');
+      btnAdd.classList.remove('active', 'add-tag-active');
+
+      if (cat === 'Tạo tag mới') {
+        btnCreate.classList.add('active');
+        checkCreate.style.display = 'flex';
+        checkAdd.style.display = 'none';
+      } else {
+        btnAdd.classList.add('active', 'add-tag-active');
+        checkCreate.style.display = 'none';
+        checkAdd.style.display = 'flex';
+      }
+      toggleRequestCategoryFields();
+    }
+
+    function toggleRequestCategoryFields() {
+      const cat = document.getElementById('req-category').value;
+      const noticeBar = document.getElementById('workflow-notice-bar');
+      const grpSourceType = document.getElementById('group-driver-source-type');
+      const grpSourceUrl = document.getElementById('group-driver-source-url');
+
+      if (cat === 'Add tag') {
+        noticeBar.innerHTML = `<span>⚡ <strong>Luồng Add Tag Trực Tiếp:</strong> Yêu cầu sẽ <strong>tự động bỏ qua DM Review</strong> và chuyển thẳng tới <strong>Bước 3: QM Add Tags</strong> để QM tiếp nhận xử lý.</span>`;
+        noticeBar.style.background = `rgba(99, 102, 241, 0.15)`;
+        noticeBar.style.borderColor = `rgba(99, 102, 241, 0.4)`;
+        noticeBar.style.color = `#A5B4FC`;
+
+        grpSourceType.style.display = 'flex';
+        grpSourceUrl.style.display = 'flex';
+        document.getElementById('lbl-tag-name').innerText = 'Mã / Tên Tag Cần Add *';
+        document.getElementById('req-driver-source-val').required = true;
+        updateDriverSourcePlaceholder();
+      } else {
+        noticeBar.innerHTML = `<span>🛡️ <strong>Luồng Tạo Tag Mới:</strong> Yêu cầu sẽ được gửi tới <strong>Bước 2: DM Review</strong> để DM Lead thẩm định & phê duyệt mã tag.</span>`;
+        noticeBar.style.background = `rgba(14, 165, 233, 0.1)`;
+        noticeBar.style.borderColor = `rgba(56, 189, 248, 0.3)`;
+        noticeBar.style.color = `#7DD3FC`;
+
+        grpSourceType.style.display = 'none';
+        grpSourceUrl.style.display = 'none';
+        document.getElementById('lbl-tag-name').innerText = 'Tên Tag Gợi Ý / Mục Tiêu *';
+        document.getElementById('req-driver-source-val').required = false;
+      }
+    }
+
+    function updateDriverSourcePlaceholder() {
+      const sType = document.getElementById('req-driver-source-type').value;
+      const input = document.getElementById('req-driver-source-val');
+      const lbl = document.getElementById('lbl-driver-source-url');
+
+      if (sType === 'Link GoogleSheet') {
+        lbl.innerText = 'Đường Dẫn File GoogleSheet Danh Sách Tài Xế *';
+        input.placeholder = 'https://docs.google.com/spreadsheets/d/...';
+      } else if (sType === 'Card Metabase') {
+        lbl.innerText = 'Đường Dẫn Card Metabase Danh Sách Tài Xế *';
+        input.placeholder = 'https://metabase.ahamove.com/card/...';
+      }
+    }
+
+    function openLiveConfigEditor() {
+      document.getElementById('editor-modal').classList.add('open');
+    }
+
+    function saveLiveUIConfig() {
+      const newConfig = {
+        APP_TITLE: document.getElementById('edit-app-title').value,
+        FORM_TITLE: document.getElementById('edit-form-title').value,
+        TAB1_NAME: document.getElementById('edit-tab1').value,
+        TAB2_NAME: document.getElementById('edit-tab2').value,
+        TAB3_NAME: document.getElementById('edit-tab3').value,
+        TAB4_NAME: document.getElementById('edit-tab4').value,
+        SUBMIT_BTN_TEXT: document.getElementById('edit-submit-btn').value,
+        TEAM_LIST: document.getElementById('edit-team-list').value,
+        TAG_TYPES: document.getElementById('edit-tag-types').value
+      };
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(() => {
+          alert("✅ Đã lưu cấu hình chữ trực tiếp về Google Sheet! Đang tải lại trang...");
+          location.reload();
+        }).saveAppConfig(newConfig);
+      } else {
+        alert("✅ Đã lưu cấu hình chữ trực tiếp trên giao diện!");
+        closeModal('editor-modal');
+      }
+    }
 
     function loadDataFromSheet() {
       if (typeof google !== 'undefined' && google.script && google.script.run) {
@@ -428,16 +683,16 @@
 
     function updateKPIs() {
       const total = requestsData.length;
-      const pending = requestsData.filter(r => r.dmDecision === 'PENDING').length;
-      const approved = requestsData.filter(r => r.dmDecision === 'APPROVED').length;
-      const pendingQMCount = requestsData.filter(r => r.dmDecision === 'APPROVED' && r.qmStatus !== 'TAGGED_SUCCESS').length;
+      const pendingDM = requestsData.filter(r => r.requestCategory === 'Tạo tag mới' && r.dmDecision === 'PENDING').length;
+      const approvedDM = requestsData.filter(r => r.dmDecision === 'APPROVED' || r.dmDecision === 'AUTO_BYPASS').length;
+      const pendingQMCount = requestsData.filter(r => (r.dmDecision === 'APPROVED' || r.dmDecision === 'AUTO_BYPASS') && r.qmStatus !== 'TAGGED_SUCCESS').length;
 
       document.getElementById('kpi-total').innerText = total;
-      document.getElementById('kpi-pending').innerText = pending;
-      document.getElementById('kpi-approved').innerText = approved;
+      document.getElementById('kpi-pending').innerText = pendingDM;
+      document.getElementById('kpi-approved').innerText = approvedDM;
       document.getElementById('kpi-pending-qm').innerText = pendingQMCount;
 
-      document.getElementById('badge-pending-count').innerText = pending;
+      document.getElementById('badge-pending-count').innerText = pendingDM;
       document.getElementById('badge-qm-count').innerText = pendingQMCount;
     }
 
@@ -447,51 +702,77 @@
       const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
       
       const newId = `REQ-2026-${String(requestsData.length + 1).padStart(3, '0')}`;
+      const category = document.getElementById('req-category').value;
+      const isAddTag = (category === 'Add tag');
+
+      const driverSourceType = isAddTag ? document.getElementById('req-driver-source-type').value : '-';
+      const driverSourceVal = isAddTag ? document.getElementById('req-driver-source-val').value : '-';
+      const driverSourceFull = isAddTag ? `[${driverSourceType}] ${driverSourceVal}` : '-';
 
       const newReq = {
         id: newId,
         date: timeStr,
+        requestCategory: category,
         team: document.getElementById('req-team').value,
         name: document.getElementById('req-name').value,
         type: document.getElementById('req-type').value,
         tagName: document.getElementById('req-tag-name').value,
-        count: parseInt(document.getElementById('req-driver-count').value) || 0,
+        driverListSource: driverSourceFull,
+        count: 0,
         reason: document.getElementById('req-reason').value,
         duration: document.getElementById('req-duration').value,
-        dmDecision: "PENDING", dmNote: "Đang chờ DM Lead kiểm duyệt", dmTagCode: "-",
-        qmHandover: "HOLD", qmStatus: "PENDING_QM", qmSuccessCount: 0, qmRef: "Chờ DM duyệt"
+        dmDecision: isAddTag ? "AUTO_BYPASS" : "PENDING",
+        dmNote: isAddTag ? "Tự động bypass DM (Add tag trực tiếp)" : "Đang chờ DM Lead kiểm duyệt",
+        dmTagCode: isAddTag ? document.getElementById('req-tag-name').value : "-",
+        qmHandover: isAddTag ? "READY_FOR_QM" : "HOLD",
+        qmStatus: isAddTag ? "PENDING_QM" : "HOLD",
+        qmSuccessCount: 0,
+        qmRef: isAddTag ? `Nguồn: ${driverSourceFull}` : "Chờ DM duyệt"
       };
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run.withSuccessHandler(() => {
-          alert(`✅ Đã gửi Yêu cầu ${newId}! Dữ liệu đã lưu vào Google Sheet.`);
+          if (isAddTag) {
+            alert(`⚡ Đã gửi Yêu cầu ${newId} (Add Tag)! Yêu cầu tự động bỏ qua DM và chuyển trực tiếp tới Bước 3: QM Add Tags.`);
+            switchTab('tab-qm-queue');
+          } else {
+            alert(`✅ Đã gửi Yêu cầu ${newId} (Tạo tag mới)! Yêu cầu đã lưu vào Bước 2: DM Review.`);
+            switchTab('tab-dm-review');
+          }
           loadDataFromSheet();
-          switchTab('tab-dm-review');
         }).saveNewRequest(newReq);
       } else {
         requestsData.unshift(newReq);
         renderAll();
-        alert(`✅ Đã gửi Yêu cầu ${newId}!`);
-        switchTab('tab-dm-review');
+        if (isAddTag) {
+          alert(`⚡ Đã gửi Yêu cầu ${newId} (Add Tag)! Chuyển trực tiếp tới Bước 3: QM Add Tags.`);
+          switchTab('tab-qm-queue');
+        } else {
+          alert(`✅ Đã gửi Yêu cầu ${newId} (Tạo tag mới)! Chuyển tới Bước 2: DM Review.`);
+          switchTab('tab-dm-review');
+        }
       }
       document.getElementById('tag-request-form').reset();
+      selectRequestCategory('Tạo tag mới');
     }
 
     function renderDMReviewTable() {
       const tbody = document.getElementById('dm-review-tbody');
       tbody.innerHTML = '';
-      if (requestsData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--text-muted);">Chưa có yêu cầu nào.</td></tr>`;
+      const dmReviewList = requestsData.filter(r => r.requestCategory === 'Tạo tag mới' || r.dmDecision === 'PENDING');
+      
+      if (dmReviewList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--text-muted);">Không có yêu cầu Tạo Tag Mới nào cần DM review.</td></tr>`;
         return;
       }
-      requestsData.forEach(r => {
+      dmReviewList.forEach(r => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>${r.id}</strong></td>
           <td style="color:var(--text-secondary); font-size:12px;">${r.date}</td>
+          <td><span class="status-badge status-approved">${r.requestCategory || 'Tạo tag mới'}</span></td>
           <td><span class="code-tag">${r.team}</span></td>
           <td><strong>${r.tagName}</strong></td>
-          <td style="text-align:right;"><strong>${r.count}</strong></td>
           <td>${getStatusBadge(r.dmDecision)}</td>
           <td><span class="code-tag">${r.dmTagCode}</span></td>
           <td>
@@ -505,18 +786,20 @@
     function renderQMQueueTable() {
       const tbody = document.getElementById('qm-queue-tbody');
       tbody.innerHTML = '';
-      const approvedList = requestsData.filter(r => r.dmDecision === 'APPROVED');
-      if (approvedList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--text-muted);">Không có yêu cầu nào đang chờ QM add tag.</td></tr>`;
+      const qmList = requestsData.filter(r => r.dmDecision === 'APPROVED' || r.dmDecision === 'AUTO_BYPASS');
+      if (qmList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:var(--text-muted);">Không có yêu cầu nào đang chờ QM add tag.</td></tr>`;
         return;
       }
-      approvedList.forEach(r => {
+      qmList.forEach(r => {
+        const isBypass = (r.dmDecision === 'AUTO_BYPASS');
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>${r.id}</strong></td>
+          <td><span class="status-badge ${isBypass ? 'status-bypass' : 'status-approved'}">${r.requestCategory || (isBypass ? 'Add tag' : 'Tạo tag mới')}</span></td>
           <td>${r.team}</td>
           <td><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span></td>
-          <td style="text-align:right;"><strong>${r.count}</strong></td>
+          <td style="font-size:12px; color:#FBBF24; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${r.driverListSource}">${r.driverListSource}</td>
           <td>${getQMStatusBadge(r.qmStatus)}</td>
           <td style="text-align:right;">
             <input type="number" value="${r.qmSuccessCount}" style="width:70px; padding:4px;" onchange="updateQMSuccessCount('${r.id}', this.value)">
@@ -544,12 +827,12 @@
         tr.innerHTML = `
           <td><strong>${r.id}</strong></td>
           <td style="font-size:12px; color:var(--text-secondary);">${r.date}</td>
+          <td><span class="status-badge ${r.dmDecision === 'AUTO_BYPASS' ? 'status-bypass' : 'status-approved'}">${r.requestCategory || 'Tạo tag mới'}</span></td>
           <td>${r.team}</td>
           <td>${r.name}</td>
           <td><strong>${r.tagName}</strong></td>
-          <td style="text-align:right;">${r.count}</td>
+          <td style="font-size:11px; color:#FBBF24; max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${r.driverListSource}">${r.driverListSource}</td>
           <td>${getStatusBadge(r.dmDecision)}</td>
-          <td><span class="code-tag">${r.dmTagCode}</span></td>
           <td>${getQMStatusBadge(r.qmStatus)}</td>
           <td style="text-align:right;"><strong>${r.qmSuccessCount}</strong></td>
           <td style="font-size:12px; color:var(--text-secondary);">${r.qmRef}</td>
@@ -560,6 +843,7 @@
 
     function getStatusBadge(status) {
       if (status === 'APPROVED') return `<span class="status-badge status-approved">✓ APPROVED</span>`;
+      if (status === 'AUTO_BYPASS') return `<span class="status-badge status-bypass">⚡ AUTO BYPASS DM</span>`;
       if (status === 'REJECTED') return `<span class="status-badge status-rejected">✕ REJECTED</span>`;
       return `<span class="status-badge status-pending">⏳ PENDING</span>`;
     }
@@ -578,9 +862,9 @@
 
       document.getElementById('modal-req-id').innerText = r.id;
       document.getElementById('modal-details').innerHTML = `
-        <strong>Team:</strong> ${r.team} | <strong>Người yêu cầu:</strong> ${r.name}<br>
-        <strong>Tag Đề Xuất:</strong> ${r.tagName} (${r.type})<br>
-        <strong>Số Lượng Driver:</strong> ${r.count} TX | <strong>Thời gian:</strong> ${r.duration}<br>
+        <strong>Hình thức:</strong> ${r.requestCategory || 'Tạo tag mới'} | <strong>Team:</strong> ${r.team}<br>
+        <strong>Người yêu cầu:</strong> ${r.name} | <strong>Tag Đề Xuất:</strong> ${r.tagName}<br>
+        <strong>Thời gian:</strong> ${r.duration}<br>
         <strong>Lý do:</strong> ${r.reason}
       `;
       document.getElementById('modal-dm-decision').value = r.dmDecision === 'PENDING' ? 'APPROVED' : r.dmDecision;
@@ -619,7 +903,7 @@
     function updateQMStatus(id, newStatus) {
       const r = requestsData.find(item => item.id === id);
       if (!r) return;
-      const successCount = newStatus === 'TAGGED_SUCCESS' ? (r.qmSuccessCount || r.count) : r.qmSuccessCount;
+      const successCount = newStatus === 'TAGGED_SUCCESS' ? r.qmSuccessCount : r.qmSuccessCount;
       const ref = r.qmRef || 'QM Updated';
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {

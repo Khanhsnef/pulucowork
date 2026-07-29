@@ -1,5 +1,5 @@
 /**
- * GOOGLE APPS SCRIPT BACKEND WITH DYNAMIC SPREADSHEET CONFIGURATION
+ * GOOGLE APPS SCRIPT BACKEND WITH AUTOMATIC DM BYPASS FOR ADD TAG REQUESTS
  * Spreadsheet Target ID: 1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4
  */
 
@@ -24,9 +24,9 @@ function getAppConfig() {
     sheet.appendRow(["TAB2_NAME", "🛡️ Bước 2: DM Review", "Tên Tab 2"]);
     sheet.appendRow(["TAB3_NAME", "⚙️ Bước 3: QM Add Tags", "Tên Tab 3"]);
     sheet.appendRow(["TAB4_NAME", "📊 Master Request Tracker", "Tên Tab 4"]);
-    sheet.appendRow(["SUBMIT_BTN_TEXT", "🚀 Gửi Đề Xuất Tới DM Lead", "Tên nút gửi đề xuất"]);
-    sheet.appendRow(["TEAM_LIST", "Business Operations, Marketing Campaign, Hub Linehaul Operations, Customer Service (CS), Risk & Fraud Control, Fleet Operations", "Danh sách các Team đề xuất (phân cách bằng dấu phẩy)"]);
-    sheet.appendRow(["TAG_TYPES", "Priority Dispatch (Ưu tiên phát đơn), Incentive Campaign (Thưởng/Thách thức), Area Restriction (Giới hạn khu vực), Special Training (Đào tạo dịch vụ VIP), Penalty / Block (Khóa/Tạm dừng)", "Danh sách loại Tag (phân cách bằng dấu phẩy)"]);
+    sheet.appendRow(["SUBMIT_BTN_TEXT", "🚀 Gửi Đề Xuất Tới Hệ Thống", "Tên nút gửi"]);
+    sheet.appendRow(["TEAM_LIST", "Business Operations, Marketing Campaign, Hub Linehaul Operations, Customer Service (CS), Risk & Fraud Control, Fleet Operations", "Danh sách Team"]);
+    sheet.appendRow(["TAG_TYPES", "Priority Dispatch (Ưu tiên phát đơn), Incentive Campaign (Thưởng/Thách thức), Area Restriction (Giới hạn khu vực), Special Training (Đào tạo dịch vụ VIP), Penalty / Block (Khóa/Tạm dừng)", "Danh sách loại Tag"]);
   }
   
   const rows = sheet.getDataRange().getValues();
@@ -39,12 +39,37 @@ function getAppConfig() {
   return config;
 }
 
+function saveAppConfig(newConfig) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName("00_CONFIG_SETTINGS");
+  if (!sheet) {
+    getAppConfig();
+    sheet = ss.getSheetByName("00_CONFIG_SETTINGS");
+  }
+  
+  const rows = sheet.getDataRange().getValues();
+  for (const key in newConfig) {
+    let found = false;
+    for (let i = 1; i < rows.length; i++) {
+      if (rows[i][0] === key) {
+        sheet.getRange(i + 1, 2).setValue(newConfig[key]);
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      sheet.appendRow([key, newConfig[key], "Tùy chỉnh từ Live UI Editor"]);
+    }
+  }
+  return { status: "success" };
+}
+
 function getSheetDataJson() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName("01_ALL_TAG_REQUESTS");
   if (!sheet) {
     sheet = ss.insertSheet("01_ALL_TAG_REQUESTS");
-    sheet.appendRow(["Mã Request", "Ngày Tạo", "Team Đề Xuất", "Người Đề Xuất", "Loại Tag", "Tên Tag Yêu Cầu", "Số Lượng TX", "Lý Do", "Thời Gian", "DM Reviewer", "Ngày DM Review", "DM Quyết Định", "DM Note", "DM Tag Code", "QM Handover", "QM Specialist", "Ngày QM Nhận", "QM Trạng Thái Add Tag", "Ngày Add Tag Xong", "Số TX Add Thành Công", "Ghi Chú QM"]);
+    sheet.appendRow(["Mã Request", "Ngày Tạo", "Hình Thức", "Team Đề Xuất", "Người Đề Xuất", "Loại Tag", "Tên Tag Yêu Cầu", "Nguồn Danh Sách TX", "Số Lượng TX", "Lý Do", "Thời Gian", "DM Reviewer", "Ngày DM Review", "DM Quyết Định", "DM Note", "DM Tag Code", "QM Handover", "QM Specialist", "Ngày QM Nhận", "QM Trạng Thái Add Tag", "Ngày Add Tag Xong", "Số TX Add Thành Công", "Ghi Chú QM"]);
   }
   
   const rows = sheet.getDataRange().getValues();
@@ -55,11 +80,13 @@ function getSheetDataJson() {
     const r = rows[i];
     if (r[0] && r[0].toString().startsWith("REQ-")) {
       cleanData.push({
-        id: r[0], date: r[1], team: r[2], name: r[3], type: r[4], tagName: r[5],
-        count: r[6], reason: r[7], duration: r[8], dmReviewer: r[9]||"-", dmReviewDate: r[10]||"-",
-        dmDecision: r[11] || 'PENDING', dmNote: r[12] || '', dmTagCode: r[13] || '-',
-        qmHandover: r[14]||'HOLD', qmStatus: r[17] || 'PENDING_QM',
-        qmSuccessCount: r[19] || 0, qmRef: r[20] || ''
+        id: r[0], date: r[1], requestCategory: r[2] || 'Tạo tag mới',
+        team: r[3], name: r[4], type: r[5], tagName: r[6],
+        driverListSource: r[7] || '-', count: r[8], reason: r[9], duration: r[10],
+        dmReviewer: r[11]||"-", dmReviewDate: r[12]||"-",
+        dmDecision: r[13] || 'PENDING', dmNote: r[14] || '', dmTagCode: r[15] || '-',
+        qmHandover: r[16]||'HOLD', qmStatus: r[19] || 'PENDING_QM',
+        qmSuccessCount: r[21] || 0, qmRef: r[22] || ''
       });
     }
   }
@@ -71,13 +98,23 @@ function saveNewRequest(data) {
   let sheet = ss.getSheetByName("01_ALL_TAG_REQUESTS");
   if (!sheet) {
     sheet = ss.insertSheet("01_ALL_TAG_REQUESTS");
-    sheet.appendRow(["Mã Request", "Ngày Tạo", "Team Đề Xuất", "Người Đề Xuất", "Loại Tag", "Tên Tag Yêu Cầu", "Số Lượng TX", "Lý Do", "Thời Gian", "DM Reviewer", "Ngày DM Review", "DM Quyết Định", "DM Note", "DM Tag Code", "QM Handover", "QM Specialist", "Ngày QM Nhận", "QM Trạng Thái Add Tag", "Ngày Add Tag Xong", "Số TX Add Thành Công", "Ghi Chú QM"]);
+    sheet.appendRow(["Mã Request", "Ngày Tạo", "Hình Thức", "Team Đề Xuất", "Người Đề Xuất", "Loại Tag", "Tên Tag Yêu Cầu", "Nguồn Danh Sách TX", "Số Lượng TX", "Lý Do", "Thời Gian", "DM Reviewer", "Ngày DM Review", "DM Quyết Định", "DM Note", "DM Tag Code", "QM Handover", "QM Specialist", "Ngày QM Nhận", "QM Trạng Thái Add Tag", "Ngày Add Tag Xong", "Số TX Add Thành Công", "Ghi Chú QM"]);
   }
-  
+
+  // Luồng xử lý: Nếu "Add tag" -> Tự động Bypass DM Review, chuyển thẳng cho QM
+  let isAddTag = (data.requestCategory === 'Add tag');
+  let dmDec = isAddTag ? 'AUTO_BYPASS' : 'PENDING';
+  let dmNote = isAddTag ? 'Tự động duyệt (Add Tag trực tiếp chuyển QM)' : 'Đang chờ DM Lead kiểm duyệt';
+  let dmCode = isAddTag ? (data.tagName || 'DM_ADD_TAG_DIRECT') : '-';
+  let qmHandover = isAddTag ? 'READY_FOR_QM' : 'HOLD';
+  let qmStatus = isAddTag ? 'PENDING_QM' : 'HOLD';
+
   sheet.appendRow([
-    data.id, data.date, data.team, data.name, data.type, data.tagName, data.count, data.reason, data.duration,
-    "-", "-", data.dmDecision, data.dmNote, data.dmTagCode, data.qmHandover,
-    "-", "-", data.qmStatus, "-", data.qmSuccessCount, data.qmRef
+    data.id, data.date, data.requestCategory, data.team, data.name, data.type, data.tagName,
+    data.driverListSource, data.count, data.reason, data.duration,
+    isAddTag ? "System (Auto)" : "-", isAddTag ? data.date : "-",
+    dmDec, dmNote, dmCode, qmHandover,
+    "-", "-", qmStatus, "-", 0, isAddTag ? `Nguồn TX: ${data.driverListSource}` : "Chờ DM duyệt"
   ]);
   return { status: "success" };
 }
@@ -91,16 +128,16 @@ function saveDMReview(reqId, decision, note, tagCode) {
   for (let i = 1; i < rows.length; i++) {
     if (rows[i][0] === reqId) {
       const rowIdx = i + 1;
-      sheet.getRange(rowIdx, 10).setValue("Trần Lead DM");
-      sheet.getRange(rowIdx, 11).setValue(nowStr);
-      sheet.getRange(rowIdx, 12).setValue(decision);
-      sheet.getRange(rowIdx, 13).setValue(note);
-      sheet.getRange(rowIdx, 14).setValue(tagCode);
-      sheet.getRange(rowIdx, 15).setValue(decision === "APPROVED" ? "READY_FOR_QM" : "CANCELLED");
+      sheet.getRange(rowIdx, 12).setValue("Trần Lead DM");
+      sheet.getRange(rowIdx, 13).setValue(nowStr);
+      sheet.getRange(rowIdx, 14).setValue(decision);
+      sheet.getRange(rowIdx, 15).setValue(note);
+      sheet.getRange(rowIdx, 16).setValue(tagCode);
+      sheet.getRange(rowIdx, 17).setValue(decision === "APPROVED" ? "READY_FOR_QM" : "CANCELLED");
       if (decision === "APPROVED") {
-        sheet.getRange(rowIdx, 18).setValue("PROCESSING");
+        sheet.getRange(rowIdx, 20).setValue("PENDING_QM");
       } else {
-        sheet.getRange(rowIdx, 18).setValue("N/A");
+        sheet.getRange(rowIdx, 20).setValue("N/A");
       }
       break;
     }
@@ -117,16 +154,16 @@ function saveQMStatus(reqId, status, successCount, ref) {
   for (let i = 1; i < rows.length; i++) {
     if (rows[i][0] === reqId) {
       const rowIdx = i + 1;
-      sheet.getRange(rowIdx, 16).setValue("QM Specialist");
-      if (!sheet.getRange(rowIdx, 17).getValue() || sheet.getRange(rowIdx, 17).getValue() === "-") {
-        sheet.getRange(rowIdx, 17).setValue(nowStr);
-      }
-      sheet.getRange(rowIdx, 18).setValue(status);
-      if (status === "TAGGED_SUCCESS") {
+      sheet.getRange(rowIdx, 18).setValue("QM Specialist");
+      if (!sheet.getRange(rowIdx, 19).getValue() || sheet.getRange(rowIdx, 19).getValue() === "-") {
         sheet.getRange(rowIdx, 19).setValue(nowStr);
       }
-      sheet.getRange(rowIdx, 20).setValue(successCount);
-      sheet.getRange(rowIdx, 21).setValue(ref);
+      sheet.getRange(rowIdx, 20).setValue(status);
+      if (status === "TAGGED_SUCCESS") {
+        sheet.getRange(rowIdx, 21).setValue(nowStr);
+      }
+      sheet.getRange(rowIdx, 22).setValue(successCount);
+      sheet.getRange(rowIdx, 23).setValue(ref);
       break;
     }
   }
