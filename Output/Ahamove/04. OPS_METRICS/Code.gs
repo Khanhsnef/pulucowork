@@ -24,7 +24,7 @@ function getAppConfig() {
     sheet.appendRow(["TAB2_NAME", "🛡️ Bước 2: DM Review", "Tên Tab 2"]);
     sheet.appendRow(["TAB3_NAME", "⚙️ Bước 3: QM Add Tags", "Tên Tab 3"]);
     sheet.appendRow(["TAB4_NAME", "📊 Master Request Tracker", "Tên Tab 4"]);
-    sheet.appendRow(["SUBMIT_BTN_TEXT", "🚀 Gửi Đề Xuất Tới Hệ Thống", "Tên nút gửi"]);
+    sheet.appendRow(["SUBMIT_BTN_TEXT", "🚀 Gửi Đề Xuất Tới DM Lead", "Tên nút gửi"]);
     sheet.appendRow(["TEAM_LIST", "Business Operations, Marketing Campaign, Hub Linehaul Operations, Customer Service (CS), Risk & Fraud Control, Fleet Operations", "Danh sách Team"]);
     sheet.appendRow(["TAG_TYPES", "Priority Dispatch (Ưu tiên phát đơn), Incentive Campaign (Thưởng/Thách thức), Area Restriction (Giới hạn khu vực), Special Training (Đào tạo dịch vụ VIP), Penalty / Block (Khóa/Tạm dừng)", "Danh sách loại Tag"]);
   }
