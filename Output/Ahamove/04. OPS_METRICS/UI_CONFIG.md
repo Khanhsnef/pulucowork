@@ -4,6 +4,8 @@ Anh/Chị có thể sửa trực tiếp bất kỳ nội dung text, tiêu đề,
 
 > ⚡ **Lưu ý (v2 — 3-Gate Workflow):** Từ bản này tool đã nâng lên **luồng phê duyệt đa tầng** (Lead → DM → QM) + **phân quyền RBAC theo email** + **SLA đếm giờ**. Xem mục 8, 9, 10 bên dưới.
 
+> 🛠️ **Sửa nhanh cho bản DEMO offline** (`2026-07-dm-qm-tag-request-manager.html`): mọi field ở dưới đều gom vào **1 object `DEMO_CONFIG`** ngay đầu `<script>` (có comment đóng khung `⚙️ 00_CONFIG_SETTINGS`). Sửa trong đó → lưu file → mở lại browser là nội dung đổi (không cần chạy code đồng bộ). Các key: `APP_TITLE`, `APP_SUBTITLE`, `SHEET_URL`, `SHEET_LINK_TEXT`, `FORM_TITLE`, `SUBMIT_BTN_TEXT`, `TAB1_NAME`, `TAB5_NAME`, `SLA_LEAD_HOURS/DM/QM`, `TEAM_LIST`, `TAG_TYPES`. Bản web thật thì sửa các ô tương ứng trong sheet `00_CONFIG_SETTINGS`.
+
 ---
 
 ## 1. Thông Tin Chung & Header

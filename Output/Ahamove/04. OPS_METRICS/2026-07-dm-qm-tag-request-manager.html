@@ -297,8 +297,8 @@
       <div class="brand-title">
         <div class="brand-icon">🏷️</div>
         <div class="brand-text">
-          <h1>Tag Request Portal</h1>
-          <p>Spreadsheet Target: <a href="https://docs.google.com/spreadsheets/d/1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4/edit?gid=407438001#gid=407438001" target="_blank">Google Sheet Target</a></p>
+          <h1 id="app-title">Tag Request Portal</h1>
+          <p><span id="app-subtitle">Spreadsheet Target:</span> <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4/edit?gid=407438001#gid=407438001" target="_blank">Google Sheet Target</a></p>
         </div>
       </div>
       <div class="user-chip">
@@ -331,21 +331,21 @@
 
     <div class="kpi-grid">
       <div class="kpi-card"><div class="kpi-title">Tổng Yêu Cầu</div><div class="kpi-value" id="kpi-total">0</div><div class="kpi-sub">Ghi nhận trên hệ thống</div></div>
-      <div class="kpi-card pending-lead"><div class="kpi-title">Chờ Lead Duyệt</div><div class="kpi-value" id="kpi-pending-lead">0</div><div class="kpi-sub">SLA: ≤ 4h</div></div>
-      <div class="kpi-card pending-dm"><div class="kpi-title">Chờ DM Review</div><div class="kpi-value" id="kpi-pending-dm">0</div><div class="kpi-sub">SLA: ≤ 8h</div></div>
-      <div class="kpi-card pending-qm"><div class="kpi-title">Chờ QM Add Tags</div><div class="kpi-value" id="kpi-pending-qm">0</div><div class="kpi-sub">SLA: ≤ 24h</div></div>
+      <div class="kpi-card pending-lead"><div class="kpi-title">Chờ Lead Duyệt</div><div class="kpi-value" id="kpi-pending-lead">0</div><div class="kpi-sub">SLA: ≤ <span id="sla-lead">4</span>h</div></div>
+      <div class="kpi-card pending-dm"><div class="kpi-title">Chờ DM Review</div><div class="kpi-value" id="kpi-pending-dm">0</div><div class="kpi-sub">SLA: ≤ <span id="sla-dm">8</span>h</div></div>
+      <div class="kpi-card pending-qm"><div class="kpi-title">Chờ QM Add Tags</div><div class="kpi-value" id="kpi-pending-qm">0</div><div class="kpi-sub">SLA: ≤ <span id="sla-qm">24</span>h</div></div>
       <div class="kpi-card done"><div class="kpi-title">Hoàn Thành (Done)</div><div class="kpi-value" id="kpi-done">0</div><div class="kpi-sub">Đã add tag thành công</div></div>
     </div>
 
     <div class="tabs-nav">
-      <button class="tab-btn active" data-tab="tab-request" onclick="switchTab('tab-request')">📝 Tạo Request</button>
-      <button class="tab-btn" data-tab="tab-master" onclick="switchTab('tab-master')">📊 Master Request Tracker <span class="badge-count" id="badge-open-count">0</span></button>
+      <button class="tab-btn active" data-tab="tab-request" id="tab-btn-request" onclick="switchTab('tab-request')">📝 Tạo Request</button>
+      <button class="tab-btn" data-tab="tab-master" id="tab-btn-master" onclick="switchTab('tab-master')"><span id="tab-btn-master-label">📊 Master Request Tracker</span> <span class="badge-count" id="badge-open-count">0</span></button>
     </div>
 
     <!-- TAB 1: REQUEST -->
     <div id="tab-request" class="tab-panel active">
       <div class="panel-card">
-        <div class="card-header"><h2>📝 Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM</h2></div>
+        <div class="card-header"><h2 id="form-title">📝 Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM</h2></div>
         <form id="tag-request-form" onsubmit="handleFormSubmit(event)">
           <div style="margin-bottom: 20px;">
             <label style="font-size: 14px; font-weight: 700; color: #F8FAFC; margin-bottom: 10px; display: block;">Chọn Hình Thức Request *</label>
@@ -399,7 +399,7 @@
             <div class="form-group full-width"><label>Lý Do Kinh Doanh & Tiêu Chí Chọn Tài Xế *</label><textarea id="req-reason" rows="3" placeholder="Nêu rõ mục tiêu kinh doanh, ROI kỳ vọng..." required></textarea></div>
           </div>
           <div style="margin-top: 20px; display:flex; justify-content:flex-end; gap:12px;">
-            <button type="submit" class="btn">🚀 Gửi Đề Xuất Tới Lead Duyệt</button>
+            <button type="submit" class="btn" id="submit-btn">🚀 Gửi Đề Xuất Tới Lead Duyệt</button>
           </div>
         </form>
       </div>
@@ -483,12 +483,29 @@
   <script>
     // ===== DEMO STANDALONE: offline, mock data, role switcher, approve inline =====
 
-    // ┌──────────────────────────────────────────────────────────────────────┐
-    // │  ⚙️  CONFIG SETTINGS — SỬA TAY TẠI ĐÂY (mô phỏng sheet 00_CONFIG_SETTINGS)  │
-    // │  Thêm / bớt / đổi tên: chỉ cần sửa trong 2 mảng dưới, form tự cập nhật.  │
-    // └──────────────────────────────────────────────────────────────────────┘
+    // ╔══════════════════════════════════════════════════════════════════════════╗
+    // ║  ⚙️  00_CONFIG_SETTINGS — SỬA TAY TẠI ĐÂY                                   ║
+    // ║  Bản DEMO này mirror y hệt sheet "00_CONFIG_SETTINGS" của bản web thật.     ║
+    // ║  Đổi bất kỳ field nào bên dưới → lưu file → mở lại browser là nội dung đổi.  ║
+    // ║  (Bản web thật: sửa các ô tương ứng trong sheet 00_CONFIG_SETTINGS.)        ║
+    // ╚══════════════════════════════════════════════════════════════════════════╝
     const DEMO_CONFIG = {
-      // Danh sách Team đề xuất (dropdown "Team Đề Xuất")
+      // ── Tiêu đề & nhãn hiển thị ────────────────────────────────────────────
+      APP_TITLE:        "Tag Request Portal",                                  // Tiêu đề app (header + <title>)
+      APP_SUBTITLE:     "Spreadsheet Target:",                                 // Dòng phụ dưới tiêu đề
+      SHEET_URL:        "https://docs.google.com/spreadsheets/d/1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4/edit?gid=407438001#gid=407438001",
+      SHEET_LINK_TEXT:  "Google Sheet Target",                                 // Chữ hiển thị của link sheet
+      FORM_TITLE:       "Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM",         // Tiêu đề form tạo request
+      SUBMIT_BTN_TEXT:  "🚀 Gửi Đề Xuất Tới Lead Duyệt",                        // Chữ nút Submit
+      TAB1_NAME:        "📝 Tạo Request",                                       // Tên tab 1
+      TAB5_NAME:        "📊 Master Request Tracker",                            // Tên tab Master
+
+      // ── SLA từng gate (giờ) — hiển thị ở KPI card & tính deadline ──────────
+      SLA_LEAD_HOURS: 4,   // Gate 1: chờ Lead duyệt
+      SLA_DM_HOURS:   8,   // Gate 2: chờ DM review
+      SLA_QM_HOURS:   24,  // Gate 3: chờ QM add tag
+
+      // ── Danh sách Team đề xuất (dropdown "Team Đề Xuất") ───────────────────
       TEAM_LIST: [
         "Business Operations",
         "Marketing Campaign",
@@ -497,7 +514,8 @@
         "Risk & Fraud Control",
         "Fleet Operations"
       ],
-      // Loại tag mong muốn — { value: mã lưu vào request, label: chữ hiển thị }
+
+      // ── Loại tag mong muốn — { value: mã lưu request, label: chữ hiển thị } ─
       TAG_TYPES: [
         { value: "Priority Dispatch",  label: "Priority Dispatch (Ưu tiên phát đơn)" },
         { value: "Incentive Campaign", label: "Incentive Campaign (Thưởng/Thách thức)" },
@@ -523,16 +541,37 @@
       selectRequestCategory('Tạo tag mới');
     });
 
-    // Đổ option cho form từ DEMO_CONFIG (Team + Loại tag) — sửa config ở đầu <script>
+    // Áp toàn bộ DEMO_CONFIG vào UI (mirror sheet 00_CONFIG_SETTINGS) — sửa config ở đầu <script>
     function populateFormConfig() {
+      const C = DEMO_CONFIG;
+      const setText = (id, val) => { const el = document.getElementById(id); if (el && val != null) el.textContent = val; };
+
+      // Tiêu đề & nhãn
+      document.title = C.APP_TITLE + ' | DEMO Inline (Offline Preview)';
+      setText('app-title', C.APP_TITLE);
+      setText('app-subtitle', C.APP_SUBTITLE);
+      setText('form-title', '📝 ' + C.FORM_TITLE);
+      setText('submit-btn', C.SUBMIT_BTN_TEXT);
+      setText('tab-btn-request', C.TAB1_NAME);
+      setText('tab-btn-master-label', C.TAB5_NAME);
+      const link = document.getElementById('sheet-link');
+      if (link) { link.textContent = C.SHEET_LINK_TEXT; if (C.SHEET_URL) link.href = C.SHEET_URL; }
+
+      // SLA (giờ) hiển thị trên KPI card
+      setText('sla-lead', C.SLA_LEAD_HOURS);
+      setText('sla-dm',   C.SLA_DM_HOURS);
+      setText('sla-qm',   C.SLA_QM_HOURS);
+
+      // Dropdown Team
       const teamSel = document.getElementById('req-team');
       if (teamSel) {
         teamSel.innerHTML = '<option value="">-- Chọn Team --</option>' +
-          DEMO_CONFIG.TEAM_LIST.map(t => `<option value="${t}">${t}</option>`).join('');
+          C.TEAM_LIST.map(t => `<option value="${t}">${t}</option>`).join('');
       }
+      // Dropdown Loại tag
       const typeSel = document.getElementById('req-type');
       if (typeSel) {
-        typeSel.innerHTML = DEMO_CONFIG.TAG_TYPES
+        typeSel.innerHTML = C.TAG_TYPES
           .map(t => `<option value="${t.value}">${t.label}</option>`).join('');
       }
     }

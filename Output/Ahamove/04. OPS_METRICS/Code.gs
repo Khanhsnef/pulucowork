@@ -60,6 +60,8 @@ function getAppConfig() {
     sheet = ss.insertSheet("00_CONFIG_SETTINGS", 0);
     sheet.appendRow(["Mã Cấu Hình (Key)", "Nội Dung Hiển Thị (Value)", "Hướng Dẫn"]);
     sheet.appendRow(["APP_TITLE", "Tag Request Portal", "Tiêu đề ứng dụng"]);
+    sheet.appendRow(["APP_SUBTITLE", "Spreadsheet Target:", "Dòng phụ dưới tiêu đề"]);
+    sheet.appendRow(["SHEET_LINK_TEXT", "Google Sheet Target", "Chữ hiển thị của link sheet"]);
     sheet.appendRow(["FORM_TITLE", "Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM", "Tiêu đề biểu mẫu tạo request"]);
     sheet.appendRow(["TAB1_NAME", "📝 Bước 1: Request", "Tên Tab 1"]);
     sheet.appendRow(["TAB2_NAME", "👔 Bước 2: Lead Approval", "Tên Tab 2 (Lead duyệt)"]);
