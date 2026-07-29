@@ -149,22 +149,32 @@
     /* Hành động gộp ngay dưới line tiến trình */
     .ms-action-row { display:flex; justify-content:center; margin-bottom:12px; }
     .ms-action { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; }
-    .ms-action .btn-xs { width:100%; justify-content:center; }
-    /* Hover-reveal: mặc định 2 nút thu về icon nhỏ; rê vào mới bung label + phóng to */
-    .ms-action.ms-hover { gap:5px; transition:gap .18s ease; }
-    .ms-action.ms-hover .btn-xs .bl {
-      max-width:0; opacity:0; overflow:hidden; white-space:nowrap;
-      transition:max-width .22s ease, opacity .18s ease, margin .18s ease;
+    /* QM dropdown + nút cập nhật */
+    .ms-action .btn-xs { justify-content:center; border-radius:999px; }
+    /* ===== Nút kẹp 2 GÓC TRÊN của chấm active (Lead/DM) ===== */
+    .ms-dot-wrap { position:relative; display:flex; align-items:center; justify-content:center; }
+    .ms-step.has-btns { padding:22px 0 0; }   /* chừa chỗ cho nút ở 2 góc trên */
+    .dot-btn {
+      position:absolute; top:-6px;
+      display:inline-flex; align-items:center; justify-content:center;
+      border:1.5px solid var(--bg-primary); color:#fff; cursor:pointer;
+      width:22px; height:22px; padding:0; border-radius:999px; font-weight:800; font-size:12px;
+      overflow:hidden; white-space:nowrap; z-index:5;
+      transition:width .22s ease, padding .2s ease, transform .18s ease, box-shadow .18s ease, filter .18s ease;
     }
-    .ms-action.ms-hover .btn-xs {
-      width:auto; padding:5px; border-radius:999px;
-      transition:padding .2s ease, transform .18s ease, box-shadow .18s ease, filter .18s ease;
-    }
-    .ms-action.ms-hover .btn-xs .bi { font-size:13px; line-height:1; }
-    /* trạng thái rê vào cả cụm */
-    .ms-action.ms-hover:hover { gap:6px; }
-    .ms-action.ms-hover:hover .btn-xs { padding:7px 16px; }
-    .ms-action.ms-hover:hover .btn-xs .bl { max-width:120px; opacity:1; margin-left:7px; }
+    /* top = Duyệt (✓) góc PHẢI-trên; bot = Từ chối (✕) góc TRÁI-trên */
+    .dot-btn.top { left:calc(50% + 4px); }
+    .dot-btn.bot { right:calc(50% + 4px); flex-direction:row-reverse; }
+    .dot-btn.btn-success { background:linear-gradient(135deg,#14B8A6,#059669); box-shadow:0 2px 8px rgba(5,150,105,.45); }
+    .dot-btn.btn-danger  { background:linear-gradient(135deg,#FB7185,#E11D48); box-shadow:0 2px 8px rgba(225,29,72,.4); }
+    .dot-btn .bi { line-height:1; }
+    .dot-btn .bl { max-width:0; opacity:0; overflow:hidden; transition:max-width .22s ease, opacity .16s ease, margin .18s ease; }
+    /* rê vào step active → 2 nút bung thành pill có chữ, xòe ra 2 phía */
+    .ms-step.has-btns:hover .dot-btn { width:auto; padding:4px 12px; filter:brightness(1.08); }
+    .ms-step.has-btns:hover .dot-btn.top .bl { max-width:130px; opacity:1; margin-left:5px; }
+    .ms-step.has-btns:hover .dot-btn.bot .bl { max-width:130px; opacity:1; margin-right:5px; }
+    .ms-step.has-btns:hover .dot-btn.btn-success { box-shadow:0 4px 16px rgba(16,185,129,.6); }
+    .ms-step.has-btns:hover .dot-btn.btn-danger  { box-shadow:0 4px 16px rgba(244,63,94,.6); }
     /* Gradient pill + glow cho nút inline trên line tiến trình */
     .ms-action .btn-xs {
       border-radius:999px; padding:7px 16px; font-size:12px; font-weight:700; letter-spacing:.2px;
@@ -623,21 +633,10 @@
       return `<span class="status-badge status-pending">⏳ QM</span>`;
     }
 
-    // ===== Action cell theo state + role =====
-    // Block hành động đặt NGAY DƯỚI line tiến trình — chỉ hiện ở gate đang active
+    // ===== Block trạng thái/hành động đặt DƯỚI line tiến trình =====
+    // Lead & DM duyệt/từ chối ngay trên chấm active (xem gateDotButtons).
+    // Ở đây chỉ còn: QM cập nhật (dropdown) + text kết quả REJECTED/DONE.
     function actionCell(r) {
-      if (r.state === 'PENDING_TEAM_LEAD') {
-        if (!canApproveLead()) return `<div class="ms-wait">Chờ Lead/Head duyệt</div>`;
-        return `<div class="ms-action ms-hover" title="Rê vào để duyệt / từ chối">`+
-          `<button class="btn btn-success btn-xs" onclick="leadApprove('${r.id}')"><span class="bi">✓</span><span class="bl">Duyệt</span></button>`+
-          `<button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','LEAD')"><span class="bi">✕</span><span class="bl">Từ chối</span></button></div>`;
-      }
-      if (r.state === 'PENDING_DM') {
-        if (!canReviewDM()) return `<div class="ms-wait">Chờ DM thẩm định</div>`;
-        return `<div class="ms-action ms-hover" title="Rê vào để duyệt & gán tag / từ chối">`+
-          `<button class="btn btn-success btn-xs" onclick="openDMApprove('${r.id}')"><span class="bi">✓</span><span class="bl">Duyệt &amp; gán tag</span></button>`+
-          `<button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','DM')"><span class="bi">✕</span><span class="bl">Từ chối</span></button></div>`;
-      }
       if (r.state === 'PENDING_QM') {
         if (!canUpdateQM()) return `<div class="ms-wait">Chờ QM add tag</div>`;
         return `<div class="ms-action">
@@ -728,29 +727,39 @@
       }
       return '';
     }
+    // nút kẹp trên/dưới chấm active (Lead/DM). QM & trạng thái cuối trả '' (dùng block riêng).
+    function gateDotButtons(r, key) {
+      if (key === 'lead' && r.state === 'PENDING_TEAM_LEAD' && canApproveLead()) {
+        return `<button class="dot-btn top btn-success" onclick="event.stopPropagation();leadApprove('${r.id}')"><span class="bi">✓</span><span class="bl">Duyệt</span></button>`+
+               `<button class="dot-btn bot btn-danger" onclick="event.stopPropagation();openReject('${r.id}','LEAD')"><span class="bi">✕</span><span class="bl">Từ chối</span></button>`;
+      }
+      if (key === 'dm' && r.state === 'PENDING_DM' && canReviewDM()) {
+        return `<button class="dot-btn top btn-success" onclick="event.stopPropagation();openDMApprove('${r.id}')"><span class="bi">✓</span><span class="bl">Duyệt &amp; gán tag</span></button>`+
+               `<button class="dot-btn bot btn-danger" onclick="event.stopPropagation();openReject('${r.id}','DM')"><span class="bi">✕</span><span class="bl">Từ chối</span></button>`;
+      }
+      return '';
+    }
     function miniStepper(r) {
       const st = stepStates(r);
       const ic = { done:'✓', active:'⏳', todo:'', skip:'⤵', rej:'✕' };
       const conn = (a) => `<div class="ms-conn ${a==='done'?'done':''}"></div>`;
-      const step = (key, label) =>
-        `<div class="ms-step"><div class="ms-dot ${st[key]}">${ic[st[key]]}</div>`+
+      const step = (key, label) => {
+        const btns = gateDotButtons(r, key);
+        return `<div class="ms-step${btns?' has-btns':''}"><div class="ms-dot-wrap">${btns}<div class="ms-dot ${st[key]}">${ic[st[key]]}</div></div>`+
         `<div class="ms-label">${label}</div>${stepMeta(r, key, st[key])}</div>`;
-      // neo action-row vào tâm chấm đang active: center(i)=i*132+46, tâm tổng=244
-      const idxMap = { req:0, lead:1, dm:2, qm:3 };
-      let activeKey = ['lead','dm','qm'].find(k => st[k]==='active');
-      let shift = 0;
-      if (activeKey != null) shift = (idxMap[activeKey]*132 + 46) - 244;
-      const actionHtml = actionCell(r);
-      const actionRow = actionHtml
-        ? `<div class="ms-action-row" style="transform:translateX(${shift}px);">${actionHtml}</div>`
-        : '';
-      return actionRow +
-      `<div class="mini-stepper">`+
+      };
+      // QM active: dropdown trạng thái đặt ngay dưới chấm QM
+      const qmBlock = (r.state === 'PENDING_QM' && canUpdateQM())
+        ? `<div class="ms-action-row" style="transform:translateX(${(3*132+46)-244}px);">${actionCell(r)}</div>` : '';
+      // REJECTED / DONE: text kết quả căn giữa dưới line
+      const resultBlock = (r.state === 'REJECTED' || r.state === 'DONE')
+        ? `<div class="ms-action-row">${actionCell(r)}</div>` : '';
+      return `<div class="mini-stepper">`+
         step('req','Request') + conn(st.req) +
         step('lead','Lead')   + conn(st.lead) +
         step('dm','DM')       + conn(st.dm) +
         step('qm','QM')       +
-      `</div>`;
+      `</div>`+ qmBlock + resultBlock;
     }
 
     // ===== Chọn dòng → chỉ cập nhật sơ đồ luồng + highlight (KHÔNG mở modal) =====
