@@ -135,10 +135,16 @@
     .ms-step { display:flex; flex-direction:column; align-items:center; gap:4px; width:92px; }
     .ms-dot { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; border:2px solid transparent; box-shadow:0 3px 8px rgba(0,0,0,.4); }
     .ms-dot.done { background:var(--accent-emerald); color:#fff; }
-    .ms-dot.active { background:var(--accent-amber); color:#fff; border-color:#FBBF24; }
-    /* spinner vòng tròn xoay báo "đang chờ xử lý" trong chấm active */
+    .ms-dot.active { background:var(--accent-amber); color:#fff; border-color:#FBBF24; box-shadow:0 0 10px rgba(251,191,36,.7), 0 0 20px rgba(245,158,11,.45); animation:dotneon 1.6s ease-in-out infinite; }
+    /* spinner neon vòng tròn xoay báo "đang chờ xử lý" trong chấm active */
     @keyframes dotspin { to { transform:rotate(360deg); } }
-    .dot-spinner { width:16px; height:16px; border-radius:50%; border:2.5px solid rgba(255,255,255,.35); border-top-color:#fff; animation:dotspin .8s linear infinite; }
+    @keyframes dotneon { 0%,100%{ box-shadow:0 0 10px rgba(251,191,36,.7), 0 0 20px rgba(245,158,11,.45);} 50%{ box-shadow:0 0 16px rgba(251,191,36,.95), 0 0 34px rgba(245,158,11,.75);} }
+    .dot-spinner {
+      width:26px; height:26px; border-radius:50%;
+      border:3px solid rgba(255,255,255,.18); border-top-color:#FFFBEB; border-right-color:#FDE68A;
+      animation:dotspin .75s linear infinite;
+      filter:drop-shadow(0 0 4px rgba(255,255,255,.95)) drop-shadow(0 0 8px rgba(253,230,138,.9));
+    }
     .ms-dot.todo { background:rgba(100,116,139,0.35); color:var(--text-muted); }
     .ms-dot.skip { background:var(--accent-indigo); color:#fff; }
     .ms-dot.rej  { background:var(--accent-rose); color:#fff; }
