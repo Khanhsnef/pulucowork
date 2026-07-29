@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hệ Thống Quản Lý Đề Xuất Tag Tài Xế | Sync Google Sheet Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0F172A;
+      --bg-secondary: #1E293B;
+      --bg-card: rgba(30, 41, 59, 0.7);
+      --bg-card-hover: rgba(51, 65, 85, 0.8);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      
+      --accent-teal: #0D9488;
+      --accent-teal-light: #14B8A6;
+      --accent-indigo: #4F46E5;
+      --accent-indigo-light: #6366F1;
+      --accent-amber: #D97706;
+      --accent-emerald: #059669;
+      --accent-rose: #E11D48;
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .app-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px 28px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-lg);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-indigo));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 0 20px rgba(20, 184, 166, 0.4);
+    }
+
+    .brand-text h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #FFFFFF, #CBD5E1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Google Sheet Connection Banner */
+    .sheet-sync-banner {
+      background: rgba(13, 148, 136, 0.1);
+      border: 1px solid rgba(20, 184, 166, 0.3);
+      border-radius: var(--radius-md);
+      padding: 12px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .sync-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px var(--accent-emerald);
+    }
+
+    .status-dot.offline {
+      background: var(--accent-amber);
+      box-shadow: 0 0 8px var(--accent-amber);
+    }
+
+    .sync-input-group {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      max-width: 600px;
+    }
+
+    .sync-input-group input {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+
+    /* KPI Metrics Bar */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      backdrop-filter: blur(8px);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent-teal);
+    }
+
+    .kpi-card.pending-dm::before { background: var(--accent-amber); }
+    .kpi-card.approved::before { background: var(--accent-teal-light); }
+    .kpi-card.qm-tagged::before { background: var(--accent-indigo-light); }
+
+    .kpi-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 6px 0 2px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Navigation Tabs */
+    .tabs-nav {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 24px;
+      padding-bottom: 2px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .tab-btn:hover {
+      color: #FFF;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .tab-btn.active {
+      color: var(--accent-teal-light);
+      background: rgba(13, 148, 136, 0.12);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent-teal-light);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .badge-count {
+      background: rgba(255, 255, 255, 0.15);
+      color: #FFF;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .tab-btn.active .badge-count {
+      background: var(--accent-teal);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(12px);
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .card-header h2 {
+      font-size: 17px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    input, select, textarea {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: #FFF;
+      font-family: inherit;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent-teal-light);
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--accent-teal), #0F766E);
+      color: #FFF;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--accent-emerald), #047857);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text-secondary);
+      padding: 12px 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 14px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .status-approved {
+      background: rgba(5, 150, 105, 0.2);
+      color: #34D399;
+      border: 1px solid rgba(5, 150, 105, 0.4);
+    }
+
+    .status-pending {
+      background: rgba(217, 119, 6, 0.2);
+      color: #FBBF24;
+      border: 1px solid rgba(217, 119, 6, 0.4);
+    }
+
+    .status-rejected {
+      background: rgba(225, 29, 72, 0.2);
+      color: #F87171;
+      border: 1px solid rgba(225, 29, 72, 0.4);
+    }
+
+    .status-processing {
+      background: rgba(14, 165, 233, 0.2);
+      color: #38BDF8;
+      border: 1px solid rgba(14, 165, 233, 0.4);
+    }
+
+    .code-tag {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: #38BDF8;
+      font-size: 12px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 650px;
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Top Header -->
+    <header>
+      <div class="brand-title">
+        <div class="brand-icon">🔗</div>
+        <div class="brand-text">
+          <h1>DM & QM Tag Request Portal | Google Sheet Synced</h1>
+          <p>Spreadsheet Target: <a href="https://docs.google.com/spreadsheets/d/1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4/edit?gid=407438001#gid=407438001" target="_blank" style="color:var(--accent-teal-light);">Google Sheet ID: 1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4</a></p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Google Sheet API Sync Bar -->
+    <div class="sheet-sync-banner">
+      <div class="sync-status">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="sync-status-text">Đang dùng dữ liệu Local (Chưa kích hoạt Web App API Sync)</span>
+      </div>
+
+      <div class="sync-input-group">
+        <input type="text" id="gas-url-input" value="https://script.google.com/a/macros/ahamove.com/s/AKfycbxt3CwzMt2d6IFIlM3MDq9HAasolky_qvNcHmf-E7YbYjWrRY6J3nv6OLn7gF8YrlsM/exec" placeholder="Dán Google Apps Script Web App URL tại đây...">
+        <button class="btn" onclick="saveAndSyncGoogleSheet()">🔄 Kích Hoạt Đồng Bộ</button>
+      </div>
+    </div>
+
+    <!-- KPI Summary Metrics -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Tổng Yêu Cầu (All Requests)</div>
+        <div class="kpi-value" id="kpi-total">5</div>
+        <div class="kpi-sub">Ghi nhận trên hệ thống</div>
+      </div>
+
+      <div class="kpi-card pending-dm">
+        <div class="kpi-title">Chờ DM Review (Pending)</div>
+        <div class="kpi-value" id="kpi-pending">1</div>
+        <div class="kpi-sub">SLA phản hồi: ≤ 4h</div>
+      </div>
+
+      <div class="kpi-card approved">
+        <div class="kpi-title">DM Đã Duyệt (Approved)</div>
+        <div class="kpi-value" id="kpi-approved">3</div>
+        <div class="kpi-sub">Đã chuyển luồng QM</div>
+      </div>
+
+      <div class="kpi-card qm-tagged">
+        <div class="kpi-title">QM Add Tag Thành Công</div>
+        <div class="kpi-value" id="kpi-tagged">628</div>
+        <div class="kpi-sub">Tài xế đã được gán tag</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('tab-request')">
+        📝 1. Gửi Đề Xuất Mới
+      </button>
+
+      <button class="tab-btn" onclick="switchTab('tab-dm-review')">
+        🛡️ 2. Bàn Tròn DM Lead Review
+        <span class="badge-count" id="badge-pending-count">1</span>
+      </button>
+
+      <button class="tab-btn" onclick="switchTab('tab-qm-queue')">
+        ⚙️ 3. Danh Sách Chờ QM Add Tag
+        <span class="badge-count" id="badge-qm-count">2</span>
+      </button>
+
+      <button class="tab-btn" onclick="switchTab('tab-master')">
+        📊 4. Master Request Tracker
+      </button>
+
+      <button class="tab-btn" onclick="switchTab('tab-gas-setup')">
+        ⚡ 5. Hướng Dẫn Tải Apps Script Up Sheet
+      </button>
+    </div>
+
+
+    <!-- ==================== TAB 1: FORM TẠO ĐỀ NGHỊ ==================== -->
+    <div id="tab-request" class="tab-panel active">
+      <div class="panel-card">
+        <div class="card-header">
+          <h2>📝 Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM</h2>
+          <span style="font-size:12px; color:var(--text-secondary);">Tự động gửi và ghi vào Google Sheet target</span>
+        </div>
+
+        <form id="tag-request-form" onsubmit="handleFormSubmit(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Team Đề Xuất *</label>
+              <select id="req-team" required>
+                <option value="">-- Chọn Team --</option>
+                <option value="Business Ops">Business Operations</option>
+                <option value="Marketing">Marketing Campaign</option>
+                <option value="Hub Operations">Hub Linehaul Operations</option>
+                <option value="Customer Service">Customer Service (CS)</option>
+                <option value="Risk Management">Risk & Fraud Control</option>
+                <option value="Fleet Operations">Fleet Operations</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Họ Tên Người Yêu Cầu *</label>
+              <input type="text" id="req-name" placeholder="VD: Nguyễn Văn A" required>
+            </div>
+
+            <div class="form-group">
+              <label>Loại Tag Mong Muốn *</label>
+              <select id="req-type" required>
+                <option value="Priority Dispatch">Priority Dispatch (Ưu tiên phát đơn)</option>
+                <option value="Incentive Campaign">Incentive Campaign (Thưởng/Thách thức)</option>
+                <option value="Area Restriction">Area Restriction (Giới hạn khu vực)</option>
+                <option value="Special Training">Special Training (Đào tạo dịch vụ VIP)</option>
+                <option value="Penalty / Block">Penalty / Block (Khóa/Tạm dừng)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Tên Tag Gợi Ý / Mục Tiêu *</label>
+              <input type="text" id="req-tag-name" placeholder="VD: TAG_HUB_SOC_NIGHT_OFFLOAD" required>
+            </div>
+
+            <div class="form-group">
+              <label>Số Lượng Tài Xế Cần Tag *</label>
+              <input type="number" id="req-driver-count" min="1" placeholder="VD: 150" required>
+            </div>
+
+            <div class="form-group">
+              <label>Thời Gian Áp Dụng *</label>
+              <input type="text" id="req-duration" placeholder="VD: 2026-08-01 đến 2026-08-31" required>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Lý Do Kinh Doanh & Tiêu Chí Chọn Tài Xế (Business Justification) *</label>
+              <textarea id="req-reason" rows="3" placeholder="Nêu rõ mục tiêu kinh doanh, ROI kỳ vọng và tiêu chuẩn lọc danh sách tài xế" required></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Danh Sách Phone/ID Tài Xế (Dán mã Driver ID phân cách bởi dấu phẩy)</label>
+              <textarea id="req-driver-list" rows="2" placeholder="TX001, TX002, TX003..."></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; display:flex; justify-content:flex-end; gap:12px;">
+            <button type="reset" class="btn btn-secondary">Làm Mới</button>
+            <button type="submit" class="btn">🚀 Gửi Đề Xuất & Ghi Vào Google Sheet</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- ==================== TAB 2: DM REVIEW CONSOLE ==================== -->
+    <div id="tab-dm-review" class="tab-panel">
+      <div class="panel-card">
+        <div class="card-header">
+          <h2>🛡️ Bàn Tròn Thẩm Định Của DM Lead (DM Review Console)</h2>
+          <span style="font-size:12px; color:var(--accent-teal-light);">Duyệt & Tự Động Đồng Bộ Với Google Sheet Target</span>
+        </div>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã Request</th>
+                <th>Ngày Tạo</th>
+                <th>Team</th>
+                <th>Tên Tag Yêu Cầu</th>
+                <th>Số TX</th>
+                <th>Trạng Thái DM</th>
+                <th>Mã Tag Chuẩn Hóa</th>
+                <th>Hành Động</th>
+              </tr>
+            </thead>
+            <tbody id="dm-review-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== TAB 3: QM EXECUTION QUEUE ==================== -->
+    <div id="tab-qm-queue" class="tab-panel">
+      <div class="panel-card">
+        <div class="card-header">
+          <h2>⚙️ Hàng Đợi QM Tiếp Nhận & Add Tag</h2>
+        </div>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã Request</th>
+                <th>Team Đề Xuất</th>
+                <th>Mã Tag Chuẩn Hóa</th>
+                <th>Số TX Cần Tag</th>
+                <th>Trạng Thái QM</th>
+                <th>Số TX Thành Công</th>
+                <th>QM Batch Ref / Ghi Chú</th>
+                <th>Cập Nhật QM</th>
+              </tr>
+            </thead>
+            <tbody id="qm-queue-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== TAB 4: MASTER TRACKER ==================== -->
+    <div id="tab-master" class="tab-panel">
+      <div class="panel-card">
+        <div class="card-header">
+          <h2>📊 Master Request Tracker</h2>
+          <button class="btn btn-secondary" onclick="exportCSV()">📥 Export CSV</button>
+        </div>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã Request</th>
+                <th>Ngày Tạo</th>
+                <th>Team</th>
+                <th>Người Tạo</th>
+                <th>Tên Tag Yêu Cầu</th>
+                <th>Số TX</th>
+                <th>DM Status</th>
+                <th>DM Tag Code</th>
+                <th>QM Status</th>
+                <th>TX Thắng</th>
+                <th>Batch Ref</th>
+              </tr>
+            </thead>
+            <tbody id="master-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== TAB 5: APPS SCRIPT SETUP GUIDE ==================== -->
+    <div id="tab-gas-setup" class="tab-panel">
+      <div class="panel-card">
+        <div class="card-header">
+          <h2>⚡ Hướng Dẫn Tải Apps Script Để Liên Kết Google Sheet</h2>
+        </div>
+
+        <p style="font-size:14px; margin-bottom:14px;">Anh/chị chỉ cần thực hiện 3 bước đơn giản sau để liên kết trang HTML này trực tiếp tới Google Sheet Target của anh/chị:</p>
+
+        <ol style="margin-left: 20px; line-height: 1.8; font-size:13px; color:#CBD5E1;">
+          <li>Mở file Google Sheet target: <a href="https://docs.google.com/spreadsheets/d/1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4/edit?gid=407438001#gid=407438001" target="_blank" style="color:var(--accent-teal-light);">Link Google Sheet 1tsoIAE...</a></li>
+          <li>Vào menu <strong>Tiện ích mở rộng (Extensions) $\rightarrow$ Apps Script</strong>.</li>
+          <li>Xóa sạch code cũ và dán toàn bộ đoạn code Apps Script bên dưới vào, sau đó nhấn <strong>Triển khai (Deploy) $\rightarrow$ Triển khai dưới dạng ứng dụng web (New Deployment as Web App)</strong>.</li>
+          <li>Chọn quyền truy cập: <strong>"Bất kỳ ai" (Anyone)</strong> $\rightarrow$ Nhấn <strong>Triển khai (Deploy)</strong> và sao chép <code>Web App URL</code> dán vào ô "Kích hoạt đồng bộ" phía trên!</li>
+        </ol>
+
+        <div style="margin-top:16px;">
+          <textarea id="gas-code-text" rows="12" style="width:100%; font-family:'JetBrains Mono', monospace; font-size:12px; color:#38BDF8;" readonly>
+/**
+ * GOOGLE APPS SCRIPT WEB APP API - SPREADSHEET ID: 1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4
+ */
+
+function doGet(e) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName("01_ALL_TAG_REQUESTS");
+  if (!sheet) {
+    sheet = ss.insertSheet("01_ALL_TAG_REQUESTS");
+    sheet.appendRow(["Mã Request", "Ngày Tạo", "Team Đề Xuất", "Người Đề Xuất", "Loại Tag", "Tên Tag Yêu Cầu", "Số Lượng TX", "Lý Do", "Thời Gian", "DM Reviewer", "Ngày DM Review", "DM Quyết Định", "DM Note", "DM Tag Code", "QM Handover", "QM Specialist", "Ngày QM Nhận", "QM Trạng Thái Add Tag", "Ngày Add Tag Xong", "Số TX Add Thành Công", "Ghi Chú QM"]);
+  }
+  
+  const rows = sheet.getDataRange().getValues();
+  const headers = rows[0];
+  const data = rows.slice(1).map(r => {
+    return {
+      id: r[0], date: r[1], team: r[2], name: r[3], type: r[4], tagName: r[5],
+      count: r[6], reason: r[7], duration: r[8], dmDecision: r[11] || 'PENDING',
+      dmNote: r[12] || '', dmTagCode: r[13] || '-', qmStatus: r[17] || 'PENDING_QM',
+      qmSuccessCount: r[19] || 0, qmRef: r[20] || ''
+    };
+  });
+  
+  return ContentService.createTextOutput(JSON.stringify({ status: "success", data: data }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents);
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName("01_ALL_TAG_REQUESTS");
+    
+    if (body.action === "createRequest") {
+      const d = body.data;
+      sheet.appendRow([
+        d.id, d.date, d.team, d.name, d.type, d.tagName, d.count, d.reason, d.duration,
+        "-", "-", d.dmDecision, d.dmNote, d.dmTagCode, d.qmHandover, "-", "-", d.qmStatus, "-", d.qmSuccessCount, d.qmRef
+      ]);
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify({ status: "success" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+          </textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal DM Review -->
+  <div class="modal-overlay" id="dm-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-title">🛡️ Thẩm Định Request: <span id="modal-req-id"></span></h3>
+        <button class="btn btn-secondary" onclick="closeModal('dm-modal')">✖</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>Chi Tiết Request</label>
+          <div id="modal-details" style="font-size:13px; background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; color:#CBD5E1;"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Quyết Định Phê Duyệt *</label>
+          <select id="modal-dm-decision" onchange="toggleTagCodeInput()">
+            <option value="APPROVED">APPROVED (Phê Duyệt)</option>
+            <option value="REJECTED">REJECTED (Từ Chối)</option>
+            <option value="NEED_MORE_INFO">NEED_MORE_INFO (Yêu Cầu Bổ Sung)</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="group-tag-code">
+          <label>Gán Mã Tag Chuẩn *</label>
+          <input type="text" id="modal-dm-tag-code" placeholder="VD: DM_TAG_HUB_LH_VIP_V1">
+        </div>
+
+        <div class="form-group full-width">
+          <label>Lý Do Phê Duyệt / Từ Chối / Ghi Chú</label>
+          <textarea id="modal-dm-note" rows="3" placeholder="Nhập căn cứ thẩm định..."></textarea>
+        </div>
+      </div>
+      <div style="margin-top: 18px; display:flex; justify-content:flex-end; gap:10px;">
+        <button class="btn btn-secondary" onclick="closeModal('dm-modal')">Hủy</button>
+        <button class="btn btn-success" onclick="saveDMReview()">💾 Lưu & Đồng Bộ Sheet</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Script Logic -->
+  <script>
+    let gasWebAppUrl = localStorage.getItem("gas_app_url") || "https://script.google.com/macros/s/AKfycbxt3CwzMt2d6IFIlM3MDq9HAasolky_qvNcHmf-E7YbYjWrRY6J3nv6OLn7gF8YrlsM/exec";
+
+    let requestsData = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (gasWebAppUrl) {
+        document.getElementById('gas-url-input').value = gasWebAppUrl;
+        fetchDataFromGoogleSheet();
+      } else {
+        renderAll();
+      }
+    });
+
+    function saveAndSyncGoogleSheet() {
+      const url = document.getElementById('gas-url-input').value.trim();
+      if (!url) {
+        alert("Vui lòng dán Google Apps Script Web App URL!");
+        return;
+      }
+      gasWebAppUrl = url;
+      localStorage.setItem("gas_app_url", url);
+      fetchDataFromGoogleSheet();
+    }
+
+    function fetchDataFromGoogleSheet() {
+      if (!gasWebAppUrl) return;
+      
+      document.getElementById('sync-status-text').innerHTML = "⏳ Đang kết nối & tải dữ liệu từ Google Sheet...";
+      fetch(gasWebAppUrl)
+        .then(res => {
+          if (!res.ok) throw new Error("HTTP error " + res.status);
+          return res.json();
+        })
+        .then(res => {
+          if (res.status === "success" && res.data && res.data.length > 0) {
+            // Filter out title/header rows and keep only real request rows
+            const cleanData = res.data.filter(r => r.id && r.id.toString().startsWith("REQ-"));
+            if (cleanData.length > 0) {
+              requestsData = cleanData;
+            }
+            document.getElementById('sync-status-text').innerHTML = "🟢 Đã kết nối & Đồng bộ trực tiếp với Google Sheet Target";
+            document.getElementById('status-dot').classList.remove('offline');
+          }
+          renderAll();
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById('sync-status-text').innerHTML = `⚠️ Lỗi kết nối Google Sheet. <a href="#" onclick="fetchDataFromGoogleSheet()" style="color:#FBBF24; text-decoration:underline; margin-left:8px;">Thử lại 🔄</a>`;
+          document.getElementById('status-dot').classList.add('offline');
+          renderAll();
+        });
+    }
+
+    function renderAll() {
+      updateKPIs();
+      renderDMReviewTable();
+      renderQMQueueTable();
+      renderMasterTable();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+      event.currentTarget.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function updateKPIs() {
+      const total = requestsData.length;
+      const pending = requestsData.filter(r => r.dmDecision === 'PENDING').length;
+      const approved = requestsData.filter(r => r.dmDecision === 'APPROVED').length;
+      const taggedCount = requestsData.filter(r => r.qmStatus === 'TAGGED_SUCCESS').reduce((sum, r) => sum + (parseInt(r.qmSuccessCount)||0), 0);
+      const qmQueueCount = requestsData.filter(r => r.dmDecision === 'APPROVED' && r.qmStatus !== 'TAGGED_SUCCESS').length;
+
+      document.getElementById('kpi-total').innerText = total;
+      document.getElementById('kpi-pending').innerText = pending;
+      document.getElementById('kpi-approved').innerText = approved;
+      document.getElementById('kpi-tagged').innerText = taggedCount;
+
+      document.getElementById('badge-pending-count').innerText = pending;
+      document.getElementById('badge-qm-count').innerText = qmQueueCount;
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const now = new Date();
+      const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+      
+      const newId = `REQ-2026-${String(requestsData.length + 1).padStart(3, '0')}`;
+
+      const newReq = {
+        id: newId,
+        date: timeStr,
+        team: document.getElementById('req-team').value,
+        name: document.getElementById('req-name').value,
+        type: document.getElementById('req-type').value,
+        tagName: document.getElementById('req-tag-name').value,
+        count: parseInt(document.getElementById('req-driver-count').value) || 0,
+        reason: document.getElementById('req-reason').value,
+        duration: document.getElementById('req-duration').value,
+        dmDecision: "PENDING",
+        dmNote: "Đang chờ DM Lead kiểm duyệt",
+        dmTagCode: "-",
+        qmHandover: "HOLD",
+        qmStatus: "PENDING_QM",
+        qmSuccessCount: 0,
+        qmRef: "Chờ DM duyệt"
+      };
+
+      requestsData.unshift(newReq);
+      renderAll();
+
+      if (gasWebAppUrl) {
+        fetch(gasWebAppUrl, {
+          method: "POST",
+          body: JSON.stringify({ action: "createRequest", data: newReq })
+        }).then(() => fetchDataFromGoogleSheet());
+      }
+
+      document.getElementById('tag-request-form').reset();
+      alert(`✅ Đã gửi Yêu cầu ${newId}! Dữ liệu đã đồng bộ vào Google Sheet.`);
+      switchTab('tab-dm-review');
+    }
+
+    function renderDMReviewTable() {
+      const tbody = document.getElementById('dm-review-tbody');
+      tbody.innerHTML = '';
+
+      requestsData.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${r.id}</strong></td>
+          <td style="color:var(--text-secondary); font-size:12px;">${r.date}</td>
+          <td><span class="code-tag">${r.team}</span></td>
+          <td><strong>${r.tagName}</strong></td>
+          <td style="text-align:right;"><strong>${r.count}</strong></td>
+          <td>${getStatusBadge(r.dmDecision)}</td>
+          <td><span class="code-tag">${r.dmTagCode}</span></td>
+          <td>
+            <button class="btn btn-secondary" style="padding:4px 10px; font-size:12px;" onclick="openDMModal('${r.id}')">
+              ✏️ Thẩm Định
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderQMQueueTable() {
+      const tbody = document.getElementById('qm-queue-tbody');
+      tbody.innerHTML = '';
+
+      const approvedList = requestsData.filter(r => r.dmDecision === 'APPROVED');
+      if (approvedList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--text-muted);">Không có yêu cầu nào đang chờ QM add tag.</td></tr>`;
+        return;
+      }
+
+      approvedList.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${r.id}</strong></td>
+          <td>${r.team}</td>
+          <td><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span></td>
+          <td style="text-align:right;"><strong>${r.count}</strong></td>
+          <td>${getQMStatusBadge(r.qmStatus)}</td>
+          <td style="text-align:right;">${r.qmSuccessCount}</td>
+          <td>${r.qmRef}</td>
+          <td>
+            <select style="padding:4px 8px; font-size:12px;" onchange="updateQMStatus('${r.id}', this.value)">
+              <option value="PROCESSING" ${r.qmStatus === 'PROCESSING' ? 'selected' : ''}>PROCESSING</option>
+              <option value="TAGGED_SUCCESS" ${r.qmStatus === 'TAGGED_SUCCESS' ? 'selected' : ''}>TAGGED_SUCCESS</option>
+              <option value="FAILED" ${r.qmStatus === 'FAILED' ? 'selected' : ''}>FAILED</option>
+            </select>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderMasterTable() {
+      const tbody = document.getElementById('master-tbody');
+      tbody.innerHTML = '';
+
+      requestsData.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${r.id}</strong></td>
+          <td style="font-size:12px; color:var(--text-secondary);">${r.date}</td>
+          <td>${r.team}</td>
+          <td>${r.name}</td>
+          <td><strong>${r.tagName}</strong></td>
+          <td style="text-align:right;">${r.count}</td>
+          <td>${getStatusBadge(r.dmDecision)}</td>
+          <td><span class="code-tag">${r.dmTagCode}</span></td>
+          <td>${getQMStatusBadge(r.qmStatus)}</td>
+          <td style="text-align:right;"><strong>${r.qmSuccessCount}</strong></td>
+          <td style="font-size:12px; color:var(--text-secondary);">${r.qmRef}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function getStatusBadge(status) {
+      if (status === 'APPROVED') return `<span class="status-badge status-approved">✓ APPROVED</span>`;
+      if (status === 'REJECTED') return `<span class="status-badge status-rejected">✕ REJECTED</span>`;
+      return `<span class="status-badge status-pending">⏳ PENDING</span>`;
+    }
+
+    function getQMStatusBadge(status) {
+      if (status === 'TAGGED_SUCCESS') return `<span class="status-badge status-approved">✓ TAGGED SUCCESS</span>`;
+      if (status === 'PROCESSING') return `<span class="status-badge status-processing">⚙️ PROCESSING</span>`;
+      if (status === 'FAILED') return `<span class="status-badge status-rejected">✕ FAILED</span>`;
+      return `<span class="status-badge status-pending">⏳ PENDING QM</span>`;
+    }
+
+    function openDMModal(id) {
+      currentSelectedId = id;
+      const r = requestsData.find(item => item.id === id);
+      if (!r) return;
+
+      document.getElementById('modal-req-id').innerText = r.id;
+      document.getElementById('modal-details').innerHTML = `
+        <strong>Team:</strong> ${r.team} | <strong>Người yêu cầu:</strong> ${r.name}<br>
+        <strong>Tag Đề Xuất:</strong> ${r.tagName} (${r.type})<br>
+        <strong>Số Lượng Driver:</strong> ${r.count} TX | <strong>Thời gian:</strong> ${r.duration}<br>
+        <strong>Lý do:</strong> ${r.reason}
+      `;
+
+      document.getElementById('modal-dm-decision').value = r.dmDecision === 'PENDING' ? 'APPROVED' : r.dmDecision;
+      document.getElementById('modal-dm-tag-code').value = r.dmTagCode !== '-' ? r.dmTagCode : `DM_${r.tagName.toUpperCase()}`;
+      document.getElementById('modal-dm-note').value = r.dmNote;
+
+      toggleTagCodeInput();
+      document.getElementById('dm-modal').classList.add('open');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('open');
+    }
+
+    function toggleTagCodeInput() {
+      const dec = document.getElementById('modal-dm-decision').value;
+      const group = document.getElementById('group-tag-code');
+      group.style.display = (dec === 'APPROVED') ? 'flex' : 'none';
+    }
+
+    function saveDMReview() {
+      const r = requestsData.find(item => item.id === currentSelectedId);
+      if (!r) return;
+
+      r.dmDecision = document.getElementById('modal-dm-decision').value;
+      r.dmNote = document.getElementById('modal-dm-note').value;
+
+      if (r.dmDecision === 'APPROVED') {
+        r.dmTagCode = document.getElementById('modal-dm-tag-code').value || `DM_TAG_APPROVED`;
+        r.qmHandover = 'READY_FOR_QM';
+        if (r.qmStatus === 'N/A' || r.qmStatus === 'PENDING_QM') {
+          r.qmStatus = 'PROCESSING';
+        }
+      } else if (r.dmDecision === 'REJECTED') {
+        r.dmTagCode = 'N/A';
+        r.qmHandover = 'CANCELLED';
+        r.qmStatus = 'N/A';
+      }
+
+      renderAll();
+      closeModal('dm-modal');
+    }
+
+    function updateQMStatus(id, newStatus) {
+      const r = requestsData.find(item => item.id === id);
+      if (r) {
+        r.qmStatus = newStatus;
+        if (newStatus === 'TAGGED_SUCCESS' && r.qmSuccessCount === 0) {
+          r.qmSuccessCount = r.count;
+        }
+        renderAll();
+      }
+    }
+
+    function exportCSV() {
+      let csv = 'Id,Date,Team,Name,Type,TagName,Count,Reason,DMDecision,DMTagCode,QMStatus,QMSuccessCount\n';
+      requestsData.forEach(r => {
+        csv += `"${r.id}","${r.date}","${r.team}","${r.name}","${r.type}","${r.tagName}",${r.count},"${r.reason.replace(/"/g, '""')}","${r.dmDecision}","${r.dmTagCode}","${r.qmStatus}",${r.qmSuccessCount}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', 'DM_QM_Tag_Requests_Master.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
