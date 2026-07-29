@@ -373,23 +373,14 @@
               <label>Team Đề Xuất *</label>
               <select id="req-team" required>
                 <option value="">-- Chọn Team --</option>
-                <option value="Business Operations">Business Operations</option>
-                <option value="Marketing Campaign">Marketing Campaign</option>
-                <option value="Hub Linehaul Operations">Hub Linehaul Operations</option>
-                <option value="Customer Service (CS)">Customer Service (CS)</option>
-                <option value="Risk & Fraud Control">Risk & Fraud Control</option>
-                <option value="Fleet Operations">Fleet Operations</option>
+                <!-- Options được đổ tự động từ DEMO_CONFIG.TEAM_LIST (xem đầu <script>) -->
               </select>
             </div>
             <div class="form-group"><label>Họ Tên Người Yêu Cầu *</label><input type="text" id="req-name" placeholder="VD: Nguyễn Văn A" required></div>
             <div class="form-group">
               <label>Loại Tag Mong Muốn *</label>
               <select id="req-type" required>
-                <option value="Priority Dispatch">Priority Dispatch (Ưu tiên phát đơn)</option>
-                <option value="Incentive Campaign">Incentive Campaign (Thưởng/Thách thức)</option>
-                <option value="Area Restriction">Area Restriction (Giới hạn khu vực)</option>
-                <option value="Special Training">Special Training (Đào tạo dịch vụ VIP)</option>
-                <option value="Penalty / Block">Penalty / Block (Khóa/Tạm dừng)</option>
+                <!-- Options được đổ tự động từ DEMO_CONFIG.TAG_TYPES (xem đầu <script>) -->
               </select>
             </div>
             <div class="form-group"><label id="lbl-tag-name">Tên Tag Gợi Ý / Mục Tiêu *</label><input type="text" id="req-tag-name" placeholder="VD: TAG_HUB_SOC_NIGHT_OFFLOAD" required></div>
@@ -491,6 +482,31 @@
 
   <script>
     // ===== DEMO STANDALONE: offline, mock data, role switcher, approve inline =====
+
+    // ┌──────────────────────────────────────────────────────────────────────┐
+    // │  ⚙️  CONFIG SETTINGS — SỬA TAY TẠI ĐÂY (mô phỏng sheet 00_CONFIG_SETTINGS)  │
+    // │  Thêm / bớt / đổi tên: chỉ cần sửa trong 2 mảng dưới, form tự cập nhật.  │
+    // └──────────────────────────────────────────────────────────────────────┘
+    const DEMO_CONFIG = {
+      // Danh sách Team đề xuất (dropdown "Team Đề Xuất")
+      TEAM_LIST: [
+        "Business Operations",
+        "Marketing Campaign",
+        "Hub Linehaul Operations",
+        "Customer Service (CS)",
+        "Risk & Fraud Control",
+        "Fleet Operations"
+      ],
+      // Loại tag mong muốn — { value: mã lưu vào request, label: chữ hiển thị }
+      TAG_TYPES: [
+        { value: "Priority Dispatch",  label: "Priority Dispatch (Ưu tiên phát đơn)" },
+        { value: "Incentive Campaign", label: "Incentive Campaign (Thưởng/Thách thức)" },
+        { value: "Area Restriction",   label: "Area Restriction (Giới hạn khu vực)" },
+        { value: "Special Training",   label: "Special Training (Đào tạo dịch vụ VIP)" },
+        { value: "Penalty / Block",    label: "Penalty / Block (Khóa/Tạm dừng)" }
+      ]
+    };
+
     var CURRENT_ROLE = 'DM';
     var CURRENT_EMAIL = 'demo@ahamove.com';
     let requestsData = [];
@@ -501,10 +517,25 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       requestsData = mockData();
+      populateFormConfig();
       updateRolePill();
       renderAll();
       selectRequestCategory('Tạo tag mới');
     });
+
+    // Đổ option cho form từ DEMO_CONFIG (Team + Loại tag) — sửa config ở đầu <script>
+    function populateFormConfig() {
+      const teamSel = document.getElementById('req-team');
+      if (teamSel) {
+        teamSel.innerHTML = '<option value="">-- Chọn Team --</option>' +
+          DEMO_CONFIG.TEAM_LIST.map(t => `<option value="${t}">${t}</option>`).join('');
+      }
+      const typeSel = document.getElementById('req-type');
+      if (typeSel) {
+        typeSel.innerHTML = DEMO_CONFIG.TAG_TYPES
+          .map(t => `<option value="${t.value}">${t.label}</option>`).join('');
+      }
+    }
 
     function changeRole(role) { CURRENT_ROLE = role; updateRolePill(); renderAll(); showToast('Đã đổi vai trò xem', 'Hiển thị hành động theo quyền: ' + role, 'ok'); }
     function updateRolePill() { const p = document.getElementById('user-role-pill'); p.innerText = CURRENT_ROLE; p.className = 'role-pill role-' + CURRENT_ROLE; }
