@@ -146,8 +146,16 @@
     .ms-meta.skip { color:var(--accent-indigo-light); font-weight:600; }
     .ms-conn { height:2px; width:22px; margin-top:12px; background:rgba(100,116,139,0.35); border-radius:2px; }
     .ms-conn.done { background:var(--accent-emerald); }
-    .btn-detail { display:block; margin:6px auto 0; background:rgba(20,184,166,0.12); color:var(--accent-teal-light); border:1px solid rgba(20,184,166,0.35); border-radius:8px; padding:3px 12px; font-size:11px; font-weight:600; cursor:pointer; transition:var(--transition); }
-    .btn-detail:hover { background:rgba(20,184,166,0.25); }
+    /* Hành động gộp ngay dưới line tiến trình */
+    .ms-action-row { display:flex; justify-content:center; margin-top:10px; }
+    .ms-action { display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap; }
+    .ms-action select { background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border-color); border-radius:8px; padding:5px 8px; font-size:12px; }
+    .ms-wait { font-size:11px; color:var(--text-muted); font-style:italic; }
+    .ms-wait.ok  { color:var(--accent-emerald); font-style:normal; font-weight:600; }
+    .ms-wait.rej { color:#F87171; font-style:normal; }
+    /* Chi tiết hơn: link chữ, không nền không viền, ở cuối */
+    .link-detail { display:block; text-align:center; margin-top:8px; color:var(--text-muted); font-size:11px; cursor:pointer; text-decoration:none; transition:var(--transition); }
+    .link-detail:hover { color:var(--accent-teal-light); }
     /* ===== Timeline audit log modal (ảnh #5) ===== */
     .tl-head { display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--text-secondary); margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border-color); }
     .tl-head b { color:var(--text-primary); }
@@ -370,7 +378,7 @@
         <div class="table-responsive"><table>
           <thead><tr>
             <th style="min-width:130px;">Mã Request</th><th style="min-width:140px;">Hình Thức</th><th style="min-width:150px;">Team / Người Tạo</th><th style="min-width:170px;">Tag</th>
-            <th style="min-width:420px;">Tiến Trình (Actor · Deadline)</th><th>TX</th><th style="min-width:230px;">Hành Động (Theo Lượt)</th>
+            <th style="min-width:460px;">Tiến Trình · Hành Động</th><th>TX</th>
           </tr></thead>
           <tbody id="master-tbody"></tbody>
         </table></div>
@@ -584,31 +592,30 @@
     }
 
     // ===== Action cell theo state + role =====
+    // Block hành động đặt NGAY DƯỚI line tiến trình — chỉ hiện ở gate đang active
     function actionCell(r) {
       if (r.state === 'PENDING_TEAM_LEAD') {
-        if (!canApproveLead()) return `<span class="muted-note">Chờ Lead/Head duyệt</span>`;
-        return `<div class="act-wrap"><button class="btn btn-success btn-xs" onclick="leadApprove('${r.id}')">✓ Duyệt</button><button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','LEAD')">✕ Từ chối</button></div>`;
+        if (!canApproveLead()) return `<div class="ms-wait">Chờ Lead/Head duyệt</div>`;
+        return `<div class="ms-action"><button class="btn btn-success btn-xs" onclick="leadApprove('${r.id}')">✓ Duyệt</button><button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','LEAD')">✕ Từ chối</button></div>`;
       }
       if (r.state === 'PENDING_DM') {
-        if (!canReviewDM()) return `<span class="muted-note">Chờ DM thẩm định</span>`;
-        return `<div class="act-wrap"><button class="btn btn-success btn-xs" onclick="openDMApprove('${r.id}')">✓ Duyệt & gán tag</button><button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','DM')">✕ Từ chối</button></div>`;
+        if (!canReviewDM()) return `<div class="ms-wait">Chờ DM thẩm định</div>`;
+        return `<div class="ms-action"><button class="btn btn-success btn-xs" onclick="openDMApprove('${r.id}')">✓ Duyệt & gán tag</button><button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','DM')">✕ Từ chối</button></div>`;
       }
       if (r.state === 'PENDING_QM') {
-        if (!canUpdateQM()) return `<span class="muted-note">Chờ QM add tag</span>`;
-        return `<div class="qm-inline">
-          <input type="number" id="qc-${r.id}" value="${r.qmSuccessCount}" title="Số TX add thành công" style="width:66px;">
-          <input type="text" id="qr-${r.id}" value="${r.qmRef||''}" placeholder="Batch/Ref" style="width:110px;">
+        if (!canUpdateQM()) return `<div class="ms-wait">Chờ QM add tag</div>`;
+        return `<div class="ms-action">
           <select id="qs-${r.id}">
             <option value="PROCESSING" ${r.qmStatus==='PROCESSING'?'selected':''}>PROCESSING</option>
-            <option value="TAGGED_SUCCESS" ${r.qmStatus==='TAGGED_SUCCESS'?'selected':''}>SUCCESS</option>
+            <option value="TAGGED_SUCCESS" ${r.qmStatus==='TAGGED_SUCCESS'?'selected':''}>DONE</option>
             <option value="FAILED" ${r.qmStatus==='FAILED'?'selected':''}>FAILED</option>
           </select>
-          <button class="btn btn-success btn-xs" onclick="qmSave('${r.id}')">💾 Lưu</button>
+          <button class="btn btn-success btn-xs" onclick="qmSave('${r.id}')">💾 Cập nhật</button>
         </div>`;
       }
-      if (r.state === 'REJECTED') return `<span class="muted-note" title="${(r.leadNote||r.dmNote||'').replace(/"/g,'')}">❗ Lý do: ${(r.leadNote||r.dmNote||'-')}</span>`;
-      if (r.state === 'DONE') return `<span class="muted-note">✓ Đã add ${r.qmSuccessCount} TX</span>`;
-      return `<span class="muted-note">—</span>`;
+      if (r.state === 'REJECTED') return `<div class="ms-wait rej" title="${(r.leadNote||r.dmNote||'').replace(/"/g,'')}">❗ Lý do: ${(r.leadNote||r.dmNote||'-')}</div>`;
+      if (r.state === 'DONE') return `<div class="ms-wait ok">✓ Đã add ${r.qmSuccessCount} TX</div>`;
+      return '';
     }
 
     function renderMasterTable() {
@@ -616,7 +623,7 @@
       let list = requestsData.slice();
       if (currentFilter === 'MINE') list = list.filter(isMine);
       else if (currentFilter !== 'ALL') list = list.filter(r => r.state === currentFilter);
-      if (!list.length) { tbody.innerHTML = `<tr><td colspan="7" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
+      if (!list.length) { tbody.innerHTML = `<tr><td colspan="6" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
       list.forEach(r => {
         const tr = document.createElement('tr');
         tr.className = 'row-click';
@@ -630,8 +637,7 @@
           `<td><span class="code-tag">${r.team}</span><div class="sub-name">👤 ${r.name}</div></td>`+
           `<td><strong>${r.tagName}</strong>${(r.dmTagCode && r.dmTagCode!=='-') ? `<br><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span>`:''}</td>`+
           `<td>${miniStepper(r)}</td>`+
-          `<td><strong>${r.qmSuccessCount}</strong></td>`+
-          `<td>${actionCell(r)}</td>`;
+          `<td><strong>${r.qmSuccessCount}</strong></td>`;
         tbody.appendChild(tr);
       });
     }
@@ -698,7 +704,8 @@
         step('dm','DM')       + conn(st.dm) +
         step('qm','QM')       +
       `</div>`+
-      `<button class="btn-detail" onclick="event.stopPropagation(); openTimeline('${r.id}')">📜 Chi tiết hơn</button>`;
+      `<div class="ms-action-row">${actionCell(r)}</div>`+
+      `<a class="link-detail" onclick="event.stopPropagation(); openTimeline('${r.id}')">Chi tiết hơn →</a>`;
     }
 
     // ===== Chọn dòng → chỉ cập nhật sơ đồ luồng + highlight (KHÔNG mở modal) =====
@@ -921,10 +928,8 @@
       if (!canUpdateQM()) { showToast('Không đủ quyền', 'Chỉ QM.', 'err'); return; }
       const r = requestsData.find(x => x.id === id); if (!r) return;
       const status = document.getElementById('qs-'+id).value;
-      const count = parseInt(document.getElementById('qc-'+id).value) || 0;
-      const ref = document.getElementById('qr-'+id).value;
-      r.qmStatus = status; r.qmSuccessCount = count; r.qmRef = ref;
-      if (status === 'TAGGED_SUCCESS') { r.state = 'DONE'; r.breach = ''; showToast('Hoàn thành ' + id, `Đã add ${count} TX thành công (DONE). [DEMO]`, 'ok'); }
+      r.qmStatus = status;
+      if (status === 'TAGGED_SUCCESS') { r.state = 'DONE'; r.breach = ''; r.qmSuccessCount = r.count || r.qmSuccessCount || 0; showToast('Hoàn thành ' + id, `Đã đánh dấu DONE. [DEMO]`, 'ok'); }
       else showToast('Đã cập nhật ' + id, 'Trạng thái QM: ' + status + '. [DEMO]', 'ok');
       renderAll();
     }
