@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hệ Thống Quản Lý Đề Xuất Tag Tài Xế | DM & QM Portal</title>
+  <title><?= (typeof config !== 'undefined' && config.APP_TITLE) ? config.APP_TITLE : "Tag Request Portal" ?></title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -71,12 +71,13 @@
     }
 
     .brand-text h1 {
-      font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
+      font-size: 22px; font-weight: 800; letter-spacing: -0.02em;
       background: linear-gradient(to right, #FFFFFF, #CBD5E1);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
     .brand-text p { font-size: 13px; color: var(--text-secondary); }
+    .brand-text a { color: var(--accent-teal-light); text-decoration: underline; font-weight: 600; }
 
     .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
 
@@ -89,7 +90,7 @@
     .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-teal); }
     .kpi-card.pending-dm::before { background: var(--accent-amber); }
     .kpi-card.approved::before { background: var(--accent-teal-light); }
-    .kpi-card.qm-tagged::before { background: var(--accent-indigo-light); }
+    .kpi-card.pending-qm::before { background: var(--accent-indigo-light); }
 
     .kpi-title { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; }
     .kpi-value { font-size: 26px; font-weight: 800; margin: 6px 0 2px; font-family: 'JetBrains Mono', monospace; }
@@ -163,12 +164,12 @@
       <div class="brand-title">
         <div class="brand-icon">🏷️</div>
         <div class="brand-text">
-          <h1>Hệ Thống Đề Xuất & Quản Lý Tag Tài Xế</h1>
-          <p>Hệ Thống Đồng Bộ Real-time Trực Tiếp Với Google Sheet Target</p>
+          <h1><?= (typeof config !== 'undefined' && config.APP_TITLE) ? config.APP_TITLE : "Tag Request Portal" ?></h1>
+          <p>Spreadsheet Target: <a href="https://docs.google.com/spreadsheets/d/1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4/edit?gid=407438001#gid=407438001" target="_blank">Google Sheet Target</a></p>
         </div>
       </div>
       <div>
-        <button class="btn btn-secondary" onclick="loadDataFromSheet()">🔄 Tải Lại Dữ Liệu</button>
+        <button class="btn btn-secondary" onclick="loadDataFromSheet()">🔄 Tự Động Đồng Bộ Sheet</button>
       </div>
     </header>
 
@@ -176,7 +177,7 @@
       <div class="kpi-card">
         <div class="kpi-title">Tổng Yêu Cầu (All Requests)</div>
         <div class="kpi-value" id="kpi-total">0</div>
-        <div class="kpi-sub">Ghi nhận từ các team</div>
+        <div class="kpi-sub">Ghi nhận trên hệ thống</div>
       </div>
 
       <div class="kpi-card pending-dm">
@@ -191,38 +192,39 @@
         <div class="kpi-sub">Đã chuyển luồng QM</div>
       </div>
 
-      <div class="kpi-card qm-tagged">
-        <div class="kpi-title">QM Add Tag Thành Công</div>
-        <div class="kpi-value" id="kpi-tagged">0</div>
-        <div class="kpi-sub">Tài xế đã được gán tag</div>
+      <div class="kpi-card pending-qm">
+        <div class="kpi-title">Chờ QM Add Tags</div>
+        <div class="kpi-value" id="kpi-pending-qm">0</div>
+        <div class="kpi-sub">Yêu cầu DM đã duyệt</div>
       </div>
     </div>
 
+    <!-- TABS READ DYNAMICALLY FROM GOOGLE SHEET CONFIG -->
     <div class="tabs-nav">
       <button class="tab-btn active" onclick="switchTab('tab-request')">
-        📝 1. Gửi Đề Xuất Mới
+        <?= (typeof config !== 'undefined' && config.TAB1_NAME) ? config.TAB1_NAME : "📝 Bước 1: Request" ?>
       </button>
 
       <button class="tab-btn" onclick="switchTab('tab-dm-review')">
-        🛡️ 2. Bàn Tròn DM Lead Review
+        <?= (typeof config !== 'undefined' && config.TAB2_NAME) ? config.TAB2_NAME : "🛡️ Bước 2: DM Review" ?>
         <span class="badge-count" id="badge-pending-count">0</span>
       </button>
 
       <button class="tab-btn" onclick="switchTab('tab-qm-queue')">
-        ⚙️ 3. Danh Sách Chờ QM Add Tag
+        <?= (typeof config !== 'undefined' && config.TAB3_NAME) ? config.TAB3_NAME : "⚙️ Bước 3: QM Add Tags" ?>
         <span class="badge-count" id="badge-qm-count">0</span>
       </button>
 
       <button class="tab-btn" onclick="switchTab('tab-master')">
-        📊 4. Master Request Tracker
+        <?= (typeof config !== 'undefined' && config.TAB4_NAME) ? config.TAB4_NAME : "📊 Master Request Tracker" ?>
       </button>
     </div>
 
-    <!-- TAB 1: FORM REQUEST -->
+    <!-- TAB 1: REQUEST -->
     <div id="tab-request" class="tab-panel active">
       <div class="panel-card">
         <div class="card-header">
-          <h2>📝 Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM</h2>
+          <h2><?= (typeof config !== 'undefined' && config.FORM_TITLE) ? config.FORM_TITLE : "📝 Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM" ?></h2>
         </div>
 
         <form id="tag-request-form" onsubmit="handleFormSubmit(event)">
@@ -231,12 +233,14 @@
               <label>Team Đề Xuất *</label>
               <select id="req-team" required>
                 <option value="">-- Chọn Team --</option>
-                <option value="Business Ops">Business Operations</option>
-                <option value="Marketing">Marketing Campaign</option>
-                <option value="Hub Operations">Hub Linehaul Operations</option>
-                <option value="Customer Service">Customer Service (CS)</option>
-                <option value="Risk Management">Risk & Fraud Control</option>
-                <option value="Fleet Operations">Fleet Operations</option>
+                <?
+                  var teamStr = (typeof config !== 'undefined' && config.TEAM_LIST) ? config.TEAM_LIST : "Business Operations, Marketing Campaign, Hub Linehaul Operations, Customer Service (CS), Risk & Fraud Control, Fleet Operations";
+                  var teams = teamStr.split(",");
+                  for (var i = 0; i < teams.length; i++) {
+                    var tName = teams[i].trim();
+                ?>
+                  <option value="<?= tName ?>"><?= tName ?></option>
+                <? } ?>
               </select>
             </div>
 
@@ -248,11 +252,14 @@
             <div class="form-group">
               <label>Loại Tag Mong Muốn *</label>
               <select id="req-type" required>
-                <option value="Priority Dispatch">Priority Dispatch (Ưu tiên phát đơn)</option>
-                <option value="Incentive Campaign">Incentive Campaign (Thưởng/Thách thức)</option>
-                <option value="Area Restriction">Area Restriction (Giới hạn khu vực)</option>
-                <option value="Special Training">Special Training (Đào tạo dịch vụ VIP)</option>
-                <option value="Penalty / Block">Penalty / Block (Khóa/Tạm dừng)</option>
+                <?
+                  var typeStr = (typeof config !== 'undefined' && config.TAG_TYPES) ? config.TAG_TYPES : "Priority Dispatch (Ưu tiên phát đơn), Incentive Campaign (Thưởng/Thách thức), Area Restriction (Giới hạn khu vực), Special Training (Đào tạo dịch vụ VIP), Penalty / Block (Khóa/Tạm dừng)";
+                  var types = typeStr.split(",");
+                  for (var j = 0; j < types.length; j++) {
+                    var tpName = types[j].trim();
+                ?>
+                  <option value="<?= tpName ?>"><?= tpName ?></option>
+                <? } ?>
               </select>
             </div>
 
@@ -278,7 +285,7 @@
           </div>
 
           <div style="margin-top: 20px; display:flex; justify-content:flex-end; gap:12px;">
-            <button type="submit" class="btn">🚀 Gửi Đề Xuất Tới DM Lead</button>
+            <button type="submit" class="btn"><?= (typeof config !== 'undefined' && config.SUBMIT_BTN_TEXT) ? config.SUBMIT_BTN_TEXT : "🚀 Gửi Đề Xuất Tới DM Lead" ?></button>
           </div>
         </form>
       </div>
@@ -304,7 +311,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: QM QUEUE -->
+    <!-- TAB 3: QM ADD TAGS -->
     <div id="tab-qm-queue" class="tab-panel">
       <div class="panel-card">
         <div class="card-header">
@@ -400,7 +407,6 @@
           renderAll();
         }).getSheetDataJson();
       } else {
-        // Fallback demo data if opened offline
         renderAll();
       }
     }
@@ -424,16 +430,15 @@
       const total = requestsData.length;
       const pending = requestsData.filter(r => r.dmDecision === 'PENDING').length;
       const approved = requestsData.filter(r => r.dmDecision === 'APPROVED').length;
-      const taggedCount = requestsData.filter(r => r.qmStatus === 'TAGGED_SUCCESS').reduce((sum, r) => sum + (parseInt(r.qmSuccessCount)||0), 0);
-      const qmQueueCount = requestsData.filter(r => r.dmDecision === 'APPROVED' && r.qmStatus !== 'TAGGED_SUCCESS').length;
+      const pendingQMCount = requestsData.filter(r => r.dmDecision === 'APPROVED' && r.qmStatus !== 'TAGGED_SUCCESS').length;
 
       document.getElementById('kpi-total').innerText = total;
       document.getElementById('kpi-pending').innerText = pending;
       document.getElementById('kpi-approved').innerText = approved;
-      document.getElementById('kpi-tagged').innerText = taggedCount;
+      document.getElementById('kpi-pending-qm').innerText = pendingQMCount;
 
       document.getElementById('badge-pending-count').innerText = pending;
-      document.getElementById('badge-qm-count').innerText = qmQueueCount;
+      document.getElementById('badge-qm-count').innerText = pendingQMCount;
     }
 
     function handleFormSubmit(e) {

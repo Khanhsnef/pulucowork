@@ -1,14 +1,42 @@
 /**
- * GOOGLE APPS SCRIPT BACKEND FOR DM & QM TAG MANAGEMENT WEB APP
+ * GOOGLE APPS SCRIPT BACKEND WITH DYNAMIC SPREADSHEET CONFIGURATION
  * Spreadsheet Target ID: 1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4
  */
 
 function doGet(e) {
-  return HtmlService.createTemplateFromFile("Index")
-    .evaluate()
-    .setTitle("Hệ Thống Quản Lý & Đề Xuất Tag Tài Xế | DM & QM Portal")
+  const template = HtmlService.createTemplateFromFile("Index");
+  template.config = getAppConfig();
+  return template.evaluate()
+    .setTitle(template.config.APP_TITLE || "Tag Request Portal")
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+}
+
+function getAppConfig() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName("00_CONFIG_SETTINGS");
+  if (!sheet) {
+    sheet = ss.insertSheet("00_CONFIG_SETTINGS", 0);
+    sheet.appendRow(["Mã Cấu Hình (Key)", "Nội Dung Hiển Thị (Value)", "Hướng Dẫn"]);
+    sheet.appendRow(["APP_TITLE", "Tag Request Portal", "Tiêu đề ứng dụng"]);
+    sheet.appendRow(["FORM_TITLE", "Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM", "Tiêu đề biểu mẫu tạo request"]);
+    sheet.appendRow(["TAB1_NAME", "📝 Bước 1: Request", "Tên Tab 1"]);
+    sheet.appendRow(["TAB2_NAME", "🛡️ Bước 2: DM Review", "Tên Tab 2"]);
+    sheet.appendRow(["TAB3_NAME", "⚙️ Bước 3: QM Add Tags", "Tên Tab 3"]);
+    sheet.appendRow(["TAB4_NAME", "📊 Master Request Tracker", "Tên Tab 4"]);
+    sheet.appendRow(["SUBMIT_BTN_TEXT", "🚀 Gửi Đề Xuất Tới DM Lead", "Tên nút gửi đề xuất"]);
+    sheet.appendRow(["TEAM_LIST", "Business Operations, Marketing Campaign, Hub Linehaul Operations, Customer Service (CS), Risk & Fraud Control, Fleet Operations", "Danh sách các Team đề xuất (phân cách bằng dấu phẩy)"]);
+    sheet.appendRow(["TAG_TYPES", "Priority Dispatch (Ưu tiên phát đơn), Incentive Campaign (Thưởng/Thách thức), Area Restriction (Giới hạn khu vực), Special Training (Đào tạo dịch vụ VIP), Penalty / Block (Khóa/Tạm dừng)", "Danh sách loại Tag (phân cách bằng dấu phẩy)"]);
+  }
+  
+  const rows = sheet.getDataRange().getValues();
+  const config = {};
+  for (let i = 1; i < rows.length; i++) {
+    const key = rows[i][0];
+    const val = rows[i][1];
+    if (key) config[key] = val;
+  }
+  return config;
 }
 
 function getSheetDataJson() {
@@ -63,12 +91,12 @@ function saveDMReview(reqId, decision, note, tagCode) {
   for (let i = 1; i < rows.length; i++) {
     if (rows[i][0] === reqId) {
       const rowIdx = i + 1;
-      sheet.getRange(rowIdx, 10).setValue("Trần Lead DM"); // DM Reviewer
-      sheet.getRange(rowIdx, 11).setValue(nowStr);        // Review Date
-      sheet.getRange(rowIdx, 12).setValue(decision);      // DM Decision
-      sheet.getRange(rowIdx, 13).setValue(note);          // DM Note
-      sheet.getRange(rowIdx, 14).setValue(tagCode);       // DM Tag Code
-      sheet.getRange(rowIdx, 15).setValue(decision === "APPROVED" ? "READY_FOR_QM" : "CANCELLED"); // QM Handover
+      sheet.getRange(rowIdx, 10).setValue("Trần Lead DM");
+      sheet.getRange(rowIdx, 11).setValue(nowStr);
+      sheet.getRange(rowIdx, 12).setValue(decision);
+      sheet.getRange(rowIdx, 13).setValue(note);
+      sheet.getRange(rowIdx, 14).setValue(tagCode);
+      sheet.getRange(rowIdx, 15).setValue(decision === "APPROVED" ? "READY_FOR_QM" : "CANCELLED");
       if (decision === "APPROVED") {
         sheet.getRange(rowIdx, 18).setValue("PROCESSING");
       } else {
@@ -89,13 +117,13 @@ function saveQMStatus(reqId, status, successCount, ref) {
   for (let i = 1; i < rows.length; i++) {
     if (rows[i][0] === reqId) {
       const rowIdx = i + 1;
-      sheet.getRange(rowIdx, 16).setValue("QM Specialist"); // QM User
+      sheet.getRange(rowIdx, 16).setValue("QM Specialist");
       if (!sheet.getRange(rowIdx, 17).getValue() || sheet.getRange(rowIdx, 17).getValue() === "-") {
-        sheet.getRange(rowIdx, 17).setValue(nowStr); // QM Received Date
+        sheet.getRange(rowIdx, 17).setValue(nowStr);
       }
       sheet.getRange(rowIdx, 18).setValue(status);
       if (status === "TAGGED_SUCCESS") {
-        sheet.getRange(rowIdx, 19).setValue(nowStr); // Finish Date
+        sheet.getRange(rowIdx, 19).setValue(nowStr);
       }
       sheet.getRange(rowIdx, 20).setValue(successCount);
       sheet.getRange(rowIdx, 21).setValue(ref);
