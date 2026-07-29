@@ -193,6 +193,20 @@
       border-radius:999px; padding:7px 14px; font-size:12px; font-weight:600; cursor:pointer;
     }
     .ms-action select:focus { outline:none; border-color:var(--accent-teal-light); box-shadow:0 0 0 3px rgba(20,184,166,.2); }
+    /* QM 1 hàng gọn — select tự lưu khi đổi (onchange), pill gradient teal */
+    .qm-inline { display:flex; justify-content:center; }
+    .qm-inline select {
+      appearance:none; -webkit-appearance:none; color:#fff;
+      border:1.5px solid var(--bg-primary); border-radius:999px;
+      padding:5px 28px 5px 14px; font-size:12px; font-weight:700; cursor:pointer;
+      box-shadow:0 2px 8px rgba(5,150,105,.4);
+      background-image:linear-gradient(135deg,#14B8A6,#059669),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 3.5L5 6.5L8 3.5' stroke='white' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");
+      background-repeat:no-repeat; background-position:right 9px center;
+      transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .qm-inline select:hover { transform:translateY(-1px) scale(1.03); box-shadow:0 4px 16px rgba(16,185,129,.6); filter:brightness(1.08); }
+    .qm-inline select:focus { outline:none; box-shadow:0 0 0 3px rgba(20,184,166,.3); }
+    .qm-inline select option { background:var(--bg-secondary); color:var(--text-primary); }
     .ms-wait { font-size:11px; color:var(--text-muted); font-style:italic; }
     .ms-wait.ok  { color:var(--accent-emerald); font-style:normal; font-weight:600; }
     .ms-wait.rej { color:#F87171; font-style:normal; }
@@ -640,13 +654,12 @@
     function actionCell(r) {
       if (r.state === 'PENDING_QM') {
         if (!canUpdateQM()) return `<div class="ms-wait">Chờ QM add tag</div>`;
-        return `<div class="ms-action">
-          <select id="qs-${r.id}">
+        return `<div class="qm-inline">
+          <select id="qs-${r.id}" onchange="qmSave('${r.id}')" title="Chọn để cập nhật trạng thái">
             <option value="PROCESSING" ${r.qmStatus==='PROCESSING'?'selected':''}>PROCESSING</option>
-            <option value="TAGGED_SUCCESS" ${r.qmStatus==='TAGGED_SUCCESS'?'selected':''}>DONE</option>
-            <option value="FAILED" ${r.qmStatus==='FAILED'?'selected':''}>FAILED</option>
+            <option value="TAGGED_SUCCESS" ${r.qmStatus==='TAGGED_SUCCESS'?'selected':''}>✓ DONE</option>
+            <option value="FAILED" ${r.qmStatus==='FAILED'?'selected':''}>✕ FAILED</option>
           </select>
-          <button class="btn btn-success btn-xs" onclick="qmSave('${r.id}')">💾 Cập nhật</button>
         </div>`;
       }
       if (r.state === 'REJECTED') return `<div class="ms-wait rej" title="${(r.leadNote||r.dmNote||'').replace(/"/g,'')}">❗ Lý do: ${(r.leadNote||r.dmNote||'-')}</div>`;
