@@ -732,12 +732,14 @@
     if (!CURRENT_EMAIL) CURRENT_EMAIL = IS_LOCAL ? 'local-test@ahamove.com' : '';
 
     // Ma trận quyền xem tab
+    // Mọi role XEM được hết tab (minh bạch luồng); chỉ HÀNH ĐỘNG bị giới hạn theo role + enforce backend.
+    var ALL_ROLES = ['REQUESTER','TEAM_LEAD','DM','QM'];
     var TAB_ACCESS = {
-      'tab-request':       ['REQUESTER','TEAM_LEAD','DM','QM'],
-      'tab-lead-approval': ['TEAM_LEAD','DM'],
-      'tab-dm-review':     ['DM'],
-      'tab-qm-queue':      ['QM','DM'],
-      'tab-master':        ['REQUESTER','TEAM_LEAD','DM','QM']
+      'tab-request':       ALL_ROLES,
+      'tab-lead-approval': ALL_ROLES,
+      'tab-dm-review':     ALL_ROLES,
+      'tab-qm-queue':      ALL_ROLES,
+      'tab-master':        ALL_ROLES
     };
 
     let requestsData = [];
