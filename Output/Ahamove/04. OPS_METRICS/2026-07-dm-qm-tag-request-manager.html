@@ -540,25 +540,30 @@
       let list = requestsData.slice();
       if (currentFilter === 'MINE') list = list.filter(isMine);
       else if (currentFilter !== 'ALL') list = list.filter(r => r.state === currentFilter);
-      if (!list.length) { tbody.innerHTML = `<tr><td colspan="12" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
+      if (!list.length) { tbody.innerHTML = `<tr><td colspan="11" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
       list.forEach(r => {
         const tr = document.createElement('tr');
         if (isMine(r)) tr.style.background = 'rgba(20,184,166,0.06)';
         tr.innerHTML =
-          `<td><strong>${r.id}</strong>${breachTag(r)}</td>`+
-          `<td style="font-size:12px; color:var(--text-secondary);">${r.date}</td>`+
+          `<td><strong>${r.id}</strong>${breachTag(r)}<div class="date-note">🕓 ${r.date}</div></td>`+
           `<td><span class="status-badge ${r.requestCategory==='Add tag'?'status-bypass':'status-approved'}">${r.requestCategory}</span></td>`+
           `<td><span class="code-tag">${r.team}</span></td>`+
           `<td>${r.name}</td>`+
           `<td><strong>${r.tagName}</strong>${(r.dmTagCode && r.dmTagCode!=='-') ? `<br><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span>`:''}</td>`+
           `<td>${getStateBadge(r.state)}</td>`+
-          `<td>${getGateBadge(r.leadDecision)}</td>`+
-          `<td>${getGateBadge(r.dmDecision)}</td>`+
-          `<td>${getQMStatusBadge(r.qmStatus)}</td>`+
+          `<td>${getGateBadge(r.leadDecision)}${dlNote(r.deadlineLead, r, 'PENDING_TEAM_LEAD')}</td>`+
+          `<td>${getGateBadge(r.dmDecision)}${dlNote(r.deadlineDM, r, 'PENDING_DM')}</td>`+
+          `<td>${getQMStatusBadge(r.qmStatus)}${dlNote(r.deadlineQM, r, 'PENDING_QM')}</td>`+
           `<td style="text-align:right;"><strong>${r.qmSuccessCount}</strong></td>`+
           `<td>${actionCell(r)}</td>`;
         tbody.appendChild(tr);
       });
+    }
+    // Deadline note dưới mỗi badge gate; đỏ nếu đang ở gate đó & breach SLA
+    function dlNote(dl, r, gateState) {
+      if (!dl) return '';
+      const hot = (r.breach === 'QUÁ HẠN SLA' && r.state === gateState);
+      return `<div class="dl-note ${hot?'hot':''}">⏰ ${dl}</div>`;
     }
 
     // ===== LEAD approve inline =====
