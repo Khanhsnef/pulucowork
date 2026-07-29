@@ -834,20 +834,27 @@
         const active = n.state==='active';
         const dim = (n.state==='todo') ? 'opacity="0.72"' : '';
         const cx = n.x + w/2;   // tâm ngang để căn giữa text
+        const lit = n.state!=='todo';   // box đã "sáng" → thêm halo neon
+        const barX = n.x - 6;           // nhích thanh gạch ra TRƯỚC khung
         return `<g class="${active?'fl-active':''}" ${dim} filter="url(#soft)">`+
+          (lit ? `<rect x="${n.x}" y="${y}" width="${w}" height="${h}" rx="18" fill="none" stroke="${ring}" stroke-width="2" opacity="0.55" filter="url(#boxglow)"/>` : '')+
           `<rect x="${n.x}" y="${y}" width="${w}" height="${h}" rx="18" fill="url(#card)" stroke="${ring}" stroke-width="${active?1.6:1}"/>`+
-          `<rect x="${n.x}" y="${y}" width="5" height="${h}" rx="2.5" fill="${g[0]}"/>`+
+          `<rect x="${barX-2}" y="${y+2}" width="9" height="${h-4}" rx="4" fill="${g[0]}" opacity="0.65" filter="url(#barglow)"/>`+
+          `<rect x="${barX}" y="${y+4}" width="5" height="${h-8}" rx="2.5" fill="${g[0]}"/>`+
           `<circle cx="${cx}" cy="${y+17}" r="13" fill="url(#dot-${n.state})" ${active?'filter="url(#glow)"':''}/>`+
           `<text x="${cx}" y="${y+22}" font-size="13" fill="#fff" text-anchor="middle">${n.icon}</text>`+
           `<text x="${cx}" y="${y+46}" font-size="14.5" font-weight="700" fill="#F8FAFC" text-anchor="middle">${n.label}</text>`+
           `<text x="${cx}" y="${y+60}" font-size="10" fill="${ring}" font-weight="600" text-anchor="middle">${flowStateText(n.state)}</text>`+
         `</g>`;
       };
-      // connector: chừa khoảng cách 2 đầu để mũi tên không chồng vào khung
+      // connector: line dừng TRƯỚC mũi tên (chừa 9px) để không lộ line dưới tam giác trong suốt
+      const AHEAD = 9; // độ dài dành cho đầu mũi tên
       const conn = (x1, x2, flowed) => {
         const stroke = flowed ? 'url(#flow-on)' : 'rgba(100,116,139,.28)';
         const mk = flowed ? 'url(#arr-on)' : 'url(#arr-off)';
-        return `<path d="M${x1},${midY} L${x2},${midY}" fill="none" stroke="${stroke}" stroke-width="2.4" stroke-linecap="round" marker-end="${mk}" ${flowed?'':'stroke-dasharray="1,7"'}/>`;
+        const lineEnd = x2 - AHEAD; // line kết thúc sớm, chừa chỗ cho tam giác đặc
+        const tip = `<path d="M${lineEnd},${midY} L${x2},${midY}" fill="none" stroke="none" marker-end="${mk}"/>`;
+        return `<path d="M${x1},${midY} L${lineEnd},${midY}" fill="none" stroke="${stroke}" stroke-width="2.4" stroke-linecap="round" ${flowed?'':'stroke-dasharray="1,7"'}/>`+tip;
       };
       let defs = `<defs>`+
         `<linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(51,65,85,.55)"/><stop offset="1" stop-color="rgba(15,23,42,.85)"/></linearGradient>`+
@@ -855,6 +862,8 @@
         Object.keys(GRAD).map(k=>`<radialGradient id="dot-${k}" cx="0.35" cy="0.3" r="0.9"><stop offset="0" stop-color="${GRAD[k][0]}"/><stop offset="1" stop-color="${GRAD[k][1]}"/></radialGradient>`).join('')+
         `<filter id="soft" x="-20%" y="-40%" width="140%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.45"/></filter>`+
         `<filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#F59E0B" flood-opacity="0.9"/></filter>`+
+        `<filter id="boxglow" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/></feMerge></filter>`+
+        `<filter id="barglow" x="-300%" y="-40%" width="700%" height="180%"><feGaussianBlur stdDeviation="3"/></filter>`+
         `<marker id="arr-on" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#34D399"/></marker>`+
         `<marker id="arr-off" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(148,163,184,.5)"/></marker>`+
         `<marker id="arr-rej" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#FB7185"/></marker>`+
@@ -868,7 +877,10 @@
       // nhánh Reject cong xuống
       const rejActive = rejected;
       const rc = rejActive ? '#FB7185' : 'rgba(100,116,139,.28)';
-      svg += `<path d="M341,${y+h+2} C341,170 420,180 496,180" fill="none" stroke="${rc}" stroke-width="2.4" stroke-linecap="round" marker-end="${rejActive?'url(#arr-rej)':'url(#arr-off)'}" ${rejActive?'':'stroke-dasharray="1,7"'}/>`;
+      const rejMk = rejActive?'url(#arr-rej)':'url(#arr-off)';
+      // line cong dừng tại ~487, chừa 9px cho tam giác mũi tên (không lộ line dưới mũi tên)
+      svg += `<path d="M341,${y+h+2} C341,170 415,180 487,180" fill="none" stroke="${rc}" stroke-width="2.4" stroke-linecap="round" ${rejActive?'':'stroke-dasharray="1,7"'}/>`+
+             `<path d="M487,180 L496,180" fill="none" stroke="none" marker-end="${rejMk}"/>`;
       // node Reject
       const rejN = { key:'rej', x:500, y2:151, label:'Reject', sub:'Từ chối', icon:'✕', state: rejActive?'rej':'todo' };
       {
