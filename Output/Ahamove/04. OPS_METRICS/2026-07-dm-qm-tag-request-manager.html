@@ -135,7 +135,10 @@
     .ms-step { display:flex; flex-direction:column; align-items:center; gap:4px; width:92px; }
     .ms-dot { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; border:2px solid transparent; box-shadow:0 3px 8px rgba(0,0,0,.4); }
     .ms-dot.done { background:var(--accent-emerald); color:#fff; }
-    .ms-dot.active { background:var(--accent-amber); color:#fff; border-color:#FBBF24; animation:flpulse 1.4s ease-in-out infinite; }
+    .ms-dot.active { background:var(--accent-amber); color:#fff; border-color:#FBBF24; }
+    /* spinner vòng tròn xoay báo "đang chờ xử lý" trong chấm active */
+    @keyframes dotspin { to { transform:rotate(360deg); } }
+    .dot-spinner { width:16px; height:16px; border-radius:50%; border:2.5px solid rgba(255,255,255,.35); border-top-color:#fff; animation:dotspin .8s linear infinite; }
     .ms-dot.todo { background:rgba(100,116,139,0.35); color:var(--text-muted); }
     .ms-dot.skip { background:var(--accent-indigo); color:#fff; }
     .ms-dot.rej  { background:var(--accent-rose); color:#fff; }
@@ -208,6 +211,8 @@
     .qm-inline select:focus { outline:none; box-shadow:0 0 0 3px rgba(20,184,166,.3); }
     .qm-inline select option { background:var(--bg-secondary); color:var(--text-primary); }
     .ms-wait { font-size:11px; color:var(--text-muted); font-style:italic; }
+    /* Lý do reject ở cột Chi Tiết */
+    .reject-note { margin-top:6px; font-size:10px; line-height:1.4; color:#F87171; max-width:120px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
     .ms-wait.ok  { color:var(--accent-emerald); font-style:normal; font-weight:600; }
     .ms-wait.rej { color:#F87171; font-style:normal; }
     /* Chi tiết hơn: link chữ, không nền không viền, ở cuối */
@@ -648,6 +653,17 @@
       return `<span class="status-badge status-pending">⏳ QM</span>`;
     }
 
+    // ===== Cột "Chi Tiết": link timeline + lý do reject (nếu có) =====
+    function detailCell(r) {
+      const link = `<a class="link-detail" onclick="event.stopPropagation(); openTimeline('${r.id}')">Chi tiết hơn →</a>`;
+      if (r.state === 'REJECTED') {
+        const reason = (r.leadNote || r.dmNote || '-');
+        const by = r.dmDecision === 'REJECTED' ? 'DM' : 'Lead';
+        return link + `<div class="reject-note" title="${reason.replace(/"/g,'')}">❗ ${by} từ chối: ${reason}</div>`;
+      }
+      return link;
+    }
+
     // ===== Block trạng thái/hành động đặt DƯỚI line tiến trình =====
     // Lead & DM duyệt/từ chối ngay trên chấm active (xem gateDotButtons).
     // Ở đây chỉ còn: QM cập nhật (dropdown) + text kết quả REJECTED/DONE.
@@ -685,7 +701,7 @@
           `<td><span class="code-tag">${r.team}</span><div class="sub-name">👤 ${r.name}</div></td>`+
           `<td><strong>${r.tagName}</strong>${(r.dmTagCode && r.dmTagCode!=='-') ? `<br><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span>`:''}</td>`+
           `<td>${miniStepper(r)}</td>`+
-          `<td><a class="link-detail" onclick="event.stopPropagation(); openTimeline('${r.id}')">Chi tiết hơn →</a></td>`;
+          `<td>${detailCell(r)}</td>`;
         tbody.appendChild(tr);
       });
     }
@@ -753,7 +769,7 @@
     }
     function miniStepper(r) {
       const st = stepStates(r);
-      const ic = { done:'✓', active:'⏳', todo:'', skip:'⤵', rej:'✕' };
+      const ic = { done:'✓', active:'<span class="dot-spinner"></span>', todo:'', skip:'⤵', rej:'✕' };
       const conn = (a) => `<div class="ms-conn ${a==='done'?'done':''}"></div>`;
       const step = (key, label) => {
         const btns = gateDotButtons(r, key);
@@ -765,10 +781,8 @@
       // QM active: dropdown trạng thái đặt ngay dưới chấm QM (i=3)
       const qmBlock = (r.state === 'PENDING_QM' && canUpdateQM())
         ? `<div class="ms-action-row" style="${centerAt(3)}">${actionCell(r)}</div>` : '';
-      // REJECTED: lý do đặt ngay dưới chấm bị từ chối (Lead i=1 / DM i=2), text căn giữa
-      const rejIdx = (r.state === 'REJECTED') ? (r.dmDecision==='REJECTED' ? 2 : 1) : -1;
-      const resultBlock = (r.state === 'REJECTED')
-        ? `<div class="ms-action-row" style="${centerAt(rejIdx)}">${actionCell(r)}</div>` : '';
+      // Lý do reject hiển thị ở cột "Chi Tiết" (xem detailCell), không đặt trên line nữa
+      const resultBlock = '';
       return `<div class="mini-stepper">`+
         step('req','Request') + conn(st.req) +
         step('lead','Lead')   + conn(st.lead) +
