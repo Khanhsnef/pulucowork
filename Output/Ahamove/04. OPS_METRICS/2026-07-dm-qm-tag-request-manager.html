@@ -150,6 +150,21 @@
     .ms-action-row { display:flex; justify-content:center; margin-bottom:12px; }
     .ms-action { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; }
     .ms-action .btn-xs { width:100%; justify-content:center; }
+    /* Hover-reveal: mặc định 2 nút thu về icon nhỏ; rê vào mới bung label + phóng to */
+    .ms-action.ms-hover { gap:5px; transition:gap .18s ease; }
+    .ms-action.ms-hover .btn-xs .bl {
+      max-width:0; opacity:0; overflow:hidden; white-space:nowrap;
+      transition:max-width .22s ease, opacity .18s ease, margin .18s ease;
+    }
+    .ms-action.ms-hover .btn-xs {
+      width:auto; padding:5px; border-radius:999px;
+      transition:padding .2s ease, transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .ms-action.ms-hover .btn-xs .bi { font-size:13px; line-height:1; }
+    /* trạng thái rê vào cả cụm */
+    .ms-action.ms-hover:hover { gap:6px; }
+    .ms-action.ms-hover:hover .btn-xs { padding:7px 16px; }
+    .ms-action.ms-hover:hover .btn-xs .bl { max-width:120px; opacity:1; margin-left:7px; }
     /* Gradient pill + glow cho nút inline trên line tiến trình */
     .ms-action .btn-xs {
       border-radius:999px; padding:7px 16px; font-size:12px; font-weight:700; letter-spacing:.2px;
@@ -613,11 +628,15 @@
     function actionCell(r) {
       if (r.state === 'PENDING_TEAM_LEAD') {
         if (!canApproveLead()) return `<div class="ms-wait">Chờ Lead/Head duyệt</div>`;
-        return `<div class="ms-action"><button class="btn btn-success btn-xs" onclick="leadApprove('${r.id}')">✓ Duyệt</button><button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','LEAD')">✕ Từ chối</button></div>`;
+        return `<div class="ms-action ms-hover" title="Rê vào để duyệt / từ chối">`+
+          `<button class="btn btn-success btn-xs" onclick="leadApprove('${r.id}')"><span class="bi">✓</span><span class="bl">Duyệt</span></button>`+
+          `<button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','LEAD')"><span class="bi">✕</span><span class="bl">Từ chối</span></button></div>`;
       }
       if (r.state === 'PENDING_DM') {
         if (!canReviewDM()) return `<div class="ms-wait">Chờ DM thẩm định</div>`;
-        return `<div class="ms-action"><button class="btn btn-success btn-xs" onclick="openDMApprove('${r.id}')">✓ Duyệt & gán tag</button><button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','DM')">✕ Từ chối</button></div>`;
+        return `<div class="ms-action ms-hover" title="Rê vào để duyệt & gán tag / từ chối">`+
+          `<button class="btn btn-success btn-xs" onclick="openDMApprove('${r.id}')"><span class="bi">✓</span><span class="bl">Duyệt &amp; gán tag</span></button>`+
+          `<button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','DM')"><span class="bi">✕</span><span class="bl">Từ chối</span></button></div>`;
       }
       if (r.state === 'PENDING_QM') {
         if (!canUpdateQM()) return `<div class="ms-wait">Chờ QM add tag</div>`;
