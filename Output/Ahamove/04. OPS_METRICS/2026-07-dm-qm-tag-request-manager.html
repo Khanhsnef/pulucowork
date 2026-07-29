@@ -735,21 +735,21 @@
         const g = GRAD[n.state] || GRAD.todo, ring = RING[n.state] || RING.todo;
         const active = n.state==='active';
         const dim = (n.state==='todo') ? 'opacity="0.72"' : '';
+        const cx = n.x + w/2;   // tâm ngang để căn giữa text
         return `<g class="${active?'fl-active':''}" ${dim} filter="url(#soft)">`+
-          `<rect x="${n.x}" y="${y}" width="${w}" height="${h}" rx="18" fill="url(#card)" stroke="${ring}" stroke-width="${active?2.6:1.6}"/>`+
-          `<rect x="${n.x}" y="${y}" width="6" height="${h}" rx="3" fill="${g[0]}"/>`+
-          `<circle cx="${n.x+34}" cy="${midY}" r="17" fill="url(#dot-${n.state})" ${active?'filter="url(#glow)"':''}/>`+
-          `<text x="${n.x+34}" y="${midY+5}" font-size="15" fill="#fff" text-anchor="middle">${n.icon}</text>`+
-          `<text x="${n.x+60}" y="${midY-6}" font-size="15" font-weight="700" fill="#F8FAFC">${n.label}</text>`+
-          `<text x="${n.x+60}" y="${midY+11}" font-size="10.5" fill="${ring}" font-weight="600">${flowStateText(n.state)}</text>`+
-          `<text x="${n.x+w-12}" y="${y+16}" font-size="8.5" fill="#64748B" text-anchor="end" letter-spacing="1">${n.sub.toUpperCase()}</text>`+
+          `<rect x="${n.x}" y="${y}" width="${w}" height="${h}" rx="18" fill="url(#card)" stroke="${ring}" stroke-width="${active?1.6:1}"/>`+
+          `<rect x="${n.x}" y="${y}" width="5" height="${h}" rx="2.5" fill="${g[0]}"/>`+
+          `<circle cx="${cx}" cy="${y+17}" r="13" fill="url(#dot-${n.state})" ${active?'filter="url(#glow)"':''}/>`+
+          `<text x="${cx}" y="${y+22}" font-size="13" fill="#fff" text-anchor="middle">${n.icon}</text>`+
+          `<text x="${cx}" y="${y+46}" font-size="14.5" font-weight="700" fill="#F8FAFC" text-anchor="middle">${n.label}</text>`+
+          `<text x="${cx}" y="${y+60}" font-size="10" fill="${ring}" font-weight="600" text-anchor="middle">${flowStateText(n.state)}</text>`+
         `</g>`;
       };
-      // connector cong nhẹ, gradient theo trạng thái đã "thông"
+      // connector: chừa khoảng cách 2 đầu để mũi tên không chồng vào khung
       const conn = (x1, x2, flowed) => {
         const stroke = flowed ? 'url(#flow-on)' : 'rgba(100,116,139,.28)';
         const mk = flowed ? 'url(#arr-on)' : 'url(#arr-off)';
-        return `<path d="M${x1},${midY} L${x2},${midY}" fill="none" stroke="${stroke}" stroke-width="3" stroke-linecap="round" marker-end="${mk}" ${flowed?'':'stroke-dasharray="1,7"'}/>`;
+        return `<path d="M${x1},${midY} L${x2},${midY}" fill="none" stroke="${stroke}" stroke-width="2.4" stroke-linecap="round" marker-end="${mk}" ${flowed?'':'stroke-dasharray="1,7"'}/>`;
       };
       let defs = `<defs>`+
         `<linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(51,65,85,.55)"/><stop offset="1" stop-color="rgba(15,23,42,.85)"/></linearGradient>`+
@@ -757,31 +757,31 @@
         Object.keys(GRAD).map(k=>`<radialGradient id="dot-${k}" cx="0.35" cy="0.3" r="0.9"><stop offset="0" stop-color="${GRAD[k][0]}"/><stop offset="1" stop-color="${GRAD[k][1]}"/></radialGradient>`).join('')+
         `<filter id="soft" x="-20%" y="-40%" width="140%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.45"/></filter>`+
         `<filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#F59E0B" flood-opacity="0.9"/></filter>`+
-        `<marker id="arr-on" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#34D399"/></marker>`+
-        `<marker id="arr-off" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="rgba(148,163,184,.5)"/></marker>`+
+        `<marker id="arr-on" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#34D399"/></marker>`+
+        `<marker id="arr-off" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(148,163,184,.5)"/></marker>`+
+        `<marker id="arr-rej" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#FB7185"/></marker>`+
       `</defs>`;
       let svg = `<svg class="flow-svg" viewBox="0 0 1020 210" preserveAspectRatio="xMidYMid meet">` + defs;
-      // connectors ngang
-      svg += conn(220, 262, st.lead==='done');
-      svg += conn(416, 458, st.dm==='done'||st.dm==='skip');
-      svg += conn(612, 654, st.qm==='done');
-      svg += conn(808, 850, r&&r.state==='DONE');
+      // connectors ngang — chừa 6px mỗi đầu để không chồng khung
+      svg += conn(226, 260, st.lead==='done');
+      svg += conn(422, 456, st.dm==='done'||st.dm==='skip');
+      svg += conn(618, 652, st.qm==='done');
+      svg += conn(814, 848, r&&r.state==='DONE');
       // nhánh Reject cong xuống
       const rejActive = rejected;
       const rc = rejActive ? '#FB7185' : 'rgba(100,116,139,.28)';
-      svg += `<path d="M341,${y+h} C341,168 420,178 500,178" fill="none" stroke="${rc}" stroke-width="3" stroke-linecap="round" marker-end="${rejActive?'url(#arr-rej)':'url(#arr-off)'}" ${rejActive?'':'stroke-dasharray="1,7"'}/>`;
-      if (rejActive) svg += `<marker id="arr-rej" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#FB7185"/></marker>`;
+      svg += `<path d="M341,${y+h+2} C341,170 420,180 496,180" fill="none" stroke="${rc}" stroke-width="2.4" stroke-linecap="round" marker-end="${rejActive?'url(#arr-rej)':'url(#arr-off)'}" ${rejActive?'':'stroke-dasharray="1,7"'}/>`;
       // node Reject
       const rejN = { key:'rej', x:500, y2:151, label:'Reject', sub:'Từ chối', icon:'✕', state: rejActive?'rej':'todo' };
       {
-        const g = rejActive?GRAD.rej:GRAD.todo, ring = rejActive?RING.rej:RING.todo, yy=rejN.y2, mm=yy+h/2;
+        const g = rejActive?GRAD.rej:GRAD.todo, ring = rejActive?RING.rej:RING.todo, yy=rejN.y2, cx=rejN.x+w/2;
         svg += `<g class="${rejActive?'fl-active':''}" ${rejActive?'':'opacity="0.6"'} filter="url(#soft)">`+
-          `<rect x="${rejN.x}" y="${yy}" width="${w}" height="${h}" rx="18" fill="url(#card)" stroke="${ring}" stroke-width="${rejActive?2.6:1.6}"/>`+
-          `<rect x="${rejN.x}" y="${yy}" width="6" height="${h}" rx="3" fill="${g[0]}"/>`+
-          `<circle cx="${rejN.x+34}" cy="${mm}" r="17" fill="url(#dot-${rejActive?'rej':'todo'})" ${rejActive?'filter="url(#glow-rej)"':''}/>`+
-          `<text x="${rejN.x+34}" y="${mm+5}" font-size="15" fill="#fff" text-anchor="middle">✕</text>`+
-          `<text x="${rejN.x+60}" y="${mm-6}" font-size="15" font-weight="700" fill="#F8FAFC">Reject</text>`+
-          `<text x="${rejN.x+60}" y="${mm+11}" font-size="10.5" fill="${ring}" font-weight="600">${rejActive?'Đã từ chối':'—'}</text></g>`;
+          `<rect x="${rejN.x}" y="${yy}" width="${w}" height="${h}" rx="18" fill="url(#card)" stroke="${ring}" stroke-width="${rejActive?1.6:1}"/>`+
+          `<rect x="${rejN.x}" y="${yy}" width="5" height="${h}" rx="2.5" fill="${g[0]}"/>`+
+          `<circle cx="${cx}" cy="${yy+17}" r="13" fill="url(#dot-${rejActive?'rej':'todo'})" ${rejActive?'filter="url(#glow-rej)"':''}/>`+
+          `<text x="${cx}" y="${yy+22}" font-size="13" fill="#fff" text-anchor="middle">✕</text>`+
+          `<text x="${cx}" y="${yy+46}" font-size="14.5" font-weight="700" fill="#F8FAFC" text-anchor="middle">Reject</text>`+
+          `<text x="${cx}" y="${yy+60}" font-size="10" fill="${ring}" font-weight="600" text-anchor="middle">${rejActive?'Đã từ chối':'—'}</text></g>`;
         if (rejActive) svg += `<filter id="glow-rej" x="-80%" y="-80%" width="260%" height="260%"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#F43F5E" flood-opacity="0.9"/></filter>`;
       }
       svg += nodes.map(box).join('');
