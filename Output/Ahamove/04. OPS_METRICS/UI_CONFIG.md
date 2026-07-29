@@ -40,9 +40,8 @@ Anh/Chị có thể sửa trực tiếp bất kỳ nội dung text, tiêu đề,
 - **Field 2 Label**: Họ Tên Người Yêu Cầu *
 - **Field 3 Label**: Loại Tag Mong Muốn *
 - **Field 4 Label**: Tên Tag Gợi Ý / Mục Tiêu *
-- **Field 5 Label**: Số Lượng Tài Xế Cần Tag *
-- **Field 6 Label**: Thời Gian Áp Dụng *
-- **Field 7 Label**: Lý Do Kinh Doanh & Tiêu Chí Chọn Tài Xế *
+- **Field 5 Label**: Thời Gian Áp Dụng *
+- **Field 6 Label**: Lý Do Kinh Doanh & Tiêu Chí Chọn Tài Xế *
 - **Submit Button Text**: 🚀 Gửi Đề Xuất Tới DM Lead
 
 ### Danh Sách Các Team Đề Xuất (Dropdown)
