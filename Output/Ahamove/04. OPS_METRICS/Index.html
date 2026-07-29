@@ -17,7 +17,7 @@
       --text-primary: #F8FAFC;
       --text-secondary: #94A3B8;
       --text-muted: #64748B;
-      
+
       --accent-teal: #0D9488;
       --accent-teal-light: #14B8A6;
       --accent-indigo: #4F46E5;
@@ -25,7 +25,7 @@
       --accent-amber: #D97706;
       --accent-emerald: #059669;
       --accent-rose: #E11D48;
-      
+
       --radius-sm: 8px;
       --radius-md: 12px;
       --radius-lg: 16px;
@@ -79,7 +79,22 @@
     .brand-text p { font-size: 13px; color: var(--text-secondary); }
     .brand-text a { color: var(--accent-teal-light); text-decoration: underline; font-weight: 600; }
 
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    /* USER / ROLE CHIP */
+    .user-chip {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);
+      border-radius: 30px; padding: 6px 14px 6px 8px;
+    }
+    .user-avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-indigo), var(--accent-teal)); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; }
+    .user-meta { line-height: 1.2; }
+    .user-email { font-size: 12px; color: var(--text-secondary); }
+    .role-pill { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; padding: 2px 8px; border-radius: 10px; display:inline-block; margin-top:2px; }
+    .role-DM { background: rgba(13, 148, 136, 0.25); color: #5EEAD4; }
+    .role-TEAM_LEAD { background: rgba(99, 102, 241, 0.25); color: #C7D2FE; }
+    .role-QM { background: rgba(217, 119, 6, 0.25); color: #FCD34D; }
+    .role-REQUESTER { background: rgba(148, 163, 184, 0.2); color: #CBD5E1; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
 
     .kpi-card {
       background: var(--bg-card); border: 1px solid var(--border-color);
@@ -88,13 +103,31 @@
     }
 
     .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-teal); }
+    .kpi-card.pending-lead::before { background: var(--accent-indigo-light); }
     .kpi-card.pending-dm::before { background: var(--accent-amber); }
-    .kpi-card.approved::before { background: var(--accent-teal-light); }
-    .kpi-card.pending-qm::before { background: var(--accent-indigo-light); }
+    .kpi-card.pending-qm::before { background: var(--accent-teal-light); }
+    .kpi-card.done::before { background: var(--accent-emerald); }
 
     .kpi-title { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; }
     .kpi-value { font-size: 26px; font-weight: 800; margin: 6px 0 2px; font-family: 'JetBrains Mono', monospace; }
     .kpi-sub { font-size: 12px; color: var(--text-muted); }
+
+    /* WORKFLOW STEPPER */
+    .stepper-wrap { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 24px; backdrop-filter: blur(8px); }
+    .stepper-title { font-size: 13px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 16px; display:flex; align-items:center; gap:8px; }
+    .stepper { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+    .step { display: flex; align-items: center; gap: 12px; }
+    .step-node { display: flex; align-items: center; gap: 10px; }
+    .step-circle { width: 38px; height: 38px; border-radius: 50%; display:flex; align-items:center; justify-content:center; font-size: 17px; font-weight: 800; border: 2px solid var(--border-color); background: rgba(15,23,42,0.6); flex-shrink:0; }
+    .step-1 .step-circle { border-color: #6366F1; color: #C7D2FE; }
+    .step-2 .step-circle { border-color: #6366F1; color: #C7D2FE; }
+    .step-3 .step-circle { border-color: var(--accent-amber); color: #FCD34D; }
+    .step-4 .step-circle { border-color: var(--accent-teal-light); color: #5EEAD4; }
+    .step-label { line-height:1.2; }
+    .step-label b { font-size: 14px; color: #FFF; }
+    .step-label span { font-size: 11px; color: var(--text-muted); }
+    .step-arrow { color: var(--text-muted); font-size: 22px; margin: 0 18px; }
+    .step-branch { font-size: 11px; color: #A5B4FC; background: rgba(99,102,241,0.12); border:1px dashed rgba(99,102,241,0.4); border-radius: 8px; padding: 6px 12px; margin-top: 14px; display:inline-flex; align-items:center; gap:6px; }
 
     .tabs-nav { display: flex; gap: 8px; border-bottom: 1px solid var(--border-color); margin-bottom: 24px; padding-bottom: 2px; overflow-x: auto; }
 
@@ -191,6 +224,7 @@
     .btn-secondary { background: rgba(255, 255, 255, 0.1); }
     .btn-success { background: linear-gradient(135deg, var(--accent-emerald), #047857); }
     .btn-warning { background: linear-gradient(135deg, var(--accent-amber), #B45309); }
+    .btn-danger { background: linear-gradient(135deg, var(--accent-rose), #9F1239); }
 
     .table-responsive { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
@@ -204,21 +238,41 @@
     .status-rejected { background: rgba(225, 29, 72, 0.2); color: #F87171; border: 1px solid rgba(225, 29, 72, 0.4); }
     .status-processing { background: rgba(14, 165, 233, 0.2); color: #38BDF8; border: 1px solid rgba(14, 165, 233, 0.4); }
     .status-bypass { background: rgba(99, 102, 241, 0.2); color: #A5B4FC; border: 1px solid rgba(99, 102, 241, 0.4); }
+    .status-lead { background: rgba(99, 102, 241, 0.2); color: #C7D2FE; border: 1px solid rgba(99, 102, 241, 0.4); }
+    .status-done { background: rgba(5, 150, 105, 0.28); color: #6EE7B7; border: 1px solid rgba(5, 150, 105, 0.5); }
+
+    .breach-badge { display:inline-flex; align-items:center; gap:4px; background: rgba(225, 29, 72, 0.25); color:#FCA5A5; border:1px solid rgba(225,29,72,0.5); font-size:10px; font-weight:800; padding:2px 8px; border-radius:10px; margin-left:6px; animation: pulse 1.6s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.55;} }
 
     .code-tag { font-family: 'JetBrains Mono', monospace; background: rgba(0, 0, 0, 0.4); padding: 3px 8px; border-radius: 4px; color: #38BDF8; font-size: 12px; border: 1px solid rgba(56, 189, 248, 0.2); }
 
     .workflow-notice { background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: #7DD3FC; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .rbac-hidden { display: none !important; }
+    .empty-hint { text-align:center; color:var(--text-muted); padding: 20px; }
 
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 999; opacity: 0; pointer-events: none; transition: var(--transition); }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
     .modal-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 90%; max-width: 650px; padding: 24px; box-shadow: var(--shadow-lg); }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+
+    /* TOAST STATUS POPUP */
+    #toast-wrap { position: fixed; top: 20px; right: 20px; z-index: 1200; display:flex; flex-direction:column; gap:10px; }
+    .toast { min-width: 280px; max-width: 380px; background: var(--bg-secondary); border:1px solid var(--border-color); border-left: 4px solid var(--accent-teal-light); border-radius: var(--radius-md); padding: 14px 16px; box-shadow: var(--shadow-lg); display:flex; gap:12px; align-items:flex-start; animation: slideIn 0.3s ease; }
+    .toast.ok { border-left-color: var(--accent-emerald); }
+    .toast.warn { border-left-color: var(--accent-amber); }
+    .toast.err { border-left-color: var(--accent-rose); }
+    .toast-ic { font-size: 20px; }
+    .toast-body b { display:block; font-size: 14px; color:#FFF; margin-bottom:2px; }
+    .toast-body span { font-size: 12px; color: var(--text-secondary); }
+    @keyframes slideIn { from { transform: translateX(40px); opacity:0; } to { transform: translateX(0); opacity:1; } }
   </style>
 </head>
 <body>
 
+  <div id="toast-wrap"></div>
+
   <div class="app-container">
-    
+
     <header>
       <div class="brand-title">
         <div class="brand-icon">🏷️</div>
@@ -227,56 +281,109 @@
           <p>Spreadsheet Target: <a href="https://docs.google.com/spreadsheets/d/1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4/edit?gid=407438001#gid=407438001" target="_blank">Google Sheet Target</a></p>
         </div>
       </div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn btn-warning" onclick="openLiveConfigEditor()">✏️ Sửa Chữ Trực Tiếp (Live UI Editor)</button>
-        <button class="btn btn-secondary" onclick="loadDataFromSheet()">🔄 Tự Động Đồng Bộ Sheet</button>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <div class="user-chip">
+          <div class="user-avatar" id="user-avatar">?</div>
+          <div class="user-meta">
+            <div class="user-email" id="user-email">chưa đăng nhập</div>
+            <span class="role-pill" id="user-role-pill">REQUESTER</span>
+          </div>
+        </div>
+        <button class="btn btn-warning" id="btn-live-editor" onclick="openLiveConfigEditor()">✏️ Live UI Editor</button>
+        <button class="btn btn-secondary" onclick="loadDataFromSheet()">🔄 Đồng Bộ Sheet</button>
       </div>
     </header>
 
+    <!-- WORKFLOW STEPPER -->
+    <div class="stepper-wrap">
+      <div class="stepper-title">🧭 Luồng Phê Duyệt Đa Tầng (Multi-Gate Approval)</div>
+      <div class="stepper">
+        <div class="step step-1">
+          <div class="step-node">
+            <div class="step-circle">1</div>
+            <div class="step-label"><b>Requester</b><span>Team tạo request</span></div>
+          </div>
+        </div>
+        <span class="step-arrow">→</span>
+        <div class="step step-2">
+          <div class="step-node">
+            <div class="step-circle">2</div>
+            <div class="step-label"><b>Lead / Head</b><span>Duyệt cấp team</span></div>
+          </div>
+        </div>
+        <span class="step-arrow">→</span>
+        <div class="step step-3">
+          <div class="step-node">
+            <div class="step-circle">3</div>
+            <div class="step-label"><b>DM Review</b><span>Thẩm định tag mới</span></div>
+          </div>
+        </div>
+        <span class="step-arrow">→</span>
+        <div class="step step-4">
+          <div class="step-node">
+            <div class="step-circle">4</div>
+            <div class="step-label"><b>QM Add Tag</b><span>Tạo / gắn tag TX</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="step-branch">⚡ Add tag có sẵn: Lead duyệt xong → bỏ qua DM → thẳng QM (rút gọn 1 gate)</div>
+    </div>
+
     <div class="kpi-grid">
       <div class="kpi-card">
-        <div class="kpi-title">Tổng Yêu Cầu (All Requests)</div>
+        <div class="kpi-title">Tổng Yêu Cầu</div>
         <div class="kpi-value" id="kpi-total">0</div>
         <div class="kpi-sub">Ghi nhận trên hệ thống</div>
       </div>
 
-      <div class="kpi-card pending-dm">
-        <div class="kpi-title">Chờ DM Review (Pending)</div>
-        <div class="kpi-value" id="kpi-pending">0</div>
-        <div class="kpi-sub">SLA phản hồi: ≤ 4h</div>
+      <div class="kpi-card pending-lead">
+        <div class="kpi-title">Chờ Lead Duyệt</div>
+        <div class="kpi-value" id="kpi-pending-lead">0</div>
+        <div class="kpi-sub">SLA: ≤ 4h</div>
       </div>
 
-      <div class="kpi-card approved">
-        <div class="kpi-title">DM Đã Duyệt (Approved)</div>
-        <div class="kpi-value" id="kpi-approved">0</div>
-        <div class="kpi-sub">Đã chuyển luồng QM</div>
+      <div class="kpi-card pending-dm">
+        <div class="kpi-title">Chờ DM Review</div>
+        <div class="kpi-value" id="kpi-pending-dm">0</div>
+        <div class="kpi-sub">SLA: ≤ 8h</div>
       </div>
 
       <div class="kpi-card pending-qm">
         <div class="kpi-title">Chờ QM Add Tags</div>
         <div class="kpi-value" id="kpi-pending-qm">0</div>
-        <div class="kpi-sub">Yêu cầu DM đã duyệt</div>
+        <div class="kpi-sub">SLA: ≤ 24h</div>
+      </div>
+
+      <div class="kpi-card done">
+        <div class="kpi-title">Hoàn Thành (Done)</div>
+        <div class="kpi-value" id="kpi-done">0</div>
+        <div class="kpi-sub">Đã add tag thành công</div>
       </div>
     </div>
 
-    <!-- TABS READ DYNAMICALLY FROM GOOGLE SHEET CONFIG -->
+    <!-- TABS (RBAC: ẩn/hiện theo role) -->
     <div class="tabs-nav">
-      <button class="tab-btn active" id="view-tab1" onclick="switchTab('tab-request')">
+      <button class="tab-btn active" id="view-tab1" data-tab="tab-request" onclick="switchTab('tab-request')">
         <?= (typeof config !== 'undefined' && config.TAB1_NAME) ? config.TAB1_NAME : "📝 Bước 1: Request" ?>
       </button>
 
-      <button class="tab-btn" id="view-tab2" onclick="switchTab('tab-dm-review')">
-        <span id="view-tab2-text"><?= (typeof config !== 'undefined' && config.TAB2_NAME) ? config.TAB2_NAME : "🛡️ Bước 2: DM Review" ?></span>
-        <span class="badge-count" id="badge-pending-count">0</span>
+      <button class="tab-btn" id="view-tab2" data-tab="tab-lead-approval" onclick="switchTab('tab-lead-approval')">
+        <span id="view-tab2-text"><?= (typeof config !== 'undefined' && config.TAB2_NAME) ? config.TAB2_NAME : "👔 Bước 2: Lead Approval" ?></span>
+        <span class="badge-count" id="badge-lead-count">0</span>
       </button>
 
-      <button class="tab-btn" id="view-tab3" onclick="switchTab('tab-qm-queue')">
-        <span id="view-tab3-text"><?= (typeof config !== 'undefined' && config.TAB3_NAME) ? config.TAB3_NAME : "⚙️ Bước 3: QM Add Tags" ?></span>
+      <button class="tab-btn" id="view-tab3" data-tab="tab-dm-review" onclick="switchTab('tab-dm-review')">
+        <span id="view-tab3-text"><?= (typeof config !== 'undefined' && config.TAB3_NAME) ? config.TAB3_NAME : "🛡️ Bước 3: DM Review" ?></span>
+        <span class="badge-count" id="badge-dm-count">0</span>
+      </button>
+
+      <button class="tab-btn" id="view-tab4" data-tab="tab-qm-queue" onclick="switchTab('tab-qm-queue')">
+        <span id="view-tab4-text"><?= (typeof config !== 'undefined' && config.TAB4_NAME) ? config.TAB4_NAME : "⚙️ Bước 4: QM Add Tags" ?></span>
         <span class="badge-count" id="badge-qm-count">0</span>
       </button>
 
-      <button class="tab-btn" id="view-tab4" onclick="switchTab('tab-master')">
-        <?= (typeof config !== 'undefined' && config.TAB4_NAME) ? config.TAB4_NAME : "📊 Master Request Tracker" ?>
+      <button class="tab-btn" id="view-tab5" data-tab="tab-master" onclick="switchTab('tab-master')">
+        <?= (typeof config !== 'undefined' && config.TAB5_NAME) ? config.TAB5_NAME : "📊 Master Request Tracker" ?>
       </button>
     </div>
 
@@ -288,8 +395,7 @@
         </div>
 
         <form id="tag-request-form" onsubmit="handleFormSubmit(event)">
-          
-          <!-- HÌNH THỨC REQUEST: 2 BUTTONS NỔI BẬT VỚI TICK BADGE HIGHLIGHT -->
+
           <div style="margin-bottom: 20px;">
             <label style="font-size: 14px; font-weight: 700; color: #F8FAFC; margin-bottom: 10px; display: block;">Chọn Hình Thức Request *</label>
             <div class="category-toggle-grid">
@@ -297,7 +403,7 @@
                 <div class="opt-icon">🏷️</div>
                 <div class="opt-text">
                   <div class="opt-title">Tạo Tag Mới</div>
-                  <div class="opt-desc">Dành cho Tag mới - Cần DM Lead Review & Phê duyệt</div>
+                  <div class="opt-desc">Tag mới → Lead duyệt → DM Review → QM (đủ 3 gate)</div>
                 </div>
                 <div class="opt-check" id="check-cat-create">✓ Đã chọn</div>
               </div>
@@ -306,7 +412,7 @@
                 <div class="opt-icon">⚡</div>
                 <div class="opt-text">
                   <div class="opt-title">Add Tag (Gắn Thêm TX)</div>
-                  <div class="opt-desc">Dành cho Tag có sẵn - Bỏ qua DM, chuyển thẳng QM xử lý</div>
+                  <div class="opt-desc">Tag có sẵn → Lead duyệt → bỏ qua DM → thẳng QM</div>
                 </div>
                 <div class="opt-check" id="check-cat-add" style="display:none;">✓ Đã chọn</div>
               </div>
@@ -315,7 +421,7 @@
           </div>
 
           <div class="workflow-notice full-width" id="workflow-notice-bar">
-            <span>🛡️ <strong>Luồng Tạo Tag Mới:</strong> Yêu cầu sẽ được gửi tới <strong>Bước 2: DM Review</strong> để DM Lead thẩm định & phê duyệt mã tag.</span>
+            <span>👔 <strong>Luồng Tạo Tag Mới:</strong> Yêu cầu gửi tới <strong>Bước 2: Lead Approval</strong> để Lead/Head duyệt, sau đó qua <strong>DM Review</strong> rồi tới <strong>QM</strong>.</span>
           </div>
 
           <div class="form-grid">
@@ -358,7 +464,6 @@
               <input type="text" id="req-tag-name" placeholder="VD: TAG_HUB_SOC_NIGHT_OFFLOAD" required>
             </div>
 
-            <!-- DYNAMIC DRIVER LIST SOURCE FIELDS (ONLY METABASE CARD & GOOGLE SHEET LINK) -->
             <div class="form-group" id="group-driver-source-type" style="display:none;">
               <label style="color:#FBBF24;">Phương Thức Cung Cấp Danh Sách TX *</label>
               <select id="req-driver-source-type" onchange="updateDriverSourcePlaceholder()">
@@ -384,24 +489,42 @@
           </div>
 
           <div style="margin-top: 20px; display:flex; justify-content:flex-end; gap:12px;">
-            <button type="submit" class="btn" id="view-submit-btn"><?= (typeof config !== 'undefined' && config.SUBMIT_BTN_TEXT) ? config.SUBMIT_BTN_TEXT : "🚀 Gửi Đề Xuất Tới DM Lead" ?></button>
+            <button type="submit" class="btn" id="view-submit-btn"><?= (typeof config !== 'undefined' && config.SUBMIT_BTN_TEXT) ? config.SUBMIT_BTN_TEXT : "🚀 Gửi Đề Xuất Tới Lead Duyệt" ?></button>
           </div>
         </form>
       </div>
     </div>
 
-    <!-- TAB 2: DM REVIEW -->
-    <div id="tab-dm-review" class="tab-panel">
+    <!-- TAB 2: LEAD APPROVAL -->
+    <div id="tab-lead-approval" class="tab-panel">
       <div class="panel-card">
         <div class="card-header">
-          <h2>🛡️ Bàn Tròn Thẩm Định Của DM Lead (DM Review Console)</h2>
+          <h2>👔 Bàn Duyệt Của Lead / Head Team (Gate 1)</h2>
         </div>
-
         <div class="table-responsive">
           <table>
             <thead>
               <tr>
-                <th>Mã Request</th><th>Ngày Tạo</th><th>Hình Thức</th><th>Team</th><th>Tên Tag Yêu Cầu</th><th>Trạng Thái DM</th><th>Mã Tag Chuẩn Hóa</th><th>Hành Động</th>
+                <th>Mã Request</th><th>Ngày Tạo</th><th>Hình Thức</th><th>Team</th><th>Người Tạo</th><th>Tên Tag</th><th>Deadline Lead</th><th>Trạng Thái</th><th>Hành Động</th>
+              </tr>
+            </thead>
+            <tbody id="lead-approval-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: DM REVIEW -->
+    <div id="tab-dm-review" class="tab-panel">
+      <div class="panel-card">
+        <div class="card-header">
+          <h2>🛡️ Bàn Tròn Thẩm Định Của DM Lead (Gate 2)</h2>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã Request</th><th>Ngày Tạo</th><th>Team</th><th>Đã Qua Lead</th><th>Tên Tag Yêu Cầu</th><th>Deadline DM</th><th>Trạng Thái</th><th>Hành Động</th>
               </tr>
             </thead>
             <tbody id="dm-review-tbody"></tbody>
@@ -410,18 +533,17 @@
       </div>
     </div>
 
-    <!-- TAB 3: QM ADD TAGS -->
+    <!-- TAB 4: QM ADD TAGS -->
     <div id="tab-qm-queue" class="tab-panel">
       <div class="panel-card">
         <div class="card-header">
-          <h2>⚙️ Hàng Đợi QM Tiếp Nhận & Add Tag</h2>
+          <h2>⚙️ Hàng Đợi QM Tiếp Nhận & Add Tag (Gate 3)</h2>
         </div>
-
         <div class="table-responsive">
           <table>
             <thead>
               <tr>
-                <th>Mã Request</th><th>Hình Thức</th><th>Team</th><th>Mã Tag Chuẩn</th><th>Nguồn Danh Sách TX</th><th>Trạng Thái QM</th><th>Số TX Thành Công</th><th>QM Ref / Batch</th><th>Cập Nhật QM</th>
+                <th>Mã Request</th><th>Hình Thức</th><th>Team</th><th>Mã Tag Chuẩn</th><th>Nguồn Danh Sách TX</th><th>Deadline QM</th><th>Trạng Thái QM</th><th>Số TX Thành Công</th><th>QM Ref / Batch</th><th>Cập Nhật QM</th>
               </tr>
             </thead>
             <tbody id="qm-queue-tbody"></tbody>
@@ -430,18 +552,17 @@
       </div>
     </div>
 
-    <!-- TAB 4: MASTER TRACKER -->
+    <!-- TAB 5: MASTER TRACKER -->
     <div id="tab-master" class="tab-panel">
       <div class="panel-card">
         <div class="card-header">
           <h2>📊 Master Request Tracker</h2>
         </div>
-
         <div class="table-responsive">
           <table>
             <thead>
               <tr>
-                <th>Mã Request</th><th>Ngày Tạo</th><th>Hình Thức</th><th>Team</th><th>Người Tạo</th><th>Tên Tag</th><th>Nguồn TX</th><th>DM Status</th><th>QM Status</th><th>TX Thắng</th><th>Batch Ref</th>
+                <th>Mã Request</th><th>Ngày Tạo</th><th>Hình Thức</th><th>Team</th><th>Người Tạo</th><th>Tên Tag</th><th>Trạng Thái Tổng</th><th>Lead</th><th>DM</th><th>QM</th><th>TX Thắng</th>
               </tr>
             </thead>
             <tbody id="master-tbody"></tbody>
@@ -476,23 +597,41 @@
         </div>
 
         <div class="form-group">
-          <label>Tên Tab 2</label>
-          <input type="text" id="edit-tab2" value="<?= (typeof config !== 'undefined' && config.TAB2_NAME) ? config.TAB2_NAME : "🛡️ Bước 2: DM Review" ?>">
+          <label>Tên Tab 2 (Lead Approval)</label>
+          <input type="text" id="edit-tab2" value="<?= (typeof config !== 'undefined' && config.TAB2_NAME) ? config.TAB2_NAME : "👔 Bước 2: Lead Approval" ?>">
         </div>
 
         <div class="form-group">
-          <label>Tên Tab 3</label>
-          <input type="text" id="edit-tab3" value="<?= (typeof config !== 'undefined' && config.TAB3_NAME) ? config.TAB3_NAME : "⚙️ Bước 3: QM Add Tags" ?>">
+          <label>Tên Tab 3 (DM Review)</label>
+          <input type="text" id="edit-tab3" value="<?= (typeof config !== 'undefined' && config.TAB3_NAME) ? config.TAB3_NAME : "🛡️ Bước 3: DM Review" ?>">
         </div>
 
         <div class="form-group">
-          <label>Tên Tab 4</label>
-          <input type="text" id="edit-tab4" value="<?= (typeof config !== 'undefined' && config.TAB4_NAME) ? config.TAB4_NAME : "📊 Master Request Tracker" ?>">
+          <label>Tên Tab 4 (QM Add Tags)</label>
+          <input type="text" id="edit-tab4" value="<?= (typeof config !== 'undefined' && config.TAB4_NAME) ? config.TAB4_NAME : "⚙️ Bước 4: QM Add Tags" ?>">
+        </div>
+
+        <div class="form-group">
+          <label>Tên Tab 5 (Master Tracker)</label>
+          <input type="text" id="edit-tab5" value="<?= (typeof config !== 'undefined' && config.TAB5_NAME) ? config.TAB5_NAME : "📊 Master Request Tracker" ?>">
         </div>
 
         <div class="form-group full-width">
           <label>Chữ Trên Nút Gửi Đề Xuất (Submit Button)</label>
-          <input type="text" id="edit-submit-btn" value="<?= (typeof config !== 'undefined' && config.SUBMIT_BTN_TEXT) ? config.SUBMIT_BTN_TEXT : "🚀 Gửi Đề Xuất Tới DM Lead" ?>">
+          <input type="text" id="edit-submit-btn" value="<?= (typeof config !== 'undefined' && config.SUBMIT_BTN_TEXT) ? config.SUBMIT_BTN_TEXT : "🚀 Gửi Đề Xuất Tới Lead Duyệt" ?>">
+        </div>
+
+        <div class="form-group">
+          <label>SLA Lead (giờ)</label>
+          <input type="text" id="edit-sla-lead" value="<?= (typeof config !== 'undefined' && config.SLA_LEAD_HOURS) ? config.SLA_LEAD_HOURS : "4" ?>">
+        </div>
+        <div class="form-group">
+          <label>SLA DM (giờ)</label>
+          <input type="text" id="edit-sla-dm" value="<?= (typeof config !== 'undefined' && config.SLA_DM_HOURS) ? config.SLA_DM_HOURS : "8" ?>">
+        </div>
+        <div class="form-group">
+          <label>SLA QM (giờ)</label>
+          <input type="text" id="edit-sla-qm" value="<?= (typeof config !== 'undefined' && config.SLA_QM_HOURS) ? config.SLA_QM_HOURS : "24" ?>">
         </div>
 
         <div class="form-group full-width">
@@ -513,7 +652,38 @@
     </div>
   </div>
 
-  <!-- Modal DM Review -->
+  <!-- MODAL LEAD APPROVAL (Gate 1) -->
+  <div class="modal-overlay" id="lead-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>👔 Duyệt Cấp Lead: <span id="lead-modal-req-id"></span></h3>
+        <button class="btn btn-secondary" onclick="closeModal('lead-modal')">✖</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>Chi Tiết Request</label>
+          <div id="lead-modal-details" style="font-size:13px; background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; color:#CBD5E1;"></div>
+        </div>
+        <div class="form-group">
+          <label>Quyết Định *</label>
+          <select id="lead-modal-decision">
+            <option value="APPROVED">APPROVED (Duyệt — chuyển tiếp)</option>
+            <option value="REJECTED">REJECTED (Từ chối — trả requester)</option>
+          </select>
+        </div>
+        <div class="form-group full-width">
+          <label>Lý Do / Ghi Chú (bắt buộc khi từ chối)</label>
+          <textarea id="lead-modal-note" rows="3" placeholder="Nêu căn cứ duyệt / lý do từ chối để requester chỉnh sửa..."></textarea>
+        </div>
+      </div>
+      <div style="margin-top: 18px; display:flex; justify-content:flex-end; gap:10px;">
+        <button class="btn btn-secondary" onclick="closeModal('lead-modal')">Hủy</button>
+        <button class="btn btn-success" onclick="submitLeadApproval()">💾 Lưu Quyết Định Lead</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DM REVIEW (Gate 2) -->
   <div class="modal-overlay" id="dm-modal">
     <div class="modal-card">
       <div class="modal-header">
@@ -547,27 +717,90 @@
       </div>
       <div style="margin-top: 18px; display:flex; justify-content:flex-end; gap:10px;">
         <button class="btn btn-secondary" onclick="closeModal('dm-modal')">Hủy</button>
-        <button class="btn btn-success" onclick="saveDMReview()">💾 Lưu & Đồng Bộ Sheet</button>
+        <button class="btn btn-success" onclick="submitDMReview()">💾 Lưu & Đồng Bộ Sheet</button>
       </div>
     </div>
   </div>
 
   <script>
+    // ===== RBAC: role & email truyền từ doGet =====
+    var CURRENT_ROLE = "<?= (typeof userRole !== 'undefined') ? userRole : '' ?>";
+    var CURRENT_EMAIL = "<?= (typeof userEmail !== 'undefined') ? userEmail : '' ?>";
+    // Local test (mở file trực tiếp): không có role -> giả lập DM để xem hết
+    var IS_LOCAL = !(typeof google !== 'undefined' && google.script && google.script.run);
+    if (!CURRENT_ROLE) CURRENT_ROLE = IS_LOCAL ? 'DM' : 'REQUESTER';
+    if (!CURRENT_EMAIL) CURRENT_EMAIL = IS_LOCAL ? 'local-test@ahamove.com' : '';
+
+    // Ma trận quyền xem tab
+    var TAB_ACCESS = {
+      'tab-request':       ['REQUESTER','TEAM_LEAD','DM','QM'],
+      'tab-lead-approval': ['TEAM_LEAD','DM'],
+      'tab-dm-review':     ['DM'],
+      'tab-qm-queue':      ['QM','DM'],
+      'tab-master':        ['REQUESTER','TEAM_LEAD','DM','QM']
+    };
+
     let requestsData = [];
     let currentSelectedId = null;
 
     document.addEventListener("DOMContentLoaded", () => {
+      applyRBAC();
       loadDataFromSheet();
       selectRequestCategory('Tạo tag mới');
     });
 
+    // ===== TOAST STATUS POPUP =====
+    function showToast(title, msg, type) {
+      const wrap = document.getElementById('toast-wrap');
+      const t = document.createElement('div');
+      t.className = 'toast ' + (type || 'ok');
+      const ic = type === 'err' ? '⛔' : (type === 'warn' ? '⚠️' : '✅');
+      t.innerHTML = `<div class="toast-ic">${ic}</div><div class="toast-body"><b>${title}</b><span>${msg||''}</span></div>`;
+      wrap.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(40px)'; setTimeout(()=>t.remove(), 300); }, 4200);
+    }
+
+    // ===== RBAC UI =====
+    function applyRBAC() {
+      // User chip
+      document.getElementById('user-email').innerText = CURRENT_EMAIL || 'chưa đăng nhập';
+      const pill = document.getElementById('user-role-pill');
+      pill.innerText = CURRENT_ROLE;
+      pill.className = 'role-pill role-' + CURRENT_ROLE;
+      document.getElementById('user-avatar').innerText = (CURRENT_EMAIL ? CURRENT_EMAIL[0] : '?').toUpperCase();
+
+      // Ẩn tab không có quyền
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        const tabId = btn.getAttribute('data-tab');
+        const allowed = TAB_ACCESS[tabId] || [];
+        if (allowed.indexOf(CURRENT_ROLE) === -1) btn.classList.add('rbac-hidden');
+        else btn.classList.remove('rbac-hidden');
+      });
+
+      // Live editor chỉ DM
+      const be = document.getElementById('btn-live-editor');
+      if (CURRENT_ROLE !== 'DM') be.classList.add('rbac-hidden');
+
+      // Nếu tab active hiện đang bị ẩn -> chuyển sang tab đầu tiên được phép
+      const activeBtn = document.querySelector('.tab-btn.active');
+      if (activeBtn && activeBtn.classList.contains('rbac-hidden')) {
+        const firstVisible = document.querySelector('.tab-btn:not(.rbac-hidden)');
+        if (firstVisible) firstVisible.click();
+      }
+    }
+
+    function canApproveLead() { return CURRENT_ROLE === 'TEAM_LEAD' || CURRENT_ROLE === 'DM'; }
+    function canReviewDM()    { return CURRENT_ROLE === 'DM'; }
+    function canUpdateQM()    { return CURRENT_ROLE === 'QM' || CURRENT_ROLE === 'DM'; }
+
+    // ===== FORM CATEGORY =====
     function selectRequestCategory(cat) {
       document.getElementById('req-category').value = cat;
       const btnCreate = document.getElementById('btn-cat-create');
       const btnAdd = document.getElementById('btn-cat-add');
       const checkCreate = document.getElementById('check-cat-create');
       const checkAdd = document.getElementById('check-cat-add');
-      
+
       btnCreate.classList.remove('active', 'add-tag-active');
       btnAdd.classList.remove('active', 'add-tag-active');
 
@@ -590,7 +823,7 @@
       const grpSourceUrl = document.getElementById('group-driver-source-url');
 
       if (cat === 'Add tag') {
-        noticeBar.innerHTML = `<span>⚡ <strong>Luồng Add Tag Trực Tiếp:</strong> Yêu cầu sẽ <strong>tự động bỏ qua DM Review</strong> và chuyển thẳng tới <strong>Bước 3: QM Add Tags</strong> để QM tiếp nhận xử lý.</span>`;
+        noticeBar.innerHTML = `<span>⚡ <strong>Luồng Add Tag:</strong> Lead/Head duyệt trước, sau đó <strong>tự động bỏ qua DM Review</strong> và chuyển thẳng tới <strong>QM Add Tags</strong>.</span>`;
         noticeBar.style.background = `rgba(99, 102, 241, 0.15)`;
         noticeBar.style.borderColor = `rgba(99, 102, 241, 0.4)`;
         noticeBar.style.color = `#A5B4FC`;
@@ -601,7 +834,7 @@
         document.getElementById('req-driver-source-val').required = true;
         updateDriverSourcePlaceholder();
       } else {
-        noticeBar.innerHTML = `<span>🛡️ <strong>Luồng Tạo Tag Mới:</strong> Yêu cầu sẽ được gửi tới <strong>Bước 2: DM Review</strong> để DM Lead thẩm định & phê duyệt mã tag.</span>`;
+        noticeBar.innerHTML = `<span>👔 <strong>Luồng Tạo Tag Mới:</strong> Yêu cầu gửi tới <strong>Bước 2: Lead Approval</strong>, sau đó qua <strong>DM Review</strong> rồi tới <strong>QM</strong>.</span>`;
         noticeBar.style.background = `rgba(14, 165, 233, 0.1)`;
         noticeBar.style.borderColor = `rgba(56, 189, 248, 0.3)`;
         noticeBar.style.color = `#7DD3FC`;
@@ -617,7 +850,6 @@
       const sType = document.getElementById('req-driver-source-type').value;
       const input = document.getElementById('req-driver-source-val');
       const lbl = document.getElementById('lbl-driver-source-url');
-
       if (sType === 'Link GoogleSheet') {
         lbl.innerText = 'Đường Dẫn File GoogleSheet Danh Sách Tài Xế *';
         input.placeholder = 'https://docs.google.com/spreadsheets/d/...';
@@ -627,9 +859,8 @@
       }
     }
 
-    function openLiveConfigEditor() {
-      document.getElementById('editor-modal').classList.add('open');
-    }
+    // ===== LIVE CONFIG =====
+    function openLiveConfigEditor() { document.getElementById('editor-modal').classList.add('open'); }
 
     function saveLiveUIConfig() {
       const newConfig = {
@@ -639,35 +870,55 @@
         TAB2_NAME: document.getElementById('edit-tab2').value,
         TAB3_NAME: document.getElementById('edit-tab3').value,
         TAB4_NAME: document.getElementById('edit-tab4').value,
+        TAB5_NAME: document.getElementById('edit-tab5').value,
         SUBMIT_BTN_TEXT: document.getElementById('edit-submit-btn').value,
+        SLA_LEAD_HOURS: document.getElementById('edit-sla-lead').value,
+        SLA_DM_HOURS: document.getElementById('edit-sla-dm').value,
+        SLA_QM_HOURS: document.getElementById('edit-sla-qm').value,
         TEAM_LIST: document.getElementById('edit-team-list').value,
         TAG_TYPES: document.getElementById('edit-tag-types').value
       };
 
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
+      if (!IS_LOCAL) {
         google.script.run.withSuccessHandler(() => {
-          alert("✅ Đã lưu cấu hình chữ trực tiếp về Google Sheet! Đang tải lại trang...");
-          location.reload();
+          showToast('Đã lưu cấu hình', 'Đang tải lại trang...', 'ok');
+          setTimeout(()=>location.reload(), 900);
         }).saveAppConfig(newConfig);
       } else {
-        alert("✅ Đã lưu cấu hình chữ trực tiếp trên giao diện!");
+        showToast('Đã lưu (local)', 'Cấu hình lưu tạm trên giao diện.', 'ok');
         closeModal('editor-modal');
       }
     }
 
+    // ===== LOAD DATA =====
     function loadDataFromSheet() {
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run.withSuccessHandler(data => {
-          requestsData = data || [];
+      if (!IS_LOCAL) {
+        google.script.run.withSuccessHandler(res => {
+          if (res && res.data) {
+            requestsData = res.data;
+            if (res.role) { CURRENT_ROLE = res.role; CURRENT_EMAIL = res.email || CURRENT_EMAIL; applyRBAC(); }
+          } else {
+            requestsData = res || [];
+          }
           renderAll();
         }).getSheetDataJson();
       } else {
+        if (requestsData.length === 0) requestsData = mockData();
         renderAll();
       }
     }
 
+    function mockData() {
+      return [
+        { id:'REQ-2026-001', date:'2026-07-29 09:10', requestCategory:'Tạo tag mới', team:'Hub Linehaul Operations', name:'Trần B', type:'Priority Dispatch', tagName:'TAG_HUB_NIGHT', driverListSource:'-', reason:'Tăng offload đêm', duration:'2026-08', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 13:10', deadlineDM:'', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-002', date:'2026-07-28 15:00', requestCategory:'Add tag', team:'Marketing Campaign', name:'Lê C', type:'Incentive Campaign', tagName:'TAG_MKT_AUG', driverListSource:'[Card Metabase] https://metabase...', reason:'Campaign tháng 8', duration:'2026-08', state:'PENDING_QM', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', dmDecision:'SKIPPED', qmStatus:'PENDING_QM', qmSuccessCount:0, qmRef:'', dmTagCode:'TAG_MKT_AUG', deadlineLead:'', deadlineDM:'', deadlineQM:'2026-07-29 15:00', breach:'QUÁ HẠN SLA' },
+        { id:'REQ-2026-003', date:'2026-07-27 10:00', requestCategory:'Tạo tag mới', team:'Risk & Fraud Control', name:'Phạm D', type:'Penalty / Block', tagName:'TAG_RISK_BLOCK', driverListSource:'-', reason:'Chặn TX gian lận', duration:'2026-08', state:'PENDING_DM', leadApprover:'lead2@ahamove.com', leadDecision:'APPROVED', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'2026-07-27 18:00', deadlineQM:'', breach:'' }
+      ];
+    }
+
     function renderAll() {
       updateKPIs();
+      renderLeadApprovalTable();
       renderDMReviewTable();
       renderQMQueueTable();
       renderMasterTable();
@@ -676,31 +927,36 @@
     function switchTab(tabId) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
-
-      event.currentTarget.classList.add('active');
+      const btn = document.querySelector('.tab-btn[data-tab="'+tabId+'"]');
+      if (btn) btn.classList.add('active');
       document.getElementById(tabId).classList.add('active');
     }
 
+    // ===== KPIs =====
     function updateKPIs() {
       const total = requestsData.length;
-      const pendingDM = requestsData.filter(r => r.requestCategory === 'Tạo tag mới' && r.dmDecision === 'PENDING').length;
-      const approvedDM = requestsData.filter(r => r.dmDecision === 'APPROVED' || r.dmDecision === 'AUTO_BYPASS').length;
-      const pendingQMCount = requestsData.filter(r => (r.dmDecision === 'APPROVED' || r.dmDecision === 'AUTO_BYPASS') && r.qmStatus !== 'TAGGED_SUCCESS').length;
+      const pLead = requestsData.filter(r => r.state === 'PENDING_TEAM_LEAD').length;
+      const pDM   = requestsData.filter(r => r.state === 'PENDING_DM').length;
+      const pQM   = requestsData.filter(r => r.state === 'PENDING_QM').length;
+      const done  = requestsData.filter(r => r.state === 'DONE').length;
 
       document.getElementById('kpi-total').innerText = total;
-      document.getElementById('kpi-pending').innerText = pendingDM;
-      document.getElementById('kpi-approved').innerText = approvedDM;
-      document.getElementById('kpi-pending-qm').innerText = pendingQMCount;
+      document.getElementById('kpi-pending-lead').innerText = pLead;
+      document.getElementById('kpi-pending-dm').innerText = pDM;
+      document.getElementById('kpi-pending-qm').innerText = pQM;
+      document.getElementById('kpi-done').innerText = done;
 
-      document.getElementById('badge-pending-count').innerText = pendingDM;
-      document.getElementById('badge-qm-count').innerText = pendingQMCount;
+      document.getElementById('badge-lead-count').innerText = pLead;
+      document.getElementById('badge-dm-count').innerText = pDM;
+      document.getElementById('badge-qm-count').innerText = pQM;
     }
 
+    // ===== SUBMIT NEW REQUEST (không còn bypass phía client) =====
     function handleFormSubmit(e) {
       e.preventDefault();
       const now = new Date();
       const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-      
+
       const newId = `REQ-2026-${String(requestsData.length + 1).padStart(3, '0')}`;
       const category = document.getElementById('req-category').value;
       const isAddTag = (category === 'Add tag');
@@ -720,219 +976,308 @@
         driverListSource: driverSourceFull,
         count: 0,
         reason: document.getElementById('req-reason').value,
-        duration: document.getElementById('req-duration').value,
-        dmDecision: isAddTag ? "AUTO_BYPASS" : "PENDING",
-        dmNote: isAddTag ? "Tự động bypass DM (Add tag trực tiếp)" : "Đang chờ DM Lead kiểm duyệt",
-        dmTagCode: isAddTag ? document.getElementById('req-tag-name').value : "-",
-        qmHandover: isAddTag ? "READY_FOR_QM" : "HOLD",
-        qmStatus: isAddTag ? "PENDING_QM" : "HOLD",
-        qmSuccessCount: 0,
-        qmRef: isAddTag ? `Nguồn: ${driverSourceFull}` : "Chờ DM duyệt"
+        duration: document.getElementById('req-duration').value
       };
 
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
+      if (!IS_LOCAL) {
         google.script.run.withSuccessHandler(() => {
-          if (isAddTag) {
-            alert(`⚡ Đã gửi Yêu cầu ${newId} (Add Tag)! Yêu cầu tự động bỏ qua DM và chuyển trực tiếp tới Bước 3: QM Add Tags.`);
-            switchTab('tab-qm-queue');
-          } else {
-            alert(`✅ Đã gửi Yêu cầu ${newId} (Tạo tag mới)! Yêu cầu đã lưu vào Bước 2: DM Review.`);
-            switchTab('tab-dm-review');
-          }
+          showToast(`Đã gửi ${newId}`, 'Request đang chờ Lead/Head duyệt (Gate 1).', 'ok');
           loadDataFromSheet();
+          if (canApproveLead()) switchTab('tab-lead-approval'); else switchTab('tab-master');
         }).saveNewRequest(newReq);
       } else {
+        // mock local: gán state khởi tạo
+        newReq.state = 'PENDING_TEAM_LEAD';
+        newReq.leadDecision = 'PENDING'; newReq.dmDecision = 'PENDING';
+        newReq.qmStatus = 'HOLD'; newReq.qmSuccessCount = 0; newReq.qmRef = '';
+        newReq.dmTagCode = '-'; newReq.breach = '';
         requestsData.unshift(newReq);
         renderAll();
-        if (isAddTag) {
-          alert(`⚡ Đã gửi Yêu cầu ${newId} (Add Tag)! Chuyển trực tiếp tới Bước 3: QM Add Tags.`);
-          switchTab('tab-qm-queue');
-        } else {
-          alert(`✅ Đã gửi Yêu cầu ${newId} (Tạo tag mới)! Chuyển tới Bước 2: DM Review.`);
-          switchTab('tab-dm-review');
-        }
+        showToast(`Đã gửi ${newId}`, 'Request đang chờ Lead/Head duyệt (Gate 1).', 'ok');
+        switchTab('tab-lead-approval');
       }
       document.getElementById('tag-request-form').reset();
       selectRequestCategory('Tạo tag mới');
     }
 
+    // ===== GATE 1: LEAD APPROVAL TABLE =====
+    function renderLeadApprovalTable() {
+      const tbody = document.getElementById('lead-approval-tbody');
+      tbody.innerHTML = '';
+      const list = requestsData.filter(r => r.state === 'PENDING_TEAM_LEAD');
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty-hint">Không có request nào chờ Lead duyệt.</td></tr>`;
+        return;
+      }
+      list.forEach(r => {
+        const tr = document.createElement('tr');
+        const catBadge = r.requestCategory === 'Add tag' ? 'status-bypass' : 'status-approved';
+        const actionBtn = canApproveLead()
+          ? `<button class="btn btn-secondary" style="padding:4px 10px; font-size:12px;" onclick="openLeadModal('${r.id}')">👔 Duyệt</button>`
+          : `<span style="color:var(--text-muted); font-size:12px;">Chỉ Lead/DM</span>`;
+        tr.innerHTML = `
+          <td><strong>${r.id}</strong>${breachTag(r)}</td>
+          <td style="color:var(--text-secondary); font-size:12px;">${r.date}</td>
+          <td><span class="status-badge ${catBadge}">${r.requestCategory || 'Tạo tag mới'}</span></td>
+          <td><span class="code-tag">${r.team}</span></td>
+          <td>${r.name}</td>
+          <td><strong>${r.tagName}</strong></td>
+          <td style="font-size:12px; color:${r.breach ? '#F87171':'var(--text-secondary)'};">${r.deadlineLead || '-'}</td>
+          <td>${getStateBadge(r.state)}</td>
+          <td>${actionBtn}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ===== GATE 2: DM REVIEW TABLE =====
     function renderDMReviewTable() {
       const tbody = document.getElementById('dm-review-tbody');
       tbody.innerHTML = '';
-      const dmReviewList = requestsData.filter(r => r.requestCategory === 'Tạo tag mới' || r.dmDecision === 'PENDING');
-      
-      if (dmReviewList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--text-muted);">Không có yêu cầu Tạo Tag Mới nào cần DM review.</td></tr>`;
+      const list = requestsData.filter(r => r.state === 'PENDING_DM');
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="empty-hint">Không có request Tạo Tag Mới nào chờ DM review.</td></tr>`;
         return;
       }
-      dmReviewList.forEach(r => {
+      list.forEach(r => {
         const tr = document.createElement('tr');
+        const actionBtn = canReviewDM()
+          ? `<button class="btn btn-secondary" style="padding:4px 10px; font-size:12px;" onclick="openDMModal('${r.id}')">✏️ Thẩm Định</button>`
+          : `<span style="color:var(--text-muted); font-size:12px;">Chỉ DM</span>`;
         tr.innerHTML = `
-          <td><strong>${r.id}</strong></td>
+          <td><strong>${r.id}</strong>${breachTag(r)}</td>
           <td style="color:var(--text-secondary); font-size:12px;">${r.date}</td>
-          <td><span class="status-badge status-approved">${r.requestCategory || 'Tạo tag mới'}</span></td>
           <td><span class="code-tag">${r.team}</span></td>
+          <td style="font-size:12px; color:#C7D2FE;">✓ ${r.leadApprover || 'Lead'}</td>
           <td><strong>${r.tagName}</strong></td>
-          <td>${getStatusBadge(r.dmDecision)}</td>
-          <td><span class="code-tag">${r.dmTagCode}</span></td>
-          <td>
-            <button class="btn btn-secondary" style="padding:4px 10px; font-size:12px;" onclick="openDMModal('${r.id}')">✏️ Thẩm Định</button>
-          </td>
+          <td style="font-size:12px; color:${r.breach ? '#F87171':'var(--text-secondary)'};">${r.deadlineDM || '-'}</td>
+          <td>${getStateBadge(r.state)}</td>
+          <td>${actionBtn}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
+    // ===== GATE 3: QM QUEUE TABLE =====
     function renderQMQueueTable() {
       const tbody = document.getElementById('qm-queue-tbody');
       tbody.innerHTML = '';
-      const qmList = requestsData.filter(r => r.dmDecision === 'APPROVED' || r.dmDecision === 'AUTO_BYPASS');
-      if (qmList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:var(--text-muted);">Không có yêu cầu nào đang chờ QM add tag.</td></tr>`;
+      const list = requestsData.filter(r => r.state === 'PENDING_QM');
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" class="empty-hint">Không có request nào chờ QM add tag.</td></tr>`;
         return;
       }
-      qmList.forEach(r => {
-        const isBypass = (r.dmDecision === 'AUTO_BYPASS');
+      const editable = canUpdateQM();
+      list.forEach(r => {
+        const isBypass = (r.requestCategory === 'Add tag');
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${r.id}</strong></td>
-          <td><span class="status-badge ${isBypass ? 'status-bypass' : 'status-approved'}">${r.requestCategory || (isBypass ? 'Add tag' : 'Tạo tag mới')}</span></td>
-          <td>${r.team}</td>
-          <td><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span></td>
-          <td style="font-size:12px; color:#FBBF24; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${r.driverListSource}">${r.driverListSource}</td>
-          <td>${getQMStatusBadge(r.qmStatus)}</td>
-          <td style="text-align:right;">
-            <input type="number" value="${r.qmSuccessCount}" style="width:70px; padding:4px;" onchange="updateQMSuccessCount('${r.id}', this.value)">
-          </td>
-          <td>
-            <input type="text" value="${r.qmRef}" style="width:180px; padding:4px;" onchange="updateQMRef('${r.id}', this.value)">
-          </td>
-          <td>
-            <select style="padding:4px 8px; font-size:12px;" onchange="updateQMStatus('${r.id}', this.value)">
+        const controls = editable ? `
+          <td style="text-align:right;"><input type="number" value="${r.qmSuccessCount}" style="width:70px; padding:4px;" onchange="updateQMSuccessCount('${r.id}', this.value)"></td>
+          <td><input type="text" value="${r.qmRef}" style="width:180px; padding:4px;" onchange="updateQMRef('${r.id}', this.value)"></td>
+          <td><select style="padding:4px 8px; font-size:12px;" onchange="updateQMStatus('${r.id}', this.value)">
+              <option value="PENDING_QM" ${r.qmStatus === 'PENDING_QM' ? 'selected' : ''}>PENDING_QM</option>
               <option value="PROCESSING" ${r.qmStatus === 'PROCESSING' ? 'selected' : ''}>PROCESSING</option>
               <option value="TAGGED_SUCCESS" ${r.qmStatus === 'TAGGED_SUCCESS' ? 'selected' : ''}>TAGGED_SUCCESS</option>
               <option value="FAILED" ${r.qmStatus === 'FAILED' ? 'selected' : ''}>FAILED</option>
-            </select>
-          </td>
+            </select></td>`
+          : `<td style="text-align:right;">${r.qmSuccessCount}</td><td>${r.qmRef||'-'}</td><td><span style="color:var(--text-muted); font-size:12px;">Chỉ QM</span></td>`;
+        tr.innerHTML = `
+          <td><strong>${r.id}</strong>${breachTag(r)}</td>
+          <td><span class="status-badge ${isBypass ? 'status-bypass' : 'status-approved'}">${r.requestCategory || 'Tạo tag mới'}</span></td>
+          <td>${r.team}</td>
+          <td><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span></td>
+          <td style="font-size:12px; color:#FBBF24; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${r.driverListSource}">${r.driverListSource}</td>
+          <td style="font-size:12px; color:${r.breach ? '#F87171':'var(--text-secondary)'};">${r.deadlineQM || '-'}</td>
+          <td>${getQMStatusBadge(r.qmStatus)}</td>
+          ${controls}
         `;
         tbody.appendChild(tr);
       });
     }
 
+    // ===== MASTER TRACKER =====
     function renderMasterTable() {
       const tbody = document.getElementById('master-tbody');
       tbody.innerHTML = '';
+      if (requestsData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="11" class="empty-hint">Chưa có request nào.</td></tr>`;
+        return;
+      }
       requestsData.forEach(r => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${r.id}</strong></td>
+          <td><strong>${r.id}</strong>${breachTag(r)}</td>
           <td style="font-size:12px; color:var(--text-secondary);">${r.date}</td>
-          <td><span class="status-badge ${r.dmDecision === 'AUTO_BYPASS' ? 'status-bypass' : 'status-approved'}">${r.requestCategory || 'Tạo tag mới'}</span></td>
+          <td><span class="status-badge ${r.requestCategory === 'Add tag' ? 'status-bypass' : 'status-approved'}">${r.requestCategory || 'Tạo tag mới'}</span></td>
           <td>${r.team}</td>
           <td>${r.name}</td>
           <td><strong>${r.tagName}</strong></td>
-          <td style="font-size:11px; color:#FBBF24; max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${r.driverListSource}">${r.driverListSource}</td>
-          <td>${getStatusBadge(r.dmDecision)}</td>
+          <td>${getStateBadge(r.state)}</td>
+          <td>${getGateBadge(r.leadDecision)}</td>
+          <td>${getGateBadge(r.dmDecision)}</td>
           <td>${getQMStatusBadge(r.qmStatus)}</td>
           <td style="text-align:right;"><strong>${r.qmSuccessCount}</strong></td>
-          <td style="font-size:12px; color:var(--text-secondary);">${r.qmRef}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function getStatusBadge(status) {
-      if (status === 'APPROVED') return `<span class="status-badge status-approved">✓ APPROVED</span>`;
-      if (status === 'AUTO_BYPASS') return `<span class="status-badge status-bypass">⚡ AUTO BYPASS DM</span>`;
-      if (status === 'REJECTED') return `<span class="status-badge status-rejected">✕ REJECTED</span>`;
+    // ===== BADGES =====
+    function breachTag(r) {
+      return r.breach === 'QUÁ HẠN SLA' ? `<span class="breach-badge">⏰ QUÁ HẠN SLA</span>` : '';
+    }
+    function getStateBadge(state) {
+      switch (state) {
+        case 'PENDING_TEAM_LEAD': return `<span class="status-badge status-lead">👔 CHỜ LEAD</span>`;
+        case 'PENDING_DM':        return `<span class="status-badge status-pending">🛡️ CHỜ DM</span>`;
+        case 'PENDING_QM':        return `<span class="status-badge status-processing">⚙️ CHỜ QM</span>`;
+        case 'DONE':              return `<span class="status-badge status-done">✓ DONE</span>`;
+        case 'REJECTED':          return `<span class="status-badge status-rejected">✕ REJECTED</span>`;
+        default:                  return `<span class="status-badge status-pending">${state||'-'}</span>`;
+      }
+    }
+    function getGateBadge(dec) {
+      if (dec === 'APPROVED') return `<span class="status-badge status-approved">✓ APPROVED</span>`;
+      if (dec === 'REJECTED') return `<span class="status-badge status-rejected">✕ REJECTED</span>`;
+      if (dec === 'SKIPPED')  return `<span class="status-badge status-bypass">⚡ SKIPPED</span>`;
+      if (dec === 'NEED_MORE_INFO') return `<span class="status-badge status-pending">ℹ️ BỔ SUNG</span>`;
       return `<span class="status-badge status-pending">⏳ PENDING</span>`;
     }
-
     function getQMStatusBadge(status) {
       if (status === 'TAGGED_SUCCESS') return `<span class="status-badge status-approved">✓ TAGGED SUCCESS</span>`;
       if (status === 'PROCESSING') return `<span class="status-badge status-processing">⚙️ PROCESSING</span>`;
       if (status === 'FAILED') return `<span class="status-badge status-rejected">✕ FAILED</span>`;
+      if (status === 'HOLD') return `<span class="status-badge status-pending">⏸️ HOLD</span>`;
+      if (status === 'N/A') return `<span class="status-badge status-rejected">—</span>`;
       return `<span class="status-badge status-pending">⏳ PENDING QM</span>`;
     }
 
-    function openDMModal(id) {
+    // ===== MODAL: LEAD =====
+    function openLeadModal(id) {
+      if (!canApproveLead()) { showToast('Không đủ quyền', 'Chỉ Lead/Head hoặc DM mới duyệt được.', 'err'); return; }
       currentSelectedId = id;
       const r = requestsData.find(item => item.id === id);
       if (!r) return;
+      document.getElementById('lead-modal-req-id').innerText = r.id;
+      document.getElementById('lead-modal-details').innerHTML = `
+        <strong>Hình thức:</strong> ${r.requestCategory || 'Tạo tag mới'} | <strong>Team:</strong> ${r.team}<br>
+        <strong>Người yêu cầu:</strong> ${r.name} | <strong>Tag Đề Xuất:</strong> ${r.tagName}<br>
+        <strong>Thời gian:</strong> ${r.duration}<br>
+        <strong>Lý do:</strong> ${r.reason}<br>
+        <em style="color:#A5B4FC;">${r.requestCategory === 'Add tag' ? '⚡ Duyệt xong sẽ bỏ qua DM, chuyển thẳng QM.' : '👉 Duyệt xong sẽ chuyển sang DM Review.'}</em>
+      `;
+      document.getElementById('lead-modal-decision').value = 'APPROVED';
+      document.getElementById('lead-modal-note').value = '';
+      document.getElementById('lead-modal').classList.add('open');
+    }
 
+    function submitLeadApproval() {
+      const r = requestsData.find(item => item.id === currentSelectedId);
+      if (!r) return;
+      const decision = document.getElementById('lead-modal-decision').value;
+      const note = document.getElementById('lead-modal-note').value;
+      if (decision === 'REJECTED' && !note.trim()) { showToast('Thiếu lý do', 'Vui lòng nhập lý do từ chối.', 'warn'); return; }
+
+      if (!IS_LOCAL) {
+        google.script.run.withSuccessHandler((res) => {
+          if (res && res.status === 'error') { showToast('Không thể lưu', res.message, 'err'); return; }
+          showToast('Đã lưu quyết định Lead', decision === 'APPROVED' ? 'Request đã chuyển gate kế tiếp.' : 'Request bị từ chối, trả về requester.', decision === 'APPROVED' ? 'ok' : 'warn');
+          loadDataFromSheet();
+          closeModal('lead-modal');
+        }).saveLeadApproval(currentSelectedId, decision, note);
+      } else {
+        r.leadDecision = decision; r.leadApprover = CURRENT_EMAIL; r.leadNote = note;
+        if (decision === 'APPROVED') {
+          if (r.requestCategory === 'Add tag') { r.state = 'PENDING_QM'; r.dmDecision = 'SKIPPED'; r.qmStatus = 'PENDING_QM'; r.dmTagCode = r.tagName; }
+          else { r.state = 'PENDING_DM'; }
+        } else { r.state = 'REJECTED'; r.qmStatus = 'N/A'; }
+        r.breach = '';
+        renderAll(); closeModal('lead-modal');
+        showToast('Đã lưu (local)', 'Cập nhật trạng thái Lead.', 'ok');
+      }
+    }
+
+    // ===== MODAL: DM =====
+    function openDMModal(id) {
+      if (!canReviewDM()) { showToast('Không đủ quyền', 'Chỉ DM Lead mới review được.', 'err'); return; }
+      currentSelectedId = id;
+      const r = requestsData.find(item => item.id === id);
+      if (!r) return;
       document.getElementById('modal-req-id').innerText = r.id;
       document.getElementById('modal-details').innerHTML = `
         <strong>Hình thức:</strong> ${r.requestCategory || 'Tạo tag mới'} | <strong>Team:</strong> ${r.team}<br>
         <strong>Người yêu cầu:</strong> ${r.name} | <strong>Tag Đề Xuất:</strong> ${r.tagName}<br>
+        <strong>Đã qua Lead duyệt bởi:</strong> <span style="color:#C7D2FE;">${r.leadApprover || '-'}</span><br>
         <strong>Thời gian:</strong> ${r.duration}<br>
         <strong>Lý do:</strong> ${r.reason}
       `;
-      document.getElementById('modal-dm-decision').value = r.dmDecision === 'PENDING' ? 'APPROVED' : r.dmDecision;
-      document.getElementById('modal-dm-tag-code').value = r.dmTagCode !== '-' ? r.dmTagCode : `DM_${r.tagName.toUpperCase()}`;
-      document.getElementById('modal-dm-note').value = r.dmNote;
+      document.getElementById('modal-dm-decision').value = 'APPROVED';
+      document.getElementById('modal-dm-tag-code').value = (r.dmTagCode && r.dmTagCode !== '-') ? r.dmTagCode : `DM_${(r.tagName||'').toUpperCase()}`;
+      document.getElementById('modal-dm-note').value = '';
       toggleTagCodeInput();
       document.getElementById('dm-modal').classList.add('open');
     }
-
-    function closeModal(modalId) { document.getElementById(modalId).classList.remove('open'); }
 
     function toggleTagCodeInput() {
       const dec = document.getElementById('modal-dm-decision').value;
       document.getElementById('group-tag-code').style.display = (dec === 'APPROVED') ? 'flex' : 'none';
     }
 
-    function saveDMReview() {
+    function submitDMReview() {
       const r = requestsData.find(item => item.id === currentSelectedId);
       if (!r) return;
-
       const decision = document.getElementById('modal-dm-decision').value;
       const note = document.getElementById('modal-dm-note').value;
       const tagCode = (decision === 'APPROVED') ? (document.getElementById('modal-dm-tag-code').value || `DM_TAG_APPROVED`) : 'N/A';
 
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run.withSuccessHandler(() => {
+      if (!IS_LOCAL) {
+        google.script.run.withSuccessHandler((res) => {
+          if (res && res.status === 'error') { showToast('Không thể lưu', res.message, 'err'); return; }
+          showToast('Đã lưu DM Review', decision === 'APPROVED' ? 'Request chuyển sang QM Add Tags.' : 'Request bị từ chối.', decision === 'APPROVED' ? 'ok' : 'warn');
           loadDataFromSheet();
           closeModal('dm-modal');
         }).saveDMReview(currentSelectedId, decision, note, tagCode);
       } else {
         r.dmDecision = decision; r.dmNote = note; r.dmTagCode = tagCode;
+        if (decision === 'APPROVED') { r.state = 'PENDING_QM'; r.qmStatus = 'PENDING_QM'; }
+        else if (decision === 'REJECTED') { r.state = 'REJECTED'; r.qmStatus = 'N/A'; }
+        r.breach = '';
         renderAll(); closeModal('dm-modal');
+        showToast('Đã lưu (local)', 'Cập nhật DM Review.', 'ok');
       }
     }
 
+    // ===== QM UPDATES =====
     function updateQMStatus(id, newStatus) {
       const r = requestsData.find(item => item.id === id);
       if (!r) return;
-      const successCount = newStatus === 'TAGGED_SUCCESS' ? r.qmSuccessCount : r.qmSuccessCount;
-      const ref = r.qmRef || 'QM Updated';
-
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run.withSuccessHandler(() => loadDataFromSheet()).saveQMStatus(id, newStatus, successCount, ref);
+      if (!IS_LOCAL) {
+        google.script.run.withSuccessHandler((res) => {
+          if (res && res.status === 'error') { showToast('Không thể lưu', res.message, 'err'); return; }
+          if (newStatus === 'TAGGED_SUCCESS') showToast('Hoàn thành', `${id} đã add tag thành công (DONE).`, 'ok');
+          loadDataFromSheet();
+        }).saveQMStatus(id, newStatus, r.qmSuccessCount, r.qmRef || 'QM Updated');
       } else {
-        r.qmStatus = newStatus; r.qmSuccessCount = successCount; renderAll();
+        r.qmStatus = newStatus; if (newStatus === 'TAGGED_SUCCESS') r.state = 'DONE'; renderAll();
       }
     }
-
     function updateQMSuccessCount(id, val) {
       const r = requestsData.find(item => item.id === id);
       if (!r) return;
       const count = parseInt(val) || 0;
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
+      if (!IS_LOCAL) {
         google.script.run.withSuccessHandler(() => loadDataFromSheet()).saveQMStatus(id, r.qmStatus, count, r.qmRef);
-      } else {
-        r.qmSuccessCount = count; renderAll();
-      }
+      } else { r.qmSuccessCount = count; renderAll(); }
     }
-
     function updateQMRef(id, val) {
       const r = requestsData.find(item => item.id === id);
       if (!r) return;
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
+      if (!IS_LOCAL) {
         google.script.run.withSuccessHandler(() => loadDataFromSheet()).saveQMStatus(id, r.qmStatus, r.qmSuccessCount, val);
-      } else {
-        r.qmRef = val; renderAll();
-      }
+      } else { r.qmRef = val; renderAll(); }
     }
+
+    function closeModal(modalId) { document.getElementById(modalId).classList.remove('open'); }
   </script>
 </body>
 </html>

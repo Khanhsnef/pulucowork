@@ -2,7 +2,7 @@
 
 **Owner:** Lê Phương Khanh | Driver Management Leader  
 **Scope:** Xe máy (Instant) — Giao ngay 1H, Siêu tốc, Ghép đơn, 4H  
-**Last updated:** 2026-06-22
+**Last updated:** 2026-07-29
 
 ---
 
@@ -157,6 +157,16 @@ Output/Ahamove/
 | `weekly-ops-dashboard.xlsx` | Dashboard vận hành tuần (master) |
 | `copyweekly-ops-dashboard.xlsx` | Copy backup dashboard |
 | `daily-ops-report-template.xlsx` | Template báo cáo ops hàng ngày |
+
+#### 🏷️ Tag Request Portal — Web App (3-Gate Approval + RBAC + SLA)
+| File | Mô tả |
+|------|-------|
+| `Code.gs` | Backend Google Apps Script: state machine 3-gate (Lead → DM → QM), RBAC hardcode theo email (`ROLE_MAP`), SLA + `checkSLABreaches()` gửi email escalate. Target Sheet `1tsoIA...6xrE4` |
+| `Index.html` | Web App UI: stepper 4 bước, 5 tab (Request/Lead/DM/QM/Master), popup trạng thái mỗi gate, ẩn/hiện tab theo role, badge quá hạn SLA, Live UI Editor |
+| `UI_CONFIG.md` | File cấu hình text/nội dung UI + tài liệu state machine, ma trận RBAC, SLA keys (sửa rồi bảo AI đồng bộ vào code) |
+| `2026-07-dm-qm-tag-request-manager.html` | Bản manager standalone (2-gate DM→QM, tiền thân) |
+| `2026-07-DM-QM-Tag-Management-System.xlsx` | Excel export cấu trúc sheet tag management |
+| `export_0*_*.csv` | Snapshot CSV các sheet: requests, DM review, QM handover, tag dictionary |
 
 #### `dashboards/`
 | File | Mô tả |
