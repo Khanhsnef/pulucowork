@@ -162,10 +162,10 @@ Output/Ahamove/
 | File | Mô tả |
 |------|-------|
 | `Code.gs` | Backend Google Apps Script: state machine 3-gate (Lead → DM → QM), RBAC hardcode theo email (`ROLE_MAP`), SLA + `checkSLABreaches()` gửi email escalate. Target Sheet `1tsoIA...6xrE4` |
-| `Index.html` | Web App UI: stepper 4 bước, 5 tab (Request/Lead/DM/QM/Master), popup trạng thái mỗi gate, ẩn/hiện tab theo role, badge quá hạn SLA, Live UI Editor |
+| `Index.html` | Web App UI **v2.1 (approve inline)**: 2 tab (Tạo Request / Master), gửi xong nhảy thẳng Master; mỗi dòng Master hiện nút phê duyệt theo state+role (Lead ✓ Duyệt inline · DM popup gán mã tag · QM inline status+Lưu), Từ chối mở popup lý do; filter chip "Cần tôi xử lý", badge quá hạn SLA, Live UI Editor (DM) |
 | `UI_CONFIG.md` | File cấu hình text/nội dung UI + tài liệu state machine, ma trận RBAC, SLA keys (sửa rồi bảo AI đồng bộ vào code) |
 | `DEPLOY_GUIDE.md` | **SOP triển khai**: deploy Web App (Execute as Me + Anyone within org), khởi tạo/migrate sheet, gắn trigger `checkSLABreaches`, checklist test 12 bước, xử lý sự cố |
-| `2026-07-dm-qm-tag-request-manager.html` | **Bản DEMO offline** luồng 3-gate — mock data + công tắc đổi role để preview UI từng vai trò (không ghi Sheet, không RBAC thật) |
+| `2026-07-dm-qm-tag-request-manager.html` | **Bản DEMO offline** luồng 3-gate **approve inline** (2 tab, duyệt ngay trên dòng Master) — mock data + công tắc đổi role để preview UI từng vai trò (không ghi Sheet, không RBAC thật) |
 | `2026-07-DM-QM-Tag-Management-System.xlsx` | Excel export cấu trúc sheet tag management |
 | `export_0*_*.csv` | Snapshot CSV các sheet: requests, DM review, QM handover, tag dictionary |
 

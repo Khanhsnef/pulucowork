@@ -3,35 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tag Request Portal | DEMO 3-Gate (Offline Preview)</title>
+  <title>Tag Request Portal | DEMO Inline (Offline Preview)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-primary: #0F172A;
-      --bg-secondary: #1E293B;
-      --bg-card: rgba(30, 41, 59, 0.7);
-      --border-color: rgba(255, 255, 255, 0.1);
-      --text-primary: #F8FAFC;
-      --text-secondary: #94A3B8;
-      --text-muted: #64748B;
-      --accent-teal: #0D9488;
-      --accent-teal-light: #14B8A6;
-      --accent-indigo: #4F46E5;
-      --accent-indigo-light: #6366F1;
-      --accent-amber: #D97706;
-      --accent-emerald: #059669;
-      --accent-rose: #E11D48;
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
+      --bg-primary: #0F172A; --bg-secondary: #1E293B; --bg-card: rgba(30, 41, 59, 0.7);
+      --border-color: rgba(255, 255, 255, 0.1); --text-primary: #F8FAFC; --text-secondary: #94A3B8; --text-muted: #64748B;
+      --accent-teal: #0D9488; --accent-teal-light: #14B8A6; --accent-indigo: #4F46E5; --accent-indigo-light: #6366F1;
+      --accent-amber: #D97706; --accent-emerald: #059669; --accent-rose: #E11D48;
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
       --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
       --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.5; min-height: 100vh; padding-bottom: 60px; }
-    .app-container { max-width: 1440px; margin: 0 auto; padding: 24px; }
+    .app-container { max-width: 1500px; margin: 0 auto; padding: 24px; }
 
     .demo-banner { background: linear-gradient(135deg, rgba(217,119,6,0.25), rgba(225,29,72,0.2)); border: 1px dashed rgba(251,191,36,0.5); border-radius: var(--radius-md); padding: 12px 18px; margin-bottom: 16px; font-size: 13px; color: #FCD34D; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
     .demo-banner b { color: #FFF; }
@@ -46,7 +34,6 @@
     .role-switch { display:flex; align-items:center; gap:10px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 30px; padding: 6px 8px 6px 16px; }
     .role-switch label { font-size:12px; color: var(--text-secondary); }
     .role-switch select { background: rgba(15,23,42,0.8); border:1px solid var(--border-color); border-radius: 20px; color:#FFF; padding: 6px 12px; font-family:inherit; font-size:13px; font-weight:700; }
-
     .user-chip { display: flex; align-items: center; gap: 10px; }
     .role-pill { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; padding: 3px 10px; border-radius: 10px; display:inline-block; }
     .role-DM { background: rgba(13, 148, 136, 0.25); color: #5EEAD4; }
@@ -54,7 +41,7 @@
     .role-QM { background: rgba(217, 119, 6, 0.25); color: #FCD34D; }
     .role-REQUESTER { background: rgba(148, 163, 184, 0.2); color: #CBD5E1; }
 
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .kpi-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px 20px; backdrop-filter: blur(8px); position: relative; overflow: hidden; }
     .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-teal); }
     .kpi-card.pending-lead::before { background: var(--accent-indigo-light); }
@@ -86,15 +73,18 @@
     .tab-btn.active::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 100%; height: 3px; background: var(--accent-teal-light); }
     .badge-count { background: rgba(255, 255, 255, 0.15); color: #FFF; font-size: 11px; padding: 2px 7px; border-radius: 10px; font-weight: 700; }
     .tab-btn.active .badge-count { background: var(--accent-teal); }
-    .rbac-hidden { display: none !important; }
 
     .tab-panel { display: none; animation: fadeIn 0.3s ease; }
     .tab-panel.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
     .panel-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-lg); backdrop-filter: blur(12px); margin-bottom: 24px; }
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border-color); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border-color); gap: 12px; flex-wrap: wrap; }
     .card-header h2 { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+
+    .filter-chips { display:flex; gap:6px; flex-wrap:wrap; }
+    .chip { background: rgba(15,23,42,0.6); border:1px solid var(--border-color); color:var(--text-secondary); font-size:12px; font-weight:600; padding:5px 12px; border-radius:20px; cursor:pointer; }
+    .chip.active { background: rgba(13,148,136,0.2); border-color: var(--accent-teal-light); color:#5EEAD4; }
 
     .category-toggle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 8px; }
     .category-option { position: relative; background: rgba(15, 23, 42, 0.4); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: var(--transition); user-select: none; opacity: 0.65; }
@@ -118,11 +108,13 @@
     .btn { background: linear-gradient(135deg, var(--accent-teal), #0F766E); color: #FFF; border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; font-family: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
     .btn-secondary { background: rgba(255, 255, 255, 0.1); }
     .btn-success { background: linear-gradient(135deg, var(--accent-emerald), #047857); }
+    .btn-danger { background: linear-gradient(135deg, var(--accent-rose), #9F1239); }
+    .btn-xs { padding: 5px 11px; font-size: 12px; }
 
     .table-responsive { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
     th { background: rgba(15, 23, 42, 0.8); color: var(--text-secondary); padding: 12px 14px; font-weight: 700; text-transform: uppercase; font-size: 11px; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
-    td { padding: 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); vertical-align: middle; }
+    td { padding: 12px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); vertical-align: middle; }
     tr:hover td { background: rgba(255, 255, 255, 0.03); }
 
     .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
@@ -138,10 +130,15 @@
     .code-tag { font-family: 'JetBrains Mono', monospace; background: rgba(0, 0, 0, 0.4); padding: 3px 8px; border-radius: 4px; color: #38BDF8; font-size: 12px; border: 1px solid rgba(56, 189, 248, 0.2); }
     .workflow-notice { background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: #7DD3FC; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
     .empty-hint { text-align:center; color:var(--text-muted); padding: 20px; }
+    .act-wrap { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+    .muted-note { color:var(--text-muted); font-size:12px; }
+    .qm-inline { display:flex; gap:6px; align-items:center; }
+    .qm-inline input { padding:5px 8px; }
+    .qm-inline select { padding:5px 8px; font-size:12px; }
 
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 999; opacity: 0; pointer-events: none; transition: var(--transition); }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
-    .modal-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 90%; max-width: 650px; padding: 24px; box-shadow: var(--shadow-lg); }
+    .modal-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 90%; max-width: 640px; padding: 24px; box-shadow: var(--shadow-lg); }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); }
 
     #toast-wrap { position: fixed; top: 20px; right: 20px; z-index: 1200; display:flex; flex-direction:column; gap:10px; }
@@ -162,7 +159,7 @@
   <div class="app-container">
 
     <div class="demo-banner">
-      🧪 <b>BẢN DEMO OFFLINE</b> — Preview luồng 3-Gate với dữ liệu mẫu. RBAC thật + ghi Sheet chỉ chạy trên bản Web App (Apps Script). Dùng công tắc <b>Xem với vai trò</b> để thử giao diện từng role.
+      🧪 <b>BẢN DEMO OFFLINE</b> — Luồng gọn: gửi request xong nhảy thẳng <b>Master</b>, Lead/DM/QM <b>duyệt inline ngay trên dòng</b>. RBAC thật + ghi Sheet chạy trên bản Web App. Dùng công tắc <b>Xem với vai trò</b> để thử.
     </div>
 
     <header>
@@ -210,11 +207,8 @@
     </div>
 
     <div class="tabs-nav">
-      <button class="tab-btn active" data-tab="tab-request" onclick="switchTab('tab-request')">📝 Bước 1: Request</button>
-      <button class="tab-btn" data-tab="tab-lead-approval" onclick="switchTab('tab-lead-approval')">👔 Bước 2: Lead Approval <span class="badge-count" id="badge-lead-count">0</span></button>
-      <button class="tab-btn" data-tab="tab-dm-review" onclick="switchTab('tab-dm-review')">🛡️ Bước 3: DM Review <span class="badge-count" id="badge-dm-count">0</span></button>
-      <button class="tab-btn" data-tab="tab-qm-queue" onclick="switchTab('tab-qm-queue')">⚙️ Bước 4: QM Add Tags <span class="badge-count" id="badge-qm-count">0</span></button>
-      <button class="tab-btn" data-tab="tab-master" onclick="switchTab('tab-master')">📊 Master Request Tracker</button>
+      <button class="tab-btn active" data-tab="tab-request" onclick="switchTab('tab-request')">📝 Tạo Request</button>
+      <button class="tab-btn" data-tab="tab-master" onclick="switchTab('tab-master')">📊 Master Request Tracker <span class="badge-count" id="badge-open-count">0</span></button>
     </div>
 
     <!-- TAB 1: REQUEST -->
@@ -240,7 +234,7 @@
           </div>
 
           <div class="workflow-notice full-width" id="workflow-notice-bar">
-            <span>👔 <strong>Luồng Tạo Tag Mới:</strong> Yêu cầu gửi tới <strong>Bước 2: Lead Approval</strong>, sau đó qua <strong>DM Review</strong> rồi tới <strong>QM</strong>.</span>
+            <span>👔 <strong>Luồng Tạo Tag Mới:</strong> Gửi xong request về <strong>Master</strong> ở trạng thái Chờ Lead duyệt → DM Review → QM.</span>
           </div>
 
           <div class="form-grid">
@@ -289,45 +283,26 @@
       </div>
     </div>
 
-    <!-- TAB 2: LEAD APPROVAL -->
-    <div id="tab-lead-approval" class="tab-panel">
-      <div class="panel-card">
-        <div class="card-header"><h2>👔 Bàn Duyệt Của Lead / Head Team (Gate 1)</h2></div>
-        <div class="table-responsive"><table>
-          <thead><tr><th>Mã Request</th><th>Ngày Tạo</th><th>Hình Thức</th><th>Team</th><th>Người Tạo</th><th>Tên Tag</th><th>Deadline Lead</th><th>Trạng Thái</th><th>Hành Động</th></tr></thead>
-          <tbody id="lead-approval-tbody"></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- TAB 3: DM REVIEW -->
-    <div id="tab-dm-review" class="tab-panel">
-      <div class="panel-card">
-        <div class="card-header"><h2>🛡️ Bàn Tròn Thẩm Định Của DM Lead (Gate 2)</h2></div>
-        <div class="table-responsive"><table>
-          <thead><tr><th>Mã Request</th><th>Ngày Tạo</th><th>Team</th><th>Đã Qua Lead</th><th>Tên Tag Yêu Cầu</th><th>Deadline DM</th><th>Trạng Thái</th><th>Hành Động</th></tr></thead>
-          <tbody id="dm-review-tbody"></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- TAB 4: QM ADD TAGS -->
-    <div id="tab-qm-queue" class="tab-panel">
-      <div class="panel-card">
-        <div class="card-header"><h2>⚙️ Hàng Đợi QM Tiếp Nhận & Add Tag (Gate 3)</h2></div>
-        <div class="table-responsive"><table>
-          <thead><tr><th>Mã Request</th><th>Hình Thức</th><th>Team</th><th>Mã Tag Chuẩn</th><th>Nguồn Danh Sách TX</th><th>Deadline QM</th><th>Trạng Thái QM</th><th>Số TX Thành Công</th><th>QM Ref / Batch</th><th>Cập Nhật QM</th></tr></thead>
-          <tbody id="qm-queue-tbody"></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- TAB 5: MASTER TRACKER -->
+    <!-- TAB 2: MASTER (hàng đợi thống nhất + approve inline) -->
     <div id="tab-master" class="tab-panel">
       <div class="panel-card">
-        <div class="card-header"><h2>📊 Master Request Tracker</h2></div>
+        <div class="card-header">
+          <h2>📊 Master Request Tracker <span class="muted-note" style="font-weight:400;">— duyệt ngay trên dòng theo lượt của bạn</span></h2>
+          <div class="filter-chips" id="filter-chips">
+            <span class="chip active" data-filter="ALL" onclick="setFilter('ALL')">Tất cả</span>
+            <span class="chip" data-filter="MINE" onclick="setFilter('MINE')">⚡ Cần tôi xử lý</span>
+            <span class="chip" data-filter="PENDING_TEAM_LEAD" onclick="setFilter('PENDING_TEAM_LEAD')">Chờ Lead</span>
+            <span class="chip" data-filter="PENDING_DM" onclick="setFilter('PENDING_DM')">Chờ DM</span>
+            <span class="chip" data-filter="PENDING_QM" onclick="setFilter('PENDING_QM')">Chờ QM</span>
+            <span class="chip" data-filter="DONE" onclick="setFilter('DONE')">Done</span>
+            <span class="chip" data-filter="REJECTED" onclick="setFilter('REJECTED')">Rejected</span>
+          </div>
+        </div>
         <div class="table-responsive"><table>
-          <thead><tr><th>Mã Request</th><th>Ngày Tạo</th><th>Hình Thức</th><th>Team</th><th>Người Tạo</th><th>Tên Tag</th><th>Trạng Thái Tổng</th><th>Lead</th><th>DM</th><th>QM</th><th>TX Thắng</th></tr></thead>
+          <thead><tr>
+            <th>Mã Request</th><th>Ngày</th><th>Hình Thức</th><th>Team</th><th>Người Tạo</th><th>Tag</th>
+            <th>Trạng Thái Tổng</th><th>Lead</th><th>DM</th><th>QM</th><th>TX</th><th style="min-width:220px;">Hành Động (Theo Lượt)</th>
+          </tr></thead>
           <tbody id="master-tbody"></tbody>
         </table></div>
       </div>
@@ -335,75 +310,48 @@
 
   </div>
 
-  <!-- MODAL LEAD -->
-  <div class="modal-overlay" id="lead-modal">
+  <!-- MODAL: DM APPROVE (nhập tag code chuẩn) -->
+  <div class="modal-overlay" id="dm-modal">
     <div class="modal-card">
-      <div class="modal-header"><h3>👔 Duyệt Cấp Lead: <span id="lead-modal-req-id"></span></h3><button class="btn btn-secondary" onclick="closeModal('lead-modal')">✖</button></div>
+      <div class="modal-header"><h3>🛡️ DM Duyệt & Gán Mã Tag: <span id="modal-req-id"></span></h3><button class="btn btn-secondary" onclick="closeModal('dm-modal')">✖</button></div>
       <div class="form-grid">
-        <div class="form-group full-width"><label>Chi Tiết Request</label><div id="lead-modal-details" style="font-size:13px; background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; color:#CBD5E1;"></div></div>
-        <div class="form-group"><label>Quyết Định *</label><select id="lead-modal-decision"><option value="APPROVED">APPROVED (Duyệt — chuyển tiếp)</option><option value="REJECTED">REJECTED (Từ chối — trả requester)</option></select></div>
-        <div class="form-group full-width"><label>Lý Do / Ghi Chú (bắt buộc khi từ chối)</label><textarea id="lead-modal-note" rows="3" placeholder="Nêu căn cứ duyệt / lý do từ chối..."></textarea></div>
+        <div class="form-group full-width"><label>Chi Tiết Request</label><div id="modal-details" style="font-size:13px; background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; color:#CBD5E1;"></div></div>
+        <div class="form-group full-width"><label>Gán Mã Tag Chuẩn (taxonomy QM sẽ dùng) *</label><input type="text" id="modal-dm-tag-code" placeholder="VD: DM_TAG_HUB_LH_VIP_V1"></div>
+        <div class="form-group full-width"><label>Ghi Chú Thẩm Định (tùy chọn)</label><textarea id="modal-dm-note" rows="2" placeholder="Căn cứ phê duyệt..."></textarea></div>
       </div>
-      <div style="margin-top: 18px; display:flex; justify-content:flex-end; gap:10px;"><button class="btn btn-secondary" onclick="closeModal('lead-modal')">Hủy</button><button class="btn btn-success" onclick="submitLeadApproval()">💾 Lưu Quyết Định Lead</button></div>
+      <div style="margin-top: 18px; display:flex; justify-content:flex-end; gap:10px;"><button class="btn btn-secondary" onclick="closeModal('dm-modal')">Hủy</button><button class="btn btn-success" onclick="submitDMApprove()">✓ Duyệt & Chuyển QM</button></div>
     </div>
   </div>
 
-  <!-- MODAL DM -->
-  <div class="modal-overlay" id="dm-modal">
+  <!-- MODAL: REJECT (dùng chung Lead & DM) -->
+  <div class="modal-overlay" id="reject-modal">
     <div class="modal-card">
-      <div class="modal-header"><h3>🛡️ Thẩm Định Request: <span id="modal-req-id"></span></h3><button class="btn btn-secondary" onclick="closeModal('dm-modal')">✖</button></div>
+      <div class="modal-header"><h3>✕ Từ Chối Request: <span id="reject-req-id"></span></h3><button class="btn btn-secondary" onclick="closeModal('reject-modal')">✖</button></div>
       <div class="form-grid">
-        <div class="form-group full-width"><label>Chi Tiết Request</label><div id="modal-details" style="font-size:13px; background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; color:#CBD5E1;"></div></div>
-        <div class="form-group"><label>Quyết Định Phê Duyệt *</label><select id="modal-dm-decision" onchange="toggleTagCodeInput()"><option value="APPROVED">APPROVED (Phê Duyệt)</option><option value="REJECTED">REJECTED (Từ Chối)</option><option value="NEED_MORE_INFO">NEED_MORE_INFO (Yêu Cầu Bổ Sung)</option></select></div>
-        <div class="form-group" id="group-tag-code"><label>Gán Mã Tag Chuẩn *</label><input type="text" id="modal-dm-tag-code" placeholder="VD: DM_TAG_HUB_LH_VIP_V1"></div>
-        <div class="form-group full-width"><label>Lý Do / Ghi Chú</label><textarea id="modal-dm-note" rows="3" placeholder="Nhập căn cứ thẩm định..."></textarea></div>
+        <div class="form-group full-width"><label>Lý Do Từ Chối * <span class="muted-note">(requester sẽ thấy để sửa & gửi lại)</span></label><textarea id="reject-note" rows="3" placeholder="Nêu rõ lý do..."></textarea></div>
       </div>
-      <div style="margin-top: 18px; display:flex; justify-content:flex-end; gap:10px;"><button class="btn btn-secondary" onclick="closeModal('dm-modal')">Hủy</button><button class="btn btn-success" onclick="submitDMReview()">💾 Lưu Quyết Định DM</button></div>
+      <div style="margin-top: 18px; display:flex; justify-content:flex-end; gap:10px;"><button class="btn btn-secondary" onclick="closeModal('reject-modal')">Hủy</button><button class="btn btn-danger" onclick="submitReject()">✕ Xác Nhận Từ Chối</button></div>
     </div>
   </div>
 
   <script>
-    // ===== DEMO STANDALONE: luôn chạy offline, mock data, có role switcher =====
+    // ===== DEMO STANDALONE: offline, mock data, role switcher, approve inline =====
     var CURRENT_ROLE = 'DM';
     var CURRENT_EMAIL = 'demo@ahamove.com';
-    // Mọi role XEM được hết tab (minh bạch luồng); chỉ HÀNH ĐỘNG bị giới hạn theo role.
-    var ALL_ROLES = ['REQUESTER','TEAM_LEAD','DM','QM'];
-    var TAB_ACCESS = {
-      'tab-request':       ALL_ROLES,
-      'tab-lead-approval': ALL_ROLES,
-      'tab-dm-review':     ALL_ROLES,
-      'tab-qm-queue':      ALL_ROLES,
-      'tab-master':        ALL_ROLES
-    };
     let requestsData = [];
-    let currentSelectedId = null;
+    let currentFilter = 'ALL';
+    let rejectCtx = { id: null, gate: null };
+    let dmCtx = { id: null };
 
     document.addEventListener("DOMContentLoaded", () => {
       requestsData = mockData();
-      applyRBAC();
+      updateRolePill();
       renderAll();
       selectRequestCategory('Tạo tag mới');
     });
 
-    function changeRole(role) {
-      CURRENT_ROLE = role;
-      const pill = document.getElementById('user-role-pill');
-      pill.innerText = role; pill.className = 'role-pill role-' + role;
-      applyRBAC();
-      // về tab đầu tiên được phép
-      const firstVisible = document.querySelector('.tab-btn:not(.rbac-hidden)');
-      if (firstVisible) firstVisible.click();
-      showToast('Đã đổi vai trò xem', 'Giao diện đang hiển thị theo quyền: ' + role, 'ok');
-    }
-
-    function applyRBAC() {
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        const tabId = btn.getAttribute('data-tab');
-        const allowed = TAB_ACCESS[tabId] || [];
-        if (allowed.indexOf(CURRENT_ROLE) === -1) btn.classList.add('rbac-hidden');
-        else btn.classList.remove('rbac-hidden');
-      });
-    }
+    function changeRole(role) { CURRENT_ROLE = role; updateRolePill(); renderAll(); showToast('Đã đổi vai trò xem', 'Hiển thị hành động theo quyền: ' + role, 'ok'); }
+    function updateRolePill() { const p = document.getElementById('user-role-pill'); p.innerText = CURRENT_ROLE; p.className = 'role-pill role-' + CURRENT_ROLE; }
     function canApproveLead() { return CURRENT_ROLE === 'TEAM_LEAD' || CURRENT_ROLE === 'DM'; }
     function canReviewDM()    { return CURRENT_ROLE === 'DM'; }
     function canUpdateQM()    { return CURRENT_ROLE === 'QM' || CURRENT_ROLE === 'DM'; }
@@ -427,7 +375,7 @@
       ];
     }
 
-    function renderAll() { updateKPIs(); renderLeadApprovalTable(); renderDMReviewTable(); renderQMQueueTable(); renderMasterTable(); }
+    function renderAll() { updateKPIs(); renderMasterTable(); }
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -438,20 +386,32 @@
     }
 
     function updateKPIs() {
-      document.getElementById('kpi-total').innerText = requestsData.length;
       const pLead = requestsData.filter(r => r.state === 'PENDING_TEAM_LEAD').length;
       const pDM = requestsData.filter(r => r.state === 'PENDING_DM').length;
       const pQM = requestsData.filter(r => r.state === 'PENDING_QM').length;
       const done = requestsData.filter(r => r.state === 'DONE').length;
+      document.getElementById('kpi-total').innerText = requestsData.length;
       document.getElementById('kpi-pending-lead').innerText = pLead;
       document.getElementById('kpi-pending-dm').innerText = pDM;
       document.getElementById('kpi-pending-qm').innerText = pQM;
       document.getElementById('kpi-done').innerText = done;
-      document.getElementById('badge-lead-count').innerText = pLead;
-      document.getElementById('badge-dm-count').innerText = pDM;
-      document.getElementById('badge-qm-count').innerText = pQM;
+      document.getElementById('badge-open-count').innerText = countMine();
+    }
+    function isMine(r) {
+      if (r.state === 'PENDING_TEAM_LEAD') return canApproveLead();
+      if (r.state === 'PENDING_DM') return canReviewDM();
+      if (r.state === 'PENDING_QM') return canUpdateQM();
+      return false;
+    }
+    function countMine() { return requestsData.filter(isMine).length; }
+
+    function setFilter(f) {
+      currentFilter = f;
+      document.querySelectorAll('#filter-chips .chip').forEach(c => c.classList.toggle('active', c.getAttribute('data-filter') === f));
+      renderMasterTable();
     }
 
+    // ===== Category toggle =====
     function selectRequestCategory(cat) {
       document.getElementById('req-category').value = cat;
       const btnCreate = document.getElementById('btn-cat-create');
@@ -476,7 +436,7 @@
         document.getElementById('lbl-tag-name').innerText = 'Mã / Tên Tag Cần Add *';
         document.getElementById('req-driver-source-val').required = true; updateDriverSourcePlaceholder();
       } else {
-        noticeBar.innerHTML = `<span>👔 <strong>Luồng Tạo Tag Mới:</strong> Yêu cầu gửi tới <strong>Bước 2: Lead Approval</strong>, sau đó qua <strong>DM Review</strong> rồi tới <strong>QM</strong>.</span>`;
+        noticeBar.innerHTML = `<span>👔 <strong>Luồng Tạo Tag Mới:</strong> Gửi xong request về <strong>Master</strong> ở trạng thái Chờ Lead duyệt → DM Review → QM.</span>`;
         noticeBar.style.background = `rgba(14, 165, 233, 0.1)`; noticeBar.style.borderColor = `rgba(56, 189, 248, 0.3)`; noticeBar.style.color = `#7DD3FC`;
         grpSourceType.style.display = 'none'; grpSourceUrl.style.display = 'none';
         document.getElementById('lbl-tag-name').innerText = 'Tên Tag Gợi Ý / Mục Tiêu *';
@@ -510,12 +470,13 @@
       };
       requestsData.unshift(newReq);
       renderAll();
-      showToast(`Đã gửi ${newId}`, 'Request đang chờ Lead/Head duyệt (Gate 1). [DEMO]', 'ok');
       document.getElementById('tag-request-form').reset();
       selectRequestCategory('Tạo tag mới');
-      if (canApproveLead()) switchTab('tab-lead-approval'); else switchTab('tab-master');
+      switchTab('tab-master');
+      showToast(`Đã gửi ${newId}`, 'Request về Master, đang chờ Lead/Head duyệt. [DEMO]', 'ok');
     }
 
+    // ===== Badges =====
     function breachTag(r) { return r.breach === 'QUÁ HẠN SLA' ? `<span class="breach-badge">⏰ QUÁ HẠN SLA</span>` : ''; }
     function getStateBadge(state) {
       switch (state) {
@@ -528,134 +489,136 @@
       }
     }
     function getGateBadge(dec) {
-      if (dec === 'APPROVED') return `<span class="status-badge status-approved">✓ APPROVED</span>`;
-      if (dec === 'REJECTED') return `<span class="status-badge status-rejected">✕ REJECTED</span>`;
-      if (dec === 'SKIPPED') return `<span class="status-badge status-bypass">⚡ SKIPPED</span>`;
-      if (dec === 'NEED_MORE_INFO') return `<span class="status-badge status-pending">ℹ️ BỔ SUNG</span>`;
-      return `<span class="status-badge status-pending">⏳ PENDING</span>`;
+      if (dec === 'APPROVED') return `<span class="status-badge status-approved">✓</span>`;
+      if (dec === 'REJECTED') return `<span class="status-badge status-rejected">✕</span>`;
+      if (dec === 'SKIPPED') return `<span class="status-badge status-bypass">⚡ skip</span>`;
+      return `<span class="status-badge status-pending">⏳</span>`;
     }
     function getQMStatusBadge(status) {
-      if (status === 'TAGGED_SUCCESS') return `<span class="status-badge status-approved">✓ TAGGED SUCCESS</span>`;
-      if (status === 'PROCESSING') return `<span class="status-badge status-processing">⚙️ PROCESSING</span>`;
-      if (status === 'FAILED') return `<span class="status-badge status-rejected">✕ FAILED</span>`;
-      if (status === 'HOLD') return `<span class="status-badge status-pending">⏸️ HOLD</span>`;
+      if (status === 'TAGGED_SUCCESS') return `<span class="status-badge status-approved">✓ SUCCESS</span>`;
+      if (status === 'PROCESSING') return `<span class="status-badge status-processing">⚙️</span>`;
+      if (status === 'FAILED') return `<span class="status-badge status-rejected">✕ FAIL</span>`;
+      if (status === 'HOLD') return `<span class="status-badge status-pending">⏸️</span>`;
       if (status === 'N/A') return `<span class="status-badge status-rejected">—</span>`;
-      return `<span class="status-badge status-pending">⏳ PENDING QM</span>`;
+      return `<span class="status-badge status-pending">⏳ QM</span>`;
     }
 
-    function renderLeadApprovalTable() {
-      const tbody = document.getElementById('lead-approval-tbody'); tbody.innerHTML = '';
-      const list = requestsData.filter(r => r.state === 'PENDING_TEAM_LEAD');
-      if (!list.length) { tbody.innerHTML = `<tr><td colspan="9" class="empty-hint">Không có request nào chờ Lead duyệt.</td></tr>`; return; }
-      list.forEach(r => {
-        const catBadge = r.requestCategory === 'Add tag' ? 'status-bypass' : 'status-approved';
-        const actionBtn = canApproveLead() ? `<button class="btn btn-secondary" style="padding:4px 10px; font-size:12px;" onclick="openLeadModal('${r.id}')">👔 Duyệt</button>` : `<span style="color:var(--text-muted); font-size:12px;">Chỉ Lead/DM</span>`;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td><strong>${r.id}</strong>${breachTag(r)}</td><td style="color:var(--text-secondary); font-size:12px;">${r.date}</td><td><span class="status-badge ${catBadge}">${r.requestCategory}</span></td><td><span class="code-tag">${r.team}</span></td><td>${r.name}</td><td><strong>${r.tagName}</strong></td><td style="font-size:12px; color:${r.breach ? '#F87171':'var(--text-secondary)'};">${r.deadlineLead || '-'}</td><td>${getStateBadge(r.state)}</td><td>${actionBtn}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-    function renderDMReviewTable() {
-      const tbody = document.getElementById('dm-review-tbody'); tbody.innerHTML = '';
-      const list = requestsData.filter(r => r.state === 'PENDING_DM');
-      if (!list.length) { tbody.innerHTML = `<tr><td colspan="8" class="empty-hint">Không có request Tạo Tag Mới nào chờ DM review.</td></tr>`; return; }
-      list.forEach(r => {
-        const actionBtn = canReviewDM() ? `<button class="btn btn-secondary" style="padding:4px 10px; font-size:12px;" onclick="openDMModal('${r.id}')">✏️ Thẩm Định</button>` : `<span style="color:var(--text-muted); font-size:12px;">Chỉ DM</span>`;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td><strong>${r.id}</strong>${breachTag(r)}</td><td style="color:var(--text-secondary); font-size:12px;">${r.date}</td><td><span class="code-tag">${r.team}</span></td><td style="font-size:12px; color:#C7D2FE;">✓ ${r.leadApprover || 'Lead'}</td><td><strong>${r.tagName}</strong></td><td style="font-size:12px; color:${r.breach ? '#F87171':'var(--text-secondary)'};">${r.deadlineDM || '-'}</td><td>${getStateBadge(r.state)}</td><td>${actionBtn}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-    function renderQMQueueTable() {
-      const tbody = document.getElementById('qm-queue-tbody'); tbody.innerHTML = '';
-      const list = requestsData.filter(r => r.state === 'PENDING_QM');
-      if (!list.length) { tbody.innerHTML = `<tr><td colspan="10" class="empty-hint">Không có request nào chờ QM add tag.</td></tr>`; return; }
-      const editable = canUpdateQM();
-      list.forEach(r => {
-        const isBypass = (r.requestCategory === 'Add tag');
-        const controls = editable ? `
-          <td style="text-align:right;"><input type="number" value="${r.qmSuccessCount}" style="width:70px; padding:4px;" onchange="updateQMField('${r.id}','count',this.value)"></td>
-          <td><input type="text" value="${r.qmRef}" style="width:180px; padding:4px;" onchange="updateQMField('${r.id}','ref',this.value)"></td>
-          <td><select style="padding:4px 8px; font-size:12px;" onchange="updateQMField('${r.id}','status',this.value)">
-            <option value="PENDING_QM" ${r.qmStatus==='PENDING_QM'?'selected':''}>PENDING_QM</option>
+    // ===== Action cell theo state + role =====
+    function actionCell(r) {
+      if (r.state === 'PENDING_TEAM_LEAD') {
+        if (!canApproveLead()) return `<span class="muted-note">Chờ Lead/Head duyệt</span>`;
+        return `<div class="act-wrap"><button class="btn btn-success btn-xs" onclick="leadApprove('${r.id}')">✓ Duyệt</button><button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','LEAD')">✕ Từ chối</button></div>`;
+      }
+      if (r.state === 'PENDING_DM') {
+        if (!canReviewDM()) return `<span class="muted-note">Chờ DM thẩm định</span>`;
+        return `<div class="act-wrap"><button class="btn btn-success btn-xs" onclick="openDMApprove('${r.id}')">✓ Duyệt & gán tag</button><button class="btn btn-danger btn-xs" onclick="openReject('${r.id}','DM')">✕ Từ chối</button></div>`;
+      }
+      if (r.state === 'PENDING_QM') {
+        if (!canUpdateQM()) return `<span class="muted-note">Chờ QM add tag</span>`;
+        return `<div class="qm-inline">
+          <input type="number" id="qc-${r.id}" value="${r.qmSuccessCount}" title="Số TX add thành công" style="width:66px;">
+          <input type="text" id="qr-${r.id}" value="${r.qmRef||''}" placeholder="Batch/Ref" style="width:110px;">
+          <select id="qs-${r.id}">
             <option value="PROCESSING" ${r.qmStatus==='PROCESSING'?'selected':''}>PROCESSING</option>
-            <option value="TAGGED_SUCCESS" ${r.qmStatus==='TAGGED_SUCCESS'?'selected':''}>TAGGED_SUCCESS</option>
+            <option value="TAGGED_SUCCESS" ${r.qmStatus==='TAGGED_SUCCESS'?'selected':''}>SUCCESS</option>
             <option value="FAILED" ${r.qmStatus==='FAILED'?'selected':''}>FAILED</option>
-          </select></td>` : `<td style="text-align:right;">${r.qmSuccessCount}</td><td>${r.qmRef||'-'}</td><td><span style="color:var(--text-muted); font-size:12px;">Chỉ QM</span></td>`;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td><strong>${r.id}</strong>${breachTag(r)}</td><td><span class="status-badge ${isBypass?'status-bypass':'status-approved'}">${r.requestCategory}</span></td><td>${r.team}</td><td><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span></td><td style="font-size:12px; color:#FBBF24; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${r.driverListSource}">${r.driverListSource}</td><td style="font-size:12px; color:${r.breach ? '#F87171':'var(--text-secondary)'};">${r.deadlineQM || '-'}</td><td>${getQMStatusBadge(r.qmStatus)}</td>${controls}`;
-        tbody.appendChild(tr);
-      });
+          </select>
+          <button class="btn btn-success btn-xs" onclick="qmSave('${r.id}')">💾 Lưu</button>
+        </div>`;
+      }
+      if (r.state === 'REJECTED') return `<span class="muted-note" title="${(r.leadNote||r.dmNote||'').replace(/"/g,'')}">❗ Lý do: ${(r.leadNote||r.dmNote||'-')}</span>`;
+      if (r.state === 'DONE') return `<span class="muted-note">✓ Đã add ${r.qmSuccessCount} TX</span>`;
+      return `<span class="muted-note">—</span>`;
     }
+
     function renderMasterTable() {
       const tbody = document.getElementById('master-tbody'); tbody.innerHTML = '';
-      if (!requestsData.length) { tbody.innerHTML = `<tr><td colspan="11" class="empty-hint">Chưa có request nào.</td></tr>`; return; }
-      requestsData.forEach(r => {
+      let list = requestsData.slice();
+      if (currentFilter === 'MINE') list = list.filter(isMine);
+      else if (currentFilter !== 'ALL') list = list.filter(r => r.state === currentFilter);
+      if (!list.length) { tbody.innerHTML = `<tr><td colspan="12" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>`; return; }
+      list.forEach(r => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td><strong>${r.id}</strong>${breachTag(r)}</td><td style="font-size:12px; color:var(--text-secondary);">${r.date}</td><td><span class="status-badge ${r.requestCategory==='Add tag'?'status-bypass':'status-approved'}">${r.requestCategory}</span></td><td>${r.team}</td><td>${r.name}</td><td><strong>${r.tagName}</strong></td><td>${getStateBadge(r.state)}</td><td>${getGateBadge(r.leadDecision)}</td><td>${getGateBadge(r.dmDecision)}</td><td>${getQMStatusBadge(r.qmStatus)}</td><td style="text-align:right;"><strong>${r.qmSuccessCount}</strong></td>`;
+        if (isMine(r)) tr.style.background = 'rgba(20,184,166,0.06)';
+        tr.innerHTML =
+          `<td><strong>${r.id}</strong>${breachTag(r)}</td>`+
+          `<td style="font-size:12px; color:var(--text-secondary);">${r.date}</td>`+
+          `<td><span class="status-badge ${r.requestCategory==='Add tag'?'status-bypass':'status-approved'}">${r.requestCategory}</span></td>`+
+          `<td><span class="code-tag">${r.team}</span></td>`+
+          `<td>${r.name}</td>`+
+          `<td><strong>${r.tagName}</strong>${(r.dmTagCode && r.dmTagCode!=='-') ? `<br><span class="code-tag" style="color:#34D399;">${r.dmTagCode}</span>`:''}</td>`+
+          `<td>${getStateBadge(r.state)}</td>`+
+          `<td>${getGateBadge(r.leadDecision)}</td>`+
+          `<td>${getGateBadge(r.dmDecision)}</td>`+
+          `<td>${getQMStatusBadge(r.qmStatus)}</td>`+
+          `<td style="text-align:right;"><strong>${r.qmSuccessCount}</strong></td>`+
+          `<td>${actionCell(r)}</td>`;
         tbody.appendChild(tr);
       });
     }
 
-    function openLeadModal(id) {
-      if (!canApproveLead()) { showToast('Không đủ quyền', 'Chỉ Lead/Head hoặc DM mới duyệt được.', 'err'); return; }
-      currentSelectedId = id;
+    // ===== LEAD approve inline =====
+    function leadApprove(id) {
+      if (!canApproveLead()) { showToast('Không đủ quyền', 'Chỉ Lead/Head hoặc DM.', 'err'); return; }
       const r = requestsData.find(x => x.id === id); if (!r) return;
-      document.getElementById('lead-modal-req-id').innerText = r.id;
-      document.getElementById('lead-modal-details').innerHTML = `<strong>Hình thức:</strong> ${r.requestCategory} | <strong>Team:</strong> ${r.team}<br><strong>Người yêu cầu:</strong> ${r.name} | <strong>Tag:</strong> ${r.tagName}<br><strong>Thời gian:</strong> ${r.duration}<br><strong>Lý do:</strong> ${r.reason}<br><em style="color:#A5B4FC;">${r.requestCategory === 'Add tag' ? '⚡ Duyệt xong sẽ bỏ qua DM, chuyển thẳng QM.' : '👉 Duyệt xong sẽ chuyển sang DM Review.'}</em>`;
-      document.getElementById('lead-modal-decision').value = 'APPROVED';
-      document.getElementById('lead-modal-note').value = '';
-      document.getElementById('lead-modal').classList.add('open');
-    }
-    function submitLeadApproval() {
-      const r = requestsData.find(x => x.id === currentSelectedId); if (!r) return;
-      const decision = document.getElementById('lead-modal-decision').value;
-      const note = document.getElementById('lead-modal-note').value;
-      if (decision === 'REJECTED' && !note.trim()) { showToast('Thiếu lý do', 'Vui lòng nhập lý do từ chối.', 'warn'); return; }
-      r.leadDecision = decision; r.leadApprover = CURRENT_EMAIL; r.leadNote = note;
-      if (decision === 'APPROVED') {
-        if (r.requestCategory === 'Add tag') { r.state = 'PENDING_QM'; r.dmDecision = 'SKIPPED'; r.qmStatus = 'PENDING_QM'; r.dmTagCode = r.tagName; }
-        else { r.state = 'PENDING_DM'; }
-      } else { r.state = 'REJECTED'; r.qmStatus = 'N/A'; }
-      r.breach = '';
-      renderAll(); closeModal('lead-modal');
-      showToast('Đã lưu quyết định Lead', decision === 'APPROVED' ? 'Request đã chuyển gate kế tiếp. [DEMO]' : 'Request bị từ chối. [DEMO]', decision === 'APPROVED' ? 'ok' : 'warn');
+      r.leadDecision = 'APPROVED'; r.leadApprover = CURRENT_EMAIL; r.breach = '';
+      if (r.requestCategory === 'Add tag') { r.state = 'PENDING_QM'; r.dmDecision = 'SKIPPED'; r.qmStatus = 'PENDING_QM'; if (!r.dmTagCode || r.dmTagCode==='-') r.dmTagCode = r.tagName; }
+      else { r.state = 'PENDING_DM'; }
+      renderAll();
+      showToast('Lead đã duyệt ' + id, r.requestCategory === 'Add tag' ? 'Bỏ qua DM → chuyển thẳng QM. [DEMO]' : 'Chuyển sang DM Review. [DEMO]', 'ok');
     }
 
-    function openDMModal(id) {
-      if (!canReviewDM()) { showToast('Không đủ quyền', 'Chỉ DM Lead mới review được.', 'err'); return; }
-      currentSelectedId = id;
+    // ===== DM approve (popup nhập tag code) =====
+    function openDMApprove(id) {
+      if (!canReviewDM()) { showToast('Không đủ quyền', 'Chỉ DM Lead.', 'err'); return; }
       const r = requestsData.find(x => x.id === id); if (!r) return;
+      dmCtx.id = id;
       document.getElementById('modal-req-id').innerText = r.id;
-      document.getElementById('modal-details').innerHTML = `<strong>Hình thức:</strong> ${r.requestCategory} | <strong>Team:</strong> ${r.team}<br><strong>Người yêu cầu:</strong> ${r.name} | <strong>Tag:</strong> ${r.tagName}<br><strong>Đã qua Lead duyệt bởi:</strong> <span style="color:#C7D2FE;">${r.leadApprover || '-'}</span><br><strong>Thời gian:</strong> ${r.duration}<br><strong>Lý do:</strong> ${r.reason}`;
-      document.getElementById('modal-dm-decision').value = 'APPROVED';
-      document.getElementById('modal-dm-tag-code').value = (r.dmTagCode && r.dmTagCode !== '-') ? r.dmTagCode : `DM_${(r.tagName||'').toUpperCase()}`;
+      document.getElementById('modal-details').innerHTML = `<strong>Team:</strong> ${r.team} | <strong>Người YC:</strong> ${r.name}<br><strong>Tag đề xuất:</strong> ${r.tagName} | <strong>Loại:</strong> ${r.type}<br><strong>Đã qua Lead:</strong> <span style="color:#C7D2FE;">${r.leadApprover || '-'}</span><br><strong>Lý do:</strong> ${r.reason}`;
+      document.getElementById('modal-dm-tag-code').value = `DM_${(r.tagName||'').toUpperCase()}`;
       document.getElementById('modal-dm-note').value = '';
-      toggleTagCodeInput();
       document.getElementById('dm-modal').classList.add('open');
     }
-    function toggleTagCodeInput() {
-      const dec = document.getElementById('modal-dm-decision').value;
-      document.getElementById('group-tag-code').style.display = (dec === 'APPROVED') ? 'flex' : 'none';
-    }
-    function submitDMReview() {
-      const r = requestsData.find(x => x.id === currentSelectedId); if (!r) return;
-      const decision = document.getElementById('modal-dm-decision').value;
-      const note = document.getElementById('modal-dm-note').value;
-      const tagCode = (decision === 'APPROVED') ? (document.getElementById('modal-dm-tag-code').value || 'DM_TAG_APPROVED') : 'N/A';
-      r.dmDecision = decision; r.dmNote = note; r.dmTagCode = tagCode;
-      if (decision === 'APPROVED') { r.state = 'PENDING_QM'; r.qmStatus = 'PENDING_QM'; }
-      else if (decision === 'REJECTED') { r.state = 'REJECTED'; r.qmStatus = 'N/A'; }
-      r.breach = '';
+    function submitDMApprove() {
+      const r = requestsData.find(x => x.id === dmCtx.id); if (!r) return;
+      const tagCode = document.getElementById('modal-dm-tag-code').value.trim();
+      if (!tagCode) { showToast('Thiếu mã tag', 'Nhập mã tag chuẩn để QM dùng.', 'warn'); return; }
+      r.dmDecision = 'APPROVED'; r.dmTagCode = tagCode; r.dmNote = document.getElementById('modal-dm-note').value;
+      r.state = 'PENDING_QM'; r.qmStatus = 'PENDING_QM'; r.breach = '';
       renderAll(); closeModal('dm-modal');
-      showToast('Đã lưu DM Review', decision === 'APPROVED' ? 'Request chuyển sang QM Add Tags. [DEMO]' : 'Request bị từ chối. [DEMO]', decision === 'APPROVED' ? 'ok' : 'warn');
+      showToast('DM đã duyệt ' + r.id, 'Gán mã ' + tagCode + ' → chuyển QM. [DEMO]', 'ok');
     }
 
-    function updateQMField(id, field, val) {
+    // ===== Reject (chung Lead & DM) =====
+    function openReject(id, gate) {
+      if (gate === 'LEAD' && !canApproveLead()) { showToast('Không đủ quyền','Chỉ Lead/Head hoặc DM.','err'); return; }
+      if (gate === 'DM' && !canReviewDM()) { showToast('Không đủ quyền','Chỉ DM Lead.','err'); return; }
+      rejectCtx = { id: id, gate: gate };
+      document.getElementById('reject-req-id').innerText = id;
+      document.getElementById('reject-note').value = '';
+      document.getElementById('reject-modal').classList.add('open');
+    }
+    function submitReject() {
+      const r = requestsData.find(x => x.id === rejectCtx.id); if (!r) return;
+      const note = document.getElementById('reject-note').value.trim();
+      if (!note) { showToast('Thiếu lý do', 'Vui lòng nhập lý do từ chối.', 'warn'); return; }
+      if (rejectCtx.gate === 'LEAD') { r.leadDecision = 'REJECTED'; r.leadApprover = CURRENT_EMAIL; r.leadNote = note; }
+      else { r.dmDecision = 'REJECTED'; r.dmNote = note; }
+      r.state = 'REJECTED'; r.qmStatus = 'N/A'; r.breach = '';
+      renderAll(); closeModal('reject-modal');
+      showToast('Đã từ chối ' + r.id, 'Requester sẽ thấy lý do để chỉnh sửa. [DEMO]', 'warn');
+    }
+
+    // ===== QM inline save =====
+    function qmSave(id) {
+      if (!canUpdateQM()) { showToast('Không đủ quyền', 'Chỉ QM.', 'err'); return; }
       const r = requestsData.find(x => x.id === id); if (!r) return;
-      if (field === 'count') r.qmSuccessCount = parseInt(val) || 0;
-      else if (field === 'ref') r.qmRef = val;
-      else if (field === 'status') { r.qmStatus = val; if (val === 'TAGGED_SUCCESS') { r.state = 'DONE'; r.breach=''; showToast('Hoàn thành', `${id} đã add tag thành công (DONE). [DEMO]`, 'ok'); } }
+      const status = document.getElementById('qs-'+id).value;
+      const count = parseInt(document.getElementById('qc-'+id).value) || 0;
+      const ref = document.getElementById('qr-'+id).value;
+      r.qmStatus = status; r.qmSuccessCount = count; r.qmRef = ref;
+      if (status === 'TAGGED_SUCCESS') { r.state = 'DONE'; r.breach = ''; showToast('Hoàn thành ' + id, `Đã add ${count} TX thành công (DONE). [DEMO]`, 'ok'); }
+      else showToast('Đã cập nhật ' + id, 'Trạng thái QM: ' + status + '. [DEMO]', 'ok');
       renderAll();
     }
 

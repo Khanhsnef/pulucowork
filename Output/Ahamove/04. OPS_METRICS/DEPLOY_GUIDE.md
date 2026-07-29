@@ -74,18 +74,20 @@ Trigger sẽ quét mọi request chưa `DONE`/`REJECTED`, so deadline với hi�
 
 ## 5. Test End-to-End (checklist sau deploy)
 
+> ⚡ **v2.1 — Approve Inline:** UI chỉ còn **2 tab** (Tạo Request / Master). Mọi role **xem được cả 2 tab**; phê duyệt làm **ngay trên dòng** ở bảng Master theo state+role. Live UI Editor vẫn chỉ hiện với DM.
+
 | # | Kịch bản | Kết quả mong đợi |
 | :-- | :--- | :--- |
-| 1 | Login bằng email REQUESTER | Chỉ thấy tab **Request** + **Master** |
-| 2 | Login TEAM_LEAD | Thấy thêm tab **Lead Approval** |
-| 3 | Login DM | Thấy đủ tab + Live UI Editor |
-| 4 | Login QM | Thấy tab **QM Add Tags** |
-| 5 | Tạo request "Tạo tag mới" | State = `PENDING_TEAM_LEAD`, hiện ở tab Lead |
-| 6 | Lead **APPROVE** tag mới | → `PENDING_DM`, hiện ở tab DM |
-| 7 | DM **APPROVE** + gán tag code | → `PENDING_QM`, hiện ở tab QM |
-| 8 | QM chọn `TAGGED_SUCCESS` | → `DONE`, KPI "Hoàn Thành" +1 |
-| 9 | Tạo request **"Add tag"** → Lead APPROVE | Bỏ qua DM, thẳng `PENDING_QM` (DM = SKIPPED) |
-| 10 | **REJECT** ở gate Lead (kèm lý do) | → `REJECTED`, requester thấy lý do |
+| 1 | Login mọi role | Thấy 2 tab **Tạo Request** + **Master** |
+| 2 | Login DM | Thấy thêm nút **Live UI Editor** |
+| 3 | Tạo request "Tạo tag mới" | Tự nhảy sang **Master**, state = `PENDING_TEAM_LEAD` |
+| 4 | Login TEAM_LEAD/DM, dòng `PENDING_TEAM_LEAD` bấm **✓ Duyệt** (inline) | → `PENDING_DM` |
+| 5 | Login DM, dòng `PENDING_DM` bấm **✓ Duyệt & gán tag** → nhập mã tag | → `PENDING_QM`, cột Tag hiện mã DM |
+| 6 | Login QM, dòng `PENDING_QM`: nhập số TX + status `SUCCESS` → **💾 Lưu** | → `DONE`, KPI "Hoàn Thành" +1 |
+| 7 | Tạo **"Add tag"** → Lead **✓ Duyệt** | Bỏ qua DM, thẳng `PENDING_QM` (DM = SKIPPED) |
+| 8 | Dòng bất kỳ bấm **✕ Từ chối** → nhập lý do (popup) | → `REJECTED`, cột Hành Động hiện lý do |
+| 9 | Lọc chip **⚡ Cần tôi xử lý** | Chỉ hiện dòng đang chờ đúng role đang login |
+| 10 | Role không đủ quyền bấm nút (nếu lộ) | Backend `getUserRole()` chặn, toast "Không đủ quyền" |
 | 11 | Chạy tay `checkSLABreaches()` với 1 request quá deadline | Cột `Cờ Quá Hạn` = `QUÁ HẠN SLA` + nhận email nhắc |
 | 12 | Mở lại data cũ (23 cột) | Không vỡ, 9 cột mới rỗng được bổ sung |
 

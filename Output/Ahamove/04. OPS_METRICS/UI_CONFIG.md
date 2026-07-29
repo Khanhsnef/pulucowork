@@ -22,12 +22,18 @@ Anh/Chị có thể sửa trực tiếp bất kỳ nội dung text, tiêu đề,
 
 ---
 
-## 3. Tên Các Tab Điều Hướng (Navigation Tabs) — 5 Tab
-- **Tab 1 Name**: 📝 Bước 1: Request
-- **Tab 2 Name**: 👔 Bước 2: Lead Approval
-- **Tab 3 Name**: 🛡️ Bước 3: DM Review
-- **Tab 4 Name**: ⚙️ Bước 4: QM Add Tags
-- **Tab 5 Name**: 📊 Master Request Tracker
+## 3. Tên Các Tab Điều Hướng (Navigation Tabs) — 2 Tab (luồng gọn inline)
+- **Tab 1 Name**: 📝 Tạo Request
+- **Tab 2 Name**: 📊 Master Request Tracker
+
+> ⚡ **v2.1 — Approve Inline:** Bỏ 3 tab gate riêng (Lead/DM/QM). Mọi phê duyệt làm **ngay trên dòng** ở bảng Master. Gửi request xong tự nhảy sang Master. Bộ lọc chip: **Tất cả · ⚡ Cần tôi xử lý · Chờ Lead · Chờ DM · Chờ QM · Done · Rejected**.
+>
+> | State của dòng | Nút hiện (đúng role) | Popup? |
+> | :--- | :--- | :--- |
+> | `PENDING_TEAM_LEAD` | Lead/DM: **✓ Duyệt** / **✕ Từ chối** | Duyệt = inline; Từ chối = popup lý do |
+> | `PENDING_DM` | DM: **✓ Duyệt & gán tag** / **✕ Từ chối** | Duyệt = popup nhập mã tag; Từ chối = popup lý do |
+> | `PENDING_QM` | QM/DM: ô số TX + Ref + status ▼ + **💾 Lưu** | inline, không popup |
+> | `DONE` / `REJECTED` | chỉ hiển thị kết quả / lý do | — |
 
 ---
 
@@ -58,23 +64,23 @@ Anh/Chị có thể sửa trực tiếp bất kỳ nội dung text, tiêu đề,
 
 ---
 
-## 5. Bước 2: Bàn Duyệt Của Lead / Head (Lead Approval — Gate 1) 🆕
-- **Section Header**: 👔 Bàn Duyệt Của Lead / Head Team (Gate 1)
-- **Modal Header**: 👔 Duyệt Cấp Lead
-- Lead/Head duyệt request của team → APPROVED (chuyển tiếp) hoặc REJECTED (trả requester kèm lý do).
+## 5. Gate 1 — Lead / Head Approve (inline trên Master)
+- Dòng state `PENDING_TEAM_LEAD` → Lead/Head (hoặc DM) thấy nút **✓ Duyệt** (bấm thẳng, không popup) và **✕ Từ chối**.
+- **✓ Duyệt**: Tạo tag mới → `PENDING_DM`; Add tag có sẵn → bỏ qua DM → `PENDING_QM`.
+- **✕ Từ chối** → mở popup **"✕ Từ Chối Request"** nhập lý do (bắt buộc) → `REJECTED`, requester thấy lý do.
 
 ---
 
-## 6. Bước 3: Bàn Tròn DM Review (DM Review Console — Gate 2)
-- **Section Header**: 🛡️ Bàn Tròn Thẩm Định Của DM Lead (Gate 2)
-- **Modal Header**: 🛡️ Thẩm Định Request
-- Chỉ áp dụng cho **Tạo tag mới**. Add tag có sẵn sẽ bỏ qua bước này.
+## 6. Gate 2 — DM Review (inline + popup gán mã tag)
+- Dòng state `PENDING_DM` → DM thấy **✓ Duyệt & gán tag** / **✕ Từ chối**.
+- **✓ Duyệt & gán tag** → mở popup **"🛡️ DM Duyệt & Gán Mã Tag"**: nhập **Mã Tag Chuẩn** (taxonomy QM dùng) + ghi chú → `PENDING_QM`.
+- Chỉ áp dụng cho **Tạo tag mới**. Add tag có sẵn đã bỏ qua bước này ở Gate 1.
 
 ---
 
-## 7. Bước 4: Hàng Đợi QM Add Tag (QM Add Tag Queue — Gate 3)
-- **Section Header**: ⚙️ Hàng Đợi QM Tiếp Nhận & Add Tag (Gate 3)
-- QM cập nhật trạng thái: PENDING_QM → PROCESSING → TAGGED_SUCCESS (→ DONE) / FAILED.
+## 7. Gate 3 — QM Add Tag (inline, không popup)
+- Dòng state `PENDING_QM` → QM (hoặc DM) chỉnh ngay trên dòng: ô **số TX thành công** + **Batch/Ref** + dropdown status (`PROCESSING / SUCCESS / FAILED`) + nút **💾 Lưu**.
+- Chọn `TAGGED_SUCCESS` (SUCCESS) khi Lưu → state chuyển `DONE`, KPI "Hoàn Thành" +1.
 
 ---
 
