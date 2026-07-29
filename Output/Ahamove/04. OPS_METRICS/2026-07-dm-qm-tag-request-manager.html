@@ -152,10 +152,11 @@
     /* QM dropdown + nút cập nhật */
     .ms-action .btn-xs { justify-content:center; border-radius:999px; }
     /* ===== Nút kẹp 2 GÓC TRÊN của chấm active (Lead/DM) ===== */
-    .ms-dot-wrap { position:relative; display:flex; align-items:center; justify-content:center; }
-    .ms-step.has-btns { padding:22px 0 0; }   /* chừa chỗ cho nút ở 2 góc trên */
+    /* chấm active có nút NHƯNG vẫn ngang đều với các chấm khác:
+       nút absolute nổi lên trên, không đẩy chấm xuống */
+    .ms-dot-wrap { position:relative; display:flex; align-items:center; justify-content:center; overflow:visible; }
     .dot-btn {
-      position:absolute; top:-6px;
+      position:absolute; bottom:calc(100% - 8px);   /* nổi lên phía trên chấm */
       display:inline-flex; align-items:center; justify-content:center;
       border:1.5px solid var(--bg-primary); color:#fff; cursor:pointer;
       width:22px; height:22px; padding:0; border-radius:999px; font-weight:800; font-size:12px;
@@ -163,18 +164,18 @@
       transition:width .22s ease, padding .2s ease, transform .18s ease, box-shadow .18s ease, filter .18s ease;
     }
     /* top = Duyệt (✓) góc PHẢI-trên; bot = Từ chối (✕) góc TRÁI-trên */
-    .dot-btn.top { left:calc(50% + 4px); }
-    .dot-btn.bot { right:calc(50% + 4px); flex-direction:row-reverse; }
+    .dot-btn.top { left:calc(50% + 3px); }
+    .dot-btn.bot { right:calc(50% + 3px); flex-direction:row-reverse; }
     .dot-btn.btn-success { background:linear-gradient(135deg,#14B8A6,#059669); box-shadow:0 2px 8px rgba(5,150,105,.45); }
     .dot-btn.btn-danger  { background:linear-gradient(135deg,#FB7185,#E11D48); box-shadow:0 2px 8px rgba(225,29,72,.4); }
     .dot-btn .bi { line-height:1; }
     .dot-btn .bl { max-width:0; opacity:0; overflow:hidden; transition:max-width .22s ease, opacity .16s ease, margin .18s ease; }
-    /* rê vào step active → 2 nút bung thành pill có chữ, xòe ra 2 phía */
-    .ms-step.has-btns:hover .dot-btn { width:auto; padding:4px 12px; filter:brightness(1.08); }
+    /* HOVER-REVEAL: rê vào step active → 2 nút bung thành pill có chữ, xòe ra 2 phía + nhấc cao lên */
+    .ms-step.has-btns:hover .dot-btn { width:auto; padding:5px 13px; bottom:calc(100% + 2px); filter:brightness(1.08); }
     .ms-step.has-btns:hover .dot-btn.top .bl { max-width:130px; opacity:1; margin-left:5px; }
     .ms-step.has-btns:hover .dot-btn.bot .bl { max-width:130px; opacity:1; margin-right:5px; }
-    .ms-step.has-btns:hover .dot-btn.btn-success { box-shadow:0 4px 16px rgba(16,185,129,.6); }
-    .ms-step.has-btns:hover .dot-btn.btn-danger  { box-shadow:0 4px 16px rgba(244,63,94,.6); }
+    .ms-step.has-btns:hover .dot-btn.btn-success { box-shadow:0 5px 18px rgba(16,185,129,.6); }
+    .ms-step.has-btns:hover .dot-btn.btn-danger  { box-shadow:0 5px 18px rgba(244,63,94,.6); }
     /* Gradient pill + glow cho nút inline trên line tiến trình */
     .ms-action .btn-xs {
       border-radius:999px; padding:7px 16px; font-size:12px; font-weight:700; letter-spacing:.2px;
