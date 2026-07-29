@@ -132,8 +132,8 @@
     @keyframes flpulse { 0%,100%{ opacity:1 } 50%{ opacity:.5 } }
     /* ===== Mini stepper gộp actor + deadline (ảnh #4/#7) ===== */
     .mini-stepper { display:flex; align-items:flex-start; justify-content:center; gap:0; }
-    .ms-step { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:84px; }
-    .ms-dot { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; border:2px solid transparent; box-shadow:0 2px 6px rgba(0,0,0,.35); }
+    .ms-step { display:flex; flex-direction:column; align-items:center; gap:4px; width:92px; }
+    .ms-dot { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; border:2px solid transparent; box-shadow:0 3px 8px rgba(0,0,0,.4); }
     .ms-dot.done { background:var(--accent-emerald); color:#fff; }
     .ms-dot.active { background:var(--accent-amber); color:#fff; border-color:#FBBF24; animation:flpulse 1.4s ease-in-out infinite; }
     .ms-dot.todo { background:rgba(100,116,139,0.35); color:var(--text-muted); }
@@ -144,7 +144,7 @@
     .ms-meta.actor { color:var(--accent-teal-light); font-family:'JetBrains Mono',monospace; }
     .ms-meta.hot { color:#F87171; font-weight:600; }
     .ms-meta.skip { color:var(--accent-indigo-light); font-weight:600; }
-    .ms-conn { height:2px; width:22px; margin-top:12px; background:rgba(100,116,139,0.35); border-radius:2px; }
+    .ms-conn { height:3px; width:40px; margin-top:16px; background:rgba(100,116,139,0.35); border-radius:2px; }
     .ms-conn.done { background:var(--accent-emerald); }
     /* Hành động gộp ngay dưới line tiến trình */
     .ms-action-row { display:flex; justify-content:center; margin-top:10px; }
@@ -698,13 +698,22 @@
       const step = (key, label) =>
         `<div class="ms-step"><div class="ms-dot ${st[key]}">${ic[st[key]]}</div>`+
         `<div class="ms-label">${label}</div>${stepMeta(r, key, st[key])}</div>`;
+      // neo action-row vào tâm chấm đang active: center(i)=i*132+46, tâm tổng=244
+      const idxMap = { req:0, lead:1, dm:2, qm:3 };
+      let activeKey = ['lead','dm','qm'].find(k => st[k]==='active');
+      let shift = 0;
+      if (activeKey != null) shift = (idxMap[activeKey]*132 + 46) - 244;
+      const actionHtml = actionCell(r);
+      const actionRow = actionHtml
+        ? `<div class="ms-action-row" style="transform:translateX(${shift}px);">${actionHtml}</div>`
+        : '';
       return `<div class="mini-stepper">`+
         step('req','Request') + conn(st.req) +
         step('lead','Lead')   + conn(st.lead) +
         step('dm','DM')       + conn(st.dm) +
         step('qm','QM')       +
       `</div>`+
-      `<div class="ms-action-row">${actionCell(r)}</div>`+
+      actionRow +
       `<a class="link-detail" onclick="event.stopPropagation(); openTimeline('${r.id}')">Chi tiết hơn →</a>`;
     }
 
