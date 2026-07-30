@@ -14,14 +14,21 @@
  *  Vai trò: TEAM_LEAD | DM | QM | REQUESTER (mặc định)
  * ============================================================ */
 const ROLE_MAP = {
-  // --- DM Lead ---
-  'khanhlp@ahamove.com' : 'DM',
-  // --- Team Leads / Heads ---
-  'lead1@ahamove.com'   : 'TEAM_LEAD',
-  'lead2@ahamove.com'   : 'TEAM_LEAD',
-  // --- QM Specialists ---
-  'qm1@ahamove.com'     : 'QM',
-  'qm2@ahamove.com'     : 'QM'
+  // --- DM (override mọi team) ---
+  'khanhlp@ahamove.com'  : 'DM',
+  'trangdtt@ahamove.com' : 'DM',
+  // --- Team Leads / Heads (duyệt Gate 1 theo team ở TEAM_LEAD_MAP) ---
+  'hant@ahamove.com'     : 'TEAM_LEAD',  // S&P
+  'sonnbt@ahamove.com'   : 'TEAM_LEAD',  // Growth
+  'luuhtm@ahamove.com'   : 'TEAM_LEAD',  // Growth
+  'thaoltn@ahamove.com'  : 'TEAM_LEAD',  // Expansion
+  'thinhnh@ahamove.com'  : 'TEAM_LEAD',  // OE + PA
+  'taipq@ahamove.com'    : 'TEAM_LEAD',  // OE
+  'tuannq@ahamove.com'   : 'TEAM_LEAD',  // OE + PA
+  'locnx@ahamove.com'    : 'TEAM_LEAD',  // WH
+  // --- QM Specialists (Gate 3 add tag; đồng thời là Lead team QM ở Gate 1) ---
+  'phundk@ahamove.com'   : 'QM',
+  'vayhc@ahamove.com'    : 'QM'
 };
 const DOMAIN_DEFAULT_ROLE = 'REQUESTER'; // mọi user hợp lệ khác = requester
 
@@ -33,18 +40,21 @@ const DOMAIN_DEFAULT_ROLE = 'REQUESTER'; // mọi user hợp lệ khác = reques
  *                 thêm phần tử vào mảng, vd: 'Growth': ['a@','b@'].
  * ============================================================ */
 const TEAM_LEAD_MAP = {
-  'DM'        : ['head-dm@ahamove.com'],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
-  'PA'        : ['head-pa@ahamove.com'],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
-  'OE'        : ['head-oe@ahamove.com'],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
-  'QM'        : ['head-qm@ahamove.com'],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
-  'Growth'    : ['head-growth@ahamove.com'],      // >>> ĐIỀN EMAIL LEAD/HEAD <<<
-  'Expansion' : ['head-expansion@ahamove.com']    // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+  'DM'        : ['khanhlp@ahamove.com', 'trangdtt@ahamove.com'],
+  'S&P'       : ['hant@ahamove.com'],
+  'Growth'    : ['sonnbt@ahamove.com', 'luuhtm@ahamove.com'],
+  'Expansion' : ['thaoltn@ahamove.com'],
+  'OE'        : ['thinhnh@ahamove.com', 'taipq@ahamove.com', 'tuannq@ahamove.com'],
+  'PA'        : ['thinhnh@ahamove.com', 'tuannq@ahamove.com'],
+  'WH'        : ['locnx@ahamove.com'],
+  'QM'        : ['phundk@ahamove.com', 'vayhc@ahamove.com']
 };
 
-// Lead `email` có được duyệt request của `team` không? DM luôn = true. 1 team có thể nhiều lead.
+// Lead `email` có được duyệt request của `team` không?
+// DM luôn = true (override mọi team). Ngoài ra: bất kỳ ai có tên trong TEAM_LEAD_MAP[team]
+// đều duyệt được Gate 1 của team đó — kể cả người mang role QM (vd QM team leads).
 function canLeadApproveTeam(email, team, role) {
   if (role === 'DM') return true;                       // DM override mọi team
-  if (role !== 'TEAM_LEAD') return false;
   var owners = (TEAM_LEAD_MAP[team] || []).map(function(e){ return String(e).toLowerCase(); });
   return owners.indexOf((email || '').toLowerCase()) !== -1;
 }
@@ -93,7 +103,7 @@ function getAppConfig() {
     sheet.appendRow(["TAB4_NAME", "⚙️ Bước 4: QM Add Tags", "Tên Tab 4"]);
     sheet.appendRow(["TAB5_NAME", "📊 Master Request Tracker", "Tên Tab 5"]);
     sheet.appendRow(["SUBMIT_BTN_TEXT", "🚀 Gửi Đề Xuất Tới Lead Duyệt", "Tên nút gửi"]);
-    sheet.appendRow(["TEAM_LIST", "DM, PA, OE, QM, Growth, Expansion", "Danh sách Team"]);
+    sheet.appendRow(["TEAM_LIST", "DM, S&P, Growth, Expansion, OE, PA, WH, QM", "Danh sách Team"]);
     sheet.appendRow(["TAG_TYPES", "Priority Dispatch (Ưu tiên phát đơn), Incentive Campaign (Thưởng/Thách thức), Area Restriction (Giới hạn khu vực), Special Training (Đào tạo dịch vụ VIP), Penalty / Block (Khóa/Tạm dừng)", "Danh sách loại Tag"]);
     sheet.appendRow(["SLA_LEAD_HOURS", "4", "SLA giờ chờ Lead duyệt (Gate 1)"]);
     sheet.appendRow(["SLA_DM_HOURS", "8", "SLA giờ chờ DM review (Gate 2)"]);

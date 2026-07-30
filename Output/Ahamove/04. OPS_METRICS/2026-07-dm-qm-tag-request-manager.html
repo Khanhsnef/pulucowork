@@ -306,11 +306,13 @@
           <label>👁️ Xem với vai trò:</label>
           <select id="role-selector" onchange="changeRole(this.value)">
             <option value="REQUESTER|req@ahamove.com">REQUESTER</option>
-            <option value="TEAM_LEAD|head-pa@ahamove.com">Head · PA</option>
-            <option value="TEAM_LEAD|head-oe@ahamove.com">Head · OE</option>
-            <option value="TEAM_LEAD|head-growth@ahamove.com">Head · Growth</option>
-            <option value="DM|khanhlp@ahamove.com" selected>DM (override tất cả)</option>
-            <option value="QM|qm1@ahamove.com">QM</option>
+            <option value="TEAM_LEAD|hant@ahamove.com">Head · S&P (hant)</option>
+            <option value="TEAM_LEAD|sonnbt@ahamove.com">Head · Growth (sonnbt)</option>
+            <option value="TEAM_LEAD|thinhnh@ahamove.com">Head · OE+PA (thinhnh)</option>
+            <option value="TEAM_LEAD|locnx@ahamove.com">Head · WH (locnx)</option>
+            <option value="DM|khanhlp@ahamove.com" selected>DM · khanhlp (override tất cả)</option>
+            <option value="DM|trangdtt@ahamove.com">DM · trangdtt (override tất cả)</option>
+            <option value="QM|phundk@ahamove.com">QM · phundk (Gate 3 + Lead QM)</option>
           </select>
         </div>
         <span class="role-pill role-DM" id="user-role-pill">DM</span>
@@ -510,11 +512,13 @@
       // ── Danh sách Team đề xuất (dropdown "Team Đề Xuất") ───────────────────
       TEAM_LIST: [
         "DM",
-        "PA",
-        "OE",
-        "QM",
+        "S&P",
         "Growth",
-        "Expansion"
+        "Expansion",
+        "OE",
+        "PA",
+        "WH",
+        "QM"
       ],
 
       // ── Loại tag mong muốn — { value: mã lưu request, label: chữ hiển thị } ─
@@ -529,12 +533,14 @@
       // ── TEAM ↔ LEAD: mỗi team có ≥1 lead/head. Lead chỉ duyệt team mình; DM override tất cả.
       //    Sửa TÊN team cho khớp TEAM_LIST + điền EMAIL lead (mảng — thêm nhiều lead nếu cần).
       TEAM_LEAD_MAP: {
-        "DM"        : ["head-dm@ahamove.com"],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
-        "PA"        : ["head-pa@ahamove.com"],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
-        "OE"        : ["head-oe@ahamove.com"],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
-        "QM"        : ["head-qm@ahamove.com"],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
-        "Growth"    : ["head-growth@ahamove.com"],      // >>> ĐIỀN EMAIL LEAD/HEAD <<<
-        "Expansion" : ["head-expansion@ahamove.com"]    // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+        "DM"        : ["khanhlp@ahamove.com", "trangdtt@ahamove.com"],
+        "S&P"       : ["hant@ahamove.com"],
+        "Growth"    : ["sonnbt@ahamove.com", "luuhtm@ahamove.com"],
+        "Expansion" : ["thaoltn@ahamove.com"],
+        "OE"        : ["thinhnh@ahamove.com", "taipq@ahamove.com", "tuannq@ahamove.com"],
+        "PA"        : ["thinhnh@ahamove.com", "tuannq@ahamove.com"],
+        "WH"        : ["locnx@ahamove.com"],
+        "QM"        : ["phundk@ahamove.com", "vayhc@ahamove.com"]
       }
     };
 
@@ -600,9 +606,9 @@
     function updateRolePill() { const p = document.getElementById('user-role-pill'); p.innerText = CURRENT_ROLE; p.className = 'role-pill role-' + CURRENT_ROLE; }
     // Lead chỉ duyệt request của team mình; DM override tất cả. Truyền request r để check team.
     function canApproveLead(r) {
-      if (CURRENT_ROLE === 'DM') return true;
-      if (CURRENT_ROLE !== 'TEAM_LEAD') return false;
-      if (!r) return true; // dùng cho KPI/đếm chung khi chưa gắn request cụ thể
+      if (CURRENT_ROLE === 'DM') return true;            // DM override mọi team
+      if (!r) return CURRENT_ROLE === 'TEAM_LEAD';       // đếm chung khi chưa gắn request cụ thể
+      // Bất kỳ ai có tên trong TEAM_LEAD_MAP của team đều duyệt được (kể cả role QM là lead team QM)
       const owners = (DEMO_CONFIG.TEAM_LEAD_MAP[r.team] || []).map(e => String(e).toLowerCase());
       return owners.includes((CURRENT_EMAIL || '').toLowerCase());
     }
