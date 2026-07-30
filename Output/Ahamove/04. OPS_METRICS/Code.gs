@@ -26,26 +26,27 @@ const ROLE_MAP = {
 const DOMAIN_DEFAULT_ROLE = 'REQUESTER'; // mọi user hợp lệ khác = requester
 
 /* ============================================================
- *  TEAM ↔ LEAD — mỗi Team có 1 Lead/Head phụ trách
+ *  TEAM ↔ LEAD — mỗi Team có ≥1 Lead/Head phụ trách (mảng email)
  *  Lead CHỈ duyệt được request của team mình. DM override tất cả.
  *  >>> KHANH: (1) sửa TÊN TEAM cho khớp TEAM_LIST ở 00_CONFIG_SETTINGS
- *             (2) điền EMAIL lead/head phụ trách từng team.
- *  1 lead có thể nắm nhiều team (trỏ nhiều team về cùng 1 email).
+ *             (2) điền EMAIL lead/head — thêm nhiều lead cho 1 team bằng cách
+ *                 thêm phần tử vào mảng, vd: 'Growth': ['a@','b@'].
  * ============================================================ */
 const TEAM_LEAD_MAP = {
-  'Business Operations'      : 'lead1@ahamove.com',   // >>> ĐIỀN EMAIL LEAD <<<
-  'Marketing Campaign'       : 'lead1@ahamove.com',   // >>> ĐIỀN EMAIL LEAD <<<
-  'Hub Linehaul Operations'  : 'lead2@ahamove.com',   // >>> ĐIỀN EMAIL LEAD <<<
-  'Customer Service (CS)'    : 'lead2@ahamove.com',   // >>> ĐIỀN EMAIL LEAD <<<
-  'Risk & Fraud Control'     : 'lead2@ahamove.com',   // >>> ĐIỀN EMAIL LEAD <<<
-  'Fleet Operations'         : 'lead1@ahamove.com'    // >>> ĐIỀN EMAIL LEAD <<<
+  'DM'        : ['head-dm@ahamove.com'],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+  'PA'        : ['head-pa@ahamove.com'],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+  'OE'        : ['head-oe@ahamove.com'],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+  'QM'        : ['head-qm@ahamove.com'],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+  'Growth'    : ['head-growth@ahamove.com'],      // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+  'Expansion' : ['head-expansion@ahamove.com']    // >>> ĐIỀN EMAIL LEAD/HEAD <<<
 };
 
-// Lead `email` có được duyệt request của `team` không? DM luôn = true.
+// Lead `email` có được duyệt request của `team` không? DM luôn = true. 1 team có thể nhiều lead.
 function canLeadApproveTeam(email, team, role) {
   if (role === 'DM') return true;                       // DM override mọi team
   if (role !== 'TEAM_LEAD') return false;
-  return (TEAM_LEAD_MAP[team] || '').toLowerCase() === (email || '').toLowerCase();
+  var owners = (TEAM_LEAD_MAP[team] || []).map(function(e){ return String(e).toLowerCase(); });
+  return owners.indexOf((email || '').toLowerCase()) !== -1;
 }
 
 function getUserEmail() {
@@ -92,7 +93,7 @@ function getAppConfig() {
     sheet.appendRow(["TAB4_NAME", "⚙️ Bước 4: QM Add Tags", "Tên Tab 4"]);
     sheet.appendRow(["TAB5_NAME", "📊 Master Request Tracker", "Tên Tab 5"]);
     sheet.appendRow(["SUBMIT_BTN_TEXT", "🚀 Gửi Đề Xuất Tới Lead Duyệt", "Tên nút gửi"]);
-    sheet.appendRow(["TEAM_LIST", "Business Operations, Marketing Campaign, Hub Linehaul Operations, Customer Service (CS), Risk & Fraud Control, Fleet Operations", "Danh sách Team"]);
+    sheet.appendRow(["TEAM_LIST", "DM, PA, OE, QM, Growth, Expansion", "Danh sách Team"]);
     sheet.appendRow(["TAG_TYPES", "Priority Dispatch (Ưu tiên phát đơn), Incentive Campaign (Thưởng/Thách thức), Area Restriction (Giới hạn khu vực), Special Training (Đào tạo dịch vụ VIP), Penalty / Block (Khóa/Tạm dừng)", "Danh sách loại Tag"]);
     sheet.appendRow(["SLA_LEAD_HOURS", "4", "SLA giờ chờ Lead duyệt (Gate 1)"]);
     sheet.appendRow(["SLA_DM_HOURS", "8", "SLA giờ chờ DM review (Gate 2)"]);

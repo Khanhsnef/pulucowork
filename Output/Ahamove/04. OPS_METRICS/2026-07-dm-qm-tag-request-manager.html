@@ -306,8 +306,9 @@
           <label>👁️ Xem với vai trò:</label>
           <select id="role-selector" onchange="changeRole(this.value)">
             <option value="REQUESTER|req@ahamove.com">REQUESTER</option>
-            <option value="TEAM_LEAD|lead1@ahamove.com">TEAM_LEAD · lead1 (team A)</option>
-            <option value="TEAM_LEAD|lead2@ahamove.com">TEAM_LEAD · lead2 (team B)</option>
+            <option value="TEAM_LEAD|head-pa@ahamove.com">Head · PA</option>
+            <option value="TEAM_LEAD|head-oe@ahamove.com">Head · OE</option>
+            <option value="TEAM_LEAD|head-growth@ahamove.com">Head · Growth</option>
             <option value="DM|khanh@ahamove.com" selected>DM (override tất cả)</option>
             <option value="QM|qm1@ahamove.com">QM</option>
           </select>
@@ -508,12 +509,12 @@
 
       // ── Danh sách Team đề xuất (dropdown "Team Đề Xuất") ───────────────────
       TEAM_LIST: [
-        "Business Operations",
-        "Marketing Campaign",
-        "Hub Linehaul Operations",
-        "Customer Service (CS)",
-        "Risk & Fraud Control",
-        "Fleet Operations"
+        "DM",
+        "PA",
+        "OE",
+        "QM",
+        "Growth",
+        "Expansion"
       ],
 
       // ── Loại tag mong muốn — { value: mã lưu request, label: chữ hiển thị } ─
@@ -525,15 +526,15 @@
         { value: "Penalty / Block",    label: "Penalty / Block (Khóa/Tạm dừng)" }
       ],
 
-      // ── TEAM ↔ LEAD: mỗi team 1 lead/head phụ trách. Lead chỉ duyệt team mình; DM override tất cả.
-      //    Sửa TÊN team cho khớp TEAM_LIST ở trên + điền EMAIL lead phụ trách.
+      // ── TEAM ↔ LEAD: mỗi team có ≥1 lead/head. Lead chỉ duyệt team mình; DM override tất cả.
+      //    Sửa TÊN team cho khớp TEAM_LIST + điền EMAIL lead (mảng — thêm nhiều lead nếu cần).
       TEAM_LEAD_MAP: {
-        "Business Operations"      : "lead1@ahamove.com",
-        "Marketing Campaign"       : "lead1@ahamove.com",
-        "Hub Linehaul Operations"  : "lead2@ahamove.com",
-        "Customer Service (CS)"    : "lead2@ahamove.com",
-        "Risk & Fraud Control"     : "lead2@ahamove.com",
-        "Fleet Operations"         : "lead1@ahamove.com"
+        "DM"        : ["head-dm@ahamove.com"],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+        "PA"        : ["head-pa@ahamove.com"],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+        "OE"        : ["head-oe@ahamove.com"],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+        "QM"        : ["head-qm@ahamove.com"],          // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+        "Growth"    : ["head-growth@ahamove.com"],      // >>> ĐIỀN EMAIL LEAD/HEAD <<<
+        "Expansion" : ["head-expansion@ahamove.com"]    // >>> ĐIỀN EMAIL LEAD/HEAD <<<
       }
     };
 
@@ -602,8 +603,8 @@
       if (CURRENT_ROLE === 'DM') return true;
       if (CURRENT_ROLE !== 'TEAM_LEAD') return false;
       if (!r) return true; // dùng cho KPI/đếm chung khi chưa gắn request cụ thể
-      const owner = (DEMO_CONFIG.TEAM_LEAD_MAP[r.team] || '').toLowerCase();
-      return owner === (CURRENT_EMAIL || '').toLowerCase();
+      const owners = (DEMO_CONFIG.TEAM_LEAD_MAP[r.team] || []).map(e => String(e).toLowerCase());
+      return owners.includes((CURRENT_EMAIL || '').toLowerCase());
     }
     function canReviewDM()    { return CURRENT_ROLE === 'DM'; }
     function canUpdateQM()    { return CURRENT_ROLE === 'QM' || CURRENT_ROLE === 'DM'; }
@@ -620,12 +621,12 @@
 
     function mockData() {
       return [
-        { id:'REQ-2026-001', date:'2026-07-29 09:10', requestCategory:'Tạo tag mới', team:'Hub Linehaul Operations', name:'Trần B', type:'Priority Dispatch', tagName:'TAG_HUB_NIGHT', driverListSource:'-', reason:'Tăng offload đêm', duration:'2026-08', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 13:10', deadlineDM:'', deadlineQM:'', breach:'' },
-        { id:'REQ-2026-007', date:'2026-07-29 10:30', requestCategory:'Tạo tag mới', team:'Marketing Campaign', name:'Lê G', type:'Incentive Campaign', tagName:'TAG_MKT_FLASH', driverListSource:'-', reason:'Thưởng flash sale cuối tuần', duration:'2026-08', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 14:30', deadlineDM:'', deadlineQM:'', breach:'' },
-        { id:'REQ-2026-002', date:'2026-07-28 15:00', requestCategory:'Add tag', team:'Marketing Campaign', name:'Lê C', type:'Incentive Campaign', tagName:'TAG_MKT_AUG', driverListSource:'[Card Metabase] https://metabase.ahamove.com/card/123', reason:'Campaign tháng 8', duration:'2026-08', state:'PENDING_QM', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-28 16:20', dmDecision:'SKIPPED', qmStatus:'PENDING_QM', qmSuccessCount:0, qmRef:'', dmTagCode:'TAG_MKT_AUG', deadlineLead:'', deadlineDM:'', deadlineQM:'2026-07-29 15:00', breach:'QUÁ HẠN SLA' },
-        { id:'REQ-2026-003', date:'2026-07-27 10:00', requestCategory:'Tạo tag mới', team:'Risk & Fraud Control', name:'Phạm D', type:'Penalty / Block', tagName:'TAG_RISK_BLOCK', driverListSource:'-', reason:'Chặn TX gian lận', duration:'2026-08', state:'PENDING_DM', leadApprover:'lead2@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-27 11:05', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'2026-07-27 18:00', deadlineQM:'', breach:'' },
-        { id:'REQ-2026-004', date:'2026-07-26 08:00', requestCategory:'Tạo tag mới', team:'Fleet Operations', name:'Vũ E', type:'Special Training', tagName:'TAG_VIP_TRAIN', driverListSource:'[Link GoogleSheet] https://docs.google.com/...', reason:'Đào tạo VIP', duration:'2026-08', state:'DONE', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-26 09:30', dmReviewer:'khanh@ahamove.com', dmDecision:'APPROVED', dmReviewDate:'2026-07-26 14:10', qmStatus:'TAGGED_SUCCESS', qmSpecialist:'qm1@ahamove.com', qmDate:'2026-07-27 10:45', qmSuccessCount:120, qmRef:'BATCH-0726', dmTagCode:'DM_TAG_VIP_TRAIN_V1', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' },
-        { id:'REQ-2026-005', date:'2026-07-25 13:40', requestCategory:'Tạo tag mới', team:'Customer Service (CS)', name:'Đỗ F', type:'Area Restriction', tagName:'TAG_CS_LIMIT_Q7', driverListSource:'-', reason:'Giới hạn TX khu Q7 giờ cao điểm', duration:'2026-08', state:'REJECTED', leadApprover:'lead2@ahamove.com', leadDecision:'REJECTED', leadDate:'2026-07-25 15:00', rejectReason:'Chưa rõ tiêu chí chọn TX & phạm vi khu vực. Đề nghị bổ sung card Metabase danh sách TX rồi gửi lại.', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' }
+        { id:'REQ-2026-001', date:'2026-07-29 09:10', requestCategory:'Tạo tag mới', team:'OE', name:'Trần B', type:'Priority Dispatch', tagName:'TAG_HUB_NIGHT', driverListSource:'-', reason:'Tăng offload đêm', duration:'2026-08', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 13:10', deadlineDM:'', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-007', date:'2026-07-29 10:30', requestCategory:'Tạo tag mới', team:'Growth', name:'Lê G', type:'Incentive Campaign', tagName:'TAG_MKT_FLASH', driverListSource:'-', reason:'Thưởng flash sale cuối tuần', duration:'2026-08', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 14:30', deadlineDM:'', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-002', date:'2026-07-28 15:00', requestCategory:'Add tag', team:'Growth', name:'Lê C', type:'Incentive Campaign', tagName:'TAG_MKT_AUG', driverListSource:'[Card Metabase] https://metabase.ahamove.com/card/123', reason:'Campaign tháng 8', duration:'2026-08', state:'PENDING_QM', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-28 16:20', dmDecision:'SKIPPED', qmStatus:'PENDING_QM', qmSuccessCount:0, qmRef:'', dmTagCode:'TAG_MKT_AUG', deadlineLead:'', deadlineDM:'', deadlineQM:'2026-07-29 15:00', breach:'QUÁ HẠN SLA' },
+        { id:'REQ-2026-003', date:'2026-07-27 10:00', requestCategory:'Tạo tag mới', team:'PA', name:'Phạm D', type:'Penalty / Block', tagName:'TAG_RISK_BLOCK', driverListSource:'-', reason:'Chặn TX gian lận', duration:'2026-08', state:'PENDING_DM', leadApprover:'lead2@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-27 11:05', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'2026-07-27 18:00', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-004', date:'2026-07-26 08:00', requestCategory:'Tạo tag mới', team:'QM', name:'Vũ E', type:'Special Training', tagName:'TAG_VIP_TRAIN', driverListSource:'[Link GoogleSheet] https://docs.google.com/...', reason:'Đào tạo VIP', duration:'2026-08', state:'DONE', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-26 09:30', dmReviewer:'khanh@ahamove.com', dmDecision:'APPROVED', dmReviewDate:'2026-07-26 14:10', qmStatus:'TAGGED_SUCCESS', qmSpecialist:'qm1@ahamove.com', qmDate:'2026-07-27 10:45', qmSuccessCount:120, qmRef:'BATCH-0726', dmTagCode:'DM_TAG_VIP_TRAIN_V1', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-005', date:'2026-07-25 13:40', requestCategory:'Tạo tag mới', team:'Expansion', name:'Đỗ F', type:'Area Restriction', tagName:'TAG_CS_LIMIT_Q7', driverListSource:'-', reason:'Giới hạn TX khu Q7 giờ cao điểm', duration:'2026-08', state:'REJECTED', leadApprover:'lead2@ahamove.com', leadDecision:'REJECTED', leadDate:'2026-07-25 15:00', rejectReason:'Chưa rõ tiêu chí chọn TX & phạm vi khu vực. Đề nghị bổ sung card Metabase danh sách TX rồi gửi lại.', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' }
       ];
     }
 
