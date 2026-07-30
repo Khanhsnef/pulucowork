@@ -309,7 +309,7 @@
             <option value="TEAM_LEAD|head-pa@ahamove.com">Head · PA</option>
             <option value="TEAM_LEAD|head-oe@ahamove.com">Head · OE</option>
             <option value="TEAM_LEAD|head-growth@ahamove.com">Head · Growth</option>
-            <option value="DM|khanh@ahamove.com" selected>DM (override tất cả)</option>
+            <option value="DM|khanhlp@ahamove.com" selected>DM (override tất cả)</option>
             <option value="QM|qm1@ahamove.com">QM</option>
           </select>
         </div>
@@ -539,7 +539,7 @@
     };
 
     var CURRENT_ROLE = 'DM';
-    var CURRENT_EMAIL = 'khanh@ahamove.com';
+    var CURRENT_EMAIL = 'khanhlp@ahamove.com';
     let requestsData = [];
     let currentFilter = 'ALL';
     let rejectCtx = { id: null, gate: null };
@@ -625,7 +625,7 @@
         { id:'REQ-2026-007', date:'2026-07-29 10:30', requestCategory:'Tạo tag mới', team:'Growth', name:'Lê G', type:'Incentive Campaign', tagName:'TAG_MKT_FLASH', driverListSource:'-', reason:'Thưởng flash sale cuối tuần', duration:'2026-08', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 14:30', deadlineDM:'', deadlineQM:'', breach:'' },
         { id:'REQ-2026-002', date:'2026-07-28 15:00', requestCategory:'Add tag', team:'Growth', name:'Lê C', type:'Incentive Campaign', tagName:'TAG_MKT_AUG', driverListSource:'[Card Metabase] https://metabase.ahamove.com/card/123', reason:'Campaign tháng 8', duration:'2026-08', state:'PENDING_QM', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-28 16:20', dmDecision:'SKIPPED', qmStatus:'PENDING_QM', qmSuccessCount:0, qmRef:'', dmTagCode:'TAG_MKT_AUG', deadlineLead:'', deadlineDM:'', deadlineQM:'2026-07-29 15:00', breach:'QUÁ HẠN SLA' },
         { id:'REQ-2026-003', date:'2026-07-27 10:00', requestCategory:'Tạo tag mới', team:'PA', name:'Phạm D', type:'Penalty / Block', tagName:'TAG_RISK_BLOCK', driverListSource:'-', reason:'Chặn TX gian lận', duration:'2026-08', state:'PENDING_DM', leadApprover:'lead2@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-27 11:05', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'2026-07-27 18:00', deadlineQM:'', breach:'' },
-        { id:'REQ-2026-004', date:'2026-07-26 08:00', requestCategory:'Tạo tag mới', team:'QM', name:'Vũ E', type:'Special Training', tagName:'TAG_VIP_TRAIN', driverListSource:'[Link GoogleSheet] https://docs.google.com/...', reason:'Đào tạo VIP', duration:'2026-08', state:'DONE', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-26 09:30', dmReviewer:'khanh@ahamove.com', dmDecision:'APPROVED', dmReviewDate:'2026-07-26 14:10', qmStatus:'TAGGED_SUCCESS', qmSpecialist:'qm1@ahamove.com', qmDate:'2026-07-27 10:45', qmSuccessCount:120, qmRef:'BATCH-0726', dmTagCode:'DM_TAG_VIP_TRAIN_V1', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-004', date:'2026-07-26 08:00', requestCategory:'Tạo tag mới', team:'QM', name:'Vũ E', type:'Special Training', tagName:'TAG_VIP_TRAIN', driverListSource:'[Link GoogleSheet] https://docs.google.com/...', reason:'Đào tạo VIP', duration:'2026-08', state:'DONE', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-26 09:30', dmReviewer:'khanhlp@ahamove.com', dmDecision:'APPROVED', dmReviewDate:'2026-07-26 14:10', qmStatus:'TAGGED_SUCCESS', qmSpecialist:'qm1@ahamove.com', qmDate:'2026-07-27 10:45', qmSuccessCount:120, qmRef:'BATCH-0726', dmTagCode:'DM_TAG_VIP_TRAIN_V1', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' },
         { id:'REQ-2026-005', date:'2026-07-25 13:40', requestCategory:'Tạo tag mới', team:'Expansion', name:'Đỗ F', type:'Area Restriction', tagName:'TAG_CS_LIMIT_Q7', driverListSource:'-', reason:'Giới hạn TX khu Q7 giờ cao điểm', duration:'2026-08', state:'REJECTED', leadApprover:'lead2@ahamove.com', leadDecision:'REJECTED', leadDate:'2026-07-25 15:00', rejectReason:'Chưa rõ tiêu chí chọn TX & phạm vi khu vực. Đề nghị bổ sung card Metabase danh sách TX rồi gửi lại.', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' }
       ];
     }

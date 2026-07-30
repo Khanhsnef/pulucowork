@@ -15,7 +15,7 @@
  * ============================================================ */
 const ROLE_MAP = {
   // --- DM Lead ---
-  'khanh@ahamove.com'   : 'DM',
+  'khanhlp@ahamove.com' : 'DM',
   // --- Team Leads / Heads ---
   'lead1@ahamove.com'   : 'TEAM_LEAD',
   'lead2@ahamove.com'   : 'TEAM_LEAD',
