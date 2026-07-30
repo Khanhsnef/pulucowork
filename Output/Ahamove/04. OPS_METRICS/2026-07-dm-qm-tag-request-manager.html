@@ -400,15 +400,11 @@
               <input type="text" id="req-driver-source-val" placeholder="https://docs.google.com/spreadsheets/d/...">
             </div>
             <div class="form-group">
-              <label>Application Period *</label>
-              <div style="display:flex; gap:8px; align-items:center;">
-                <input type="date" id="req-apply-from" style="flex:1;" required>
-                <span style="color:var(--text-muted); font-size:13px;">to</span>
-                <input type="date" id="req-apply-to" style="flex:1;" required>
-              </div>
+              <label>Application Start Date *</label>
+              <input type="date" id="req-apply-from" required>
             </div>
             <div class="form-group">
-              <label style="color:#FBBF24;">Tagging Deadline (Complete Before) *</label>
+              <label style="color:#FBBF24;">Deadline *</label>
               <input type="date" id="req-deadline" required>
             </div>
             <div class="form-group full-width"><label>Business Rationale & Driver Selection Criteria *</label><textarea id="req-reason" rows="3" placeholder="State business objective, expected ROI, driver selection criteria..." required></textarea></div>
@@ -732,8 +728,7 @@
       const dsType = isAddTag ? document.getElementById('req-driver-source-type').value : '-';
       const dsVal = isAddTag ? document.getElementById('req-driver-source-val').value : '-';
       const applyFrom = document.getElementById('req-apply-from').value;
-      const applyTo   = document.getElementById('req-apply-to').value;
-      const duration  = (applyFrom && applyTo) ? `${applyFrom} đến ${applyTo}` : (applyFrom || applyTo || '-');
+      const duration  = applyFrom || '-';
       const newReq = {
         id: newId, date: timeStr, requestCategory: category,
         team: document.getElementById('req-team').value, name: document.getElementById('req-name').value,
