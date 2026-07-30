@@ -305,10 +305,11 @@
         <div class="role-switch">
           <label>👁️ Xem với vai trò:</label>
           <select id="role-selector" onchange="changeRole(this.value)">
-            <option value="REQUESTER">REQUESTER</option>
-            <option value="TEAM_LEAD">TEAM_LEAD</option>
-            <option value="DM" selected>DM</option>
-            <option value="QM">QM</option>
+            <option value="REQUESTER|req@ahamove.com">REQUESTER</option>
+            <option value="TEAM_LEAD|lead1@ahamove.com">TEAM_LEAD · lead1 (team A)</option>
+            <option value="TEAM_LEAD|lead2@ahamove.com">TEAM_LEAD · lead2 (team B)</option>
+            <option value="DM|khanh@ahamove.com" selected>DM (override tất cả)</option>
+            <option value="QM|qm1@ahamove.com">QM</option>
           </select>
         </div>
         <span class="role-pill role-DM" id="user-role-pill">DM</span>
@@ -522,11 +523,22 @@
         { value: "Area Restriction",   label: "Area Restriction (Giới hạn khu vực)" },
         { value: "Special Training",   label: "Special Training (Đào tạo dịch vụ VIP)" },
         { value: "Penalty / Block",    label: "Penalty / Block (Khóa/Tạm dừng)" }
-      ]
+      ],
+
+      // ── TEAM ↔ LEAD: mỗi team 1 lead/head phụ trách. Lead chỉ duyệt team mình; DM override tất cả.
+      //    Sửa TÊN team cho khớp TEAM_LIST ở trên + điền EMAIL lead phụ trách.
+      TEAM_LEAD_MAP: {
+        "Business Operations"      : "lead1@ahamove.com",
+        "Marketing Campaign"       : "lead1@ahamove.com",
+        "Hub Linehaul Operations"  : "lead2@ahamove.com",
+        "Customer Service (CS)"    : "lead2@ahamove.com",
+        "Risk & Fraud Control"     : "lead2@ahamove.com",
+        "Fleet Operations"         : "lead1@ahamove.com"
+      }
     };
 
     var CURRENT_ROLE = 'DM';
-    var CURRENT_EMAIL = 'demo@ahamove.com';
+    var CURRENT_EMAIL = 'khanh@ahamove.com';
     let requestsData = [];
     let currentFilter = 'ALL';
     let rejectCtx = { id: null, gate: null };
@@ -576,9 +588,23 @@
       }
     }
 
-    function changeRole(role) { CURRENT_ROLE = role; updateRolePill(); renderAll(); showToast('Đã đổi vai trò xem', 'Hiển thị hành động theo quyền: ' + role, 'ok'); }
+    function changeRole(val) {
+      // val dạng "ROLE|email" từ role-selector (email để test ràng buộc team)
+      const parts = String(val).split('|');
+      CURRENT_ROLE = parts[0];
+      CURRENT_EMAIL = parts[1] || CURRENT_EMAIL;
+      updateRolePill(); renderAll();
+      showToast('Đã đổi vai trò xem', 'Quyền: ' + CURRENT_ROLE + (parts[1] ? ' · ' + parts[1] : ''), 'ok');
+    }
     function updateRolePill() { const p = document.getElementById('user-role-pill'); p.innerText = CURRENT_ROLE; p.className = 'role-pill role-' + CURRENT_ROLE; }
-    function canApproveLead() { return CURRENT_ROLE === 'TEAM_LEAD' || CURRENT_ROLE === 'DM'; }
+    // Lead chỉ duyệt request của team mình; DM override tất cả. Truyền request r để check team.
+    function canApproveLead(r) {
+      if (CURRENT_ROLE === 'DM') return true;
+      if (CURRENT_ROLE !== 'TEAM_LEAD') return false;
+      if (!r) return true; // dùng cho KPI/đếm chung khi chưa gắn request cụ thể
+      const owner = (DEMO_CONFIG.TEAM_LEAD_MAP[r.team] || '').toLowerCase();
+      return owner === (CURRENT_EMAIL || '').toLowerCase();
+    }
     function canReviewDM()    { return CURRENT_ROLE === 'DM'; }
     function canUpdateQM()    { return CURRENT_ROLE === 'QM' || CURRENT_ROLE === 'DM'; }
 
@@ -595,6 +621,7 @@
     function mockData() {
       return [
         { id:'REQ-2026-001', date:'2026-07-29 09:10', requestCategory:'Tạo tag mới', team:'Hub Linehaul Operations', name:'Trần B', type:'Priority Dispatch', tagName:'TAG_HUB_NIGHT', driverListSource:'-', reason:'Tăng offload đêm', duration:'2026-08', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 13:10', deadlineDM:'', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-007', date:'2026-07-29 10:30', requestCategory:'Tạo tag mới', team:'Marketing Campaign', name:'Lê G', type:'Incentive Campaign', tagName:'TAG_MKT_FLASH', driverListSource:'-', reason:'Thưởng flash sale cuối tuần', duration:'2026-08', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 14:30', deadlineDM:'', deadlineQM:'', breach:'' },
         { id:'REQ-2026-002', date:'2026-07-28 15:00', requestCategory:'Add tag', team:'Marketing Campaign', name:'Lê C', type:'Incentive Campaign', tagName:'TAG_MKT_AUG', driverListSource:'[Card Metabase] https://metabase.ahamove.com/card/123', reason:'Campaign tháng 8', duration:'2026-08', state:'PENDING_QM', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-28 16:20', dmDecision:'SKIPPED', qmStatus:'PENDING_QM', qmSuccessCount:0, qmRef:'', dmTagCode:'TAG_MKT_AUG', deadlineLead:'', deadlineDM:'', deadlineQM:'2026-07-29 15:00', breach:'QUÁ HẠN SLA' },
         { id:'REQ-2026-003', date:'2026-07-27 10:00', requestCategory:'Tạo tag mới', team:'Risk & Fraud Control', name:'Phạm D', type:'Penalty / Block', tagName:'TAG_RISK_BLOCK', driverListSource:'-', reason:'Chặn TX gian lận', duration:'2026-08', state:'PENDING_DM', leadApprover:'lead2@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-27 11:05', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'2026-07-27 18:00', deadlineQM:'', breach:'' },
         { id:'REQ-2026-004', date:'2026-07-26 08:00', requestCategory:'Tạo tag mới', team:'Fleet Operations', name:'Vũ E', type:'Special Training', tagName:'TAG_VIP_TRAIN', driverListSource:'[Link GoogleSheet] https://docs.google.com/...', reason:'Đào tạo VIP', duration:'2026-08', state:'DONE', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-26 09:30', dmReviewer:'khanh@ahamove.com', dmDecision:'APPROVED', dmReviewDate:'2026-07-26 14:10', qmStatus:'TAGGED_SUCCESS', qmSpecialist:'qm1@ahamove.com', qmDate:'2026-07-27 10:45', qmSuccessCount:120, qmRef:'BATCH-0726', dmTagCode:'DM_TAG_VIP_TRAIN_V1', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' },
@@ -625,7 +652,7 @@
       document.getElementById('badge-open-count').innerText = countMine();
     }
     function isMine(r) {
-      if (r.state === 'PENDING_TEAM_LEAD') return canApproveLead();
+      if (r.state === 'PENDING_TEAM_LEAD') return canApproveLead(r);
       if (r.state === 'PENDING_DM') return canReviewDM();
       if (r.state === 'PENDING_QM') return canUpdateQM();
       return false;
@@ -835,7 +862,7 @@
     }
     // nút kẹp trên/dưới chấm active (Lead/DM). QM & trạng thái cuối trả '' (dùng block riêng).
     function gateDotButtons(r, key) {
-      if (key === 'lead' && r.state === 'PENDING_TEAM_LEAD' && canApproveLead()) {
+      if (key === 'lead' && r.state === 'PENDING_TEAM_LEAD' && canApproveLead(r)) {
         return `<button class="dot-btn top btn-success" onclick="event.stopPropagation();leadApprove('${r.id}')"><span class="bi">✓</span><span class="bl">Duyệt</span></button>`+
                `<button class="dot-btn bot btn-danger" onclick="event.stopPropagation();openReject('${r.id}','LEAD')"><span class="bi">✕</span><span class="bl">Từ chối</span></button>`;
       }
@@ -1046,8 +1073,8 @@
 
     // ===== LEAD approve inline =====
     function leadApprove(id) {
-      if (!canApproveLead()) { showToast('Không đủ quyền', 'Chỉ Lead/Head hoặc DM.', 'err'); return; }
       const r = requestsData.find(x => x.id === id); if (!r) return;
+      if (!canApproveLead(r)) { showToast('Không đủ quyền', 'Bạn không phụ trách team "' + r.team + '". Chỉ Lead team này hoặc DM.', 'err'); return; }
       r.leadDecision = 'APPROVED'; r.leadApprover = CURRENT_EMAIL; r.breach = '';
       if (r.requestCategory === 'Add tag') { r.state = 'PENDING_QM'; r.dmDecision = 'SKIPPED'; r.qmStatus = 'PENDING_QM'; if (!r.dmTagCode || r.dmTagCode==='-') r.dmTagCode = r.tagName; }
       else { r.state = 'PENDING_DM'; }
@@ -1078,7 +1105,8 @@
 
     // ===== Reject (chung Lead & DM) =====
     function openReject(id, gate) {
-      if (gate === 'LEAD' && !canApproveLead()) { showToast('Không đủ quyền','Chỉ Lead/Head hoặc DM.','err'); return; }
+      const rr = requestsData.find(x => x.id === id);
+      if (gate === 'LEAD' && !canApproveLead(rr)) { showToast('Không đủ quyền','Bạn không phụ trách team "' + (rr ? rr.team : '') + '". Chỉ Lead team này hoặc DM.','err'); return; }
       if (gate === 'DM' && !canReviewDM()) { showToast('Không đủ quyền','Chỉ DM Lead.','err'); return; }
       rejectCtx = { id: id, gate: gate };
       document.getElementById('reject-req-id').innerText = id;

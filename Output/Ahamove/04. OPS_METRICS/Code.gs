@@ -16,7 +16,7 @@
 const ROLE_MAP = {
   // --- DM Lead ---
   'khanh@ahamove.com'   : 'DM',
-  // --- Team Leads (Lead nào cũng duyệt được) ---
+  // --- Team Leads / Heads ---
   'lead1@ahamove.com'   : 'TEAM_LEAD',
   'lead2@ahamove.com'   : 'TEAM_LEAD',
   // --- QM Specialists ---
@@ -24,6 +24,29 @@ const ROLE_MAP = {
   'qm2@ahamove.com'     : 'QM'
 };
 const DOMAIN_DEFAULT_ROLE = 'REQUESTER'; // mọi user hợp lệ khác = requester
+
+/* ============================================================
+ *  TEAM ↔ LEAD — mỗi Team có 1 Lead/Head phụ trách
+ *  Lead CHỈ duyệt được request của team mình. DM override tất cả.
+ *  >>> KHANH: (1) sửa TÊN TEAM cho khớp TEAM_LIST ở 00_CONFIG_SETTINGS
+ *             (2) điền EMAIL lead/head phụ trách từng team.
+ *  1 lead có thể nắm nhiều team (trỏ nhiều team về cùng 1 email).
+ * ============================================================ */
+const TEAM_LEAD_MAP = {
+  'Business Operations'      : 'lead1@ahamove.com',   // >>> ĐIỀN EMAIL LEAD <<<
+  'Marketing Campaign'       : 'lead1@ahamove.com',   // >>> ĐIỀN EMAIL LEAD <<<
+  'Hub Linehaul Operations'  : 'lead2@ahamove.com',   // >>> ĐIỀN EMAIL LEAD <<<
+  'Customer Service (CS)'    : 'lead2@ahamove.com',   // >>> ĐIỀN EMAIL LEAD <<<
+  'Risk & Fraud Control'     : 'lead2@ahamove.com',   // >>> ĐIỀN EMAIL LEAD <<<
+  'Fleet Operations'         : 'lead1@ahamove.com'    // >>> ĐIỀN EMAIL LEAD <<<
+};
+
+// Lead `email` có được duyệt request của `team` không? DM luôn = true.
+function canLeadApproveTeam(email, team, role) {
+  if (role === 'DM') return true;                       // DM override mọi team
+  if (role !== 'TEAM_LEAD') return false;
+  return (TEAM_LEAD_MAP[team] || '').toLowerCase() === (email || '').toLowerCase();
+}
 
 function getUserEmail() {
   try { return (Session.getActiveUser().getEmail() || '').toLowerCase(); }
@@ -264,6 +287,11 @@ function saveLeadApproval(reqId, decision, note) {
       const state = rows[i][COL.STATE-1];
       if (state !== 'PENDING_TEAM_LEAD') {
         return { status: "error", message: "Request không ở trạng thái chờ Lead duyệt." };
+      }
+      // RBAC theo team: Lead chỉ duyệt request của team mình; DM override tất cả.
+      const reqTeam = rows[i][COL.TEAM-1];
+      if (!canLeadApproveTeam(getUserEmail(), reqTeam, role)) {
+        return { status: "error", message: "Bạn không phụ trách team \"" + reqTeam + "\". Chỉ Lead của team này (hoặc DM) mới được duyệt." };
       }
       const isAddTag = (rows[i][COL.CATEGORY-1] === 'Add tag');
 
