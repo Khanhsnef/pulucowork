@@ -159,7 +159,7 @@ function saveAppConfig(newConfig) {
  * ============================================================ */
 // 23 cột gốc + 8 cột mới (append cuối để không vỡ data cũ)
 const BASE_HEADERS = ["Mã Request", "Ngày Tạo", "Hình Thức", "Team Đề Xuất", "Người Đề Xuất", "Loại Tag", "Tên Tag Yêu Cầu", "Nguồn Danh Sách TX", "Số Lượng TX", "Lý Do", "Thời Gian", "DM Reviewer", "Ngày DM Review", "DM Quyết Định", "DM Note", "DM Tag Code", "QM Handover", "QM Specialist", "Ngày QM Nhận", "QM Trạng Thái Add Tag", "Ngày Add Tag Xong", "Số TX Add Thành Công", "Ghi Chú QM"];
-const NEW_HEADERS = ["Lead Approver", "Ngày Lead Duyệt", "Lead Quyết Định", "Lead Note", "Trạng Thái Tổng", "Deadline Lead", "Deadline DM", "Deadline QM", "Cờ Quá Hạn"];
+const NEW_HEADERS = ["Lead Approver", "Ngày Lead Duyệt", "Lead Quyết Định", "Lead Note", "Trạng Thái Tổng", "Deadline Lead", "Deadline DM", "Deadline QM", "Cờ Quá Hạn", "Cần Add Tag Xong Trước"];
 // Cột (1-based) — vị trí cột mới bắt đầu từ 24
 const COL = {
   ID: 1, DATE: 2, CATEGORY: 3, TEAM: 4, NAME: 5, TYPE: 6, TAGNAME: 7,
@@ -167,7 +167,7 @@ const COL = {
   DM_REVIEWER: 12, DM_DATE: 13, DM_DECISION: 14, DM_NOTE: 15, DM_TAGCODE: 16, QM_HANDOVER: 17,
   QM_SPECIALIST: 18, QM_DATE: 19, QM_STATUS: 20, QM_DONE_DATE: 21, QM_SUCCESS: 22, QM_NOTE: 23,
   LEAD_APPROVER: 24, LEAD_DATE: 25, LEAD_DECISION: 26, LEAD_NOTE: 27,
-  STATE: 28, DL_LEAD: 29, DL_DM: 30, DL_QM: 31, BREACH: 32
+  STATE: 28, DL_LEAD: 29, DL_DM: 30, DL_QM: 31, BREACH: 32, DUE_DATE: 33
 };
 
 function getMainSheet() {
@@ -217,6 +217,7 @@ function getSheetDataJson() {
         id: r[COL.ID-1], date: r[COL.DATE-1], requestCategory: r[COL.CATEGORY-1] || 'Tạo tag mới',
         team: r[COL.TEAM-1], name: r[COL.NAME-1], type: r[COL.TYPE-1], tagName: r[COL.TAGNAME-1],
         driverListSource: r[COL.SRC-1] || '-', count: r[COL.COUNT-1], reason: r[COL.REASON-1], duration: r[COL.DURATION-1],
+        dueDate: r[COL.DUE_DATE-1] || '-',
         leadApprover: r[COL.LEAD_APPROVER-1] || '-', leadDate: r[COL.LEAD_DATE-1] || '-',
         leadDecision: r[COL.LEAD_DECISION-1] || 'PENDING', leadNote: r[COL.LEAD_NOTE-1] || '',
         dmReviewer: r[COL.DM_REVIEWER-1] || '-', dmReviewDate: r[COL.DM_DATE-1] || '-',
@@ -261,6 +262,7 @@ function saveNewRequest(data) {
   row[COL.COUNT-1] = data.count || 0;
   row[COL.REASON-1] = data.reason;
   row[COL.DURATION-1] = data.duration;
+  row[COL.DUE_DATE-1] = data.dueDate || '-';
   // Các gate sau chưa xử lý
   row[COL.DM_REVIEWER-1] = '-'; row[COL.DM_DATE-1] = '-';
   row[COL.DM_DECISION-1] = 'PENDING'; row[COL.DM_NOTE-1] = 'Chờ Lead duyệt trước'; row[COL.DM_TAGCODE-1] = '-';
