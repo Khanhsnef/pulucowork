@@ -352,17 +352,17 @@
         <div class="card-header"><h2 id="form-title">📝 Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM</h2></div>
         <form id="tag-request-form" onsubmit="handleFormSubmit(event)">
           <div style="margin-bottom: 20px;">
-            <label style="font-size: 14px; font-weight: 700; color: #F8FAFC; margin-bottom: 10px; display: block;">Chọn Hình Thức Request *</label>
+            <label style="font-size: 14px; font-weight: 700; color: #F8FAFC; margin-bottom: 10px; display: block;">Select Request Type *</label>
             <div class="category-toggle-grid">
               <div class="category-option active" id="btn-cat-create" onclick="selectRequestCategory('Tạo tag mới')">
                 <div class="opt-icon">🏷️</div>
-                <div class="opt-text"><div class="opt-title">CREATE NEW TAGS</div><div class="opt-desc">Tag mới → Lead duyệt → DM Review → QM (đủ 3 gate)</div></div>
-                <div class="opt-check" id="check-cat-create">✓ Đã chọn</div>
+                <div class="opt-text"><div class="opt-title">CREATE NEW TAGS</div><div class="opt-desc">New tag → Lead approval → DM Review → QM (all 3 gates)</div></div>
+                <div class="opt-check" id="check-cat-create">✓ Selected</div>
               </div>
               <div class="category-option" id="btn-cat-add" onclick="selectRequestCategory('Add tag')">
                 <div class="opt-icon">⚡</div>
-                <div class="opt-text"><div class="opt-title">ADD TAGS</div><div class="opt-desc">Tag có sẵn → Lead duyệt → bỏ qua DM → thẳng QM</div></div>
-                <div class="opt-check" id="check-cat-add" style="display:none;">✓ Đã chọn</div>
+                <div class="opt-text"><div class="opt-title">ADD TAGS</div><div class="opt-desc">Existing tag → Lead approval → skip DM → straight to QM</div></div>
+                <div class="opt-check" id="check-cat-add" style="display:none;">✓ Selected</div>
               </div>
             </div>
             <input type="hidden" id="req-category" value="Tạo tag mới">
@@ -374,44 +374,44 @@
 
           <div class="form-grid">
             <div class="form-group">
-              <label>Team Đề Xuất *</label>
+              <label>Requesting Team *</label>
               <select id="req-team" required>
-                <option value="">-- Chọn Team --</option>
+                <option value="">-- Select Team --</option>
                 <!-- Options được đổ tự động từ DEMO_CONFIG.TEAM_LIST (xem đầu <script>) -->
               </select>
             </div>
-            <div class="form-group"><label>Họ Tên Người Yêu Cầu *</label><input type="text" id="req-name" placeholder="VD: Nguyễn Văn A" required></div>
+            <div class="form-group"><label>Requester Full Name *</label><input type="text" id="req-name" placeholder="e.g. Nguyen Van A" required></div>
             <div class="form-group">
-              <label>Loại Tag Mong Muốn *</label>
+              <label>Tag Type *</label>
               <select id="req-type" required>
                 <!-- Options được đổ tự động từ DEMO_CONFIG.TAG_TYPES (xem đầu <script>) -->
               </select>
             </div>
-            <div class="form-group"><label id="lbl-tag-name">Tên Tag Gợi Ý / Mục Tiêu *</label><input type="text" id="req-tag-name" placeholder="VD: TAG_HUB_SOC_NIGHT_OFFLOAD" required></div>
+            <div class="form-group"><label id="lbl-tag-name">Suggested Tag Name / Objective *</label><input type="text" id="req-tag-name" placeholder="e.g. TAG_HUB_SOC_NIGHT_OFFLOAD" required></div>
             <div class="form-group" id="group-driver-source-type" style="display:none;">
-              <label style="color:#FBBF24;">Phương Thức Cung Cấp Danh Sách TX *</label>
+              <label style="color:#FBBF24;">Driver List Source Method *</label>
               <select id="req-driver-source-type" onchange="updateDriverSourcePlaceholder()">
-                <option value="Link GoogleSheet">Link GoogleSheet Target</option>
-                <option value="Card Metabase">Card Metabase URL</option>
+                <option value="Link GoogleSheet">Google Sheet Link</option>
+                <option value="Card Metabase">Metabase Card URL</option>
               </select>
             </div>
             <div class="form-group full-width" id="group-driver-source-url" style="display:none;">
-              <label style="color:#FBBF24;" id="lbl-driver-source-url">Đường Dẫn Danh Sách Tài Xế (GoogleSheet / Metabase) *</label>
+              <label style="color:#FBBF24;" id="lbl-driver-source-url">Driver List URL (Google Sheet / Metabase) *</label>
               <input type="text" id="req-driver-source-val" placeholder="https://docs.google.com/spreadsheets/d/...">
             </div>
             <div class="form-group">
-              <label>Thời Gian Áp Dụng *</label>
+              <label>Application Period *</label>
               <div style="display:flex; gap:8px; align-items:center;">
                 <input type="date" id="req-apply-from" style="flex:1;" required>
-                <span style="color:var(--text-muted); font-size:13px;">đến</span>
+                <span style="color:var(--text-muted); font-size:13px;">to</span>
                 <input type="date" id="req-apply-to" style="flex:1;" required>
               </div>
             </div>
             <div class="form-group">
-              <label style="color:#FBBF24;">Cần Add Tag Xong Trước Ngày *</label>
+              <label style="color:#FBBF24;">Tagging Deadline (Complete Before) *</label>
               <input type="date" id="req-deadline" required>
             </div>
-            <div class="form-group full-width"><label>Lý Do Kinh Doanh & Tiêu Chí Chọn Tài Xế *</label><textarea id="req-reason" rows="3" placeholder="Nêu rõ mục tiêu kinh doanh, ROI kỳ vọng..." required></textarea></div>
+            <div class="form-group full-width"><label>Business Rationale & Driver Selection Criteria *</label><textarea id="req-reason" rows="3" placeholder="State business objective, expected ROI, driver selection criteria..." required></textarea></div>
           </div>
           <div style="margin-top: 20px; display:flex; justify-content:flex-end; gap:12px;">
             <button type="submit" class="btn" id="submit-btn">🚀 Gửi Đề Xuất Tới Lead Duyệt</button>
@@ -512,7 +512,7 @@
       SHEET_LINK_TEXT:  "Google Sheet Target",                                 // Chữ hiển thị của link sheet
       FORM_TITLE:       "Request Form",         // Tiêu đề form tạo request
       SUBMIT_BTN_TEXT:  "🚀 Xong ",                        // Chữ nút Submit
-      TAB1_NAME:        "📝 Tạo Request",                                       // Tên tab 1
+      TAB1_NAME:        "📝 Create Request",                                    // Tên tab 1
       TAB5_NAME:        "📊 Master Request Tracker",                            // Tên tab Master
 
       // ── SLA từng gate (giờ) — hiển thị ở KPI card & tính deadline ──────────
@@ -520,7 +520,7 @@
       SLA_DM_HOURS:   8,   // Gate 2: chờ DM review
       SLA_QM_HOURS:   24,  // Gate 3: chờ QM add tag
 
-      // ── Danh sách Team đề xuất (dropdown "Team Đề Xuất") ───────────────────
+      // ── Danh sách Team request (dropdown "Team Request") ───────────────────
       TEAM_LIST: [
         "DM",
         "S&P",
@@ -701,16 +701,16 @@
       const grpSourceType = document.getElementById('group-driver-source-type');
       const grpSourceUrl = document.getElementById('group-driver-source-url');
       if (cat === 'Add tag') {
-        noticeBar.innerHTML = `<span>⚡ <strong>Luồng Add Tag:</strong> Lead/Head duyệt trước, sau đó <strong>tự động bỏ qua DM Review</strong> và chuyển thẳng tới <strong>QM Add Tags</strong>.</span>`;
+        noticeBar.innerHTML = `<span>⚡ <strong>Add Tag flow:</strong> Lead/Head approves first, then <strong>automatically skips DM Review</strong> and goes straight to <strong>QM Add Tags</strong>.</span>`;
         noticeBar.style.background = `rgba(99, 102, 241, 0.15)`; noticeBar.style.borderColor = `rgba(99, 102, 241, 0.4)`; noticeBar.style.color = `#A5B4FC`;
         grpSourceType.style.display = 'flex'; grpSourceUrl.style.display = 'flex';
-        document.getElementById('lbl-tag-name').innerText = 'Mã / Tên Tag Cần Add *';
+        document.getElementById('lbl-tag-name').innerText = 'Tag Code / Name to Add *';
         document.getElementById('req-driver-source-val').required = true; updateDriverSourcePlaceholder();
       } else {
-        noticeBar.innerHTML = `<span>👔 <strong>Luồng Tạo Tag Mới:</strong> Gửi xong request về <strong>Master</strong> ở trạng thái Chờ Lead duyệt → DM Review → QM.</span>`;
+        noticeBar.innerHTML = `<span>👔 <strong>Create New Tag flow:</strong> Request goes to <strong>Master</strong> as Pending Lead approval → DM Review → QM.</span>`;
         noticeBar.style.background = `rgba(14, 165, 233, 0.1)`; noticeBar.style.borderColor = `rgba(56, 189, 248, 0.3)`; noticeBar.style.color = `#7DD3FC`;
         grpSourceType.style.display = 'none'; grpSourceUrl.style.display = 'none';
-        document.getElementById('lbl-tag-name').innerText = 'Tên Tag Gợi Ý / Mục Tiêu *';
+        document.getElementById('lbl-tag-name').innerText = 'Suggested Tag Name / Objective *';
         document.getElementById('req-driver-source-val').required = false;
       }
     }
@@ -718,8 +718,8 @@
       const sType = document.getElementById('req-driver-source-type').value;
       const input = document.getElementById('req-driver-source-val');
       const lbl = document.getElementById('lbl-driver-source-url');
-      if (sType === 'Link GoogleSheet') { lbl.innerText = 'Đường Dẫn File GoogleSheet Danh Sách Tài Xế *'; input.placeholder = 'https://docs.google.com/spreadsheets/d/...'; }
-      else { lbl.innerText = 'Đường Dẫn Card Metabase Danh Sách Tài Xế *'; input.placeholder = 'https://metabase.ahamove.com/card/...'; }
+      if (sType === 'Link GoogleSheet') { lbl.innerText = 'Google Sheet URL of Driver List *'; input.placeholder = 'https://docs.google.com/spreadsheets/d/...'; }
+      else { lbl.innerText = 'Metabase Card URL of Driver List *'; input.placeholder = 'https://metabase.ahamove.com/card/...'; }
     }
 
     function handleFormSubmit(e) {
