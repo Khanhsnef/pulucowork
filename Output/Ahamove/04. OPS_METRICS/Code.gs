@@ -104,7 +104,7 @@ function getAppConfig() {
     sheet.appendRow(["TAB5_NAME", "📊 Master Request Tracker", "Tên Tab 5"]);
     sheet.appendRow(["SUBMIT_BTN_TEXT", "🚀 Gửi Đề Xuất Tới Lead Duyệt", "Tên nút gửi"]);
     sheet.appendRow(["TEAM_LIST", "DM, S&P, Growth, Expansion, OE, PA, WH, QM", "Danh sách Team"]);
-    sheet.appendRow(["TAG_TYPES", "Priority Dispatch (Ưu tiên phát đơn), Incentive Campaign (Thưởng/Thách thức), Area Restriction (Giới hạn khu vực), Special Training (Đào tạo dịch vụ VIP), Penalty / Block (Khóa/Tạm dừng)", "Danh sách loại Tag"]);
+    sheet.appendRow(["TAG_TYPES", "Driver Segment, Incentive/Challenge, Adhoc, Others", "Danh sách loại Tag"]);
     sheet.appendRow(["SLA_LEAD_HOURS", "4", "SLA giờ chờ Lead duyệt (Gate 1)"]);
     sheet.appendRow(["SLA_DM_HOURS", "8", "SLA giờ chờ DM review (Gate 2)"]);
     sheet.appendRow(["SLA_QM_HOURS", "24", "SLA giờ chờ QM add tag (Gate 3)"]);
