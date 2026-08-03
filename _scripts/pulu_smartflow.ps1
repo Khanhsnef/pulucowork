@@ -112,12 +112,16 @@ Set-Alias -Name c-think -Value CThink
 Set-Alias -Name c-code  -Value CCode
 Set-Alias -Name c-fast  -Value CFast
 
-# ── Kích hoạt 9router endpoint cho Claude ───────────────────
-# Chạy lệnh này trước khi dùng `claude` hoặc `ai`
+# ── Kích hoạt Gateway endpoints cho Claude ───────────────────
 function Use9router {
     $env:ANTHROPIC_BASE_URL = "http://localhost:20128/api/v1"
-    Write-Host "✅ Claude đã trỏ về 9router (localhost:20128)" -ForegroundColor Green
+    Write-Host "✅ Claude đã trỏ về 9Router (localhost:20128 - Fast Terminal Route)" -ForegroundColor Green
+}
+function UseOmni {
+    $env:ANTHROPIC_BASE_URL = "http://localhost:20130/v1"
+    Write-Host "✅ Claude đã trỏ về OmniRoute (localhost:20130 - Multi-provider & Compression Route)" -ForegroundColor Green
 }
 Set-Alias -Name use-9router -Value Use9router
+Set-Alias -Name use-omni    -Value UseOmni
 
-Write-Host "🚀 PuluSmartFlow loaded | Aliases: chat, ai, c-think, c-code, c-fast, 9router, use-9router" -ForegroundColor DarkGray
+Write-Host "🚀 PuluSmartFlow v3.0 Loaded | Aliases: chat, ai, c-think, c-code, c-fast, 9router, omniroute, use-9router, use-omni" -ForegroundColor DarkGray
