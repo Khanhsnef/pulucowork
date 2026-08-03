@@ -22,8 +22,12 @@ def main():
     if not raw_text.strip():
         return
 
-    # 1. Header Panel (Claude Orange Rounded Box)
-    header_content = f"[bold white]🔀 Gateway:[/] [bold yellow]{args.gateway}[/]   │   [bold white]🧠 Model:[/] [bold green]{args.model}[/]   │   [bold green]🟢 Session Active[/]"
+    # Shorten labels if necessary to prevent wrapping
+    gw = args.gateway.replace(" - Terminal Siêu Tốc < 1ms", "").replace(" - Nén Token & Auto-Fallback Active", "").replace(" - Multi-Provider Engine", "")
+    model = args.model.replace("COMBO: ", "")
+
+    # 1. Header Panel (Concise 1-Line Claude Orange Box)
+    header_content = f"🔀 [bold yellow]{gw}[/]   │   🧠 [bold green]{model}[/]   │   [bold green]🟢 Active[/]"
     console.print(
         Panel(
             header_content,
@@ -41,9 +45,9 @@ def main():
     except Exception:
         sys.stdout.write(raw_text)
 
-    # 3. Footer Panel (Compact Meter Panel)
+    # 3. Footer Panel (Compact 1-Line Meter Panel)
     elapsed_str = f"⏱️ {args.elapsed}s" if args.elapsed else "⏱️ Completed"
-    footer_content = f"[dim white]{elapsed_str}   │   ➔ Auto-Token Nén   │   📦 Cache Active   │   ⚡ Max Speed   │   🟢 Active[/]"
+    footer_content = f"[dim white]{elapsed_str}  │  ➔ Auto-Token Nén  │  📦 Cache Active  │  ⚡ Max Speed  │  🟢 Active[/]"
     console.print(
         Panel(
             footer_content,
