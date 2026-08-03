@@ -145,12 +145,20 @@ smart_chat() {
         claude_flags+=("--dangerously-skip-permissions")
     fi
 
-    # Nếu gõ `chat` hoặc `chat!` không kèm prompt -> Khởi chạy giao diện TTY REPL Native sắc nét
+    # Nếu gõ `chat` hoặc `chat!` không kèm prompt -> Nhận prompt trực tiếp & chạy qua Auto-Detect Engine
     if [[ -z "$prompt" ]]; then
-        echo -e "🚀 [PuluSmartFlow v3.5] Khởi chạy Giao diện TTY Interactive Native..."
-        _auto_detect_gateway "" "" > /dev/null
-        claude "${claude_flags[@]}" --model "cc/claude-sonnet-4-6"
-        return 0
+        echo ""
+        echo "┌── 🤖 PuluSmartFlow Interactive Chat ──────────────────────────────┐"
+        if [[ "$danger_mode" == true ]]; then
+            echo "│ ⚡ CHẾ ĐỘ CHAT!: TỰ ĐỘNG CẤP QUYỀN (--dangerously-skip-permissions) │"
+        else
+            echo "│ 🔒 CHẾ ĐỘ CHAT: XÁC THỰC QUYỀN MẶC ĐỊNH                            │"
+        fi
+        echo "└───────────────────────────────────────────────────────────────────┘"
+        echo -n "💬 Nhập nội dung câu hỏi: "
+        read -r prompt
+        [[ -z "$prompt" ]] && return
+        [[ "$prompt" =~ ^(exit|quit|bye|thoát|q)$ ]] && echo "👋 Tạm biệt!" && return
     fi
 
     local lower_prompt=$(echo "$prompt" | awk '{print tolower($0)}')
