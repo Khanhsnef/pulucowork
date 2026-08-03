@@ -62,7 +62,7 @@ _auto_detect_gateway() {
 
     # 2. Tự động chuyển cổng (Auto-Detect Mode + Self-Healing Health Check)
     local target_port=20128
-    if [[ $prompt_len -gt 500 ]] || [[ "$lower_prompt" =~ (\.log|\.csv|\.json|\.pdf|tóm tắt file|đọc file|dữ liệu lớn|văn bản dài|báo cáo dài) ]]; then
+    if [[ $prompt_len -gt 500 ]] || [[ "$lower_prompt" =~ (\.log|\.csv|\.json|\.pdf|tóm tắt|đọc file|dữ liệu lớn|văn bản dài|báo cáo|tiếp tục|task|terminal|clone|giao diện|phần trước|sửa file|viết code) ]]; then
         target_port=20130
     fi
 
