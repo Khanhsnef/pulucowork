@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tóm Tắt Log Vận Hành Q3 2026 — Ahamove Driver Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Lexend', sans-serif;
+    background: #F8F9FB;
+    color: #1A2332;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .report-header {
+    background: linear-gradient(135deg, #0E4174 0%, #1a5fa8 100%);
+    color: white;
+    padding: 48px 40px 36px;
+  }
+  .header-inner { max-width: 960px; margin: 0 auto; }
+  .report-badge {
+    display: inline-block;
+    background: rgba(255,127,50,0.25);
+    border: 1px solid rgba(255,127,50,0.5);
+    color: #FFAA6E;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .report-title {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .report-subtitle {
+    font-size: 15px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 24px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .meta-item { font-size: 13px; color: rgba(255,255,255,0.6); }
+  .meta-item strong { color: white; font-weight: 600; }
+
+  /* ── CONTENT WRAPPER ── */
+  .content { max-width: 960px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* ── EXECUTIVE SUMMARY BOX ── */
+  .exec-summary {
+    background: white;
+    border-left: 4px solid #FF7F32;
+    border-radius: 0 12px 12px 0;
+    padding: 24px 28px;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .exec-summary .label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #FF7F32;
+    margin-bottom: 8px;
+  }
+  .exec-summary p {
+    font-size: 15px;
+    color: #2D3748;
+    line-height: 1.7;
+  }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 40px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #E5EAF0;
+  }
+  .section-icon {
+    width: 36px; height: 36px;
+    background: #0E4174;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0E4174;
+  }
+  .section-count {
+    margin-left: auto;
+    background: #EEF2F8;
+    color: #0E4174;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── CARD GRID ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #EEF0F4;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+  .card-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .tag-strategy { background: #EEF2FB; color: #2563EB; }
+  .tag-ops { background: #FFF7ED; color: #C05621; }
+  .tag-analysis { background: #F0FDF4; color: #16A34A; }
+  .tag-intel { background: #FFF5F5; color: #C53030; }
+  .tag-campaign { background: #F5F3FF; color: #7C3AED; }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1A2332;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 12px;
+    color: #64748B;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #94A3B8;
+  }
+  .card-file {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: #94A3B8;
+  }
+
+  /* ── STATUS DOTS ── */
+  .status-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  .dot-done { background: #10B981; }
+  .dot-wip  { background: #F59E0B; }
+
+  /* ── HIGHLIGHT ROW ── */
+  .highlight-card {
+    background: linear-gradient(135deg, #0E4174 0%, #1565C0 100%);
+    color: white;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .highlight-card::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .highlight-card .card-tag { background: rgba(255,127,50,0.25); color: #FFAA6E; }
+  .highlight-card .card-title { color: white; font-size: 16px; }
+  .highlight-card .card-desc { color: rgba(255,255,255,0.75); }
+  .highlight-card .card-meta { color: rgba(255,255,255,0.5); }
+  .highlight-card .card-file { color: rgba(255,255,255,0.4); }
+
+  /* ── INTEL TABLE ── */
+  .intel-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #EEF0F4;
+  }
+  .intel-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .intel-table thead th {
+    background: #0E4174;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    text-align: left;
+  }
+  .intel-table tbody tr { border-bottom: 1px solid #F0F4F8; }
+  .intel-table tbody tr:last-child { border-bottom: none; }
+  .intel-table tbody tr:hover { background: #FAFBFC; }
+  .intel-table tbody td {
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #2D3748;
+    vertical-align: top;
+  }
+  .impact-high { color: #EF4444; font-weight: 600; }
+  .impact-med  { color: #F59E0B; font-weight: 600; }
+  .impact-low  { color: #10B981; font-weight: 600; }
+
+  /* ── KPI ROW ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .kpi-box {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #EEF0F4;
+  }
+  .kpi-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: #0E4174;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-num.orange { color: #FF7F32; }
+  .kpi-label {
+    font-size: 11px;
+    color: #94A3B8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  /* ── FOOTER ── */
+  .report-footer {
+    background: #0E4174;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    margin-top: 60px;
+  }
+  .report-footer strong { color: white; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .report-header { padding: 32px 20px 24px; }
+    .report-title { font-size: 22px; }
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .card-grid { grid-template-columns: 1fr; }
+    .header-meta { gap: 16px; }
+  }
+  @media (max-width: 480px) {
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .intel-table tbody td { font-size: 12px; padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="report-header">
+  <div class="header-inner">
+    <div class="report-badge">Q3 2026 · Ops Log Summary</div>
+    <h1 class="report-title">Tóm Tắt Vận Hành Q3 2026<br>Ahamove Driver Management</h1>
+    <p class="report-subtitle">Tổng hợp outputs chiến lược, vận hành và intel — Tháng 7–8/2026</p>
+    <div class="header-meta">
+      <div class="meta-item"><strong>Owner:</strong> Lê Phương Khanh · DM Leader</div>
+      <div class="meta-item"><strong>Scope:</strong> Bike Instant (HCMC + HAN)</div>
+      <div class="meta-item"><strong>Ngày tạo:</strong> 03/08/2026</div>
+      <div class="meta-item"><strong>Tổng outputs:</strong> 22 files</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTENT ═══ -->
+<div class="content">
+
+  <!-- EXEC SUMMARY -->
+  <div class="exec-summary">
+    <div class="label">Executive Summary</div>
+    <p>
+      Q3 2026 (tháng 7–8) ghi nhận <strong>4 luồng công việc song song</strong>: (1) hoàn thiện hệ thống Tag Portal 3-gate với RBAC và SLA escalation, (2) xây dựng toàn bộ logic KPI Linehaul Offload (FM &amp; SOC), (3) thiết kế data model cho Churn Detection ML và Driver Layer Ranking, (4) giám sát cạnh tranh liên tục (Grab push driver incentives mạnh, Baga campaign). Trọng tâm Q3 chuyển từ <em>chiến lược</em> (Q2: tiering, journey) sang <em>data infrastructure &amp; tooling</em> cho vận hành thực chiến.
+    </p>
+  </div>
+
+  <!-- KPI SUMMARY ROW -->
+  <div class="kpi-row">
+    <div class="kpi-box">
+      <div class="kpi-num">22</div>
+      <div class="kpi-label">Files Output</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-num orange">5</div>
+      <div class="kpi-label">Folders Active</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-num">4</div>
+      <div class="kpi-label">Intel Reports</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-num orange">3</div>
+      <div class="kpi-label">Tools Deployed</div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 1: OPS METRICS / TOOLING ═══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">⚙️</div>
+      <div class="section-title">04. Ops Metrics &amp; Tooling</div>
+      <div class="section-count">8 files · Jul 2026</div>
+    </div>
+
+    <!-- HIGHLIGHT: Tag Portal -->
+    <div class="highlight-card" style="margin-bottom:16px;">
+      <span class="card-tag">Flagship Tool</span>
+      <div class="card-title">DM–QM Tag Request Portal v2.1 — 3-Gate Approval + RBAC + SLA</div>
+      <div class="card-desc">
+        Web App Google Apps Script với state machine 3 cổng (Lead → DM → QM). RBAC hardcode theo email, SLA tự động escalate email khi quá hạn. UI: 2 tab (Tạo Request / Master), approve inline trên từng dòng, filter "Cần tôi xử lý", badge quá hạn SLA. Kèm bản demo offline không cần Sheet thật.
+      </div>
+      <div class="card-meta">
+        <span><span class="status-dot dot-done"></span>Deployed</span>
+        <span class="card-file">Code.gs · Index.html · UI_CONFIG.md · DEPLOY_GUIDE.md</span>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-tag tag-ops">Linehaul KPI</span>
+        <div class="card-title">LH Offload KPI — FM &amp; SOC Master Doc</div>
+        <div class="card-desc">
+          Hệ thống hóa toàn bộ logic KPI Linehaul Offload: 81 dòng FM + 213 dòng SOC. Ma trận phán định lỗi <code>offload_fault</code> (cột N/O/P), thuật toán FIFO, 4 nguồn loại trừ. Output: 2 file Excel + master doc markdown.
+        </div>
+        <div class="card-meta">
+          <span><span class="status-dot dot-done"></span>2026-07-28</span>
+          <span class="card-file">lh-offload-kpi-master-doc.md</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-tag tag-ops">Visualization</span>
+        <div class="card-title">LH Offload KPI Visualizer &amp; Flowcharts</div>
+        <div class="card-desc">
+          Bộ 3 file HTML: booking truck flowchart, offload KPI flowchart, và interactive visualizer. Kèm 2 file Excel: workflow explained + logic review chi tiết 5 sheet.
+        </div>
+        <div class="card-meta">
+          <span><span class="status-dot dot-done"></span>Jul 2026</span>
+          <span class="card-file">lh-offload-kpi-visualizer.html</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-tag tag-ops">Demo Tool</span>
+        <div class="card-title">Tag Manager Demo — Offline Preview</div>
+        <div class="card-desc">
+          Bản demo offline Tag Portal 3-gate với mock data + công tắc đổi role (Lead/DM/QM). Dùng để onboard team mà không cần quyền truy cập Sheet thật.
+        </div>
+        <div class="card-meta">
+          <span><span class="status-dot dot-done"></span>Jul 2026</span>
+          <span class="card-file">dm-qm-tag-request-manager.html</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 2: STRATEGY & DATA INFRA ═══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">📐</div>
+      <div class="section-title">01. Strategy &amp; Data Infrastructure</div>
+      <div class="section-count">5 files · Jul 2026</div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-tag tag-strategy">ML Data Design</span>
+        <div class="card-title">Driver Churn Detection — Feature Mart &amp; Data Architecture</div>
+        <div class="card-desc">
+          Kiến trúc 3 bảng: <code>churn_feature_mart</code> (training) · <code>churn_score_daily</code> (serving) · <code>churn_cohort_summary</code> (monitor). 12 features MVP, label tách NEW (14d gap) / OLD (30d gap). Kèm SQL feature mart hoàn chỉnh.
+        </div>
+        <div class="card-meta">
+          <span><span class="status-dot dot-done"></span>2026-07-10</span>
+          <span class="card-file">driver-churn-detection-data-design.md</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-tag tag-strategy">Churn Framework</span>
+        <div class="card-title">Driver Churn Detection Framework — Tổng Quan</div>
+        <div class="card-desc">
+          Framework phát hiện sớm churn: at-risk flag (7 ngày im lặng đầu), tín hiệu leading (↓ online_hours_3m_slope, ↓ income_mom_pct, ↑ days_since_last_order, ↑ cr_poc). Tích hợp với Driver Layer Ranking.
+        </div>
+        <div class="card-meta">
+          <span><span class="status-dot dot-wip"></span>Model đang build</span>
+          <span class="card-file">driver-churn-detection-framework.md</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-tag tag-strategy">Ranking System</span>
+        <div class="card-title">Driver Layer Ranking — Master &amp; Presentation</div>
+        <div class="card-desc">
+          Master doc tổng hợp hệ thống ranking 4 tầng. Kèm HTML presentation và file PPTX cho stakeholders. Gắn kết với Churn Framework và AhaBenefits.
+        </div>
+        <div class="card-meta">
+          <span><span class="status-dot dot-done"></span>Jul 2026</span>
+          <span class="card-file">driver-ranking-layer-master.html · .pptx</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 3: ANALYSIS & REPORTS ═══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">📊</div>
+      <div class="section-title">05. Analysis &amp; Reports</div>
+      <div class="section-count">3 files · Jul 2026</div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-tag tag-analysis">Ops One-Pager</span>
+        <div class="card-title">HAN Ops One-Pager — 07/07/2026</div>
+        <div class="card-desc">
+          Báo cáo vận hành nhanh thị trường Hà Nội ngày 7/7. Format one-pager chuẩn: tình hình nguồn cung, AR, FR, điểm nóng cần can thiệp.
+        </div>
+        <div class="card-meta">
+          <span><span class="status-dot dot-done"></span>2026-07-07</span>
+          <span class="card-file">2026-07-07-HAN-ops-one-pager.html</span>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-tag tag-analysis">Deep Dive</span>
+        <div class="card-title">HAN COD FR &amp; Supply Analysis</div>
+        <div class="card-desc">
+          Phân tích chuyên sâu tỷ lệ hoàn thành COD tại Hà Nội: root-cause supply gap, tương quan FR vs giờ cao điểm, khuyến nghị can thiệp nguồn cung.
+        </div>
+        <div class="card-meta">
+          <span><span class="status-dot dot-done"></span>Jul 2026</span>
+          <span class="card-file">han-cod-fr-supply-analysis.html</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 4: COMPETITIVE INTEL ═══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">🔍</div>
+      <div class="section-title">06. Competitive Intelligence</div>
+      <div class="section-count">4 reports · Jul 2026</div>
+    </div>
+
+    <div class="intel-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Ngày</th>
+            <th>Đối thủ</th>
+            <th>Động thái chính</th>
+            <th>Tác động</th>
+            <th>FAROUT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>02/07</td>
+            <td><strong>Grab VN</strong></td>
+            <td>Đẩy mạnh chương trình thưởng tài xế tại HCMC: giới thiệu tài xế mới, Partner Benefits Pop-Up event, thưởng định kỳ xe 2 bánh</td>
+            <td class="impact-high">⬆ HIGH — Áp lực trực tiếp nguồn cung</td>
+            <td>46/60</td>
+          </tr>
+          <tr>
+            <td>06/07</td>
+            <td><strong>Grab VN</strong></td>
+            <td>Tiếp tục mở rộng chương trình GrabExpress thưởng giới thiệu; Uber EU tạm dừng Eats expansion để theo đuổi Delivery Hero M&amp;A</td>
+            <td class="impact-high">⬆ HIGH — Cạnh tranh tài xế xe máy leo thang</td>
+            <td>48/60</td>
+          </tr>
+          <tr>
+            <td>02/07</td>
+            <td><strong>Uber (Global)</strong></td>
+            <td>Pause mở rộng Uber Eats tại 5/7 thị trường châu Âu; tập trung M&amp;A Delivery Hero</td>
+            <td class="impact-low">↔ LOW — Tác động gián tiếp dài hạn</td>
+            <td>44/60</td>
+          </tr>
+          <tr>
+            <td>Jul</td>
+            <td><strong>Be / XanhSM</strong></td>
+            <td>Không có tín hiệu đột biến trong kỳ</td>
+            <td class="impact-low">— Theo dõi</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:12px; padding:14px 16px; background:#FFF5F5; border-radius:8px; border-left:3px solid #EF4444; font-size:13px; color:#7F1D1D;">
+      ⚠️ <strong>Signal chính Q3:</strong> Grab đang đẩy mạnh giữ chân tài xế xe 2 bánh. Khuyến nghị: rà soát chương trình giới thiệu tài xế và thưởng định kỳ hiện tại — kiểm tra gap so với Grab trước khi điều chỉnh budget incentive Q3.
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 5: CAMPAIGNS ═══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">📣</div>
+      <div class="section-title">02. Campaigns &amp; Projects</div>
+      <div class="section-count">2 files · Jul 2026</div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-tag tag-campaign">Campaign Summary</span>
+        <div class="card-title">BAGA — Summary Slide</div>
+        <div class="card-desc">
+          Slide tổng kết chiến dịch BAGA (xe ba bánh / cargo). Gồm HTML presentation và file PPTX để báo cáo nội bộ.
+        </div>
+        <div class="card-meta">
+          <span><span class="status-dot dot-done"></span>Jul 2026</span>
+          <span class="card-file">2026-07-baga-summary-slide.html · .pptx</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ NEXT ACTIONS ═══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">🎯</div>
+      <div class="section-title">Next Actions — Ưu tiên Q3 còn lại</div>
+    </div>
+    <div class="card-grid">
+      <div class="card" style="border-top:3px solid #EF4444;">
+        <div style="font-size:11px;font-weight:700;color:#EF4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🔴 Urgent</div>
+        <div class="card-title">Deploy Churn Scoring Model (DE)</div>
+        <div class="card-desc">Feature mart SQL đã sẵn, kiến trúc đã định nghĩa. Bước tiếp: bàn giao DE build <code>churn_score_daily</code> serving table và integrate với ops dashboard.</div>
+      </div>
+      <div class="card" style="border-top:3px solid #F59E0B;">
+        <div style="font-size:11px;font-weight:700;color:#F59E0B;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🟡 High</div>
+        <div class="card-title">Phản ứng trước Grab Driver Incentives</div>
+        <div class="card-desc">Benchmark chương trình thưởng hiện tại vs Grab. Quyết định điều chỉnh budget Q3 (nếu có) trước khi Grab tăng thêm vào mùa cao điểm.</div>
+      </div>
+      <div class="card" style="border-top:3px solid #10B981;">
+        <div style="font-size:11px;font-weight:700;color:#10B981;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🟢 Normal</div>
+        <div class="card-title">Tag Portal — User Acceptance Test</div>
+        <div class="card-desc">Hoàn thành checklist 12 bước trong DEPLOY_GUIDE.md. Test full flow với Lead/DM/QM thực tế trước khi rollout toàn team.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- ═══ FOOTER ═══ -->
+<div class="report-footer">
+  <strong>Ahamove — Driver Management Team</strong> &nbsp;|&nbsp;
+  Lê Phương Khanh · DM Leader &nbsp;|&nbsp;
+  Q3 2026 Ops Log Summary &nbsp;|&nbsp;
+  Tạo ngày 03/08/2026
+</div>
+
+</body>
+</html>
