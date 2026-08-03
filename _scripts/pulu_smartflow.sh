@@ -188,10 +188,16 @@ smart_chat() {
 
     while true; do
         local user_prompt=""
+        local more_line=""
         echo -n "💬 Prompt: "
+        # Đọc dòng đầu tiên
         read -r user_prompt
         [[ -z "$user_prompt" ]] && continue
         [[ "$user_prompt" =~ ^(exit|quit|bye|thoát|q)$ ]] && echo "👋 Tạm biệt!" && break
+        # Paste-detection: Nếu có thêm dữ liệu trong 100ms (paste), gom tiếp vào cùng 1 prompt
+        while read -t 0.1 -r more_line; do
+            user_prompt+=$'\n'"$more_line"
+        done
         _process_single_chat_prompt "$user_prompt"
     done
 }
