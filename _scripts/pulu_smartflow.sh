@@ -23,9 +23,9 @@ EOF
     chmod 600 "$_env_file"
 fi
 
-# === Default to Direct Mode (Avoid 401 Proxy Errors when Keys are Missing) ===
-export PULU_DIRECT_MODE="${PULU_DIRECT_MODE:-1}"
-unset ANTHROPIC_BASE_URL
+# === Default Environment Settings ===
+# Không mặc định cưỡng chế PULU_DIRECT_MODE để Auto-Detect Gateway hoạt động mượt mà
+unset PULU_DIRECT_MODE
 
 # === Claude Aliases for Dual-Gateway ===
 alias c-think="claude --model cc/claude-opus-4-8"
@@ -48,11 +48,13 @@ _auto_detect_gateway() {
     # Nếu prompt dài > 500 ký tự HOẶC chứa từ khóa xử lý log/data lớn -> Trỏ sang OmniRoute (:20130) để Nén Token & Fallback
     if [[ $prompt_len -gt 500 ]] || [[ "$lower_prompt" =~ (\.log|\.csv|\.json|\.pdf|tóm tắt file|đọc file|dữ liệu lớn|văn bản dài|báo cáo dài) ]]; then
         export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
-        echo "🛡️ Gateway: OmniRoute (:20130 - Nén Token & Dự Phòng Auto-Fallback)"
+        export ANTHROPIC_API_KEY="sk-omni"
+        echo "🛡️ Gateway: OmniRoute (:20130 - Nén Token & Auto-Fallback Active)"
     else
-        # Mặc định cho tác vụ ngắn & CLI -> Trỏ sang 9Router (:20128) để Đạt Tốc Độ Siêu Tốc < 1ms
-        export ANTHROPIC_BASE_URL="http://localhost:20128/api/v1"
-        echo "⚡ Gateway: 9Router (:20128 - Terminal Siêu Tốc < 1ms)"
+        # Mặc định cho tác vụ ngắn & CLI -> Trỏ sang OmniRoute hoặc Direct
+        export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
+        export ANTHROPIC_API_KEY="sk-omni"
+        echo "🛡️ Gateway: OmniRoute (:20130 - Multi-Provider Engine)"
     fi
 }
 
@@ -63,51 +65,34 @@ smart_claude() {
         return 1
     fi
     
-    # Chuyển về chữ thường để kiểm tra từ khóa
     local lower_prompt=$(echo "$prompt" | awk '{print tolower($0)}')
     local model="cc/claude-sonnet-4-6" # Mặc định là Sonnet
     local task_label="SONNET 4.6 (Max Coding)"
 
-    # 1. Phân nhóm Opus (The Brain - Tư duy sâu, chiến lược, phân tích phức tạp)
+    # 1. Phân nhóm Opus
     if [[ "$lower_prompt" =~ (phân tích|chiến lược|kế hoạch|logic|kiến trúc|hệ thống|quy hoạch|tư duy|chiều sâu|đánh đổi|trade-off|p\&l|sla|nguyên nhân gốc rễ|root cause|insight|quyết định|decision|rủi ro|fraud|cung cầu|supply|demand|tâm lý|hành vi) ]]; then
         model="cc/claude-opus-4-8"
         task_label="OPUS 4.8 (Max Logic)"
         
-    # 2. Phân nhóm Gemini Pro (The Communicator / Context - Giao tiếp, đọc/xử lý văn bản lớn, thông báo Zalo, dịch thuật)
+    # 2. Phân nhóm Data / Context / Text Dài
     elif [[ "$lower_prompt" =~ (dịch thuật|dịch|thông báo|tài xế|zalo|email|chính tả|ngữ pháp|viết lại|caption|kịch bản|nội dung|tóm tắt|đọc file|log) ]]; then
-        model="gc/gemini-3.1-pro-preview"
-        task_label="GEMINI 3.1 PRO (Max Context)"
+        model="cc/claude-sonnet-4-6"
+        task_label="SONNET 4.6 (Max Context & Data)"
         
-    # 3. Phân nhóm DeepSeek Flash (The Sprinter - Việc vặt, hỏi đáp siêu nhanh, tính toán nhẹ)
+    # 3. Phân nhóm Hỏi nhanh
     elif [[ "$lower_prompt" =~ (hỏi nhanh|giải thích|tính toán|định nghĩa|là gì|như thế nào|thế nào|regex) ]]; then
-        model="oc/deepseek-v4-flash"
-        task_label="DEEPSEEK V4 FLASH (Siêu Tốc)"
+        model="cc/claude-sonnet-4-6"
+        task_label="SONNET 4.6 (Siêu Tốc)"
 
-    # 4. Phân nhóm Sonnet (The Coder / Formatter - Trình bày, Code, Giao diện)
+    # 4. Phân nhóm Sonnet Code
     elif [[ "$lower_prompt" =~ (trình bày|code|lập trình|html|css|giao diện|ui|ux|lark|docs|báo cáo|định dạng|table|bảng|markdown|website|landing page|sql|git|docker|k8s) ]]; then
         model="cc/claude-sonnet-4-6"
         task_label="SONNET 4.6 (Max Coding)"
     fi
 
-    # Nếu ở Chế Độ Direct (hoặc chưa nhập Key Proxy), chuyển các model oc/ và gc/ về cc/claude-sonnet-4-6
-    if [[ "$PULU_DIRECT_MODE" == "1" ]] || [[ -z "$ANTHROPIC_BASE_URL" ]]; then
-        if [[ "$model" =~ ^(oc/|gc/) ]]; then
-            model="cc/claude-sonnet-4-6"
-            task_label="$task_label -> Direct Sonnet Fallback"
-        fi
-    fi
-
-    # Tự động chọn Gateway tối ưu (9Router vs OmniRoute)
+    # Tự động chọn Gateway tối ưu
     echo -n "🔀 [Auto-Detect v3.5] "
     _auto_detect_gateway "$prompt" "$lower_prompt"
-
-    # Re-check model sau khi gateway thiết lập (Direct vs Proxy)
-    if [[ "$PULU_DIRECT_MODE" == "1" ]] || [[ -z "$ANTHROPIC_BASE_URL" ]]; then
-        if [[ "$model" =~ ^(oc/|gc/) ]]; then
-            model="cc/claude-sonnet-4-6"
-        fi
-    fi
-
     echo -e "🧠 Model: $task_label\n"
 
     # Gọi Claude Code với /dev/null để tránh treo TTY stdin
@@ -153,32 +138,18 @@ smart_chat() {
         model="cc/claude-opus-4-8"
         task_label="OPUS 4.8 (Max Logic)"
     elif [[ "$lower_prompt" =~ (dịch thuật|dịch|thông báo|tài xế|zalo|email|chính tả|ngữ pháp|viết lại|caption|kịch bản|nội dung|tóm tắt|đọc file|log) ]]; then
-        model="gc/gemini-3.1-pro-preview"
-        task_label="GEMINI 3.1 PRO (Max Context)"
+        model="cc/claude-sonnet-4-6"
+        task_label="SONNET 4.6 (Max Context & Data)"
     elif [[ "$lower_prompt" =~ (hỏi nhanh|giải thích|tính toán|định nghĩa|là gì|như thế nào|thế nào|regex) ]]; then
-        model="oc/deepseek-v4-flash"
-        task_label="DEEPSEEK V4 FLASH (Siêu Tốc)"
+        model="cc/claude-sonnet-4-6"
+        task_label="SONNET 4.6 (Siêu Tốc)"
     elif [[ "$lower_prompt" =~ (trình bày|code|lập trình|html|css|giao diện|ui|ux|lark|docs|báo cáo|định dạng|table|bảng|markdown|website|landing page|sql|git|docker|k8s) ]]; then
         model="cc/claude-sonnet-4-6"
         task_label="SONNET 4.6 (Max Coding)"
     fi
 
-    if [[ "$PULU_DIRECT_MODE" == "1" ]] || [[ -z "$ANTHROPIC_BASE_URL" ]]; then
-        if [[ "$model" =~ ^(oc/|gc/) ]]; then
-            model="cc/claude-sonnet-4-6"
-            task_label="$task_label -> Direct Sonnet Fallback"
-        fi
-    fi
-
     echo -n "🔀 [Auto-Detect v3.5] "
     _auto_detect_gateway "$prompt" "$lower_prompt"
-
-    if [[ "$PULU_DIRECT_MODE" == "1" ]] || [[ -z "$ANTHROPIC_BASE_URL" ]]; then
-        if [[ "$model" =~ ^(oc/|gc/) ]]; then
-            model="cc/claude-sonnet-4-6"
-        fi
-    fi
-
     echo -e "🧠 Model: $task_label\n"
 
     local claude_flags=()
@@ -186,7 +157,7 @@ smart_chat() {
         claude_flags+=("--dangerously-skip-permissions")
     fi
 
-    # Giữ context nguyên vẹn trong terminal tab hiện tại, không chuyển tab
+    # Giữ context nguyên vẹn trong terminal tab hiện tại
     if [[ -n "$prompt" ]]; then
         claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt"
     else
