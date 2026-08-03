@@ -188,17 +188,45 @@ def main():
             if out_tok > 0 or last_result is None:
                 last_result = obj
 
-    # ── Process events (true streaming — 1 line at a time) ──────────────
-    for raw in itertools.chain([first_line], sys.stdin):
-        raw = raw.strip()
-        if not raw:
-            continue
+    # ── Threaded stdin reader — non-blocking with live spinner ───────────
+    import threading, queue as _queue
+    event_queue = _queue.Queue()
+
+    def _stdin_reader():
+        """Đọc stdin trên thread riêng để không block main thread."""
         try:
-            handle_event(json.loads(raw))
-        except json.JSONDecodeError:
-            # Plain-text fallback (non-JSON stream)
-            if raw and not raw.startswith("{"):
-                pending_text.append(raw)
+            for line in itertools.chain([first_line], sys.stdin):
+                event_queue.put(line)
+        finally:
+            event_queue.put(None)  # sentinel: stream ended
+
+    reader = threading.Thread(target=_stdin_reader, daemon=True)
+    reader.start()
+
+    # ── Live spinner hiển thị trong lúc chờ event mới ────────────────────
+    wait_seconds = 0
+    spinner_text  = lambda s: f"[{ORANGE}]⏳ Đang xử lý… ({s:.0f}s)[/{ORANGE}]"
+
+    with Live(console=console, refresh_per_second=8, transient=False) as live:
+        while True:
+            try:
+                raw = event_queue.get(timeout=0.15)
+                live.update("")               # ẩn spinner khi có event
+                if raw is None:
+                    break                     # stream ended
+                raw = raw.strip()
+                if not raw:
+                    continue
+                try:
+                    handle_event(json.loads(raw))
+                except json.JSONDecodeError:
+                    if raw and not raw.startswith("{"):
+                        pending_text.append(raw)
+                wait_seconds = 0              # reset counter sau mỗi event
+            except _queue.Empty:
+                # Không có event → cập nhật spinner đếm thời gian chờ
+                wait_seconds += 0.15
+                live.update(spinner_text(wait_seconds))
 
     # ── Flush remaining text & print footer ──────────────────────────────
     flush_pending_text()
@@ -226,3 +254,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
