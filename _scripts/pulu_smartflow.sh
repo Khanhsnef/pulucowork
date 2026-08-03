@@ -7,6 +7,7 @@
 # === Start local AI Proxies ===
 alias 9router="9router"
 alias omniroute="omniroute"
+alias pulu-start="zsh /Users/ts-1148/Desktop/Pulu-workspace/_scripts/pulu-start.sh"
 
 # === Load Secure Environment ===
 _env_file="$HOME/.config/pulu/env.sh"
