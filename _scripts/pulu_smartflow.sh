@@ -39,22 +39,34 @@ _auto_detect_gateway() {
     local lower_prompt="$2"
     local prompt_len=${#prompt}
 
-    if [[ "$PULU_DIRECT_MODE" == "1" ]]; then
+    # 1. Nếu người dùng chọn thủ công qua use-9router, use-omni, hoặc use-direct
+    if [[ "$PULU_GATEWAY_OVERRIDE" == "9router" ]]; then
+        export ANTHROPIC_BASE_URL="http://localhost:20128/api/v1"
+        export ANTHROPIC_API_KEY="sk-9router"
+        echo "⚡ Gateway: 9Router (:20128 - Sub-millisecond Terminal Route)"
+        return 0
+    elif [[ "$PULU_GATEWAY_OVERRIDE" == "direct" ]]; then
         unset ANTHROPIC_BASE_URL
         echo "⚡ Gateway: Direct Connection (Trực tiếp Anthropic API)"
         return 0
+    elif [[ "$PULU_GATEWAY_OVERRIDE" == "omni" ]]; then
+        export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
+        export ANTHROPIC_API_KEY="sk-omni"
+        echo "🛡️ Gateway: OmniRoute (:20130 - Multi-Provider Engine)"
+        return 0
     fi
 
-    # Nếu prompt dài > 500 ký tự HOẶC chứa từ khóa xử lý log/data lớn -> Trỏ sang OmniRoute (:20130) để Nén Token & Fallback
+    # 2. Tự động chuyển cổng (Auto-Detect Mode)
+    # Nếu prompt dài > 500 ký tự HOẶC chứa từ khóa xử lý log/data lớn -> Trỏ sang OmniRoute (:20130)
     if [[ $prompt_len -gt 500 ]] || [[ "$lower_prompt" =~ (\.log|\.csv|\.json|\.pdf|tóm tắt file|đọc file|dữ liệu lớn|văn bản dài|báo cáo dài) ]]; then
         export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
         export ANTHROPIC_API_KEY="sk-omni"
         echo "🛡️ Gateway: OmniRoute (:20130 - Nén Token & Auto-Fallback Active)"
     else
-        # Mặc định cho tác vụ ngắn & CLI -> Trỏ sang OmniRoute hoặc Direct
-        export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
-        export ANTHROPIC_API_KEY="sk-omni"
-        echo "🛡️ Gateway: OmniRoute (:20130 - Multi-Provider Engine)"
+        # Mặc định cho tác vụ ngắn & CLI -> Trỏ sang 9Router (:20128) để Đạt Tốc Độ Siêu Tốc < 1ms
+        export ANTHROPIC_BASE_URL="http://localhost:20128/api/v1"
+        export ANTHROPIC_API_KEY="sk-9router"
+        echo "⚡ Gateway: 9Router (:20128 - Terminal Siêu Tốc < 1ms)"
     fi
 }
 
