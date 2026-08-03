@@ -1,61 +1,45 @@
 #!/usr/bin/env python3
-import sys, argparse
+import sys, argparse, datetime
 from rich.console import Console
 from rich.markdown import Markdown
-from rich.panel import Panel
-from rich.box import ROUNDED
 
 def main():
-    parser = argparse.ArgumentParser(description="Render terminal Markdown output with Claude CLI native styling")
-    parser.add_argument("--gateway", default="Auto-Detect", help="Gateway label")
-    parser.add_argument("--model", default="Auto-Model", help="Model label")
-    parser.add_argument("--elapsed", default="", help="Elapsed execution time")
+    parser = argparse.ArgumentParser(description="Render terminal output with Claude Code CLI Native visual layout")
+    parser.add_argument("--gateway", default="9Router (:20128)", help="Gateway label")
+    parser.add_argument("--model", default="SONNET 4.6", help="Model label")
+    parser.add_argument("--elapsed", default="1.2s", help="Elapsed execution time")
     args = parser.parse_args()
 
     console = Console()
-    orange_style = "rgb(215,95,0)"
-    
-    # Read content from stdin
-    with console.status("[bold rgb(215,95,0)]⏳ Đang suy luận & kết nối Gateway...[/bold rgb(215,95,0)]", spinner="dots"):
+    orange_color = "rgb(217,119,6)"
+    cyan_color = "rgb(56,189,248)"
+    now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Clean short labels
+    gw = args.gateway.replace(" - Terminal Siêu Tốc < 1ms", "").replace(" - Nén Token & Auto-Fallback Active", "").replace(" - Multi-Provider Engine", "")
+    model = args.model.replace("COMBO: ", "")
+
+    # Live animated spinner while reading input
+    with console.status(f"[{orange_color}]⏳ Đang suy luận & kết nối {gw}...[/{orange_color}]", spinner="dots"):
         raw_text = sys.stdin.read()
 
     if not raw_text.strip():
         return
 
-    # Clean labels for exact width alignment
-    gw = args.gateway.replace(" - Terminal Siêu Tốc < 1ms", "").replace(" - Nén Token & Auto-Fallback Active", "").replace(" - Multi-Provider Engine", "")
-    model = args.model.replace("COMBO: ", "")
+    # 1. Claude CLI Native Top Status Line (Header Row)
+    console.print(f"[dim]{now_str}[/dim] [dim]│[/dim] [{cyan_color}]🔀 {gw}[/{cyan_color}] [dim]│[/dim] [bold green]🧠 {model}[/bold green] [dim]│[/dim] [yellow]📦 Cache Active[/yellow] [dim]│[/dim] [{orange_color}]⏱️ {args.elapsed}[/{orange_color}] [dim]│[/dim] [bold cyan]⚡ Max Speed[/bold cyan]")
+    console.print(f"[{orange_color}]" + "─" * min(console.width, 88) + f"[/{orange_color}]")
 
-    # 1. Header Panel (Perfectly Aligned Single-Line Rounded Box)
-    header_content = f" 🔀 [bold yellow]{gw}[/]   •   🧠 [bold green]{model}[/]   •   [bold green]● Active[/] "
-    console.print(
-        Panel(
-            header_content,
-            title="[bold white on rgb(215,95,0)] 🤖 PuluSmartFlow v3.5 [/bold white on rgb(215,95,0)]",
-            border_style=orange_style,
-            box=ROUNDED,
-            expand=False
-        )
-    )
-
-    # 2. Main Markdown Content
+    # 2. Main Markdown Content (Unbordered Body with Native Tables)
     try:
         md = Markdown(raw_text)
         console.print(md)
     except Exception:
         sys.stdout.write(raw_text)
 
-    # 3. Footer Panel (Perfectly Aligned Single-Line Meter Panel)
-    elapsed_str = f"⏱️ {args.elapsed}s" if args.elapsed else "⏱️ Done"
-    footer_content = f" [dim white]{elapsed_str}   •   ➔ Nén Token   •   📦 Cache   •   ⚡ Speed   •   [green]● Active[/green][/dim white] "
-    console.print(
-        Panel(
-            footer_content,
-            border_style=f"dim {orange_style}",
-            box=ROUNDED,
-            expand=False
-        )
-    )
+    # 3. Claude CLI Native Bottom Status Line (Footer Row)
+    console.print(f"[{orange_color}]" + "─" * min(console.width, 88) + f"[/{orange_color}]")
+    console.print(f"[dim]⏱️ {args.elapsed}  │  ➔ Auto-Token Nén  │  📦 Cache Active  │  ⚡ Max Speed  │[/dim] [bold green]🟢 Session Active[/bold green]")
 
 if __name__ == "__main__":
     main()

@@ -160,8 +160,15 @@ smart_chat() {
 
         _auto_detect_gateway "$curr_prompt" "$lower_prompt" > /dev/null
 
+        local start_ts=$(python3 -c "import time; print(time.time())")
+
         if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
-            claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py --gateway "${PULU_ACTIVE_GW_LABEL:-Auto-Gateway}" --model "${task_label}"
+            local tmp_out=$(mktemp)
+            claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" < /dev/null > "$tmp_out"
+            local end_ts=$(python3 -c "import time; print(time.time())")
+            local elapsed=$(python3 -c "print(round($end_ts - $start_ts, 2))")
+            cat "$tmp_out" | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py --gateway "${PULU_ACTIVE_GW_LABEL:-Auto-Gateway}" --model "${task_label}" --elapsed "${elapsed}"
+            rm -f "$tmp_out"
         else
             claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" < /dev/null
         fi
