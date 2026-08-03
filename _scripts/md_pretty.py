@@ -8,7 +8,7 @@ Visual hierarchy:
   - Dividers:     ─── sections
   - Footer:       token stats
 """
-import sys, json, datetime, re, textwrap
+import sys, json, datetime, re, itertools, textwrap
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.live import Live
@@ -188,8 +188,8 @@ def main():
             if out_tok > 0 or last_result is None:
                 last_result = obj
 
-    # ── Process events ───────────────────────────────────────────────────
-    for raw in [first_line] + list(sys.stdin):
+    # ── Process events (true streaming — 1 line at a time) ──────────────
+    for raw in itertools.chain([first_line], sys.stdin):
         raw = raw.strip()
         if not raw:
             continue
