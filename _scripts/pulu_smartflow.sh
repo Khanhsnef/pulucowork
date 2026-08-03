@@ -186,16 +186,9 @@ smart_chat() {
     echo ""
 
     while true; do
-        echo -n "💬 Nhập/dán câu hỏi (gõ 'exit' để thoát, nhấn Enter 2 lần để gửi): "
         local user_prompt=""
-        local line=""
-        while IFS= read -r line; do
-            user_prompt+="$line"$'\n'
-            # Ngắt khi gặp dòng trống (Enter 2 lần khi dán văn bản)
-            [[ -z "$line" ]] && break
-        done
-
-        user_prompt=$(echo "$user_prompt" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        echo -n "💬 Prompt: "
+        read -r user_prompt
         [[ -z "$user_prompt" ]] && continue
         [[ "$user_prompt" =~ ^(exit|quit|bye|thoát|q)$ ]] && echo "👋 Tạm biệt!" && break
         _process_single_chat_prompt "$user_prompt"
