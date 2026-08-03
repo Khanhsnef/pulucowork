@@ -60,15 +60,31 @@ _auto_detect_gateway() {
         return 0
     fi
 
-    # 2. Tự động chuyển cổng (Auto-Detect Mode)
-    # Nếu prompt dài > 500 ký tự HOẶC chứa từ khóa xử lý log/data lớn -> Trỏ sang OmniRoute (:20130)
+    # 2. Tự động chuyển cổng (Auto-Detect Mode + Self-Healing Health Check)
+    local target_port=20128
     if [[ $prompt_len -gt 500 ]] || [[ "$lower_prompt" =~ (\.log|\.csv|\.json|\.pdf|tóm tắt file|đọc file|dữ liệu lớn|văn bản dài|báo cáo dài) ]]; then
+        target_port=20130
+    fi
+
+    # Kiểm tra xem target port có đang mở không (health check)
+    if ! lsof -iTCP:$target_port -sTCP:LISTEN &>/dev/null; then
+        # Thử port dự phòng
+        local fallback_port=$((target_port == 20128 ? 20130 : 20128))
+        if lsof -iTCP:$fallback_port -sTCP:LISTEN &>/dev/null; then
+            target_port=$fallback_port
+        else
+            # Cả 2 port đều offline -> Tự động khởi chạy pulu-start.sh ngầm
+            (zsh /Users/ts-1148/Desktop/Pulu-workspace/_scripts/pulu-start.sh &>/dev/null &)
+            sleep 0.5
+        fi
+    fi
+
+    if [[ $target_port -eq 20130 ]]; then
         export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
         export ANTHROPIC_API_KEY="sk-omni"
         PULU_ACTIVE_GW_LABEL="OmniRoute (:20130)"
         echo "🛡️ Gateway: OmniRoute (:20130 - Nén Token & Auto-Fallback Active)"
     else
-        # Mặc định cho tác vụ ngắn & CLI -> Trỏ sang 9Router (:20128) để Đạt Tốc Độ Siêu Tốc < 1ms
         export ANTHROPIC_BASE_URL="http://localhost:20128/api/v1"
         export ANTHROPIC_API_KEY="sk-9router"
         PULU_ACTIVE_GW_LABEL="9Router (:20128)"
@@ -133,10 +149,7 @@ smart_chat() {
         prompt_arg="$*"
     fi
 
-    local claude_flags=()
-    if [[ "$danger_mode" == true ]]; then
-        claude_flags+=("--dangerously-skip-permissions")
-    fi
+    local claude_flags=("--dangerously-skip-permissions")
 
     # Hàm xử lý từng câu hỏi qua Auto-Detect Engine v3.5
     _process_single_chat_prompt() {
@@ -164,7 +177,7 @@ smart_chat() {
         if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
             claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" \
                 --output-format stream-json --verbose \
-                < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py \
+                < /dev/null 2>&1 | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py \
                 --gateway "${PULU_ACTIVE_GW_LABEL:-Auto-Gateway}" --model "${task_label}"
         else
             claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" < /dev/null
@@ -180,21 +193,23 @@ smart_chat() {
     # 2. Nếu chỉ gõ `chat` hoặc `chat!` -> Vào vòng lặp Interactive Auto-Detect
     echo ""
     echo "┌── 🤖 PuluSmartFlow Interactive Auto-Detect Chat ─────────────────┐"
-    if [[ "$danger_mode" == true ]]; then
-        echo "│ ⚡ CHẾ ĐỘ CHAT!: TỰ ĐỘNG CẤP QUYỀN (--dangerously-skip-permissions) │"
-    else
-        echo "│ 🔒 CHẾ ĐỘ CHAT: XÁC THỰC QUYỀN MẶC ĐỊNH                            │"
-    fi
+    echo "│ ⚡ CHẾ ĐỘ TỰ ĐỘNG CẤP QUYỀN (--dangerously-skip-permissions)        │"
     echo "│ Gõ 'exit' hoặc Ctrl+C để thoát                                   │"
     echo "└───────────────────────────────────────────────────────────────────┘"
     echo ""
+
+    # Set SIGINT trap to prevent shell exit on Ctrl+C
+    trap 'echo ""; continue' INT
 
     while true; do
         local user_prompt=""
         local more_line=""
         echo -n "💬 Prompt: "
         # Đọc dòng đầu tiên
-        read -r user_prompt
+        if ! read -r user_prompt; then
+            echo ""
+            break
+        fi
         [[ -z "$user_prompt" ]] && continue
         [[ "$user_prompt" =~ ^(exit|quit|bye|thoát|q)$ ]] && echo "👋 Tạm biệt!" && break
         # Paste-detection: Nếu có thêm dữ liệu trong 100ms (paste), gom tiếp vào cùng 1 prompt
@@ -203,6 +218,8 @@ smart_chat() {
         done
         _process_single_chat_prompt "$user_prompt"
     done
+
+    trap - INT
 }
 alias chat="smart_chat"
 alias "chat!"="smart_chat !"

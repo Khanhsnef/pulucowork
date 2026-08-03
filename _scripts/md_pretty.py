@@ -179,6 +179,12 @@ def main():
                         f"{'…' if len(tlist) > 6 else ''}[/{GRAY}]"
                     )
 
+        # ── error handling ─────────────────────────────────────────────────
+        elif etype == "error" or (etype == "result" and obj.get("is_error")):
+            flush_pending_text()
+            err_msg = obj.get("error", {}).get("message") or obj.get("result") or str(obj)
+            console.print(f"\n[bold red]❌ Lỗi Gateway / System:[/bold red] [dim]{err_msg}[/dim]\n")
+
         # ── result (final) ────────────────────────────────────────────────
         elif etype == "result":
             out_tok = obj.get("usage", {}).get("output_tokens", 0)
@@ -251,5 +257,12 @@ def main():
         console.print(f"[{GRAY}]Time: {elapsed}s  │  Session: Active[/{GRAY}]")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (KeyboardInterrupt, SystemExit):
+        sys.stderr.write("\n\033[33m⏹️ Đã dừng câu trả lời (Ctrl+C)\033[0m\n")
+        sys.exit(0)
+    except Exception as e:
+        sys.stderr.write(f"\n\033[31m❌ Lỗi hiển thị: {e}\033[0m\n")
+        sys.exit(0)
 
