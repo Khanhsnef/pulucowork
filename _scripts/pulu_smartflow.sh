@@ -179,27 +179,35 @@ smart_chat() {
 alias chat="smart_chat"
 alias "chat!"="smart_chat !"
 
-# === Gateway Switcher Wrappers (Thủ công nếu muốn override) ===
+# === Gateway Switcher Wrappers (Thủ công hoặc Tự động) ===
 use_9router() {
     export ANTHROPIC_BASE_URL="http://localhost:20128/api/v1"
-    unset PULU_DIRECT_MODE
+    export ANTHROPIC_API_KEY="sk-9router"
+    export PULU_GATEWAY_OVERRIDE="9router"
     echo -e "✅ Claude đã cố định trỏ về 9Router (localhost:20128)"
 }
 alias use-9router="use_9router"
 
 use_omni() {
     export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
-    unset PULU_DIRECT_MODE
+    export ANTHROPIC_API_KEY="sk-omni"
+    export PULU_GATEWAY_OVERRIDE="omni"
     echo -e "✅ Claude đã cố định trỏ về OmniRoute (localhost:20130)"
 }
 alias use-omni="use_omni"
 
 use_direct() {
     unset ANTHROPIC_BASE_URL
-    export PULU_DIRECT_MODE=1
+    export PULU_GATEWAY_OVERRIDE="direct"
     echo -e "⚡ Claude đã chuyển sang chế độ TRỰC TIẾP (Bỏ qua 9Router/OmniRoute Proxy)"
 }
 alias use-direct="use_direct"
+
+use_auto() {
+    unset PULU_GATEWAY_OVERRIDE
+    echo -e "🔀 Kích hoạt chế độ TỰ ĐỘNG CHUYỂN GATEWAY (Auto-Detect 9Router vs OmniRoute)"
+}
+alias use-auto="use_auto"
 
 # === Circuit Breaker cho command_not_found_handler ===
 export _PULU_CNF_DEPTH=0
