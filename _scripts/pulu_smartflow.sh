@@ -69,20 +69,20 @@ smart_claude() {
     local model="cc/claude-sonnet-4-6" # Mặc định là Sonnet
     local task_label="SONNET 4.6 (Max Coding)"
 
-    # 1. Phân nhóm Opus
+    # 1. Phân nhóm Opus / Brain Code Combo
     if [[ "$lower_prompt" =~ (phân tích|chiến lược|kế hoạch|logic|kiến trúc|hệ thống|quy hoạch|tư duy|chiều sâu|đánh đổi|trade-off|p\&l|sla|nguyên nhân gốc rễ|root cause|insight|quyết định|decision|rủi ro|fraud|cung cầu|supply|demand|tâm lý|hành vi) ]]; then
         model="cc/claude-opus-4-8"
-        task_label="OPUS 4.8 (Max Logic)"
+        task_label="COMBO: PULU-BRAIN-CODE (Opus 4.8 + Sonnet 4.6 + DeepSeek)"
         
-    # 2. Phân nhóm Data / Context / Text Dài
+    # 2. Phân nhóm Data / Log / Context Combo
     elif [[ "$lower_prompt" =~ (dịch thuật|dịch|thông báo|tài xế|zalo|email|chính tả|ngữ pháp|viết lại|caption|kịch bản|nội dung|tóm tắt|đọc file|log) ]]; then
         model="cc/claude-sonnet-4-6"
-        task_label="SONNET 4.6 (Max Context & Data)"
+        task_label="COMBO: PULU-DATA-LOG (Gemini Web Free + Sonnet 4.6 + DeepSeek)"
         
-    # 3. Phân nhóm Hỏi nhanh
+    # 3. Phân nhóm Hỏi nhanh CLI Combo
     elif [[ "$lower_prompt" =~ (hỏi nhanh|giải thích|tính toán|định nghĩa|là gì|như thế nào|thế nào|regex) ]]; then
         model="cc/claude-sonnet-4-6"
-        task_label="SONNET 4.6 (Siêu Tốc)"
+        task_label="COMBO: PULU-FAST-CLI (DeepSeek V3/R1 + Sonnet 4.6)"
 
     # 4. Phân nhóm Sonnet Code
     elif [[ "$lower_prompt" =~ (trình bày|code|lập trình|html|css|giao diện|ui|ux|lark|docs|báo cáo|định dạng|table|bảng|markdown|website|landing page|sql|git|docker|k8s) ]]; then
@@ -136,13 +136,13 @@ smart_chat() {
 
     if [[ "$lower_prompt" =~ (phân tích|chiến lược|kế hoạch|logic|kiến trúc|hệ thống|quy hoạch|tư duy|chiều sâu|đánh đổi|trade-off|p\&l|sla|nguyên nhân gốc rễ|root cause|insight|quyết định|decision|rủi ro|fraud|cung cầu|supply|demand|tâm lý|hành vi) ]]; then
         model="cc/claude-opus-4-8"
-        task_label="OPUS 4.8 (Max Logic)"
+        task_label="COMBO: PULU-BRAIN-CODE (Opus 4.8 + Sonnet 4.6 + DeepSeek)"
     elif [[ "$lower_prompt" =~ (dịch thuật|dịch|thông báo|tài xế|zalo|email|chính tả|ngữ pháp|viết lại|caption|kịch bản|nội dung|tóm tắt|đọc file|log) ]]; then
         model="cc/claude-sonnet-4-6"
-        task_label="SONNET 4.6 (Max Context & Data)"
+        task_label="COMBO: PULU-DATA-LOG (Gemini Web Free + Sonnet 4.6 + DeepSeek)"
     elif [[ "$lower_prompt" =~ (hỏi nhanh|giải thích|tính toán|định nghĩa|là gì|như thế nào|thế nào|regex) ]]; then
         model="cc/claude-sonnet-4-6"
-        task_label="SONNET 4.6 (Siêu Tốc)"
+        task_label="COMBO: PULU-FAST-CLI (DeepSeek V3/R1 + Sonnet 4.6)"
     elif [[ "$lower_prompt" =~ (trình bày|code|lập trình|html|css|giao diện|ui|ux|lark|docs|báo cáo|định dạng|table|bảng|markdown|website|landing page|sql|git|docker|k8s) ]]; then
         model="cc/claude-sonnet-4-6"
         task_label="SONNET 4.6 (Max Coding)"
