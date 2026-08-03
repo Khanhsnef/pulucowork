@@ -140,22 +140,17 @@ smart_chat() {
 
     prompt="$*"
 
+    local claude_flags=()
+    if [[ "$danger_mode" == true ]]; then
+        claude_flags+=("--dangerously-skip-permissions")
+    fi
+
+    # Nếu gõ `chat` hoặc `chat!` không kèm prompt -> Khởi chạy giao diện TTY REPL Native sắc nét
     if [[ -z "$prompt" ]]; then
-        echo ""
-        echo "╔════════════════════════════════════════════════════════════╗"
-        echo "║  🤖 PuluSmartFlow Interactive Chat (Auto-Detect Engine)   ║"
-        if [[ "$danger_mode" == true ]]; then
-            echo "║  ⚡ CHẾ ĐỘ CHAT!: TỰ ĐỘNG CẤP QUYỀN (--dangerously)        ║"
-        else
-            echo "║  🔒 CHẾ ĐỘ CHAT: XÁC THỰC QUYỀN HỆ THỐNG MẶC ĐỊNH        ║"
-        fi
-        echo "║  Gõ 'exit' hoặc Ctrl+C để thoát                            ║"
-        echo "╚════════════════════════════════════════════════════════════╝"
-        echo ""
-        echo -n "💬 Nhập nội dung câu hỏi: "
-        read -r prompt
-        [[ -z "$prompt" ]] && return
-        [[ "$prompt" =~ ^(exit|quit|bye|thoát|q)$ ]] && echo "👋 Tạm biệt!" && return
+        echo -e "🚀 [PuluSmartFlow v3.5] Khởi chạy Giao diện TTY Interactive Native..."
+        _auto_detect_gateway "" "" > /dev/null
+        claude "${claude_flags[@]}" --model "cc/claude-sonnet-4-6"
+        return 0
     fi
 
     local lower_prompt=$(echo "$prompt" | awk '{print tolower($0)}')
@@ -180,23 +175,19 @@ smart_chat() {
     _auto_detect_gateway "$prompt" "$lower_prompt"
     echo -e "🧠 Model: $task_label\n"
 
-    local claude_flags=()
-    if [[ "$danger_mode" == true ]]; then
-        claude_flags+=("--dangerously-skip-permissions")
-    fi
-
     local start_ts=$(python3 -c "import time; print(time.time())")
 
     # Giữ context nguyên vẹn trong terminal tab hiện tại, ngắt TTY stdin & format hiển thị qua Rich Markdown
-    if [[ -n "$prompt" ]]; then
-        if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
-            claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt" < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py
-        else
-            claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt" < /dev/null
-        fi
+    if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
+        claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt" < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py
     else
-        claude "${claude_flags[@]}" --model "$model"
+        claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt" < /dev/null
     fi
+
+    local end_ts=$(python3 -c "import time; print(time.time())")
+    local elapsed=$(python3 -c "print(round($end_ts - $start_ts, 2))")
+    echo -e "\n────────────────────────────────────────────────────────────"
+    echo -e "⏱️ [TIẾN TRÌNH] Hoàn thành trong ${elapsed}s | Gateway: ${PULU_ACTIVE_GW_LABEL:-Auto-Gateway} | Session: Active 🟢\n"
 }
 alias chat="smart_chat"
 alias "chat!"="smart_chat !"
