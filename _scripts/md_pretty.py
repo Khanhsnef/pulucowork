@@ -45,6 +45,8 @@ def main():
     tool_calls = {}     # tool_use_id -> name
     thinking_open = False
     text_buffer = ""
+    init_shown = False      # Only show tools list once
+    last_result = None      # Track final result event
 
     def flush_text():
         nonlocal text_buffer
@@ -108,34 +110,22 @@ def main():
 
         # ─── system init ─────────────────────────────────────────────────
         elif etype == "system":
+            nonlocal init_shown
             subtype = obj.get("subtype", "")
-            if subtype == "init":
+            if subtype == "init" and not init_shown:
+                init_shown = True
                 tools_list = obj.get("tools", [])
                 if tools_list:
                     console.print(f"[dim]⚙ Tools: {', '.join(t for t in tools_list[:5])}{'...' if len(tools_list)>5 else ''}[/dim]")
 
         # ─── result (final) ───────────────────────────────────────────────
         elif etype == "result":
-            flush_text()
+            nonlocal last_result
+            # Chỉ giữ lại result có dữ liệu thực (out_tok > 0)
             usage = obj.get("usage", {})
-            in_tok = usage.get("input_tokens", 0)
             out_tok = usage.get("output_tokens", 0)
-            cache_r = usage.get("cache_read_input_tokens", 0)
-            cache_c = usage.get("cache_creation_input_tokens", 0)
-            dur_api = obj.get("duration_api_ms", 0)
-            cost = obj.get("total_cost_usd", 0)
-
-            elapsed = round((datetime.datetime.now() - start_ts).total_seconds(), 2)
-            console.print(f"[{dim_orange}]" + "─" * width + f"[/{dim_orange}]")
-            console.print(
-                f"[dim]Time: {elapsed}s  │  "
-                f"In: {in_tok:,}  │  "
-                f"Out: {out_tok:,}  │  "
-                f"Cache↑: {cache_c:,}  Cache↓: {cache_r:,}  │  "
-                f"API: {dur_api:,}ms  │[/dim]"
-                + (f" [dim yellow]Cost: ${cost:.4f}[/dim yellow]" if cost else "")
-                + " [dim green]Session: Active[/dim green]"
-            )
+            if out_tok > 0 or last_result is None:
+                last_result = obj
 
     # Process first line
     try:
@@ -161,6 +151,27 @@ def main():
             handle_event(obj)
         except json.JSONDecodeError:
             console.print(raw_line)
+
+    # Final footer — dùng last_result có token thực
+    flush_text()
+    elapsed = round((datetime.datetime.now() - start_ts).total_seconds(), 2)
+    console.print(f"[{dim_orange}]" + "─" * width + f"[/{dim_orange}]")
+    if last_result:
+        usage = last_result.get("usage", {})
+        in_tok  = usage.get("input_tokens", 0)
+        out_tok = usage.get("output_tokens", 0)
+        cache_r = usage.get("cache_read_input_tokens", 0)
+        cache_c = usage.get("cache_creation_input_tokens", 0)
+        dur_api = last_result.get("duration_api_ms", 0)
+        cost    = last_result.get("total_cost_usd", 0)
+        console.print(
+            f"[dim]Time: {elapsed}s  │  In: {in_tok:,}  │  Out: {out_tok:,}  │  "
+            f"Cache↑: {cache_c:,}  Cache↓: {cache_r:,}  │  API: {dur_api:,}ms[/dim]"
+            + (f"  [dim yellow]Cost: ${cost:.4f}[/dim yellow]" if cost else "")
+            + "  [dim green]Session: Active[/dim green]"
+        )
+    else:
+        console.print(f"[dim]Time: {elapsed}s  │  Session: Active[/dim]")
 
 if __name__ == "__main__":
     main()
