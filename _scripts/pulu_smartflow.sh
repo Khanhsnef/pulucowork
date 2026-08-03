@@ -107,8 +107,12 @@ smart_claude() {
     _auto_detect_gateway "$prompt" "$lower_prompt"
     echo -e "🧠 Model: $task_label\n"
 
-    # Gọi Claude Code với /dev/null để tránh treo TTY stdin
-    claude --model "$model" -p "$prompt" < /dev/null
+    # Gọi Claude Code với /dev/null để tránh treo TTY stdin & format hiển thị qua Rich Markdown
+    if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
+        claude --model "$model" -p "$prompt" < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py
+    else
+        claude --model "$model" -p "$prompt" < /dev/null
+    fi
 }
 alias ai="smart_claude"
 
@@ -169,9 +173,13 @@ smart_chat() {
         claude_flags+=("--dangerously-skip-permissions")
     fi
 
-    # Giữ context nguyên vẹn trong terminal tab hiện tại, ngắt TTY stdin để tránh treo
+    # Giữ context nguyên vẹn trong terminal tab hiện tại, ngắt TTY stdin & format hiển thị qua Rich Markdown
     if [[ -n "$prompt" ]]; then
-        claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt" < /dev/null
+        if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
+            claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt" < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py
+        else
+            claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt" < /dev/null
+        fi
     else
         claude "${claude_flags[@]}" --model "$model"
     fi
