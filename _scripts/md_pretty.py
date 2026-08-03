@@ -74,18 +74,30 @@ def main():
         pending_text.clear()
         if not raw:
             return
+        # Blank line before text block to separate from tool calls visually
+        console.print("")
         # Render Markdown (bold/italic/code/table/lists)
         console.print(Markdown(raw, code_theme="monokai"))
 
     def render_tool_call(name, inp):
         """● ToolName  <command preview>"""
         flush_pending_text()
-        # Build command preview
+        # Try all common input keys in priority order
         cmd = ""
         if isinstance(inp, dict):
-            cmd = (inp.get("command") or inp.get("path") or
-                   inp.get("query") or inp.get("url") or
-                   inp.get("description") or "")
+            cmd = (
+                inp.get("command") or
+                inp.get("path") or
+                inp.get("query") or
+                inp.get("url") or
+                inp.get("name") or
+                inp.get("prompt") or
+                inp.get("description") or
+                inp.get("title") or
+                inp.get("code") or
+                inp.get("content") or
+                ", ".join(f"{k}={str(v)[:30]}" for k, v in list(inp.items())[:2])
+            )
         elif isinstance(inp, str):
             cmd = inp
         # Truncate long commands to first line
