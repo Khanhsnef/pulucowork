@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """
-PuluSmartFlow Terminal Renderer v2.0
-Visual hierarchy:
-  - Tool calls:   ┌─ ● Bash  <command dim>
-  - Tool output:  │  <text>   (indented)
-  - Text/answer:  Rich Markdown (bold/italic/code/table rendered)
-  - Dividers:     ─── sections
-  - Footer:       token stats
+PuluSmartFlow Terminal Renderer v3.0
+Visual hierarchy & Real-time Step Progress:
+  - Header:       Timestamp | Gateway | Model | Mode
+  - Tool calls:   ● ToolName  <command/arg>
+  - Tool output:  │  <preview>
+  - Step Progress: ⏳ [Bước N] <Mô tả hành động đang chạy> | ⏱️ Xs (liên tục)
+  - Answer:       Rich Markdown
+  - Footer:       Token usage & cost stats
 """
-import sys, json, datetime, re, itertools, textwrap
+import sys, json, datetime, re, itertools, threading, queue as _queue
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.live import Live
@@ -22,7 +23,6 @@ DIM_ORG  = "dim rgb(217,119,6)"
 CYAN     = "rgb(56,189,248)"
 GREEN    = "rgb(134,239,172)"
 GRAY     = "rgb(100,116,139)"
-CODE_BG  = "rgb(30,30,30)"
 
 def main():
     import argparse
@@ -59,12 +59,23 @@ def main():
     )
     console.print(f"[{ORANGE}]{'─' * width}[/{ORANGE}]")
 
-    # ── State ─────────────────────────────────────────────────────────────
-    tool_calls   = {}          # id → name
-    init_shown   = False
-    last_result  = None
-    pending_text = []          # text blocks to render as Markdown
-    last_tool_id = None        # for associating next tool result
+    # ── State Tracking & Action Status ────────────────────────────────────
+    tool_calls     = {}          # id → name
+    init_shown     = False
+    last_result    = None
+    pending_text   = []          # text blocks to render as Markdown
+    step_count     = 0           # Active step counter
+    current_action = "Đang phân tích prompt & khởi tạo..."
+
+    def extract_inp_summary(inp):
+        if isinstance(inp, dict):
+            return (
+                inp.get("command") or inp.get("path") or inp.get("query") or
+                inp.get("url") or inp.get("name") or inp.get("prompt") or
+                inp.get("description") or inp.get("title") or inp.get("code") or
+                inp.get("content") or ", ".join(f"{k}={str(v)[:20]}" for k, v in list(inp.items())[:2])
+            )
+        return str(inp) if inp else ""
 
     def flush_pending_text():
         """Render accumulated text as Markdown with proper indentation."""
@@ -80,27 +91,9 @@ def main():
         console.print(Markdown(raw, code_theme="monokai"))
 
     def render_tool_call(name, inp):
-        """● ToolName  <command preview>"""
+        """  ● ToolName  <command preview>"""
         flush_pending_text()
-        # Try all common input keys in priority order
-        cmd = ""
-        if isinstance(inp, dict):
-            cmd = (
-                inp.get("command") or
-                inp.get("path") or
-                inp.get("query") or
-                inp.get("url") or
-                inp.get("name") or
-                inp.get("prompt") or
-                inp.get("description") or
-                inp.get("title") or
-                inp.get("code") or
-                inp.get("content") or
-                ", ".join(f"{k}={str(v)[:30]}" for k, v in list(inp.items())[:2])
-            )
-        elif isinstance(inp, str):
-            cmd = inp
-        # Truncate long commands to first line
+        cmd = extract_inp_summary(inp)
         cmd_first = cmd.split("\n")[0][:70] if cmd else ""
         remainder = cmd[len(cmd_first):].strip() if len(cmd) > len(cmd_first) else ""
 
@@ -109,7 +102,6 @@ def main():
             f"[bold white]{name}[/bold white]  "
             f"[{GRAY}]{cmd_first}[/{GRAY}]"
         )
-        # Extra lines of command (multiline bash)
         if remainder:
             for extra in remainder.split("\n")[:3]:
                 if extra.strip():
@@ -125,7 +117,6 @@ def main():
         text = text.strip()
         if not text:
             return
-        # Show up to 3 lines of result
         lines = text.splitlines()
         shown = lines[:3]
         for ln in shown:
@@ -135,7 +126,7 @@ def main():
             console.print(f"{BRANCH}[{GRAY}]… ({len(lines)-3} dòng tiếp theo)[/{GRAY}]")
 
     def handle_event(obj):
-        nonlocal init_shown, last_result, last_tool_id
+        nonlocal init_shown, last_result, step_count, current_action
 
         etype = obj.get("type", "")
 
@@ -148,6 +139,8 @@ def main():
                     flush_pending_text()
                     thought = block.get("thinking", "").strip()
                     if thought:
+                        step_count += 1
+                        current_action = f"Bước {step_count}: Đang suy luận giải pháp..."
                         console.print(f"\n{INDENT}[dim italic]💭 Suy luận nội tâm:[/dim italic]")
                         for ln in thought.splitlines():
                             if ln.strip():
@@ -157,14 +150,18 @@ def main():
                 elif btype == "text":
                     text = block.get("text", "")
                     if text.strip():
+                        current_action = "Đang soạn & tổng hợp câu trả lời..."
                         pending_text.append(text)
 
                 elif btype == "tool_use":
+                    step_count += 1
                     tid   = block.get("id", "")
                     name  = block.get("name", "Tool")
                     inp   = block.get("input", {})
                     tool_calls[tid] = name
-                    last_tool_id    = tid
+
+                    cmd_summary = extract_inp_summary(inp).split("\n")[0][:45]
+                    current_action = f"Bước {step_count}: Đang thực thi {name} ({cmd_summary})"
                     render_tool_call(name, inp)
 
         # ── tool result ───────────────────────────────────────────────────
@@ -188,12 +185,10 @@ def main():
             if out_tok > 0 or last_result is None:
                 last_result = obj
 
-    # ── Threaded stdin reader — non-blocking with live spinner ───────────
-    import threading, queue as _queue
+    # ── Threaded stdin reader ─────────────────────────────────────────────
     event_queue = _queue.Queue()
 
     def _stdin_reader():
-        """Đọc stdin trên thread riêng để không block main thread."""
         try:
             for line in itertools.chain([first_line], sys.stdin):
                 event_queue.put(line)
@@ -203,17 +198,23 @@ def main():
     reader = threading.Thread(target=_stdin_reader, daemon=True)
     reader.start()
 
-    # ── Live spinner hiển thị trong lúc chờ event mới ────────────────────
-    wait_seconds = 0
-    spinner_text  = lambda s: f"[{ORANGE}]⏳ Đang xử lý… ({s:.0f}s)[/{ORANGE}]"
-
-    with Live(console=console, refresh_per_second=8, transient=False) as live:
+    # ── Live continuous progress spinner with step description & total time ─────
+    with Live(console=console, refresh_per_second=10, transient=True) as live:
         while True:
+            # Continuous total time calculation
+            elapsed_sec = int((datetime.datetime.now() - start_ts).total_seconds())
+
+            # Build spinner status text
+            spinner_renderable = Spinner(
+                "dots",
+                text=f"[{ORANGE}]⏳ {current_action}  │  ⏱️ {elapsed_sec}s[/{ORANGE}]"
+            )
+            live.update(spinner_renderable)
+
             try:
-                raw = event_queue.get(timeout=0.15)
-                live.update("")               # ẩn spinner khi có event
+                raw = event_queue.get(timeout=0.1)
                 if raw is None:
-                    break                     # stream ended
+                    break  # stream ended
                 raw = raw.strip()
                 if not raw:
                     continue
@@ -222,11 +223,8 @@ def main():
                 except json.JSONDecodeError:
                     if raw and not raw.startswith("{"):
                         pending_text.append(raw)
-                wait_seconds = 0              # reset counter sau mỗi event
             except _queue.Empty:
-                # Không có event → cập nhật spinner đếm thời gian chờ
-                wait_seconds += 0.15
-                live.update(spinner_text(wait_seconds))
+                pass  # Keep looping to update total time counter continuously
 
     # ── Flush remaining text & print footer ──────────────────────────────
     flush_pending_text()
