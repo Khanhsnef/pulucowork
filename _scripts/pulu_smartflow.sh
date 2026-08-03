@@ -84,8 +84,8 @@ smart_claude() {
     _auto_detect_gateway "$prompt" "$lower_prompt"
     echo -e "🧠 Model: $task_label\n"
 
-    # Gọi Claude Code
-    claude --model "$model" -p "$prompt"
+    # Gọi Claude Code với /dev/null để tránh treo TTY stdin
+    claude --model "$model" -p "$prompt" < /dev/null
 }
 alias ai="smart_claude"
 
