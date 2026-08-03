@@ -22,12 +22,12 @@ def main():
     if not raw_text.strip():
         return
 
-    # Shorten labels if necessary to prevent wrapping
+    # Clean labels for exact width alignment
     gw = args.gateway.replace(" - Terminal Siêu Tốc < 1ms", "").replace(" - Nén Token & Auto-Fallback Active", "").replace(" - Multi-Provider Engine", "")
     model = args.model.replace("COMBO: ", "")
 
-    # 1. Header Panel (Concise 1-Line Claude Orange Box)
-    header_content = f"🔀 [bold yellow]{gw}[/]   │   🧠 [bold green]{model}[/]   │   [bold green]🟢 Active[/]"
+    # 1. Header Panel (Perfectly Aligned Single-Line Rounded Box)
+    header_content = f" 🔀 [bold yellow]{gw}[/]   •   🧠 [bold green]{model}[/]   •   [bold green]● Active[/] "
     console.print(
         Panel(
             header_content,
@@ -45,9 +45,9 @@ def main():
     except Exception:
         sys.stdout.write(raw_text)
 
-    # 3. Footer Panel (Compact 1-Line Meter Panel)
-    elapsed_str = f"⏱️ {args.elapsed}s" if args.elapsed else "⏱️ Completed"
-    footer_content = f"[dim white]{elapsed_str}  │  ➔ Auto-Token Nén  │  📦 Cache Active  │  ⚡ Max Speed  │  🟢 Active[/]"
+    # 3. Footer Panel (Perfectly Aligned Single-Line Meter Panel)
+    elapsed_str = f"⏱️ {args.elapsed}s" if args.elapsed else "⏱️ Done"
+    footer_content = f" [dim white]{elapsed_str}   •   ➔ Nén Token   •   📦 Cache   •   ⚡ Speed   •   [green]● Active[/green][/dim white] "
     console.print(
         Panel(
             footer_content,
