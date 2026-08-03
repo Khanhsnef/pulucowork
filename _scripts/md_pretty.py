@@ -2,15 +2,15 @@
 import sys
 from rich.console import Console
 from rich.markdown import Markdown
-from rich.panel import Panel
-from rich.text import Text
 
 def format_output():
-    raw_text = sys.stdin.read()
+    console = Console()
+    with console.status("[bold cyan]⏳ Đang suy luận & kết nối Gateway...[/bold cyan]", spinner="dots"):
+        raw_text = sys.stdin.read()
+        
     if not raw_text.strip():
         return
     
-    console = Console()
     try:
         md = Markdown(raw_text)
         console.print(md)
