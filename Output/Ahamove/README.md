@@ -221,6 +221,7 @@ Output/Ahamove/
 #### `monitoring/`
 | File | Mô tả |
 |------|-------|
+| `2026-08-llm-supply-strategy-brief.md` | Tóm tắt meeting T6 với MT: LLM (Lalamove) đã vượt AHM (Ent&SME, HCM 71%), chiến lược oversupply+giá rẻ, call-to-action Supply 2W/4W |
 | `2026-06-22-weekly-market-brief.md` | BẢN TIN VẬN HÀNH & THỊ TRƯỜNG ĐẦU TUẦN (16/06 - 22/06/2026) |
 | `2026-06-22-weekly-market-brief.html` | Bản HTML tương tác của Bản tin thị trường đầu tuần 22/06 |
 | `2026-06-22-competitor-intel-report.md` | Báo cáo giám sát cạnh tranh ngày 22/06: ShopeeFood tuyển dụng mạnh, Uber thâu tóm Getir |
