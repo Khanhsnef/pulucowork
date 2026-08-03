@@ -108,23 +108,16 @@ smart_claude() {
     fi
 
     # Tự động chọn Gateway tối ưu
-    echo -n "🔀 [Auto-Detect v3.5] "
-    _auto_detect_gateway "$prompt" "$lower_prompt"
-    echo -e "🧠 Model: $task_label\n"
+    _auto_detect_gateway "$prompt" "$lower_prompt" > /dev/null
 
     local start_ts=$(python3 -c "import time; print(time.time())")
 
-    # Gọi Claude Code với /dev/null để tránh treo TTY stdin & format hiển thị qua Rich Markdown
+    # Gọi Claude Code với /dev/null & format hiển thị qua Rich Markdown với Claude Orange Theme
     if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
-        claude --model "$model" -p "$prompt" < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py
+        claude --model "$model" -p "$prompt" < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py --gateway "${PULU_ACTIVE_GW_LABEL:-Auto-Gateway}" --model "${task_label}"
     else
         claude --model "$model" -p "$prompt" < /dev/null
     fi
-
-    local end_ts=$(python3 -c "import time; print(time.time())")
-    local elapsed=$(python3 -c "print(round($end_ts - $start_ts, 2))")
-    echo -e "\n────────────────────────────────────────────────────────────"
-    echo -e "⏱️ [TIẾN TRÌNH] Hoàn thành trong ${elapsed}s | Gateway: ${PULU_ACTIVE_GW_LABEL:-Auto-Gateway} | Session: Active 🟢\n"
 }
 alias ai="smart_claude"
 
@@ -167,17 +160,11 @@ smart_chat() {
 
         _auto_detect_gateway "$curr_prompt" "$lower_prompt" > /dev/null
 
-        local start_ts=$(python3 -c "import time; print(time.time())")
-
         if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
             claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py --gateway "${PULU_ACTIVE_GW_LABEL:-Auto-Gateway}" --model "${task_label}"
         else
             claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" < /dev/null
         fi
-
-        local end_ts=$(python3 -c "import time; print(time.time())")
-        local elapsed=$(python3 -c "print(round($end_ts - $start_ts, 2))")
-        echo -e "⏱️ [TIẾN TRÌNH] Hoàn thành trong ${elapsed}s | Gateway: ${PULU_ACTIVE_GW_LABEL:-Auto-Gateway} | Session: Active 🟢\n"
     }
 
     # 1. Nếu gõ kèm prompt (ví dụ: `chat! hỏi nhanh...`) -> Xử lý 1 lần

@@ -3,7 +3,7 @@ import sys, argparse
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
-from rich.text import Text
+from rich.box import ROUNDED
 
 def main():
     parser = argparse.ArgumentParser(description="Render terminal Markdown output with Claude CLI native styling")
@@ -13,29 +13,45 @@ def main():
     args = parser.parse_args()
 
     console = Console()
+    orange_style = "rgb(215,95,0)"
     
     # Read content from stdin
-    with console.status("[bold cyan]⏳ Đang suy luận & xử lý câu hỏi...[/bold cyan]", spinner="dots"):
+    with console.status("[bold rgb(215,95,0)]⏳ Đang suy luận & kết nối Gateway...[/bold rgb(215,95,0)]", spinner="dots"):
         raw_text = sys.stdin.read()
 
     if not raw_text.strip():
         return
 
-    # Render Header Panel
-    header_text = f"[bold cyan]🔀 Gateway:[/] [bold yellow]{args.gateway}[/]  │  [bold cyan]🧠 Model:[/] [bold green]{args.model}[/]  │  [bold green]🟢 Session Active[/]"
-    console.print(Panel(header_text, border_style="bright_blue", title="[bold white]🤖 PuluSmartFlow v3.5[/]", expand=False))
+    # 1. Header Panel (Claude Orange Rounded Box)
+    header_content = f"[bold white]🔀 Gateway:[/] [bold yellow]{args.gateway}[/]   │   [bold white]🧠 Model:[/] [bold green]{args.model}[/]   │   [bold green]🟢 Session Active[/]"
+    console.print(
+        Panel(
+            header_content,
+            title="[bold white on rgb(215,95,0)] 🤖 PuluSmartFlow v3.5 [/bold white on rgb(215,95,0)]",
+            border_style=orange_style,
+            box=ROUNDED,
+            expand=False
+        )
+    )
 
-    # Render Main Content
+    # 2. Main Markdown Content
     try:
         md = Markdown(raw_text)
         console.print(md)
     except Exception:
         sys.stdout.write(raw_text)
 
-    # Render Footer Panel
+    # 3. Footer Panel (Compact Meter Panel)
     elapsed_str = f"⏱️ {args.elapsed}s" if args.elapsed else "⏱️ Completed"
-    footer_text = f"[bold dim]{elapsed_str} │ ➔ Auto-Token Nén │ 📦 Cache Active │ ⚡ Max Speed │ 🟢 Context Preserved[/]"
-    console.print(Panel(footer_text, border_style="dim", expand=False))
+    footer_content = f"[dim white]{elapsed_str}   │   ➔ Auto-Token Nén   │   📦 Cache Active   │   ⚡ Max Speed   │   🟢 Active[/]"
+    console.print(
+        Panel(
+            footer_content,
+            border_style=f"dim {orange_style}",
+            box=ROUNDED,
+            expand=False
+        )
+    )
 
 if __name__ == "__main__":
     main()
