@@ -162,7 +162,10 @@ smart_chat() {
         _auto_detect_gateway "$curr_prompt" "$lower_prompt" > /dev/null
 
         if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
-            claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py --gateway "${PULU_ACTIVE_GW_LABEL:-Auto-Gateway}" --model "${task_label}"
+            claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" \
+                --output-format stream-json --verbose \
+                < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py \
+                --gateway "${PULU_ACTIVE_GW_LABEL:-Auto-Gateway}" --model "${task_label}"
         else
             claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" < /dev/null
         fi
