@@ -43,15 +43,18 @@ _auto_detect_gateway() {
     if [[ "$PULU_GATEWAY_OVERRIDE" == "9router" ]]; then
         export ANTHROPIC_BASE_URL="http://localhost:20128/api/v1"
         export ANTHROPIC_API_KEY="sk-9router"
+        PULU_ACTIVE_GW_LABEL="9Router (:20128)"
         echo "⚡ Gateway: 9Router (:20128 - Sub-millisecond Terminal Route)"
         return 0
     elif [[ "$PULU_GATEWAY_OVERRIDE" == "direct" ]]; then
         unset ANTHROPIC_BASE_URL
+        PULU_ACTIVE_GW_LABEL="Direct API"
         echo "⚡ Gateway: Direct Connection (Trực tiếp Anthropic API)"
         return 0
     elif [[ "$PULU_GATEWAY_OVERRIDE" == "omni" ]]; then
         export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
         export ANTHROPIC_API_KEY="sk-omni"
+        PULU_ACTIVE_GW_LABEL="OmniRoute (:20130)"
         echo "🛡️ Gateway: OmniRoute (:20130 - Multi-Provider Engine)"
         return 0
     fi
@@ -61,11 +64,13 @@ _auto_detect_gateway() {
     if [[ $prompt_len -gt 500 ]] || [[ "$lower_prompt" =~ (\.log|\.csv|\.json|\.pdf|tóm tắt file|đọc file|dữ liệu lớn|văn bản dài|báo cáo dài) ]]; then
         export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
         export ANTHROPIC_API_KEY="sk-omni"
+        PULU_ACTIVE_GW_LABEL="OmniRoute (:20130)"
         echo "🛡️ Gateway: OmniRoute (:20130 - Nén Token & Auto-Fallback Active)"
     else
         # Mặc định cho tác vụ ngắn & CLI -> Trỏ sang 9Router (:20128) để Đạt Tốc Độ Siêu Tốc < 1ms
         export ANTHROPIC_BASE_URL="http://localhost:20128/api/v1"
         export ANTHROPIC_API_KEY="sk-9router"
+        PULU_ACTIVE_GW_LABEL="9Router (:20128)"
         echo "⚡ Gateway: 9Router (:20128 - Terminal Siêu Tốc < 1ms)"
     fi
 }
@@ -107,12 +112,19 @@ smart_claude() {
     _auto_detect_gateway "$prompt" "$lower_prompt"
     echo -e "🧠 Model: $task_label\n"
 
+    local start_ts=$(python3 -c "import time; print(time.time())")
+
     # Gọi Claude Code với /dev/null để tránh treo TTY stdin & format hiển thị qua Rich Markdown
     if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
         claude --model "$model" -p "$prompt" < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py
     else
         claude --model "$model" -p "$prompt" < /dev/null
     fi
+
+    local end_ts=$(python3 -c "import time; print(time.time())")
+    local elapsed=$(python3 -c "print(round($end_ts - $start_ts, 2))")
+    echo -e "\n────────────────────────────────────────────────────────────"
+    echo -e "⏱️ [TIẾN TRÌNH] Hoàn thành trong ${elapsed}s | Gateway: ${PULU_ACTIVE_GW_LABEL:-Auto-Gateway} | Session: Active 🟢\n"
 }
 alias ai="smart_claude"
 
@@ -172,6 +184,8 @@ smart_chat() {
     if [[ "$danger_mode" == true ]]; then
         claude_flags+=("--dangerously-skip-permissions")
     fi
+
+    local start_ts=$(python3 -c "import time; print(time.time())")
 
     # Giữ context nguyên vẹn trong terminal tab hiện tại, ngắt TTY stdin & format hiển thị qua Rich Markdown
     if [[ -n "$prompt" ]]; then
