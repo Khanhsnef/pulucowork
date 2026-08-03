@@ -1,177 +1,216 @@
 #!/usr/bin/env python3
 """
-PuluSmartFlow Terminal Renderer — Claude CLI Native stream-json format parser.
-Hiển thị từng bước suy luận, tool calls, và nội dung phản hồi real-time.
+PuluSmartFlow Terminal Renderer v2.0
+Visual hierarchy:
+  - Tool calls:   ┌─ ● Bash  <command dim>
+  - Tool output:  │  <text>   (indented)
+  - Text/answer:  Rich Markdown (bold/italic/code/table rendered)
+  - Dividers:     ─── sections
+  - Footer:       token stats
 """
-import sys, json, datetime, re
+import sys, json, datetime, re, textwrap
 from rich.console import Console
+from rich.markdown import Markdown
 from rich.live import Live
 from rich.spinner import Spinner
 from rich.text import Text
-from rich.panel import Panel
-from rich.box import ROUNDED
+
+INDENT   = "  "          # 2-space base indent
+BRANCH   = "  │  "       # continuation indent under tool call
+ORANGE   = "rgb(217,119,6)"
+DIM_ORG  = "dim rgb(217,119,6)"
+CYAN     = "rgb(56,189,248)"
+GREEN    = "rgb(134,239,172)"
+GRAY     = "rgb(100,116,139)"
+CODE_BG  = "rgb(30,30,30)"
 
 def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--gateway", default="9Router")
-    parser.add_argument("--model", default="SONNET 4.6")
+    parser.add_argument("--model",   default="SONNET 4.6")
     args = parser.parse_args()
 
     console = Console(highlight=False)
-    orange = "rgb(217,119,6)"
-    dim_orange = "dim rgb(217,119,6)"
-    cyan = "rgb(56,189,248)"
-    width = min(console.width, 80)
+    width   = min(console.width, 80)
 
-    gw = args.gateway.replace(" - Terminal Siêu Tốc < 1ms", "").replace(" - Nén Token & Auto-Fallback Active", "").replace(" - Multi-Provider Engine", "").replace(" (:20128)", "").replace(" (:20130)", "")
+    gw    = re.sub(r'\s*\(:[0-9]+\)', '', args.gateway)
+    gw    = re.sub(r'\s*-\s*(Terminal.*|Nén.*|Multi.*)', '', gw).strip()
     model = args.model.replace("COMBO: ", "").replace(" (Max Coding)", "")
 
-    # Phase 1: Spinner while waiting for first data
+    # ── Spinner until first byte ─────────────────────────────────────────
     first_line = None
-    with Live(Spinner("dots", text=f"[{orange}]⏳ Đang suy luận & kết nối {gw}...[/{orange}]"), console=console, transient=True, refresh_per_second=12):
+    with Live(
+        Spinner("dots", text=f"[{ORANGE}]Đang suy luận & kết nối {gw}…[/{ORANGE}]"),
+        console=console, transient=True, refresh_per_second=14
+    ):
         first_line = sys.stdin.readline()
-
     if not first_line:
         return
 
-    # Phase 2: Header
-    now_str = datetime.datetime.now().strftime("%H:%M:%S")
+    # ── Header ───────────────────────────────────────────────────────────
     start_ts = datetime.datetime.now()
-    console.print(f"[dim]{now_str}[/dim] [dim]│[/dim] [{cyan}]{gw}[/{cyan}] [dim]│[/dim] [bold green]{model}[/bold green] [dim]│[/dim] [bold cyan]Max Speed[/bold cyan]")
-    console.print(f"[{orange}]" + "─" * width + f"[/{orange}]")
+    now_str  = start_ts.strftime("%H:%M:%S")
+    console.print(
+        f"[{GRAY}]{now_str}[/{GRAY}]  "
+        f"[{CYAN}]{gw}[/{CYAN}]  "
+        f"[bold {GREEN}]{model}[/bold {GREEN}]  "
+        f"[{GRAY}]Max Speed[/{GRAY}]"
+    )
+    console.print(f"[{ORANGE}]{'─' * width}[/{ORANGE}]")
 
-    # State tracking
-    tool_calls = {}     # tool_use_id -> name
-    thinking_open = False
-    text_buffer = ""
-    init_shown = False      # Only show tools list once
-    last_result = None      # Track final result event
+    # ── State ─────────────────────────────────────────────────────────────
+    tool_calls   = {}          # id → name
+    init_shown   = False
+    last_result  = None
+    pending_text = []          # text blocks to render as Markdown
+    last_tool_id = None        # for associating next tool result
 
-    def flush_text():
-        nonlocal text_buffer
-        if text_buffer.strip():
-            console.print(text_buffer.rstrip())
-        text_buffer = ""
+    def flush_pending_text():
+        """Render accumulated text as Markdown with proper indentation."""
+        if not pending_text:
+            return
+        raw = "\n".join(pending_text).strip()
+        pending_text.clear()
+        if not raw:
+            return
+        # Render Markdown (bold/italic/code/table/lists)
+        console.print(Markdown(raw, code_theme="monokai"))
+
+    def render_tool_call(name, inp):
+        """● ToolName  <command preview>"""
+        flush_pending_text()
+        # Build command preview
+        cmd = ""
+        if isinstance(inp, dict):
+            cmd = (inp.get("command") or inp.get("path") or
+                   inp.get("query") or inp.get("url") or
+                   inp.get("description") or "")
+        elif isinstance(inp, str):
+            cmd = inp
+        # Truncate long commands to first line
+        cmd_first = cmd.split("\n")[0][:70] if cmd else ""
+        remainder = cmd[len(cmd_first):].strip() if len(cmd) > len(cmd_first) else ""
+
+        console.print(
+            f"{INDENT}[bold {ORANGE}]●[/bold {ORANGE}] "
+            f"[bold white]{name}[/bold white]  "
+            f"[{GRAY}]{cmd_first}[/{GRAY}]"
+        )
+        # Extra lines of command (multiline bash)
+        if remainder:
+            for extra in remainder.split("\n")[:3]:
+                if extra.strip():
+                    console.print(f"{BRANCH}[{GRAY}]{extra.strip()}[/{GRAY}]")
+
+    def render_tool_result(content):
+        """  │  <result preview>"""
+        text = ""
+        if isinstance(content, list):
+            text = " ".join(c.get("text", "") for c in content if c.get("type") == "text")
+        elif isinstance(content, str):
+            text = content
+        text = text.strip()
+        if not text:
+            return
+        # Show up to 3 lines of result
+        lines = text.splitlines()
+        shown = lines[:3]
+        for ln in shown:
+            if ln.strip():
+                console.print(f"{BRANCH}[{GRAY}]{ln[:100]}[/{GRAY}]")
+        if len(lines) > 3:
+            console.print(f"{BRANCH}[{GRAY}]… ({len(lines)-3} dòng tiếp theo)[/{GRAY}]")
 
     def handle_event(obj):
-        nonlocal thinking_open, text_buffer
+        nonlocal init_shown, last_result, last_tool_id
+
         etype = obj.get("type", "")
 
-        # ─── assistant message (contains content blocks) ───────────────
+        # ── assistant message ─────────────────────────────────────────────
         if etype == "assistant":
-            msg = obj.get("message", {})
-            for block in msg.get("content", []):
+            for block in obj.get("message", {}).get("content", []):
                 btype = block.get("type", "")
 
                 if btype == "thinking":
-                    flush_text()
-                    thinking_text = block.get("thinking", "").strip()
-                    if thinking_text:
-                        # Show thinking panel
-                        console.print(f"[dim italic]💭 Suy luận:[/dim italic]")
-                        for tline in thinking_text.splitlines():
-                            if tline.strip():
-                                console.print(f"  [dim italic]{tline}[/dim italic]")
-                    console.print(f"[dim]{'─' * 40}[/dim]")
+                    flush_pending_text()
+                    thought = block.get("thinking", "").strip()
+                    if thought:
+                        console.print(f"\n{INDENT}[dim italic]💭 Suy luận nội tâm:[/dim italic]")
+                        for ln in thought.splitlines():
+                            if ln.strip():
+                                console.print(f"{BRANCH}[dim italic]{ln}[/dim italic]")
+                        console.print(f"{INDENT}[{GRAY}]{'─'*40}[/{GRAY}]")
 
                 elif btype == "text":
                     text = block.get("text", "")
-                    if text:
-                        console.print(text.rstrip())
+                    if text.strip():
+                        pending_text.append(text)
 
                 elif btype == "tool_use":
-                    flush_text()
-                    tool_name = block.get("name", "?")
-                    tool_input = block.get("input", {})
-                    tool_calls[block.get("id", "")] = tool_name
-                    # Show tool call in Claude CLI native style
-                    inp_str = ""
-                    if "command" in tool_input:
-                        inp_str = tool_input["command"][:80]
-                    elif "path" in tool_input:
-                        inp_str = tool_input["path"]
-                    elif "query" in tool_input:
-                        inp_str = tool_input["query"][:80]
-                    elif "url" in tool_input:
-                        inp_str = tool_input["url"][:80]
-                    console.print(f"[{orange}]● {tool_name}[/{orange}] [dim]{inp_str}[/dim]")
+                    tid   = block.get("id", "")
+                    name  = block.get("name", "Tool")
+                    inp   = block.get("input", {})
+                    tool_calls[tid] = name
+                    last_tool_id    = tid
+                    render_tool_call(name, inp)
 
-        # ─── tool result ────────────────────────────────────────────────
+        # ── tool result ───────────────────────────────────────────────────
         elif etype == "tool_result":
-            tool_id = obj.get("tool_use_id", "")
-            tool_name = tool_calls.get(tool_id, "Tool")
-            content = obj.get("content", "")
-            if isinstance(content, list):
-                content = " ".join(c.get("text", "") for c in content if c.get("type") == "text")
-            if content:
-                preview = content.strip()[:120].replace("\n", " ")
-                console.print(f"  [dim]└─ {preview}{'...' if len(content) > 120 else ''}[/dim]")
+            render_tool_result(obj.get("content", ""))
 
-        # ─── system init ─────────────────────────────────────────────────
+        # ── system init ───────────────────────────────────────────────────
         elif etype == "system":
-            nonlocal init_shown
-            subtype = obj.get("subtype", "")
-            if subtype == "init" and not init_shown:
+            if obj.get("subtype") == "init" and not init_shown:
                 init_shown = True
-                tools_list = obj.get("tools", [])
-                if tools_list:
-                    console.print(f"[dim]⚙ Tools: {', '.join(t for t in tools_list[:5])}{'...' if len(tools_list)>5 else ''}[/dim]")
+                tlist = obj.get("tools", [])
+                if tlist:
+                    console.print(
+                        f"[{GRAY}]⚙  {', '.join(tlist[:6])}"
+                        f"{'…' if len(tlist) > 6 else ''}[/{GRAY}]"
+                    )
 
-        # ─── result (final) ───────────────────────────────────────────────
+        # ── result (final) ────────────────────────────────────────────────
         elif etype == "result":
-            nonlocal last_result
-            # Chỉ giữ lại result có dữ liệu thực (out_tok > 0)
-            usage = obj.get("usage", {})
-            out_tok = usage.get("output_tokens", 0)
+            out_tok = obj.get("usage", {}).get("output_tokens", 0)
             if out_tok > 0 or last_result is None:
                 last_result = obj
 
-    # Process first line
-    try:
-        obj = json.loads(first_line.strip())
-        handle_event(obj)
-    except json.JSONDecodeError:
-        # Not JSON — plain text mode
-        console.print(first_line.rstrip())
-        for line in sys.stdin:
-            console.print(line.rstrip())
-        elapsed = round((datetime.datetime.now() - start_ts).total_seconds(), 2)
-        console.print(f"[{dim_orange}]" + "─" * width + f"[/{dim_orange}]")
-        console.print(f"[dim]Time: {elapsed}s  │  Session: Active[/dim] [dim green]●[/dim green]")
-        return
-
-    # Stream remaining events
-    for raw_line in sys.stdin:
-        raw_line = raw_line.strip()
-        if not raw_line:
+    # ── Process events ───────────────────────────────────────────────────
+    for raw in [first_line] + list(sys.stdin):
+        raw = raw.strip()
+        if not raw:
             continue
         try:
-            obj = json.loads(raw_line)
-            handle_event(obj)
+            handle_event(json.loads(raw))
         except json.JSONDecodeError:
-            console.print(raw_line)
+            # Plain-text fallback (non-JSON stream)
+            if raw and not raw.startswith("{"):
+                pending_text.append(raw)
 
-    # Final footer — dùng last_result có token thực
-    flush_text()
+    # ── Flush remaining text & print footer ──────────────────────────────
+    flush_pending_text()
     elapsed = round((datetime.datetime.now() - start_ts).total_seconds(), 2)
-    console.print(f"[{dim_orange}]" + "─" * width + f"[/{dim_orange}]")
+    console.print(f"\n[{DIM_ORG}]{'─' * width}[/{DIM_ORG}]")
+
     if last_result:
-        usage = last_result.get("usage", {})
-        in_tok  = usage.get("input_tokens", 0)
-        out_tok = usage.get("output_tokens", 0)
-        cache_r = usage.get("cache_read_input_tokens", 0)
-        cache_c = usage.get("cache_creation_input_tokens", 0)
+        u       = last_result.get("usage", {})
+        in_tok  = u.get("input_tokens", 0)
+        out_tok = u.get("output_tokens", 0)
+        cache_r = u.get("cache_read_input_tokens", 0)
+        cache_c = u.get("cache_creation_input_tokens", 0)
         dur_api = last_result.get("duration_api_ms", 0)
         cost    = last_result.get("total_cost_usd", 0)
+        cost_str = f"  [yellow]${cost:.4f}[/yellow]" if cost else ""
         console.print(
-            f"[dim]Time: {elapsed}s  │  In: {in_tok:,}  │  Out: {out_tok:,}  │  "
-            f"Cache↑: {cache_c:,}  Cache↓: {cache_r:,}  │  API: {dur_api:,}ms[/dim]"
-            + (f"  [dim yellow]Cost: ${cost:.4f}[/dim yellow]" if cost else "")
-            + "  [dim green]Session: Active[/dim green]"
+            f"[{GRAY}]Time: {elapsed}s  │  "
+            f"In: {in_tok:,}  │  Out: {out_tok:,}  │  "
+            f"Cache↑: {cache_c:,}  Cache↓: {cache_r:,}  │  "
+            f"API: {dur_api:,}ms[/{GRAY}]"
+            f"{cost_str}  [{GREEN}]Session: Active[/{GREEN}]"
         )
     else:
-        console.print(f"[dim]Time: {elapsed}s  │  Session: Active[/dim]")
+        console.print(f"[{GRAY}]Time: {elapsed}s  │  Session: Active[/{GRAY}]")
 
 if __name__ == "__main__":
     main()
