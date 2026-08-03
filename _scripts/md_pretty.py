@@ -14,21 +14,41 @@ def main():
     orange_color = "rgb(217,119,6)"
     dim_orange = "dim rgb(217,119,6)"
     cyan_color = "rgb(56,189,248)"
-    now_str = datetime.datetime.now().strftime("%H:%M:%S")
+    start_time = datetime.datetime.now()
+    now_str = start_time.strftime("%H:%M:%S")
 
     # Clean short labels for compact single-line rendering
     gw = args.gateway.replace(" - Terminal Siêu Tốc < 1ms", "").replace(" - Nén Token & Auto-Fallback Active", "").replace(" - Multi-Provider Engine", "").replace(" (:20128)", "").replace(" (:20130)", "")
     model = args.model.replace("COMBO: ", "").replace(" (Max Coding)", "")
 
-    # Live animated spinner while waiting for input
+    # Live animated spinner displayed IMMEDIATELY while reading piped stream
     with console.status(f"[{orange_color}]⏳ Đang suy luận & kết nối {gw}...[/{orange_color}]", spinner="dots"):
         raw_text = sys.stdin.read()
+
+    end_time = datetime.datetime.now()
+    elapsed_seconds = round((end_time - start_time).total_seconds(), 2)
+    elapsed_str = f"{elapsed_seconds}s"
 
     if not raw_text.strip():
         return
 
+    # Filter out duplicate banner or system header lines
+    lines = raw_text.splitlines()
+    filtered_lines = []
+    seen = set()
+    for line in lines:
+        if "🚀 PuluSmartFlow" in line or "Auto Model & Auto Gateway Enabled" in line:
+            continue
+        # Remove consecutive duplicate blank lines
+        if line.strip() == "" and filtered_lines and filtered_lines[-1].strip() == "":
+            continue
+        filtered_lines.append(line)
+
+    clean_text = "\n".join(filtered_lines).strip()
+    if not clean_text:
+        return
+
     width = min(console.width, 80)
-    elapsed_str = f"{args.elapsed}s" if args.elapsed else "1.2s"
 
     # 1. Compact Header Row (Guaranteed No Line Wrapping)
     console.print(f"[dim]{now_str}[/dim] [dim]│[/dim] [{cyan_color}]{gw}[/{cyan_color}] [dim]│[/dim] [bold green]{model}[/bold green] [dim]│[/dim] [{orange_color}]{elapsed_str}[/{orange_color}] [dim]│[/dim] [bold cyan]Max Speed[/bold cyan]")
@@ -36,10 +56,10 @@ def main():
 
     # 2. Main Response Body (Markdown Rendered)
     try:
-        md = Markdown(raw_text)
+        md = Markdown(clean_text)
         console.print(md)
     except Exception:
-        sys.stdout.write(raw_text)
+        sys.stdout.write(clean_text + "\n")
 
     # 3. Dimmed Bottom Divider Line & Clean Compact Footer Row
     console.print(f"[{dim_orange}]" + "─" * width + f"[/{dim_orange}]")
