@@ -23,10 +23,14 @@ EOF
     chmod 600 "$_env_file"
 fi
 
+# === Default to Direct Mode (Avoid 401 Proxy Errors when Keys are Missing) ===
+export PULU_DIRECT_MODE="${PULU_DIRECT_MODE:-1}"
+unset ANTHROPIC_BASE_URL
+
 # === Claude Aliases for Dual-Gateway ===
 alias c-think="claude --model cc/claude-opus-4-8"
 alias c-code="claude --model cc/claude-sonnet-4-6"
-alias c-fast="claude --model oc/deepseek-v4-flash"
+alias c-fast="claude --model cc/claude-sonnet-4-6"
 # ============================================
 
 # === SMART AI ROUTER (v3.5 Auto-Detect Model & Gateway) ===
@@ -34,6 +38,12 @@ _auto_detect_gateway() {
     local prompt="$1"
     local lower_prompt="$2"
     local prompt_len=${#prompt}
+
+    if [[ "$PULU_DIRECT_MODE" == "1" ]]; then
+        unset ANTHROPIC_BASE_URL
+        echo "⚡ Gateway: Direct Connection (Trực tiếp Anthropic API)"
+        return 0
+    fi
 
     # Nếu prompt dài > 500 ký tự HOẶC chứa từ khóa xử lý log/data lớn -> Trỏ sang OmniRoute (:20130) để Nén Token & Fallback
     if [[ $prompt_len -gt 500 ]] || [[ "$lower_prompt" =~ (\.log|\.csv|\.json|\.pdf|tóm tắt file|đọc file|dữ liệu lớn|văn bản dài|báo cáo dài) ]]; then
@@ -79,9 +89,25 @@ smart_claude() {
         task_label="SONNET 4.6 (Max Coding)"
     fi
 
+    # Nếu ở Chế Độ Direct (hoặc chưa nhập Key Proxy), chuyển các model oc/ và gc/ về cc/claude-sonnet-4-6
+    if [[ "$PULU_DIRECT_MODE" == "1" ]] || [[ -z "$ANTHROPIC_BASE_URL" ]]; then
+        if [[ "$model" =~ ^(oc/|gc/) ]]; then
+            model="cc/claude-sonnet-4-6"
+            task_label="$task_label -> Direct Sonnet Fallback"
+        fi
+    fi
+
     # Tự động chọn Gateway tối ưu (9Router vs OmniRoute)
     echo -n "🔀 [Auto-Detect v3.5] "
     _auto_detect_gateway "$prompt" "$lower_prompt"
+
+    # Re-check model sau khi gateway thiết lập (Direct vs Proxy)
+    if [[ "$PULU_DIRECT_MODE" == "1" ]] || [[ -z "$ANTHROPIC_BASE_URL" ]]; then
+        if [[ "$model" =~ ^(oc/|gc/) ]]; then
+            model="cc/claude-sonnet-4-6"
+        fi
+    fi
+
     echo -e "🧠 Model: $task_label\n"
 
     # Gọi Claude Code với /dev/null để tránh treo TTY stdin
@@ -126,15 +152,24 @@ alias chat="smart_chat"
 # === Gateway Switcher Wrappers (Thủ công nếu muốn override) ===
 use_9router() {
     export ANTHROPIC_BASE_URL="http://localhost:20128/api/v1"
+    unset PULU_DIRECT_MODE
     echo -e "✅ Claude đã cố định trỏ về 9Router (localhost:20128)"
 }
 alias use-9router="use_9router"
 
 use_omni() {
     export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
+    unset PULU_DIRECT_MODE
     echo -e "✅ Claude đã cố định trỏ về OmniRoute (localhost:20130)"
 }
 alias use-omni="use_omni"
+
+use_direct() {
+    unset ANTHROPIC_BASE_URL
+    export PULU_DIRECT_MODE=1
+    echo -e "⚡ Claude đã chuyển sang chế độ TRỰC TIẾP (Bỏ qua 9Router/OmniRoute Proxy)"
+}
+alias use-direct="use_direct"
 
 # === Circuit Breaker cho command_not_found_handler ===
 export _PULU_CNF_DEPTH=0
