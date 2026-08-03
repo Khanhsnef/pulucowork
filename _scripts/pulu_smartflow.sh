@@ -157,9 +157,9 @@ smart_chat() {
         claude_flags+=("--dangerously-skip-permissions")
     fi
 
-    # Giữ context nguyên vẹn trong terminal tab hiện tại
+    # Giữ context nguyên vẹn trong terminal tab hiện tại, ngắt TTY stdin để tránh treo
     if [[ -n "$prompt" ]]; then
-        claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt"
+        claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt" < /dev/null
     else
         claude "${claude_flags[@]}" --model "$model"
     fi
