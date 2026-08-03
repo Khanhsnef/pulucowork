@@ -115,9 +115,36 @@ smart_claude() {
 }
 alias ai="smart_claude"
 
-# === SMART CHAT (TTY Interactive Mode) ===
+# === SMART CHAT (TTY Interactive Mode & Auto-Detect Engine) ===
 smart_chat() {
-    local prompt="$*"
+    local danger_mode=false
+    local prompt=""
+
+    if [[ "$1" == "!" ]]; then
+        danger_mode=true
+        shift
+    fi
+
+    prompt="$*"
+
+    if [[ -z "$prompt" ]]; then
+        echo ""
+        echo "╔════════════════════════════════════════════════════════════╗"
+        echo "║  🤖 PuluSmartFlow Interactive Chat (Auto-Detect Engine)   ║"
+        if [[ "$danger_mode" == true ]]; then
+            echo "║  ⚡ CHẾ ĐỘ CHAT!: TỰ ĐỘNG CẤP QUYỀN (--dangerously)        ║"
+        else
+            echo "║  🔒 CHẾ ĐỘ CHAT: XÁC THỰC QUYỀN HỆ THỐNG MẶC ĐỊNH        ║"
+        fi
+        echo "║  Gõ 'exit' hoặc Ctrl+C để thoát                            ║"
+        echo "╚════════════════════════════════════════════════════════════╝"
+        echo ""
+        echo -n "💬 Nhập nội dung câu hỏi: "
+        read -r prompt
+        [[ -z "$prompt" ]] && return
+        [[ "$prompt" =~ ^(exit|quit|bye|thoát|q)$ ]] && echo "👋 Tạm biệt!" && return
+    fi
+
     local lower_prompt=$(echo "$prompt" | awk '{print tolower($0)}')
     local model="cc/claude-sonnet-4-6" # Mặc định
     local task_label="SONNET 4.6 (Max Coding)"
@@ -136,18 +163,38 @@ smart_chat() {
         task_label="SONNET 4.6 (Max Coding)"
     fi
 
+    if [[ "$PULU_DIRECT_MODE" == "1" ]] || [[ -z "$ANTHROPIC_BASE_URL" ]]; then
+        if [[ "$model" =~ ^(oc/|gc/) ]]; then
+            model="cc/claude-sonnet-4-6"
+            task_label="$task_label -> Direct Sonnet Fallback"
+        fi
+    fi
+
     echo -n "🔀 [Auto-Detect v3.5] "
     _auto_detect_gateway "$prompt" "$lower_prompt"
+
+    if [[ "$PULU_DIRECT_MODE" == "1" ]] || [[ -z "$ANTHROPIC_BASE_URL" ]]; then
+        if [[ "$model" =~ ^(oc/|gc/) ]]; then
+            model="cc/claude-sonnet-4-6"
+        fi
+    fi
+
     echo -e "🧠 Model: $task_label\n"
 
-    # Tương tác đầy đủ (TTY) - KHÔNG có -p flag trừ khi được chuyển tiếp bằng cờ --continue
+    local claude_flags=()
+    if [[ "$danger_mode" == true ]]; then
+        claude_flags+=("--dangerously-skip-permissions")
+    fi
+
+    # Giữ context nguyên vẹn trong terminal tab hiện tại, không chuyển tab
     if [[ -n "$prompt" ]]; then
-        claude --model "$model" --continue -p "$prompt"
+        claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt"
     else
-        claude --model "$model"
+        claude "${claude_flags[@]}" --model "$model"
     fi
 }
 alias chat="smart_chat"
+alias "chat!"="smart_chat !"
 
 # === Gateway Switcher Wrappers (Thủ công nếu muốn override) ===
 use_9router() {
