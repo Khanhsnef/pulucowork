@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ahamove · Modern 8-Slide Business Presentation Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --aha-orange: #FF6B00;
+      --aha-orange-light: #FFF5EE;
+      --aha-orange-glow: rgba(255, 107, 0, 0.15);
+      --aha-blue:   #004C8C;
+      --aha-blue-dark: #002E57;
+      --aha-blue-light: #F0F5FA;
+      --green:      #10B981;
+      --green-bg:   #E6F4EA;
+      --yellow:     #F59E0B;
+      --yellow-bg:  #FEF3C7;
+      --red:        #EF4444;
+      --red-bg:     #FEE2E2;
+      --gray-bg:    #F1F5F9;
+      --card-bg:    #FFFFFF;
+      --border:     #E2E8F0;
+      --text-dark:  #0F172A;
+      --text-sub:   #475569;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-bg);
+      color: var(--text-dark);
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 0 5rem;
+    }
+
+    /* NAVIGATION / PRESENTATION CONTROL BAR */
+    .deck-control-bar {
+      position: sticky;
+      top: 1rem;
+      z-index: 100;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.25rem;
+      border-radius: 3rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .ctrl-btn {
+      background: var(--aha-blue);
+      color: #fff;
+      border: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ctrl-btn:hover { background: var(--aha-orange); }
+    .slide-indicator { font-size: 0.82rem; font-weight: 700; color: var(--aha-blue); }
+
+    /* DECK WRAPPER */
+    .deck-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    /* ─── SLIDE CARD (16:9 ASPECT RATIO: 1240 × 698) ─── */
+    .slide-card {
+      width: 1240px;
+      height: 698px;
+      background: var(--card-bg);
+      border-radius: 1.75rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 35px rgba(0, 76, 140, 0.08);
+      padding: 2.25rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      scroll-margin-top: 5rem;
+    }
+
+    /* SLIDE HEADER */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #F1F5F9;
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .slide-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--aha-orange);
+      background: var(--aha-orange-light);
+      padding: 0.25rem 0.65rem;
+      border-radius: 0.4rem;
+    }
+    .slide-title {
+      font-family: 'Lexend', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--aha-blue);
+      margin-top: 0.2rem;
+    }
+    .slide-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+    }
+    .slide-num-badge {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    /* SLIDE FOOTER */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      border-top: 1px solid #F1F5F9;
+      padding-top: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    /* GRID LAYOUT UTILITIES */
+    .grid-6-kpi {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    .kpi-card-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 1.1rem;
+      padding: 1.2rem;
+      position: relative;
+    }
+    .kpi-card-box::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--aha-orange);
+      border-radius: 1.1rem 0 0 1.1rem;
+    }
+    .kpi-lbl { font-size: 0.75rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; }
+    .kpi-val { font-family: 'Space Mono', monospace; font-size: 1.85rem; font-weight: 800; color: var(--aha-blue); margin: 0.2rem 0; }
+    .kpi-delta-up { font-size: 0.78rem; font-weight: 700; color: var(--green); }
+    .kpi-delta-down { font-size: 0.78rem; font-weight: 700; color: var(--red); }
+
+    /* TABLES */
+    .deck-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+    .deck-table th {
+      background: var(--aha-blue);
+      color: #fff;
+      text-align: left;
+      padding: 0.65rem 0.9rem;
+      font-weight: 700;
+    }
+    .deck-table td {
+      padding: 0.65rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .deck-table tr:hover td { background: var(--aha-blue-light); }
+
+    /* STATUS PILLS */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 2rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .pill-green { background: var(--green-bg); color: #047857; }
+    .pill-red { background: var(--red-bg); color: #B91C1C; }
+    .pill-yellow { background: var(--yellow-bg); color: #B45309; }
+
+    /* 4-QUADRANT MATRIX */
+    .quadrant-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+    .quad-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.1rem;
+    }
+    .quad-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--aha-blue);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION CONTROL BAR -->
+  <div class="deck-control-bar">
+    <button class="ctrl-btn" onclick="navigateDeck(-1)">◀ Slide Trước</button>
+    <span class="slide-indicator" id="slideNumLabel">Slide 1 / 8</span>
+    <button class="ctrl-btn" onclick="navigateDeck(1)">Slide Sau ▶</button>
+    <span style="border-left: 1px solid #CBD5E1; height: 16px; margin: 0 0.2rem;"></span>
+    <button class="ctrl-btn" style="background: var(--aha-orange);" onclick="window.print()">🖨️ In / PDF</button>
+  </div>
+
+  <!-- DECK CONTAINER -->
+  <div class="deck-container">
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 1: COVER -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="slide-card" id="slide-1" style="background: linear-gradient(135deg, #002E57 0%, #004C8C 60%, #001F3F 100%); color: #fff;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="background: var(--aha-orange); color: #fff; font-weight: 900; font-size: 1.1rem; padding: 0.4rem 1rem; border-radius: 0.6rem;">AHAMOVE</div>
+        <div style="font-family: 'Space Mono', monospace; font-size: 0.85rem; color: rgba(255,255,255,0.7);">CONFIDENTIAL · INTERNAL ONLY</div>
+      </div>
+
+      <div style="margin: 3rem 0;">
+        <div style="font-size: 0.85rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--aha-orange);">BUSINESS PERFORMANCE REPORT</div>
+        <h1 style="font-family: 'Lexend', sans-serif; font-size: 2.8rem; font-weight: 900; line-height: 1.15; margin: 0.5rem 0 1rem;">WEEKLY & MONTHLY EXECUTIVE DECK</h1>
+        <p style="font-size: 1.1rem; color: rgba(255,255,255,0.85); max-width: 750px;">Báo cáo tổng quan hiệu suất vận hành, tăng trưởng doanh thu & kế hoạch hành động chiến lược.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; background: rgba(255,255,255,0.08); padding: 1.25rem 1.75rem; border-radius: 1.25rem; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15);">
+        <div>
+          <div style="font-size: 0.72rem; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 700;">Kỳ Báo Cáo (Reporting Period)</div>
+          <div style="font-size: 1rem; font-weight: 800; color: #fff; margin-top: 0.2rem;">Tuần 31 — Tháng 08/2026</div>
+        </div>
+        <div>
+          <div style="font-size: 0.72rem; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 700;">Phòng Ban (Team / Dept)</div>
+          <div style="font-size: 1rem; font-weight: 800; color: var(--aha-orange); margin-top: 0.2rem;">Driver Operations & Strategy</div>
+        </div>
+        <div>
+          <div style="font-size: 0.72rem; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 700;">Nguồn Dữ Liệu (Data Source)</div>
+          <div style="font-size: 1rem; font-weight: 800; color: #fff; margin-top: 0.2rem;">BigQuery & Realtime Analytics</div>
+        </div>
+      </div>
+
+      <div class="slide-footer" style="border-top-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.6);">
+        <span>Ahamove Operations Management Framework</span>
+        <span>Slide 01 / 08</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 2: EXECUTIVE SUMMARY -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="slide-card" id="slide-2">
+      <div>
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">SLIDE 02 · SUMMARY</span>
+            <h2 class="slide-title">Executive Summary — 6 Chỉ Số Cốt Lõi (KPI Cards)</h2>
+            <p class="slide-subtitle">Tổng quan nhanh về Volume, Orders, Revenue, Completion Rate, DQS & CSAT</p>
+          </div>
+          <span class="slide-num-badge">02 / 08</span>
+        </div>
+
+        <div class="grid-6-kpi">
+          <div class="kpi-card-box">
+            <div class="kpi-lbl">Volume (Sản Lượng Đơn)</div>
+            <div class="kpi-val">150.2K</div>
+            <div class="kpi-delta-up">▲ +12.4% WoW</div>
+          </div>
+          <div class="kpi-card-box">
+            <div class="kpi-lbl">Orders (Đơn Hoàn Thành)</div>
+            <div class="kpi-val">135.8K</div>
+            <div class="kpi-delta-up">▲ +10.1% WoW</div>
+          </div>
+          <div class="kpi-card-box">
+            <div class="kpi-lbl">Revenue (Doanh Thu)</div>
+            <div class="kpi-val" style="color: var(--aha-orange);">5.2 Tỷ</div>
+            <div class="kpi-delta-up">▲ +8.5% MoM</div>
+          </div>
+          <div class="kpi-card-box">
+            <div class="kpi-lbl">Completion Rate (FR %)</div>
+            <div class="kpi-val">98.2%</div>
+            <div class="kpi-delta-up">▲ +1.5% SLA</div>
+          </div>
+          <div class="kpi-card-box">
+            <div class="kpi-lbl">DQS Score (Chất Lượng)</div>
+            <div class="kpi-val">94.5</div>
+            <div class="kpi-delta-up">▲ +2.1 Pts</div>
+          </div>
+          <div class="kpi-card-box">
+            <div class="kpi-lbl">Customer Rating (CSAT)</div>
+            <div class="kpi-val">4.88/5</div>
+            <div class="kpi-delta-up">▲ +0.05 Rating</div>
+          </div>
+        </div>
+
+        <div style="background: var(--aha-orange-light); border-left: 4px solid var(--aha-orange); border-radius: 0.75rem; padding: 1rem 1.25rem; margin-top: 1.25rem;">
+          <div style="font-size: 0.85rem; font-weight: 800; color: var(--aha-orange);">💡 Executive Note & Action Takeaway:</div>
+          <p style="font-size: 0.83rem; color: var(--text-dark); margin-top: 0.2rem;">Sản lượng đơn hàng duy trì mức tăng trưởng ấn tượng +12.4% nhờ đóng góp từ chiến dịch B2B khu vực phía Nam. Cần tiếp tục duy trì tỷ lệ hoàn thành FR trên 98% cho khung giờ cao điểm tối.</p>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Business Report · Slide 02</span>
+        <span>02 / 08</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 3: KPI DASHBOARD (WOW / MOM COMPARISON) -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="slide-card" id="slide-3">
+      <div>
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">SLIDE 03 · KPI DASHBOARD</span>
+            <h2 class="slide-title">KPI Dashboard — So Sánh WoW / MoM & Target vs Actual</h2>
+            <p class="slide-subtitle">Bảng chỉ số chi tiết kèm đồ thị xu hướng & Traffic-light status (🟢 🟡 🔴)</p>
+          </div>
+          <span class="slide-num-badge">03 / 08</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.5rem;">
+          <!-- Left Table -->
+          <div>
+            <table class="deck-table">
+              <thead>
+                <tr>
+                  <th>Chỉ Số Quan Trọng</th>
+                  <th>Thực Tế (Actual)</th>
+                  <th>Mục Tiêu (Target)</th>
+                  <th>So Với Kỳ (WoW)</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Total Volume (Đơn)</strong></td>
+                  <td>150,200</td>
+                  <td>145,000</td>
+                  <td><span style="color: var(--green); font-weight:700;">▲ +3.5%</span></td>
+                  <td><span class="pill pill-green">🟢 Vượt Target</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Completed Orders</strong></td>
+                  <td>135,800</td>
+                  <td>132,000</td>
+                  <td><span style="color: var(--green); font-weight:700;">▲ +2.8%</span></td>
+                  <td><span class="pill pill-green">🟢 Vượt Target</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Revenue (VND)</strong></td>
+                  <td>5.2 Tỷ</td>
+                  <td>5.5 Tỷ</td>
+                  <td><span style="color: var(--red); font-weight:700;">▼ -5.4%</span></td>
+                  <td><span class="pill pill-red">🔴 Chưa Đạt</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Fulfillment Rate (FR)</strong></td>
+                  <td>98.2%</td>
+                  <td>98.5%</td>
+                  <td><span style="color: var(--yellow); font-weight:700;">▬ -0.3%</span></td>
+                  <td><span class="pill pill-yellow">🟡 Cần Chú Ý</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Right SVG Combo Line & Bar Chart -->
+          <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 1rem; padding: 1rem;">
+            <div style="font-size: 0.85rem; font-weight: 800; color: var(--aha-blue); margin-bottom: 0.5rem;">📊 Combo Chart: Volume vs Target</div>
+            <svg viewBox="0 0 350 160" style="width: 100%; height: auto;">
+              <line x1="30" y1="30" x2="330" y2="30" stroke="#CBD5E1" stroke-dasharray="4" />
+              <line x1="30" y1="80" x2="330" y2="80" stroke="#CBD5E1" stroke-dasharray="4" />
+              <line x1="30" y1="130" x2="330" y2="130" stroke="#94A3B8" />
+
+              <rect x="50" y="50" width="30" height="80" rx="3" fill="#004C8C" />
+              <rect x="130" y="40" width="30" height="90" rx="3" fill="#004C8C" />
+              <rect x="210" y="30" width="30" height="100" rx="3" fill="#FF6B00" />
+              <rect x="290" y="35" width="30" height="95" rx="3" fill="#004C8C" />
+
+              <path d="M 65 60 L 145 45 L 225 32 L 305 40" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" />
+              <circle cx="225" cy="32" r="4" fill="#10B981" stroke="#fff" stroke-width="2" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Business Report · Slide 03</span>
+        <span>03 / 08</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 4: HIGHLIGHTS & LOWLIGHTS -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="slide-card" id="slide-4">
+      <div>
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">SLIDE 04 · HIGHLIGHTS & LOWLIGHTS</span>
+            <h2 class="slide-title">Highlights & Lowlights — Tác Động & Chỉ Số Bổ Trợ</h2>
+            <p class="slide-subtitle">Đánh giá 2 mặt vận hành: Thành tựu bứt phá vs Thử thách nghẽn cổ chai</p>
+          </div>
+          <span class="slide-num-badge">04 / 08</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <!-- HIGHLIGHTS CARD -->
+          <div style="background: var(--green-bg); border: 1px solid rgba(16,185,129,0.3); border-radius: 1.25rem; padding: 1.25rem;">
+            <div style="font-size: 1rem; font-weight: 800; color: #047857; margin-bottom: 0.75rem;">🟢 HIGHLIGHTS (Điểm Sáng Vận Hành)</div>
+            <ul style="padding-left: 1.2rem; font-size: 0.83rem; color: var(--text-dark); line-height: 1.6;">
+              <li style="margin-bottom: 0.6rem;"><strong>Ra mắt dịch vụ Siêu Tốc 1H:</strong> Đạt mốc 15,000 đơn/ngày chỉ sau 2 tuần ra mắt tại Tân Bình & Q7.</li>
+              <li style="margin-bottom: 0.6rem;"><strong>Tối ưu năng suất tài xế:</strong> Tỷ lệ ghép đơn tăng +12%, giảm thời gian chờ pickup xuống dưới 8.5 phút.</li>
+              <li style="margin-bottom: 0.6rem;"><strong>Tối ưu CPO:</strong> Chi phí hỗ trợ đơn hàng giảm 450₫/đơn nhờ điều phối AI động.</li>
+            </ul>
+          </div>
+
+          <!-- LOWLIGHTS CARD -->
+          <div style="background: var(--red-bg); border: 1px solid rgba(239,68,68,0.3); border-radius: 1.25rem; padding: 1.25rem;">
+            <div style="font-size: 1rem; font-weight: 800; color: #B91C1C; margin-bottom: 0.75rem;">🔴 LOWLIGHTS (Điểm Tồn Đọng Cần Xử Lý)</div>
+            <ul style="padding-left: 1.2rem; font-size: 0.83rem; color: var(--text-dark); line-height: 1.6;">
+              <li style="margin-bottom: 0.6rem;"><strong>Mất cân bằng cung cầu giờ mưa:</strong> Tỷ lệ hủy đơn khung 18h-20h tại Thủ Đức tăng đột biến lên 4.2%.</li>
+              <li style="margin-bottom: 0.6rem;"><strong>Chất lượng dịch vụ xe tải:</strong> Tỷ lệ phàn nàn thái độ tài xế tăng nhẹ 0.3% ở mảng giao hàng lớn.</li>
+              <li style="margin-bottom: 0.6rem;"><strong>Chậm tiến độ tuyển dụng:</strong> Tuyển mới tài xế xe tải đạt 65% so với target tháng.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Business Report · Slide 04</span>
+        <span>04 / 08</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 5: REGIONAL / TEAM PERFORMANCE -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="slide-card" id="slide-5">
+      <div>
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">SLIDE 05 · REGIONAL PERFORMANCE</span>
+            <h2 class="slide-title">Hiệu Suất Theo Khu Vực — Bắc / Trung / Nam</h2>
+            <p class="slide-subtitle">Heatmap xếp hạng đóng góp sản lượng & tỷ trọng tăng trưởng vùng miền</p>
+          </div>
+          <span class="slide-num-badge">05 / 08</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem;">
+          <!-- Heatmap Table -->
+          <div>
+            <table class="deck-table">
+              <thead>
+                <tr>
+                  <th>Khu Vực (Region)</th>
+                  <th>Sản Lượng (Volume)</th>
+                  <th>Tỷ Trọng (%)</th>
+                  <th>Ranking</th>
+                  <th>Xu Hướng (Trend)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Miền Nam (SGN)</strong></td>
+                  <td>92,500 đơn</td>
+                  <td>61.6%</td>
+                  <td><strong style="color: var(--aha-orange);">#1</strong></td>
+                  <td><span style="color: var(--green); font-weight:700;">▲ +14.2%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Miền Bắc (HAN)</strong></td>
+                  <td>45,200 đơn</td>
+                  <td>30.1%</td>
+                  <td><strong>#2</strong></td>
+                  <td><span style="color: var(--green); font-weight:700;">▲ +8.5%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Miền Trung (DAD)</strong></td>
+                  <td>12,500 đơn</td>
+                  <td>8.3%</td>
+                  <td><strong>#3</strong></td>
+                  <td><span style="color: var(--red); font-weight:700;">▼ -2.1%</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Regional SVG Donut -->
+          <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 1rem; padding: 1rem; text-align: center;">
+            <div style="font-size: 0.85rem; font-weight: 800; color: var(--aha-blue); margin-bottom: 0.5rem;">🍩 Cơ Cấu Đóng Góp Sản Lượng</div>
+            <svg viewBox="0 0 200 150" style="width: 80%; height: auto;">
+              <circle cx="100" cy="75" r="45" fill="none" stroke="#FF6B00" stroke-width="20" stroke-dasharray="174 283" />
+              <circle cx="100" cy="75" r="45" fill="none" stroke="#004C8C" stroke-width="20" stroke-dasharray="85 283" stroke-dashoffset="-174" />
+              <circle cx="100" cy="75" r="45" fill="none" stroke="#38BDF8" stroke-width="20" stroke-dasharray="24 283" stroke-dashoffset="-259" />
+              <text x="100" y="80" text-anchor="middle" font-size="11" font-weight="bold" fill="#0F172A">SGN 61.6%</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Business Report · Slide 05</span>
+        <span>05 / 08</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 6: ROOT CAUSE ANALYSIS -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="slide-card" id="slide-6">
+      <div>
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">SLIDE 06 · ROOT CAUSE ANALYSIS</span>
+            <h2 class="slide-title">Phân Tích Nguyên Nhân Gốc Rễ (4 Trục Vấn Đề)</h2>
+            <p class="slide-subtitle">Bóc tách lý do sụt giảm KPI theo Driver, Demand, Supply & Operation</p>
+          </div>
+          <span class="slide-num-badge">06 / 08</span>
+        </div>
+
+        <div class="quadrant-grid">
+          <div class="quad-card">
+            <div class="quad-title">🛵 1. DRIVER (Tài Xế)</div>
+            <p style="font-size: 0.82rem; color: var(--text-dark);">Tập quán tắt app nghỉ sớm vào khung giờ mưa tối. Thiếu hụt tài xế xe tải tại các quận ngoại thành do khoảng cách pickup xa.</p>
+          </div>
+          <div class="quad-card">
+            <div class="quad-title">📈 2. DEMAND (Nhu Cầu Khách Hàng)</div>
+            <p style="font-size: 0.82rem; color: var(--text-dark);">Cầu tăng vọt +25% đột biến trong các ngày Mega Sale của đối tác e-commerce làm vượt năng lực phục vụ đỉnh giờ.</p>
+          </div>
+          <div class="quad-card">
+            <div class="quad-title">📦 3. SUPPLY (Nguồn Cung Dịch Vụ)</div>
+            <p style="font-size: 0.82rem; color: var(--text-dark);">Tốc độ tuyển mới tài xế xe tải chậm hơn 35% so với tiến độ kế hoạch do siết chặt quy trình xác minh hồ sơ DQS.</p>
+          </div>
+          <div class="quad-card">
+            <div class="quad-title">⚙️ 4. OPERATION & EXTERNAL (Vận Hành & Thời Tiết)</div>
+            <p style="font-size: 0.82rem; color: var(--text-dark);">Ảnh hưởng của các cơn mưa bão lớn kéo dài gây kẹt xe diện rộng tại các tuyến đường huyết mạch Q7 và Tân Bình.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Business Report · Slide 06</span>
+        <span>06 / 08</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 7: NEXT ACTIONS -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="slide-card" id="slide-7">
+      <div>
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">SLIDE 07 · NEXT ACTIONS</span>
+            <h2 class="slide-title">Kế Hoạch Hành Động Kỳ Tới (Action Plan Matrix)</h2>
+            <p class="slide-subtitle">Phân công nhiệm vụ cụ thể, người phụ trách, thời hạn & tiến độ thực hiện</p>
+          </div>
+          <span class="slide-num-badge">07 / 08</span>
+        </div>
+
+        <table class="deck-table">
+          <thead>
+            <tr>
+              <th>Hành Động Cụ Thể (Action Item)</th>
+              <th>Người Phụ Trách (Owner)</th>
+              <th>Hạn Hoàn Thành (ETA)</th>
+              <th>Độ Ưu Tiên (Priority)</th>
+              <th>Tiến Độ (Progress)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Kích hoạt thưởng Quest mưa giờ tối</strong> để giữ AR ≥ 92%</td>
+              <td>Ops Team (Anh A)</td>
+              <td>10/08/2026</td>
+              <td><span style="color: var(--red); font-weight:700;">HIGH</span></td>
+              <td><span class="pill pill-green">🟢 80% Completed</span></td>
+            </tr>
+            <tr>
+              <td><strong>Đẩy mạnh tuyển dụng 50 tài xế xe tải</strong> khu vực Q7 & Thủ Đức</td>
+              <td>HR & Supply (Chị B)</td>
+              <td>18/08/2026</td>
+              <td><span style="color: var(--red); font-weight:700;">HIGH</span></td>
+              <td><span class="pill pill-yellow">🟡 50% In-Progress</span></td>
+            </tr>
+            <tr>
+              <td><strong>Cập nhật hệ thống Dispatch AI 2.0</strong> gộp đơn tối ưu</td>
+              <td>Product Team (Anh C)</td>
+              <td>25/08/2026</td>
+              <td><span style="color: var(--aha-orange); font-weight:700;">MEDIUM</span></td>
+              <td><span class="pill pill-yellow">🟡 30% In-Progress</span></td>
+            </tr>
+            <tr>
+              <td><strong>Rà soát quy trình DQS & Đào tạo</strong> thái độ ứng xử tài xế</td>
+              <td>Training Team (Chị D)</td>
+              <td>30/08/2026</td>
+              <td><span style="color: var(--text-sub); font-weight:700;">LOW</span></td>
+              <td><span class="pill pill-red">🔴 Pending</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Business Report · Slide 07</span>
+        <span>07 / 08</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 8: APPENDIX / NOTES -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="slide-card" id="slide-8">
+      <div>
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">SLIDE 08 · APPENDIX & NOTES</span>
+            <h2 class="slide-title">Phụ Lục & Chú Thích — Định Nghĩa KPI & Data Source</h2>
+            <p class="slide-subtitle">Công thức tính toán chuẩn mực & nguồn trích xuất dữ liệu vận hành</p>
+          </div>
+          <span class="slide-num-badge">08 / 08</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 1rem; padding: 1.25rem;">
+            <div style="font-size: 0.9rem; font-weight: 800; color: var(--aha-blue); margin-bottom: 0.6rem;">📐 Định Nghĩa & Công Thức KPI</div>
+            <ul style="font-size: 0.82rem; color: var(--text-dark); line-height: 1.6; padding-left: 1.2rem;">
+              <li><strong>Fulfillment Rate (FR %):</strong> `(Tổng Đơn Hoàn Thành / Tổng Đơn Yêu Cầu) × 100%`. Target benchmark ≥ 98%.</li>
+              <li><strong>Acceptance Rate (AR %):</strong> `(Số Đơn Tài Xế Chấp Nhận / Số Đơn Phát Tới Tài Xế) × 100%`. Target ≥ 92%.</li>
+              <li><strong>DQS Score:</strong> `(0.4 × AR) + (0.4 × FR) + (0.2 × CSAT Scale 100)`.</li>
+            </ul>
+          </div>
+
+          <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 1rem; padding: 1.25rem;">
+            <div style="font-size: 0.9rem; font-weight: 800; color: var(--aha-blue); margin-bottom: 0.6rem;">🗄️ Nguồn Dữ Liệu (Data Sources)</div>
+            <ul style="font-size: 0.82rem; color: var(--text-dark); line-height: 1.6; padding-left: 1.2rem;">
+              <li><strong>BigQuery Data Warehouse:</strong> `ahamove-bi-dw.ops_metrics.daily_performance_summary`.</li>
+              <li><strong>Realtime Dispatch Engine:</strong> SQL realtime streaming logs từ hệ thống Mini-hub & Station.</li>
+              <li><strong>CSAT Feedback System:</strong> Bảng tổng hợp đánh giá khách hàng hàng tuần.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Business Report · End of Presentation</span>
+        <span>08 / 08</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 8;
+
+    function navigateDeck(dir) {
+      currentSlide += dir;
+      if (currentSlide < 1) currentSlide = 1;
+      if (currentSlide > totalSlides) currentSlide = totalSlides;
+
+      document.getElementById('slideNumLabel').innerText = `Slide ${currentSlide} / ${totalSlides}`;
+      const targetSlide = document.getElementById(`slide-${currentSlide}`);
+      if (targetSlide) {
+        targetSlide.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        navigateDeck(1);
+      } else if (e.key === 'ArrowLeft') {
+        navigateDeck(-1);
+      }
+    });
+  </script>
+</body>
+</html>
