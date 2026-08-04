@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ECO Performance Weekly Report — Minimalist Executive Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Minimalist Executive Palette */
+      --navy-slate:  #0F172A;
+      --navy-card:   #1E293B;
+      --blue-accent: #38BDF8;
+      --blue-muted:  #0EA5E9;
+      --orange-aha:  #FF7F32;
+      --green-emerald:#10B981;
+      --green-soft:  #E6F4EA;
+      --red-coral:   #EF4444;
+      --red-soft:     #FEE2E2;
+      --amber-gold:  #F59E0B;
+      --amber-soft:  #FEF3C7;
+      
+      --bg-page:     #F8FAFC;
+      --bg-card:     #FFFFFF;
+      --border-gray: #E2E8F0;
+      --text-main:   #0F172A;
+      --text-muted:  #64748B;
+      --shadow-sm:   0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.03);
+      --shadow-card: 0 4px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    body {
+      font-family: 'Lexend', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 5rem;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ─── HEADER ─── */
+    .report-header {
+      background: var(--navy-slate);
+      color: #fff;
+      padding: 2rem 2.5rem;
+      border-radius: 0 0 1.5rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    }
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .brand-pill {
+      background: var(--orange-aha);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.25rem 0.65rem;
+      border-radius: 0.4rem;
+      letter-spacing: 0.04em;
+    }
+    .header-source-text {
+      font-size: 0.78rem;
+      color: #94A3B8;
+    }
+    .header-title {
+      font-size: 1.7rem;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+    .header-subtitle {
+      font-size: 0.88rem;
+      color: #CBD5E1;
+      margin-top: 0.35rem;
+    }
+
+    /* ─── SECTION STYLING ─── */
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gray);
+      border-radius: 1.25rem;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-card);
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .section-icon {
+      font-size: 1.2rem;
+    }
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--navy-slate);
+    }
+
+    /* ─── KPI CARDS ─── */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .kpi-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border-gray);
+      border-radius: 0.85rem;
+      padding: 1.1rem 1.25rem;
+    }
+    .kpi-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .kpi-value-group {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-top: 0.3rem;
+    }
+    .kpi-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      font-family: 'Space Mono', monospace;
+      color: var(--navy-slate);
+    }
+    .kpi-delta {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 0.35rem;
+    }
+    .delta-green { background: var(--green-soft); color: var(--green-emerald); }
+    .delta-red { background: var(--red-soft); color: var(--red-coral); }
+
+    /* ─── GRID LAYOUT 2 COLUMNS ─── */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.75fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* ─── CHART CONTAINERS ─── */
+    .chart-box {
+      background: #FAFAFC;
+      border: 1px solid var(--border-gray);
+      border-radius: 1rem;
+      padding: 1.25rem;
+    }
+    .chart-title-text {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--navy-slate);
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ─── KEY TAKEAWAYS BULLETS (CLEAN) ─── */
+    .takeaways-box {
+      background: #F1F5F9;
+      border-left: 4px solid var(--orange-aha);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+    }
+    .takeaways-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--navy-slate);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .takeaways-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .takeaways-list li {
+      font-size: 0.82rem;
+      color: var(--text-main);
+      position: relative;
+      padding-left: 1.1rem;
+      line-height: 1.45;
+    }
+    .takeaways-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--orange-aha);
+    }
+
+    /* ─── HEATMAP TABLE WITH PILLS ─── */
+    .heatmap-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+      margin-top: 1rem;
+    }
+    .heatmap-table th {
+      background: #F1F5F9;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border-gray);
+    }
+    .heatmap-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-gray);
+      color: var(--text-main);
+    }
+    .heatmap-table tr:hover td {
+      background: #FAFAFC;
+    }
+
+    /* Status Pills */
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 2rem;
+      font-size: 0.73rem;
+      font-weight: 700;
+    }
+    .pill-pass { background: var(--green-soft); color: #047857; }
+    .pill-watch { background: var(--amber-soft); color: #B45309; }
+    .pill-action { background: var(--red-soft); color: #B91C1C; }
+
+    /* ─── RECOMMENDATION BOX ─── */
+    .recommendation-card {
+      background: linear-gradient(135deg, rgba(255, 127, 50, 0.08) 0%, rgba(14, 165, 233, 0.08) 100%);
+      border: 1px solid rgba(255, 127, 50, 0.3);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .rec-icon-badge {
+      background: var(--orange-aha);
+      color: #fff;
+      font-size: 1.4rem;
+      width: 3.2rem;
+      height: 3.2rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .rec-content-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--navy-slate);
+      margin-bottom: 0.25rem;
+    }
+    .rec-content-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="report-header">
+    <div class="container">
+      <div class="header-top-row">
+        <span class="brand-pill">AHAMOVE · ECO PERFORMANCE</span>
+        <span class="header-source-text">Nguồn dữ liệu: BigQuery - Looker Studio · Cập nhật 28/06/2026</span>
+      </div>
+      <h1 class="header-title">ECO Performance Weekly Report (Sau Ra Mắt Gói NHANH)</h1>
+      <p class="header-subtitle">Dữ liệu theo dõi 9 tuần biến động (27/04 - 28/06/2026) · Phân tích Sản lượng, Tỷ trọng ghép đơn và Chỉ số OTR chất lượng dịch vụ.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    
+    <!-- ─── SECTION 1: SẢN LƯỢNG & TỶ LỆ HOÀN TẤT (AR / FR) ─── -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-icon">📊</span>
+        <h2 class="section-title">SECTION 1: Sản Lượng & Tỷ Lệ Hoàn Tất (AR / FR)</h2>
+      </div>
+
+      <!-- KPI CARDS -->
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">Req / Ngày (Đơn Yêu Cầu)</div>
+          <div class="kpi-value-group">
+            <span class="kpi-value">13.7K</span>
+            <span class="kpi-delta delta-green">▲ +16%</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Comp / Ngày (Đơn Hoàn Thành)</div>
+          <div class="kpi-value-group">
+            <span class="kpi-value">11.0K</span>
+            <span class="kpi-delta delta-green">▲ +21%</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Acceptance Rate (AR %)</div>
+          <div class="kpi-value-group">
+            <span class="kpi-value">95.1%</span>
+            <span class="kpi-delta delta-green">▲ +0.8%</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Fulfillment Rate (FR %)</div>
+          <div class="kpi-value-group">
+            <span class="kpi-value">80.8%</span>
+            <span class="kpi-delta delta-green">▲ +2.4%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHART 1 + KEY TAKEAWAYS -->
+      <div class="grid-2">
+        <!-- CHART 1: COMBO BAR + SMOOTH SPLINE CURVES -->
+        <div class="chart-box">
+          <div class="chart-title-text">
+            <span>Sản Lượng Đơn (Cột) & Tỷ Lệ AR / FR % (Đường Cong Mượt)</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Đơn vị: Đơn hàng / %</span>
+          </div>
+
+          <svg viewBox="0 0 600 230" style="width: 100%; height: auto;">
+            <defs>
+              <!-- Drop shadow filter for lines -->
+              <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.15" />
+              </filter>
+            </defs>
+
+            <!-- Dashed Grid Lines (#E2E8F0) -->
+            <line x1="40" y1="30" x2="560" y2="30" stroke="#E2E8F0" stroke-dasharray="5,5" />
+            <line x1="40" y1="80" x2="560" y2="80" stroke="#E2E8F0" stroke-dasharray="5,5" />
+            <line x1="40" y1="130" x2="560" y2="130" stroke="#E2E8F0" stroke-dasharray="5,5" />
+            <line x1="40" y1="180" x2="560" y2="180" stroke="#CBD5E1" />
+
+            <!-- Bars: Req & Completed -->
+            <!-- Week 1 -->
+            <rect x="60" y="90" width="16" height="90" rx="3" fill="#CBD5E1" />
+            <rect x="80" y="110" width="16" height="70" rx="3" fill="#0EA5E9" />
+            <!-- Week 2 -->
+            <rect x="180" y="80" width="16" height="100" rx="3" fill="#CBD5E1" />
+            <rect x="200" y="100" width="16" height="80" rx="3" fill="#0EA5E9" />
+            <!-- Week 3 -->
+            <rect x="300" y="70" width="16" height="110" rx="3" fill="#CBD5E1" />
+            <rect x="320" y="88" width="16" height="92" rx="3" fill="#0EA5E9" />
+            <!-- Week 4 -->
+            <rect x="420" y="50" width="16" height="130" rx="3" fill="#0F172A" />
+            <rect x="440" y="70" width="16" height="110" rx="3" fill="#FF7F32" />
+
+            <!-- Smooth Spline Curves (AR% Green & FR% Orange) -->
+            <!-- AR Line (Green) -->
+            <path d="M 70 45 C 170 40, 270 42, 330 38 C 410 35, 490 32, 540 30" fill="none" stroke="#10B981" stroke-width="3.5" filter="url(#shadow)" stroke-linecap="round" />
+            <!-- FR Line (Orange) -->
+            <path d="M 70 120 C 170 115, 270 100, 330 85 C 410 75, 490 65, 540 60" fill="none" stroke="#FF7F32" stroke-width="3.5" filter="url(#shadow)" stroke-linecap="round" />
+
+            <!-- Data Points -->
+            <circle cx="540" cy="30" r="5" fill="#10B981" stroke="#fff" stroke-width="2" />
+            <text x="540" y="20" fill="#10B981" font-size="10" font-weight="bold" text-anchor="middle">AR 95.1%</text>
+
+            <circle cx="540" cy="60" r="5" fill="#FF7F32" stroke="#fff" stroke-width="2" />
+            <text x="540" y="52" fill="#FF7F32" font-size="10" font-weight="bold" text-anchor="middle">FR 80.8%</text>
+
+            <!-- X Axis Labels -->
+            <text x="78" y="200" fill="#64748B" font-size="9" text-anchor="middle">27/04 - 03/05</text>
+            <text x="198" y="200" fill="#64748B" font-size="9" text-anchor="middle">18/05 - 24/05</text>
+            <text x="318" y="200" fill="#64748B" font-size="9" text-anchor="middle">08/06 - 14/06</text>
+            <text x="438" y="200" fill="#64748B" font-size="9" text-anchor="middle">22/06 - 28/06</text>
+          </svg>
+        </div>
+
+        <!-- KEY TAKEAWAYS BULLET BOX -->
+        <div class="takeaways-box">
+          <div class="takeaways-title">💡 KEY TAKEAWAYS</div>
+          <ul class="takeaways-list">
+            <li><strong>Volume tăng trưởng mạnh:</strong> Tổng đơn yêu cầu (Req) đạt 13.7K/ngày (+33% YoY so với cùng kỳ năm trước).</li>
+            <li><strong>Tỷ lệ hoàn thành (FR):** Cải thiện vượt mốc 80.8% nhờ điều chỉnh đơn giá chuyến ghép hợp lý.</li>
+            <li><strong>Yếu tố thời tiết:</strong> Đợt mưa diện rộng từ 11-14/06 khiến AR sụt giảm nhẹ trong khung giờ 20h đêm nhưng đã phục hồi nhanh chóng.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SECTION 2: GSV MIGRATION & TỶ TRỌNG GHÉP ĐƠN ─── -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-icon">📈</span>
+        <h2 class="section-title">SECTION 2: GSV Migration & Tỷ Trọng Ghép Đơn</h2>
+      </div>
+
+      <div class="grid-2" style="grid-template-columns: 1fr 1fr;">
+        <!-- CHART 2A: GSV STACKED AREA -->
+        <div class="chart-box">
+          <div class="chart-title-text">
+            <span>Chart 2A: GSV Migration (Dịch Vụ 2H → ECO)</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Tỷ lệ % GSV</span>
+          </div>
+
+          <svg viewBox="0 0 500 180" style="width: 100%; height: auto;">
+            <defs>
+              <linearGradient id="ecoGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.5" />
+                <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.05" />
+              </linearGradient>
+            </defs>
+
+            <line x1="30" y1="30" x2="470" y2="30" stroke="#E2E8F0" stroke-dasharray="4" />
+            <line x1="30" y1="90" x2="470" y2="90" stroke="#E2E8F0" stroke-dasharray="4" />
+            <line x1="30" y1="150" x2="470" y2="150" stroke="#CBD5E1" />
+
+            <!-- Smooth Area Bezier Transition -->
+            <path d="M 30 130 C 150 110, 270 70, 470 40 L 470 150 L 30 150 Z" fill="url(#ecoGrad)" />
+            <path d="M 30 130 C 150 110, 270 70, 470 40" fill="none" stroke="#0EA5E9" stroke-width="3.5" filter="url(#shadow)" stroke-linecap="round" />
+
+            <circle cx="470" cy="40" r="5" fill="#0EA5E9" stroke="#fff" stroke-width="2" />
+            <text x="450" y="30" fill="#0EA5E9" font-size="10" font-weight="bold">ECO 68%</text>
+
+            <text x="30" y="168" fill="#64748B" font-size="8">Tuần 1</text>
+            <text x="250" y="168" fill="#64748B" font-size="8">Tuần 5</text>
+            <text x="470" y="168" fill="#64748B" font-size="8" text-anchor="end">Tuần 9</text>
+          </svg>
+        </div>
+
+        <!-- CHART 2B: GHÉP ĐƠN BAR -->
+        <div class="chart-box">
+          <div class="chart-title-text">
+            <span>Chart 2B: Phân Bổ Mức Ghép Đơn (1, 2, 3, 4+ Đơn)</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Tỷ lệ lượt giao</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.2rem;">
+                <span><strong>1 - 2 đơn / lượt</strong></span>
+                <span style="font-weight: 700; color: var(--green-emerald);">58.4%</span>
+              </div>
+              <div style="background: #E2E8F0; height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="width: 58.4%; background: var(--green-emerald); height: 100%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.2rem;">
+                <span><strong>3 đơn / lượt</strong></span>
+                <span style="font-weight: 700; color: var(--blue-muted);">26.2%</span>
+              </div>
+              <div style="background: #E2E8F0; height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="width: 26.2%; background: var(--blue-muted); height: 100%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.2rem;">
+                <span><strong>4+ đơn / lượt</strong> (Nhiều đơn)</span>
+                <span style="font-weight: 700; color: var(--red-coral);">15.4%</span>
+              </div>
+              <div style="background: #E2E8F0; height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="width: 15.4%; background: var(--red-coral); height: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SECTION 3: QUALITY OF SERVICE (OTR USER VS DRIVER) & HEATMAP ─── -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-icon">🎯</span>
+        <h2 class="section-title">SECTION 3: Quality of Service (OTR User vs Driver)</h2>
+      </div>
+
+      <!-- CHART 3: SMOOTH DUAL-LINE CHART -->
+      <div class="chart-box" style="margin-bottom: 1.5rem;">
+        <div class="chart-title-text">
+          <span>Chart 3: On-Time Rate (OTR User 98.9% vs OTR Driver 94.6%)</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Đường cong mượt Spline</span>
+        </div>
+
+        <svg viewBox="0 0 700 160" style="width: 100%; height: auto;">
+          <line x1="40" y1="30" x2="660" y2="30" stroke="#E2E8F0" stroke-dasharray="5,5" />
+          <line x1="40" y1="80" x2="660" y2="80" stroke="#E2E8F0" stroke-dasharray="5,5" />
+          <line x1="40" y1="130" x2="660" y2="130" stroke="#CBD5E1" />
+
+          <!-- OTR User Line (Blue) -->
+          <path d="M 40 40 C 200 35, 400 38, 660 32" fill="none" stroke="#38BDF8" stroke-width="3.5" filter="url(#shadow)" stroke-linecap="round" />
+          <!-- OTR Driver Line (Orange) -->
+          <path d="M 40 75 C 200 70, 400 65, 660 55" fill="none" stroke="#FF7F32" stroke-width="3.5" filter="url(#shadow)" stroke-linecap="round" />
+
+          <circle cx="660" cy="32" r="5" fill="#38BDF8" stroke="#fff" stroke-width="2" />
+          <text x="650" y="22" fill="#38BDF8" font-size="10" font-weight="bold">OTR User 98.9%</text>
+
+          <circle cx="660" cy="55" r="5" fill="#FF7F32" stroke="#fff" stroke-width="2" />
+          <text x="650" y="72" fill="#FF7F32" font-size="10" font-weight="bold">OTR Driver 94.6%</text>
+        </svg>
+      </div>
+
+      <!-- HEATMAP TABLE (PILLS BADGES STYLE) -->
+      <div>
+        <h3 style="font-size: 0.95rem; font-weight: 800; color: var(--navy-slate); margin-bottom: 0.5rem;">📋 Heatmap Table: Chỉ Số OTR Theo Mức Ghép Đơn</h3>
+        <table class="heatmap-table">
+          <thead>
+            <tr>
+              <th>Mức Ghép Đơn</th>
+              <th>Tuần 08/06</th>
+              <th>Tuần 15/06</th>
+              <th>Tuần 22/06</th>
+              <th>Trạng Thái Vận Hành</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1 - 2 đơn / lượt</strong></td>
+              <td>96.4%</td>
+              <td>96.3%</td>
+              <td><strong>97.0%</strong></td>
+              <td><span class="status-pill pill-pass">🟢 Đạt chuẩn SLA</span></td>
+            </tr>
+            <tr>
+              <td><strong>3 đơn / lượt</strong></td>
+              <td>82.4%</td>
+              <td>81.2%</td>
+              <td><strong>83.7%</strong></td>
+              <td><span class="status-pill pill-watch">🟡 Theo dõi sát</span></td>
+            </tr>
+            <tr>
+              <td><strong>4+ đơn / lượt</strong></td>
+              <td>71.6%</td>
+              <td>68.6%</td>
+              <td><strong style="color: var(--red-coral);">70.9%</strong></td>
+              <td><span class="status-pill pill-action">🔴 Cần can thiệp khẩn</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── SECTION 4: RECOMMENDATIONS & ACTION ITEMS ─── -->
+    <div class="recommendation-card">
+      <div class="rec-icon-badge">🚨</div>
+      <div>
+        <div class="rec-content-title">RECOMMENDATION / ACTION ITEM TRỌNG TÂM</div>
+        <div class="rec-content-desc">
+          Thực hiện pilot <strong>giới hạn tối đa 4 đơn/lượt</strong> cho dịch vụ NHANH trong 2 tuần tới nhằm kiểm soát tỷ lệ OTR của nhóm đơn ghép không bị tụt dưới 75%, đảm bảo chất lượng trải nghiệm của khách hàng.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
