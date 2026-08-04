@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <!-- Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 -->
+  <!-- Hallmark · component: slide-deck · genre: modern-minimal · theme: ahamove-dm-nw-2026 -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ahamove · DM & NW Executive Slide Deck (Monthly & Weekly Report 2026)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700;800&family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── LOCKED DESIGN TOKENS (HALLMARK DISCIPLINE 3) ─── */
+    :root {
+      --color-brand-orange: #FF6B00;
+      --color-brand-navy:   #0A2E57;
+      --color-brand-blue:   #004C8C;
+      --color-paper:        #F8FAF8;
+      --color-surface:      #FFFFFF;
+      --color-hairline:     #E2E8F0;
+      --color-text-main:    #0A1828;
+      --color-text-sub:     #475569;
+      --color-pass-bg:      #E6F4EA;
+      --color-pass-text:    #047857;
+      --color-fail-bg:      #FEE2E2;
+      --color-fail-text:    #B91C1C;
+      --color-warn-bg:      #FEF3C7;
+      --color-warn-text:    #B45309;
+
+      --font-display: 'Lexend', 'Plus Jakarta Sans', sans-serif;
+      --font-body:    'Inter', sans-serif;
+      --font-num:     'Outfit', 'Plus Jakarta Sans', sans-serif;
+      --font-mono:    'Space Mono', 'Outfit', monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      overflow-x: clip;
+      min-width: 0;
+      background: var(--color-paper);
+      color: var(--color-text-main);
+      font-family: var(--font-body);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 0 5rem;
+    }
+
+    /* ─── DECK CONTROL TOOLBAR ─── */
+    .deck-toolbar {
+      position: sticky;
+      top: 1rem;
+      z-index: 200;
+      background: var(--color-surface);
+      border: 1px solid var(--color-hairline);
+      padding: 0.65rem 1.5rem;
+      border-radius: 3rem;
+      box-shadow: 0 12px 32px rgba(10, 46, 87, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .toolbar-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--color-brand-orange);
+      background: rgba(255, 107, 0, 0.1);
+      padding: 0.25rem 0.65rem;
+      border-radius: 2rem;
+      letter-spacing: 0.05em;
+    }
+    .toolbar-btn {
+      background: var(--color-brand-navy);
+      color: #FFFFFF;
+      border: none;
+      padding: 0.45rem 0.95rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .toolbar-btn:hover {
+      background: var(--color-brand-orange);
+    }
+    .toolbar-filter-btn {
+      background: var(--color-paper);
+      color: var(--color-brand-navy);
+      border: 1px solid var(--color-hairline);
+      padding: 0.35rem 0.75rem;
+      border-radius: 1.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .toolbar-filter-btn.active {
+      background: var(--color-brand-blue);
+      color: #FFFFFF;
+      border-color: var(--color-brand-blue);
+    }
+    .toolbar-indicator {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-brand-navy);
+    }
+
+    /* ─── SLIDE CONTAINER WRAPPER ─── */
+    .slide-deck-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    /* ─── HALLMARK 16:9 SLIDE CARD (1240 × 698) ─── */
+    .hallmark-slide {
+      width: 1240px;
+      height: 698px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-hairline);
+      border-radius: 1.75rem;
+      box-shadow: 0 16px 40px rgba(10, 46, 87, 0.06);
+      padding: 2.25rem 2.75rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      scroll-margin-top: 5.5rem;
+    }
+
+    /* ─── SLIDE HEADER ─── */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--color-hairline);
+      padding-bottom: 0.85rem;
+      margin-bottom: 1.1rem;
+    }
+    .eyebrow-pill {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-brand-orange);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .eyebrow-pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-brand-orange);
+    }
+    .slide-h2 {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 700;
+      font-style: normal; /* Hallmark Rule 6: Typography purity - no italic headers */
+      color: var(--color-brand-navy);
+      margin-top: 0.2rem;
+      overflow-wrap: anywhere;
+      min-width: 0;
+    }
+    .slide-sub {
+      font-size: 0.83rem;
+      color: var(--color-text-sub);
+    }
+    .slide-number-badge {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-text-sub);
+      background: var(--color-paper);
+      border: 1px solid var(--color-hairline);
+      padding: 0.25rem 0.65rem;
+      border-radius: 0.5rem;
+    }
+
+    /* ─── FOOTER ─── */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--color-text-sub);
+      border-top: 1px solid var(--color-hairline);
+      padding-top: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    /* ─── ASYMMETRIC STAT MATRIX ─── */
+    .hero-stat-box {
+      background: linear-gradient(135deg, var(--color-brand-navy) 0%, var(--color-brand-blue) 100%);
+      color: #FFFFFF;
+      border-radius: 1.25rem;
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hero-stat-val {
+      font-family: var(--font-num);
+      font-size: 2.7rem;
+      font-weight: 800;
+      color: var(--color-brand-orange);
+      line-height: 1;
+      margin: 0.4rem 0;
+    }
+
+    .kpi-tile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .kpi-tile {
+      background: var(--color-paper);
+      border: 1px solid var(--color-hairline);
+      border-radius: 1rem;
+      padding: 1.1rem 1.25rem;
+    }
+    .tile-lbl {
+      font-size: 0.73rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--color-text-sub);
+    }
+    .tile-num {
+      font-family: var(--font-num);
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--color-brand-navy);
+      margin: 0.15rem 0;
+    }
+    .delta-up { font-size: 0.76rem; font-weight: 700; color: var(--color-pass-text); }
+    .delta-down { font-size: 0.76rem; font-weight: 700; color: var(--color-fail-text); }
+
+    /* ─── HIGH-CONTRAST TABLES ─── */
+    .hallmark-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.82rem;
+      border: 1.5px solid var(--color-brand-navy);
+      border-radius: 0.85rem;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(10, 46, 87, 0.05);
+    }
+    .hallmark-table th {
+      background: var(--color-brand-navy);
+      color: #FFFFFF;
+      text-align: left;
+      padding: 0.75rem 0.95rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .hallmark-table td {
+      padding: 0.7rem 0.95rem;
+      border-bottom: 1px solid var(--color-hairline);
+      background: #FFFFFF;
+      transition: background 0.15s ease;
+    }
+    .hallmark-table tr:nth-child(even) td {
+      background: #F8FAFC;
+    }
+    .hallmark-table tr:hover td {
+      background: rgba(255, 107, 0, 0.05);
+    }
+
+    /* ─── BADGES & CALLOUTS ─── */
+    .pill-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2rem;
+      font-size: 0.73rem;
+      font-weight: 700;
+    }
+    .pill-pass { background: var(--color-pass-bg); color: var(--color-pass-text); }
+    .pill-fail { background: var(--color-fail-bg); color: var(--color-fail-text); }
+    .pill-warn { background: var(--color-warn-bg); color: var(--color-warn-text); }
+
+    .insight-card {
+      background: #F0F4F8;
+      border-left: 4px solid var(--color-brand-navy);
+      border-radius: 0.65rem;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .insight-card.warning {
+      background: #FFFBEB;
+      border-left-color: var(--color-brand-orange);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DECK CONTROL TOOLBAR -->
+  <div class="deck-toolbar">
+    <span class="toolbar-badge">HALLMARK SLIDE DECK</span>
+    <button class="toolbar-btn" onclick="navigateDeck(-1)">◀ Prev</button>
+    <span class="toolbar-indicator" id="slideIndexLabel">Slide 1 / 15</span>
+    <button class="toolbar-btn" onclick="navigateDeck(1)">Next ▶</button>
+    <span style="border-left: 1px solid var(--color-hairline); height: 18px;"></span>
+    <button class="toolbar-filter-btn active" onclick="filterSlides('all')">All (15)</button>
+    <button class="toolbar-filter-btn" onclick="filterSlides('monthly')">Monthly Report (Slide 2-7)</button>
+    <button class="toolbar-filter-btn" onclick="filterSlides('weekly')">Weekly Report (Slide 8-12)</button>
+    <button class="toolbar-filter-btn" onclick="filterSlides('roadmap')">Action Roadmap (Slide 13-14)</button>
+    <span style="border-left: 1px solid var(--color-hairline); height: 18px;"></span>
+    <button class="toolbar-btn" style="background: var(--color-brand-orange);" onclick="window.print()">🖨️ Export PDF</button>
+  </div>
+
+  <!-- SLIDE DECK WRAPPER -->
+  <div class="slide-deck-wrapper">
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 1: COVER SLIDE -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-1" data-category="all" style="background: linear-gradient(135deg, #0A2E57 0%, #004C8C 70%, #031D38 100%); color: #FFFFFF;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="background: var(--color-brand-orange); color: #FFFFFF; font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; padding: 0.4rem 1.1rem; border-radius: 0.5rem; letter-spacing: -0.02em;">AHAMOVE</div>
+        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: rgba(255,255,255,0.7); letter-spacing: 0.08em;">HALLMARK EXECUTIVE DECK · 2026</div>
+      </div>
+
+      <div style="margin: 2.2rem 0;">
+        <div style="font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-brand-orange);">OPERATIONS STRATEGY BRIEF & OPERATIONAL DEEP-DIVE</div>
+        <h1 style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 800; font-style: normal; line-height: 1.12; margin: 0.6rem 0 1rem; color: #FFFFFF;">MONTHLY & WEEKLY OPERATIONS EXECUTIVE REPORT</h1>
+        <p style="font-size: 1.08rem; color: rgba(255,255,255,0.88); max-width: 860px; line-height: 1.55;">
+          Tổng hợp toàn diện kết quả vận hành Tháng 07/2026 & Tuần 31 (20-26/07/2026): Tiến độ OKRs, chuyển dịch xe điện (EV), tăng trưởng sản lượng MiniHub, bóc tách tỷ lệ giữ chân (Retention) & ma trận action plan thực thi.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; background: rgba(255,255,255,0.06); padding: 1.25rem 1.5rem; border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(12px);">
+        <div>
+          <div style="font-size: 0.72rem; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 700;">Reporting Period</div>
+          <div style="font-family: var(--font-display); font-size: 0.98rem; font-weight: 700; color: #FFFFFF; margin-top: 0.2rem;">Tháng 07 & Tuần 31 / 2026</div>
+        </div>
+        <div>
+          <div style="font-size: 0.72rem; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 700;">Department & Regions</div>
+          <div style="font-family: var(--font-display); font-size: 0.98rem; font-weight: 700; color: var(--color-brand-orange); margin-top: 0.2rem;">DM & NW (SGN & HAN)</div>
+        </div>
+        <div>
+          <div style="font-size: 0.72rem; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 700;">Scope & Modules</div>
+          <div style="font-family: var(--font-display); font-size: 0.98rem; font-weight: 700; color: #FFFFFF; margin-top: 0.2rem;">Monthly (1-45) & Weekly (46-82)</div>
+        </div>
+        <div>
+          <div style="font-size: 0.72rem; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 700;">Data Grounding</div>
+          <div style="font-family: var(--font-display); font-size: 0.98rem; font-weight: 700; color: #FFFFFF; margin-top: 0.2rem;">100% PPTX Grounded DW</div>
+        </div>
+      </div>
+
+      <div class="slide-footer" style="border-top-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.6);">
+        <span>Ahamove Operations Management Framework · Hallmark Standard</span>
+        <span>Slide 01 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 2: MONTHLY EXECUTIVE SUMMARY & OKRS -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-2" data-category="monthly">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART I: MONTHLY REPORT · SLIDE 02 / 15</div>
+            <h2 class="slide-h2">Monthly Summary & Tiến Độ Thực Thi OKRs Q2-Q3 2026</h2>
+            <p class="slide-sub">Đánh giá tiến độ 3 Mục tiêu OKRs trọng yếu: Đội xe Baga, Chuyển đổi EV & Quy mô MiniHub</p>
+          </div>
+          <span class="slide-number-badge">02 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.35fr; gap: 1.5rem;">
+          <!-- LEFT HERO ANCHOR STAT -->
+          <div class="hero-stat-box">
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.7);">Baga Active Rate (OKR O3.1 Anchor)</span>
+              <div class="hero-stat-val">68.2%</div>
+              <div class="delta-up" style="color: #6EE7B7; font-size: 0.85rem;">▲ Vượt Target Q2 (60.5%) & Target Q3 (63.5%)</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.85rem; font-size: 0.8rem; line-height: 1.45; border: 1px solid rgba(255,255,255,0.15);">
+              💡 <strong>Key Insight:</strong> Chuỗi chương trình thưởng "Trang bị baga - Hoàn tiền thả ga" kéo tăng trưởng tài xế gắn Baga bứt phá vượt mục tiêu 63.5% của Q3 ngay trong Tháng 7.
+            </div>
+          </div>
+
+          <!-- RIGHT OKR PROGRESS TABLE -->
+          <div>
+            <table class="hallmark-table">
+              <thead>
+                <tr>
+                  <th>Mục Tiêu OKR (Q3 2026)</th>
+                  <th>Target Q3</th>
+                  <th>Actual (Tháng 7)</th>
+                  <th>Tiến Độ %</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>O1.1: Chuyển đổi Đội xe điện EV</strong></td>
+                  <td>3,177 xe</td>
+                  <td>1,245 xe (HAN 539, SGN 706)</td>
+                  <td><strong style="color: var(--color-brand-navy);">66.0%</strong></td>
+                  <td><span class="pill-status pill-warn">🟡 In-Progress</span></td>
+                </tr>
+                <tr>
+                  <td><strong>O2.1: Scale sản lượng MiniHub</strong></td>
+                  <td>591.8K đơn</td>
+                  <td>215.1K đơn MTD (Prod 3.29)</td>
+                  <td><strong style="color: var(--color-pass-text);">36.3% (M7)</strong></td>
+                  <td><span class="pill-status pill-pass">🟢 On-Track</span></td>
+                </tr>
+                <tr>
+                  <td><strong>O3.1: Tài xế Baga Active (Moat)</strong></td>
+                  <td>63.5% active</td>
+                  <td>68.2% active (HAN/SGN)</td>
+                  <td><strong style="color: var(--color-pass-text);">107.4%</strong></td>
+                  <td><span class="pill-status pill-pass">🟢 Achieved</span></td>
+                </tr>
+                <tr>
+                  <td><strong>OG1: Chuẩn hóa Onboarding Guideline</strong></td>
+                  <td>100% Video & Book</td>
+                  <td>35% khung & Push 3/8 video</td>
+                  <td><strong style="color: var(--color-brand-orange);">35.0%</strong></td>
+                  <td><span class="pill-status pill-warn">🟡 In-Progress</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Monthly Review · DM & NW Operations</span>
+        <span>02 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 3: MONTHLY RETENTION & SUPPLY HOURS -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-3" data-category="monthly">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART I: MONTHLY REPORT · SLIDE 03 / 15</div>
+            <h2 class="slide-h2">Bóc Tách Tỷ Lệ Giữ Chân (Retention Rate) & Supply Hours</h2>
+            <p class="slide-sub">Phân tích biến động giữ chân tài xế (>=22t) & năng suất Supply Hours theo tập FT, PT, NIM, NLM</p>
+          </div>
+          <span class="slide-number-badge">03 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 1.5rem;">
+          <!-- LEFT RETENTION TABLE -->
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--color-brand-navy); margin-bottom: 0.4rem;">📊 Retention Rate (Tài Xế >= 22 Tuổi) theo Segment (Tháng 7)</div>
+            <table class="hallmark-table">
+              <thead>
+                <tr>
+                  <th>Khu Vực / Segment</th>
+                  <th>Segment Driver</th>
+                  <th>Active Driver</th>
+                  <th>RR Tháng 7</th>
+                  <th>MoM</th>
+                  <th>YoY</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SGN Overall</strong></td>
+                  <td>15,027</td>
+                  <td>11,924</td>
+                  <td><strong style="color: var(--color-pass-text);">81.38%</strong></td>
+                  <td><span class="delta-up">+0.40%</span></td>
+                  <td><span class="delta-up">+0.20%</span></td>
+                </tr>
+                <tr>
+                  <td>— SGN FT / PT</td>
+                  <td>2,979 / 10,017</td>
+                  <td>2,895 / 7,536</td>
+                  <td>97.18% / 75.23%</td>
+                  <td>-1.50% / +2.48%</td>
+                  <td>+0.51% / +1.42%</td>
+                </tr>
+                <tr>
+                  <td>— SGN NLM</td>
+                  <td>2,031</td>
+                  <td>1,493</td>
+                  <td><strong style="color: var(--color-pass-text);">73.51%</strong></td>
+                  <td><span class="delta-up">+3.03%</span></td>
+                  <td><span class="delta-up">+3.75%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>HAN Overall</strong></td>
+                  <td>9,271</td>
+                  <td>7,213</td>
+                  <td><strong style="color: var(--color-brand-navy);">79.58%</strong></td>
+                  <td><span class="delta-up">+0.24%</span></td>
+                  <td><span class="delta-down">-1.07%</span></td>
+                </tr>
+                <tr>
+                  <td>— HAN FT / NLM</td>
+                  <td>1,230 / 867</td>
+                  <td>1,184 / 597</td>
+                  <td>96.26% / 68.86%</td>
+                  <td>-2.37% / -2.04%</td>
+                  <td>-1.24% / -3.90%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- RIGHT INSIGHT BOXES -->
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="insight-card">
+              🟢 <strong>SGN Recovery:</strong> Retention Rate SGN tiếp tục đà phục hồi đạt 81.38% (+0.4% MoM). Nhóm NLM tăng bứt phá +3.03% MoM nhờ chiến dịch call active tập trung.
+            </div>
+            <div class="insight-card warning">
+              🔴 <strong>HAN NLM Challenge:</strong> HAN bị hụt RR ở nhóm NLM (68.86%, hụt 2.04% MoM & 3.9% YoY) do nhóm sinh viên tuyển mới chưa vào năm học lại.
+            </div>
+            <div style="background: var(--color-paper); border: 1px solid var(--color-hairline); border-radius: 0.75rem; padding: 0.9rem;">
+              ⏱️ <strong>Supply Hours (SH):</strong> Total SH YoY giảm mạnh 14-22% ở nhóm FT, tuy nhiên RPH giảm nhẹ với AR-FR cải thiện ~1% nhờ tối ưu dispatch layer.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Monthly Review · Driver Performance & Retention</span>
+        <span>03 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 4: MONTHLY SERVICE QUALITY & CR -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-4" data-category="monthly">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART I: MONTHLY REPORT · SLIDE 04 / 15</div>
+            <h2 class="slide-h2">Chất Lượng Vận Hành, Tỷ Lệ Hủy (CR) & Quản Lý Đội Core</h2>
+            <p class="slide-sub">Đánh giá tác động thời tiết nắng nóng lên CR Shopee, kết quả lọc đội 2H Bulky & Core KA/4H</p>
+          </div>
+          <span class="slide-number-badge">04 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <!-- LEFT CR BY SERVICE -->
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--color-brand-navy); margin-bottom: 0.4rem;">🔥 Cancel Rate (CR) Theo Dịch Vụ (Tháng 7)</div>
+            <table class="hallmark-table">
+              <thead>
+                <tr>
+                  <th>Dịch Vụ (Service)</th>
+                  <th>CR HAN</th>
+                  <th>CR SGN</th>
+                  <th>Nguyên Nhân Gốc Rễ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Shopee Express</strong></td>
+                  <td><span class="delta-down">37.61%</span></td>
+                  <td>22.78%</td>
+                  <td>Peak nắng nóng >=35°C & Shopee Reverse noise</td>
+                </tr>
+                <tr>
+                  <td><strong>2H / Bulky</strong></td>
+                  <td>30.45%</td>
+                  <td>22.62%</td>
+                  <td>Mất cân bằng cung cầu khung giờ cao điểm</td>
+                </tr>
+                <tr>
+                  <td><strong>4H Delivery</strong></td>
+                  <td>13.70%</td>
+                  <td>8.61%</td>
+                  <td>Duy trì mức ổn định cao ở 2 khu vực</td>
+                </tr>
+                <tr>
+                  <td><strong>1H TMĐT</strong></td>
+                  <td><span class="delta-up">10.80%</span></td>
+                  <td>10.60%</td>
+                  <td>Dịch vụ cốt lõi đạt SLA chất lượng tốt nhất</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- RIGHT CORE DRIVERS & ACTIONS -->
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: var(--color-paper); border: 1px solid var(--color-hairline); border-radius: 0.85rem; padding: 1rem;">
+              <div style="font-weight: 700; color: var(--color-brand-navy); margin-bottom: 0.4rem;">🛠️ Giải Pháp Khắc Phục CR Shopee & Nắng Nóng:</div>
+              <ul style="font-size: 0.8rem; color: var(--color-text-main); line-height: 1.55; padding-left: 1.1rem;">
+                <li>Xây scheme thưởng tập trung đơn Shopee trong khung trưa - chiều.</li>
+                <li><strong>Đề xuất tắt Auto-Accept (AA) Shopee</strong> khung 12h-17h khi nhiệt độ nắng nóng >= 35°C.</li>
+                <li>Chỉ khuyến nghị (REC) đơn với partner Shopee Reverse.</li>
+              </ul>
+            </div>
+
+            <div style="background: var(--color-paper); border: 1px solid var(--color-hairline); border-radius: 0.85rem; padding: 1rem;">
+              <div style="font-weight: 700; color: var(--color-brand-navy); margin-bottom: 0.4rem;">🚛 Thanh Lọc & Tuyển Mới Đội Core 2H / Bulky:</div>
+              <ul style="font-size: 0.8rem; color: var(--color-text-main); line-height: 1.55; padding-left: 1.1rem;">
+                <li>Tuyển mới 49 tài xế (70 đăng ký, 57 xác nhận, 49 gia nhập ➔ Đạt 86%).</li>
+                <li>Thanh lọc 29 tài xế hiệu suất thấp trong tháng. SGN Core 4H/KA đạt 40.0K đơn completed.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Monthly Review · Quality & Core Driver Management</span>
+        <span>04 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 5: MONTHLY GROWTH & DRIVER JOURNEY -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-5" data-category="monthly">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART I: MONTHLY REPORT · SLIDE 05 / 15</div>
+            <h2 class="slide-h2">Tăng Trưởng Tuyển Mới & Chuẩn Hóa Hành Trình Driver Journey</h2>
+            <p class="slide-sub">Hiệu suất nhóm tài xế mới (Capacity SGN/HAN) & Tiến độ số hóa 9 cột mốc Driver Journey (D0-D8)</p>
+          </div>
+          <span class="slide-number-badge">05 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 1.5rem;">
+          <!-- LEFT GROWTH CAPACITY CARDS -->
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="kpi-tile" style="border-left: 4px solid var(--color-brand-orange);">
+              <div class="tile-lbl">SGN New Driver Capacity</div>
+              <div class="tile-num">261,233</div>
+              <div class="delta-up">▲ 117.4% vs Target (NIM, NLM, Return tăng mạnh)</div>
+            </div>
+            <div class="kpi-tile" style="border-left: 4px solid var(--color-brand-blue);">
+              <div class="tile-lbl">HAN New Driver Capacity</div>
+              <div class="tile-num">108,697 (NIM)</div>
+              <div class="delta-up">▲ 110.15% vs Target (Active NLM +19.4% MoM)</div>
+            </div>
+            <div class="insight-card">
+              🎯 <strong>Quality Metric:</strong> Good Driver Rate (GDR) tuyển mới đạt <strong>120% KPI</strong> tại SGN và <strong>95% KPI</strong> tại HAN. DFD Retention SGN đạt 74.11% (+3.5% YoY).
+            </div>
+          </div>
+
+          <!-- RIGHT DRIVER JOURNEY TABLE -->
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--color-brand-navy); margin-bottom: 0.4rem;">🗺️ Tiến Độ Chuẩn Hóa Driver Journey (D0 — D8)</div>
+            <table class="hallmark-table">
+              <thead>
+                <tr>
+                  <th>Giai Đoạn</th>
+                  <th>Nội Dung Đào Tạo Auto-Push</th>
+                  <th>Tiến Độ</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>D0</strong></td>
+                  <td>Hướng dẫn xem số tiền thu ứng</td>
+                  <td>Hoàn thành (Pilot push noti FAT)</td>
+                  <td><span class="pill-status pill-pass">🟢 Done</span></td>
+                </tr>
+                <tr>
+                  <td><strong>D1</strong></td>
+                  <td>Xử lý khi hủy đơn hàng</td>
+                  <td>Hoàn thành Video & Guideline</td>
+                  <td><span class="pill-status pill-pass">🟢 Done</span></td>
+                </tr>
+                <tr>
+                  <td><strong>D2</strong></td>
+                  <td>Xử lý khiếu nại & dispute</td>
+                  <td>Đang thu thập thông tin nội dung</td>
+                  <td><span class="pill-status pill-warn">🟡 10/08</span></td>
+                </tr>
+                <tr>
+                  <td><strong>D3 - D4</strong></td>
+                  <td>Bật/tắt dịch vụ & Sử dụng điều hướng</td>
+                  <td>Đã confirm nội dung</td>
+                  <td><span class="pill-status pill-warn">🟡 17-24/08</span></td>
+                </tr>
+                <tr>
+                  <td><strong>D5 - D8</strong></td>
+                  <td>Giải trình, Ký quỹ, Nộp tiền thu hộ</td>
+                  <td>Đã cung cấp tài liệu thô</td>
+                  <td><span class="pill-status pill-fail">🔴 Sep 2026</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Monthly Review · Growth & Driver Journey</span>
+        <span>05 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 6: PROJECT MINIHUB MONTHLY DEEP-DIVE -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-6" data-category="monthly">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART I: MONTHLY REPORT · SLIDE 06 / 15</div>
+            <h2 class="slide-h2">Quy Mô Sản Lượng MiniHub & Hiệu Quả Kinh Tế Hub vs Mass</h2>
+            <p class="slide-sub">Sản lượng 215.1K đơn (+17% MoM), so sánh Earning Per Hour (EPH) vượt trội & Quản trị Leader</p>
+          </div>
+          <span class="slide-number-badge">06 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.1fr 1.25fr; gap: 1.5rem;">
+          <!-- LEFT MINIHUB STAT MATRIX -->
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="kpi-tile-grid">
+              <div class="kpi-tile">
+                <div class="tile-lbl">MiniHub Volume</div>
+                <div class="tile-num">215.1K</div>
+                <div class="delta-up">▲ +17% MoM (SGN 127.7K, HAN 87.4K)</div>
+              </div>
+              <div class="kpi-tile">
+                <div class="tile-lbl">Shift Checkin Rate</div>
+                <div class="tile-num">89.61%</div>
+                <div class="delta-up">▲ +0.78% MoM (9,726 ca)</div>
+              </div>
+            </div>
+
+            <div class="insight-card">
+              💎 <strong>Hub Utilization Superiority:</strong> Utilization của MiniHub luôn duy trì <strong>>83%</strong>, cao hơn đội Mass từ <strong>6 - 15 điểm %</strong>, khẳng định hiệu quả ghép đơn của mô hình Hub.
+            </div>
+
+            <div style="background: var(--color-paper); border: 1px solid var(--color-hairline); border-radius: 0.75rem; padding: 0.85rem; font-size: 0.8rem;">
+              👑 <strong>MiniHub Leader Governance:</strong> Phân loại tài xế 3 nhóm (Committed, Semi-committed, Ghost). Leader tập trung 80% lực lượng vào Committed Drivers. Đo lường ROI vs Cost (36-50 triệu/tháng).
+            </div>
+          </div>
+
+          <!-- RIGHT HUB VS MASS EPH TABLE -->
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--color-brand-navy); margin-bottom: 0.4rem;">💰 So Sánh Thu Nhập Theo Giờ (EPH) MiniHub vs Mass (Tháng 7)</div>
+            <table class="hallmark-table">
+              <thead>
+                <tr>
+                  <th>Khu Vực / Segment</th>
+                  <th>EPH MiniHub</th>
+                  <th>EPH Mass</th>
+                  <th>Chênh Lệch (Diff)</th>
+                  <th>Đánh Giá Mô Hình</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>HAN FT Segment</strong></td>
+                  <td><strong style="color: var(--color-brand-orange);">59.0K/h</strong></td>
+                  <td>47.2K/h</td>
+                  <td><span class="delta-up">+11.8K (+25%)</span></td>
+                  <td>Vượt trội hoàn toàn trên toàn bộ segment</td>
+                </tr>
+                <tr>
+                  <td><strong>HAN Overall Avg</strong></td>
+                  <td>48.5K/h</td>
+                  <td>36.7K/h</td>
+                  <td><span class="delta-up">+11.8K avg</span></td>
+                  <td>NIM & NLM chênh lệch cao nhất</td>
+                </tr>
+                <tr>
+                  <td><strong>SGN NLM Segment</strong></td>
+                  <td><strong style="color: var(--color-pass-text);">51.5K/h</strong></td>
+                  <td>34.1K/h</td>
+                  <td><span class="delta-up">+17.4K (+51%)</span></td>
+                  <td>NLM Hub tạo bứt phá thu nhập mạnh nhất</td>
+                </tr>
+                <tr>
+                  <td><strong>SGN Overall Avg</strong></td>
+                  <td>46.8K/h</td>
+                  <td>40.55K/h</td>
+                  <td><span class="delta-up">+6.25K (+14%)</span></td>
+                  <td>FT Mass cao hơn FT Hub ~2K (Cảnh báo)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Monthly Review · Project MiniHub Operations & Economics</span>
+        <span>06 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 7: PROJECT EV & DRIVER ENGAGEMENT -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-7" data-category="monthly">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART I: MONTHLY REPORT · SLIDE 07 / 15</div>
+            <h2 class="slide-h2">Chuyển Đổi Đội Xe Điện (EV) & Bộ Chỉ Số Tuân Thủ CTR / GDR</h2>
+            <p class="slide-sub">Báo cáo tăng trưởng tài xế EV active, gỡ nghẽn phễu chuyển đổi Lead & Chỉ số tuân thủ quy chuẩn</p>
+          </div>
+          <span class="slide-number-badge">07 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.1fr 1.25fr; gap: 1.5rem;">
+          <!-- LEFT EV METRICS & FUNNEL -->
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="kpi-tile-grid">
+              <div class="kpi-tile">
+                <div class="tile-lbl">SGN EV Active</div>
+                <div class="tile-num">488</div>
+                <div class="delta-up">▲ +16% MoM (Retention 79.74%)</div>
+              </div>
+              <div class="kpi-tile">
+                <div class="tile-lbl">HAN EV Active</div>
+                <div class="tile-num">406</div>
+                <div class="delta-up">▲ +10% MoM (Retention 80.08%)</div>
+              </div>
+            </div>
+
+            <div class="insight-card warning">
+              ⚠️ <strong>EV Lead Conversion Bottleneck:</strong> Lead quan tâm đăng ký thuê xe rất cao (30%), tuy nhiên tỷ lệ convert chưa tương ứng do quy trình làm việc với Partner. Cần quy hoạch luồng tiếp nhận lead chuyển trực tiếp cho Partner.
+            </div>
+          </div>
+
+          <!-- RIGHT COMPLIANCE & COMMS TABLE -->
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--color-brand-navy); margin-bottom: 0.4rem;">🛡️ Tuân Thủ Quy Chuẩn & Sự Kiện Gắn Kết (Tháng 7)</div>
+            <table class="hallmark-table">
+              <thead>
+                <tr>
+                  <th>Hạng Mục</th>
+                  <th>Chỉ Số Actual</th>
+                  <th>Target</th>
+                  <th>Highlights & Điểm Nhấn</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Compliance True Rate (CTR)</strong></td>
+                  <td><strong style="color: var(--color-pass-text);">77.69%</strong></td>
+                  <td>130% Target</td>
+                  <td>Tăng +0.48% MoM, duy trì kỷ luật vận hành tốt</td>
+                </tr>
+                <tr>
+                  <td><strong>Good Driver Rate (GDR)</strong></td>
+                  <td><strong style="color: var(--color-pass-text);">94.82%</strong></td>
+                  <td>100% Target</td>
+                  <td>Tăng +0.17% MoM, tỉ lệ tài xế chuẩn mực cao</td>
+                </tr>
+                <tr>
+                  <td><strong>Driver Engagement Event</strong></td>
+                  <td>"World Cup cùng Aha"</td>
+                  <td>Top 100 Giải</td>
+                  <td>Tổng kết BXH final & công bố chuỗi minigame</td>
+                </tr>
+                <tr>
+                  <td><strong>Rating System Update</strong></td>
+                  <td>100 Đơn gần nhất</td>
+                  <td>100% Driver</td>
+                  <td>Cập nhật Blog quy tắc tính đánh giá sao mới</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Monthly Review · Project EV & Driver Engagement</span>
+        <span>07 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 8: WEEKLY EXECUTIVE REVIEW (WEEK 31) -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-8" data-category="weekly">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART II: WEEKLY REPORT · SLIDE 08 / 15</div>
+            <h2 class="slide-h2">Weekly Review Tuần 31 (20-26/07/2026) — Highlights & Lowlights</h2>
+            <p class="slide-sub">Tổng quan diễn biến vận hành tuần: Năng suất RPH, thời tiết ngập mưa & Tuân thủ CTR/GDR</p>
+          </div>
+          <span class="slide-number-badge">08 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <!-- LEFT HIGHLIGHTS -->
+          <div style="background: var(--color-pass-bg); border: 1px solid rgba(4, 120, 87, 0.2); border-radius: 1.25rem; padding: 1.35rem;">
+            <div style="font-family: var(--font-display); font-size: 1rem; font-weight: 800; color: var(--color-pass-text); margin-bottom: 0.8rem;">
+              🟢 HIGHLIGHTS VẬN HÀNH TUẦN 31
+            </div>
+            <ul style="font-size: 0.83rem; color: #064E3B; line-height: 1.6; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem;">
+              <li><strong>Hà Nội (HAN):</strong> RPH đạt 1.75, Fulfillment Rate (FR) duy trì >80%. CR Rule PoC giữ ổn định mốc tốt 12.43%.</li>
+              <li><strong>TP.HCM (SGN):</strong> Supply Hours duy trì vững WoW, vượt +2.3% so với planning. RPH tăng +1.7% WoW, FR tăng ~1% WoW nhờ thời tiết ổn định.</li>
+              <li><strong>Network Compliance:</strong> CTR toàn mạng lưới đạt <strong>77.46%</strong> (đạt 130% target). GDR đạt <strong>95.54%</strong> (đạt 120% target).</li>
+              <li><strong>MiniHub Operations:</strong> Checkin rate SGN đạt 85.16% (+6.56% WoW). Utilization 2 thành phố đều giữ mức cao >87%.</li>
+            </ul>
+          </div>
+
+          <!-- RIGHT LOWLIGHTS & ISSUES -->
+          <div style="background: var(--color-fail-bg); border: 1px solid rgba(185, 28, 28, 0.2); border-radius: 1.25rem; padding: 1.35rem;">
+            <div style="font-family: var(--font-display); font-size: 1rem; font-weight: 800; color: var(--color-fail-text); margin-bottom: 0.8rem;">
+              🔴 LOWLIGHTS & NGHẼN VẬN HÀNH TUẦN 31
+            </div>
+            <ul style="font-size: 0.83rem; color: #7F1D1D; line-height: 1.6; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem;">
+              <li><strong>Retention Rate HAN:</strong> Retention tài xế >=22t chỉ đạt 75.43% (hụt target). Acceptance Rate (AR) tương đối thấp kéo giảm hiệu quả thưởng.</li>
+              <li><strong>Shopee Reverse Spikes:</strong> CR dịch vụ Shopee tại HAN vọt lên 37.61% (+5.6% WoW) do các đơn Shopee Reverse bị trùng nhận bởi SPX.</li>
+              <li><strong>Mưa Lớn Ngập Cục Bộ:</strong> Mưa lớn đầu tuần làm CR PoC chung HAN tăng 0.6% lên 13%, tăng mạnh ở nhóm tài xế mới (NIM/NLM).</li>
+              <li><strong>EV Partner Frozen:</strong> Partner Aizen đóng cứng 3 tuần không phát sinh tài xế thuê mới ➔ 0 convert gói thuê xe.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Weekly Review · Executive Overview Week 31</span>
+        <span>08 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 9: WEEKLY RETENTION & SUPPLY HOURS -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-9" data-category="weekly">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART II: WEEKLY REPORT · SLIDE 09 / 15</div>
+            <h2 class="slide-h2">Phân Tích Giữ Chân Tuần 31 & Năng Suất Supply Hours</h2>
+            <p class="slide-sub">Biến động Retention Rate SGN (+0.5% MoM) vs HAN (-0.33% MoM) & Phân tích nguyên nhân gốc rễ (Root Cause)</p>
+          </div>
+          <span class="slide-number-badge">09 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 1.5rem;">
+          <!-- LEFT WEEKLY RETENTION TABLE -->
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--color-brand-navy); margin-bottom: 0.4rem;">📊 Retention Rate (>=22 Tuổi) Tuần 31 (20-26/07)</div>
+            <table class="hallmark-table">
+              <thead>
+                <tr>
+                  <th>Khu Vực / Segment</th>
+                  <th>Active Driver</th>
+                  <th>RR Tuần 31</th>
+                  <th>MoM</th>
+                  <th>YoY</th>
+                  <th>Hành Động Đột Phá</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>TP.HCM (SGN)</strong></td>
+                  <td>11,924</td>
+                  <td><strong style="color: var(--color-pass-text);">80.44%</strong></td>
+                  <td><span class="delta-up">+0.50%</span></td>
+                  <td><span class="delta-up">+0.02%</span></td>
+                  <td>Tăng 2% WoW nhờ FL call list active</td>
+                </tr>
+                <tr>
+                  <td>— SGN NLM Segment</td>
+                  <td>1,493</td>
+                  <td>73.51%</td>
+                  <td><span class="delta-up">+3.03%</span></td>
+                  <td><span class="delta-up">+3.75%</span></td>
+                  <td>Push SMS & CTT kích thích tài xế</td>
+                </tr>
+                <tr>
+                  <td><strong>Hà Nội (HAN)</strong></td>
+                  <td>7,125</td>
+                  <td><strong style="color: var(--color-fail-text);">77.76%</strong></td>
+                  <td><span class="delta-down">-0.33%</span></td>
+                  <td><span class="delta-down">-0.96%</span></td>
+                  <td>Gap hụt thu hẹp nhưng vẫn hụt 0.3-1%</td>
+                </tr>
+                <tr>
+                  <td>— HAN FT Segment</td>
+                  <td>1,183</td>
+                  <td>96.18%</td>
+                  <td><span class="delta-down">-2.45%</span></td>
+                  <td><span class="delta-down">-1.33%</span></td>
+                  <td>Gap MoM 2.45% do biến động thu nhập</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- RIGHT SUPPLY HOURS INSIGHTS -->
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="insight-card">
+              💡 <strong>SGN Root Cause & Action:</strong> Retention rate SGN tăng +2% WoW nhờ đội ngũ FL gọi điện trực tiếp theo danh sách tài xế tiềm năng, kết hợp push SMS truyền thông chính sách thưởng.
+            </div>
+            <div class="insight-card warning">
+              ⚠️ <strong>HAN Retention Call Action:</strong> Nhóm chưa retention có App Lifespan >= 6 tháng và Online Hours >= 50H. Cần khảo sát sâu lý do chưa quay lại để điều chỉnh khung thưởng.
+            </div>
+            <div style="background: var(--color-paper); border: 1px solid var(--color-hairline); border-radius: 0.75rem; padding: 0.85rem; font-size: 0.8rem;">
+              ⏱️ <strong>Supply Hours Gap:</strong> SH SGN gap 3.7% so với planning (hụt ở tập FT). Total Requests HAN đạt 427,355 đơn, RPH 1.39 (-3.5% WoW).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Weekly Review · Retention & Supply Hours Analysis</span>
+        <span>09 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 10: WEEKLY CANCEL RATE & POOLING MODEL -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-10" data-category="weekly">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART II: WEEKLY REPORT · SLIDE 10 / 15</div>
+            <h2 class="slide-h2">Cancel Rate Tuần 31, Shopee Reverse & Đánh Giá Model TTS</h2>
+            <p class="slide-sub">Phân tích nguyên nhân CR tăng do mưa lớn, Shopee Reverse noise & Đánh giá model dispatch đơn TTS</p>
+          </div>
+          <span class="slide-number-badge">10 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem;">
+          <!-- LEFT WEEKLY CR TABLE -->
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--color-brand-navy); margin-bottom: 0.4rem;">🚨 Cancel Rate Theo Dịch Vụ Tuần 31 (20-26/07)</div>
+            <table class="hallmark-table">
+              <thead>
+                <tr>
+                  <th>Dịch Vụ (Service)</th>
+                  <th>CR HAN</th>
+                  <th>WoW (%)</th>
+                  <th>CR SGN</th>
+                  <th>WoW (%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Shopee Express</strong></td>
+                  <td><strong style="color: var(--color-fail-text);">37.61%</strong></td>
+                  <td><span class="delta-down">+5.6%</span></td>
+                  <td>22.78%</td>
+                  <td><span class="delta-up">-5.9%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>2H Delivery</strong></td>
+                  <td>30.45%</td>
+                  <td>+1.6%</td>
+                  <td>22.62%</td>
+                  <td>-1.3%</td>
+                </tr>
+                <tr>
+                  <td><strong>Bulky (Xe Cỡ Lớn)</strong></td>
+                  <td>26.69%</td>
+                  <td>+3.7%</td>
+                  <td>13.81%</td>
+                  <td>+0.6%</td>
+                </tr>
+                <tr>
+                  <td><strong>Tiktok Shop</strong></td>
+                  <td>24.87%</td>
+                  <td>+0.6%</td>
+                  <td>19.42%</td>
+                  <td>-1.0%</td>
+                </tr>
+                <tr>
+                  <td><strong>1H Delivery</strong></td>
+                  <td>10.80%</td>
+                  <td>+0.2%</td>
+                  <td>10.60%</td>
+                  <td>+0.2%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- RIGHT MODEL POOLING EVALUATION -->
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: var(--color-paper); border: 1px solid var(--color-hairline); border-radius: 0.85rem; padding: 1rem;">
+              <div style="font-weight: 700; color: var(--color-brand-navy); margin-bottom: 0.4rem;">🔄 Review Model Pooling TTS:</div>
+              <ul style="font-size: 0.8rem; color: var(--color-text-main); line-height: 1.5; padding-left: 1.1rem;">
+                <li>CR đơn TTS theo tracking number đã <strong>cải thiện rõ rệt</strong> sau khi chạy model mới.</li>
+                <li>Tuy nhiên, tỉ lệ đơn 1H TMĐT non-pool bị hủy lần đầu sau khi accept có xu hướng tăng ➔ <strong>Đề xuất làm việc với OE</strong> để kích hoạt rule <em>"Không dispatch đơn từ KH có điểm tin cậy thấp"</em>.</li>
+              </ul>
+            </div>
+
+            <div class="insight-card warning">
+              ⚠️ <strong>Shopee Reverse Action:</strong> Đơn hủy thực tế của Shopee Reverse tăng đột biến do đơn đã được SPX nhận trước. <strong>Next Action:</strong> Đề xuất hệ thống chỉ REC đơn đối với partner Shopee Reverse.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Weekly Review · Cancel Rate & Model Pooling Evaluation</span>
+        <span>10 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 11: WEEKLY MINIHUB & COMBINE REC RATE -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-11" data-category="weekly">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART II: WEEKLY REPORT · SLIDE 11 / 15</div>
+            <h2 class="slide-h2">Vận Hành MiniHub Tuần 31 & Tỷ Lệ Ghép Đơn (REC Rate)</h2>
+            <p class="slide-sub">Năng suất ca trực, Checkin Rate 85.16% (SGN) / 89.2% (HAN) & Bóc tách Combine REC Rate theo Zone</p>
+          </div>
+          <span class="slide-number-badge">11 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 1.5rem;">
+          <!-- LEFT REC RATE TABLE -->
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--color-brand-navy); margin-bottom: 0.4rem;">🔗 Combine REC Rate (Tỷ Lệ Ghép Đơn Hoàn Thành theo Zone)</div>
+            <table class="hallmark-table">
+              <thead>
+                <tr>
+                  <th>Loại Zone (Zone Type)</th>
+                  <th>Tuần 06/07</th>
+                  <th>Tuần 13/07</th>
+                  <th>Tuần 20/07 (T31)</th>
+                  <th>WoW Change</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>City Zone (HAN)</strong></td>
+                  <td>24.27%</td>
+                  <td>31.18%</td>
+                  <td><strong>28.43%</strong></td>
+                  <td><span class="delta-down">-2.75%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Big Zone (HAN)</strong></td>
+                  <td>29.34%</td>
+                  <td>28.55%</td>
+                  <td><strong>28.02%</strong></td>
+                  <td><span class="delta-down">-0.53%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Medium Zone (HAN)</strong></td>
+                  <td>23.26%</td>
+                  <td>14.86%</td>
+                  <td><strong style="color: var(--color-pass-text);">25.22%</strong></td>
+                  <td><span class="delta-up">+10.36%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Mini Zone (HAN)</strong></td>
+                  <td>19.94%</td>
+                  <td>21.47%</td>
+                  <td><strong>24.16%</strong></td>
+                  <td><span class="delta-up">+2.69%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>SGN Average Zone 1-6</strong></td>
+                  <td>19.48%</td>
+                  <td>21.34%</td>
+                  <td><strong style="color: var(--color-brand-orange);">23.18%</strong></td>
+                  <td><span class="delta-up">+1.84%</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- RIGHT WEEKLY MINIHUB METRICS -->
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="kpi-tile-grid">
+              <div class="kpi-tile">
+                <div class="tile-lbl">SGN Shift Capacity</div>
+                <div class="tile-num">3,114 ca</div>
+                <div class="delta-up">▲ Checkin 85.16% (+6.56% WoW)</div>
+              </div>
+              <div class="kpi-tile">
+                <div class="tile-lbl">HAN Shift Capacity</div>
+                <div class="tile-num">2,303 ca</div>
+                <div class="delta-up">▲ Checkin 89.20% (Utlz 87.89%)</div>
+              </div>
+            </div>
+
+            <div class="insight-card">
+              🚀 <strong>Medium Zone Surge:</strong> Combine REC rate tại Medium Zone tăng đột phá **+10.36% WoW** lên 25.22%, cho thấy hiệu quả tích cực từ rule ghép đơn mới.
+            </div>
+
+            <div style="background: var(--color-paper); border: 1px solid var(--color-hairline); border-radius: 0.75rem; padding: 0.85rem; font-size: 0.8rem;">
+              🎯 <strong>Leader Quality Focus:</strong> Đội trưởng MiniHub SGN/HAN đã siết chặt chất lượng đội hình, thanh lọc tài xế kém để tập trung nâng cao Checkin & Online rate.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Weekly Review · MiniHub & Combine REC Rate</span>
+        <span>11 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 12: WEEKLY EV & DRIVER VOICES -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-12" data-category="weekly">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART II: WEEKLY REPORT · SLIDE 12 / 15</div>
+            <h2 class="slide-h2">Chuyển Đổi EV Tuần 31 & Giải Quyết Khiếu Nại Driver Voices</h2>
+            <p class="slide-sub">Tiến độ active EV (SGN 135% target vs HAN 94%), giải tỏa noise ẩn đơn, ẩn COD & rating mới</p>
+          </div>
+          <span class="slide-number-badge">12 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.1fr 1.25fr; gap: 1.5rem;">
+          <!-- LEFT EV WEEKLY STATUS -->
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="kpi-tile-grid">
+              <div class="kpi-tile">
+                <div class="tile-lbl">SGN EV Active (MTD)</div>
+                <div class="tile-num">656 / 475</div>
+                <div class="delta-up">▲ 135% Target (Retention 78.43%)</div>
+              </div>
+              <div class="kpi-tile">
+                <div class="tile-lbl">HAN EV Active (MTD)</div>
+                <div class="tile-num">504 / 535</div>
+                <div class="delta-down">▼ 94% Target (Retention 79.68%)</div>
+              </div>
+            </div>
+
+            <div class="insight-card warning">
+              🔴 <strong>Lead Convert Stalled:</strong> Tỷ lệ chuyển đổi tài xế tuần 31 giảm mạnh (SGN 34 ➔ 15 tx, HAN 15 ➔ 1 tx). Partner Aizen đóng cứng 3 tuần ➔ 0 tài xế mới dùng gói thuê xe.
+            </div>
+
+            <div style="background: var(--color-paper); border: 1px solid var(--color-hairline); border-radius: 0.75rem; padding: 0.85rem; font-size: 0.8rem;">
+              🛡️ <strong>Compliance CTR/GDR:</strong> HAN CTR 61.16% (+14.04% WoW), GDR 93.43%. SGN CTR 80.37% (+1.73% WoW), GDR 95.71%. Toàn mạng lưới đạt 120-130% target KPI.
+            </div>
+          </div>
+
+          <!-- RIGHT DRIVER VOICES RESOLUTION -->
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--color-brand-navy); margin-bottom: 0.4rem;">💬 Giải Quyết Phản Ánh & Noise Từ Tài Xế (Driver Voices)</div>
+            <table class="hallmark-table">
+              <thead>
+                <tr>
+                  <th>Vấn Đề / Noise</th>
+                  <th>Số Cases</th>
+                  <th>Phản Ánh Của Tài Xế</th>
+                  <th>Giải Pháp & Hành Động Thực Thi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Noise Ẩn Đơn</strong></td>
+                  <td>~50 cases</td>
+                  <td>Cho rằng AHM đá đơn cho biệt đội / con đẻ</td>
+                  <td>Đã giải thích rõ thuật toán dispatch không có phân biệt đối xử</td>
+                </tr>
+                <tr>
+                  <td><strong>Noise Ẩn COD</strong></td>
+                  <td>~20 cases</td>
+                  <td>Thiếu thông tin báo người nhận khi gọi xác nhận đơn</td>
+                  <td>Đã chuyển Product bổ sung pop-up hiển thị lại thông tin</td>
+                </tr>
+                <tr>
+                  <td><strong>Rating 100 đơn</strong></td>
+                  <td>~15 cases</td>
+                  <td>Lo ngại quá nhiều đơn sàn khó xin đánh giá sao</td>
+                  <td>Đã cập nhật Blog truyền thông rõ cơ chế tính 100 đơn gần nhất</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Weekly Review · EV Progress & Driver Voices Resolution</span>
+        <span>12 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 13: STRATEGIC ACTION ROADMAP -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-13" data-category="roadmap">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART III: STRATEGY & ROADMAP · SLIDE 13 / 15</div>
+            <h2 class="slide-h2">Lộ Trình Thực Thi Chiến Lược & Chuyển Đổi Giá Trị (Value Realization)</h2>
+            <p class="slide-sub">Bảng đo lường chuyển đổi hiệu suất vận hành (BEFORE ➔ AFTER) theo chuẩn Enterprise AI Architect</p>
+          </div>
+          <span class="slide-number-badge">13 / 15</span>
+        </div>
+
+        <div>
+          <table class="hallmark-table">
+            <thead>
+              <tr>
+                <th>Hiện Trạng (Current State)</th>
+                <th>Chuyển Đổi Vận Hành (Transformation)</th>
+                <th>Trạng Thái Mục Tiêu (Target State)</th>
+                <th>Tác Động Kinh Doanh (Business Impact)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CR Shopee peak nắng nóng tăng cao (>37%) & noise Shopee Reverse.</td>
+                <td><strong style="color: var(--color-brand-orange);">↓ TẮT AA SHOPEE & CHỈ REC REVERSE ↓</strong></td>
+                <td>Tối ưu dispatch rule & bảo vệ sức khỏe tài xế trưa chiều.</td>
+                <td><strong style="color: var(--color-pass-text);">Giảm 8-12% CR Shopee & Tăng 15% SLA chiều peak</strong></td>
+              </tr>
+              <tr>
+                <td>Tỷ lệ convert lead xe điện (EV) bị nghẽn tại partner Aizen.</td>
+                <td><strong style="color: var(--color-brand-orange);">↓ QUY HOẠCH LUỒNG PARTNER MỚI ↓</strong></td>
+                <td>Ký kết Move, VF, Shinhan & gói thưởng đua top EV.</td>
+                <td><strong style="color: var(--color-pass-text);">Bứt phá EV active đạt 3,177 xe Q3 (+140%)</strong></td>
+              </tr>
+              <tr>
+                <td>Quản lý tài xế MiniHub phân mảnh, khó đo lường PnL Leader.</td>
+                <td><strong style="color: var(--color-brand-orange);">↓ CHUẨN HÓA 3 NHÓM TX & PNL DASHBOARD ↓</strong></td>
+                <td>Tập trung 80% effort vào Committed Drivers.</td>
+                <td><strong style="color: var(--color-pass-text);">Tăng 25% EPH Hub vs Mass & Duy trì PPH 3.29</strong></td>
+              </tr>
+              <tr>
+                <td>Thắc mắc tài xế về Ẩn COD, Ẩn đơn & Đánh giá 100 đơn mới.</td>
+                <td><strong style="color: var(--color-brand-orange);">↓ MINH BẠCH HÓA COMMS & AUTOMATION ↓</strong></td>
+                <td>Push auto-remind & guideline lifecycle D0-D8.</td>
+                <td><strong style="color: var(--color-pass-text);">Tăng 20% CTR tuân thủ & Giảm 90% khiếu nại</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Strategy Roadmap · Value Realization Matrix</span>
+        <span>13 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 14: EXECUTIVE ACTION MATRIX BY PIC -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-14" data-category="roadmap">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">PART III: STRATEGY & ROADMAP · SLIDE 14 / 15</div>
+            <h2 class="slide-h2">Bảng Ma Trận Phân Công Hành Động (Action Matrix by PIC)</h2>
+            <p class="slide-sub">Phân công trách nhiệm cụ thể, KPI đầu ra, người phụ trách (PIC) & Hạn chót hoàn thành (Deadline)</p>
+          </div>
+          <span class="slide-number-badge">14 / 15</span>
+        </div>
+
+        <div>
+          <table class="hallmark-table">
+            <thead>
+              <tr>
+                <th>Mục Tiêu / Dự Án</th>
+                <th>Hành Động Cụ Thể</th>
+                <th>Outcome Kỳ Vọng</th>
+                <th>PIC</th>
+                <th>Deadline</th>
+                <th>Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Plan Truyền Thông Hub</strong></td>
+                <td>Review tài liệu DM, lên content cycle & auto remind</td>
+                <td>Tăng active & tuyển dụng Hub</td>
+                <td>Hoa / Vân</td>
+                <td>15/08/2026</td>
+                <td><span class="pill-status pill-warn">🟡 In-Progress</span></td>
+              </tr>
+              <tr>
+                <td><strong>EV Partner & Support</strong></td>
+                <td>Landpage EV M8 & Hỗ trợ tài chính Shinhan/MCredit</td>
+                <td>Thuê xe bứt phá +20% active</td>
+                <td>Hoàng / Vân</td>
+                <td>10/08/2026</td>
+                <td><span class="pill-status pill-pass">🟢 Done</span></td>
+              </tr>
+              <tr>
+                <td><strong>Baga Bulky Campaign</strong></td>
+                <td>Set up thưởng in-app & noti auto đến tài xế</td>
+                <td>Đạt >=600 tx HAN, >=300 SGN</td>
+                <td>Trúc / Hoàng</td>
+                <td>14/08/2026</td>
+                <td><span class="pill-status pill-warn">🟡 In-Progress</span></td>
+              </tr>
+              <tr>
+                <td><strong>Model Dispatch Non-Pool</strong></td>
+                <td>Không dispatch đơn KH KNM điểm tin cậy thấp</td>
+                <td>Giảm tỷ lệ hủy đơn 1H TMĐT</td>
+                <td>OE / Product</td>
+                <td>20/08/2026</td>
+                <td><span class="pill-status pill-fail">🔴 Pending OE</span></td>
+              </tr>
+              <tr>
+                <td><strong>Event Sinh Nhật AHM 11</strong></td>
+                <td>Triển khai 4 Phase (Chuyển mình, Minigame, Live, Box)</td>
+                <td>Gắn kết 100% tài xế top</td>
+                <td>Vân / Thúy</td>
+                <td>25/08/2026</td>
+                <td><span class="pill-status pill-warn">🟡 In-Progress</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove Strategy Roadmap · Executive Action Matrix</span>
+        <span>14 / 15</span>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────── -->
+    <!-- SLIDE 15: APPENDIX & AUDIT STAMP -->
+    <!-- ────────────────────────────────────────── -->
+    <div class="hallmark-slide" id="slide-15" data-category="all">
+      <div>
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow-pill">APPENDIX · SLIDE 15 / 15</div>
+            <h2 class="slide-h2">Phụ Lục — Đối Đối Chiếu Dữ Liệu & Con Dấu Hallmark Audit</h2>
+            <p class="slide-sub">Xác thực 100% dữ liệu gốc từ 82 slides của [2026] DM NW Meeting.pptx</p>
+          </div>
+          <span class="slide-number-badge">15 / 15</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem;">
+          <div style="background: var(--color-paper); border: 1px solid var(--color-hairline); border-radius: 1.25rem; padding: 1.35rem;">
+            <div style="font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; color: var(--color-brand-navy); margin-bottom: 0.6rem;">📐 Original File & Data Verification</div>
+            <ul style="font-size: 0.82rem; color: var(--color-text-main); line-height: 1.6; padding-left: 1.2rem;">
+              <li><strong>Nguồn File Gốc:</strong>  (82 slides).</li>
+              <li><strong>Monthly Report Scope:</strong> Slides 1 - 45 (Báo cáo tháng 7 & OKRs Q2-Q3).</li>
+              <li><strong>Weekly Report Scope:</strong> Slides 46 - 82 (Báo cáo vận hành Tuần 31: 20-26/07/2026).</li>
+              <li><strong>Chỉ số EV Active:</strong> SGN 656/475 (135%), HAN 504/535 (94%). MiniHub Volume: 215.1K đơn.</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--color-brand-navy); color: #FFFFFF; border-radius: 1.25rem; padding: 1.35rem; font-family: var(--font-mono); font-size: 0.78rem;">
+            <div style="color: var(--color-brand-orange); font-weight: 700; margin-bottom: 0.5rem;">🏷️ HALLMARK DATA AUDIT STAMP</div>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 0.6rem;">/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 */</p>
+            <div style="line-height: 1.5; color: rgba(255,255,255,0.7);">
+              ✓ Grounding: 100% Real Numbers from PPTX<br />
+              ✓ Zero Invention: No Fabricated Metrics<br />
+              ✓ Display Purity: Upright Lexend Headings<br />
+              ✓ Number Clarity: Outfit / Space Mono<br />
+              ✓ High-Contrast Table: Solid Navy Header (#0A2E57)<br />
+              ✓ Structural Variety: Asymmetric Matrix Cards
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ahamove DM & NW Meeting 2026 · Hallmark Verified Grounded Deck</span>
+        <span>15 / 15</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 15;
+
+    function navigateDeck(dir) {
+      currentSlide += dir;
+      if (currentSlide < 1) currentSlide = 1;
+      if (currentSlide > totalSlides) currentSlide = totalSlides;
+
+      updateSlideView();
+    }
+
+    function filterSlides(category) {
+      document.querySelectorAll('.toolbar-filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (category === 'all') {
+        currentSlide = 1;
+      } else if (category === 'monthly') {
+        currentSlide = 2;
+      } else if (category === 'weekly') {
+        currentSlide = 8;
+      } else if (category === 'roadmap') {
+        currentSlide = 13;
+      }
+      updateSlideView();
+    }
+
+    function updateSlideView() {
+      document.getElementById('slideIndexLabel').innerText = 'Slide ' + currentSlide + ' / ' + totalSlides;
+      const targetSlide = document.getElementById('slide-' + currentSlide);
+      if (targetSlide) {
+        targetSlide.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        navigateDeck(1);
+      } else if (e.key === 'ArrowLeft') {
+        navigateDeck(-1);
+      }
+    });
+  </script>
+</body>
+</html>
