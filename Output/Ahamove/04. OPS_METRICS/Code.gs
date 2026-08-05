@@ -6,7 +6,23 @@
  *   Tạo tag mới : PENDING_TEAM_LEAD -> PENDING_DM -> PENDING_QM -> DONE
  *   Add tag     : PENDING_TEAM_LEAD -> PENDING_QM -> DONE  (bỏ qua DM)
  *   Reject bất kỳ gate -> REJECTED (về requester để sửa & re-submit)
+ *
+ * DEPLOY NOTE: Script này có thể dùng cả dạng standalone lẫn container-bound.
+ *   - Nếu standalone: dùng SpreadsheetApp.openById(SS_ID) bên dưới (đã cấu hình).
+ *   - Nếu container-bound (tạo từ Extension menu của Sheet): getActiveSpreadsheet() cũng OK.
+ *   - Execute as: "User accessing the web app" để RBAC đọc đúng email người dùng.
+ *   - Access: "Anyone within ahamove.com" (hoặc Anyone nếu muốn public).
+ *   - Sau mỗi lần sửa code PHẢI bấm "New deployment" hoặc test qua URL /dev.
  */
+
+const SS_ID = '1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4';
+function getSpreadsheet() {
+  try {
+    const active = SpreadsheetApp.getActiveSpreadsheet();
+    if (active) return active;
+  } catch (e) { /* standalone mode — fall through to openById */ }
+  return SpreadsheetApp.openById(SS_ID);
+}
 
 /* ============================================================
  *  RBAC — PHÂN QUYỀN (hardcode theo email)
@@ -88,7 +104,7 @@ function doGet(e) {
  *  CONFIG
  * ============================================================ */
 function getAppConfig() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = getSpreadsheet();
   let sheet = ss.getSheetByName("00_CONFIG_SETTINGS");
   if (!sheet) {
     sheet = ss.insertSheet("00_CONFIG_SETTINGS", 0);
@@ -130,7 +146,7 @@ function getAppConfig() {
 }
 
 function saveAppConfig(newConfig) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = getSpreadsheet();
   let sheet = ss.getSheetByName("00_CONFIG_SETTINGS");
   if (!sheet) {
     getAppConfig();
@@ -171,7 +187,7 @@ const COL = {
 };
 
 function getMainSheet() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = getSpreadsheet();
   let sheet = ss.getSheetByName("01_ALL_TAG_REQUESTS");
   if (!sheet) {
     sheet = ss.insertSheet("01_ALL_TAG_REQUESTS");
@@ -285,7 +301,7 @@ function saveNewRequest(data) {
  *  UTILS
  * ============================================================ */
 function saveCell(id, colName, value) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = getSpreadsheet();
   const sheet = ss.getSheetByName("02_DATA_REQUEST");
   if (!sheet) return { status: 'error', message: 'Không tìm thấy sheet 02_DATA_REQUEST' };
 

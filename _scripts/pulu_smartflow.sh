@@ -6,7 +6,6 @@
 
 # === Start local AI Proxies ===
 alias 9router="9router"
-alias omniroute="omniroute"
 alias pulu-start="zsh /Users/ts-1148/Desktop/Pulu-workspace/_scripts/pulu-start.sh"
 
 # === Load Secure Environment ===
@@ -34,62 +33,19 @@ alias c-code="claude --model cc/claude-sonnet-4-6"
 alias c-fast="claude --model cc/claude-sonnet-4-6"
 # ============================================
 
-# === SMART AI ROUTER (v3.5 Auto-Detect Model & Gateway) ===
+# === SMART AI ROUTER (Gateway Management) ===
 _auto_detect_gateway() {
-    local prompt="$1"
-    local lower_prompt="$2"
-    local prompt_len=${#prompt}
-
-    # 1. Nếu người dùng chọn thủ công qua use-9router, use-omni, hoặc use-direct
-    if [[ "$PULU_GATEWAY_OVERRIDE" == "9router" ]]; then
-        export ANTHROPIC_BASE_URL="http://localhost:20128/api/v1"
-        export ANTHROPIC_API_KEY="sk-9router"
-        PULU_ACTIVE_GW_LABEL="9Router (:20128)"
-        echo "⚡ Gateway: 9Router (:20128 - Sub-millisecond Terminal Route)"
-        return 0
-    elif [[ "$PULU_GATEWAY_OVERRIDE" == "direct" ]]; then
+    if [[ "$PULU_GATEWAY_OVERRIDE" == "direct" ]]; then
         unset ANTHROPIC_BASE_URL
         PULU_ACTIVE_GW_LABEL="Direct API"
         echo "⚡ Gateway: Direct Connection (Trực tiếp Anthropic API)"
         return 0
-    elif [[ "$PULU_GATEWAY_OVERRIDE" == "omni" ]]; then
-        export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
-        export ANTHROPIC_API_KEY="sk-omni"
-        PULU_ACTIVE_GW_LABEL="OmniRoute (:20130)"
-        echo "🛡️ Gateway: OmniRoute (:20130 - Multi-Provider Engine)"
-        return 0
     fi
 
-    # 2. Tự động chuyển cổng (Auto-Detect Mode + Self-Healing Health Check)
-    local target_port=20128
-    if [[ $prompt_len -gt 500 ]] || [[ "$lower_prompt" =~ (\.log|\.csv|\.json|\.pdf|tóm tắt|đọc file|dữ liệu lớn|văn bản dài|báo cáo|tiếp tục|task|terminal|clone|giao diện|phần trước|sửa file|viết code) ]]; then
-        target_port=20130
-    fi
-
-    # Kiểm tra xem target port có đang mở không (health check)
-    if ! lsof -iTCP:$target_port -sTCP:LISTEN &>/dev/null; then
-        # Thử port dự phòng
-        local fallback_port=$((target_port == 20128 ? 20130 : 20128))
-        if lsof -iTCP:$fallback_port -sTCP:LISTEN &>/dev/null; then
-            target_port=$fallback_port
-        else
-            # Cả 2 port đều offline -> Tự động khởi chạy pulu-start.sh ngầm
-            (zsh /Users/ts-1148/Desktop/Pulu-workspace/_scripts/pulu-start.sh &>/dev/null &)
-            sleep 0.5
-        fi
-    fi
-
-    if [[ $target_port -eq 20130 ]]; then
-        export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
-        export ANTHROPIC_API_KEY="sk-omni"
-        PULU_ACTIVE_GW_LABEL="OmniRoute (:20130)"
-        echo "🛡️ Gateway: OmniRoute (:20130 - Nén Token & Auto-Fallback Active)"
-    else
-        export ANTHROPIC_BASE_URL="http://localhost:20128/api/v1"
-        export ANTHROPIC_API_KEY="sk-9router"
-        PULU_ACTIVE_GW_LABEL="9Router (:20128)"
-        echo "⚡ Gateway: 9Router (:20128 - Terminal Siêu Tốc < 1ms)"
-    fi
+    export ANTHROPIC_BASE_URL="http://localhost:20128/api/v1"
+    export ANTHROPIC_API_KEY="sk-9router"
+    PULU_ACTIVE_GW_LABEL="9Router (:20128)"
+    echo "⚡ Gateway: 9Router (:20128 - Terminal Siêu Tốc < 1ms)"
 }
 
 smart_claude() {
@@ -233,26 +189,12 @@ use_9router() {
 }
 alias use-9router="use_9router"
 
-use_omni() {
-    export ANTHROPIC_BASE_URL="http://localhost:20130/v1"
-    export ANTHROPIC_API_KEY="sk-omni"
-    export PULU_GATEWAY_OVERRIDE="omni"
-    echo -e "✅ Claude đã cố định trỏ về OmniRoute (localhost:20130)"
-}
-alias use-omni="use_omni"
-
 use_direct() {
     unset ANTHROPIC_BASE_URL
     export PULU_GATEWAY_OVERRIDE="direct"
-    echo -e "⚡ Claude đã chuyển sang chế độ TRỰC TIẾP (Bỏ qua 9Router/OmniRoute Proxy)"
+    echo -e "⚡ Claude đã chuyển sang chế độ TRỰC TIẾP (Bỏ qua 9Router Proxy)"
 }
 alias use-direct="use_direct"
-
-use_auto() {
-    unset PULU_GATEWAY_OVERRIDE
-    echo -e "🔀 Kích hoạt chế độ TỰ ĐỘNG CHUYỂN GATEWAY (Auto-Detect 9Router vs OmniRoute)"
-}
-alias use-auto="use_auto"
 
 # === Circuit Breaker cho command_not_found_handler ===
 export _PULU_CNF_DEPTH=0
@@ -277,4 +219,4 @@ command_not_found_handler() {
 }
 
 # ============================================
-echo "🚀 PuluSmartFlow v3.5 Auto-Detect Engine Loaded | Auto Model & Auto Gateway Enabled"
+echo "🚀 PuluSmartFlow v3.5 Auto-Detect Engine Loaded | Auto Model Enabled"

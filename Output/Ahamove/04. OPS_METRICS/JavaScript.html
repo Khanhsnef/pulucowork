@@ -64,7 +64,26 @@
 
     // Ghi đè DEMO_CONFIG bằng config thật từ server
     if (typeof SERVER_CONFIG !== "undefined" && Object.keys(SERVER_CONFIG).length > 0) {
-      Object.assign(DEMO_CONFIG, SERVER_CONFIG);
+      const srv = SERVER_CONFIG;
+      // Sheet lưu mảng dạng chuỗi "DM, S&P, Growth" → parse về mảng đúng
+      if (typeof srv.TEAM_LIST === 'string') {
+        srv.TEAM_LIST = srv.TEAM_LIST.split(',').map(s => s.trim()).filter(Boolean);
+      }
+      if (typeof srv.TAG_TYPES === 'string') {
+        srv.TAG_TYPES = srv.TAG_TYPES.split(',').map(s => {
+          const t = s.trim();
+          return { value: t, label: t };
+        }).filter(x => x.value);
+      }
+      // TEAM_LEAD_MAP: nếu server trả về object với giá trị là chuỗi "a@x.com, b@x.com"
+      if (srv.TEAM_LEAD_MAP && typeof srv.TEAM_LEAD_MAP === 'object') {
+        Object.keys(srv.TEAM_LEAD_MAP).forEach(k => {
+          if (typeof srv.TEAM_LEAD_MAP[k] === 'string') {
+            srv.TEAM_LEAD_MAP[k] = srv.TEAM_LEAD_MAP[k].split(',').map(e => e.trim()).filter(Boolean);
+          }
+        });
+      }
+      Object.assign(DEMO_CONFIG, srv);
     }
 
     let currentFilter = 'ALL';
@@ -76,15 +95,21 @@
     // ===== LOAD DATA =====
     function loadDataFromSheet() {
       if (!IS_LOCAL) {
-        google.script.run.withSuccessHandler(res => {
-          if (res && res.data) {
-            requestsData = res.data;
-            if (res.role) { CURRENT_ROLE = res.role; CURRENT_EMAIL = res.email || CURRENT_EMAIL; applyRBAC(); }
-          } else {
-            requestsData = res || [];
-          }
-          renderAll();
-        }).getSheetDataJson();
+        google.script.run
+          .withSuccessHandler(res => {
+            if (res && res.data) {
+              requestsData = res.data;
+              if (res.role) { CURRENT_ROLE = res.role; CURRENT_EMAIL = res.email || CURRENT_EMAIL; applyRBAC(); }
+            } else {
+              requestsData = res || [];
+            }
+            renderAll();
+          })
+          .withFailureHandler(err => {
+            showToast('Lỗi tải dữ liệu', (err && err.message) || String(err), 'err');
+            if (requestsData.length === 0) { requestsData = mockData(); renderAll(); }
+          })
+          .getSheetDataJson();
       } else {
         if (requestsData.length === 0) requestsData = mockData();
         renderAll();
@@ -298,13 +323,16 @@
         state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', breach:''
       };
       if (!IS_LOCAL) {
-        google.script.run.withSuccessHandler(() => {
-          showToast(`Đã gửi ${newId}`, 'Request về Master, đang chờ Lead/Head duyệt.', 'ok');
-          loadDataFromSheet();
-          document.getElementById('tag-request-form').reset();
-          selectRequestCategory('Tạo tag mới');
-          switchTab('tab-master');
-        }).saveNewRequest(newReq);
+        google.script.run
+          .withSuccessHandler(() => {
+            showToast(`Đã gửi ${newId}`, 'Request về Master, đang chờ Lead/Head duyệt.', 'ok');
+            loadDataFromSheet();
+            document.getElementById('tag-request-form').reset();
+            selectRequestCategory('Tạo tag mới');
+            switchTab('tab-master');
+          })
+          .withFailureHandler(err => { showToast('Lỗi gửi request', (err && err.message) || String(err), 'err'); })
+          .saveNewRequest(newReq);
       } else {
       const _ = {
         id: newId, date: timeStr, requestCategory: category,
@@ -669,11 +697,14 @@
       const r = requestsData.find(x => x.id === id); if (!r) return;
       if (!canApproveLead(r)) { showToast('Không đủ quyền', 'Bạn không phụ trách team "' + r.team + '". Chỉ Lead team này hoặc DM.', 'err'); return; }
       if (!IS_LOCAL) {
-        google.script.run.withSuccessHandler((res) => {
-          if (res && res.status === 'error') { showToast('Không thể lưu', res.message, 'err'); return; }
-          showToast('Lead đã duyệt ' + id, r.requestCategory === 'Add tag' ? 'Bỏ qua DM → chuyển thẳng QM.' : 'Chuyển sang DM Review.', 'ok');
-          loadDataFromSheet();
-        }).saveLeadApproval(id, 'APPROVED', '');
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res && res.status === 'error') { showToast('Không thể lưu', res.message, 'err'); return; }
+            showToast('Lead đã duyệt ' + id, r.requestCategory === 'Add tag' ? 'Bỏ qua DM → chuyển thẳng QM.' : 'Chuyển sang DM Review.', 'ok');
+            loadDataFromSheet();
+          })
+          .withFailureHandler(err => { showToast('Lỗi Lead duyệt', (err && err.message) || String(err), 'err'); })
+          .saveLeadApproval(id, 'APPROVED', '');
       } else {
       r.leadDecision = 'APPROVED'; r.leadApprover = CURRENT_EMAIL; r.breach = '';
       if (r.requestCategory === 'Add tag') { r.state = 'PENDING_QM'; r.dmDecision = 'SKIPPED'; r.qmStatus = 'PENDING_QM'; if (!r.dmTagCode || r.dmTagCode==='-') r.dmTagCode = r.tagName; }
@@ -700,11 +731,14 @@
       if (!tagCode) { showToast('Thiếu mã tag', 'Nhập mã tag chuẩn để QM dùng.', 'warn'); return; }
       const note = document.getElementById('modal-dm-note').value;
       if (!IS_LOCAL) {
-        google.script.run.withSuccessHandler((res) => {
-          if (res && res.status === 'error') { showToast('Không thể lưu', res.message, 'err'); return; }
-          showToast('DM đã duyệt ' + r.id, 'Gán mã ' + tagCode + ' → chuyển QM.', 'ok');
-          loadDataFromSheet(); closeModal('dm-modal');
-        }).saveDMReview(dmCtx.id, 'APPROVED', note, tagCode);
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res && res.status === 'error') { showToast('Không thể lưu', res.message, 'err'); return; }
+            showToast('DM đã duyệt ' + r.id, 'Gán mã ' + tagCode + ' → chuyển QM.', 'ok');
+            loadDataFromSheet(); closeModal('dm-modal');
+          })
+          .withFailureHandler(err => { showToast('Lỗi DM duyệt', (err && err.message) || String(err), 'err'); })
+          .saveDMReview(dmCtx.id, 'APPROVED', note, tagCode);
       } else {
       r.dmDecision = 'APPROVED'; r.dmTagCode = tagCode; r.dmNote = document.getElementById('modal-dm-note').value;
       r.state = 'PENDING_QM'; r.qmStatus = 'PENDING_QM'; r.breach = '';
@@ -729,8 +763,8 @@
       if (!note) { showToast('Thiếu lý do', 'Vui lòng nhập lý do từ chối.', 'warn'); return; }
       if (!IS_LOCAL) {
         const fn = (rejectCtx.gate === 'LEAD')
-          ? (cb) => google.script.run.withSuccessHandler(cb).saveLeadApproval(rejectCtx.id, 'REJECTED', note)
-          : (cb) => google.script.run.withSuccessHandler(cb).saveDMReview(rejectCtx.id, 'REJECTED', note, 'N/A');
+          ? (cb) => google.script.run.withSuccessHandler(cb).withFailureHandler(err => showToast('Lỗi từ chối', (err && err.message) || String(err), 'err')).saveLeadApproval(rejectCtx.id, 'REJECTED', note)
+          : (cb) => google.script.run.withSuccessHandler(cb).withFailureHandler(err => showToast('Lỗi từ chối', (err && err.message) || String(err), 'err')).saveDMReview(rejectCtx.id, 'REJECTED', note, 'N/A');
         fn((res) => {
           if (res && res.status === 'error') { showToast('Không thể lưu', res.message, 'err'); return; }
           showToast('Đã từ chối ' + r.id, 'Requester sẽ thấy lý do để chỉnh sửa.', 'warn');
@@ -752,12 +786,15 @@
       const status = document.getElementById('qs-'+id).value;
       const count = 0;
       if (!IS_LOCAL) {
-        google.script.run.withSuccessHandler((res) => {
-          if (res && res.status === 'error') { showToast('Không thể lưu', res.message, 'err'); return; }
-          if (status === 'TAGGED_SUCCESS') showToast('Hoàn thành ' + id, `Đã đánh dấu DONE.`, 'ok');
-          else showToast('Đã cập nhật ' + id, 'Trạng thái QM: ' + status + '.', 'ok');
-          loadDataFromSheet();
-        }).saveQMStatus(id, status, count, 'QM Updated');
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res && res.status === 'error') { showToast('Không thể lưu', res.message, 'err'); return; }
+            if (status === 'TAGGED_SUCCESS') showToast('Hoàn thành ' + id, `Đã đánh dấu DONE.`, 'ok');
+            else showToast('Đã cập nhật ' + id, 'Trạng thái QM: ' + status + '.', 'ok');
+            loadDataFromSheet();
+          })
+          .withFailureHandler(err => { showToast('Lỗi QM update', (err && err.message) || String(err), 'err'); })
+          .saveQMStatus(id, status, count, 'QM Updated');
       } else {
       r.qmStatus = status;
       if (status === 'TAGGED_SUCCESS') { r.state = 'DONE'; r.breach = ''; r.qmSuccessCount = r.count || r.qmSuccessCount || 0; showToast('Hoàn thành ' + id, `Đã đánh dấu DONE. [DEMO]`, 'ok'); }
