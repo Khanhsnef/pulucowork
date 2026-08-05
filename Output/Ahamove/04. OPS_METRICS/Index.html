@@ -204,9 +204,9 @@
 
   <script>
     // Truyền dữ liệu từ Server xuống Client ngay lập tức
-    const SERVER_USER_EMAIL = <?= JSON.stringify(typeof userEmail !== "undefined" ? userEmail : "") ?>;
-    const SERVER_USER_ROLE  = <?= JSON.stringify(typeof userRole !== "undefined" ? userRole : "REQUESTER") ?>;
-    const SERVER_CONFIG     = <?= JSON.stringify(typeof config !== "undefined" ? config : {}) ?>;
+    const SERVER_USER_EMAIL = <?!= JSON.stringify(typeof userEmail !== "undefined" ? userEmail : "") ?>;
+    const SERVER_USER_ROLE  = <?!= JSON.stringify(typeof userRole !== "undefined" ? userRole : "REQUESTER") ?>;
+    const SERVER_CONFIG     = <?!= JSON.stringify(typeof config !== "undefined" ? config : {}) ?>;
   </script>
   <script><?!= include('JavaScript'); ?></script>
 </body>
