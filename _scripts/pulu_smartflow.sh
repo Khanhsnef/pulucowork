@@ -85,12 +85,8 @@ smart_claude() {
 
     local start_ts=$(python3 -c "import time; print(time.time())")
 
-    # Gọi Claude Code với /dev/null & format hiển thị qua Rich Markdown với Claude Orange Theme
-    if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
-        claude --model "$model" -p "$prompt" < /dev/null | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py --gateway "${PULU_ACTIVE_GW_LABEL:-Auto-Gateway}" --model "${task_label}"
-    else
-        claude --model "$model" -p "$prompt" < /dev/null
-    fi
+    # Gọi Claude Code bằng UI gốc
+    claude --model "$model" -p "$prompt" < /dev/null
 }
 alias ai="smart_claude"
 
@@ -130,14 +126,8 @@ smart_chat() {
 
         _auto_detect_gateway "$curr_prompt" "$lower_prompt" > /dev/null
 
-        if [[ -f "/Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py" ]]; then
-            claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" \
-                --output-format stream-json --verbose \
-                < /dev/null 2>&1 | python3 /Users/ts-1148/Desktop/Pulu-workspace/_scripts/md_pretty.py \
-                --gateway "${PULU_ACTIVE_GW_LABEL:-Auto-Gateway}" --model "${task_label}"
-        else
-            claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" < /dev/null
-        fi
+        # Gọi Claude Code bằng UI gốc
+        claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" < /dev/null
     }
 
     # 1. Nếu gõ kèm prompt (ví dụ: `chat! hỏi nhanh...`) -> Xử lý 1 lần
