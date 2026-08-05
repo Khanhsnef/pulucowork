@@ -58,15 +58,9 @@
       }
     };
 
+    var CURRENT_ROLE = 'DM';
+    var CURRENT_EMAIL = 'khanhlp@ahamove.com';
     let requestsData = [];
-    let CURRENT_EMAIL = (typeof SERVER_USER_EMAIL !== "undefined" && SERVER_USER_EMAIL) ? SERVER_USER_EMAIL : "nhanvien1@ahamove.com";
-    let CURRENT_ROLE  = (typeof SERVER_USER_ROLE !== "undefined" && SERVER_USER_ROLE) ? SERVER_USER_ROLE : "REQUESTER"; 
-
-    // Ghi đè DEMO_CONFIG bằng config thật từ server
-    if (typeof SERVER_CONFIG !== "undefined" && Object.keys(SERVER_CONFIG).length > 0) {
-      Object.assign(DEMO_CONFIG, SERVER_CONFIG);
-    }
-
     let currentFilter = 'ALL';
     let rejectCtx = { id: null, gate: null };
     let dmCtx = { id: null };
