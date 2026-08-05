@@ -86,7 +86,7 @@ smart_claude() {
     local start_ts=$(python3 -c "import time; print(time.time())")
 
     # Gọi Claude Code bằng UI gốc
-    claude --model "$model" -p "$prompt" < /dev/null
+    claude --model "$model" -p "$prompt"
 }
 alias ai="smart_claude"
 
@@ -127,7 +127,7 @@ smart_chat() {
         _auto_detect_gateway "$curr_prompt" "$lower_prompt" > /dev/null
 
         # Gọi Claude Code bằng UI gốc
-        claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt" < /dev/null
+        claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt"
     }
 
     # 1. Nếu gõ kèm prompt (ví dụ: `chat! hỏi nhanh...`) -> Xử lý 1 lần
