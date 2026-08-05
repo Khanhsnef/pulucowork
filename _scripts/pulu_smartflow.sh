@@ -93,76 +93,43 @@ alias ai="smart_claude"
 # === SMART CHAT (TTY Interactive Mode & Auto-Detect Engine) ===
 smart_chat() {
     local danger_mode=false
-    local prompt_arg="$*"
+    local prompt=""
 
     if [[ "$1" == "!" ]]; then
         danger_mode=true
         shift
-        prompt_arg="$*"
+        prompt="$*"
+    else
+        prompt="$*"
     fi
 
-    local claude_flags=("--dangerously-skip-permissions")
-
-    # Hàm xử lý từng câu hỏi qua Auto-Detect Engine v3.5
-    _process_single_chat_prompt() {
-        local curr_prompt="$1"
-        local lower_prompt=$(echo "$curr_prompt" | awk '{print tolower($0)}')
-        local model="cc/claude-sonnet-4-6" # Mặc định
-        local task_label="SONNET 4.6 (Max Coding)"
-
-        if [[ "$lower_prompt" =~ (phân tích|chiến lược|kế hoạch|logic|kiến trúc|hệ thống|quy hoạch|tư duy|chiều sâu|đánh đổi|trade-off|p\&l|sla|nguyên nhân gốc rễ|root cause|insight|quyết định|decision|rủi ro|fraud|cung cầu|supply|demand|tâm lý|hành vi) ]]; then
-            model="cc/claude-opus-4-8"
-            task_label="COMBO: PULU-BRAIN-CODE (Opus 4.8 + Sonnet 4.6 + DeepSeek)"
-        elif [[ "$lower_prompt" =~ (dịch thuật|dịch|thông báo|tài xế|zalo|email|chính tả|ngữ pháp|viết lại|caption|kịch bản|nội dung|tóm tắt|đọc file|log) ]]; then
-            model="cc/claude-sonnet-4-6"
-            task_label="COMBO: PULU-DATA-LOG (Gemini Web Free + Sonnet 4.6 + DeepSeek)"
-        elif [[ "$lower_prompt" =~ (hỏi nhanh|giải thích|tính toán|định nghĩa|là gì|như thế nào|thế nào|regex) ]]; then
-            model="cc/claude-sonnet-4-6"
-            task_label="COMBO: PULU-FAST-CLI (DeepSeek V3/R1 + Sonnet 4.6)"
-        elif [[ "$lower_prompt" =~ (trình bày|code|lập trình|html|css|giao diện|ui|ux|lark|docs|báo cáo|định dạng|table|bảng|markdown|website|landing page|sql|git|docker|k8s) ]]; then
-            model="cc/claude-sonnet-4-6"
-            task_label="SONNET 4.6 (Max Coding)"
-        fi
-
-        _auto_detect_gateway "$curr_prompt" "$lower_prompt" > /dev/null
-
-        # Gọi Claude Code bằng UI gốc
-        claude "${claude_flags[@]}" --model "$model" --continue -p "$curr_prompt"
-    }
-
-    # 1. Nếu gõ kèm prompt (ví dụ: `chat! hỏi nhanh...`) -> Xử lý 1 lần
-    if [[ -n "$prompt_arg" ]]; then
-        _process_single_chat_prompt "$prompt_arg"
-        return 0
+    local claude_flags=()
+    if [[ "$danger_mode" == true ]]; then
+        claude_flags+=("--dangerously-skip-permissions")
     fi
 
-    # 2. Nếu chỉ gõ `chat` hoặc `chat!` -> Vào vòng lặp Interactive Auto-Detect
-    echo ""
-    echo "┌── 🤖 PuluSmartFlow Interactive Auto-Detect Chat ─────────────────┐"
-    echo "│ ⚡ CHẾ ĐỘ TỰ ĐỘNG CẤP QUYỀN (--dangerously-skip-permissions)        │"
-    echo "│ Gõ 'exit' hoặc Ctrl+C để thoát                                   │"
-    echo "└───────────────────────────────────────────────────────────────────┘"
-    echo ""
+    local lower_prompt=$(echo "$prompt" | awk '{print tolower($0)}')
+    local model="cc/claude-sonnet-4-6" # Mặc định
 
-    # Set SIGINT trap to prevent shell exit on Ctrl+C
-    trap 'echo ""; continue' INT
+    if [[ "$lower_prompt" =~ (phân tích|chiến lược|kế hoạch|logic|kiến trúc|hệ thống|quy hoạch|tư duy|chiều sâu|đánh đổi|trade-off|p\&l|sla|nguyên nhân gốc rễ|root cause|insight|quyết định|decision|rủi ro|fraud|cung cầu|supply|demand|tâm lý|hành vi) ]]; then
+        model="cc/claude-opus-4-8"
+    elif [[ "$lower_prompt" =~ (dịch thuật|dịch|thông báo|tài xế|zalo|email|chính tả|ngữ pháp|viết lại|caption|kịch bản|nội dung|tóm tắt|đọc file|log) ]]; then
+        model="cc/claude-sonnet-4-6"
+    elif [[ "$lower_prompt" =~ (hỏi nhanh|giải thích|tính toán|định nghĩa|là gì|như thế nào|thế nào|regex) ]]; then
+        model="cc/claude-sonnet-4-6"
+    elif [[ "$lower_prompt" =~ (trình bày|code|lập trình|html|css|giao diện|ui|ux|lark|docs|báo cáo|định dạng|table|bảng|markdown|website|landing page|sql|git|docker|k8s) ]]; then
+        model="cc/claude-sonnet-4-6"
+    fi
 
-    while true; do
-        local user_prompt=""
-        local more_line=""
-        echo -n "💬 Prompt: "
-        # Đọc dòng đầu tiên
-        if ! read -r user_prompt; then
-            echo ""
-            break
-        fi
-        [[ -z "$user_prompt" ]] && continue
-        [[ "$user_prompt" =~ ^(exit|quit|bye|thoát|q)$ ]] && echo "👋 Tạm biệt!" && break
-        
-        _process_single_chat_prompt "$user_prompt"
-    done
+    _auto_detect_gateway "$prompt" "$lower_prompt" > /dev/null
 
-    trap - INT
+    # Nếu có truyền câu hỏi trực tiếp:
+    if [[ -n "$prompt" ]]; then
+        claude "${claude_flags[@]}" --model "$model" --continue -p "$prompt"
+    else
+        # Mở trực tiếp Giao diện TTY gốc của Claude CLI (Chế độ tương tác REPL)
+        claude "${claude_flags[@]}" --model "$model"
+    fi
 }
 alias chat="smart_chat"
 alias "chat!"="smart_chat !"
