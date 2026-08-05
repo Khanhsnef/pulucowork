@@ -282,6 +282,32 @@ function saveNewRequest(data) {
 }
 
 /* ============================================================
+ *  UTILS
+ * ============================================================ */
+function saveCell(id, colName, value) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName("02_DATA_REQUEST");
+  if (!sheet) return { status: 'error', message: 'Không tìm thấy sheet 02_DATA_REQUEST' };
+
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0];
+  const colIndex = headers.indexOf(colName);
+  if (colIndex === -1) return { status: 'error', message: 'Không tìm thấy cột ' + colName };
+
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][0] === id) {
+      sheet.getRange(i + 1, colIndex + 1).setValue(value);
+      return { status: 'success' };
+    }
+  }
+  return { status: 'error', message: 'Không tìm thấy ID: ' + id };
+}
+
+function include(filename) {
+  return HtmlService.createHtmlOutputFromFile(filename).getContent();
+}
+
+/* ============================================================
  *  GATE 1 — LEAD APPROVAL
  * ============================================================ */
 function saveLeadApproval(reqId, decision, note) {
