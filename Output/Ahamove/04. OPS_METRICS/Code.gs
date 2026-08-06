@@ -90,12 +90,9 @@ function getUserRole() {
  *  ENTRY POINT
  * ============================================================ */
 function doGet(e) {
-  const template = HtmlService.createTemplateFromFile("Index");
-  template.config = getAppConfig();
-  template.userEmail = getUserEmail();
-  template.userRole = getUserRole();
-  return template.evaluate()
-    .setTitle(template.config.APP_TITLE || "Tag Request Portal")
+  const tpl = HtmlService.createTemplateFromFile("Index");
+  return tpl.evaluate()
+    .setTitle("Tag Request Portal")
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
@@ -142,6 +139,9 @@ function getAppConfig() {
     SLA_LEAD_HOURS: "4", SLA_DM_HOURS: "8", SLA_QM_HOURS: "24"
   };
   for (const k in defaults) { if (!config[k]) config[k] = defaults[k]; }
+  // Inject user identity so JS can set role/email without template variables
+  config.userEmail = getUserEmail();
+  config.userRole  = getUserRole();
   return config;
 }
 

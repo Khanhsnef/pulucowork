@@ -59,31 +59,12 @@
     };
 
     let requestsData = [];
-    // Read server-injected values from hidden #__srv data attributes (safest injection method)
-    (function() {
-      try {
-        const el = document.getElementById('__srv');
-        if (el) {
-          window._SERVER_USER_EMAIL = el.dataset.email || '';
-          window._SERVER_USER_ROLE  = el.dataset.role  || 'REQUESTER';
-          window._SERVER_CONFIG     = JSON.parse(decodeURIComponent(el.dataset.cfg || '{}'));
-        }
-      } catch(e) {
-        console.error('[__srv parse failed]', e);
-        window._SERVER_USER_EMAIL = '';
-        window._SERVER_USER_ROLE  = 'REQUESTER';
-        window._SERVER_CONFIG     = {};
-      }
-    })();
-    const _srvEmail  = window._SERVER_USER_EMAIL || "";
-    const _srvRole   = window._SERVER_USER_ROLE  || "REQUESTER";
-    const _srvConfig = window._SERVER_CONFIG     || {};
-    let CURRENT_EMAIL = (_srvEmail) ? _srvEmail : (IS_LOCAL ? "nhanvien1@ahamove.com" : "");
-    let CURRENT_ROLE  = (_srvRole)  ? _srvRole  : "REQUESTER";
+    let CURRENT_EMAIL = IS_LOCAL ? "nhanvien1@ahamove.com" : "";
+    let CURRENT_ROLE  = "REQUESTER";
 
     // Ghi đè DEMO_CONFIG bằng config thật từ server
-    if (!IS_LOCAL && _srvConfig && Object.keys(_srvConfig).length > 0) {
-      const srv = _srvConfig;
+    if (false) {
+      const srv = {};
       // Sheet lưu mảng dạng chuỗi "DM, S&P, Growth" → parse về mảng đúng
       if (typeof srv.TEAM_LIST === 'string') {
         srv.TEAM_LIST = srv.TEAM_LIST.split(',').map(s => s.trim()).filter(Boolean);
@@ -114,21 +95,39 @@
     // ===== LOAD DATA =====
     function loadDataFromSheet() {
       if (!IS_LOCAL) {
+        // Step 1: fetch config (TEAM_LIST, TAG_TYPES, role, email)
         google.script.run
-          .withSuccessHandler(res => {
-            if (res && res.data) {
-              requestsData = res.data;
-              if (res.role) { CURRENT_ROLE = res.role; CURRENT_EMAIL = res.email || CURRENT_EMAIL; applyRBAC(); }
-            } else {
-              requestsData = res || [];
+          .withSuccessHandler(cfg => {
+            if (cfg && Object.keys(cfg).length > 0) {
+              if (typeof cfg.TEAM_LIST === 'string') cfg.TEAM_LIST = cfg.TEAM_LIST.split(',').map(s=>s.trim()).filter(Boolean);
+              if (typeof cfg.TAG_TYPES === 'string') cfg.TAG_TYPES = cfg.TAG_TYPES.split(',').map(s=>({value:s.trim(),label:s.trim()})).filter(x=>x.value);
+              Object.assign(DEMO_CONFIG, cfg);
             }
-            renderAll();
+            if (cfg && cfg.userEmail) { CURRENT_EMAIL = cfg.userEmail; CURRENT_ROLE = cfg.userRole || 'REQUESTER'; }
+            populateFormConfig();
+            updateRolePill();
+            // Step 2: fetch rows
+            google.script.run
+              .withSuccessHandler(res => {
+                if (res && res.data) {
+                  requestsData = res.data;
+                  if (res.role) { CURRENT_ROLE = res.role; CURRENT_EMAIL = res.email || CURRENT_EMAIL; updateRolePill(); }
+                } else {
+                  requestsData = res || [];
+                }
+                renderAll();
+              })
+              .withFailureHandler(err => {
+                showToast('Lỗi tải dữ liệu', (err && err.message) || String(err), 'err');
+                if (requestsData.length === 0) { requestsData = mockData(); renderAll(); }
+              })
+              .getSheetDataJson();
           })
           .withFailureHandler(err => {
-            showToast('Lỗi tải dữ liệu', (err && err.message) || String(err), 'err');
-            if (requestsData.length === 0) { requestsData = mockData(); renderAll(); }
+            console.error('[getAppConfig failed]', err);
+            populateFormConfig(); // use DEMO_CONFIG defaults
           })
-          .getSheetDataJson();
+          .getAppConfig();
       } else {
         if (requestsData.length === 0) requestsData = mockData();
         renderAll();
