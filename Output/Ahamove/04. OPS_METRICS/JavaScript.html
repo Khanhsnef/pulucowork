@@ -59,12 +59,16 @@
     };
 
     let requestsData = [];
-    let CURRENT_EMAIL = (typeof SERVER_USER_EMAIL !== "undefined" && SERVER_USER_EMAIL) ? SERVER_USER_EMAIL : "nhanvien1@ahamove.com";
-    let CURRENT_ROLE  = (typeof SERVER_USER_ROLE !== "undefined" && SERVER_USER_ROLE) ? SERVER_USER_ROLE : "REQUESTER"; 
+    // Read server-injected values from window._ vars (set by Index.html base64 block)
+    const _srvEmail  = (typeof window._SERVER_USER_EMAIL !== "undefined") ? window._SERVER_USER_EMAIL : "";
+    const _srvRole   = (typeof window._SERVER_USER_ROLE  !== "undefined") ? window._SERVER_USER_ROLE  : "";
+    const _srvConfig = (typeof window._SERVER_CONFIG     !== "undefined") ? window._SERVER_CONFIG     : {};
+    let CURRENT_EMAIL = (_srvEmail) ? _srvEmail : (IS_LOCAL ? "nhanvien1@ahamove.com" : "");
+    let CURRENT_ROLE  = (_srvRole)  ? _srvRole  : "REQUESTER";
 
     // Ghi đè DEMO_CONFIG bằng config thật từ server
-    if (typeof SERVER_CONFIG !== "undefined" && Object.keys(SERVER_CONFIG).length > 0) {
-      const srv = SERVER_CONFIG;
+    if (!IS_LOCAL && _srvConfig && Object.keys(_srvConfig).length > 0) {
+      const srv = _srvConfig;
       // Sheet lưu mảng dạng chuỗi "DM, S&P, Growth" → parse về mảng đúng
       if (typeof srv.TEAM_LIST === 'string') {
         srv.TEAM_LIST = srv.TEAM_LIST.split(',').map(s => s.trim()).filter(Boolean);

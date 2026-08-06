@@ -203,10 +203,20 @@
   </div>
 
   <script>
-    // Truyền dữ liệu từ Server xuống Client ngay lập tức
-    const SERVER_USER_EMAIL = <?!= JSON.stringify(typeof userEmail !== "undefined" ? userEmail : "") ?>;
-    const SERVER_USER_ROLE  = <?!= JSON.stringify(typeof userRole !== "undefined" ? userRole : "REQUESTER") ?>;
-    const SERVER_CONFIG     = <?!= JSON.stringify(typeof config !== "undefined" ? config : {}) ?>;
+    // Server injects data via base64 to avoid & / < / > breaking inline script parsing
+    try {
+      const SERVER_USER_EMAIL = atob('<?!= Utilities.base64Encode(typeof userEmail !== "undefined" ? userEmail : "", Utilities.Charset.UTF_8) ?>');
+      const SERVER_USER_ROLE  = atob('<?!= Utilities.base64Encode(typeof userRole !== "undefined" ? userRole : "REQUESTER", Utilities.Charset.UTF_8) ?>');
+      const SERVER_CONFIG     = JSON.parse(atob('<?!= Utilities.base64Encode(JSON.stringify(typeof config !== "undefined" ? config : {}), Utilities.Charset.UTF_8) ?>'));
+      window._SERVER_USER_EMAIL = SERVER_USER_EMAIL;
+      window._SERVER_USER_ROLE  = SERVER_USER_ROLE;
+      window._SERVER_CONFIG     = SERVER_CONFIG;
+    } catch(e) {
+      console.error('[Server data injection failed]', e);
+      window._SERVER_USER_EMAIL = '';
+      window._SERVER_USER_ROLE  = 'REQUESTER';
+      window._SERVER_CONFIG     = {};
+    }
   </script>
   <script><?!= include('JavaScript'); ?></script>
 </body>
