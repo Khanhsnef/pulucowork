@@ -122,25 +122,31 @@
     }
 
     window.onerror = function(msg, url, lineNo, columnNo, error) {
-      alert('Lỗi: ' + msg + '\nDòng: ' + lineNo);
+      // alert() bị block trong Apps Script iframe — dùng console thay thế
+      console.error('[onerror] ' + msg + ' line:' + lineNo, error);
       return false;
     };
 
     function initApp() {
       try {
+        console.log('[initApp] start, IS_LOCAL=', IS_LOCAL, 'role=', CURRENT_ROLE, 'email=', CURRENT_EMAIL);
         // Đảm bảo tab luôn click được bằng addEventListener (tránh lỗi block inline onclick)
         const tabReq = document.getElementById('tab-btn-request');
         const tabMaster = document.getElementById('tab-btn-master');
         if (tabReq) tabReq.addEventListener('click', (e) => { e.preventDefault(); switchTab('tab-request'); });
         if (tabMaster) tabMaster.addEventListener('click', (e) => { e.preventDefault(); switchTab('tab-master'); });
 
-        loadDataFromSheet();
         populateFormConfig();
+        console.log('[initApp] populateFormConfig OK, TEAM_LIST=', DEMO_CONFIG.TEAM_LIST);
         updateRolePill();
         renderAll();
+        console.log('[initApp] renderAll OK');
         selectRequestCategory('Tạo tag mới');
+        loadDataFromSheet();
+        console.log('[initApp] done');
       } catch (err) {
-        alert('Lỗi khởi tạo UI: ' + err.message);
+        console.error('[initApp crash]', err);
+        showToast('Lỗi khởi tạo UI', (err && err.message) || String(err), 'err');
       }
     }
 
@@ -157,7 +163,7 @@
       const setText = (id, val) => { const el = document.getElementById(id); if (el && val != null) el.textContent = val; };
 
       // Tiêu đề & nhãn
-      document.title = C.APP_TITLE + ' | DEMO Inline (Offline Preview)';
+      try { document.title = C.APP_TITLE; } catch(e) { /* Apps Script iframe disallows title writes */ }
       setText('app-title', C.APP_TITLE);
       setText('app-subtitle', C.APP_SUBTITLE);
       setText('form-title', '📝 ' + C.FORM_TITLE);
