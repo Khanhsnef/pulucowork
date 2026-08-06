@@ -90,24 +90,7 @@ function getUserRole() {
  *  ENTRY POINT
  * ============================================================ */
 function doGet(e) {
-  var css = HtmlService.createHtmlOutputFromFile('Stylesheet').getContent();
-  var js  = HtmlService.createHtmlOutputFromFile('JavaScript').getContent();
-  var cfg = getAppConfig();
-  // Inject config as JSON via a hidden textarea — zero encoding risk
-  var cfgJson = JSON.stringify(cfg);
-  var html = '<!DOCTYPE html>\n'
-    + '<html lang="vi"><head>'
-    + '<meta charset="UTF-8">'
-    + '<meta name="viewport" content="width=device-width,initial-scale=1">'
-    + '<title>Tag Request Portal</title>'
-    + '<link rel="preconnect" href="https://fonts.googleapis.com">'
-    + '<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">'
-    + '<style>' + css + '</style>'
-    + '</head><body>'
-    + '<textarea id="__cfg" style="display:none">' + cfgJson + '</textarea>'
-    + '<script>' + js + '</script>'
-    + '</body></html>';
-  return HtmlService.createHtmlOutput(html)
+  return HtmlService.createHtmlOutputFromFile('Portal')
     .setTitle('Tag Request Portal')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');

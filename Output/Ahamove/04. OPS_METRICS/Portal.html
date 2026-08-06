@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tag Request Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0F172A; --bg-secondary: #1E293B; --bg-card: rgba(30, 41, 59, 0.7);
+      --border-color: rgba(255, 255, 255, 0.1); --text-primary: #F8FAFC; --text-secondary: #94A3B8; --text-muted: #64748B;
+      --accent-teal: #0D9488; --accent-teal-light: #14B8A6; --accent-indigo: #4F46E5; --accent-indigo-light: #6366F1;
+      --accent-amber: #D97706; --accent-emerald: #059669; --accent-rose: #E11D48;
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.5; min-height: 100vh; padding-bottom: 60px; }
+    .app-container { max-width: 1500px; margin: 0 auto; padding: 24px; }
+
+    header { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95)); backdrop-filter: blur(12px); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px 28px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-lg); flex-wrap: wrap; gap: 16px; }
+    .brand-title { display: flex; align-items: center; gap: 14px; }
+    .brand-icon { width: 46px; height: 46px; background: linear-gradient(135deg, var(--accent-teal), var(--accent-indigo)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 0 20px rgba(20, 184, 166, 0.4); }
+    .brand-text h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; background: linear-gradient(to right, #FFFFFF, #CBD5E1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand-text p { font-size: 13px; color: var(--text-secondary); }
+    .brand-text a { color: var(--accent-teal-light); text-decoration: underline; font-weight: 600; }
+
+    .user-chip { display: flex; align-items: center; gap: 10px; }
+    .role-pill { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; padding: 3px 10px; border-radius: 10px; display:inline-block; }
+    .role-DM { background: rgba(13, 148, 136, 0.25); color: #5EEAD4; }
+    .role-TEAM_LEAD { background: rgba(99, 102, 241, 0.25); color: #C7D2FE; }
+    .role-QM { background: rgba(217, 119, 6, 0.25); color: #FCD34D; }
+    .role-REQUESTER { background: rgba(148, 163, 184, 0.2); color: #CBD5E1; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .kpi-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px 20px; backdrop-filter: blur(8px); position: relative; overflow: hidden; }
+    .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-teal); }
+    .kpi-card.pending-lead::before { background: var(--accent-indigo-light); }
+    .kpi-card.pending-dm::before { background: var(--accent-amber); }
+    .kpi-card.pending-qm::before { background: var(--accent-teal-light); }
+    .kpi-card.done::before { background: var(--accent-emerald); }
+    .kpi-title { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; }
+    .kpi-value { font-size: 26px; font-weight: 800; margin: 6px 0 2px; font-family: 'JetBrains Mono', monospace; }
+    .kpi-sub { font-size: 12px; color: var(--text-muted); }
+
+    .stepper-wrap { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 24px; backdrop-filter: blur(8px); }
+    .stepper-title { font-size: 13px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 16px; display:flex; align-items:center; gap:8px; }
+    .stepper { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+    .step { display: flex; align-items: center; }
+    .step-node { display: flex; align-items: center; gap: 10px; }
+    .step-circle { width: 38px; height: 38px; border-radius: 50%; display:flex; align-items:center; justify-content:center; font-size: 17px; font-weight: 800; border: 2px solid var(--border-color); background: rgba(15,23,42,0.6); flex-shrink:0; }
+    .step-1 .step-circle, .step-2 .step-circle { border-color: #6366F1; color: #C7D2FE; }
+    .step-3 .step-circle { border-color: var(--accent-amber); color: #FCD34D; }
+    .step-4 .step-circle { border-color: var(--accent-teal-light); color: #5EEAD4; }
+    .step-label b { font-size: 14px; color: #FFF; display:block; }
+    .step-label span { font-size: 11px; color: var(--text-muted); }
+    .step-arrow { color: var(--text-muted); font-size: 22px; margin: 0 18px; }
+    .step-branch { font-size: 11px; color: #A5B4FC; background: rgba(99,102,241,0.12); border:1px dashed rgba(99,102,241,0.4); border-radius: 8px; padding: 6px 12px; margin-top: 14px; display:inline-flex; align-items:center; gap:6px; }
+
+    .tabs-nav { display: flex; gap: 8px; border-bottom: 1px solid var(--border-color); margin-bottom: 24px; padding-bottom: 2px; overflow-x: auto; }
+    .tab-btn { background: transparent; border: none; color: var(--text-secondary); padding: 12px 20px; font-size: 14px; font-weight: 600; font-family: inherit; border-radius: var(--radius-sm) var(--radius-sm) 0 0; cursor: pointer; display: flex; align-items: center; gap: 8px; white-space: nowrap; position: relative; }
+    .tab-btn:hover { color: #FFF; background: rgba(255, 255, 255, 0.04); }
+    .tab-btn.active { color: var(--accent-teal-light); background: rgba(13, 148, 136, 0.12); }
+    .tab-btn.active::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 100%; height: 3px; background: var(--accent-teal-light); }
+    .badge-count { background: rgba(255, 255, 255, 0.15); color: #FFF; font-size: 11px; padding: 2px 7px; border-radius: 10px; font-weight: 700; }
+    .tab-btn.active .badge-count { background: var(--accent-teal); }
+
+    .tab-panel { display: none; animation: fadeIn 0.3s ease; }
+    .tab-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .panel-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-lg); backdrop-filter: blur(12px); margin-bottom: 24px; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border-color); gap: 12px; flex-wrap: wrap; }
+    .card-header h2 { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+
+    .filter-chips { display:flex; gap:6px; flex-wrap:wrap; }
+    .chip { background: rgba(15,23,42,0.6); border:1px solid var(--border-color); color:var(--text-secondary); font-size:12px; font-weight:600; padding:5px 12px; border-radius:20px; cursor:pointer; }
+    .chip.active { background: rgba(13,148,136,0.2); border-color: var(--accent-teal-light); color:#5EEAD4; }
+
+    .category-toggle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 8px; }
+    .category-option { position: relative; background: rgba(15, 23, 42, 0.4); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: var(--transition); user-select: none; opacity: 0.65; }
+    .category-option:hover { opacity: 0.95; border-color: rgba(20, 184, 166, 0.5); background: rgba(30, 41, 59, 0.8); }
+    .category-option.active { opacity: 1; border-color: var(--accent-teal-light); background: rgba(13, 148, 136, 0.18); box-shadow: 0 0 20px rgba(20, 184, 166, 0.3); }
+    .category-option.active.add-tag-active { opacity: 1; border-color: #818CF8; background: rgba(99, 102, 241, 0.18); box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+    .opt-icon { font-size: 28px; }
+    .opt-text { flex: 1; }
+    .opt-title { font-size: 15px; font-weight: 700; color: #FFF; }
+    .opt-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .opt-check { margin-left: auto; background: var(--accent-emerald); color: #FFF; font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 20px; white-space: nowrap; box-shadow: 0 0 12px rgba(5, 150, 105, 0.5); display: flex; align-items: center; gap: 4px; }
+    .add-tag-active .opt-check { background: #6366F1; box-shadow: 0 0 12px rgba(99, 102, 241, 0.5); }
+
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full-width { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    input, select, textarea { background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px 14px; color: #FFF; font-family: inherit; font-size: 14px; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent-teal-light); }
+
+    .btn { background: linear-gradient(135deg, var(--accent-teal), #0F766E); color: #FFF; border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; font-family: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-secondary { background: rgba(255, 255, 255, 0.1); }
+    .btn-success { background: linear-gradient(135deg, var(--accent-emerald), #047857); }
+    .btn-danger { background: linear-gradient(135deg, var(--accent-rose), #9F1239); }
+    .btn-xs { padding: 5px 11px; font-size: 12px; }
+
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; }
+    th { background: rgba(15, 23, 42, 0.8); color: var(--text-secondary); padding: 9px 10px; font-weight: 700; text-transform: uppercase; font-size: 11px; border-bottom: 2px solid var(--border-color); white-space: nowrap; text-align: center; }
+    td { padding: 9px 10px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); vertical-align: middle; white-space: nowrap; text-align: center; }
+    tr:hover td { background: rgba(255, 255, 255, 0.03); }
+    .by-note { font-size: 10px; color: var(--text-secondary); margin-top: 4px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+    .sub-name { font-size: 11px; color: var(--text-secondary); margin-top: 4px; white-space: nowrap; }
+    .flow-wrap { background: rgba(15,23,42,0.5); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 16px; }
+    .flow-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:6px; flex-wrap:wrap; }
+    .flow-head h3 { font-size:14px; font-weight:700; color:var(--text-primary); margin:0; }
+    .flow-sel { font-size:12px; color:var(--text-secondary); }
+    .flow-sel strong { color:var(--accent-teal-light); font-family:'JetBrains Mono',monospace; }
+    .flow-svg { width:100%; height:auto; display:block; overflow:visible; }
+    .flow-legend { display:flex; gap:16px; flex-wrap:wrap; font-size:11px; color:var(--text-secondary); margin-top:8px; }
+    .flow-legend span { display:inline-flex; align-items:center; gap:5px; }
+    .flow-legend i { width:11px; height:11px; border-radius:3px; display:inline-block; }
+    .fl-active { animation: flpulse 1.4s ease-in-out infinite; }
+    @keyframes flpulse { 0%,100%{ opacity:1 } 50%{ opacity:.5 } }
+    .mini-stepper { display:flex; align-items:flex-start; justify-content:center; gap:0; padding-top:14px; }
+    .ms-step { display:flex; flex-direction:column; align-items:center; gap:4px; width:92px; }
+    .ms-dot { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; border:2px solid transparent; box-shadow:0 3px 8px rgba(0,0,0,.4); }
+    .ms-dot.done { background:var(--accent-emerald); color:#fff; }
+    .ms-dot.active { background:var(--accent-amber); color:#fff; border-color:#FBBF24; box-shadow:0 0 10px rgba(251,191,36,.7), 0 0 20px rgba(245,158,11,.45); animation:dotneon 1.6s ease-in-out infinite; }
+    @keyframes dotspin { to { transform:rotate(360deg); } }
+    @keyframes dotneon { 0%,100%{ box-shadow:0 0 10px rgba(251,191,36,.7), 0 0 20px rgba(245,158,11,.45);} 50%{ box-shadow:0 0 16px rgba(251,191,36,.95), 0 0 34px rgba(245,158,11,.75);} }
+    .dot-spinner { width:26px; height:26px; border-radius:50%; border:3px solid rgba(255,255,255,.18); border-top-color:#FFFBEB; border-right-color:#FDE68A; animation:dotspin .75s linear infinite; filter:drop-shadow(0 0 4px rgba(255,255,255,.95)) drop-shadow(0 0 8px rgba(253,230,138,.9)); }
+    .ms-dot.todo { background:rgba(100,116,139,0.35); color:var(--text-muted); }
+    .ms-dot.skip { background:var(--accent-indigo); color:#fff; }
+    .ms-dot.rej  { background:var(--accent-rose); color:#fff; }
+    .ms-label { font-size:10px; font-weight:600; color:var(--text-secondary); white-space:nowrap; }
+    .ms-meta { font-size:10px; color:var(--text-muted); white-space:nowrap; line-height:1.35; min-height:14px; }
+    .ms-meta.actor { color:var(--accent-teal-light); font-family:'JetBrains Mono',monospace; }
+    .ms-meta.hot { color:#F87171; font-weight:600; }
+    .ms-meta.skip { color:var(--accent-indigo-light); font-weight:600; }
+    .ms-conn { height:3px; width:40px; margin-top:16px; background:rgba(100,116,139,0.35); border-radius:2px; }
+    .ms-conn.done { background:var(--accent-emerald); }
+    .ms-action-row { display:flex; justify-content:center; margin-bottom:12px; }
+    .ms-action { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; }
+    .ms-action .btn-xs { justify-content:center; border-radius:999px; }
+    .ms-dot-wrap { position:relative; display:flex; align-items:center; justify-content:center; overflow:visible; }
+    .dot-btn { position:absolute; bottom:calc(100% - 8px); display:inline-flex; align-items:center; justify-content:center; border:1.5px solid var(--bg-primary); color:#fff; cursor:pointer; width:22px; height:22px; padding:0; border-radius:999px; font-weight:800; font-size:12px; overflow:hidden; white-space:nowrap; z-index:5; transition:width .22s ease, padding .2s ease, transform .18s ease, box-shadow .18s ease, filter .18s ease; }
+    .dot-btn.top { left:calc(50% + 3px); }
+    .dot-btn.bot { right:calc(50% + 3px); flex-direction:row-reverse; }
+    .dot-btn.btn-success { background:linear-gradient(135deg,#14B8A6,#059669); border-color:rgba(52,211,153,.9); box-shadow:0 0 8px rgba(16,185,129,.75), 0 0 16px rgba(16,185,129,.5); }
+    .dot-btn.btn-danger  { background:linear-gradient(135deg,#FB7185,#E11D48); border-color:rgba(251,113,133,.9); box-shadow:0 0 8px rgba(244,63,94,.75), 0 0 16px rgba(244,63,94,.5); }
+    .dot-btn .bi { line-height:1; }
+    .dot-btn .bl { max-width:0; opacity:0; overflow:hidden; transition:max-width .22s ease, opacity .16s ease, margin .18s ease; }
+    .ms-step.has-btns:hover .dot-btn { width:auto; padding:5px 13px; bottom:calc(100% + 2px); filter:brightness(1.08); }
+    .ms-step.has-btns:hover .dot-btn.top .bl { max-width:130px; opacity:1; margin-left:5px; }
+    .ms-step.has-btns:hover .dot-btn.bot .bl { max-width:130px; opacity:1; margin-right:5px; }
+    .ms-step.has-btns:hover .dot-btn.btn-success { box-shadow:0 0 12px rgba(16,185,129,.95), 0 0 24px rgba(16,185,129,.65); }
+    .ms-step.has-btns:hover .dot-btn.btn-danger  { box-shadow:0 0 12px rgba(244,63,94,.95), 0 0 24px rgba(244,63,94,.65); }
+    .ms-action .btn-xs { border-radius:999px; padding:7px 16px; font-size:12px; font-weight:700; letter-spacing:.2px; border:1px solid rgba(255,255,255,.14); position:relative; overflow:hidden; transition:transform .18s ease, box-shadow .18s ease, filter .18s ease; }
+    .ms-action .btn-success { background:linear-gradient(135deg,#14B8A6,#059669); box-shadow:0 2px 10px rgba(5,150,105,.35); }
+    .ms-action .btn-danger  { background:linear-gradient(135deg,#FB7185,#E11D48); box-shadow:0 2px 10px rgba(225,29,72,.32); }
+    .ms-action .btn-xs:hover { transform:translateY(-1px) scale(1.03); filter:brightness(1.08); }
+    .ms-action .btn-success:hover { box-shadow:0 4px 18px rgba(16,185,129,.6); }
+    .ms-action .btn-danger:hover  { box-shadow:0 4px 18px rgba(244,63,94,.6); }
+    .ms-action .btn-xs:active { transform:translateY(0) scale(.98); }
+    .ms-action select { background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border-color); border-radius:999px; padding:7px 14px; font-size:12px; font-weight:600; cursor:pointer; }
+    .ms-action select:focus { outline:none; border-color:var(--accent-teal-light); box-shadow:0 0 0 3px rgba(20,184,166,.2); }
+    .qm-inline { display:flex; justify-content:center; }
+    .qm-inline select { appearance:none; -webkit-appearance:none; color:#fff; border:1.5px solid var(--bg-primary); border-radius:999px; padding:5px 28px 5px 14px; font-size:12px; font-weight:700; cursor:pointer; box-shadow:0 2px 8px rgba(5,150,105,.4); background-image:linear-gradient(135deg,#14B8A6,#059669),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 3.5L5 6.5L8 3.5' stroke='white' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>"); background-repeat:no-repeat; background-position:right 9px center; transition:transform .18s ease, box-shadow .18s ease, filter .18s ease; }
+    .qm-inline select:hover { transform:translateY(-1px) scale(1.03); box-shadow:0 4px 16px rgba(16,185,129,.6); filter:brightness(1.08); }
+    .qm-inline select:focus { outline:none; box-shadow:0 0 0 3px rgba(20,184,166,.3); }
+    .qm-inline select option { background:var(--bg-secondary); color:var(--text-primary); }
+    .ms-wait { font-size:11px; color:var(--text-muted); font-style:italic; }
+    .reject-note { margin-top:6px; font-size:10px; line-height:1.45; color:#F87171; text-align:left; max-width:180px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; cursor:help; }
+    .reject-note b { color:#FCA5A5; }
+    .ms-wait.ok  { color:var(--accent-emerald); font-style:normal; font-weight:600; }
+    .ms-wait.rej { color:#F87171; font-style:normal; }
+    .link-detail { display:block; text-align:center; color:var(--text-muted); font-size:11px; cursor:pointer; text-decoration:none; transition:var(--transition); white-space:nowrap; }
+    .link-detail:hover { color:var(--accent-teal-light); }
+    .tl-head { display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--text-secondary); margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border-color); }
+    .tl-head b { color:var(--text-primary); }
+    .timeline { position:relative; padding-left:8px; }
+    .tl-item { position:relative; padding:0 0 18px 30px; }
+    .tl-item:before { content:''; position:absolute; left:9px; top:20px; bottom:-4px; width:2px; background:var(--border-color); }
+    .tl-item:last-child:before { display:none; }
+    .tl-node { position:absolute; left:0; top:0; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; }
+    .tl-node.ok { background:var(--accent-emerald); }
+    .tl-node.rej { background:var(--accent-rose); }
+    .tl-node.skip { background:var(--accent-indigo); }
+    .tl-node.wait { background:var(--accent-amber); }
+    .tl-title { font-size:13px; font-weight:700; color:var(--text-primary); }
+    .tl-meta { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+    .tl-meta .tl-actor { color:var(--accent-teal-light); font-family:'JetBrains Mono',monospace; }
+    .tl-ts { font-size:11px; color:var(--text-muted); font-family:'JetBrains Mono',monospace; }
+    .tl-note { font-size:12px; color:var(--text-secondary); margin-top:5px; background:rgba(15,23,42,0.5); border-left:3px solid var(--accent-amber); padding:6px 10px; border-radius:6px; }
+    .row-click { cursor:pointer; }
+    .code-tag { white-space: nowrap; }
+    .date-note { font-size: 11px; color: var(--text-secondary); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+    .dl-note { font-size: 10px; color: var(--text-muted); margin-top: 5px; white-space: nowrap; }
+    .dl-note.hot { color: #F87171; }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .status-approved { background: rgba(5, 150, 105, 0.2); color: #34D399; border: 1px solid rgba(5, 150, 105, 0.4); }
+    .status-pending { background: rgba(217, 119, 6, 0.2); color: #FBBF24; border: 1px solid rgba(217, 119, 6, 0.4); }
+    .status-rejected { background: rgba(225, 29, 72, 0.2); color: #F87171; border: 1px solid rgba(225, 29, 72, 0.4); }
+    .status-processing { background: rgba(14, 165, 233, 0.2); color: #38BDF8; border: 1px solid rgba(14, 165, 233, 0.4); }
+    .status-bypass { background: rgba(99, 102, 241, 0.2); color: #A5B4FC; border: 1px solid rgba(99, 102, 241, 0.4); }
+    .status-lead { background: rgba(99, 102, 241, 0.2); color: #C7D2FE; border: 1px solid rgba(99, 102, 241, 0.4); }
+    .status-done { background: rgba(5, 150, 105, 0.28); color: #6EE7B7; border: 1px solid rgba(5, 150, 105, 0.5); }
+    .breach-badge { display:inline-flex; align-items:center; gap:4px; background: rgba(225, 29, 72, 0.25); color:#FCA5A5; border:1px solid rgba(225,29,72,0.5); font-size:10px; font-weight:800; padding:2px 8px; border-radius:10px; margin-left:6px; animation: pulse 1.6s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.55;} }
+    .code-tag { font-family: 'JetBrains Mono', monospace; background: rgba(0, 0, 0, 0.4); padding: 3px 8px; border-radius: 4px; color: #38BDF8; font-size: 12px; border: 1px solid rgba(56, 189, 248, 0.2); }
+    .workflow-notice { background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: #7DD3FC; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .empty-hint { text-align:center; color:var(--text-muted); padding: 20px; }
+    .act-wrap { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+    .muted-note { color:var(--text-muted); font-size:12px; }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 999; opacity: 0; pointer-events: none; transition: var(--transition); }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 90%; max-width: 640px; padding: 24px; box-shadow: var(--shadow-lg); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+    #toast-wrap { position: fixed; top: 20px; right: 20px; z-index: 1200; display:flex; flex-direction:column; gap:10px; }
+    .toast { min-width: 280px; max-width: 380px; background: var(--bg-secondary); border:1px solid var(--border-color); border-left: 4px solid var(--accent-teal-light); border-radius: var(--radius-md); padding: 14px 16px; box-shadow: var(--shadow-lg); display:flex; gap:12px; align-items:flex-start; animation: slideIn 0.3s ease; }
+    .toast.ok { border-left-color: var(--accent-emerald); }
+    .toast.warn { border-left-color: var(--accent-amber); }
+    .toast.err { border-left-color: var(--accent-rose); }
+    .toast-ic { font-size: 20px; }
+    .toast-body b { display:block; font-size: 14px; color:#FFF; margin-bottom:2px; }
+    .toast-body span { font-size: 12px; color: var(--text-secondary); }
+    @keyframes slideIn { from { transform: translateX(40px); opacity:0; } to { transform: translateX(0); opacity:1; } }
+    .loading-overlay { position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,23,42,0.85); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2000; gap:16px; }
+    .loading-overlay p { color:#94A3B8; font-size:14px; }
+  </style>
+</head>
+<body>
+
+  <div id="toast-wrap"></div>
+
+  <div id="loading-screen" class="loading-overlay">
+    <div class="dot-spinner" style="width:40px;height:40px;border-width:4px;"></div>
+    <p>Đang tải dữ liệu...</p>
+  </div>
+
+  <div class="app-container">
+
+    <header>
+      <div class="brand-title">
+        <div class="brand-icon">🏷️</div>
+        <div class="brand-text">
+          <h1 id="app-title">Tag Request Portal</h1>
+          <p><span id="app-subtitle">Spreadsheet Target:</span> <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4/edit" target="_blank">Google Sheet Target</a></p>
+        </div>
+      </div>
+      <div class="user-chip">
+        <span class="role-pill role-REQUESTER" id="user-role-pill">Đang tải...</span>
+      </div>
+    </header>
+
+    <div class="stepper-wrap">
+      <div class="stepper-title">🧭 Luồng Phê Duyệt Đa Tầng (Multi-Gate Approval)</div>
+      <div class="stepper">
+        <div class="step step-1"><div class="step-node"><div class="step-circle">1</div><div class="step-label"><b>Requester</b><span>Team tạo request</span></div></div></div>
+        <span class="step-arrow">→</span>
+        <div class="step step-2"><div class="step-node"><div class="step-circle">2</div><div class="step-label"><b>Lead / Head</b><span>Duyệt cấp team</span></div></div></div>
+        <span class="step-arrow">→</span>
+        <div class="step step-3"><div class="step-node"><div class="step-circle">3</div><div class="step-label"><b>DM Review</b><span>Thẩm định tag mới</span></div></div></div>
+        <span class="step-arrow">→</span>
+        <div class="step step-4"><div class="step-node"><div class="step-circle">4</div><div class="step-label"><b>QM Add Tag</b><span>Tạo / gắn tag TX</span></div></div></div>
+      </div>
+      <div class="step-branch">⚡ Add tag có sẵn: Lead duyệt xong → bỏ qua DM → thẳng QM (rút gọn 1 gate)</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-title">Tổng Yêu Cầu</div><div class="kpi-value" id="kpi-total">0</div><div class="kpi-sub">Ghi nhận trên hệ thống</div></div>
+      <div class="kpi-card pending-lead"><div class="kpi-title">Chờ Lead Duyệt</div><div class="kpi-value" id="kpi-pending-lead">0</div><div class="kpi-sub">SLA: ≤ <span id="sla-lead">4</span>h</div></div>
+      <div class="kpi-card pending-dm"><div class="kpi-title">Chờ DM Review</div><div class="kpi-value" id="kpi-pending-dm">0</div><div class="kpi-sub">SLA: ≤ <span id="sla-dm">8</span>h</div></div>
+      <div class="kpi-card pending-qm"><div class="kpi-title">Chờ QM Add Tags</div><div class="kpi-value" id="kpi-pending-qm">0</div><div class="kpi-sub">SLA: ≤ <span id="sla-qm">24</span>h</div></div>
+      <div class="kpi-card done"><div class="kpi-title">Hoàn Thành (Done)</div><div class="kpi-value" id="kpi-done">0</div><div class="kpi-sub">Đã add tag thành công</div></div>
+    </div>
+
+    <div class="tabs-nav">
+      <button class="tab-btn active" data-tab="tab-request" id="tab-btn-request" onclick="switchTab('tab-request')">📝 Tạo Request</button>
+      <button class="tab-btn" data-tab="tab-master" id="tab-btn-master" onclick="switchTab('tab-master')"><span id="tab-btn-master-label">📊 Master Request Tracker</span> <span class="badge-count" id="badge-open-count">0</span></button>
+    </div>
+
+    <!-- TAB 1: REQUEST -->
+    <div id="tab-request" class="tab-panel active">
+      <div class="panel-card">
+        <div class="card-header"><h2 id="form-title">📝 Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM</h2></div>
+        <form id="tag-request-form" onsubmit="handleFormSubmit(event)">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 14px; font-weight: 700; color: #F8FAFC; margin-bottom: 10px; display: block;">Select Request Type *</label>
+            <div class="category-toggle-grid">
+              <div class="category-option active" id="btn-cat-create" onclick="selectRequestCategory('Tạo tag mới')">
+                <div class="opt-icon">🏷️</div>
+                <div class="opt-text"><div class="opt-title">CREATE NEW TAGS</div><div class="opt-desc">New tag → Lead approval → DM Review → QM (all 3 gates)</div></div>
+                <div class="opt-check" id="check-cat-create">✓ Selected</div>
+              </div>
+              <div class="category-option" id="btn-cat-add" onclick="selectRequestCategory('Add tag')">
+                <div class="opt-icon">⚡</div>
+                <div class="opt-text"><div class="opt-title">ADD TAGS</div><div class="opt-desc">Existing tag → Lead approval → skip DM → straight to QM</div></div>
+                <div class="opt-check" id="check-cat-add" style="display:none;">✓ Selected</div>
+              </div>
+            </div>
+            <input type="hidden" id="req-category" value="Tạo tag mới">
+          </div>
+
+          <div class="workflow-notice full-width" id="workflow-notice-bar">
+            <span>👔 <strong>Luồng Tạo Tag Mới:</strong> Gửi xong request về <strong>Master</strong> ở trạng thái Chờ Lead duyệt → DM Review → QM.</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Requesting Team *</label>
+              <select id="req-team" required>
+                <option value="">-- Select Team --</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Requester Full Name *</label><input type="text" id="req-name" placeholder="e.g. Nguyen Van A" required></div>
+            <div class="form-group">
+              <label>Tag Type *</label>
+              <select id="req-type" required>
+              </select>
+            </div>
+            <div class="form-group"><label id="lbl-tag-name">Suggested Tag Name / Objective *</label><input type="text" id="req-tag-name" placeholder="e.g. TAG_HUB_SOC_NIGHT_OFFLOAD" required></div>
+            <div class="form-group" id="group-driver-source-type" style="display:none;">
+              <label style="color:#FBBF24;">Driver List Source Method *</label>
+              <select id="req-driver-source-type" onchange="updateDriverSourcePlaceholder()">
+                <option value="Link GoogleSheet">Google Sheet Link</option>
+                <option value="Card Metabase">Metabase Card URL</option>
+              </select>
+            </div>
+            <div class="form-group full-width" id="group-driver-source-url" style="display:none;">
+              <label style="color:#FBBF24;" id="lbl-driver-source-url">Driver List URL (Google Sheet / Metabase) *</label>
+              <input type="text" id="req-driver-source-val" placeholder="https://docs.google.com/spreadsheets/d/...">
+            </div>
+            <div class="form-group">
+              <label>Application Start Date *</label>
+              <input type="date" id="req-apply-from" required>
+            </div>
+            <div class="form-group">
+              <label style="color:#FBBF24;">Deadline *</label>
+              <input type="date" id="req-deadline" required>
+            </div>
+            <div class="form-group full-width"><label>Business Rationale &amp; Driver Selection Criteria *</label><textarea id="req-reason" rows="3" placeholder="State business objective, expected ROI, driver selection criteria..." required></textarea></div>
+          </div>
+          <div style="margin-top: 20px; display:flex; justify-content:flex-end; gap:12px;">
+            <button type="submit" class="btn" id="submit-btn">🚀 Gửi Đề Xuất Tới Lead Duyệt</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- TAB 2: MASTER -->
+    <div id="tab-master" class="tab-panel">
+      <div class="panel-card">
+        <div class="card-header">
+          <h2>📊 Master Request Tracker <span class="muted-note" style="font-weight:400;">— duyệt ngay trên dòng theo lượt của bạn</span></h2>
+          <div class="filter-chips" id="filter-chips">
+            <span class="chip active" data-filter="ALL" onclick="setFilter('ALL')">Tất cả</span>
+            <span class="chip" data-filter="MINE" onclick="setFilter('MINE')">⚡ Cần tôi xử lý</span>
+            <span class="chip" data-filter="PENDING_TEAM_LEAD" onclick="setFilter('PENDING_TEAM_LEAD')">Chờ Lead</span>
+            <span class="chip" data-filter="PENDING_DM" onclick="setFilter('PENDING_DM')">Chờ DM</span>
+            <span class="chip" data-filter="PENDING_QM" onclick="setFilter('PENDING_QM')">Chờ QM</span>
+            <span class="chip" data-filter="DONE" onclick="setFilter('DONE')">Done</span>
+            <span class="chip" data-filter="REJECTED" onclick="setFilter('REJECTED')">Rejected</span>
+          </div>
+        </div>
+        <div class="flow-wrap">
+          <div class="flow-head">
+            <h3>🔀 Sơ Đồ Luồng Duyệt</h3>
+            <div class="flow-sel" id="flow-sel">Bấm 1 dòng bên dưới để xem request đang ở bước nào · <strong id="flow-sel-id">—</strong></div>
+          </div>
+          <div id="flow-svg-host"></div>
+          <div class="flow-legend">
+            <span><i style="background:#059669"></i> Đã qua</span>
+            <span><i style="background:#D97706"></i> Đang chờ</span>
+            <span><i style="background:rgba(100,116,139,.5)"></i> Chưa tới</span>
+            <span><i style="background:#4F46E5"></i> Bỏ qua (Add tag)</span>
+            <span><i style="background:#E11D48"></i> Từ chối</span>
+          </div>
+        </div>
+        <div class="table-responsive"><table>
+          <thead><tr>
+            <th style="min-width:110px;">Mã Request</th><th style="min-width:96px;">Hình Thức</th><th style="min-width:120px;">Team / Người Tạo</th><th style="min-width:120px;">Tag</th>
+            <th style="min-width:500px;">Tiến Trình · Hành Động</th><th style="width:190px;">Chi Tiết</th>
+          </tr></thead>
+          <tbody id="master-tbody"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL: DM APPROVE -->
+  <div class="modal-overlay" id="dm-modal">
+    <div class="modal-card">
+      <div class="modal-header"><h3>🛡️ DM Duyệt &amp; Gán Mã Tag: <span id="modal-req-id"></span></h3><button class="btn btn-secondary" onclick="closeModal('dm-modal')">✖</button></div>
+      <div class="form-grid">
+        <div class="form-group full-width"><label>Chi Tiết Request</label><div id="modal-details" style="font-size:13px; background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; color:#CBD5E1;"></div></div>
+        <div class="form-group full-width"><label>Gán Mã Tag Chuẩn (taxonomy QM sẽ dùng) *</label><input type="text" id="modal-dm-tag-code" placeholder="VD: DM_TAG_HUB_LH_VIP_V1"></div>
+        <div class="form-group full-width"><label>Ghi Chú Thẩm Định (tùy chọn)</label><textarea id="modal-dm-note" rows="2" placeholder="Căn cứ phê duyệt..."></textarea></div>
+      </div>
+      <div style="margin-top: 18px; display:flex; justify-content:flex-end; gap:10px;"><button class="btn btn-secondary" onclick="closeModal('dm-modal')">Hủy</button><button class="btn btn-success" onclick="submitDMApprove()">✓ Duyệt &amp; Chuyển QM</button></div>
+    </div>
+  </div>
+
+  <!-- MODAL: REJECT -->
+  <div class="modal-overlay" id="reject-modal">
+    <div class="modal-card">
+      <div class="modal-header"><h3>✕ Từ Chối Request: <span id="reject-req-id"></span></h3><button class="btn btn-secondary" onclick="closeModal('reject-modal')">✖</button></div>
+      <div class="form-grid">
+        <div class="form-group full-width"><label>Lý Do Từ Chối * <span class="muted-note">(requester sẽ thấy để sửa &amp; gửi lại)</span></label><textarea id="reject-note" rows="3" placeholder="Nêu rõ lý do..."></textarea></div>
+      </div>
+      <div style="margin-top: 18px; display:flex; justify-content:flex-end; gap:10px;"><button class="btn btn-secondary" onclick="closeModal('reject-modal')">Hủy</button><button class="btn btn-danger" onclick="submitReject()">✕ Xác Nhận Từ Chối</button></div>
+    </div>
+  </div>
+
+  <!-- MODAL: TIMELINE -->
+  <div class="modal-overlay" id="timeline-modal">
+    <div class="modal-card" style="max-width:560px;">
+      <div class="modal-header"><h3>📜 Tiến Trình &amp; Nhật Ký: <span id="tl-req-id"></span></h3><button class="btn btn-secondary" onclick="closeModal('timeline-modal')">✖</button></div>
+      <div class="tl-head" id="tl-head"></div>
+      <div class="timeline" id="tl-body"></div>
+    </div>
+  </div>
+
+  <script>
+    // ===== PORTAL: IS_LOCAL = true khi mở offline (demo), false khi chạy trên Apps Script =====
+    const IS_LOCAL = typeof google === 'undefined';
+
+    // ===== DEMO CONFIG (dùng khi IS_LOCAL = true) =====
+    const DEMO_CONFIG = {
+      APP_TITLE: 'Tag Request Portal',
+      APP_SUBTITLE: 'Spreadsheet:',
+      SHEET_URL: 'https://docs.google.com/spreadsheets/d/1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4/edit',
+      SHEET_LINK_TEXT: 'Google Sheet Target',
+      FORM_TITLE: 'Biểu Mẫu Tạo Yêu Cầu Tag Tài Xế Cho Phía DM',
+      SUBMIT_BTN_TEXT: '🚀 Gửi Đề Xuất Tới Lead Duyệt',
+      TAB1_NAME: '📝 Tạo Request',
+      TAB5_NAME: '📊 Master Request Tracker',
+      SLA_LEAD_HOURS: 4,
+      SLA_DM_HOURS: 8,
+      SLA_QM_HOURS: 24,
+      TEAM_LIST: ['DM', 'S&P', 'Growth', 'Expansion', 'OE', 'PA', 'WH', 'QM'],
+      TAG_TYPES: [
+        { value: 'Driver Segment', label: 'Driver Segment' },
+        { value: 'Incentive/Challenge', label: 'Incentive/Challenge' },
+        { value: 'Adhoc', label: 'Adhoc' },
+        { value: 'Others', label: 'Others' }
+      ],
+      TEAM_LEAD_MAP: {
+        'DM':        ['khanhlp@ahamove.com', 'trangdtt@ahamove.com'],
+        'S&P':       ['hant@ahamove.com'],
+        'Growth':    ['sonnbt@ahamove.com', 'luuhtm@ahamove.com'],
+        'Expansion': ['thaoltn@ahamove.com'],
+        'OE':        ['thinhnh@ahamove.com', 'taipq@ahamove.com', 'tuannq@ahamove.com'],
+        'PA':        ['thinhnh@ahamove.com', 'tuannq@ahamove.com'],
+        'WH':        ['locnx@ahamove.com'],
+        'QM':        ['phundk@ahamove.com', 'vayhc@ahamove.com']
+      },
+      userEmail: 'khanhlp@ahamove.com',
+      userRole: 'DM'
+    };
+
+    // TEAM_LEAD_MAP hardcoded — dùng trong canApproveLead() ở cả 2 mode
+    const TEAM_LEAD_MAP = DEMO_CONFIG.TEAM_LEAD_MAP;
+
+    var CURRENT_ROLE = 'REQUESTER';
+    var CURRENT_EMAIL = '';
+    let requestsData = [];
+    let currentFilter = 'ALL';
+    let rejectCtx = { id: null, gate: null };
+    let dmCtx = { id: null };
+    let selectedReqId = null;
+
+    // ===== BOOT: IS_LOCAL vs Apps Script =====
+    document.addEventListener('DOMContentLoaded', function() {
+      if (IS_LOCAL) {
+        CURRENT_EMAIL = DEMO_CONFIG.userEmail;
+        CURRENT_ROLE  = DEMO_CONFIG.userRole;
+        requestsData  = mockData();
+        populateFormConfig(DEMO_CONFIG);
+        updateRolePill();
+        renderAll();
+        selectRequestCategory('Tạo tag mới');
+        hideLoading();
+      } else {
+        google.script.run
+          .withSuccessHandler(function(cfg) {
+            CURRENT_EMAIL = cfg.userEmail || '';
+            CURRENT_ROLE  = cfg.userRole  || 'REQUESTER';
+            populateFormConfig(cfg);
+            updateRolePill();
+            selectRequestCategory('Tạo tag mới');
+            google.script.run
+              .withSuccessHandler(function(res) {
+                requestsData = (res && res.data) ? res.data : [];
+                renderAll();
+                hideLoading();
+              })
+              .withFailureHandler(function(err) {
+                showToast('Lỗi tải dữ liệu', String(err), 'err');
+                hideLoading();
+              })
+              .getSheetDataJson();
+          })
+          .withFailureHandler(function(err) {
+            showToast('Lỗi tải cấu hình', String(err), 'err');
+            hideLoading();
+          })
+          .getAppConfig();
+      }
+    });
+
+    function hideLoading() {
+      var el = document.getElementById('loading-screen');
+      if (el) el.style.display = 'none';
+    }
+
+    // ===== populateFormConfig: nhận config từ Apps Script hoặc DEMO_CONFIG =====
+    function populateFormConfig(C) {
+      var setText = function(id, val) { var el = document.getElementById(id); if (el && val != null) el.textContent = val; };
+      document.title = (C.APP_TITLE || 'Tag Request Portal');
+      setText('app-title',            C.APP_TITLE || 'Tag Request Portal');
+      setText('app-subtitle',         C.APP_SUBTITLE || 'Spreadsheet:');
+      setText('form-title',           '📝 ' + (C.FORM_TITLE || 'Biểu Mẫu'));
+      setText('submit-btn',           C.SUBMIT_BTN_TEXT || '🚀 Gửi');
+      setText('tab-btn-request',      C.TAB1_NAME || '📝 Tạo Request');
+      setText('tab-btn-master-label', C.TAB5_NAME || '📊 Master Request Tracker');
+      var link = document.getElementById('sheet-link');
+      if (link) { link.textContent = C.SHEET_LINK_TEXT || 'Google Sheet Target'; if (C.SHEET_URL) link.href = C.SHEET_URL; }
+      setText('sla-lead', C.SLA_LEAD_HOURS || '4');
+      setText('sla-dm',   C.SLA_DM_HOURS   || '8');
+      setText('sla-qm',   C.SLA_QM_HOURS   || '24');
+
+      // Team dropdown — Apps Script: TEAM_LIST là string "DM, S&P, ..."; DEMO: array
+      var teamList = C.TEAM_LIST;
+      if (typeof teamList === 'string') teamList = teamList.split(',').map(function(t){ return t.trim(); });
+      if (!Array.isArray(teamList)) teamList = [];
+      var teamSel = document.getElementById('req-team');
+      if (teamSel) {
+        teamSel.innerHTML = '<option value="">-- Chọn Team --</option>' +
+          teamList.map(function(t){ return '<option value="' + t + '">' + t + '</option>'; }).join('');
+      }
+
+      // Tag type dropdown — Apps Script: TAG_TYPES là string "Driver Segment, Incentive/Challenge, ..."; DEMO: array of {value,label}
+      var tagTypes = C.TAG_TYPES;
+      var typeSel = document.getElementById('req-type');
+      if (typeSel) {
+        if (typeof tagTypes === 'string') {
+          typeSel.innerHTML = tagTypes.split(',').map(function(t){
+            var v = t.trim();
+            return '<option value="' + v + '">' + v + '</option>';
+          }).join('');
+        } else if (Array.isArray(tagTypes)) {
+          typeSel.innerHTML = tagTypes.map(function(t){
+            return '<option value="' + t.value + '">' + t.label + '</option>';
+          }).join('');
+        }
+      }
+    }
+
+    function updateRolePill() {
+      var p = document.getElementById('user-role-pill');
+      p.innerText = CURRENT_ROLE;
+      p.className = 'role-pill role-' + CURRENT_ROLE;
+    }
+
+    function canApproveLead(r) {
+      if (CURRENT_ROLE === 'DM') return true;
+      if (!r) return CURRENT_ROLE === 'TEAM_LEAD';
+      var owners = (TEAM_LEAD_MAP[r.team] || []).map(function(e){ return String(e).toLowerCase(); });
+      return owners.indexOf((CURRENT_EMAIL || '').toLowerCase()) >= 0;
+    }
+    function canReviewDM()  { return CURRENT_ROLE === 'DM'; }
+    function canUpdateQM()  { return CURRENT_ROLE === 'QM' || CURRENT_ROLE === 'DM'; }
+
+    function showToast(title, msg, type) {
+      var wrap = document.getElementById('toast-wrap');
+      var t = document.createElement('div');
+      t.className = 'toast ' + (type || 'ok');
+      var ic = type === 'err' ? '⛔' : (type === 'warn' ? '⚠️' : '✅');
+      t.innerHTML = '<div class="toast-ic">' + ic + '</div><div class="toast-body"><b>' + title + '</b><span>' + (msg||'') + '</span></div>';
+      wrap.appendChild(t);
+      setTimeout(function(){ t.style.opacity = '0'; t.style.transform = 'translateX(40px)'; setTimeout(function(){ t.remove(); }, 300); }, 4200);
+    }
+
+    function reloadData(cb) {
+      if (IS_LOCAL) { if (cb) cb(); return; }
+      google.script.run
+        .withSuccessHandler(function(res) {
+          requestsData = (res && res.data) ? res.data : [];
+          renderAll();
+          if (cb) cb();
+        })
+        .withFailureHandler(function(err) { showToast('Lỗi tải lại', String(err), 'err'); })
+        .getSheetDataJson();
+    }
+
+    function mockData() {
+      return [
+        { id:'REQ-2026-001', date:'2026-07-29 09:10', requestCategory:'Tạo tag mới', team:'OE', name:'Trần B', type:'Priority Dispatch', tagName:'TAG_HUB_NIGHT', driverListSource:'-', reason:'Tăng offload đêm', duration:'2026-08-01 đến 2026-08-31', dueDate:'2026-08-05', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 13:10', deadlineDM:'', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-007', date:'2026-07-29 10:30', requestCategory:'Tạo tag mới', team:'Growth', name:'Lê G', type:'Incentive Campaign', tagName:'TAG_MKT_FLASH', driverListSource:'-', reason:'Thưởng flash sale cuối tuần', duration:'2026-08-02 đến 2026-08-04', dueDate:'2026-08-01', state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'2026-07-29 14:30', deadlineDM:'', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-002', date:'2026-07-28 15:00', requestCategory:'Add tag', team:'Growth', name:'Lê C', type:'Incentive Campaign', tagName:'TAG_MKT_AUG', driverListSource:'[Card Metabase] https://metabase.ahamove.com/card/123', reason:'Campaign tháng 8', duration:'2026-08', state:'PENDING_QM', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-28 16:20', dmDecision:'SKIPPED', qmStatus:'PENDING_QM', qmSuccessCount:0, qmRef:'', dmTagCode:'TAG_MKT_AUG', deadlineLead:'', deadlineDM:'', deadlineQM:'2026-07-29 15:00', breach:'QUÁ HẠN SLA' },
+        { id:'REQ-2026-003', date:'2026-07-27 10:00', requestCategory:'Tạo tag mới', team:'PA', name:'Phạm D', type:'Penalty / Block', tagName:'TAG_RISK_BLOCK', driverListSource:'-', reason:'Chặn TX gian lận', duration:'2026-08', state:'PENDING_DM', leadApprover:'lead2@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-27 11:05', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'2026-07-27 18:00', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-004', date:'2026-07-26 08:00', requestCategory:'Tạo tag mới', team:'QM', name:'Vũ E', type:'Special Training', tagName:'TAG_VIP_TRAIN', driverListSource:'[Link GoogleSheet] https://docs.google.com/...', reason:'Đào tạo VIP', duration:'2026-08', state:'DONE', leadApprover:'lead1@ahamove.com', leadDecision:'APPROVED', leadDate:'2026-07-26 09:30', dmReviewer:'khanhlp@ahamove.com', dmDecision:'APPROVED', dmReviewDate:'2026-07-26 14:10', qmStatus:'TAGGED_SUCCESS', qmSpecialist:'qm1@ahamove.com', qmDate:'2026-07-27 10:45', qmSuccessCount:120, qmRef:'BATCH-0726', dmTagCode:'DM_TAG_VIP_TRAIN_V1', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' },
+        { id:'REQ-2026-005', date:'2026-07-25 13:40', requestCategory:'Tạo tag mới', team:'Expansion', name:'Đỗ F', type:'Area Restriction', tagName:'TAG_CS_LIMIT_Q7', driverListSource:'-', reason:'Giới hạn TX khu Q7 giờ cao điểm', duration:'2026-08', state:'REJECTED', leadApprover:'lead2@ahamove.com', leadDecision:'REJECTED', leadDate:'2026-07-25 15:00', rejectReason:'Chưa rõ tiêu chí chọn TX & phạm vi khu vực. Đề nghị bổ sung card Metabase danh sách TX rồi gửi lại.', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', deadlineLead:'', deadlineDM:'', deadlineQM:'', breach:'' }
+      ];
+    }
+
+    function renderAll() { updateKPIs(); renderMasterTable(); renderFlow(); }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(function(btn){ btn.classList.remove('active'); });
+      document.querySelectorAll('.tab-panel').forEach(function(panel){ panel.classList.remove('active'); });
+      var btn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
+      if (btn) btn.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function updateKPIs() {
+      var pLead = requestsData.filter(function(r){ return r.state === 'PENDING_TEAM_LEAD'; }).length;
+      var pDM   = requestsData.filter(function(r){ return r.state === 'PENDING_DM'; }).length;
+      var pQM   = requestsData.filter(function(r){ return r.state === 'PENDING_QM'; }).length;
+      var done  = requestsData.filter(function(r){ return r.state === 'DONE'; }).length;
+      document.getElementById('kpi-total').innerText = requestsData.length;
+      document.getElementById('kpi-pending-lead').innerText = pLead;
+      document.getElementById('kpi-pending-dm').innerText = pDM;
+      document.getElementById('kpi-pending-qm').innerText = pQM;
+      document.getElementById('kpi-done').innerText = done;
+      document.getElementById('badge-open-count').innerText = countMine();
+    }
+    function isMine(r) {
+      if (r.state === 'PENDING_TEAM_LEAD') return canApproveLead(r);
+      if (r.state === 'PENDING_DM') return canReviewDM();
+      if (r.state === 'PENDING_QM') return canUpdateQM();
+      return false;
+    }
+    function countMine() { return requestsData.filter(isMine).length; }
+
+    function setFilter(f) {
+      currentFilter = f;
+      document.querySelectorAll('#filter-chips .chip').forEach(function(c){ c.classList.toggle('active', c.getAttribute('data-filter') === f); });
+      renderMasterTable();
+    }
+
+    function selectRequestCategory(cat) {
+      document.getElementById('req-category').value = cat;
+      var btnCreate  = document.getElementById('btn-cat-create');
+      var btnAdd     = document.getElementById('btn-cat-add');
+      var checkCreate = document.getElementById('check-cat-create');
+      var checkAdd   = document.getElementById('check-cat-add');
+      btnCreate.classList.remove('active', 'add-tag-active');
+      btnAdd.classList.remove('active', 'add-tag-active');
+      if (cat === 'Tạo tag mới') { btnCreate.classList.add('active'); checkCreate.style.display = 'flex'; checkAdd.style.display = 'none'; }
+      else { btnAdd.classList.add('active', 'add-tag-active'); checkCreate.style.display = 'none'; checkAdd.style.display = 'flex'; }
+      toggleRequestCategoryFields();
+    }
+    function toggleRequestCategoryFields() {
+      var cat = document.getElementById('req-category').value;
+      var noticeBar = document.getElementById('workflow-notice-bar');
+      var grpSourceType = document.getElementById('group-driver-source-type');
+      var grpSourceUrl = document.getElementById('group-driver-source-url');
+      if (cat === 'Add tag') {
+        noticeBar.innerHTML = '<span>⚡ <strong>Add Tag flow:</strong> Lead/Head approves first, then <strong>automatically skips DM Review</strong> and goes straight to <strong>QM Add Tags</strong>.</span>';
+        noticeBar.style.background = 'rgba(99, 102, 241, 0.15)'; noticeBar.style.borderColor = 'rgba(99, 102, 241, 0.4)'; noticeBar.style.color = '#A5B4FC';
+        grpSourceType.style.display = 'flex'; grpSourceUrl.style.display = 'flex';
+        document.getElementById('lbl-tag-name').innerText = 'Tag Code / Name to Add *';
+        document.getElementById('req-driver-source-val').required = true; updateDriverSourcePlaceholder();
+      } else {
+        noticeBar.innerHTML = '<span>👔 <strong>Create New Tag flow:</strong> Request goes to <strong>Master</strong> as Pending Lead approval → DM Review → QM.</span>';
+        noticeBar.style.background = 'rgba(14, 165, 233, 0.1)'; noticeBar.style.borderColor = 'rgba(56, 189, 248, 0.3)'; noticeBar.style.color = '#7DD3FC';
+        grpSourceType.style.display = 'none'; grpSourceUrl.style.display = 'none';
+        document.getElementById('lbl-tag-name').innerText = 'Suggested Tag Name / Objective *';
+        document.getElementById('req-driver-source-val').required = false;
+      }
+    }
+    function updateDriverSourcePlaceholder() {
+      var sType = document.getElementById('req-driver-source-type').value;
+      var input = document.getElementById('req-driver-source-val');
+      var lbl = document.getElementById('lbl-driver-source-url');
+      if (sType === 'Link GoogleSheet') { lbl.innerText = 'Google Sheet URL of Driver List *'; input.placeholder = 'https://docs.google.com/spreadsheets/d/...'; }
+      else { lbl.innerText = 'Metabase Card URL of Driver List *'; input.placeholder = 'https://metabase.ahamove.com/card/...'; }
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      var now = new Date();
+      var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+      var category = document.getElementById('req-category').value;
+      var isAddTag = (category === 'Add tag');
+      var dsType = isAddTag ? document.getElementById('req-driver-source-type').value : '-';
+      var dsVal  = isAddTag ? document.getElementById('req-driver-source-val').value : '-';
+      var applyFrom = document.getElementById('req-apply-from').value;
+      var newReqData = {
+        date: timeStr, requestCategory: category,
+        team: document.getElementById('req-team').value,
+        name: document.getElementById('req-name').value,
+        type: document.getElementById('req-type').value,
+        tagName: document.getElementById('req-tag-name').value,
+        driverListSource: isAddTag ? '[' + dsType + '] ' + dsVal : '-',
+        reason: document.getElementById('req-reason').value,
+        duration: applyFrom || '-',
+        dueDate: document.getElementById('req-deadline').value || '-',
+        submitterEmail: CURRENT_EMAIL
+      };
+      if (IS_LOCAL) {
+        var newId = 'REQ-2026-' + String(requestsData.length + 1).padStart(3, '0');
+        requestsData.unshift(Object.assign({ id: newId, state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', breach:'' }, newReqData));
+        document.getElementById('tag-request-form').reset(); selectRequestCategory('Tạo tag mới');
+        renderAll(); switchTab('tab-master');
+        showToast('Đã gửi ' + newId, 'Request về Master, đang chờ Lead/Head duyệt. [DEMO]', 'ok');
+      } else {
+        google.script.run
+          .withSuccessHandler(function() {
+            document.getElementById('tag-request-form').reset(); selectRequestCategory('Tạo tag mới');
+            switchTab('tab-master');
+            reloadData(function(){ showToast('Đã gửi thành công', 'Request về Master, đang chờ Lead/Head duyệt.', 'ok'); });
+          })
+          .withFailureHandler(function(err){ showToast('Lỗi gửi request', String(err), 'err'); })
+          .saveNewRequest(newReqData);
+      }
+    }
+
+    function breachTag(r) { return r.breach === 'QUÁ HẠN SLA' ? '<span class="breach-badge">⏰ QUÁ HẠN SLA</span>' : ''; }
+    function getStateBadge(state) {
+      var map = { 'PENDING_TEAM_LEAD': '<span class="status-badge status-lead">👔 CHỜ LEAD</span>', 'PENDING_DM': '<span class="status-badge status-pending">🛡️ CHỜ DM</span>', 'PENDING_QM': '<span class="status-badge status-processing">⚙️ CHỜ QM</span>', 'DONE': '<span class="status-badge status-done">✓ DONE</span>', 'REJECTED': '<span class="status-badge status-rejected">✕ REJECTED</span>' };
+      return map[state] || '<span class="status-badge status-pending">' + (state||'-') + '</span>';
+    }
+    function getQMStatusBadge(status) {
+      if (status === 'TAGGED_SUCCESS') return '<span class="status-badge status-approved">✓ SUCCESS</span>';
+      if (status === 'PROCESSING') return '<span class="status-badge status-processing">⚙️</span>';
+      if (status === 'FAILED') return '<span class="status-badge status-rejected">✕ FAIL</span>';
+      if (status === 'HOLD') return '<span class="status-badge status-pending">⏸️</span>';
+      return '<span class="status-badge status-pending">⏳ QM</span>';
+    }
+
+    function detailCell(r) {
+      var link = '<a class="link-detail" onclick="event.stopPropagation(); openTimeline(\'' + r.id + '\')">Chi tiết hơn →</a>';
+      if (r.state === 'REJECTED') {
+        var reason = (r.leadNote || r.dmNote || r.rejectReason || 'Không có ghi chú');
+        var by = r.dmDecision === 'REJECTED' ? 'DM' : 'Lead';
+        var who = shortEmail(r.dmDecision === 'REJECTED' ? r.dmReviewer : r.leadApprover) || by;
+        return link + '<div class="reject-note" title="' + reason.replace(/"/g,'') + '">❗ <b>' + by + ' (' + who + ') từ chối</b><br>' + reason + '</div>';
+      }
+      return link;
+    }
+
+    function actionCell(r) {
+      if (r.state === 'PENDING_QM') {
+        if (!canUpdateQM()) return '<div class="ms-wait">Chờ QM add tag</div>';
+        return '<div class="qm-inline"><select id="qs-' + r.id + '" onchange="qmSave(\'' + r.id + '\')" title="Chọn để cập nhật trạng thái"><option value="PROCESSING"' + (r.qmStatus==='PROCESSING'?' selected':'') + '>PROCESSING</option><option value="TAGGED_SUCCESS"' + (r.qmStatus==='TAGGED_SUCCESS'?' selected':'') + '>✓ DONE</option><option value="FAILED"' + (r.qmStatus==='FAILED'?' selected':'') + '>✕ FAILED</option></select></div>';
+      }
+      if (r.state === 'REJECTED') return '<div class="ms-wait rej" title="' + (r.leadNote||r.dmNote||'').replace(/"/g,'') + '">❗ Lý do: ' + (r.leadNote||r.dmNote||'-') + '</div>';
+      return '';
+    }
+
+    function renderMasterTable() {
+      var tbody = document.getElementById('master-tbody'); tbody.innerHTML = '';
+      var list = requestsData.slice();
+      if (currentFilter === 'MINE') list = list.filter(isMine);
+      else if (currentFilter !== 'ALL') list = list.filter(function(r){ return r.state === currentFilter; });
+      if (!list.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty-hint">Không có request nào khớp bộ lọc.</td></tr>'; return; }
+      list.forEach(function(r) {
+        var tr = document.createElement('tr');
+        tr.className = 'row-click';
+        if (isMine(r)) tr.style.background = 'rgba(20,184,166,0.06)';
+        if (r.id === selectedReqId) tr.style.outline = '2px solid var(--accent-teal-light)';
+        tr.onclick = function(e) { if (e.target.closest('button,select,input,a')) return; selectRow(r.id); };
+        tr.innerHTML =
+          '<td><strong>' + r.id + '</strong>' + breachTag(r) + '<div class="date-note">🕓 ' + r.date + '</div></td>'+
+          '<td><span class="status-badge ' + (r.requestCategory==='Add tag'?'status-bypass':'status-approved') + '">' + r.requestCategory + '</span></td>'+
+          '<td><span class="code-tag">' + r.team + '</span><div class="sub-name">👤 ' + r.name + '</div></td>'+
+          '<td><strong>' + r.tagName + '</strong>' + (r.dmTagCode && r.dmTagCode!=='-' ? '<br><span class="code-tag" style="color:#34D399;">' + r.dmTagCode + '</span>':'') + '</td>'+
+          '<td>' + miniStepper(r) + '</td>'+
+          '<td>' + detailCell(r) + '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    function stepStates(r) {
+      var s = r.state, rejected = (s === 'REJECTED'), isAdd = (r.requestCategory === 'Add tag');
+      var st = { req:'done', lead:'todo', dm:'todo', qm:'todo' };
+      if (rejected) {
+        st.lead = (r.leadDecision==='REJECTED') ? 'rej' : (r.leadDecision==='APPROVED' ? 'done' : 'todo');
+        st.dm   = (r.dmDecision==='REJECTED') ? 'rej' : (r.dmDecision==='APPROVED' ? 'done' : (isAdd?'skip':'todo'));
+        st.qm   = 'todo'; return st;
+      }
+      var order = ['PENDING_TEAM_LEAD','PENDING_DM','PENDING_QM','DONE'];
+      st.lead = (order.indexOf(s) > 0 || s==='PENDING_TEAM_LEAD') ? (s==='PENDING_TEAM_LEAD'?'active':'done') : 'todo';
+      if (isAdd) st.dm = 'skip';
+      else st.dm = (s==='PENDING_DM') ? 'active' : (order.indexOf(s) > order.indexOf('PENDING_DM') ? 'done' : 'todo');
+      st.qm = (s==='PENDING_QM') ? 'active' : (s==='DONE' ? 'done' : 'todo');
+      return st;
+    }
+    function stepMeta(r, step, state) {
+      var actor = function(v){ return '<div class="ms-meta actor">' + shortEmail(v) + '</div>'; };
+      var when  = function(v){ return (v && v !== '-') ? '<div class="ms-meta">' + v + '</div>' : ''; };
+      var dl    = function(d, hot){ return d ? '<div class="ms-meta ' + (hot?'hot':'') + '">⏰ ' + d + '</div>' : ''; };
+      var breach = function(g){ return (r.breach === 'QUÁ HẠN SLA' && r.state === g); };
+      if (step === 'req')  return actor(r.name) + when(r.date);
+      if (step === 'lead') {
+        if (state === 'active') return dl(r.deadlineLead, breach('PENDING_TEAM_LEAD'));
+        if (state === 'done' || state === 'rej') return (r.leadApprover && r.leadApprover!=='-' ? actor(r.leadApprover) : '') + when(r.leadDate);
+        return '';
+      }
+      if (step === 'dm') {
+        if (state === 'skip')   return '<div class="ms-meta skip">⤵ Bỏ qua</div>';
+        if (state === 'active') return dl(r.deadlineDM, breach('PENDING_DM'));
+        if (state === 'done' || state === 'rej') return (r.dmReviewer && r.dmReviewer!=='-' ? actor(r.dmReviewer) : '') + when(r.dmReviewDate);
+        return '';
+      }
+      if (step === 'qm') {
+        if (state === 'active') return dl(r.deadlineQM, breach('PENDING_QM'));
+        if (state === 'done') return (r.qmSpecialist && r.qmSpecialist!=='-' ? actor(r.qmSpecialist) : '') + when(r.qmDate);
+        return '';
+      }
+      return '';
+    }
+    function gateDotButtons(r, key) {
+      if (key === 'lead' && r.state === 'PENDING_TEAM_LEAD' && canApproveLead(r)) {
+        return '<button class="dot-btn top btn-success" onclick="event.stopPropagation();leadApprove(\'' + r.id + '\')"><span class="bi">✓</span><span class="bl">Duyệt</span></button>'+
+               '<button class="dot-btn bot btn-danger" onclick="event.stopPropagation();openReject(\'' + r.id + '\',\'LEAD\')"><span class="bi">✕</span><span class="bl">Từ chối</span></button>';
+      }
+      if (key === 'dm' && r.state === 'PENDING_DM' && canReviewDM()) {
+        return '<button class="dot-btn top btn-success" onclick="event.stopPropagation();openDMApprove(\'' + r.id + '\')"><span class="bi">✓</span><span class="bl">Duyệt &amp; gán tag</span></button>'+
+               '<button class="dot-btn bot btn-danger" onclick="event.stopPropagation();openReject(\'' + r.id + '\',\'DM\')"><span class="bi">✕</span><span class="bl">Từ chối</span></button>';
+      }
+      return '';
+    }
+    function miniStepper(r) {
+      var st = stepStates(r);
+      var ic = { done:'✓', active:'<span class="dot-spinner"></span>', todo:'', skip:'⤵', rej:'✕' };
+      var conn = function(a){ return '<div class="ms-conn ' + (a==='done'?'done':'') + '"></div>'; };
+      var step = function(key, label) {
+        var btns = gateDotButtons(r, key);
+        return '<div class="ms-step' + (btns?' has-btns':'') + '"><div class="ms-dot-wrap">' + btns + '<div class="ms-dot ' + st[key] + '">' + ic[st[key]] + '</div></div>' +
+               '<div class="ms-label">' + label + '</div>' + stepMeta(r, key, st[key]) + '</div>';
+      };
+      var centerAt = function(i){ return 'transform:translateX(' + ((i*132+46)-244) + 'px);'; };
+      var qmBlock = (r.state === 'PENDING_QM' && canUpdateQM()) ? '<div class="ms-action-row" style="' + centerAt(3) + '">' + actionCell(r) + '</div>' : '';
+      return '<div class="mini-stepper">' +
+        step('req','Request') + conn(st.req) +
+        step('lead','Lead')   + conn(st.lead) +
+        step('dm','DM')       + conn(st.dm) +
+        step('qm','QM')       +
+      '</div>' + qmBlock;
+    }
+
+    function selectRow(id) { selectedReqId = id; renderFlow(); renderMasterTable(); }
+
+    function renderFlow() {
+      var host = document.getElementById('flow-svg-host'); if (!host) return;
+      var r = requestsData.find(function(x){ return x.id === selectedReqId; });
+      var selEl = document.getElementById('flow-sel-id');
+      if (selEl) selEl.textContent = r ? r.id + ' · ' + r.tagName : '—';
+      var st = r ? stepStates(r) : { req:'todo', lead:'todo', dm:'todo', qm:'todo' };
+      var rejected = r && r.state === 'REJECTED';
+      var GRAD = { done:['#10B981','#047857'], active:['#F59E0B','#B45309'], todo:['#475569','#334155'], skip:['#6366F1','#4338CA'], rej:['#F43F5E','#9F1239'] };
+      var RING = { done:'#34D399', active:'#FBBF24', todo:'rgba(148,163,184,.35)', skip:'#818CF8', rej:'#FB7185' };
+      var nodes = [
+        { key:'req',  x:70,  label:'Request', sub:'Người tạo', icon:'▶', state:st.req },
+        { key:'lead', x:266, label:'Lead',    sub:'Gate 1',    icon:'✔', state:st.lead },
+        { key:'dm',   x:462, label:'DM',      sub:'Gate 2',    icon:'🛡', state:st.dm },
+        { key:'qm',   x:658, label:'QM',      sub:'Gate 3',    icon:'🏷', state:st.qm },
+        { key:'done', x:854, label:'Done',    sub:'Hoàn tất',  icon:'★', state:(r&&r.state==='DONE')?'done':'todo' }
+      ];
+      var w = 150, h = 68, y = 66, midY = y + h/2;
+      var box = function(n) {
+        var g = GRAD[n.state]||GRAD.todo, ring = RING[n.state]||RING.todo, active = n.state==='active';
+        var dim = (n.state==='todo') ? 'opacity="0.72"' : '';
+        var cx = n.x + w/2, lit = n.state!=='todo', barX = n.x - 6;
+        return '<g class="' + (active?'fl-active':'') + '" ' + dim + ' filter="url(#soft)">' +
+          (lit ? '<rect x="' + n.x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="18" fill="none" stroke="' + ring + '" stroke-width="2" opacity="0.55" filter="url(#boxglow)"/>' : '') +
+          '<rect x="' + n.x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="18" fill="url(#card)" stroke="' + ring + '" stroke-width="' + (active?1.6:1) + '"/>' +
+          '<rect x="' + (barX-2) + '" y="' + (y+2) + '" width="9" height="' + (h-4) + '" rx="4" fill="' + g[0] + '" opacity="0.65" filter="url(#barglow)"/>' +
+          '<rect x="' + barX + '" y="' + (y+4) + '" width="5" height="' + (h-8) + '" rx="2.5" fill="' + g[0] + '"/>' +
+          '<circle cx="' + cx + '" cy="' + (y+17) + '" r="13" fill="url(#dot-' + n.state + ')" ' + (active?'filter="url(#glow)"':'') + '/>' +
+          '<text x="' + cx + '" y="' + (y+22) + '" font-size="13" fill="#fff" text-anchor="middle">' + n.icon + '</text>' +
+          '<text x="' + cx + '" y="' + (y+46) + '" font-size="14.5" font-weight="700" fill="#F8FAFC" text-anchor="middle">' + n.label + '</text>' +
+          '<text x="' + cx + '" y="' + (y+60) + '" font-size="10" fill="' + ring + '" font-weight="600" text-anchor="middle">' + flowStateText(n.state) + '</text>' +
+        '</g>';
+      };
+      var AHEAD = 9;
+      var conn = function(x1, x2, flowed) {
+        var stroke = flowed ? 'url(#flow-on)' : 'rgba(100,116,139,.28)';
+        var mk = flowed ? 'url(#arr-on)' : 'url(#arr-off)';
+        var lineEnd = x2 - AHEAD;
+        var tip = '<path d="M' + lineEnd + ',' + midY + ' L' + x2 + ',' + midY + '" fill="none" stroke="none" marker-end="' + mk + '"/>';
+        return '<path d="M' + x1 + ',' + midY + ' L' + lineEnd + ',' + midY + '" fill="none" stroke="' + stroke + '" stroke-width="2.4" stroke-linecap="round" ' + (flowed?'':'stroke-dasharray="1,7"') + '/>' + tip;
+      };
+      var defs = '<defs>' +
+        '<linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(51,65,85,.55)"/><stop offset="1" stop-color="rgba(15,23,42,.85)"/></linearGradient>' +
+        '<linearGradient id="flow-on" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#10B981"/><stop offset="1" stop-color="#34D399"/></linearGradient>' +
+        Object.keys(GRAD).map(function(k){ return '<radialGradient id="dot-' + k + '" cx="0.35" cy="0.3" r="0.9"><stop offset="0" stop-color="' + GRAD[k][0] + '"/><stop offset="1" stop-color="' + GRAD[k][1] + '"/></radialGradient>'; }).join('') +
+        '<filter id="soft" x="-20%" y="-40%" width="140%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.45"/></filter>' +
+        '<filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#F59E0B" flood-opacity="0.9"/></filter>' +
+        '<filter id="boxglow" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/></feMerge></filter>' +
+        '<filter id="barglow" x="-300%" y="-40%" width="700%" height="180%"><feGaussianBlur stdDeviation="3"/></filter>' +
+        '<marker id="arr-on" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#34D399"/></marker>' +
+        '<marker id="arr-off" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(148,163,184,.5)"/></marker>' +
+        '<marker id="arr-rej" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#FB7185"/></marker>' +
+      '</defs>';
+      var svg = '<svg class="flow-svg" viewBox="0 0 1020 210" preserveAspectRatio="xMidYMid meet">' + defs;
+      svg += conn(226, 260, st.lead==='done');
+      svg += conn(422, 456, st.dm==='done'||st.dm==='skip');
+      svg += conn(618, 652, st.qm==='done');
+      svg += conn(814, 848, r&&r.state==='DONE');
+      var rejActive = rejected;
+      var rc = rejActive ? '#FB7185' : 'rgba(100,116,139,.28)';
+      var rejMk = rejActive?'url(#arr-rej)':'url(#arr-off)';
+      svg += '<path d="M341,' + (y+h+2) + ' C341,170 415,180 487,180" fill="none" stroke="' + rc + '" stroke-width="2.4" stroke-linecap="round" ' + (rejActive?'':'stroke-dasharray="1,7"') + '/>' +
+             '<path d="M487,180 L496,180" fill="none" stroke="none" marker-end="' + rejMk + '"/>';
+      var yy = 151, cx2 = 575;
+      svg += '<g class="' + (rejActive?'fl-active':'') + '" ' + (rejActive?'':'opacity="0.6"') + ' filter="url(#soft)">' +
+        '<rect x="500" y="' + yy + '" width="' + w + '" height="' + h + '" rx="18" fill="url(#card)" stroke="' + (rejActive?RING.rej:RING.todo) + '" stroke-width="' + (rejActive?1.6:1) + '"/>' +
+        '<rect x="500" y="' + yy + '" width="5" height="' + h + '" rx="2.5" fill="' + (rejActive?GRAD.rej[0]:GRAD.todo[0]) + '"/>' +
+        '<circle cx="' + cx2 + '" cy="' + (yy+17) + '" r="13" fill="url(#dot-' + (rejActive?'rej':'todo') + ')" ' + (rejActive?'filter="url(#glow-rej)"':'') + '/>' +
+        '<text x="' + cx2 + '" y="' + (yy+22) + '" font-size="13" fill="#fff" text-anchor="middle">✕</text>' +
+        '<text x="' + cx2 + '" y="' + (yy+46) + '" font-size="14.5" font-weight="700" fill="#F8FAFC" text-anchor="middle">Reject</text>' +
+        '<text x="' + cx2 + '" y="' + (yy+60) + '" font-size="10" fill="' + (rejActive?RING.rej:RING.todo) + '" font-weight="600" text-anchor="middle">' + (rejActive?'Đã từ chối':'—') + '</text></g>';
+      if (rejActive) svg += '<filter id="glow-rej" x="-80%" y="-80%" width="260%" height="260%"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#F43F5E" flood-opacity="0.9"/></filter>';
+      svg += nodes.map(box).join('');
+      svg += '</svg>';
+      host.innerHTML = svg;
+    }
+    function flowStateText(s) { return ({ done:'Đã qua', active:'Đang chờ', todo:'Chưa tới', skip:'Bỏ qua', rej:'Từ chối' })[s] || ''; }
+
+    function buildAuditLog(r) {
+      var log = [];
+      log.push({ node:'ok', title:'📝 Tạo Request', actor:r.name, ts:r.date, note:r.reason||'' });
+      if (r.leadDecision === 'APPROVED') log.push({ node:'ok', title:'✔ Lead Duyệt', actor:r.leadApprover, ts:r.leadDate||deriveTs(r.date,1), note:'' });
+      else if (r.leadDecision === 'REJECTED') log.push({ node:'rej', title:'✕ Lead Từ Chối', actor:r.leadApprover, ts:r.leadDate||deriveTs(r.date,1), note:r.rejectReason||r.leadNote||'' });
+      if (r.requestCategory === 'Add tag' && r.leadDecision === 'APPROVED') log.push({ node:'skip', title:'⤵ Bỏ qua DM (Add tag có sẵn)', actor:'Hệ thống', ts:r.leadDate||deriveTs(r.date,1), note:'Tag đã tồn tại — không cần DM tạo mới.' });
+      if (r.dmDecision === 'APPROVED') log.push({ node:'ok', title:'🛡 DM Duyệt & Gán Mã Tag', actor:r.dmReviewer, ts:r.dmReviewDate||deriveTs(r.date,2), note:(r.dmTagCode&&r.dmTagCode!=='-')?('Mã tag chuẩn: '+r.dmTagCode):'' });
+      else if (r.dmDecision === 'REJECTED') log.push({ node:'rej', title:'✕ DM Từ Chối', actor:r.dmReviewer, ts:r.dmReviewDate||deriveTs(r.date,2), note:r.rejectReason||r.dmNote||'' });
+      if (r.qmStatus === 'TAGGED_SUCCESS') log.push({ node:'ok', title:'🏷 QM Add Tag Thành Công', actor:r.qmSpecialist, ts:r.qmDate||deriveTs(r.date,3), note:(r.qmSuccessCount?('Add '+r.qmSuccessCount+' TX'):'')+(r.qmRef?(' · Ref '+r.qmRef):'') });
+      var waitMap = { 'PENDING_TEAM_LEAD':'⏳ Đang chờ Lead duyệt', 'PENDING_DM':'⏳ Đang chờ DM review', 'PENDING_QM':'⏳ Đang chờ QM add tag' };
+      if (waitMap[r.state]) {
+        var dl = r.state==='PENDING_TEAM_LEAD'?r.deadlineLead : r.state==='PENDING_DM'?r.deadlineDM : r.deadlineQM;
+        log.push({ node:'wait', title:waitMap[r.state], actor:'—', ts:'', note: dl ? ('Deadline SLA: '+dl+(r.breach==='QUÁ HẠN SLA'?' ⚠️ QUÁ HẠN':'')) : '' });
+      }
+      return log;
+    }
+    function deriveTs(base, addH) { return base ? base + ' (+' + (addH*2) + 'h)' : ''; }
+
+    function openTimeline(id) {
+      var r = requestsData.find(function(x){ return x.id === id; }); if (!r) return;
+      document.getElementById('tl-req-id').textContent = r.id;
+      document.getElementById('tl-head').innerHTML =
+        '<span>👤 Người tạo: <b>' + r.name + '</b></span>' +
+        '<span>🏢 Team: <b>' + r.team + '</b></span>' +
+        '<span>🏷 Tag: <b>' + r.tagName + '</b></span>' +
+        '<span>📌 Trạng thái: ' + getStateBadge(r.state) + '</span>';
+      var log = buildAuditLog(r);
+      document.getElementById('tl-body').innerHTML = log.map(function(e){
+        return '<div class="tl-item">' +
+          '<div class="tl-node ' + e.node + '">' + (e.node==='ok'?'✓':e.node==='rej'?'✕':e.node==='skip'?'⤵':'⏳') + '</div>' +
+          '<div class="tl-title">' + e.title + '</div>' +
+          '<div class="tl-meta">' + (e.actor&&e.actor!=='—'?('bởi <span class="tl-actor">'+shortEmail(e.actor)+'</span>'):'') + ' ' + (e.ts?('<span class="tl-ts">· 🕓 '+e.ts+'</span>'):'') + '</div>' +
+          (e.note?('<div class="tl-note">'+e.note+'</div>'):'') +
+        '</div>';
+      }).join('');
+      document.getElementById('timeline-modal').classList.add('open');
+    }
+    function shortEmail(v) { return String(v||'').replace(/@ahamove\.com$/i, ''); }
+
+    // ===== LEAD approve =====
+    function leadApprove(id) {
+      var r = requestsData.find(function(x){ return x.id === id; }); if (!r) return;
+      if (!canApproveLead(r)) { showToast('Không đủ quyền', 'Bạn không phụ trách team "' + r.team + '". Chỉ Lead team này hoặc DM.', 'err'); return; }
+      if (IS_LOCAL) {
+        r.leadDecision = 'APPROVED'; r.leadApprover = CURRENT_EMAIL; r.breach = '';
+        if (r.requestCategory === 'Add tag') { r.state = 'PENDING_QM'; r.dmDecision = 'SKIPPED'; r.qmStatus = 'PENDING_QM'; if (!r.dmTagCode || r.dmTagCode==='-') r.dmTagCode = r.tagName; }
+        else { r.state = 'PENDING_DM'; }
+        renderAll();
+        showToast('Lead đã duyệt ' + id, r.requestCategory === 'Add tag' ? 'Bỏ qua DM → chuyển thẳng QM. [DEMO]' : 'Chuyển sang DM Review. [DEMO]', 'ok');
+      } else {
+        google.script.run
+          .withSuccessHandler(function(){ reloadData(function(){ showToast('Lead đã duyệt ' + id, 'Đã ghi nhận.', 'ok'); }); })
+          .withFailureHandler(function(err){ showToast('Lỗi duyệt', String(err), 'err'); })
+          .saveLeadApproval(id, 'APPROVED', '');
+      }
+    }
+
+    // ===== DM approve =====
+    function openDMApprove(id) {
+      if (!canReviewDM()) { showToast('Không đủ quyền', 'Chỉ DM Lead.', 'err'); return; }
+      var r = requestsData.find(function(x){ return x.id === id; }); if (!r) return;
+      dmCtx.id = id;
+      document.getElementById('modal-req-id').innerText = r.id;
+      document.getElementById('modal-details').innerHTML = '<strong>Team:</strong> ' + r.team + ' | <strong>Người YC:</strong> ' + r.name + '<br><strong>Tag đề xuất:</strong> ' + r.tagName + ' | <strong>Loại:</strong> ' + r.type + '<br><strong>Áp dụng:</strong> ' + (r.duration||'-') + ' | <strong>⏰ Cần xong trước:</strong> <span style="color:#FBBF24;">' + (r.dueDate||'-') + '</span><br><strong>Đã qua Lead:</strong> <span style="color:#C7D2FE;">' + (r.leadApprover||'-') + '</span><br><strong>Lý do:</strong> ' + r.reason;
+      document.getElementById('modal-dm-tag-code').value = 'DM_' + (r.tagName||'').toUpperCase();
+      document.getElementById('modal-dm-note').value = '';
+      document.getElementById('dm-modal').classList.add('open');
+    }
+    function submitDMApprove() {
+      var r = requestsData.find(function(x){ return x.id === dmCtx.id; }); if (!r) return;
+      var tagCode = document.getElementById('modal-dm-tag-code').value.trim();
+      if (!tagCode) { showToast('Thiếu mã tag', 'Nhập mã tag chuẩn để QM dùng.', 'warn'); return; }
+      var note = document.getElementById('modal-dm-note').value;
+      if (IS_LOCAL) {
+        r.dmDecision = 'APPROVED'; r.dmTagCode = tagCode; r.dmNote = note;
+        r.state = 'PENDING_QM'; r.qmStatus = 'PENDING_QM'; r.breach = '';
+        renderAll(); closeModal('dm-modal');
+        showToast('DM đã duyệt ' + r.id, 'Gán mã ' + tagCode + ' → chuyển QM. [DEMO]', 'ok');
+      } else {
+        google.script.run
+          .withSuccessHandler(function(){ reloadData(function(){ closeModal('dm-modal'); showToast('DM đã duyệt ' + r.id, 'Gán mã ' + tagCode + ' → chuyển QM.', 'ok'); }); })
+          .withFailureHandler(function(err){ showToast('Lỗi DM duyệt', String(err), 'err'); })
+          .saveDMReview(r.id, 'APPROVED', note, tagCode);
+      }
+    }
+
+    // ===== Reject =====
+    function openReject(id, gate) {
+      var rr = requestsData.find(function(x){ return x.id === id; });
+      if (gate === 'LEAD' && !canApproveLead(rr)) { showToast('Không đủ quyền','Bạn không phụ trách team "' + (rr?rr.team:'') + '". Chỉ Lead team này hoặc DM.','err'); return; }
+      if (gate === 'DM' && !canReviewDM()) { showToast('Không đủ quyền','Chỉ DM Lead.','err'); return; }
+      rejectCtx = { id: id, gate: gate };
+      document.getElementById('reject-req-id').innerText = id;
+      document.getElementById('reject-note').value = '';
+      document.getElementById('reject-modal').classList.add('open');
+    }
+    function submitReject() {
+      var r = requestsData.find(function(x){ return x.id === rejectCtx.id; }); if (!r) return;
+      var note = document.getElementById('reject-note').value.trim();
+      if (!note) { showToast('Thiếu lý do', 'Vui lòng nhập lý do từ chối.', 'warn'); return; }
+      if (IS_LOCAL) {
+        if (rejectCtx.gate === 'LEAD') { r.leadDecision = 'REJECTED'; r.leadApprover = CURRENT_EMAIL; r.leadNote = note; }
+        else { r.dmDecision = 'REJECTED'; r.dmNote = note; }
+        r.state = 'REJECTED'; r.qmStatus = 'N/A'; r.breach = '';
+        renderAll(); closeModal('reject-modal');
+        showToast('Đã từ chối ' + r.id, 'Requester sẽ thấy lý do để chỉnh sửa. [DEMO]', 'warn');
+      } else {
+        var saveFn = (rejectCtx.gate === 'LEAD') ? 'saveLeadApproval' : 'saveDMReview';
+        var args = (rejectCtx.gate === 'LEAD') ? [r.id, 'REJECTED', note] : [r.id, 'REJECTED', note, ''];
+        google.script.run
+          .withSuccessHandler(function(){ reloadData(function(){ closeModal('reject-modal'); showToast('Đã từ chối ' + r.id, 'Lý do đã ghi nhận.', 'warn'); }); })
+          .withFailureHandler(function(err){ showToast('Lỗi từ chối', String(err), 'err'); })
+          [saveFn].apply(google.script.run, args);
+      }
+    }
+
+    // ===== QM save =====
+    function qmSave(id) {
+      if (!canUpdateQM()) { showToast('Không đủ quyền', 'Chỉ QM.', 'err'); return; }
+      var r = requestsData.find(function(x){ return x.id === id; }); if (!r) return;
+      var status = document.getElementById('qs-' + id).value;
+      if (IS_LOCAL) {
+        r.qmStatus = status;
+        if (status === 'TAGGED_SUCCESS') { r.state = 'DONE'; r.breach = ''; showToast('Hoàn thành ' + id, 'Đã đánh dấu DONE. [DEMO]', 'ok'); }
+        else showToast('Đã cập nhật ' + id, 'Trạng thái QM: ' + status + '. [DEMO]', 'ok');
+        renderAll();
+      } else {
+        google.script.run
+          .withSuccessHandler(function(){ reloadData(function(){ showToast('Đã cập nhật ' + id, 'QM status: ' + status, 'ok'); }); })
+          .withFailureHandler(function(err){ showToast('Lỗi QM', String(err), 'err'); })
+          .saveQMStatus(id, status, 0, '');
+      }
+    }
+
+    function closeModal(modalId) { document.getElementById(modalId).classList.remove('open'); }
+  </script>
+</body>
+</html>
