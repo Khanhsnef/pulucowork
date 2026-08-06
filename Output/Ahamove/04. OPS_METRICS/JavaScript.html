@@ -62,29 +62,31 @@
     let CURRENT_EMAIL = IS_LOCAL ? "nhanvien1@ahamove.com" : "";
     let CURRENT_ROLE  = "REQUESTER";
 
-    // Ghi đè DEMO_CONFIG bằng config thật từ server
-    if (false) {
-      const srv = {};
-      // Sheet lưu mảng dạng chuỗi "DM, S&P, Growth" → parse về mảng đúng
-      if (typeof srv.TEAM_LIST === 'string') {
-        srv.TEAM_LIST = srv.TEAM_LIST.split(',').map(s => s.trim()).filter(Boolean);
+    // Ghi đè DEMO_CONFIG bằng config thật từ server (injected via #__cfg textarea)
+    try {
+      const cfgEl = document.getElementById('__cfg');
+      if (cfgEl && cfgEl.value && !IS_LOCAL) {
+        const srv = JSON.parse(cfgEl.value);
+        if (typeof srv.TEAM_LIST === 'string') {
+          srv.TEAM_LIST = srv.TEAM_LIST.split(',').map(s => s.trim()).filter(Boolean);
+        }
+        if (typeof srv.TAG_TYPES === 'string') {
+          srv.TAG_TYPES = srv.TAG_TYPES.split(',').map(s => {
+            const t = s.trim();
+            return { value: t, label: t };
+          }).filter(x => x.value);
+        }
+        if (srv.TEAM_LEAD_MAP && typeof srv.TEAM_LEAD_MAP === 'object') {
+          Object.keys(srv.TEAM_LEAD_MAP).forEach(k => {
+            if (typeof srv.TEAM_LEAD_MAP[k] === 'string') {
+              srv.TEAM_LEAD_MAP[k] = srv.TEAM_LEAD_MAP[k].split(',').map(e => e.trim()).filter(Boolean);
+            }
+          });
+        }
+        Object.assign(DEMO_CONFIG, srv);
+        if (srv.userEmail) { CURRENT_EMAIL = srv.userEmail; CURRENT_ROLE = srv.userRole || 'REQUESTER'; }
       }
-      if (typeof srv.TAG_TYPES === 'string') {
-        srv.TAG_TYPES = srv.TAG_TYPES.split(',').map(s => {
-          const t = s.trim();
-          return { value: t, label: t };
-        }).filter(x => x.value);
-      }
-      // TEAM_LEAD_MAP: nếu server trả về object với giá trị là chuỗi "a@x.com, b@x.com"
-      if (srv.TEAM_LEAD_MAP && typeof srv.TEAM_LEAD_MAP === 'object') {
-        Object.keys(srv.TEAM_LEAD_MAP).forEach(k => {
-          if (typeof srv.TEAM_LEAD_MAP[k] === 'string') {
-            srv.TEAM_LEAD_MAP[k] = srv.TEAM_LEAD_MAP[k].split(',').map(e => e.trim()).filter(Boolean);
-          }
-        });
-      }
-      Object.assign(DEMO_CONFIG, srv);
-    }
+    } catch(e) { console.error('[cfg parse]', e); }
 
     let currentFilter = 'ALL';
     let rejectCtx = { id: null, gate: null };
