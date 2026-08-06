@@ -59,10 +59,25 @@
     };
 
     let requestsData = [];
-    // Read server-injected values from window._ vars (set by Index.html base64 block)
-    const _srvEmail  = (typeof window._SERVER_USER_EMAIL !== "undefined") ? window._SERVER_USER_EMAIL : "";
-    const _srvRole   = (typeof window._SERVER_USER_ROLE  !== "undefined") ? window._SERVER_USER_ROLE  : "";
-    const _srvConfig = (typeof window._SERVER_CONFIG     !== "undefined") ? window._SERVER_CONFIG     : {};
+    // Read server-injected values from hidden #__srv data attributes (safest injection method)
+    (function() {
+      try {
+        const el = document.getElementById('__srv');
+        if (el) {
+          window._SERVER_USER_EMAIL = el.dataset.email || '';
+          window._SERVER_USER_ROLE  = el.dataset.role  || 'REQUESTER';
+          window._SERVER_CONFIG     = JSON.parse(decodeURIComponent(el.dataset.cfg || '{}'));
+        }
+      } catch(e) {
+        console.error('[__srv parse failed]', e);
+        window._SERVER_USER_EMAIL = '';
+        window._SERVER_USER_ROLE  = 'REQUESTER';
+        window._SERVER_CONFIG     = {};
+      }
+    })();
+    const _srvEmail  = window._SERVER_USER_EMAIL || "";
+    const _srvRole   = window._SERVER_USER_ROLE  || "REQUESTER";
+    const _srvConfig = window._SERVER_CONFIG     || {};
     let CURRENT_EMAIL = (_srvEmail) ? _srvEmail : (IS_LOCAL ? "nhanvien1@ahamove.com" : "");
     let CURRENT_ROLE  = (_srvRole)  ? _srvRole  : "REQUESTER";
 
