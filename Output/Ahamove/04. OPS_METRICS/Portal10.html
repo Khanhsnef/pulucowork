@@ -544,12 +544,8 @@ function appendToSheet(rowData) {
   var params = rowData.map(function(v, i) {
     return encodeURIComponent(keys[i]) + '=' + encodeURIComponent(v || '');
   }).join('&');
-  fetch(LOGGER_URL + '?' + params)
-    .then(function(res) { return res.text(); })
-    .then(function(t) {
-      if (t === 'ok') console.log('[Sheets] ✓', rowData[1], rowData[2]);
-      else console.error('[Sheets] lỗi:', t);
-    })
+  fetch(LOGGER_URL + '?' + params, { mode: 'no-cors' })
+    .then(function() { console.log('[Sheets] ✓ sent:', rowData[1], rowData[2]); })
     .catch(function(e) { console.error('[Sheets] fetch lỗi:', e); });
 }
 
