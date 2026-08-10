@@ -35,10 +35,18 @@
     .role-REQUESTER{background:rgba(148,163,184,.2);color:#CBD5E1}
 
     /* ── ROLE SWITCHER ── */
-    .role-switcher{display:flex;align-items:center;gap:8px}
-    .role-switcher label{font-size:12px;color:var(--text-2)}
-    .role-switcher select{background:rgba(15,23,42,.8);border:1px solid var(--border);color:var(--text-1);border-radius:8px;padding:5px 10px;font-size:12px;font-family:inherit;cursor:pointer}
-    .role-switcher select:focus{outline:none;border-color:var(--teal-l)}
+    .user-info{display:flex;align-items:center;gap:10px}
+    .user-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--teal-l);flex-shrink:0}
+    .user-avatar-placeholder{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--indigo));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;border:2px solid var(--teal-l)}
+    .user-name{font-size:13px;font-weight:600;color:var(--text-1)}
+    .user-email{font-size:11px;color:var(--text-3);font-family:'JetBrains Mono',monospace}
+    .btn-logout{background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--text-2);border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:inherit}
+    .btn-logout:hover{background:rgba(255,255,255,.14);color:var(--text-1)}
+    .login-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,23,42,.97);backdrop-filter:blur(12px);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2000;gap:24px}
+    .login-box{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-lg);padding:40px 48px;text-align:center;max-width:420px;width:90%}
+    .login-box h2{font-size:20px;font-weight:800;margin-bottom:8px}
+    .login-box p{font-size:14px;color:var(--text-2);margin-bottom:28px;line-height:1.6}
+    .login-box .hint{font-size:12px;color:var(--text-3);margin-top:16px}
 
     /* ── KPI ── */
     .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:24px}
@@ -241,17 +249,17 @@
         <p>Ahamove Driver Management · Luồng phê duyệt đa tầng</p>
       </div>
     </div>
-    <div class="user-chip">
-      <div class="role-switcher">
-        <label>Vai trò của bạn:</label>
-        <select id="role-select" onchange="changeRole(this.value)">
-          <option value="REQUESTER">Requester (Team)</option>
-          <option value="TEAM_LEAD">Team Lead / Head</option>
-          <option value="DM">DM Lead</option>
-          <option value="QM">QM Specialist</option>
-        </select>
+    <div class="user-chip" id="user-chip">
+      <div class="user-info" id="user-info" style="display:none">
+        <div class="user-avatar-placeholder" id="user-avatar-ph"></div>
+        <img class="user-avatar" id="user-avatar-img" style="display:none" alt="">
+        <div>
+          <div class="user-name" id="user-display-name">—</div>
+          <div class="user-email" id="user-display-email">—</div>
+        </div>
+        <span class="role-pill role-REQUESTER" id="role-pill">REQUESTER</span>
+        <button class="btn-logout" onclick="signOut()">Đổi TK</button>
       </div>
-      <span class="role-pill role-REQUESTER" id="role-pill">REQUESTER</span>
     </div>
   </header>
 
@@ -434,6 +442,32 @@
   </div>
 </div>
 
+<!-- LOGIN OVERLAY — hiện khi chưa đăng nhập -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div style="font-size:48px;margin-bottom:12px">🏷️</div>
+    <h2>Tag Request Portal</h2>
+    <p>Đăng nhập bằng tài khoản <strong>@ahamove.com</strong> để tiếp tục.<br>Vai trò sẽ được tự động xác định theo email.</p>
+    <!-- Google One Tap renders here -->
+    <div id="g_id_onload"
+      data-client_id="YOUR_GOOGLE_CLIENT_ID"
+      data-callback="handleGoogleLogin"
+      data-auto_select="true"
+      data-itp_support="true">
+    </div>
+    <div class="g_id_signin"
+      data-type="standard"
+      data-shape="pill"
+      data-theme="filled_blue"
+      data-text="signin_with"
+      data-size="large"
+      data-logo_alignment="left">
+    </div>
+    <p class="hint">Chỉ tài khoản @ahamove.com được phép truy cập.</p>
+  </div>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async></script>
 <script>
 // ─────────────────────────────────────────────
 //  CONFIG
@@ -453,11 +487,36 @@ const DM_LEADS  = ['khanhlp@ahamove.com','trangdtt@ahamove.com'];
 const QM_LEADS  = ['phundk@ahamove.com','vayhc@ahamove.com'];
 
 // ─────────────────────────────────────────────
+//  ROLE MAP — email → role
+// ─────────────────────────────────────────────
+const ROLE_MAP = {
+  // DM Lead
+  'khanhlp@ahamove.com':  'DM',
+  'trangdtt@ahamove.com': 'DM',
+  // QM Specialist
+  'phundk@ahamove.com':   'QM',
+  'vayhc@ahamove.com':    'QM',
+  // Team Leads (từ TEAM_LEAD_MAP)
+  'hant@ahamove.com':     'TEAM_LEAD',
+  'sonnbt@ahamove.com':   'TEAM_LEAD',
+  'luuhtm@ahamove.com':   'TEAM_LEAD',
+  'thaoltn@ahamove.com':  'TEAM_LEAD',
+  'thinhnh@ahamove.com':  'TEAM_LEAD',
+  'taipq@ahamove.com':    'TEAM_LEAD',
+  'tuannq@ahamove.com':   'TEAM_LEAD',
+  'locnx@ahamove.com':    'TEAM_LEAD'
+  // Mọi @ahamove.com khác → REQUESTER (default)
+};
+const AUTH_STORAGE_KEY = 'aha_portal_user_v1';
+
+// ─────────────────────────────────────────────
 //  STATE
 // ─────────────────────────────────────────────
 var ROLE  = 'REQUESTER';
 var EMAIL = '';
-var data  = [];
+var USER_NAME   = '';
+var USER_AVATAR = '';
+var data   = [];
 var filter = 'ALL';
 var selId  = null;
 var rejCtx = {id:null, gate:null};
@@ -468,8 +527,14 @@ var dmCtx  = {id:null};
 // ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
   data = loadData();
-  renderAll();
-  selectCat('Tạo tag mới');
+  // Thử restore session đã lưu
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY)); } catch(e){}
+  if (saved && saved.email && saved.email.endsWith('@ahamove.com')) {
+    applyUser(saved.email, saved.name, saved.avatar);
+  } else {
+    document.getElementById('login-overlay').style.display = 'flex';
+  }
 });
 
 // ─────────────────────────────────────────────
@@ -496,14 +561,67 @@ function fmt(d) {
 // ─────────────────────────────────────────────
 //  ROLE
 // ─────────────────────────────────────────────
-function changeRole(v) {
-  ROLE = v;
-  var roleEmails = { 'DM':'khanhlp@ahamove.com', 'TEAM_LEAD':'hant@ahamove.com', 'QM':'phundk@ahamove.com', 'REQUESTER':'' };
-  EMAIL = roleEmails[v] || '';
+// ─────────────────────────────────────────────
+//  AUTH
+// ─────────────────────────────────────────────
+function handleGoogleLogin(response) {
+  // Decode JWT payload từ Google
+  var parts = response.credential.split('.');
+  var payload = JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+  var email  = (payload.email || '').toLowerCase();
+  var name   = payload.name   || email.split('@')[0];
+  var avatar = payload.picture || '';
+  if (!email.endsWith('@ahamove.com')) {
+    alert('Chỉ tài khoản @ahamove.com được phép truy cập. Email của bạn: ' + email);
+    return;
+  }
+  localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({email:email, name:name, avatar:avatar}));
+  applyUser(email, name, avatar);
+}
+
+function applyUser(email, name, avatar) {
+  EMAIL       = email;
+  USER_NAME   = name;
+  USER_AVATAR = avatar;
+  ROLE = ROLE_MAP[email] || 'REQUESTER';
+
+  // Ẩn login overlay
+  document.getElementById('login-overlay').style.display = 'none';
+
+  // Hiện user info
+  document.getElementById('user-info').style.display = 'flex';
+  document.getElementById('user-display-name').textContent  = name;
+  document.getElementById('user-display-email').textContent = email;
+
+  var ph  = document.getElementById('user-avatar-ph');
+  var img = document.getElementById('user-avatar-img');
+  if (avatar) {
+    img.src = avatar; img.style.display = 'block'; ph.style.display = 'none';
+  } else {
+    ph.textContent = name.charAt(0).toUpperCase(); ph.style.display = 'flex'; img.style.display = 'none';
+  }
+
   var pill = document.getElementById('role-pill');
-  pill.textContent = v;
-  pill.className = 'role-pill role-' + v;
+  pill.textContent = ROLE;
+  pill.className   = 'role-pill role-' + ROLE;
+
+  // Pre-fill form email
+  var fEmail = document.getElementById('f-email');
+  if (fEmail) { fEmail.value = email; fEmail.readOnly = true; fEmail.style.color = 'var(--text-2)'; }
+  var fName = document.getElementById('f-name');
+  if (fName && !fName.value) fName.value = name;
+
   renderAll();
+  selectCat('Tạo tag mới');
+}
+
+function signOut() {
+  localStorage.removeItem(AUTH_STORAGE_KEY);
+  EMAIL = ''; USER_NAME = ''; USER_AVATAR = ''; ROLE = 'REQUESTER';
+  document.getElementById('user-info').style.display = 'none';
+  document.getElementById('login-overlay').style.display = 'flex';
+  // Reset Google One Tap để cho phép chọn TK khác
+  if (window.google && google.accounts) google.accounts.id.disableAutoSelect();
 }
 function canLeadApprove(r) {
   if (!r) return ROLE === 'TEAM_LEAD' || ROLE === 'DM';
