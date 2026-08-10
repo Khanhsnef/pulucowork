@@ -544,9 +544,9 @@ function appendToSheet(rowData) {
   var params = rowData.map(function(v, i) {
     return encodeURIComponent(keys[i]) + '=' + encodeURIComponent(v || '');
   }).join('&');
-  fetch(LOGGER_URL + '?' + params, { mode: 'no-cors' })
-    .then(function() { console.log('[Sheets] ✓ sent:', rowData[1], rowData[2]); })
-    .catch(function(e) { console.error('[Sheets] fetch lỗi:', e); });
+  var img = new Image();
+  img.onload = img.onerror = function() { console.log('[Sheets] ✓ sent:', rowData[1], rowData[2]); };
+  img.src = LOGGER_URL + '?' + params;
 }
 
 function parseHashParams() {
