@@ -561,36 +561,29 @@ function loadToken() {
   return false;
 }
 
-var SHEETS = {
-  ALL:        '01_ALL_TAG_REQUESTS',
-  DM_LEAD:    '02_DM_LEAD_REVIEW_CONSOLE',
-  QM:         '03_QM_HANDOVER_QUEUE',
-  DICTIONARY: '04_TAG_DICTIONARY_METRICS'
-};
-
-function appendToSheet(tab, rowData) {
+function appendToSheet(rowData) {
   if (!ACCESS_TOKEN) {
-    console.warn('[Sheets] Không có access_token — data không được ghi vào', tab, ':', rowData);
+    console.warn('[Sheets] Không có access_token:', rowData);
     return;
   }
   var url = 'https://sheets.googleapis.com/v4/spreadsheets/' + SHEET_ID +
-            '/values/' + encodeURIComponent(tab) + ':append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS';
+            '/values/' + encodeURIComponent(SHEET_TAB) + ':append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS';
   fetch(url, {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json' },
     body: JSON.stringify({ values: [rowData] })
   }).then(function(res) {
     if (res.ok) {
-      console.log('[Sheets] ✓', tab, '←', rowData[1], rowData[2]);
+      console.log('[Sheets] ✓ ghi OK:', rowData[1], rowData[2]);
     } else {
       res.json().then(function(e) {
-        console.error('[Sheets] API lỗi', res.status, tab, JSON.stringify(e));
-        var msg = (res.status === 403) ? 'Thiếu quyền Sheets hoặc API chưa bật' : 'Lỗi ' + res.status;
+        console.error('[Sheets] lỗi', res.status, JSON.stringify(e));
+        var msg = res.status === 403 ? 'Thiếu quyền Sheets hoặc API chưa bật' : 'Lỗi ' + res.status;
         toast('Sheets lỗi', msg, 'err');
         if (res.status === 401) { ACCESS_TOKEN = ''; updateSheetsStatusBtn(); }
       });
     }
-  }).catch(function(e) { console.error('[Sheets] Fetch lỗi:', e); });
+  }).catch(function(e) { console.error('[Sheets] fetch lỗi:', e); });
 }
 
 function parseHashParams() {
@@ -842,8 +835,7 @@ function submitForm(e) {
   r.log.push({ts:fmt(now), actor:r.email||r.name, action:'REQUEST_CREATED', note:r.reason});
   data.unshift(r);
   saveData();
-  // 01_ALL_TAG_REQUESTS: Timestamp | ID | Category | Team | Requester | Tag Name | Tag Type | Status | Rationale
-  appendToSheet(SHEETS.ALL, [fmt(now), r.id, r.requestCategory, r.team, r.email||r.name, r.tagName, r.type, 'PENDING_TEAM_LEAD', r.reason.substring(0,200)]);
+  appendToSheet([fmt(now), r.id, 'REQUEST_CREATED', r.email||r.name, 'REQUESTER', r.team, r.requestCategory, r.tagName, '-', 'PENDING_TEAM_LEAD', r.reason.substring(0,200), r.deadlineLead||'-']);
   document.getElementById('req-form').reset();
   selectCat('Tạo tag mới');
   renderAll();
@@ -1049,8 +1041,7 @@ function leadApprove(id) {
     toast('Lead duyệt '+id,'Chuyển DM Review','ok');
   }
   saveData();
-  // 02_DM_LEAD_REVIEW_CONSOLE: Timestamp | ID | Action | Reviewer | Team | Tag Name | Tag Type | New State | Note
-  appendToSheet(SHEETS.DM_LEAD, [fmt(now), r.id, r.requestCategory==='Add tag'?'LEAD_APPROVED_SKIP_DM':'LEAD_APPROVED', EMAIL||ROLE, r.team, r.tagName, r.type, r.state, '']);
+  appendToSheet([fmt(now), r.id, r.requestCategory==='Add tag'?'LEAD_APPROVED_SKIP_DM':'LEAD_APPROVED', EMAIL||ROLE, 'TEAM_LEAD', r.team, r.requestCategory, r.tagName, '-', r.state, '', r.deadlineDM||r.deadlineQM||'-']);
   renderAll();
 }
 
@@ -1076,9 +1067,7 @@ function submitDMApprove() {
   r.deadlineQM = fmt(new Date(now.getTime()+24*3600*1000));
   r.log.push({ts:fmt(now), actor:EMAIL||ROLE, action:'DM_APPROVED', note:'Tag code: '+code+(note?' | '+note:'')});
   saveData();
-  // 02_DM_LEAD_REVIEW_CONSOLE + 04_TAG_DICTIONARY_METRICS
-  appendToSheet(SHEETS.DM_LEAD,    [fmt(now), r.id, 'DM_APPROVED', EMAIL||ROLE, r.team, r.tagName, code, 'PENDING_QM', note]);
-  appendToSheet(SHEETS.DICTIONARY, [fmt(now), r.id, code, r.tagName, r.type, r.team, r.reason.substring(0,150), EMAIL||ROLE, 'ACTIVE']);
+  appendToSheet([fmt(now), r.id, 'DM_APPROVED', EMAIL||ROLE, 'DM', r.team, r.requestCategory, r.tagName, code, 'PENDING_QM', note, r.deadlineQM||'-']);
   renderAll(); closeModal('dm-modal');
   toast('DM duyệt '+r.id,'Gán mã '+code+' → chuyển QM','ok');
 }
@@ -1102,8 +1091,7 @@ function submitReject() {
   r.state = 'REJECTED'; r.qmStatus = 'N/A'; r.breach = '';
   r.log.push({ts:fmt(now), actor:EMAIL||ROLE, action:(rejCtx.gate==='LEAD'?'LEAD_REJECTED':'DM_REJECTED'), note:note});
   saveData();
-  // 02_DM_LEAD_REVIEW_CONSOLE
-  appendToSheet(SHEETS.DM_LEAD, [fmt(now), r.id, rejCtx.gate==='LEAD'?'LEAD_REJECTED':'DM_REJECTED', EMAIL||ROLE, r.team, r.tagName, r.type, 'REJECTED', note]);
+  appendToSheet([fmt(now), r.id, rejCtx.gate==='LEAD'?'LEAD_REJECTED':'DM_REJECTED', EMAIL||ROLE, rejCtx.gate==='LEAD'?'TEAM_LEAD':'DM', r.team, r.requestCategory, r.tagName, '-', 'REJECTED', note, '-']);
   renderAll(); closeModal('rej-modal');
   toast('Đã từ chối '+r.id,'Requester có thể chỉnh &amp; gửi lại','warn');
 }
@@ -1118,8 +1106,7 @@ function qmSave(id) {
   if (status==='TAGGED_SUCCESS') { r.state='DONE'; r.breach=''; toast('Hoàn thành '+id,'Đã add tag thành công','ok'); }
   else toast('Cập nhật '+id,'QM status: '+status,'ok');
   saveData();
-  // 03_QM_HANDOVER_QUEUE: Timestamp | ID | Action | QM Specialist | Team | Tag Name | Tag Code | QM Status | Note
-  appendToSheet(SHEETS.QM, [fmt(now), id, 'QM_UPDATE', EMAIL||ROLE, r.team, r.tagName, r.dmTagCode||r.tagName, status, '']);
+  appendToSheet([fmt(now), id, 'QM_UPDATE', EMAIL||ROLE, 'QM', r.team, r.requestCategory, r.tagName, r.dmTagCode||r.tagName, status, '', '-']);
   renderAll();
 }
 
