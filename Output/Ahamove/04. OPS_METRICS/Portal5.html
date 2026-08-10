@@ -559,17 +559,22 @@ function saveRequest(r) {
 
 // ── Đọc toàn bộ request từ PORTAL_DATA
 function loadFromSheet(callback) {
-  fetch(SCRIPT_URL + '?action=read', { credentials: 'include' })
-    .then(function(res) { return res.json(); })
-    .then(function(rows) {
-      data = rows || [];
-      callback();
-    })
-    .catch(function(e) {
-      console.error('[Data] load lỗi:', e);
-      data = [];
-      callback();
-    });
+  window._loadCb = function(rows) {
+    data = rows || [];
+    callback();
+    delete window._loadCb;
+    var el = document.getElementById('_jsonp_load');
+    if (el) el.parentNode.removeChild(el);
+  };
+  var s = document.createElement('script');
+  s.id = '_jsonp_load';
+  s.src = SCRIPT_URL + '?action=read&callback=_loadCb';
+  s.onerror = function() {
+    console.error('[Data] load lỗi');
+    data = [];
+    callback();
+  };
+  document.head.appendChild(s);
 }
 
 function parseHashParams() {
