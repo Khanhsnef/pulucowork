@@ -552,14 +552,9 @@ function appendLog(rowData) {
 
 // ── Lưu full state 1 request vào PORTAL_DATA (POST)
 function saveRequest(r) {
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {'Content-Type': 'text/plain'},
-    body: JSON.stringify(r)
-  }).then(function() {
-    console.log('[Data] ✓ saved:', r.id);
-  }).catch(function(e) { console.error('[Data] save lỗi:', e); });
+  var img = new Image();
+  img.src = SCRIPT_URL + '?action=save&id=' + encodeURIComponent(r.id) + '&json=' + encodeURIComponent(JSON.stringify(r));
+  console.log('[Data] ✓ saving:', r.id);
 }
 
 // ── Đọc toàn bộ request từ PORTAL_DATA
