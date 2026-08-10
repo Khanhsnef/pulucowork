@@ -573,7 +573,17 @@ function appendToSheet(rowData) {
     headers: { 'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json' },
     body: JSON.stringify({ values: [rowData] })
   }).then(function(res) {
-    if (!res.ok) res.json().then(function(e){ console.error('[Sheets] API lỗi:', res.status, JSON.stringify(e)); });
+    if (res.ok) {
+      console.log('[Sheets] ✓ Ghi thành công:', rowData[1], rowData[2]);
+    } else {
+      res.json().then(function(e) {
+        console.error('[Sheets] API lỗi', res.status, JSON.stringify(e));
+        var msg = (res.status === 403) ? 'Thiếu quyền Sheets hoặc API chưa bật' : 'Lỗi ' + res.status;
+        toast('Sheets lỗi', msg, 'err');
+        // Token có thể hết hạn → hiện nút reconnect
+        if (res.status === 401) { ACCESS_TOKEN = ''; updateSheetsStatusBtn(); }
+      });
+    }
   }).catch(function(e) { console.error('[Sheets] Fetch lỗi:', e); });
 }
 
