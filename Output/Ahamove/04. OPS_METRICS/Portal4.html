@@ -448,26 +448,20 @@
     <div style="font-size:48px;margin-bottom:12px">🏷️</div>
     <h2>Tag Request Portal</h2>
     <p>Đăng nhập bằng tài khoản <strong>@ahamove.com</strong> để tiếp tục.<br>Vai trò sẽ được tự động xác định theo email.</p>
-    <!-- Google One Tap renders here -->
-    <div id="g_id_onload"
-      data-client_id="29825650321-ucb7jc8a3rvmt3fn7nvntaajnvfrh673.apps.googleusercontent.com"
-      data-callback="handleGoogleLogin"
-      data-auto_select="true"
-      data-itp_support="true">
-    </div>
-    <div class="g_id_signin"
-      data-type="standard"
-      data-shape="pill"
-      data-theme="filled_blue"
-      data-text="signin_with"
-      data-size="large"
-      data-logo_alignment="left">
-    </div>
-    <p class="hint">Chỉ tài khoản @ahamove.com được phép truy cập.</p>
+    <button onclick="startGoogleLogin()" style="
+      margin-top:8px; padding:12px 28px; border:none; border-radius:50px; cursor:pointer;
+      background:#fff; color:#1f1f1f; font-size:15px; font-weight:600;
+      display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.25);
+    ">
+      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Đăng nhập với Google
+    </button>
+    <p class="hint" style="margin-top:14px;">Chỉ tài khoản @ahamove.com được phép truy cập.</p>
   </div>
 </div>
 
-<script src="https://accounts.google.com/gsi/client" async onload="initGSI()"></script>
+<!-- Không cần load script Google — dùng OAuth2 implicit flow thuần -->
+
 <script>
 // ─────────────────────────────────────────────
 //  CONFIG
@@ -525,37 +519,70 @@ var dmCtx  = {id:null};
 // ─────────────────────────────────────────────
 //  BOOT
 // ─────────────────────────────────────────────
-function initGSI() {
-  // Gọi khi GSI script load xong — render nút Sign-In nếu chưa đăng nhập
-  if (!EMAIL && window.google && google.accounts && google.accounts.id) {
-    google.accounts.id.initialize({
-      client_id: '29825650321-ucb7jc8a3rvmt3fn7nvntaajnvfrh673.apps.googleusercontent.com',
-      callback: handleGoogleLogin,
-      auto_select: true,
-      itp_support: true
-    });
-    var btnEl = document.getElementById('g_id_signin');
-    if (btnEl) {
-      google.accounts.id.renderButton(btnEl, {
-        type: 'standard', shape: 'pill', theme: 'filled_blue',
-        text: 'signin_with', size: 'large', logo_alignment: 'left'
-      });
-    }
-    google.accounts.id.prompt();
-  }
+var OAUTH_CLIENT_ID = '29825650321-ucb7jc8a3rvmt3fn7nvntaajnvfrh673.apps.googleusercontent.com';
+var OAUTH_REDIRECT  = window.location.origin + window.location.pathname;
+
+function startGoogleLogin() {
+  var params = [
+    'client_id='    + encodeURIComponent(OAUTH_CLIENT_ID),
+    'redirect_uri=' + encodeURIComponent(OAUTH_REDIRECT),
+    'response_type=id_token',
+    'scope='        + encodeURIComponent('openid email profile'),
+    'nonce='        + Math.random().toString(36).slice(2),
+    'hd=ahamove.com',
+    'prompt=select_account'
+  ].join('&');
+  window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params;
+}
+
+function parseHashToken() {
+  // Sau redirect Google trả về #id_token=xxx&...
+  var hash = window.location.hash.slice(1);
+  if (!hash) return null;
+  var parts = {};
+  hash.split('&').forEach(function(p) {
+    var kv = p.split('=');
+    parts[kv[0]] = decodeURIComponent(kv[1] || '');
+  });
+  return parts.id_token || null;
+}
+
+function decodeJWT(token) {
+  try {
+    var b64 = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    return JSON.parse(atob(b64));
+  } catch(e) { return null; }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
   data = loadData();
-  // Thử restore session đã lưu
+
+  // Case 1: Vừa redirect về từ Google → có id_token trong hash
+  var token = parseHashToken();
+  if (token) {
+    var payload = decodeJWT(token);
+    if (payload && payload.email && payload.email.endsWith('@ahamove.com')) {
+      var email  = payload.email.toLowerCase();
+      var name   = payload.name   || email.split('@')[0];
+      var avatar = payload.picture || '';
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({email:email, name:name, avatar:avatar}));
+      // Xoá hash khỏi URL để không re-parse khi F5
+      history.replaceState(null, '', window.location.pathname);
+      applyUser(email, name, avatar);
+      return;
+    } else if (payload) {
+      alert('Chỉ tài khoản @ahamove.com được phép truy cập. Email: ' + (payload.email||''));
+      history.replaceState(null, '', window.location.pathname);
+    }
+  }
+
+  // Case 2: Đã có session lưu
   var saved = null;
   try { saved = JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY)); } catch(e){}
   if (saved && saved.email && saved.email.endsWith('@ahamove.com')) {
     applyUser(saved.email, saved.name, saved.avatar);
   } else {
     document.getElementById('login-overlay').style.display = 'flex';
-    // Nếu GSI đã load rồi (cached) thì init ngay
-    if (window.google && google.accounts && google.accounts.id) initGSI();
   }
 });
 
@@ -586,20 +613,6 @@ function fmt(d) {
 // ─────────────────────────────────────────────
 //  AUTH
 // ─────────────────────────────────────────────
-function handleGoogleLogin(response) {
-  // Decode JWT payload từ Google
-  var parts = response.credential.split('.');
-  var payload = JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
-  var email  = (payload.email || '').toLowerCase();
-  var name   = payload.name   || email.split('@')[0];
-  var avatar = payload.picture || '';
-  if (!email.endsWith('@ahamove.com')) {
-    alert('Chỉ tài khoản @ahamove.com được phép truy cập. Email của bạn: ' + email);
-    return;
-  }
-  localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({email:email, name:name, avatar:avatar}));
-  applyUser(email, name, avatar);
-}
 
 function applyUser(email, name, avatar) {
   EMAIL       = email;
@@ -642,8 +655,7 @@ function signOut() {
   EMAIL = ''; USER_NAME = ''; USER_AVATAR = ''; ROLE = 'REQUESTER';
   document.getElementById('user-info').style.display = 'none';
   document.getElementById('login-overlay').style.display = 'flex';
-  // Reset Google One Tap để cho phép chọn TK khác
-  if (window.google && google.accounts) google.accounts.id.disableAutoSelect();
+  // Không cần GSI — OAuth2 redirect tự xử lý account selection
 }
 function canLeadApprove(r) {
   if (!r) return ROLE === 'TEAM_LEAD' || ROLE === 'DM';
