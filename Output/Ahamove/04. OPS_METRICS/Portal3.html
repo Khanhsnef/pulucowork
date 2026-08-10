@@ -467,7 +467,7 @@
   </div>
 </div>
 
-<script src="https://accounts.google.com/gsi/client" async></script>
+<script src="https://accounts.google.com/gsi/client" async onload="initGSI()"></script>
 <script>
 // ─────────────────────────────────────────────
 //  CONFIG
@@ -525,6 +525,26 @@ var dmCtx  = {id:null};
 // ─────────────────────────────────────────────
 //  BOOT
 // ─────────────────────────────────────────────
+function initGSI() {
+  // Gọi khi GSI script load xong — render nút Sign-In nếu chưa đăng nhập
+  if (!EMAIL && window.google && google.accounts && google.accounts.id) {
+    google.accounts.id.initialize({
+      client_id: '29825650321-ucb7jc8a3rvmt3fn7nvntaajnvfrh673.apps.googleusercontent.com',
+      callback: handleGoogleLogin,
+      auto_select: true,
+      itp_support: true
+    });
+    var btnEl = document.getElementById('g_id_signin');
+    if (btnEl) {
+      google.accounts.id.renderButton(btnEl, {
+        type: 'standard', shape: 'pill', theme: 'filled_blue',
+        text: 'signin_with', size: 'large', logo_alignment: 'left'
+      });
+    }
+    google.accounts.id.prompt();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   data = loadData();
   // Thử restore session đã lưu
@@ -534,6 +554,8 @@ document.addEventListener('DOMContentLoaded', function() {
     applyUser(saved.email, saved.name, saved.avatar);
   } else {
     document.getElementById('login-overlay').style.display = 'flex';
+    // Nếu GSI đã load rồi (cached) thì init ngay
+    if (window.google && google.accounts && google.accounts.id) initGSI();
   }
 });
 
