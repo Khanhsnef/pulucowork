@@ -425,8 +425,10 @@
   </div>
 
   <script>
-    // ===== PORTAL: IS_LOCAL = true khi mở offline (demo), false khi chạy trên Apps Script =====
-    const IS_LOCAL = typeof google === 'undefined';
+    // ===== PORTAL MODE =====
+    // IS_LOCAL = true  → demo offline, dùng mockData()
+    // IS_LOCAL = false → production (Apps Script hoặc pages.ahamove.com + backend)
+    const IS_LOCAL = false; // ← ĐÃ TẮT demo, dùng data thật từ Apps Script
 
     // ===== DEMO CONFIG (dùng khi IS_LOCAL = true) =====
     const DEMO_CONFIG = {
@@ -473,9 +475,11 @@
     let dmCtx = { id: null };
     let selectedReqId = null;
 
-    // ===== BOOT: IS_LOCAL vs Apps Script =====
+    // ===== BOOT =====
     document.addEventListener('DOMContentLoaded', function() {
-      if (IS_LOCAL) {
+      var hasGAS = (typeof google !== 'undefined') && google.script && google.script.run;
+      if (IS_LOCAL || !hasGAS) {
+        // Fallback demo khi mở file trực tiếp ngoài Apps Script
         CURRENT_EMAIL = DEMO_CONFIG.userEmail;
         CURRENT_ROLE  = DEMO_CONFIG.userRole;
         requestsData  = mockData();
@@ -484,6 +488,7 @@
         renderAll();
         selectRequestCategory('Tạo tag mới');
         hideLoading();
+        if (!hasGAS) showToast('Chế độ Demo', 'Chưa kết nối Apps Script backend.', 'warn');
       } else {
         google.script.run
           .withSuccessHandler(function(cfg) {
@@ -586,7 +591,8 @@
     }
 
     function reloadData(cb) {
-      if (IS_LOCAL) { if (cb) cb(); return; }
+      var hasGAS = (typeof google !== 'undefined') && google.script && google.script.run;
+      if (IS_LOCAL || !hasGAS) { renderAll(); if (cb) cb(); return; }
       google.script.run
         .withSuccessHandler(function(res) {
           requestsData = (res && res.data) ? res.data : [];
@@ -1033,12 +1039,14 @@
         renderAll(); closeModal('reject-modal');
         showToast('Đã từ chối ' + r.id, 'Requester sẽ thấy lý do để chỉnh sửa. [DEMO]', 'warn');
       } else {
-        var saveFn = (rejectCtx.gate === 'LEAD') ? 'saveLeadApproval' : 'saveDMReview';
-        var args = (rejectCtx.gate === 'LEAD') ? [r.id, 'REJECTED', note] : [r.id, 'REJECTED', note, ''];
-        google.script.run
+        var runner = google.script.run
           .withSuccessHandler(function(){ reloadData(function(){ closeModal('reject-modal'); showToast('Đã từ chối ' + r.id, 'Lý do đã ghi nhận.', 'warn'); }); })
-          .withFailureHandler(function(err){ showToast('Lỗi từ chối', String(err), 'err'); })
-          [saveFn].apply(google.script.run, args);
+          .withFailureHandler(function(err){ showToast('Lỗi từ chối', String(err), 'err'); });
+        if (rejectCtx.gate === 'LEAD') {
+          runner.saveLeadApproval(r.id, 'REJECTED', note);
+        } else {
+          runner.saveDMReview(r.id, 'REJECTED', note, '');
+        }
       }
     }
 

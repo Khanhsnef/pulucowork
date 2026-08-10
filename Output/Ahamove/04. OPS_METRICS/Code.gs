@@ -265,9 +265,15 @@ function saveNewRequest(data) {
   const now = new Date();
   const dlLead = addHours(now, slaHours(config, 'SLA_LEAD_HOURS', 4));
 
+  // Generate ID server-side để đảm bảo luôn có ID dù client không truyền
+  const lastRow = sheet.getLastRow();
+  const seq = String(lastRow).padStart(3, '0');
+  const dateTag = Utilities.formatDate(now, "GMT+7", "yyyyMMdd");
+  const reqId = 'REQ-' + dateTag + '-' + seq;
+
   const row = new Array(BASE_HEADERS.length + NEW_HEADERS.length).fill("");
-  row[COL.ID-1] = data.id;
-  row[COL.DATE-1] = data.date;
+  row[COL.ID-1] = reqId;
+  row[COL.DATE-1] = fmt(now);
   row[COL.CATEGORY-1] = data.requestCategory;
   row[COL.TEAM-1] = data.team;
   row[COL.NAME-1] = data.name;
@@ -288,6 +294,9 @@ function saveNewRequest(data) {
   row[COL.LEAD_APPROVER-1] = '-'; row[COL.LEAD_DATE-1] = '-';
   row[COL.LEAD_DECISION-1] = 'PENDING'; row[COL.LEAD_NOTE-1] = '';
   row[COL.STATE-1] = 'PENDING_TEAM_LEAD';
+  // Ghi email người tạo — ưu tiên từ Session (Apps Script), fallback data.submitterEmail từ client
+  const submitterEmail = getUserEmail() || data.submitterEmail || '';
+  if (COL.SUBMITTER && submitterEmail) row[COL.SUBMITTER-1] = submitterEmail;
   row[COL.DL_LEAD-1] = fmt(dlLead);
   row[COL.DL_DM-1] = ''; row[COL.DL_QM-1] = '';
   row[COL.BREACH-1] = '';
@@ -327,7 +336,8 @@ function include(filename) {
  * ============================================================ */
 function saveLeadApproval(reqId, decision, note) {
   const role = getUserRole();
-  if (role !== 'TEAM_LEAD' && role !== 'DM') {
+  // QM có thể là Lead của team QM — defer RBAC hoàn toàn sang canLeadApproveTeam bên dưới
+  if (role !== 'TEAM_LEAD' && role !== 'DM' && role !== 'QM') {
     return { status: "error", message: "Bạn không có quyền duyệt ở bước Lead." };
   }
   const sheet = getMainSheet();
