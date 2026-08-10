@@ -258,6 +258,7 @@
           <div class="user-email" id="user-display-email">—</div>
         </div>
         <span class="role-pill role-REQUESTER" id="role-pill">REQUESTER</span>
+        <button class="btn-logout" id="btn-sheets-status" onclick="reconnectSheets()" title="Kết nối Sheets để ghi log" style="display:none;background:#EF4444;color:#fff;border-color:#EF4444;">⚠ Sheets</button>
         <button class="btn-logout" onclick="signOut()">Đổi TK</button>
       </div>
     </div>
@@ -522,36 +523,58 @@ var dmCtx  = {id:null};
 var OAUTH_CLIENT_ID = '29825650321-ucb7jc8a3rvmt3fn7nvntaajnvfrh673.apps.googleusercontent.com';
 var OAUTH_REDIRECT  = window.location.origin + window.location.pathname;
 
-var SHEET_ID = '1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4';
+var SHEET_ID  = '1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4';
 var SHEET_TAB = 'TAG_PORTAL_LOG';
 var ACCESS_TOKEN = '';
+var TOKEN_SS_KEY = 'aha_portal_token_v1'; // sessionStorage key
 
-function startGoogleLogin() {
-  var scopes = [
-    'openid', 'email', 'profile',
-    'https://www.googleapis.com/auth/spreadsheets'
-  ].join(' ');
+var OAUTH_SCOPES = [
+  'openid', 'email', 'profile',
+  'https://www.googleapis.com/auth/spreadsheets'
+].join(' ');
+
+function startGoogleLogin(prompt_val) {
   var params = [
     'client_id='    + encodeURIComponent(OAUTH_CLIENT_ID),
     'redirect_uri=' + encodeURIComponent(OAUTH_REDIRECT),
     'response_type=token id_token',
-    'scope='        + encodeURIComponent(scopes),
+    'scope='        + encodeURIComponent(OAUTH_SCOPES),
     'nonce='        + Math.random().toString(36).slice(2),
     'hd=ahamove.com',
-    'prompt=select_account'
+    'prompt='       + (prompt_val || 'select_account')
   ].join('&');
   window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params;
 }
 
+function saveToken(token, expiresIn) {
+  var exp = Date.now() + (parseInt(expiresIn)||3600) * 1000 - 60000; // trừ 60s buffer
+  try { sessionStorage.setItem(TOKEN_SS_KEY, JSON.stringify({token:token, exp:exp})); } catch(e){}
+  ACCESS_TOKEN = token;
+}
+
+function loadToken() {
+  try {
+    var t = JSON.parse(sessionStorage.getItem(TOKEN_SS_KEY));
+    if (t && t.token && t.exp > Date.now()) { ACCESS_TOKEN = t.token; return true; }
+  } catch(e){}
+  ACCESS_TOKEN = '';
+  return false;
+}
+
 function appendToSheet(rowData) {
-  if (!ACCESS_TOKEN) return;
+  if (!ACCESS_TOKEN) {
+    console.warn('[Sheets] Không có access_token — data không được ghi:', rowData);
+    return;
+  }
   var url = 'https://sheets.googleapis.com/v4/spreadsheets/' + SHEET_ID +
             '/values/' + encodeURIComponent(SHEET_TAB) + ':append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS';
   fetch(url, {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json' },
     body: JSON.stringify({ values: [rowData] })
-  }).catch(function(e) { console.warn('Sheet append failed:', e); });
+  }).then(function(res) {
+    if (!res.ok) res.json().then(function(e){ console.error('[Sheets] API lỗi:', res.status, JSON.stringify(e)); });
+  }).catch(function(e) { console.error('[Sheets] Fetch lỗi:', e); });
 }
 
 function parseHashParams() {
@@ -583,8 +606,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var email  = payload.email.toLowerCase();
       var name   = payload.name   || email.split('@')[0];
       var avatar = payload.picture || '';
-      // Lưu access_token vào memory (không persist — sẽ xin lại khi hết hạn)
-      ACCESS_TOKEN = hp.access_token || '';
+      if (hp.access_token) saveToken(hp.access_token, hp.expires_in);
       localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({email:email, name:name, avatar:avatar}));
       history.replaceState(null, '', window.location.pathname);
       applyUser(email, name, avatar);
@@ -599,6 +621,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var saved = null;
   try { saved = JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY)); } catch(e){}
   if (saved && saved.email && saved.email.endsWith('@ahamove.com')) {
+    loadToken(); // thử load access_token từ sessionStorage
     applyUser(saved.email, saved.name, saved.avatar);
   } else {
     document.getElementById('login-overlay').style.display = 'flex';
@@ -667,14 +690,42 @@ function applyUser(email, name, avatar) {
 
   renderAll();
   selectCat('Tạo tag mới');
+  updateSheetsStatusBtn();
 }
 
 function signOut() {
   localStorage.removeItem(AUTH_STORAGE_KEY);
+  try { sessionStorage.removeItem(TOKEN_SS_KEY); } catch(e){}
+  ACCESS_TOKEN = '';
   EMAIL = ''; USER_NAME = ''; USER_AVATAR = ''; ROLE = 'REQUESTER';
   document.getElementById('user-info').style.display = 'none';
   document.getElementById('login-overlay').style.display = 'flex';
-  // Không cần GSI — OAuth2 redirect tự xử lý account selection
+}
+
+function reconnectSheets() {
+  // Re-login ngầm để lấy access_token mới, không logout user
+  var params = [
+    'client_id='    + encodeURIComponent(OAUTH_CLIENT_ID),
+    'redirect_uri=' + encodeURIComponent(OAUTH_REDIRECT),
+    'response_type=token id_token',
+    'scope='        + encodeURIComponent(OAUTH_SCOPES),
+    'nonce='        + Math.random().toString(36).slice(2),
+    'hd=ahamove.com',
+    'prompt=consent',
+    'login_hint='   + encodeURIComponent(EMAIL)
+  ].join('&');
+  window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params;
+}
+
+function updateSheetsStatusBtn() {
+  var btn = document.getElementById('btn-sheets-status');
+  if (!btn) return;
+  if (!ACCESS_TOKEN) {
+    btn.style.display = '';
+    btn.title = 'Chưa kết nối Sheets — bấm để đăng nhập lại lấy quyền ghi';
+  } else {
+    btn.style.display = 'none';
+  }
 }
 function canLeadApprove(r) {
   if (!r) return ROLE === 'TEAM_LEAD' || ROLE === 'DM';
