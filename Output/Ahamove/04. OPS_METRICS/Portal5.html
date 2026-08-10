@@ -522,12 +522,20 @@ var dmCtx  = {id:null};
 var OAUTH_CLIENT_ID = '29825650321-ucb7jc8a3rvmt3fn7nvntaajnvfrh673.apps.googleusercontent.com';
 var OAUTH_REDIRECT  = window.location.origin + window.location.pathname;
 
+var SHEET_ID = '1tsoIAEisTLiIkeqCJ7NMwrpNRhlXRbYrWpN3mb6xrE4';
+var SHEET_TAB = 'TAG_PORTAL_LOG';
+var ACCESS_TOKEN = '';
+
 function startGoogleLogin() {
+  var scopes = [
+    'openid', 'email', 'profile',
+    'https://www.googleapis.com/auth/spreadsheets'
+  ].join(' ');
   var params = [
     'client_id='    + encodeURIComponent(OAUTH_CLIENT_ID),
     'redirect_uri=' + encodeURIComponent(OAUTH_REDIRECT),
-    'response_type=id_token',
-    'scope='        + encodeURIComponent('openid email profile'),
+    'response_type=token id_token',
+    'scope='        + encodeURIComponent(scopes),
     'nonce='        + Math.random().toString(36).slice(2),
     'hd=ahamove.com',
     'prompt=select_account'
@@ -535,16 +543,26 @@ function startGoogleLogin() {
   window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params;
 }
 
-function parseHashToken() {
-  // Sau redirect Google trả về #id_token=xxx&...
+function appendToSheet(rowData) {
+  if (!ACCESS_TOKEN) return;
+  var url = 'https://sheets.googleapis.com/v4/spreadsheets/' + SHEET_ID +
+            '/values/' + encodeURIComponent(SHEET_TAB) + ':append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS';
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ values: [rowData] })
+  }).catch(function(e) { console.warn('Sheet append failed:', e); });
+}
+
+function parseHashParams() {
   var hash = window.location.hash.slice(1);
-  if (!hash) return null;
+  if (!hash) return {};
   var parts = {};
   hash.split('&').forEach(function(p) {
     var kv = p.split('=');
     parts[kv[0]] = decodeURIComponent(kv[1] || '');
   });
-  return parts.id_token || null;
+  return parts;
 }
 
 function decodeJWT(token) {
@@ -557,16 +575,17 @@ function decodeJWT(token) {
 document.addEventListener('DOMContentLoaded', function() {
   data = loadData();
 
-  // Case 1: Vừa redirect về từ Google → có id_token trong hash
-  var token = parseHashToken();
-  if (token) {
-    var payload = decodeJWT(token);
+  // Case 1: Vừa redirect về từ Google → có id_token + access_token trong hash
+  var hp = parseHashParams();
+  if (hp.id_token) {
+    var payload = decodeJWT(hp.id_token);
     if (payload && payload.email && payload.email.endsWith('@ahamove.com')) {
       var email  = payload.email.toLowerCase();
       var name   = payload.name   || email.split('@')[0];
       var avatar = payload.picture || '';
+      // Lưu access_token vào memory (không persist — sẽ xin lại khi hết hạn)
+      ACCESS_TOKEN = hp.access_token || '';
       localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({email:email, name:name, avatar:avatar}));
-      // Xoá hash khỏi URL để không re-parse khi F5
       history.replaceState(null, '', window.location.pathname);
       applyUser(email, name, avatar);
       return;
@@ -756,6 +775,7 @@ function submitForm(e) {
   r.log.push({ts:fmt(now), actor:r.email||r.name, action:'REQUEST_CREATED', note:r.reason});
   data.unshift(r);
   saveData();
+  appendToSheet([fmt(now), r.id, 'REQUEST_CREATED', r.email||r.name, r.team, r.tagName, r.type, 'PENDING_TEAM_LEAD', r.reason.substring(0,200)]);
   document.getElementById('req-form').reset();
   selectCat('Tạo tag mới');
   renderAll();
@@ -960,7 +980,9 @@ function leadApprove(id) {
     r.deadlineDM = fmt(new Date(now.getTime()+8*3600*1000));
     toast('Lead duyệt '+id,'Chuyển DM Review','ok');
   }
-  saveData(); renderAll();
+  saveData();
+  appendToSheet([fmt(now), r.id, r.requestCategory==='Add tag'?'LEAD_APPROVED_SKIP_DM':'LEAD_APPROVED', EMAIL||ROLE, r.team, r.tagName, r.type, r.state, '']);
+  renderAll();
 }
 
 function openDMApprove(id) {
@@ -984,7 +1006,9 @@ function submitDMApprove() {
   r.state = 'PENDING_QM'; r.qmStatus = 'PENDING_QM'; r.breach = '';
   r.deadlineQM = fmt(new Date(now.getTime()+24*3600*1000));
   r.log.push({ts:fmt(now), actor:EMAIL||ROLE, action:'DM_APPROVED', note:'Tag code: '+code+(note?' | '+note:'')});
-  saveData(); renderAll(); closeModal('dm-modal');
+  saveData();
+  appendToSheet([fmt(now), r.id, 'DM_APPROVED', EMAIL||ROLE, r.team, r.tagName, code, 'PENDING_QM', note]);
+  renderAll(); closeModal('dm-modal');
   toast('DM duyệt '+r.id,'Gán mã '+code+' → chuyển QM','ok');
 }
 
@@ -1006,7 +1030,9 @@ function submitReject() {
   else { r.dmDecision='REJECTED'; r.dmReviewer=EMAIL||ROLE; r.dmReviewDate=fmt(now); r.dmNote=note; }
   r.state = 'REJECTED'; r.qmStatus = 'N/A'; r.breach = '';
   r.log.push({ts:fmt(now), actor:EMAIL||ROLE, action:(rejCtx.gate==='LEAD'?'LEAD_REJECTED':'DM_REJECTED'), note:note});
-  saveData(); renderAll(); closeModal('rej-modal');
+  saveData();
+  appendToSheet([fmt(now), r.id, rejCtx.gate==='LEAD'?'LEAD_REJECTED':'DM_REJECTED', EMAIL||ROLE, r.team, r.tagName, r.type, 'REJECTED', note]);
+  renderAll(); closeModal('rej-modal');
   toast('Đã từ chối '+r.id,'Requester có thể chỉnh &amp; gửi lại','warn');
 }
 
@@ -1019,7 +1045,9 @@ function qmSave(id) {
   r.log.push({ts:fmt(now), actor:EMAIL||ROLE, action:'QM_UPDATE', note:status});
   if (status==='TAGGED_SUCCESS') { r.state='DONE'; r.breach=''; toast('Hoàn thành '+id,'Đã add tag thành công','ok'); }
   else toast('Cập nhật '+id,'QM status: '+status,'ok');
-  saveData(); renderAll();
+  saveData();
+  appendToSheet([fmt(now), id, 'QM_UPDATE', EMAIL||ROLE, r.team, r.tagName, r.dmTagCode||r.tagName, status, '']);
+  renderAll();
 }
 
 // ─────────────────────────────────────────────
