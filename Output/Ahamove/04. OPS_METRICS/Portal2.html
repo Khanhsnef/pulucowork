@@ -522,7 +522,7 @@ var dmCtx  = {id:null};
 var OAUTH_CLIENT_ID = '29825650321-ucb7jc8a3rvmt3fn7nvntaajnvfrh673.apps.googleusercontent.com';
 var OAUTH_REDIRECT  = window.location.origin + window.location.pathname;
 
-var LOGGER_URL = 'https://script.google.com/a/macros/ahamove.com/s/AKfycbyj22kr9eZFSKcS-MHgd5PUs8sZnAmTN0t7bbY2DGhM3AL9hnsWVlXB98uXdj4dz7BLtA/exec';
+var SCRIPT_URL = 'PASTE_NEW_APPS_SCRIPT_URL_HERE';
 
 var OAUTH_SCOPES = ['openid', 'email', 'profile'].join(' ');
 
@@ -539,14 +539,41 @@ function startGoogleLogin(prompt_val) {
   window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params;
 }
 
-function appendToSheet(rowData) {
+// ── Ghi log 1 dòng vào TAG_PORTAL_LOG (GET + Image pixel, không bị CORS)
+function appendLog(rowData) {
   var keys = ['ts','id','action','actor','role','team','category','tagName','tagCode','status','note','deadline'];
   var params = rowData.map(function(v, i) {
     return encodeURIComponent(keys[i]) + '=' + encodeURIComponent(v || '');
   }).join('&');
   var img = new Image();
-  img.onload = img.onerror = function() { console.log('[Sheets] ✓ sent:', rowData[1], rowData[2]); };
-  img.src = LOGGER_URL + '?' + params;
+  img.onload = img.onerror = function() { console.log('[Log] ✓', rowData[1], rowData[2]); };
+  img.src = SCRIPT_URL + '?' + params;
+}
+
+// ── Lưu full state 1 request vào PORTAL_DATA (POST)
+function saveRequest(r) {
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'text/plain'},
+    body: JSON.stringify(r)
+  }).then(function() {
+    console.log('[Data] ✓ saved:', r.id);
+  }).catch(function(e) { console.error('[Data] save lỗi:', e); });
+}
+
+// ── Đọc toàn bộ request từ PORTAL_DATA
+function loadFromSheet(callback) {
+  fetch(SCRIPT_URL + '?action=read', { credentials: 'include' })
+    .then(function(res) { return res.json(); })
+    .then(function(rows) {
+      data = rows || [];
+      callback();
+    })
+    .catch(function(e) {
+      console.error('[Data] load lỗi:', e);
+      data = [];
+      callback();
+    });
 }
 
 function parseHashParams() {
@@ -568,7 +595,6 @@ function decodeJWT(token) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  data = loadData();
 
   // Case 1: Vừa redirect về từ Google → có id_token + access_token trong hash
   var hp = parseHashParams();
@@ -599,14 +625,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ─────────────────────────────────────────────
-//  PERSISTENCE (localStorage)
+//  PERSISTENCE (Google Sheet)
 // ─────────────────────────────────────────────
-function loadData() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-  catch(e) { return []; }
-}
-function saveData() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+function saveData(r) {
+  // r = request object vừa thay đổi → upsert lên PORTAL_DATA
+  saveRequest(r);
 }
 function genId() {
   var d = new Date();
@@ -658,8 +681,10 @@ function applyUser(email, name, avatar) {
   var fName = document.getElementById('f-name');
   if (fName && !fName.value) fName.value = name;
 
-  renderAll();
-  selectCat('Tạo tag mới');
+  loadFromSheet(function() {
+    renderAll();
+    selectCat('Tạo tag mới');
+  });
 }
 
 function signOut() {
@@ -767,8 +792,8 @@ function submitForm(e) {
   };
   r.log.push({ts:fmt(now), actor:r.email||r.name, action:'REQUEST_CREATED', note:r.reason});
   data.unshift(r);
-  saveData();
-  appendToSheet([fmt(now), r.id, 'REQUEST_CREATED', r.email||r.name, 'REQUESTER', r.team, r.requestCategory, r.tagName, '-', 'PENDING_TEAM_LEAD', r.reason.substring(0,200), r.deadlineLead||'-']);
+  saveData(r);
+  appendLog([fmt(now), r.id, 'REQUEST_CREATED', r.email||r.name, 'REQUESTER', r.team, r.requestCategory, r.tagName, '-', 'PENDING_TEAM_LEAD', r.reason.substring(0,200), r.deadlineLead||'-']);
   document.getElementById('req-form').reset();
   selectCat('Tạo tag mới');
   renderAll();
@@ -973,8 +998,8 @@ function leadApprove(id) {
     r.deadlineDM = fmt(new Date(now.getTime()+8*3600*1000));
     toast('Lead duyệt '+id,'Chuyển DM Review','ok');
   }
-  saveData();
-  appendToSheet([fmt(now), r.id, r.requestCategory==='Add tag'?'LEAD_APPROVED_SKIP_DM':'LEAD_APPROVED', EMAIL||ROLE, 'TEAM_LEAD', r.team, r.requestCategory, r.tagName, '-', r.state, '', r.deadlineDM||r.deadlineQM||'-']);
+  saveData(r);
+  appendLog([fmt(now), r.id, r.requestCategory==='Add tag'?'LEAD_APPROVED_SKIP_DM':'LEAD_APPROVED', EMAIL||ROLE, 'TEAM_LEAD', r.team, r.requestCategory, r.tagName, '-', r.state, '', r.deadlineDM||r.deadlineQM||'-']);
   renderAll();
 }
 
@@ -999,8 +1024,8 @@ function submitDMApprove() {
   r.state = 'PENDING_QM'; r.qmStatus = 'PENDING_QM'; r.breach = '';
   r.deadlineQM = fmt(new Date(now.getTime()+24*3600*1000));
   r.log.push({ts:fmt(now), actor:EMAIL||ROLE, action:'DM_APPROVED', note:'Tag code: '+code+(note?' | '+note:'')});
-  saveData();
-  appendToSheet([fmt(now), r.id, 'DM_APPROVED', EMAIL||ROLE, 'DM', r.team, r.requestCategory, r.tagName, code, 'PENDING_QM', note, r.deadlineQM||'-']);
+  saveData(r);
+  appendLog([fmt(now), r.id, 'DM_APPROVED', EMAIL||ROLE, 'DM', r.team, r.requestCategory, r.tagName, code, 'PENDING_QM', note, r.deadlineQM||'-']);
   renderAll(); closeModal('dm-modal');
   toast('DM duyệt '+r.id,'Gán mã '+code+' → chuyển QM','ok');
 }
@@ -1023,8 +1048,8 @@ function submitReject() {
   else { r.dmDecision='REJECTED'; r.dmReviewer=EMAIL||ROLE; r.dmReviewDate=fmt(now); r.dmNote=note; }
   r.state = 'REJECTED'; r.qmStatus = 'N/A'; r.breach = '';
   r.log.push({ts:fmt(now), actor:EMAIL||ROLE, action:(rejCtx.gate==='LEAD'?'LEAD_REJECTED':'DM_REJECTED'), note:note});
-  saveData();
-  appendToSheet([fmt(now), r.id, rejCtx.gate==='LEAD'?'LEAD_REJECTED':'DM_REJECTED', EMAIL||ROLE, rejCtx.gate==='LEAD'?'TEAM_LEAD':'DM', r.team, r.requestCategory, r.tagName, '-', 'REJECTED', note, '-']);
+  saveData(r);
+  appendLog([fmt(now), r.id, rejCtx.gate==='LEAD'?'LEAD_REJECTED':'DM_REJECTED', EMAIL||ROLE, rejCtx.gate==='LEAD'?'TEAM_LEAD':'DM', r.team, r.requestCategory, r.tagName, '-', 'REJECTED', note, '-']);
   renderAll(); closeModal('rej-modal');
   toast('Đã từ chối '+r.id,'Requester có thể chỉnh &amp; gửi lại','warn');
 }
@@ -1038,8 +1063,8 @@ function qmSave(id) {
   r.log.push({ts:fmt(now), actor:EMAIL||ROLE, action:'QM_UPDATE', note:status});
   if (status==='TAGGED_SUCCESS') { r.state='DONE'; r.breach=''; toast('Hoàn thành '+id,'Đã add tag thành công','ok'); }
   else toast('Cập nhật '+id,'QM status: '+status,'ok');
-  saveData();
-  appendToSheet([fmt(now), id, 'QM_UPDATE', EMAIL||ROLE, 'QM', r.team, r.requestCategory, r.tagName, r.dmTagCode||r.tagName, status, '', '-']);
+  saveData(r);
+  appendLog([fmt(now), id, 'QM_UPDATE', EMAIL||ROLE, 'QM', r.team, r.requestCategory, r.tagName, r.dmTagCode||r.tagName, status, '', '-']);
   renderAll();
 }
 
