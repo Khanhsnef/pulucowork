@@ -4,6 +4,7 @@
 Chạy lúc 15:59:55 Thứ 6 -> book 2 phòng NANGA & 1 phòng DENALI cho Thứ 2 & Thứ 6 tuần sau
 """
 
+import os
 import sys
 import time
 import logging
@@ -55,8 +56,10 @@ def next_weekday(day: str) -> str:
 
 
 def main():
-    # LaunchD trigger lúc 15:59:00 -> sleep 55s -> thực thi lúc ~15:59:55
-    time.sleep(55)
+    # LaunchD trigger lúc 15:59:00 -> sleep 55s (Bỏ qua nếu chạy từ GitHub Actions / CLI)
+    if not os.getenv("SKIP_SLEEP"):
+        log.info("Chờ 55s để tới đúng 15:59:55...")
+        time.sleep(55)
 
     log.info("=== 1Office Auto Booking Starting ===")
     client = OneOfficeClient()
