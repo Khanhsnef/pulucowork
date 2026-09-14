@@ -11,11 +11,16 @@ import logging
 from datetime import datetime, timedelta
 from oneoffice_client import OneOfficeClient
 
+# Tự động tạo thư mục log phù hợp trên macOS hoặc Linux (GitHub Actions)
+log_dir = os.path.expanduser("~/Library/Logs") if sys.platform == "darwin" else os.path.join(os.path.dirname(__file__), "logs")
+os.makedirs(log_dir, exist_ok=True)
+log_file = os.path.join(log_dir, "1office-booking.log")
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(message)s",
     handlers=[
-        logging.FileHandler("/Users/ts-1148/Library/Logs/1office-booking.log"),
+        logging.FileHandler(log_file),
         logging.StreamHandler(sys.stdout),
     ],
 )
