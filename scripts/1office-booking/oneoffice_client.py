@@ -217,11 +217,12 @@ class OneOfficeClient:
                     self.notify(title="1Office: Session hết hạn", message=msg, is_error=True)
                     return {"success": False, "error": "error_login", "message": msg}
 
-            if "thành công" in result.get("notice", "").lower():
+            notice_str = str(result.get("notice") or "").lower()
+            if "thành công" in notice_str or result.get("status") == 1:
                 log.info(f"OK: {title} | Phòng {room_name} ({date} {time_start}-{time_end})")
                 return {"success": True, "notice": result.get("notice"), "room": room_name, "date": date}
 
-            msg = result.get("notice") or result.get("error") or str(result)[:120]
+            msg = result.get("notice") or result.get("message") or str(result.get("error")) or str(result)
             log.error(f"FAIL: {title} | {msg}")
             self.notify(title=f"1Office FAIL: {title}", message=f"{date} {time_start}-{time_end}\n{msg}", is_error=True)
             return {"success": False, "message": msg}
