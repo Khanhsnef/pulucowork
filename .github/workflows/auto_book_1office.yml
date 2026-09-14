@@ -1,0 +1,32 @@
+name: 1Office Auto Booking 24/7
+
+on:
+  schedule:
+    # 08:59 UTC Thứ 6 hàng tuần = 15:59 ICT (Giờ Việt Nam)
+    - cron: '59 8 * * 5'
+  workflow_dispatch: # Cho phép bấm nút kích hoạt chạy thử thủ công bất kỳ lúc nào trên GitHub
+
+jobs:
+  book-meeting-rooms:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run 1Office Auto Booking Script
+        env:
+          ONE_OFFICE_USERNAME: ${{ secrets.ONE_OFFICE_USERNAME }}
+          ONE_OFFICE_PASSWORD: ${{ secrets.ONE_OFFICE_PASSWORD }}
+        run: |
+          python3 scripts/1office-booking/book_rooms.py
