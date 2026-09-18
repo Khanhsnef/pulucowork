@@ -45,8 +45,8 @@ function SmartClaude {
 
     # ── Tier 2: GEMINI PRO — Ngôn ngữ, context lớn, viết lách ──────
     } elseif ($lower -match "dịch thuật|dịch |thông báo|tài xế|zalo|email|chính tả|ngữ pháp|viết lại|caption|kịch bản|nội dung|tóm tắt|đọc file|\.log") {
-        $model = "gc/gemini-3.1-pro-preview"
-        Write-Host "`n⚡ [Smart Router] Task Ngôn Ngữ / Context → GEMINI 3.1 PRO" -ForegroundColor Cyan
+        $model = "gc/gemini-3.7-pro"
+        Write-Host "`n⚡ [Smart Router] Task Ngôn Ngữ / Context → GEMINI 3.7 PRO" -ForegroundColor Cyan
 
     # ── Tier 3: DEEPSEEK FLASH — Hỏi đáp nhanh, tính toán nhẹ ─────
     } elseif ($lower -match "hỏi nhanh|giải thích|tính toán|định nghĩa|là gì|như thế nào|thế nào|regex") {
@@ -82,8 +82,8 @@ function SmartChat {
         $model = "cc/claude-opus-4-8"
         Write-Host "`n🧠 [Smart Router] Task Tư Duy Sâu → OPUS 4.8" -ForegroundColor Magenta
     } elseif ($lower -match "dịch thuật|dịch |thông báo|tài xế|zalo|email|chính tả|ngữ pháp|viết lại|caption|kịch bản|nội dung|tóm tắt|đọc file|\.log") {
-        $model = "gc/gemini-3.1-pro-preview"
-        Write-Host "`n⚡ [Smart Router] Task Ngôn Ngữ / Context → GEMINI 3.1 PRO" -ForegroundColor Cyan
+        $model = "gc/gemini-3.7-pro"
+        Write-Host "`n⚡ [Smart Router] Task Ngôn Ngữ / Context → GEMINI 3.7 PRO" -ForegroundColor Cyan
     } elseif ($lower -match "hỏi nhanh|giải thích|tính toán|định nghĩa|là gì|như thế nào|thế nào|regex") {
         $model = "oc/deepseek-v4-flash"
         Write-Host "`n💨 [Smart Router] Task Nhanh → DEEPSEEK V4 FLASH" -ForegroundColor Yellow
@@ -103,14 +103,20 @@ function SmartChat {
 }
 Set-Alias -Name chat -Value SmartChat
 
-# ── Claude Aliases nhanh ─────────────────────────────────────
+# ── Claude & Gemini Aliases nhanh ─────────────────────────────
 function CThink { claude --model "cc/claude-opus-4-8"         @args }
 function CCode  { claude --model "cc/claude-sonnet-4-6"       @args }
 function CFast  { claude --model "oc/deepseek-v4-flash"       @args }
+function C37    { claude --model "cc/claude-3-7-sonnet-20250219" @args }
+function G37    { claude --model "gc/gemini-3.7-pro"          @args }
+function GFast  { claude --model "gc/gemini-3.7-flash"        @args }
 
 Set-Alias -Name c-think -Value CThink
 Set-Alias -Name c-code  -Value CCode
 Set-Alias -Name c-fast  -Value CFast
+Set-Alias -Name c-37    -Value C37
+Set-Alias -Name g-37    -Value G37
+Set-Alias -Name g-fast  -Value GFast
 
 # ── Kích hoạt Gateway endpoints cho Claude ───────────────────
 function Use9router {

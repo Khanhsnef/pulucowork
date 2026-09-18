@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+    <title>Ahamove DM NW Executive Meeting Report 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F8FAFC;
+            --panel: #FFFFFF;
+            --panel-2: #F1F5F9;
+            --border: rgba(226, 232, 240, 0.9);
+            --text: #0F172A;
+            --muted: #64748B;
+            --blue: #0284C7;
+            --cyan: #0369A1;
+            --orange: #FF7F32;
+            --primary-navy: #0E4174;
+            --green: #059669;
+            --red: #DC2626;
+            --purple: #7C3AED;
+            --font-family: Inter, Lexend, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { background: #E2E8F0; }
+        body {
+            background:
+                radial-gradient(circle at 10% 8%, rgba(14, 65, 116, 0.06), transparent 30%),
+                radial-gradient(circle at 90% 12%, rgba(255, 127, 50, 0.07), transparent 28%),
+                radial-gradient(circle at 75% 85%, rgba(2, 132, 199, 0.05), transparent 32%),
+                #F8FAFC;
+            font-family: var(--font-family); color: var(--text);
+            display: flex; flex-direction: column; align-items: center; padding: 34px 0; gap: 34px;
+        }
+        body:before {
+            content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0.35;
+            background-image: linear-gradient(rgba(14, 65, 116, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(14, 65, 116, 0.03) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+        .toolbar {
+            position: fixed; bottom: 22px; right: 22px; z-index: 9999;
+            background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(18px);
+            border: 1px solid rgba(226, 232, 240, 0.9); padding: 10px 18px; border-radius: 999px;
+            display: flex; gap: 12px; align-items: center; box-shadow: 0 16px 40px rgba(14, 65, 116, 0.12);
+        }
+        .toolbar button { background: linear-gradient(135deg, var(--primary-navy), #1e5896); color: #fff; border: 0; padding: 9px 16px; border-radius: 999px; font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.2s; }
+        .toolbar button:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .slide-page {
+            width: 1920px; height: 1080px;
+            background:
+                radial-gradient(circle at 92% 0%, rgba(2, 132, 199, 0.04), transparent 25%),
+                radial-gradient(circle at 4% 100%, rgba(255, 127, 50, 0.04), transparent 24%),
+                linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 52%, #F1F5F9 100%);
+            border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 24px;
+            padding: 48px 58px; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; box-shadow: 0 25px 70px rgba(14, 65, 116, 0.08); overflow: hidden;
+        }
+        .slide-page:after {
+            content: ""; position: absolute; width: 520px; height: 520px; right: -240px; top: -280px;
+            border: 1px solid rgba(14, 65, 116, 0.06); border-radius: 50%;
+            box-shadow: 0 0 0 80px rgba(14, 65, 116, 0.015), 0 0 0 160px rgba(14, 65, 116, 0.008);
+            pointer-events: none;
+        }
+        .slide-header { display: flex; flex-direction: column; gap: 10px; position: relative; z-index: 1; }
+        .slide-meta {
+            display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 800;
+            color: var(--primary-navy); text-transform: uppercase; letter-spacing: 1.5px;
+        }
+        .slide-meta span:last-child {
+            color: var(--primary-navy); background: rgba(14, 65, 116, 0.06); border: 1px solid rgba(14, 65, 116, 0.12);
+            padding: 7px 14px; border-radius: 999px;
+        }
+        .takeaway-title {
+            font-size: 30px; font-weight: 800; color: var(--primary-navy); line-height: 1.22; letter-spacing: -0.7px;
+            max-width: 1760px;
+        }
+        .hero-kpi-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 14px;
+        }
+        .hero-kpi-card, .glass-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border); border-radius: 16px;
+            box-shadow: 0 10px 30px -5px rgba(14, 65, 116, 0.06), 0 4px 12px rgba(0, 0, 0, 0.02);
+            position: relative; overflow: hidden;
+        }
+        .hero-kpi-card { padding: 18px 22px; display: flex; flex-direction: column; gap: 7px; min-height: 126px; }
+        .hero-kpi-card:before {
+            content: ""; position: absolute; left: 0; top: 0; width: 4px; height: 100%;
+            background: linear-gradient(180deg, var(--orange), var(--primary-navy));
+        }
+        .hero-kpi-card:after {
+            content: ""; position: absolute; right: -45px; top: -45px; width: 120px; height: 120px; border-radius: 50%;
+            background: rgba(14, 65, 116, 0.03); filter: blur(2px);
+        }
+        .hero-kpi-label { font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+        .hero-kpi-val {
+            font-size: 52px; font-weight: 900; color: var(--primary-navy); line-height: 0.98; letter-spacing: -2px;
+        }
+        .hero-kpi-badge {
+            display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 999px;
+            font-size: 12px; font-weight: 800; width: max-content; border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .badge-positive { background: #ECFDF5; color: #047857; }
+        .badge-negative { background: #FEF2F2; color: #B91C1C; }
+        .badge-neutral { background: #F0F9FF; color: #0369A1; }
+        .badge-warning { background: #FFFBEB; color: #B45309; }
+        .content-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; flex: 1; margin-top: 18px; min-height: 0;
+        }
+        .glass-card {
+            padding: 21px 24px; display: flex; flex-direction: column; gap: 14px; min-height: 0;
+        }
+        .card-header {
+            display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; color: var(--primary-navy);
+        }
+        .card-header span:first-child {
+            width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px;
+            background: linear-gradient(135deg, rgba(14, 65, 116, 0.08), rgba(255, 127, 50, 0.08));
+            border: 1px solid rgba(14, 65, 116, 0.12);
+        }
+        .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .bullet-item {
+            font-size: 14px; line-height: 1.48; color: #1E293B; position: relative; padding-left: 20px;
+        }
+        .bullet-item:before {
+            content: ""; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%;
+            background: var(--orange); box-shadow: 0 0 6px rgba(255, 127, 50, 0.4);
+        }
+        .data-table {
+            width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 4px; font-size: 13px; overflow: hidden;
+            border: 1px solid var(--border); border-radius: 12px;
+        }
+        .data-table th {
+            background: rgba(14, 65, 116, 0.06); color: var(--primary-navy); font-weight: 800; text-align: left;
+            padding: 10px 13px; border-bottom: 1px solid var(--border);
+        }
+        .data-table td {
+            padding: 10px 13px; color: #1E293B; border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            background: #FFFFFF;
+        }
+        .data-table tr:last-child td { border-bottom: 0; }
+        .data-table tbody tr:hover td { background: rgba(14, 65, 116, 0.03); }
+        .slide-footer {
+            display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted);
+            border-top: 1px solid rgba(226, 232, 240, 0.9); padding-top: 12px; margin-top: 14px;
+        }
+        [contenteditable="true"]:focus { outline: 2px solid var(--orange); background: rgba(255, 127, 50, 0.08); border-radius: 6px; }
+        @media print {
+            body { background: #FFFFFF; padding: 0; } .toolbar { display: none; }
+            .slide-page { page-break-after: always; box-shadow: none; border-radius: 0; border: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <span style="color:var(--primary-navy); font-size:13px; font-weight:800; letter-spacing:.4px;">☀️ AHAMOVE • 16:9 LIGHT GLASS REPORT</span>
+        <button id="editBtn" onclick="toggleEditMode()">✏️ Edit Mode (E)</button>
+        <button onclick="window.print()">🖨️ Export PDF</button>
+    </div>
+
+    
+        <div class="slide-page" id="slide-1">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 1</span>
+                </div>
+                <div class="takeaway-title editable">Báo Cáo Vận Hành DM NW: CTR Đạt 77.38% & GDR Đạt 95.52%, Phát Hiện Vấn Đề UX Check-in Cityzone & Đẩy Mạnh EV Partnership</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">[NW] Overall CTR</div>
+                    <div class="hero-kpi-val editable">77.38%</div>
+                    <span class="hero-kpi-badge badge-negative">-1.11% WoW</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">[NW] Overall GDR</div>
+                    <div class="hero-kpi-val editable">95.52%</div>
+                    <span class="hero-kpi-badge badge-neutral">-0.04% WoW</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">SGN GDR (HCM)</div>
+                    <div class="hero-kpi-val editable">96.61%</div>
+                    <span class="hero-kpi-badge badge-positive">-0.69% WoW</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HAN GDR (HN)</div>
+                    <div class="hero-kpi-val editable">94.21%</div>
+                    <span class="hero-kpi-badge badge-warning">-1.36% WoW</span>
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Key Highlights Vận Hành Tuần</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Tuyển dụng Core: Đã đủ lead đăng ký cho Fuji, Ajinomoto, Baga & chuỗi push active CP 15.8 (2-3 noti/ngày).</li><li class="bullet-item editable">CityZone Funnel: Quy mô tăng trưởng x3.5 lần (112 -> 394 ca đăng ký, 47 -> 197 tài xế tham gia).</li><li class="bullet-item editable">Partnership EV: Đã publish Landing Page policy mới, review xong hợp đồng mượn xe Dat Bike & Selex KOC.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🎯</span>
+                    <span class="editable">Trọng Tâm & Điểm Nghẽn Cần Xử Lý Immediate</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Phát hiện UX Check-in CityZone: 25.6% tổng đơn thuộc nhóm tài xế chạy ca nhưng quên bấm Check-in.</li><li class="bullet-item editable">Tuyển Core BigC Long Biên (HAN): Lead đăng ký cắm chốt chưa đạt kỳ vọng.</li><li class="bullet-item editable">Sự cố ngày 14/8: Tự động bật dịch vụ 2H-4H làm tài xế bức xúc trên hội nhóm (Đã fix trong ngày).</li></ul>
+            </div>
+            
+                
+            </div>
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 22, 24, 26, 27, 28, 29</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-2">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 2</span>
+                </div>
+                <div class="takeaway-title editable">Chỉ Số Tuân Thủ CTR & GDR: SGN Giữ Vững GDR 96.61%, HAN CTR Cần Tăng Cường Push Noti Nhắc Nhở</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HAN CTR (HN)</div>
+                    <div class="hero-kpi-val editable">72.72%</div>
+                    <span class="hero-kpi-badge badge-negative">Target: 130%</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HAN GDR (HN)</div>
+                    <div class="hero-kpi-val editable">94.21%</div>
+                    <span class="hero-kpi-badge badge-warning">Target: 120%</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">SGN CTR (HCM)</div>
+                    <div class="hero-kpi-val editable">79.91%</div>
+                    <span class="hero-kpi-badge badge-neutral">Target: 130%</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">SGN GDR (HCM)</div>
+                    <div class="hero-kpi-val editable">96.61%</div>
+                    <span class="hero-kpi-badge badge-positive">Target: 120%</span>
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>📊</span>
+                    <span class="editable">Phân Tích Chi Tiết CTR (Compliance True Rate)</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HAN CTR đứng ở mức 72.72% (-1.86% WoW), khoảng cách lớn so với Target 130%.</li><li class="bullet-item editable">SGN CTR đạt 79.91% (-1.29% WoW), duy trì lượng tài xế tuân thủ quy trình giao nhận tốt hơn.</li><li class="bullet-item editable">Hành động: Tăng tần suất Noti & SMS nhắc mở lại dịch vụ đối với nhóm tài xế tại Hà Nội.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>📊</span>
+                    <span class="editable">Phân Tích Chi Tiết GDR (Good Driver Rate)</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">SGN GDR đạt 96.61%, chứng minh chất lượng dịch vụ đội ngũ tài xế phía Nam được duy trì xuất sắc.</li><li class="bullet-item editable">HAN GDR đạt 94.21% (-1.36% WoW), cần rà soát lại các điểm vi phạm thái độ và thời gian giao.</li><li class="bullet-item editable">Chuẩn hóa lại bộ Content & flow truyền thông ngay tại các điểm chạm Mini-hub.</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Khu Vực (Region)</th><th class="editable">CTR Thực Tế</th><th class="editable">Target CTR</th><th class="editable">GDR Thực Tế</th><th class="editable">Target GDR</th><th class="editable">Đánh Giá SLA</th></tr></thead>
+                    <tbody><tr><td class="editable">Hà Nội (HAN)</td><td class="editable">72.72%</td><td class="editable">130%</td><td class="editable">94.21%</td><td class="editable">120%</td><td class="editable">⚠️ Cần Push Noti Tần Suất Cao</td></tr><tr><td class="editable">TP.HCM (SGN)</td><td class="editable">79.91%</td><td class="editable">130%</td><td class="editable">96.61%</td><td class="editable">120%</td><td class="editable">✔ GDR Đạt Chất Lượng Tốt</td></tr><tr><td class="editable">Toàn Mạng (NW)</td><td class="editable">77.38%</td><td class="editable">130%</td><td class="editable">95.52%</td><td class="editable">120%</td><td class="editable">🏆 Đạt Chuẩn Vận Hành Toàn Mạng</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 26</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-3">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 3</span>
+                </div>
+                <div class="takeaway-title editable">CityZone Hub Funnel: 25.6% Đơn Hàng Thuộc Nhóm Tài Xế Chạy Ca Quên Check-in — Vấn Đề UX Thao Tác</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Registered Hub</div>
+                    <div class="hero-kpi-val editable">770</div>
+                    <span class="hero-kpi-badge badge-neutral">100% Funnel</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Check-in Rate</div>
+                    <div class="hero-kpi-val editable">49.8%</div>
+                    <span class="hero-kpi-badge badge-warning">252 ca</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Chưa Check-in Lần Nào</div>
+                    <div class="hero-kpi-val editable">55%</div>
+                    <span class="hero-kpi-badge badge-negative">128 / 232 TX</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Đơn Ngoài Ca Quên Check-in</div>
+                    <div class="hero-kpi-val editable">25.6%</div>
+                    <span class="hero-kpi-badge badge-negative">401 đơn</span>
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Phát Hiện Quan Trọng Về Thao Tác Check-In</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">39% số ca no-show/hủy (99/254 ca) VẪN CÓ ĐƠN HOÀN THÀNH trong đúng khung giờ ca đó (401 đơn).</li><li class="bullet-item editable">Năng suất nhóm quên check-in đạt 4.05 đơn/ca (xấp xỉ nhóm check-in chuẩn 4.63 đơn/ca).</li><li class="bullet-item editable">Kết luận: Đây KHÔNG PHẢI tài xế lười, mà là vấn đề UX nhận biết thao tác check-in trên App.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Chi Tiết Phễu Chuyển Đổi Active Hub</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Tổng ca đăng ký: 506 ca (100%). Hủy ca: 91 ca (18.0%).</li><li class="bullet-item editable">No-show (đăng ký nhưng không check-in): 163 ca (32.2%).</li><li class="bullet-item editable">Check-in thực tế: 252 ca (49.8%). Check-in + có đơn hoàn thành: 231 ca (45.7%).</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Trạng Thái Phễu Hub</th><th class="editable">Số Ca</th><th class="editable">% Tỷ Lệ</th><th class="editable">Đánh Giá Vận Hành</th></tr></thead>
+                    <tbody><tr><td class="editable">Đăng ký ca</td><td class="editable">506</td><td class="editable">100.0%</td><td class="editable">Nhu cầu tham gia cao</td></tr><tr><td class="editable">Hủy ca</td><td class="editable">91</td><td class="editable">18.0%</td><td class="editable">Mức hủy bình thường</td></tr><tr><td class="editable">No-show (Không Check-in)</td><td class="editable">163</td><td class="editable">32.2%</td><td class="editable">⚠️ Vấn đề UX thao tác Check-in</td></tr><tr><td class="editable">Check-in thành công</td><td class="editable">252</td><td class="editable">49.8%</td><td class="editable">Cần cải thiện lên >70%</td></tr><tr><td class="editable">Check-in + Hoàn thành đơn</td><td class="editable">231</td><td class="editable">45.7%</td><td class="editable">Tỷ lệ có đơn hiệu quả high (91.6%)</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 22</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-4">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 4</span>
+                </div>
+                <div class="takeaway-title editable">Tối Ưu Khung Giờ Ca Hub: Ca Sáng 08:00-12:00 Đạt Năng Suất 6.25 Đơn/Ca (Gấp 2.8 Lần Ca Tối 18:00-20:00)</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Ca Sáng 08-12h Check-in</div>
+                    <div class="hero-kpi-val editable">63.2%</div>
+                    <span class="hero-kpi-badge badge-positive">6.25 đơn/ca</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Ca Tối 18-20h Check-in</div>
+                    <div class="hero-kpi-val editable">35.0%</div>
+                    <span class="hero-kpi-badge badge-negative">2.26 đơn/ca</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Năng Suất Ca 4H</div>
+                    <div class="hero-kpi-val editable">6.25</div>
+                    <span class="hero-kpi-badge badge-positive">2.06 đơn/giờ</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Năng Suất Ca 2H</div>
+                    <div class="hero-kpi-val editable">3.62</div>
+                    <span class="hero-kpi-badge badge-neutral">1.93 đơn/giờ</span>
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>📈</span>
+                    <span class="editable">Khung Giờ Hiệu Quả Nhất (08:00 – 12:00)</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Đạt tỷ lệ Check-in cao nhất (63.2%), sản lượng trung bình 6.25 đơn/ca (2.06 đơn/giờ).</li><li class="bullet-item editable">Các ca 14:00-17:00 (54.9% check-in, 4.84 đơn/ca) và 15:00-17:00 (64.3% check-in) cũng đạt hiệu quả cao.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>📉</span>
+                    <span class="editable">Khung Giờ Kém Hiệu Quả (18:00 – 20:00)</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Thu hút 19.2% đăng ký (97 ca) nhưng chỉ có 23.7% check-in thực tế.</li><li class="bullet-item editable">Năng suất thấp nhất: Chỉ 2.26 đơn/ca (1.71 đơn/giờ). Đề xuất giảm bớt quota ca tối để đẩy sang ca sáng.</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Khung Giờ Ca</th><th class="editable">Ca Đăng Ký</th><th class="editable">% Check-in</th><th class="editable">Đơn / Ca</th><th class="editable">Đơn / Giờ</th></tr></thead>
+                    <tbody><tr><td class="editable">08:00 – 12:00 (4h)</td><td class="editable">95 (18.8%)</td><td class="editable">63.20%</td><td class="editable">6.25</td><td class="editable">2.06 🏆 Best Slot</td></tr><tr><td class="editable">14:00 – 17:00 (3h)</td><td class="editable">113 (22.3%)</td><td class="editable">54.90%</td><td class="editable">4.84</td><td class="editable">2.07</td></tr><tr><td class="editable">15:00 – 17:00 (2h)</td><td class="editable">28 (5.5%)</td><td class="editable">64.30%</td><td class="editable">4.44</td><td class="editable">2.41</td></tr><tr><td class="editable">18:00 – 20:00 (2h)</td><td class="editable">97 (19.2%)</td><td class="editable">23.70%</td><td class="editable">2.26</td><td class="editable">1.71 ⚠️ Kém Hiệu Quả</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 23</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-5">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 5</span>
+                </div>
+                <div class="takeaway-title editable">Tăng Trưởng Quy Mô Hub: Số Ca Đăng Ký Tăng Tốc x3.5 Lần (T1 -> T2), Cần Giải Quyết 55.8% Tài Xế Rời Bỏ Sau Ca Đầu</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Tăng Trưởng Ca T1->T2</div>
+                    <div class="hero-kpi-val editable">x3.5</div>
+                    <span class="hero-kpi-badge badge-positive">112 -> 394 ca</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Tăng Trưởng TX T1->T2</div>
+                    <div class="hero-kpi-val editable">x4.2</div>
+                    <span class="hero-kpi-badge badge-positive">47 -> 197 TX</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Chạy 1 Ca Rồi Thôi</div>
+                    <div class="hero-kpi-val editable">55.8%</div>
+                    <span class="hero-kpi-badge badge-negative">58 tài xế</span>
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Quay Lại ≥ 2 Ngày</div>
+                    <div class="hero-kpi-val editable">39.4%</div>
+                    <span class="hero-kpi-badge badge-positive">41 tài xế</span>
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🚀</span>
+                    <span class="editable">Tăng Trưởng Quy Mô 2 Tuần Liên Tiếp</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Số ca đăng ký tăng 3.5 lần (từ 112 lên 394 ca), số tài xế tham gia tăng 4.2 lần (từ 47 lên 197 tài xế).</li><li class="bullet-item editable">Fill rate tăng từ 79.7% lên 84.1% (+4.4%), cho thấy nhu cầu đơn hàng Hub được đáp ứng tốt hơn.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔄</span>
+                    <span class="editable">Thách Thức Retention & Gắn Kết Mới</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">55.8% tài xế (58 TX) chỉ chạy đúng 1 ca rồi ngừng -> Cần tạo điểm chạm training & hướng dẫn chạy Hub lần đầu.</li><li class="bullet-item editable">44.2% tài xế quay lại chạy >= 2 ca; 17.3% tài xế (18 TX) trung thành quay lại >= 3 ngày khác nhau.</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Chỉ Số Retention Hub</th><th class="editable">Tuần 1 (4-9/8)</th><th class="editable">Tuần 2 (10-16/8)</th><th class="editable">Mức Thay Đổi</th></tr></thead>
+                    <tbody><tr><td class="editable">Ca đăng ký</td><td class="editable">112</td><td class="editable">394</td><td class="editable">×3.5 🚀 Tăng nhanh</td></tr><tr><td class="editable">Tài xế tham gia</td><td class="editable">47</td><td class="editable">197</td><td class="editable">×4.2 🚀 Tăng nhanh</td></tr><tr><td class="editable">Check-in rate</td><td class="editable">50.9%</td><td class="editable">49.5%</td><td class="editable">≈ Ổn định</td></tr><tr><td class="editable">Năng suất (đơn/giờ)</td><td class="editable">1.96</td><td class="editable">2.01</td><td class="editable">≈ Ổn định</td></tr><tr><td class="editable">Fill rate</td><td class="editable">79.7%</td><td class="editable">84.1%</td><td class="editable">+4.4% 📈 Cải thiện</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 24</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-6">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 6</span>
+                </div>
+                <div class="takeaway-title editable">Truyền Thông & Tuyển Đội Core: Đạt Kế Hoạch Fuji & Ajinomoto, Tập Trung Tháo Gỡ Core BigC Long Biên</div>
+                
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Communications Highlights</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Thưởng baga & Tuyển Core Fuji, Ajinomoto: Đã thu thập đủ lead đăng ký theo kế hoạch.</li><li class="bullet-item editable">Thông báo mở lại dịch vụ tại HAN: Đã phát Noti + SMS với tần suất cao.</li><li class="bullet-item editable">Campaign 15.8: Setup popup, bản tin lượng đơn + chuỗi content thưởng điểm nóng, push active 2-3 tin/ngày.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Kế Hoạch Khắc Phục</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Tuyển Core BigC Long Biên chưa đạt kỳ vọng -> Tăng tần suất + mở rộng danh sách push noti (Deadline 20/8, PIC Hoa).</li><li class="bullet-item editable">Thông tin truyền thông Mini-hub chưa được hệ thống -> Review content & tạo flow comms chuẩn (Deadline 20/8, PIC Hoa/Khoa/Vân).</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Hạng Mục Comms</th><th class="editable">Bối Cảnh / Nguyên Nhân</th><th class="editable">Hành Động Khắc Phục</th><th class="editable">Deadline</th><th class="editable">PIC</th></tr></thead>
+                    <tbody><tr><td class="editable">Tuyển Core BigC</td><td class="editable">Lead cắm chốt Long Biên chưa đạt kỳ vọng</td><td class="editable">Mở rộng danh sách push noti</td><td class="editable">20/8</td><td class="editable">Hoa</td></tr><tr><td class="editable">Minihub Comms</td><td class="editable">Thông tin chưa hệ thống hóa</td><td class="editable">Tạo content & flow theo cycle</td><td class="editable">20/8</td><td class="editable">Hoa / Khoa / Vân</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 27</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-7">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 7</span>
+                </div>
+                <div class="takeaway-title editable">Hợp Tác EV & Sự Kiện 11 Tuổi: Hoàn Tất Hợp Đồng Dat Bike, Đẩy Mạnh Gói Thuê Xe Aizen Tại SGN</div>
+                
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Tình Hình Chuyển Đổi Phương Tiện EV</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Nhu cầu tài xế quan tâm đến EV tăng từ tháng 8, tập trung mạnh nhất tại khu vực TP.HCM.</li><li class="bullet-item editable">Done review hợp đồng mượn xe Dat Bike; bàn giao xe Selex cho KOC mượn tư vấn tài xế NW.</li><li class="bullet-item editable">Gói thuê xe AIZEN: Tách blog riêng truyền thông & seeding bài viết cho tài xế SGN (Deadline 21/8, PIC Khoa/Vân).</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🎉</span>
+                    <span class="editable">Pre-event Sinh Nhật Ahamove 11 Tuổi</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Triển khai hoạt động CHL & minigame online 'Chuyển ý tưởng - Ghép tương lai'.</li><li class="bullet-item editable">Tổ chức chính thức Livestream Sinh nhật Ahamove vào ngày 21/8 (PIC Khoa/Vân/Thúy, Support DM/GR Team).</li><li class="bullet-item editable">Lowlight: Tiến độ đàm phán deal quyền lợi Bảo hiểm cho tài xế còn chậm.</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Hạng Mục Partnership</th><th class="editable">Trạng Thái Bối Cảnh</th><th class="editable">Kế Hoạch Tiếp Theo</th><th class="editable">Deadline</th><th class="editable">PIC</th></tr></thead>
+                    <tbody><tr><td class="editable">Dat Bike</td><td class="editable">Review xong hợp đồng</td><td class="editable">Triển khai mượn xe cho TX</td><td class="editable">Hoàn thành</td><td class="editable">Partnership Team</td></tr><tr><td class="editable">Selex EV</td><td class="editable">Đã bàn giao xe KOC</td><td class="editable">KOC tư vấn tài xế quan tâm NW</td><td class="editable">Đang chạy</td><td class="editable">Partnership Team</td></tr><tr><td class="editable">Thuê xe AIZEN</td><td class="editable">Cần tài xế SGN hiểu rõ gói thuê</td><td class="editable">Tách blog & seeding truyền thông</td><td class="editable">21/8</td><td class="editable">Khoa / Vân</td></tr><tr><td class="editable">Sinh nhật 11 Tuổi</td><td class="editable">Pre-event Minigame đang chạy</td><td class="editable">Livestream trực tiếp 21/8</td><td class="editable">21/8</td><td class="editable">Khoa / Vân / Thúy</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 25, 28</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-8">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 8</span>
+                </div>
+                <div class="takeaway-title editable">Lộ Trình Hành Động 3 Bước: Sửa Thao Tác Check-In UX, Điều Chuyển Quota Ca Sáng & Tháo Gỡ Sự Cố 2H-4H</div>
+                
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>📋</span>
+                    <span class="editable">Bước 1: Fix UX Check-In & Auto Check-In</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Thêm Push Notification trước giờ ca 15 phút nhắc bấm Check-in.</li><li class="bullet-item editable">Cấu hình Auto Check-in nếu tài xế Online và di chuyển trong phạm vi Hub đúng khung giờ ca.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>📋</span>
+                    <span class="editable">Bước 2: Điều Chuyển Quota Ca Tối Sang Ca Sáng 4H</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Cắt/giảm ca tối 18:00-20:00 (chỉ 2.26 đơn/ca), dịch chuyển quota sang ca sáng 08:00-12:00 (6.25 đơn/ca).</li><li class="bullet-item editable">Xây dựng điểm chạm hướng dẫn chạy Hub lần đầu để giảm tỷ lệ 55.8% tài xế bỏ sau ca 1.</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">STT</th><th class="editable">Hành Động Cốt Lõi</th><th class="editable">Mục Tiêu Kỳ Vọng</th><th class="editable">Thời Gian</th><th class="editable">PIC Lead</th></tr></thead>
+                    <tbody><tr><td class="editable">1</td><td class="editable">Thêm Push Noti 15p & Auto Check-in</td><td class="editable">Khắc phục 25.6% đơn chạy ngoài ca quên check-in</td><td class="editable">25/8</td><td class="editable">Product / DM Team</td></tr><tr><td class="editable">2</td><td class="editable">Dịch chuyển quota ca 18-20h sang ca 08-12h</td><td class="editable">Tăng năng suất toàn phễu Hub lên >5 đơn/ca</td><td class="editable">22/8</td><td class="editable">Ops Hub Team</td></tr><tr><td class="editable">3</td><td class="editable">Tập huấn & Seeding gói thuê xe AIZEN SGN</td><td class="editable">Tăng nhận thức & tỷ lệ chuyển đổi xe điện EV</td><td class="editable">21/8</td><td class="editable">Khoa / Vân</td></tr><tr><td class="editable">4</td><td class="editable">Tăng push noti tuyển Core BigC Long Biên</td><td class="editable">Đảm bảo đủ lead cắm chốt Long Biên</td><td class="editable">20/8</td><td class="editable">Hoa</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 24, 27, 28, 29</span>
+            </div>
+        </div>
+        
+
+    <script>
+        let isEdit = false;
+        function toggleEditMode() {
+            isEdit = !isEdit;
+            document.querySelectorAll('.editable').forEach(el => {
+                el.contentEditable = isEdit;
+            });
+            const btn = document.getElementById('editBtn');
+            btn.innerText = isEdit ? '💾 Save Mode (E)' : '✏️ Edit Mode (E)';
+            btn.style.background = isEdit ? '#059669' : '#FF7F32';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'e' || e.key === 'E') {
+                if (document.activeElement.isContentEditable) return;
+                toggleEditMode();
+            }
+        });
+    </script>
+</body>
+</html>

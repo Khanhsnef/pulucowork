@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Operations Report — Driver Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Lexend', system-ui, sans-serif;
+    background: #111827;
+    color: #0F172A;
+  }
+  .controls {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: flex; gap: 12px; align-items: center;
+    background: rgba(0,0,0,.7); padding: 10px 20px; border-radius: 40px;
+    backdrop-filter: blur(8px);
+  }
+  .controls button {
+    background: #0E4174; color: white; border: none;
+    padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 14px;
+    font-family: 'Lexend', sans-serif;
+  }
+  .controls button:hover { background: #FF7F32; }
+  .slide-counter {
+    color: white; font-size: 14px; min-width: 80px; text-align: center;
+  }
+  .slide-nav { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    padding: 0 20px; }
+  .slide-nav span {
+    cursor: pointer; color: #9CA3AF; font-size: 12px;
+    padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,.1);
+  }
+  .slide-nav span.active, .slide-nav span:hover {
+    background: #0E4174; color: white;
+  }
+  .slides-container { padding-top: 72px; }
+  .slide {
+    width: 1920px; height: 1080px;
+    margin: 24px auto; display: none; position: relative; overflow: hidden;
+    border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+  .slide.active { display: flex; }
+  /* Print / export: show all */
+  @media print {
+    .controls { display: none; }
+    .slide { display: block !important; page-break-after: always;
+      margin: 0; border-radius: 0; box-shadow: none; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+<div class="controls">
+  <button onclick="prevSlide()">← Prev</button>
+  <span class="slide-counter" id="counter">1 / 5</span>
+  <button onclick="nextSlide()">Next →</button>
+  <button onclick="window.print()">Export PDF</button>
+  <span style="color:#9CA3AF;font-size:12px">10 slides → 5 slides</span>
+</div>
+<div class="slides-container" id="container">
+  <div class="slide" id="slide-1">
+    <div style="width:100%;height:100%;background:#F8FAFC;display:flex;flex-direction:column;padding:56px 72px">
+      <div style="font-size:28px;font-weight:800;color:#0E4174;margin-bottom:8px">Tuần này: NW vượt target — HAN/SGN còn gap RPH, RR và Capacity</div>
+      <div style="font-size:15px;color:#64748B;margin-bottom:40px">NW ghi nhận kết quả tích cực với CTR 77.38% (130% target) và GDR 95.52% (120% target). HAN RPH gap ~5% vs target và SGN Retention giảm cả MoM lẫn YoY là 2 rủi ro cần theo dõi.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;flex:1">
+        <div style="background:white;border-radius:24px;padding:36px;border-top:4px solid #10B981">
+          <div style="font-size:13px;font-weight:700;color:#10B981;letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px">Highlights</div>
+          <div style="display:flex;gap:12px;margin-bottom:14px;align-items:flex-start"><span style="color:#10B981;font-size:18px;flex-shrink:0;margin-top:2px">▲</span><span style="font-size:15px;color:#1e293b;line-height:1.5">{'market': 'NW', 'items': ['CTR đạt 77.38% — vượt 130% target', 'GDR đạt 95.52% — vượt 120% target']}</span></div><div style="display:flex;gap:12px;margin-bottom:14px;align-items:flex-start"><span style="color:#10B981;font-size:18px;flex-shrink:0;margin-top:2px">▲</span><span style="font-size:15px;color:#1e293b;line-height:1.5">{'market': 'HAN', 'items': ['Retention Rate >=22t đạt 74.2%, cải thiện +0.7% MoM', 'CR PoC chung giảm 0.5% WoW']}</span></div>
+        </div>
+        <div style="background:white;border-radius:24px;padding:36px;border-top:4px solid #EF4444">
+          <div style="font-size:13px;font-weight:700;color:#EF4444;letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px">Lowlights</div>
+          <div style="display:flex;gap:12px;margin-bottom:14px;align-items:flex-start"><span style="color:#EF4444;font-size:18px;flex-shrink:0;margin-top:2px">▼</span><span style="font-size:15px;color:#1e293b;line-height:1.5">{'market': 'HAN', 'items': ['RPH đạt 2.07 — gap target ~5%']}</span></div><div style="display:flex;gap:12px;margin-bottom:14px;align-items:flex-start"><span style="color:#EF4444;font-size:18px;flex-shrink:0;margin-top:2px">▼</span><span style="font-size:15px;color:#1e293b;line-height:1.5">{'market': 'SGN', 'items': ['Retention Rate hụt >1% MoM và YoY', 'Supply Hours hụt 2% so với planning']}</span></div>
+        </div>
+      </div>
+    </div></div>
+<div class="slide" id="slide-2">
+    <div style="width:100%;height:100%;background:linear-gradient(135deg,#0E4174 0%,#1a3a6b 100%);display:flex;flex-direction:column;justify-content:center;padding:72px 80px">
+      <div style="font-size:13px;font-weight:600;color:#FF7F32;letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px">
+        Kpi Cards
+      </div>
+      <div style="font-size:34px;font-weight:800;color:white;line-height:1.25;margin-bottom:12px;max-width:900px">
+        NLM là nhóm churn lớn nhất — SGN RR giảm đồng loạt cả MoM lẫn YoY
+      </div>
+      <div style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:48px">HAN RR phục hồi nhẹ (+0.7% MoM) nhờ NLM bật tăng 3.68%; SGN ngược chiều với RR -1.4% MoM và NLM giảm sâu -5.45% MoM / -8.41% YoY. Cần khảo sát nguyên nhân churn nhóm NLM SGN ngay.</div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        
+      </div>
+    </div></div>
+<div class="slide" id="slide-3">
+    <div style="width:100%;height:100%;background:linear-gradient(135deg,#0E4174 0%,#1a3a6b 100%);display:flex;flex-direction:column;justify-content:center;padding:72px 80px">
+      <div style="font-size:13px;font-weight:600;color:#FF7F32;letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px">
+        Kpi Cards
+      </div>
+      <div style="font-size:34px;font-weight:800;color:white;line-height:1.25;margin-bottom:12px;max-width:900px">
+        SGN Supply Hours hụt 10.5% — Thời tiết xấu kéo AR/FR giảm 2.5%
+      </div>
+      <div style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:48px">SGN SH gap 10.5% vs planning (chủ yếu FT/PT/NIM), AR giảm 2.5% và FR giảm 2.7% WoW do ảnh hưởng thời tiết cực đoan và demand Bulky tăng đột biến. HAN ổn định hơn với gap chỉ -2.6% và AR/FR tích cực.</div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        
+      </div>
+    </div></div>
+<div class="slide" id="slide-4">
+    <div style="width:100%;height:100%;background:#F8FAFC;display:flex;flex-direction:column;padding:56px 72px">
+      <div style="font-size:28px;font-weight:800;color:#0E4174;margin-bottom:8px">Bulky Momentum tăng mạnh — Baga GĐ1 triển khai, Core 2H đội ổn định sau thanh lọc</div>
+      <div style="font-size:15px;color:#64748B;margin-bottom:32px">Đơn Bulky high-COD (>=1M) tăng chiếm 50–60% tổng volume trong 2 tuần gần nhất. Baga Bulky GĐ1 đang triển khai với 514 tài xế đăng ký. Core 2H team đã thanh lọc 9 tài xế không đạt, bổ sung 5 tài xế mới, duy trì 77 tài xế active/ngày.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:20px;flex:1">
+        
+        <div style="background:white;border-radius:20px;padding:28px;border-left:4px solid #EF4444">
+          <div style="font-size:11px;font-weight:700;color:#EF4444;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">⚠ Problem</div>
+          <div style="font-size:14px;color:#0F172A;line-height:1.6"></div>
+        </div>
+        
+        <div style="background:white;border-radius:20px;padding:28px;border-left:4px solid #FF7F32">
+          <div style="font-size:11px;font-weight:700;color:#FF7F32;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">🔍 Root Cause</div>
+          <div style="font-size:14px;color:#0F172A;line-height:1.6"></div>
+        </div>
+        
+        <div style="background:white;border-radius:20px;padding:28px;border-left:4px solid #10B981">
+          <div style="font-size:11px;font-weight:700;color:#10B981;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">✓ Solution</div>
+          <div style="font-size:14px;color:#0F172A;line-height:1.6"></div>
+        </div>
+        
+        <div style="background:white;border-radius:20px;padding:28px;border-left:4px solid #0E4174">
+          <div style="font-size:11px;font-weight:700;color:#0E4174;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">→ Impact</div>
+          <div style="font-size:14px;color:#0F172A;line-height:1.6"></div>
+        </div>
+      </div>
+    </div></div>
+<div class="slide" id="slide-5">
+    <div style="width:100%;height:100%;background:linear-gradient(135deg,#0E4174 0%,#1a3a6b 100%);display:flex;flex-direction:column;justify-content:center;padding:72px 80px">
+      <div style="font-size:13px;font-weight:600;color:#FF7F32;letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px">
+        Kpi Cards
+      </div>
+      <div style="font-size:34px;font-weight:800;color:white;line-height:1.25;margin-bottom:12px;max-width:900px">
+        Ân xá 13.8 đạt 110% target — Capacity HAN M8 hụt 7.4% MTD do NIM tăng chậm
+      </div>
+      <div style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:48px">Chiến dịch Ân xá đạt 220/200 tài xế active trở lại (vượt 110% target). Tuy nhiên Capacity tổng HAN tháng 8 hụt 7.4% MTD, NIM chỉ đạt 26.73% target do tốc độ tăng trưởng chậm so với cùng kỳ. Cần push ký quỹ và kích hoạt nhóm chưa đủ điều kiện trước khi kết thúc hạn ân xá.</div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        
+      </div>
+    </div></div>
+</div>
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  function showSlide(n) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    counter.textContent = (n+1) + ' / ' + slides.length;
+  }
+  function nextSlide() { if (current < slides.length-1) showSlide(++current); }
+  function prevSlide() { if (current > 0) showSlide(--current); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+  });
+  showSlide(0);
+</script>
+</body>
+</html>

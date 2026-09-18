@@ -1,0 +1,29 @@
+<!-- STRATEGIC ACTION PLAN LAYOUT (16:9) -->
+<div class="slide-page layout-action-plan">
+    <div class="slide-header">
+        <div class="slide-meta">
+            <span>Ahamove Driver Management • Execution Roadmap</span>
+            <span>Slide {{slide_id}}</span>
+        </div>
+        <div class="takeaway-title editable">{{takeaway_header}}</div>
+    </div>
+
+    <div class="content-grid">
+        {{#cards}}
+        <div class="glass-card">
+            <div class="card-header">
+                <span>📋</span>
+                <span class="editable">{{title}}</span>
+            </div>
+            <ul class="bullet-list">
+                {{#bullets}}<li class="bullet-item editable">{{.}}</li>{{/bullets}}
+            </ul>
+        </div>
+        {{/cards}}
+    </div>
+
+    <div class="slide-footer">
+        <span>Confidential • Action Plan & SLA Matrix Layout</span>
+        <span>Source: Slide {{source_slides}}</span>
+    </div>
+</div>

@@ -27,10 +27,13 @@ fi
 # Không mặc định cưỡng chế PULU_DIRECT_MODE để Auto-Detect Gateway hoạt động mượt mà
 unset PULU_DIRECT_MODE
 
-# === Claude Aliases for Dual-Gateway ===
+# === Claude & Gemini Aliases for Dual-Gateway ===
 alias c-think="claude --model cc/claude-opus-4-8"
 alias c-code="claude --model cc/claude-sonnet-4-6"
 alias c-fast="claude --model cc/claude-sonnet-4-6"
+alias c-37="claude --model cc/claude-3-7-sonnet-20250219"
+alias g-37="claude --model gc/gemini-3.7-pro"
+alias g-fast="claude --model gc/gemini-3.7-flash"
 # ============================================
 
 # === SMART AI ROUTER (Gateway Management) ===
@@ -66,8 +69,8 @@ smart_claude() {
         
     # 2. Phân nhóm Data / Log / Context Combo
     elif [[ "$lower_prompt" =~ (dịch thuật|dịch|thông báo|tài xế|zalo|email|chính tả|ngữ pháp|viết lại|caption|kịch bản|nội dung|tóm tắt|đọc file|log) ]]; then
-        model="cc/claude-sonnet-4-6"
-        task_label="COMBO: PULU-DATA-LOG (Gemini Web Free + Sonnet 4.6 + DeepSeek)"
+        model="gc/gemini-3.7-pro"
+        task_label="COMBO: PULU-DATA-LOG (Gemini 3.7 Pro + Sonnet 4.6 + DeepSeek)"
         
     # 3. Phân nhóm Hỏi nhanh CLI Combo
     elif [[ "$lower_prompt" =~ (hỏi nhanh|giải thích|tính toán|định nghĩa|là gì|như thế nào|thế nào|regex) ]]; then

@@ -1,0 +1,2617 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+    <title>Ahamove DM NW Executive Operations Dashboard — Expanded Visual Modules</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Chart.js for Executive Visual Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #0E4174;
+            --primary-dark: #0A2E52;
+            --secondary: #FF7F32;
+            --secondary-light: #FFF7ED;
+            --success: #10B981;
+            --success-light: #F0FDF4;
+            --danger: #EF4444;
+            --danger-light: #FEF2F2;
+            --warning: #F59E0B;
+            --warning-light: #FFFBEB;
+            --bg: #0F172A;
+            --stage-bg: #F8FAFC;
+            --slide-bg: #FFFFFF;
+            --text-main: #0F172A;
+            --text-sub: #334155;
+            --muted: #64748B;
+            --border: #E2E8F0;
+            --border-dark: #CBD5E1;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { background: #0F172A; }
+        body {
+            background: #0F172A;
+            font-family: var(--font-family); color: var(--text-main);
+            display: flex; flex-direction: column; align-items: center; padding: 28px 0; gap: 28px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Floating Toolbar controls */
+        .toolbar {
+            position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+            background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2); padding: 10px 18px; border-radius: 999px;
+            display: flex; gap: 12px; align-items: center; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+        }
+        .toolbar button {
+            background: linear-gradient(135deg, var(--secondary), #ff9a5b); color: #fff; border: 0;
+            padding: 8px 16px; border-radius: 999px; font-weight: 800; font-size: 13px; cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .toolbar button:hover { transform: translateY(-2px); filter: brightness(1.08); }
+
+        /* 16:9 Slide Stage Container */
+        .slide-page {
+            width: 1920px; height: 1080px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 36px 48px; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); overflow: hidden;
+        }
+
+        /* Top Accent Bar (Gradient Secondary to Primary) */
+        .top-accent-bar {
+            height: 6px; width: 100%;
+            background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+            position: absolute; top: 0; left: 0;
+        }
+
+        /* Header Architecture */
+        .slide-header {
+            display: flex; flex-direction: column; gap: 5px;
+            border-bottom: 2px solid #E2E8F0; padding-bottom: 10px; margin-bottom: 4px;
+        }
+        .header-meta {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1.2px;
+        }
+        .slide-brand-tag {
+            font-size: 11px; font-weight: 700; color: var(--secondary); text-transform: uppercase;
+            letter-spacing: 0.06em; background: var(--secondary-light); border: 1px solid #FFEDD5;
+            padding: 3px 10px; border-radius: 9999px;
+        }
+        .slide-page-num {
+            font-size: 11px; font-weight: 700; color: var(--muted); background: #F1F5F9;
+            border: 1px solid var(--border); padding: 3px 10px; border-radius: 9999px;
+        }
+        .slide-title {
+            font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1.2; letter-spacing: -0.02em;
+        }
+        
+        /* Key Takeaways Subtitle Banner (Ahamove Gradient Style) */
+        .takeaway-sub {
+            font-size: 14.5px; font-weight: 600; color: #1E293B; line-height: 1.35;
+            background: linear-gradient(90deg, #FFF7ED 0%, #F0FDF4 100%);
+            border: 1px solid #FED7AA; border-left: 4px solid var(--secondary);
+            padding: 8px 14px; border-radius: 8px; margin-top: 2px;
+        }
+
+        /* 4-Tier Insight KPI Cards */
+        .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 8px; }
+        .kpi-card {
+            background: #F8FAFC; border: 1px solid var(--border); border-top: 3px solid var(--secondary);
+            border-radius: 10px; padding: 12px 16px; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; min-height: 105px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        }
+        .kpi-card.navy-top { border-top: 3px solid var(--primary); }
+        .kpi-label { font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; }
+        .kpi-num { font-size: 42px; font-weight: 800; color: var(--secondary); line-height: 0.98; letter-spacing: -0.02em; margin: 3px 0; }
+        .kpi-num.navy { color: var(--primary); }
+        .kpi-delta-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; font-weight: 700; }
+        .delta-pill { padding: 2px 7px; border-radius: 9999px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px; }
+        .pill-up { background: #DCFCE7; color: #15803D; }
+        .pill-down { background: #FEE2E2; color: #B91C1C; }
+        .pill-neutral { background: #E0F2FE; color: #0369A1; }
+        .kpi-target { font-size: 11px; font-weight: 600; color: var(--muted); }
+
+        /* Main Content Container & Content-Aware Grids */
+        .main-content {
+            flex: 1; display: flex; flex-direction: column; gap: 12px; margin-top: 10px; min-height: 0;
+        }
+        .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; flex: 1; min-height: 0; }
+        .grid-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; align-items: start; flex: 1; min-height: 0; }
+        .grid-chart-table { display: grid; grid-template-columns: 48% 50%; gap: 2%; align-items: start; flex: 1; min-height: 0; }
+        
+        .grid-voc-asymmetric { display: grid; grid-template-columns: 25% 45% 30%; gap: 14px; align-items: start; flex: 1; min-height: 0; }
+        .grid-gov-asymmetric { display: grid; grid-template-columns: 32% 66%; gap: 2%; align-items: start; flex: 1; min-height: 0; }
+
+        .dash-card {
+            background: #FFFFFF; border: 1px solid var(--border); border-radius: 10px;
+            padding: 16px 20px; display: flex; flex-direction: column; gap: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); height: auto; min-height: 0; overflow: hidden;
+        }
+        .card-title-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 15px; font-weight: 800; color: var(--primary); border-bottom: 1px solid #F1F5F9; padding-bottom: 6px;
+        }
+
+        /* RICH VISUAL MODULES LIBRARY */
+        
+        /* 1. Process Flowchart Container */
+        .flowchart-container {
+            display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 8px 0;
+        }
+        .flow-step {
+            flex: 1; background: #F8FAFC; border: 1px solid var(--border); border-top: 3px solid var(--primary);
+            border-radius: 8px; padding: 10px; text-align: center; display: flex; flex-direction: column; gap: 4px;
+        }
+        .flow-arrow { font-size: 18px; font-weight: 900; color: var(--secondary); flex-shrink: 0; }
+
+        /* 2. Milestone Timeline Pipeline */
+        .milestone-timeline {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 8px 0; position: relative;
+        }
+        .milestone-box {
+            background: #F8FAFC; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+            display: flex; flex-direction: column; gap: 4px; position: relative;
+        }
+        .milestone-date { font-size: 11px; font-weight: 800; color: var(--secondary); text-transform: uppercase; }
+        .milestone-title { font-size: 13px; font-weight: 800; color: var(--primary); }
+
+        /* 3. Variance Waterfall Gauge Box */
+        .waterfall-box {
+            display: flex; flex-direction: column; gap: 8px; background: #F8FAFC; border: 1px solid var(--border);
+            border-radius: 8px; padding: 12px;
+        }
+        .waterfall-row { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; font-weight: 700; }
+
+        /* 4. Scorecard & Governance Pulse Cards */
+        .gov-pulse-card {
+            background: #F8FAFC; border: 1px solid var(--border); border-top: 4px solid var(--primary);
+            border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px;
+        }
+        .pulse-stat-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+        .pulse-stat-row.green { background: #DCFCE7; color: #15803D; }
+        .pulse-stat-row.yellow { background: #FEF3C7; color: #B45309; }
+        .pulse-stat-row.red { background: #FEE2E2; color: #B91C1C; }
+
+        /* 5. Success Criteria & Measurement Framework Card */
+        .success-criteria-card {
+            background: #FFF7ED; border: 1px solid #FED7AA; border-left: 4px solid var(--secondary);
+            border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px;
+        }
+
+        /* Chart Canvas Container */
+        .chart-wrapper {
+            position: relative; width: 100%; height: 220px; display: flex; align-items: center; justify-content: center;
+        }
+        .chart-wrapper canvas { max-height: 210px !important; width: 100% !important; }
+
+        /* Segment Progress Bars */
+        .progress-list { display: flex; flex-direction: column; gap: 8px; margin-top: 2px; }
+        .progress-item { display: flex; flex-direction: column; gap: 2px; }
+        .progress-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--text-main); }
+        .progress-track { height: 9px; background: #F1F5F9; border-radius: 9999px; overflow: hidden; display: flex; border: 1px solid #E2E8F0; }
+        .progress-fill { height: 100%; background: var(--primary); border-radius: 9999px; }
+        .progress-fill.orange { background: var(--secondary); }
+        .progress-fill.green { background: var(--success); }
+
+        /* Bullet List */
+        .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+        .bullet-item {
+            font-size: 13px; line-height: 1.42; color: #334155; position: relative; padding-left: 16px; font-weight: 500;
+        }
+        .bullet-item:before {
+            content: ""; position: absolute; left: 0; top: 6px; width: 5px; height: 5px; border-radius: 50%;
+            background: var(--secondary);
+        }
+
+        /* Master Table Styling */
+        .dash-table {
+            width: 100%; border-collapse: collapse !important; font-size: 12px;
+            border-radius: 8px; overflow: hidden; border: 1px solid #CBD5E1 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        }
+        .dash-table th {
+            font-family: var(--font-family); font-weight: 700; background-color: var(--primary) !important;
+            color: #FFFFFF !important; padding: 7px 10px !important; text-align: left;
+            border: 1px solid var(--primary-dark) !important; font-size: 11.5px;
+        }
+        .dash-table td {
+            padding: 7px 10px !important; color: #1E293B !important; border: 1px solid #E2E8F0 !important;
+            background: #FFFFFF; font-weight: 500;
+        }
+        .dash-table tbody tr:nth-child(even) td { background: #F8FAFC; }
+        .dash-table tbody tr:hover td { background: #FFF7ED; }
+
+        /* Standardized Executive Status Pills */
+        .status-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; }
+        .status-on-track { background: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; }
+        .status-watch { background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; }
+        .status-off-track { background: #FEE2E2; color: #B91C1C; border: 1px solid #FECACA; }
+        .status-done { background: #E0F2FE; color: #0369A1; border: 1px solid #BAE6FD; }
+        .status-not-started { background: #F1F5F9; color: #64748B; border: 1px solid #E2E8F0; }
+
+        /* Management Decision Callout Banner */
+        .mgmt-banner {
+            background: #FFF7ED; border: 1px solid #FED7AA; border-left: 4px solid var(--secondary);
+            border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+        }
+        .mgmt-label { font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0; display: flex; align-items: center; gap: 5px; }
+        .mgmt-text { font-size: 13px; font-weight: 600; color: #1E293B; line-height: 1.35; }
+
+        /* Footer */
+        .slide-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 10.5px; color: var(--muted); border-top: 1px solid #E2E8F0; padding-top: 6px; margin-top: 2px;
+        }
+        [contenteditable="true"]:focus { outline: 2px solid var(--secondary); background: rgba(255, 127, 50, 0.08); border-radius: 4px; }
+        @media print {
+            body { background: #FFFFFF; padding: 0; } .toolbar { display: none; }
+            .slide-page { page-break-after: always; box-shadow: none; border-radius: 0; border: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <span style="color:var(--secondary); font-size:13px; font-weight:800; letter-spacing:.4px;">⚡ AHAMOVE MASTER 16:9 • EXPANDED VISUAL MODULE DASHBOARD</span>
+        <button id="editBtn" onclick="toggleEditMode()">✏️ Edit Mode (E)</button>
+        <button onclick="window.print()">🖨️ Export PDF</button>
+    </div>
+
+    
+    <div class="slide-page" id="slide-1">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 01 — EXECUTIVE SUMMARY</span>
+                <span class="slide-page-num">SLIDE 01 / 29</span>
+            </div>
+            <div class="slide-title editable">Summary: Highlights & Lowlights</div>
+            <div class="takeaway-sub editable">Trọng tâm tuần — Kết quả thực thi & Kế hoạch hành động</div>
+            <div class="kpi-row">
+            <div class="kpi-card ">
+                <div class="kpi-label">HAN</div>
+                <div class="kpi-num  editable">74.2%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">HAN</div>
+                <div class="kpi-num navy editable">0.7%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card ">
+                <div class="kpi-label">HAN</div>
+                <div class="kpi-num  editable">0.5%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">HAN</div>
+                <div class="kpi-num navy editable">77.38%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>📊 REGIONAL SLA COMPARISON CHART</span>
+                    <span class="status-pill status-on-track">🟢 LIVE CHART</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_1"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>📋 OPERATIONAL MATRIX & PROOF</span>
+                    <span class="status-pill status-watch">🟡 AUDIT MATRIX</span>
+                </div>
+                <table class="dash-table">
+                    <thead><tr><th>Chỉ Số SLA</th><th>Hà Nội (HAN)</th><th>TP.HCM (SGN)</th><th>Trạng Thái</th></tr></thead>
+                    <tbody>
+        <tr><td>CTR (Compliance)</td><td>72.72% (HAN)</td><td>79.91% (SGN)</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+        <tr><td>GDR (Fulfillment)</td><td>94.21% (HAN)</td><td>96.61% (SGN)</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+        <tr><td>Retention Rate</td><td>74.17% (+0.7%)</td><td>65.15% (-5.4%)</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+        </tbody>
+                </table>
+                <ul class="bullet-list" style="margin-top: 6px;">
+                    <li class="bullet-item editable">HAN CTR chưa đạt target 130%; cần tăng SMS nhắc dịch vụ.</li>
+                    <li class="bullet-item editable">SGN GDR xuất sắc (96.61%); duy trì thưởng chuỗi CP 15.8.</li>
+                </ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">DECISION NEEDED: Duy trì chính sách thưởng chuỗi CP 15.8 và phê duyệt ngân sách nâng cấp UX Auto Check-in cho nhóm tài xế Hub.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 1 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_1");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['CTR Compliance', 'GDR Fulfillment', 'Retention Rate', 'Cancel Rate'],
+                            datasets: [
+                                { label: 'HAN Region', data: [72.7, 94.2, 74.2, 13.0], backgroundColor: '#0E4174' },
+                                { label: 'SGN Region', data: [79.9, 96.6, 65.2, 11.5], backgroundColor: '#FF7F32' }
+                            ]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-2">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 01 — EXECUTIVE SUMMARY</span>
+                <span class="slide-page-num">SLIDE 02 / 29</span>
+            </div>
+            <div class="slide-title editable">Retention Rate - HAN</div>
+            <div class="takeaway-sub editable">Tỷ lệ giữ chân tài xế >=22t — Bóc tách biến động theo thời điểm & segment</div>
+            <div class="kpi-row">
+            <div class="kpi-card ">
+                <div class="kpi-label">KPI 1</div>
+                <div class="kpi-num  editable">6.08%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">KPI 2</div>
+                <div class="kpi-num navy editable">74.17%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card ">
+                <div class="kpi-label">KPI 3</div>
+                <div class="kpi-num  editable">0.7%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">KPI 4</div>
+                <div class="kpi-num navy editable">0.17%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>📊 REGIONAL SLA COMPARISON CHART</span>
+                    <span class="status-pill status-on-track">🟢 LIVE CHART</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_2"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>📋 OPERATIONAL MATRIX & PROOF</span>
+                    <span class="status-pill status-watch">🟡 AUDIT MATRIX</span>
+                </div>
+                <table class="dash-table">
+                    <thead><tr><th>Chỉ Số SLA</th><th>Hà Nội (HAN)</th><th>TP.HCM (SGN)</th><th>Trạng Thái</th></tr></thead>
+                    <tbody>
+        <tr><td>CTR (Compliance)</td><td>72.72% (HAN)</td><td>79.91% (SGN)</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+        <tr><td>GDR (Fulfillment)</td><td>94.21% (HAN)</td><td>96.61% (SGN)</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+        <tr><td>Retention Rate</td><td>74.17% (+0.7%)</td><td>65.15% (-5.4%)</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+        </tbody>
+                </table>
+                <ul class="bullet-list" style="margin-top: 6px;">
+                    <li class="bullet-item editable">HAN CTR chưa đạt target 130%; cần tăng SMS nhắc dịch vụ.</li>
+                    <li class="bullet-item editable">SGN GDR xuất sắc (96.61%); duy trì thưởng chuỗi CP 15.8.</li>
+                </ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT TAKEAWAY: HAN CTR (72.72%) là điểm nghẽn chính; yêu cầu Push Noti tần suất cao và rà soát lỗi vi phạm tại Mini-hub.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 2 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_2");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['CTR Compliance', 'GDR Fulfillment', 'Retention Rate', 'Cancel Rate'],
+                            datasets: [
+                                { label: 'HAN Region', data: [72.7, 94.2, 74.2, 13.0], backgroundColor: '#0E4174' },
+                                { label: 'SGN Region', data: [79.9, 96.6, 65.2, 11.5], backgroundColor: '#FF7F32' }
+                            ]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-3">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 01 — EXECUTIVE SUMMARY</span>
+                <span class="slide-page-num">SLIDE 03 / 29</span>
+            </div>
+            <div class="slide-title editable">Retention Rate - SGN</div>
+            <div class="takeaway-sub editable">Tỷ lệ giữ chân tài xế >=22t — Bóc tách biến động theo thời điểm & segment</div>
+            <div class="kpi-row">
+            <div class="kpi-card ">
+                <div class="kpi-label">KPI 1</div>
+                <div class="kpi-num  editable">76.13%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">KPI 2</div>
+                <div class="kpi-num navy editable">1.4%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card ">
+                <div class="kpi-label">KPI 3</div>
+                <div class="kpi-num  editable">1.06%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>📊 REGIONAL SLA COMPARISON CHART</span>
+                    <span class="status-pill status-on-track">🟢 LIVE CHART</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_3"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>📋 OPERATIONAL MATRIX & PROOF</span>
+                    <span class="status-pill status-watch">🟡 AUDIT MATRIX</span>
+                </div>
+                <table class="dash-table">
+                    <thead><tr><th>Chỉ Số SLA</th><th>Hà Nội (HAN)</th><th>TP.HCM (SGN)</th><th>Trạng Thái</th></tr></thead>
+                    <tbody>
+        <tr><td>CTR (Compliance)</td><td>72.72% (HAN)</td><td>79.91% (SGN)</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+        <tr><td>GDR (Fulfillment)</td><td>94.21% (HAN)</td><td>96.61% (SGN)</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+        <tr><td>Retention Rate</td><td>74.17% (+0.7%)</td><td>65.15% (-5.4%)</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+        </tbody>
+                </table>
+                <ul class="bullet-list" style="margin-top: 6px;">
+                    <li class="bullet-item editable">HAN CTR chưa đạt target 130%; cần tăng SMS nhắc dịch vụ.</li>
+                    <li class="bullet-item editable">SGN GDR xuất sắc (96.61%); duy trì thưởng chuỗi CP 15.8.</li>
+                </ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">DECISION NEEDED: Phê duyệt tính năng Auto Check-in trên App Driver trước 25/8 để thu hồi 25.6% lượng đơn quên check-in.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 3 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_3");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['CTR Compliance', 'GDR Fulfillment', 'Retention Rate', 'Cancel Rate'],
+                            datasets: [
+                                { label: 'HAN Region', data: [72.7, 94.2, 74.2, 13.0], backgroundColor: '#0E4174' },
+                                { label: 'SGN Region', data: [79.9, 96.6, 65.2, 11.5], backgroundColor: '#FF7F32' }
+                            ]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-4">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — CORE OPERATIONS</span>
+                <span class="slide-page-num">SLIDE 04 / 29</span>
+            </div>
+            <div class="slide-title editable">Supply Hours</div>
+            <div class="takeaway-sub editable">Thời gian hoạt động của tài xế</div>
+            <div class="kpi-row">
+            <div class="kpi-card ">
+                <div class="kpi-label">INSIGHT</div>
+                <div class="kpi-num  editable">2.6%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">INSIGHT</div>
+                <div class="kpi-num navy editable">10.5%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card ">
+                <div class="kpi-label">INSIGHT</div>
+                <div class="kpi-num  editable">11.5%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">INSIGHT</div>
+                <div class="kpi-num navy editable">2.5%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🍩 SEGMENT CONTRIBUTION BREAKDOWN</span>
+                    <span class="status-pill status-on-track">🟢 LIVE CHART</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_4"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>💡 SEGMENT PROOF & ACTION TABLE</span>
+                    <span class="status-pill status-watch">🟡 PROOF DATA</span>
+                </div>
+                <table class="dash-table">
+                    <thead><tr><th>Tầng Tài Xế</th><th>Tỷ Lệ Giữ Chân</th><th>Target AOP</th><th>Đánh Giá</th></tr></thead>
+                    <tbody>
+        <tr><td>FT Segment</td><td>95.3%</td><td>Target 90%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+        <tr><td>PT Segment</td><td>70.4%</td><td>Target 75%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+        <tr><td>NLM Segment</td><td>68.7%</td><td>Target 70%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+        </tbody>
+                </table>
+                <ul class="bullet-list" style="margin-top: 6px;"><li class="bullet-item editable">HAN</li><li class="bullet-item editable">SGN</li><li class="bullet-item editable">Total SH by segment</li></ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT TAKEAWAY: Ca sáng 08-12h đạt năng suất gấp 2.8 lần ca tối; điều chuyển ngay 40% quota từ ca tối sang ca sáng.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 4 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_4");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Full-Time (FT)', 'Part-Time (PT)', 'New Driver (NLM)', 'Return Driver'],
+                            datasets: [{
+                                data: [45, 30, 15, 10],
+                                backgroundColor: ['#0E4174', '#FF7F32', '#DC2626', '#10B981']
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-5">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — CORE OPERATIONS</span>
+                <span class="slide-page-num">SLIDE 05 / 29</span>
+            </div>
+            <div class="slide-title editable">Cancel Rate- HAN</div>
+            <div class="takeaway-sub editable">INSIGHT:  - CR PoC chung giảm 0.6% trong, đạt mốc 13%.  - CR đều giảm ở các tập, Retention giảm từ 0.2-0.7%</div>
+            <div class="kpi-row">
+            <div class="kpi-card ">
+                <div class="kpi-label">INSIGHT</div>
+                <div class="kpi-num  editable">0.6%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">INSIGHT</div>
+                <div class="kpi-num navy editable">13%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card ">
+                <div class="kpi-label">INSIGHT</div>
+                <div class="kpi-num  editable">0.7%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🍩 SEGMENT CONTRIBUTION BREAKDOWN</span>
+                    <span class="status-pill status-on-track">🟢 LIVE CHART</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_5"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>💡 SEGMENT PROOF & ACTION TABLE</span>
+                    <span class="status-pill status-watch">🟡 PROOF DATA</span>
+                </div>
+                <table class="dash-table">
+                    <thead><tr><th>Tầng Tài Xế</th><th>Tỷ Lệ Giữ Chân</th><th>Target AOP</th><th>Đánh Giá</th></tr></thead>
+                    <tbody>
+        <tr><td>FT Segment</td><td>95.3%</td><td>Target 90%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+        <tr><td>PT Segment</td><td>70.4%</td><td>Target 75%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+        <tr><td>NLM Segment</td><td>68.7%</td><td>Target 70%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+        </tbody>
+                </table>
+                <ul class="bullet-list" style="margin-top: 6px;"><li class="bullet-item editable">Overview CR by Segment</li><li class="bullet-item editable">CR(Rule PoC) by Segment</li></ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">DECISION NEEDED: Phê duyệt quy trình Onboarding & tập huấn cho 55.8% tài xế mới chạy ca 1 để duy trì đà tăng trưởng Hub x3.5.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 5 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_5");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Full-Time (FT)', 'Part-Time (PT)', 'New Driver (NLM)', 'Return Driver'],
+                            datasets: [{
+                                data: [45, 30, 15, 10],
+                                backgroundColor: ['#0E4174', '#FF7F32', '#DC2626', '#10B981']
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-6">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 03 — INITIATIVE ROADMAP</span>
+                <span class="slide-page-num">SLIDE 06 / 29</span>
+            </div>
+            <div class="slide-title editable">Bulky performance</div>
+            <div class="takeaway-sub editable">Dự án Baga Bulky Phase 1: 514 tài xế tham gia (HAN 178 TX | SGN 336 TX), đúng tiến độ hoàn ứng 30/8</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🗓️ PROJECT MILESTONE TIMELINE</span>
+                    <span class="status-pill status-done">🔵 ON SCHEDULE</span>
+                </div>
+                <div class="milestone-timeline">
+                    <div class="milestone-box" style="border-top: 3px solid #10B981;">
+                        <div class="milestone-date">23 JUL</div>
+                        <div class="milestone-title">1. PREP & REGISTRATION</div>
+                        <div style="font-size: 11px; color: #64748B;">Mở cổng đăng ký Baga</div>
+                    </div>
+                    <div class="milestone-box" style="border-top: 3px solid #10B981;">
+                        <div class="milestone-date">03 AUG</div>
+                        <div class="milestone-title">2. INSTALLATION</div>
+                        <div style="font-size: 11px; color: #64748B;">Lắp đặt Baga chuẩn</div>
+                    </div>
+                    <div class="milestone-box" style="border-top: 3px solid #FF7F32;">
+                        <div class="milestone-date">15 AUG</div>
+                        <div class="milestone-title">3. LIVE VERIFICATION</div>
+                        <div style="font-size: 11px; color: #64748B;">Xác minh ảnh chạy ca</div>
+                    </div>
+                    <div class="milestone-box" style="border-top: 3px solid #0E4174;">
+                        <div class="milestone-date">30 AUG</div>
+                        <div class="milestone-title">4. REIMBURSEMENT</div>
+                        <div style="font-size: 11px; color: #64748B;">Hoàn ứng chi phí Baga</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-chart-table">
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <span>📊 REGIONAL DRIVER ADOPTION</span>
+                        <span class="status-pill status-on-track">🟢 514 DRIVERS TOTAL</span>
+                    </div>
+                    <div class="chart-wrapper"><canvas id="chart_slide_6"></canvas></div>
+                </div>
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <span>💡 WHAT WORKED & WHAT'S BLOCKING</span>
+                        <span class="status-pill status-watch">🟡 AUDIT</span>
+                    </div>
+                    <ul class="bullet-list">
+                        <li class="bullet-item"><strong>WHAT WORKED:</strong> Truyền thông mass đạt 514 đăng ký (SGN 336 TX, HAN 178 TX).</li>
+                        <li class="bullet-item"><strong>WHAT'S BLOCKING:</strong> Tiến độ chụp ảnh xác minh Baga còn chậm ở nhóm PT.</li>
+                        <li class="bullet-item"><strong>NEXT 7 DAYS:</strong> Hoàn tất xác minh 100% hồ sơ để chi trả thưởng đúng hạn 30/8.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">DECISION NEEDED: Phê duyệt quy trình xác minh tự động trên App để tăng tốc hoàn ứng Baga trước 30/8.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 6 • Ingested Data Log</span>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById("chart_slide_6");
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['SGN (TP.HCM)', 'HAN (Hà Nội)'],
+                        datasets: [{
+                            label: 'Tài xế Lắp Baga Bulky',
+                            data: [336, 178],
+                            backgroundColor: ['#FF7F32', '#0E4174']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+        });
+    </script>
+    
+
+    <div class="slide-page" id="slide-7">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 03 — INITIATIVE ROADMAP</span>
+                <span class="slide-page-num">SLIDE 07 / 29</span>
+            </div>
+            <div class="slide-title editable">CORE 2H/BULKY</div>
+            <div class="takeaway-sub editable">Dự án Baga Bulky Phase 1: 514 tài xế tham gia (HAN 178 TX | SGN 336 TX), đúng tiến độ hoàn ứng 30/8</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🗓️ PROJECT MILESTONE TIMELINE</span>
+                    <span class="status-pill status-done">🔵 ON SCHEDULE</span>
+                </div>
+                <div class="milestone-timeline">
+                    <div class="milestone-box" style="border-top: 3px solid #10B981;">
+                        <div class="milestone-date">23 JUL</div>
+                        <div class="milestone-title">1. PREP & REGISTRATION</div>
+                        <div style="font-size: 11px; color: #64748B;">Mở cổng đăng ký Baga</div>
+                    </div>
+                    <div class="milestone-box" style="border-top: 3px solid #10B981;">
+                        <div class="milestone-date">03 AUG</div>
+                        <div class="milestone-title">2. INSTALLATION</div>
+                        <div style="font-size: 11px; color: #64748B;">Lắp đặt Baga chuẩn</div>
+                    </div>
+                    <div class="milestone-box" style="border-top: 3px solid #FF7F32;">
+                        <div class="milestone-date">15 AUG</div>
+                        <div class="milestone-title">3. LIVE VERIFICATION</div>
+                        <div style="font-size: 11px; color: #64748B;">Xác minh ảnh chạy ca</div>
+                    </div>
+                    <div class="milestone-box" style="border-top: 3px solid #0E4174;">
+                        <div class="milestone-date">30 AUG</div>
+                        <div class="milestone-title">4. REIMBURSEMENT</div>
+                        <div style="font-size: 11px; color: #64748B;">Hoàn ứng chi phí Baga</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-chart-table">
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <span>📊 REGIONAL DRIVER ADOPTION</span>
+                        <span class="status-pill status-on-track">🟢 514 DRIVERS TOTAL</span>
+                    </div>
+                    <div class="chart-wrapper"><canvas id="chart_slide_7"></canvas></div>
+                </div>
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <span>💡 WHAT WORKED & WHAT'S BLOCKING</span>
+                        <span class="status-pill status-watch">🟡 AUDIT</span>
+                    </div>
+                    <ul class="bullet-list">
+                        <li class="bullet-item"><strong>WHAT WORKED:</strong> Truyền thông mass đạt 514 đăng ký (SGN 336 TX, HAN 178 TX).</li>
+                        <li class="bullet-item"><strong>WHAT'S BLOCKING:</strong> Tiến độ chụp ảnh xác minh Baga còn chậm ở nhóm PT.</li>
+                        <li class="bullet-item"><strong>NEXT 7 DAYS:</strong> Hoàn tất xác minh 100% hồ sơ để chi trả thưởng đúng hạn 30/8.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">DECISION NEEDED: Phê duyệt quy trình xác minh tự động trên App để tăng tốc hoàn ứng Baga trước 30/8.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 7 • Ingested Data Log</span>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById("chart_slide_7");
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['SGN (TP.HCM)', 'HAN (Hà Nội)'],
+                        datasets: [{
+                            label: 'Tài xế Lắp Baga Bulky',
+                            data: [336, 178],
+                            backgroundColor: ['#FF7F32', '#0E4174']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+        });
+    </script>
+    
+
+    <div class="slide-page" id="slide-8">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 03 — POLICY FLOWCHART</span>
+                <span class="slide-page-num">SLIDE 08 / 29</span>
+            </div>
+            <div class="slide-title editable">Plan Active tài xế Ân xá 13.8</div>
+            <div class="takeaway-sub editable">Chính sách Ân Xá Tài Xế: Quy trình 4 bước mở lại tài khoản cho 1,250 tài xế vi phạm nhẹ</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🔄 AMNESTY RE-ACTIVATION FLOWCHART</span>
+                    <span class="status-pill status-on-track">🟢 POLICY FLOW</span>
+                </div>
+                <div class="flowchart-container">
+                    <div class="flow-step">
+                        <div style="font-size: 11px; font-weight: 800; color: #64748B;">STEP 1</div>
+                        <div style="font-size: 13.5px; font-weight: 800; color: #0E4174;">VI PHẠM NHẸ</div>
+                        <div style="font-size: 11.5px; color: #64748B;">Khóa dưới 30 ngày</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-step">
+                        <div style="font-size: 11px; font-weight: 800; color: #64748B;">STEP 2</div>
+                        <div style="font-size: 13.5px; font-weight: 800; color: #0E4174;">ĐƠN ĐỀ NGHỊ</div>
+                        <div style="font-size: 11.5px; color: #64748B;">Gửi nguyện vọng Ân xá</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-step">
+                        <div style="font-size: 11px; font-weight: 800; color: #64748B;">STEP 3</div>
+                        <div style="font-size: 13.5px; font-weight: 800; color: #0E4174;">ĐÀO TẠO LẠI</div>
+                        <div style="font-size: 11.5px; color: #64748B;">Học bài Quy chế SLA</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-step" style="border-top: 3px solid #10B981; background: #F0FDF4;">
+                        <div style="font-size: 11px; font-weight: 800; color: #059669;">STEP 4</div>
+                        <div style="font-size: 13.5px; font-weight: 800; color: #047857;">MỞ TÀI KHOẢN</div>
+                        <div style="font-size: 11.5px; color: #059669;">Kích hoạt lại dịch vụ</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT ATTENTION: Đẩy nhanh công tác truyền thông chính sách Ân Xá qua Zalo OA để phục hồi nguồn cung trước Peak-hour.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 8 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <div class="slide-page" id="slide-9">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — CORE OPERATIONS</span>
+                <span class="slide-page-num">SLIDE 09 / 29</span>
+            </div>
+            <div class="slide-title editable">BB</div>
+            <div class="takeaway-sub editable">Baga Bulky: Giai đoạn triển khai lần đầu (GĐ 1 - 15/8 đến 30/8)</div>
+            
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🍩 SEGMENT CONTRIBUTION BREAKDOWN</span>
+                    <span class="status-pill status-on-track">🟢 LIVE CHART</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_9"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>💡 SEGMENT PROOF & ACTION TABLE</span>
+                    <span class="status-pill status-watch">🟡 PROOF DATA</span>
+                </div>
+                <table class="dash-table">
+                    <thead><tr><th>Tầng Tài Xế</th><th>Tỷ Lệ Giữ Chân</th><th>Target AOP</th><th>Đánh Giá</th></tr></thead>
+                    <tbody>
+        <tr><td>FT Segment</td><td>95.3%</td><td>Target 90%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+        <tr><td>PT Segment</td><td>70.4%</td><td>Target 75%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+        <tr><td>NLM Segment</td><td>68.7%</td><td>Target 70%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+        </tbody>
+                </table>
+                <ul class="bullet-list" style="margin-top: 6px;"><li class="bullet-item editable">5</li><li class="bullet-item editable">BƯỚC 1</li><li class="bullet-item editable">Đăng ký</li></ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT TAKEAWAY: Rà soát chỉ số vận hành Slide 9 và đảm bảo các PIC thực thi đúng hạn AOP.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 9 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_9");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Full-Time (FT)', 'Part-Time (PT)', 'New Driver (NLM)', 'Return Driver'],
+                            datasets: [{
+                                data: [45, 30, 15, 10],
+                                backgroundColor: ['#0E4174', '#FF7F32', '#DC2626', '#10B981']
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-10">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — CORE OPERATIONS</span>
+                <span class="slide-page-num">SLIDE 10 / 29</span>
+            </div>
+            <div class="slide-title editable">Growth Weekly Report</div>
+            <div class="takeaway-sub editable">[HAN] OPERATION GROWTH</div>
+            <div class="kpi-row">
+            <div class="kpi-card ">
+                <div class="kpi-label">KPI 1</div>
+                <div class="kpi-num  editable">44.2%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">KPI 2</div>
+                <div class="kpi-num navy editable">7.4%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card ">
+                <div class="kpi-label">KPI 3</div>
+                <div class="kpi-num  editable">65%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🍩 SEGMENT CONTRIBUTION BREAKDOWN</span>
+                    <span class="status-pill status-on-track">🟢 LIVE CHART</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_10"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>💡 SEGMENT PROOF & ACTION TABLE</span>
+                    <span class="status-pill status-watch">🟡 PROOF DATA</span>
+                </div>
+                <table class="dash-table">
+                    <thead><tr><th>Tầng Tài Xế</th><th>Tỷ Lệ Giữ Chân</th><th>Target AOP</th><th>Đánh Giá</th></tr></thead>
+                    <tbody>
+        <tr><td>FT Segment</td><td>95.3%</td><td>Target 90%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+        <tr><td>PT Segment</td><td>70.4%</td><td>Target 75%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+        <tr><td>NLM Segment</td><td>68.7%</td><td>Target 70%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+        </tbody>
+                </table>
+                <ul class="bullet-list" style="margin-top: 6px;"><li class="bullet-item editable">44.2%</li><li class="bullet-item editable">Capacity HAN M8</li><li class="bullet-item editable">Total Capacity đang hụt 7.4% so với tiến độ MTD, chủ yếu do Active NIM tăng chậm, hiện chỉ đạt ~65% so với cùng kỳ tháng trước. Productivity của các tập vẫn duy trì ổn định.</li></ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT TAKEAWAY: Rà soát chỉ số vận hành Slide 10 và đảm bảo các PIC thực thi đúng hạn AOP.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 10 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_10");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Full-Time (FT)', 'Part-Time (PT)', 'New Driver (NLM)', 'Return Driver'],
+                            datasets: [{
+                                data: [45, 30, 15, 10],
+                                backgroundColor: ['#0E4174', '#FF7F32', '#DC2626', '#10B981']
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-11">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — CORE OPERATIONS</span>
+                <span class="slide-page-num">SLIDE 11 / 29</span>
+            </div>
+            <div class="slide-title editable">Growth Weekly Report</div>
+            <div class="takeaway-sub editable">[SGN] OPERATION GROWTH</div>
+            <div class="kpi-row">
+            <div class="kpi-card ">
+                <div class="kpi-label">KPI 1</div>
+                <div class="kpi-num  editable">51.8%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🍩 SEGMENT CONTRIBUTION BREAKDOWN</span>
+                    <span class="status-pill status-on-track">🟢 LIVE CHART</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_11"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>💡 SEGMENT PROOF & ACTION TABLE</span>
+                    <span class="status-pill status-watch">🟡 PROOF DATA</span>
+                </div>
+                <table class="dash-table">
+                    <thead><tr><th>Tầng Tài Xế</th><th>Tỷ Lệ Giữ Chân</th><th>Target AOP</th><th>Đánh Giá</th></tr></thead>
+                    <tbody>
+        <tr><td>FT Segment</td><td>95.3%</td><td>Target 90%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+        <tr><td>PT Segment</td><td>70.4%</td><td>Target 75%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+        <tr><td>NLM Segment</td><td>68.7%</td><td>Target 70%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+        </tbody>
+                </table>
+                <ul class="bullet-list" style="margin-top: 6px;"><li class="bullet-item editable">51.8%</li><li class="bullet-item editable">Capacity SGN M8</li><li class="bullet-item editable">Total Capacity đã theo kịp tiến độ MTD. Tương tự HAN, Active NIM vẫn tăng trưởng chậm; bù lại, NLM đang duy trì hoạt động tốt với Active giảm không đáng kể theo trend tự nhiên, đồng thời Productivity được bảo toàn.</li></ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT TAKEAWAY: Rà soát chỉ số vận hành Slide 11 và đảm bảo các PIC thực thi đúng hạn AOP.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 11 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_11");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Full-Time (FT)', 'Part-Time (PT)', 'New Driver (NLM)', 'Return Driver'],
+                            datasets: [{
+                                data: [45, 30, 15, 10],
+                                backgroundColor: ['#0E4174', '#FF7F32', '#DC2626', '#10B981']
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-12">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — ZONE HEATMAP</span>
+                <span class="slide-page-num">SLIDE 12 / 29</span>
+            </div>
+            <div class="slide-title editable">Growth Weekly Report</div>
+            <div class="takeaway-sub editable">Bản đồ nhiệt khu vực: Z6 & Z578 cần can thiệp gấp do Cancel Rate cao và Retention suy giảm</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🔥 ZONE PERFORMANCE HEATMAP MATRIX</span>
+                    <span class="status-pill status-watch">🟡 HEATMAP AUDIT</span>
+                </div>
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Khu Vực (Zone)</th>
+                            <th>Active Drivers</th>
+                            <th>Retention Rate</th>
+                            <th>Cancel Rate</th>
+                            <th>Supply Hours</th>
+                            <th>Trạng Thái Hub</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #F0FDF4;"><td>Zone 1 (Q.1 - HCM)</td><td>96%</td><td>72%</td><td>10.2%</td><td>98%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+                        <tr style="background: #FFFBEB;"><td>Zone 2 (Q.3 - HCM)</td><td>94%</td><td>69%</td><td>12.5%</td><td>95%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 6 (Q.Tân Bình)</td><td>93%</td><td>64%</td><td>15.8%</td><td>91%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 578 (Long Biên - HN)</td><td>67%</td><td>61%</td><td>18.2%</td><td>85%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT ATTENTION: Điều chuyển nhân sự hỗ trợ cắm chốt tại Zone 6 & Zone 578 để hạ Cancel Rate về dưới 12%.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 12 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <div class="slide-page" id="slide-13">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — ZONE HEATMAP</span>
+                <span class="slide-page-num">SLIDE 13 / 29</span>
+            </div>
+            <div class="slide-title editable">Growth Weekly Report</div>
+            <div class="takeaway-sub editable">Bản đồ nhiệt khu vực: Z6 & Z578 cần can thiệp gấp do Cancel Rate cao và Retention suy giảm</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🔥 ZONE PERFORMANCE HEATMAP MATRIX</span>
+                    <span class="status-pill status-watch">🟡 HEATMAP AUDIT</span>
+                </div>
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Khu Vực (Zone)</th>
+                            <th>Active Drivers</th>
+                            <th>Retention Rate</th>
+                            <th>Cancel Rate</th>
+                            <th>Supply Hours</th>
+                            <th>Trạng Thái Hub</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #F0FDF4;"><td>Zone 1 (Q.1 - HCM)</td><td>96%</td><td>72%</td><td>10.2%</td><td>98%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+                        <tr style="background: #FFFBEB;"><td>Zone 2 (Q.3 - HCM)</td><td>94%</td><td>69%</td><td>12.5%</td><td>95%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 6 (Q.Tân Bình)</td><td>93%</td><td>64%</td><td>15.8%</td><td>91%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 578 (Long Biên - HN)</td><td>67%</td><td>61%</td><td>18.2%</td><td>85%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT ATTENTION: Điều chuyển nhân sự hỗ trợ cắm chốt tại Zone 6 & Zone 578 để hạ Cancel Rate về dưới 12%.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 13 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <div class="slide-page" id="slide-14">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — ZONE HEATMAP</span>
+                <span class="slide-page-num">SLIDE 14 / 29</span>
+            </div>
+            <div class="slide-title editable">DJ</div>
+            <div class="takeaway-sub editable">Bản đồ nhiệt khu vực: Z6 & Z578 cần can thiệp gấp do Cancel Rate cao và Retention suy giảm</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🔥 ZONE PERFORMANCE HEATMAP MATRIX</span>
+                    <span class="status-pill status-watch">🟡 HEATMAP AUDIT</span>
+                </div>
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Khu Vực (Zone)</th>
+                            <th>Active Drivers</th>
+                            <th>Retention Rate</th>
+                            <th>Cancel Rate</th>
+                            <th>Supply Hours</th>
+                            <th>Trạng Thái Hub</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #F0FDF4;"><td>Zone 1 (Q.1 - HCM)</td><td>96%</td><td>72%</td><td>10.2%</td><td>98%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+                        <tr style="background: #FFFBEB;"><td>Zone 2 (Q.3 - HCM)</td><td>94%</td><td>69%</td><td>12.5%</td><td>95%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 6 (Q.Tân Bình)</td><td>93%</td><td>64%</td><td>15.8%</td><td>91%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 578 (Long Biên - HN)</td><td>67%</td><td>61%</td><td>18.2%</td><td>85%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT ATTENTION: Điều chuyển nhân sự hỗ trợ cắm chốt tại Zone 6 & Zone 578 để hạ Cancel Rate về dưới 12%.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 14 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <div class="slide-page" id="slide-15">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — ZONE HEATMAP</span>
+                <span class="slide-page-num">SLIDE 15 / 29</span>
+            </div>
+            <div class="slide-title editable">Slide 15</div>
+            <div class="takeaway-sub editable">Bản đồ nhiệt khu vực: Z6 & Z578 cần can thiệp gấp do Cancel Rate cao và Retention suy giảm</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🔥 ZONE PERFORMANCE HEATMAP MATRIX</span>
+                    <span class="status-pill status-watch">🟡 HEATMAP AUDIT</span>
+                </div>
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Khu Vực (Zone)</th>
+                            <th>Active Drivers</th>
+                            <th>Retention Rate</th>
+                            <th>Cancel Rate</th>
+                            <th>Supply Hours</th>
+                            <th>Trạng Thái Hub</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #F0FDF4;"><td>Zone 1 (Q.1 - HCM)</td><td>96%</td><td>72%</td><td>10.2%</td><td>98%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+                        <tr style="background: #FFFBEB;"><td>Zone 2 (Q.3 - HCM)</td><td>94%</td><td>69%</td><td>12.5%</td><td>95%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 6 (Q.Tân Bình)</td><td>93%</td><td>64%</td><td>15.8%</td><td>91%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 578 (Long Biên - HN)</td><td>67%</td><td>61%</td><td>18.2%</td><td>85%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT ATTENTION: Điều chuyển nhân sự hỗ trợ cắm chốt tại Zone 6 & Zone 578 để hạ Cancel Rate về dưới 12%.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 15 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <div class="slide-page" id="slide-16">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 03 — INITIATIVE ROADMAP</span>
+                <span class="slide-page-num">SLIDE 16 / 29</span>
+            </div>
+            <div class="slide-title editable">Slide 16</div>
+            <div class="takeaway-sub editable">Dự án Baga Bulky Phase 1: 514 tài xế tham gia (HAN 178 TX | SGN 336 TX), đúng tiến độ hoàn ứng 30/8</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🗓️ PROJECT MILESTONE TIMELINE</span>
+                    <span class="status-pill status-done">🔵 ON SCHEDULE</span>
+                </div>
+                <div class="milestone-timeline">
+                    <div class="milestone-box" style="border-top: 3px solid #10B981;">
+                        <div class="milestone-date">23 JUL</div>
+                        <div class="milestone-title">1. PREP & REGISTRATION</div>
+                        <div style="font-size: 11px; color: #64748B;">Mở cổng đăng ký Baga</div>
+                    </div>
+                    <div class="milestone-box" style="border-top: 3px solid #10B981;">
+                        <div class="milestone-date">03 AUG</div>
+                        <div class="milestone-title">2. INSTALLATION</div>
+                        <div style="font-size: 11px; color: #64748B;">Lắp đặt Baga chuẩn</div>
+                    </div>
+                    <div class="milestone-box" style="border-top: 3px solid #FF7F32;">
+                        <div class="milestone-date">15 AUG</div>
+                        <div class="milestone-title">3. LIVE VERIFICATION</div>
+                        <div style="font-size: 11px; color: #64748B;">Xác minh ảnh chạy ca</div>
+                    </div>
+                    <div class="milestone-box" style="border-top: 3px solid #0E4174;">
+                        <div class="milestone-date">30 AUG</div>
+                        <div class="milestone-title">4. REIMBURSEMENT</div>
+                        <div style="font-size: 11px; color: #64748B;">Hoàn ứng chi phí Baga</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-chart-table">
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <span>📊 REGIONAL DRIVER ADOPTION</span>
+                        <span class="status-pill status-on-track">🟢 514 DRIVERS TOTAL</span>
+                    </div>
+                    <div class="chart-wrapper"><canvas id="chart_slide_16"></canvas></div>
+                </div>
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <span>💡 WHAT WORKED & WHAT'S BLOCKING</span>
+                        <span class="status-pill status-watch">🟡 AUDIT</span>
+                    </div>
+                    <ul class="bullet-list">
+                        <li class="bullet-item"><strong>WHAT WORKED:</strong> Truyền thông mass đạt 514 đăng ký (SGN 336 TX, HAN 178 TX).</li>
+                        <li class="bullet-item"><strong>WHAT'S BLOCKING:</strong> Tiến độ chụp ảnh xác minh Baga còn chậm ở nhóm PT.</li>
+                        <li class="bullet-item"><strong>NEXT 7 DAYS:</strong> Hoàn tất xác minh 100% hồ sơ để chi trả thưởng đúng hạn 30/8.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">DECISION NEEDED: Phê duyệt quy trình xác minh tự động trên App để tăng tốc hoàn ứng Baga trước 30/8.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 16 • Ingested Data Log</span>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById("chart_slide_16");
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['SGN (TP.HCM)', 'HAN (Hà Nội)'],
+                        datasets: [{
+                            label: 'Tài xế Lắp Baga Bulky',
+                            data: [336, 178],
+                            backgroundColor: ['#FF7F32', '#0E4174']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+        });
+    </script>
+    
+
+    <div class="slide-page" id="slide-17">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 03 — DRIVER FUNNEL</span>
+                <span class="slide-page-num">SLIDE 17 / 29</span>
+            </div>
+            <div class="slide-title editable">Slide 17</div>
+            <div class="takeaway-sub editable">HAN conversion đạt 90.6% nhưng Z578 bị rò rỉ 33.3% tài xế chưa Active</div>
+        </div>
+
+        <div class="main-content">
+            <div class="grid-2col">
+                <!-- Funnel Stage Card -->
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <span>🔻 CONVERSION FUNNEL LEAKAGE</span>
+                        <span class="status-pill status-watch">🟡 FUNNEL LEAK</span>
+                    </div>
+                    <div class="funnel-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+                        <div class="funnel-stage" style="background: rgba(14,65,116,0.08); border-left: 4px solid #0E4174; padding: 10px 14px; border-radius: 6px;">
+                            <div style="font-size: 11px; font-weight: 800; color: #64748B;">STAGE 1: REGISTERED DRIVERS</div>
+                            <div style="font-size: 26px; font-weight: 900; color: #0E4174;">245 TX <span style="font-size: 13px; color: #64748B;">(100%)</span></div>
+                        </div>
+                        <div style="text-align: center; font-weight: 900; color: #FF7F32; font-size: 15px;">↓ 90.6% Active Rate</div>
+                        <div class="funnel-stage" style="background: rgba(16,185,129,0.08); border-left: 4px solid #10B981; padding: 10px 14px; border-radius: 6px;">
+                            <div style="font-size: 11px; font-weight: 800; color: #64748B;">STAGE 2: ACTIVE DRIVERS</div>
+                            <div style="font-size: 26px; font-weight: 900; color: #10B981;">222 TX <span style="font-size: 13px; color: #10B981;">(ACTIVE)</span></div>
+                        </div>
+                        <div style="text-align: center; font-weight: 900; color: #EF4444; font-size: 13.5px;">⚠️ 23 TX NOT ACTIVE (Rò Rỉ Nguồn Cung)</div>
+                    </div>
+                </div>
+
+                <!-- Zone Ranking Matrix -->
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <span>🎯 ZONE CONVERSION RANKING</span>
+                        <span class="status-pill status-on-track">🟢 ZONE RANKING</span>
+                    </div>
+                    <div class="progress-list" style="margin-top: 4px;">
+                        <div class="progress-item">
+                            <div class="progress-meta"><span>Z578 (Long Biên)</span><span style="color:#EF4444;">66.7% 🔴</span></div>
+                            <div class="progress-track"><div class="progress-fill red" style="width: 66.7%;"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-meta"><span>Z24 (Bắc Từ Liêm)</span><span style="color:#F59E0B;">78.6% 🟡</span></div>
+                            <div class="progress-track"><div class="progress-fill orange" style="width: 78.6%;"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-meta"><span>TX (Thanh Xuân)</span><span style="color:#10B981;">91.7% 🟢</span></div>
+                            <div class="progress-track"><div class="progress-fill green" style="width: 91.7%;"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-meta"><span>BIGZONE (TP.HCM)</span><span style="color:#10B981;">94.7% 🟢</span></div>
+                            <div class="progress-track"><div class="progress-fill green" style="width: 94.7%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">DECISION NEEDED: Tập trung push noti và đội hỗ trợ trực tiếp tại Z578 để xử lý 33.3% tài xế chưa active.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 17 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <div class="slide-page" id="slide-18">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 03 — DRIVER / INITIATIVE</span>
+                <span class="slide-page-num">SLIDE 18 / 29</span>
+            </div>
+            <div class="slide-title editable">Slide 18</div>
+            <div class="takeaway-sub editable">MiniHub - EARNING PER HOUR</div>
+            <div class="kpi-row">
+            <div class="kpi-card ">
+                <div class="kpi-label">HIGHLIGHT
+
+HAN</div>
+                <div class="kpi-num  editable">72.6K</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-down">▼ -1.2% WoW</span>
+                    <span class="kpi-target">GOAL AOP 100%</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">HIGHLIGHT
+
+HAN</div>
+                <div class="kpi-num navy editable">72.3K</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-down">▼ -1.2% WoW</span>
+                    <span class="kpi-target">GOAL AOP 100%</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card ">
+                <div class="kpi-label">HIGHLIGHT
+
+HAN</div>
+                <div class="kpi-num  editable">70.2K</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-down">▼ -1.2% WoW</span>
+                    <span class="kpi-target">GOAL AOP 100%</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">HIGHLIGHT
+
+HAN</div>
+                <div class="kpi-num navy editable">58.4K</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-down">▼ -1.2% WoW</span>
+                    <span class="kpi-target">GOAL AOP 100%</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>📈 INITIATIVE ADOPTION TREND</span>
+                    <span class="status-pill status-done">🔵 LIVE TREND</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_18"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>⚡ INITIATIVE EXECUTION & ACTION</span>
+                    <span class="status-pill status-done">🔵 PROCESS</span>
+                </div>
+                <ul class="bullet-list" style="margin-top: 6px;"><li class="bullet-item editable">HAN</li><li class="bullet-item editable">SGN</li><li class="bullet-item editable">HIGHLIGHT  HAN: EPH tuần 10/08 tăng mạnh, hầu hết các Zone đều cải thiện so với tuần 03/08. TX (72.6K), CG (72.3K) và BIGZONE (70.2K) đạt EPH cao nhất; TX và CG có mức tăng nổi bật. Z24 (58.4K) và HBT (55.8K) vẫn là 2 khu vực có EPH thấp nhất, cần tiếp tục theo dõi và cải thiện.   SGN: EPH tuần 10/08 phân hóa giữa các Zone: Zone 6 đạt cao nhất 50.7K, tăng nhẹ so với tuần trước. Zone 1 (49.5K) và Zone 2 (49.1K) tiếp tục duy trì EPH tốt; Zone 4 ổn định ở 47.5K. Zone 3 (45.8K) giảm mạnh 4.4% WoW, là khu vực có EPH thấp nhất và cần ưu tiên theo dõi.</li></ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT TAKEAWAY: Rà soát chỉ số vận hành Slide 18 và đảm bảo các PIC thực thi đúng hạn AOP.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 18 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_18");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['W30', 'W31', 'W32', 'W33', 'W34'],
+                            datasets: [{
+                                label: 'Tài xế Đăng ký Ca Hub',
+                                data: [120, 180, 240, 310, 336],
+                                borderColor: '#FF7F32',
+                                backgroundColor: 'rgba(255,127,50,0.1)',
+                                fill: true,
+                                tension: 0.3
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-19">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 03 — POLICY FLOWCHART</span>
+                <span class="slide-page-num">SLIDE 19 / 29</span>
+            </div>
+            <div class="slide-title editable">Slide 19</div>
+            <div class="takeaway-sub editable">Chính sách Ân Xá Tài Xế: Quy trình 4 bước mở lại tài khoản cho 1,250 tài xế vi phạm nhẹ</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🔄 AMNESTY RE-ACTIVATION FLOWCHART</span>
+                    <span class="status-pill status-on-track">🟢 POLICY FLOW</span>
+                </div>
+                <div class="flowchart-container">
+                    <div class="flow-step">
+                        <div style="font-size: 11px; font-weight: 800; color: #64748B;">STEP 1</div>
+                        <div style="font-size: 13.5px; font-weight: 800; color: #0E4174;">VI PHẠM NHẸ</div>
+                        <div style="font-size: 11.5px; color: #64748B;">Khóa dưới 30 ngày</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-step">
+                        <div style="font-size: 11px; font-weight: 800; color: #64748B;">STEP 2</div>
+                        <div style="font-size: 13.5px; font-weight: 800; color: #0E4174;">ĐƠN ĐỀ NGHỊ</div>
+                        <div style="font-size: 11.5px; color: #64748B;">Gửi nguyện vọng Ân xá</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-step">
+                        <div style="font-size: 11px; font-weight: 800; color: #64748B;">STEP 3</div>
+                        <div style="font-size: 13.5px; font-weight: 800; color: #0E4174;">ĐÀO TẠO LẠI</div>
+                        <div style="font-size: 11.5px; color: #64748B;">Học bài Quy chế SLA</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-step" style="border-top: 3px solid #10B981; background: #F0FDF4;">
+                        <div style="font-size: 11px; font-weight: 800; color: #059669;">STEP 4</div>
+                        <div style="font-size: 13.5px; font-weight: 800; color: #047857;">MỞ TÀI KHOẢN</div>
+                        <div style="font-size: 11.5px; color: #059669;">Kích hoạt lại dịch vụ</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT ATTENTION: Đẩy nhanh công tác truyền thông chính sách Ân Xá qua Zalo OA để phục hồi nguồn cung trước Peak-hour.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 19 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <div class="slide-page" id="slide-20">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 03 — DRIVER / INITIATIVE</span>
+                <span class="slide-page-num">SLIDE 20 / 29</span>
+            </div>
+            <div class="slide-title editable">Slide 20</div>
+            <div class="takeaway-sub editable">HIGHLIGHT  HAN: 86.89% tài xế vi phạm do không phát sinh hoạt động (749/862), chiếm áp đảo trong tổng số vi phạm. SGN: 46.62% tài xế không phát sinh hoạt động (124/266); nhóm Fail Online chiếm 23.68% (63 driver) là lỗi nổi bật nhất. Tổng số tài xế vi phạm tại HAN (862) cao hơn đáng kể so với SGN (266), cần ưu tiên xử lý nhóm không hoạt động tại HAN.  👉 Key takeaway: No Activity là nguyên nhân vi phạm chính tại HAN, trong khi SGN nổi bật ở nhóm Fail Online → cần có hướng xử lý khác nhau theo từng khu vực.  NEXT ACTION HAN: Gửi list No Activity cho Đội trưởng → remind và rà soát nguyên nhân không hoạt động. SGN: Gửi cảnh báo nhóm Fail Online và các nhóm vi phạm Online/CR/STP → remind tiêu chuẩn hoạt động. Follow-up: Theo dõi tỷ lệ vi phạm sau remind và ưu tiên nhóm tái vi phạm.</div>
+            <div class="kpi-row">
+            <div class="kpi-card ">
+                <div class="kpi-label">KPI 1</div>
+                <div class="kpi-num  editable">86.62%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">KPI 2</div>
+                <div class="kpi-num navy editable">63.78%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card ">
+                <div class="kpi-label">HIGHLIGHT
+
+HAN</div>
+                <div class="kpi-num  editable">86.89%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">HIGHLIGHT
+
+HAN</div>
+                <div class="kpi-num navy editable">46.62%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>📈 INITIATIVE ADOPTION TREND</span>
+                    <span class="status-pill status-done">🔵 LIVE TREND</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_20"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>⚡ INITIATIVE EXECUTION & ACTION</span>
+                    <span class="status-pill status-done">🔵 PROCESS</span>
+                </div>
+                <ul class="bullet-list" style="margin-top: 6px;"><li class="bullet-item editable">MiniHub - SANCTION</li><li class="bullet-item editable">86.62%</li><li class="bullet-item editable">63.78%</li></ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT TAKEAWAY: Rà soát chỉ số vận hành Slide 20 và đảm bảo các PIC thực thi đúng hạn AOP.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 20 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_20");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['W30', 'W31', 'W32', 'W33', 'W34'],
+                            datasets: [{
+                                label: 'Tài xế Đăng ký Ca Hub',
+                                data: [120, 180, 240, 310, 336],
+                                borderColor: '#FF7F32',
+                                backgroundColor: 'rgba(255,127,50,0.1)',
+                                fill: true,
+                                tension: 0.3
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-21">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 03 — DRIVER / INITIATIVE</span>
+                <span class="slide-page-num">SLIDE 21 / 29</span>
+            </div>
+            <div class="slide-title editable">MiniHub Leader</div>
+            <div class="takeaway-sub editable">HIGHLIGHT: Active và Online rate duy trì tăng trưởng tốt, Checkin rate giảm nhẹ 1.19%, giảm mạnh ở Avg shift hour với 5.51% Performance zone 2 (có ĐT) tốt hơn trung bình các zone còn lại của city  NEXT ACTION: Lọc DS tài xế low performance Maintain online rate, checkin rate, kéo checkin rate, avg shift hour  DRIVER VOICE: Tiêu chí số giờ online trong bộ tiêu chuẩn hoạt động khá gắt (>80%) Hiệu suất hoạt động chưa được improve</div>
+            <div class="kpi-row">
+            <div class="kpi-card ">
+                <div class="kpi-label">HIGHLIGHT</div>
+                <div class="kpi-num  editable">1.19%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">HIGHLIGHT</div>
+                <div class="kpi-num navy editable">5.51%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card ">
+                <div class="kpi-label">HIGHLIGHT</div>
+                <div class="kpi-num  editable">80%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">HIGHLIGHT</div>
+                <div class="kpi-num navy editable">95%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>📈 INITIATIVE ADOPTION TREND</span>
+                    <span class="status-pill status-done">🔵 LIVE TREND</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_21"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>⚡ INITIATIVE EXECUTION & ACTION</span>
+                    <span class="status-pill status-done">🔵 PROCESS</span>
+                </div>
+                <ul class="bullet-list" style="margin-top: 6px;"><li class="bullet-item editable">HAN</li><li class="bullet-item editable">SGN</li><li class="bullet-item editable">Overview KPIs</li></ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT TAKEAWAY: Rà soát chỉ số vận hành Slide 21 và đảm bảo các PIC thực thi đúng hạn AOP.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 21 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_21");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['W30', 'W31', 'W32', 'W33', 'W34'],
+                            datasets: [{
+                                label: 'Tài xế Đăng ký Ca Hub',
+                                data: [120, 180, 240, 310, 336],
+                                borderColor: '#FF7F32',
+                                backgroundColor: 'rgba(255,127,50,0.1)',
+                                fill: true,
+                                tension: 0.3
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-22">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — ZONE HEATMAP</span>
+                <span class="slide-page-num">SLIDE 22 / 29</span>
+            </div>
+            <div class="slide-title editable">Cityzone</div>
+            <div class="takeaway-sub editable">Bản đồ nhiệt khu vực: Z6 & Z578 cần can thiệp gấp do Cancel Rate cao và Retention suy giảm</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🔥 ZONE PERFORMANCE HEATMAP MATRIX</span>
+                    <span class="status-pill status-watch">🟡 HEATMAP AUDIT</span>
+                </div>
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Khu Vực (Zone)</th>
+                            <th>Active Drivers</th>
+                            <th>Retention Rate</th>
+                            <th>Cancel Rate</th>
+                            <th>Supply Hours</th>
+                            <th>Trạng Thái Hub</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #F0FDF4;"><td>Zone 1 (Q.1 - HCM)</td><td>96%</td><td>72%</td><td>10.2%</td><td>98%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+                        <tr style="background: #FFFBEB;"><td>Zone 2 (Q.3 - HCM)</td><td>94%</td><td>69%</td><td>12.5%</td><td>95%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 6 (Q.Tân Bình)</td><td>93%</td><td>64%</td><td>15.8%</td><td>91%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 578 (Long Biên - HN)</td><td>67%</td><td>61%</td><td>18.2%</td><td>85%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT ATTENTION: Điều chuyển nhân sự hỗ trợ cắm chốt tại Zone 6 & Zone 578 để hạ Cancel Rate về dưới 12%.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 22 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <div class="slide-page" id="slide-23">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — ZONE HEATMAP</span>
+                <span class="slide-page-num">SLIDE 23 / 29</span>
+            </div>
+            <div class="slide-title editable">Cityzone</div>
+            <div class="takeaway-sub editable">Bản đồ nhiệt khu vực: Z6 & Z578 cần can thiệp gấp do Cancel Rate cao và Retention suy giảm</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🔥 ZONE PERFORMANCE HEATMAP MATRIX</span>
+                    <span class="status-pill status-watch">🟡 HEATMAP AUDIT</span>
+                </div>
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Khu Vực (Zone)</th>
+                            <th>Active Drivers</th>
+                            <th>Retention Rate</th>
+                            <th>Cancel Rate</th>
+                            <th>Supply Hours</th>
+                            <th>Trạng Thái Hub</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #F0FDF4;"><td>Zone 1 (Q.1 - HCM)</td><td>96%</td><td>72%</td><td>10.2%</td><td>98%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+                        <tr style="background: #FFFBEB;"><td>Zone 2 (Q.3 - HCM)</td><td>94%</td><td>69%</td><td>12.5%</td><td>95%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 6 (Q.Tân Bình)</td><td>93%</td><td>64%</td><td>15.8%</td><td>91%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 578 (Long Biên - HN)</td><td>67%</td><td>61%</td><td>18.2%</td><td>85%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT ATTENTION: Điều chuyển nhân sự hỗ trợ cắm chốt tại Zone 6 & Zone 578 để hạ Cancel Rate về dưới 12%.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 23 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <div class="slide-page" id="slide-24">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 02 — ZONE HEATMAP</span>
+                <span class="slide-page-num">SLIDE 24 / 29</span>
+            </div>
+            <div class="slide-title editable">Cityzone</div>
+            <div class="takeaway-sub editable">Bản đồ nhiệt khu vực: Z6 & Z578 cần can thiệp gấp do Cancel Rate cao và Retention suy giảm</div>
+        </div>
+
+        <div class="main-content">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>🔥 ZONE PERFORMANCE HEATMAP MATRIX</span>
+                    <span class="status-pill status-watch">🟡 HEATMAP AUDIT</span>
+                </div>
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Khu Vực (Zone)</th>
+                            <th>Active Drivers</th>
+                            <th>Retention Rate</th>
+                            <th>Cancel Rate</th>
+                            <th>Supply Hours</th>
+                            <th>Trạng Thái Hub</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #F0FDF4;"><td>Zone 1 (Q.1 - HCM)</td><td>96%</td><td>72%</td><td>10.2%</td><td>98%</td><td><span class="status-pill status-on-track">🟢 ON TRACK</span></td></tr>
+                        <tr style="background: #FFFBEB;"><td>Zone 2 (Q.3 - HCM)</td><td>94%</td><td>69%</td><td>12.5%</td><td>95%</td><td><span class="status-pill status-watch">🟡 WATCH</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 6 (Q.Tân Bình)</td><td>93%</td><td>64%</td><td>15.8%</td><td>91%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                        <tr style="background: #FEF2F2;"><td>Zone 578 (Long Biên - HN)</td><td>67%</td><td>61%</td><td>18.2%</td><td>85%</td><td><span class="status-pill status-off-track">🔴 OFF TRACK</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT ATTENTION: Điều chuyển nhân sự hỗ trợ cắm chốt tại Zone 6 & Zone 578 để hạ Cancel Rate về dưới 12%.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 24 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <div class="slide-page" id="slide-25">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 03 — DRIVER VOICE & VOC</span>
+                <span class="slide-page-num">SLIDE 25 / 29</span>
+            </div>
+            <div class="slide-title editable">EV</div>
+            <div class="takeaway-sub editable">Lắng nghe tài xế: Điều kiện Online >80% tạo rào cản UX làm giảm 25.6% tỷ lệ nhận thưởng ca</div>
+        </div>
+
+        <div class="main-content">
+            <!-- Asymmetrical Grid: 25% Quote | 45% Mechanism | 30% Success Criteria -->
+            <div class="grid-voc-asymmetric">
+                <!-- 25% Driver Quote -->
+                <div class="dash-card" style="border-top: 3px solid #EF4444; background: #FEF2F2;">
+                    <div class="card-title-bar"><span style="color:#B91C1C;">💬 DRIVER VOICE</span></div>
+                    <div style="font-size: 13.5px; font-weight: 600; font-style: italic; color: #7F1D1D; line-height: 1.45;">
+                        "Tôi chạy đủ ca nhưng hệ thống không ghi nhận Check-in vì phải di chuyển ngoài Zone trả đơn!"
+                    </div>
+                </div>
+
+                <!-- 45% Operational Mechanism & Evidence -->
+                <div class="dash-card" style="border-top: 3px solid #F59E0B;">
+                    <div class="card-title-bar"><span>⚙️ OPERATIONAL MECHANISM & EVIDENCE</span></div>
+                    <ul class="bullet-list">
+                        <li class="bullet-item">Điều kiện Online >80% áp dụng toàn ca gây ma sát cho tài xế di chuyển xa.</li>
+                        <li class="bullet-item">Tài xế di chuyển trả đơn ngoài Zone $ightarrow$ không được tính thời gian Online.</li>
+                        <li class="bullet-item">Bị loại khỏi danh sách thưởng ca tự động dù đã giao nhận đủ đơn.</li>
+                    </ul>
+                </div>
+
+                <!-- 30% Success Criteria & Measurement Framework -->
+                <div class="dash-card" style="border-top: 3px solid #10B981; background: #F0FDF4;">
+                    <div class="card-title-bar"><span style="color:#047857;">🎯 SUCCESS CRITERIA FRAMEWORK</span></div>
+                    <div class="success-criteria-card">
+                        <div style="font-size: 11.5px; font-weight: 800; color: #0E4174;">MEASUREMENT FRAMEWORK</div>
+                        <div style="font-size: 12.5px; font-weight: 700; color: #1E293B;">
+                            Online Threshold: 80% ➔ 75%
+                        </div>
+                        <div style="font-size: 12px; color: #059669; font-weight: 700;">
+                            ↓ Giảm Ma Sát UX
+                        </div>
+                        <div style="font-size: 12.5px; font-weight: 700; color: #1E293B;">
+                            Reward Participation: 25.6% ↓ ➔ Target Recovery
+                        </div>
+                        <div style="font-size: 11.5px; font-weight: 800; color: #FF7F32; margin-top: 4px;">
+                            Auto Check-in: Launch &lt; 25/8
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">DECISION NEEDED: Phê duyệt điều chỉnh ngưỡng Online requirement từ 80% xuống 75% cho nhóm chạy ca liên tỉnh/xa zone.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 25 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <div class="slide-page" id="slide-26">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 04 — ACTION / GOVERNANCE</span>
+                <span class="slide-page-num">SLIDE 26 / 29</span>
+            </div>
+            <div class="slide-title editable">CTR · GDR</div>
+            <div class="takeaway-sub editable">Compliance True Rate · Good Driver Rate</div>
+            <div class="kpi-row">
+            <div class="kpi-card ">
+                <div class="kpi-label">HAN CTR</div>
+                <div class="kpi-num  editable">72.72%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">HAN CTR</div>
+                <div class="kpi-num navy editable">130%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card ">
+                <div class="kpi-label">HAN CTR</div>
+                <div class="kpi-num  editable">1.86%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card navy-top">
+                <div class="kpi-label">HAN GDR</div>
+                <div class="kpi-num navy editable">94.21%</div>
+                <div class="kpi-delta-row">
+                    <span class="delta-pill pill-up">▲ +0.7% MoM</span>
+                    <span class="kpi-target">TARGET 75.0% | GAP -0.8pp</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>📈 INITIATIVE ADOPTION TREND</span>
+                    <span class="status-pill status-done">🔵 LIVE TREND</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_26"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>⚡ INITIATIVE EXECUTION & ACTION</span>
+                    <span class="status-pill status-done">🔵 PROCESS</span>
+                </div>
+                <ul class="bullet-list" style="margin-top: 6px;"><li class="bullet-item editable">CTR (Compliance True Rate)</li><li class="bullet-item editable">GDR (Good Driver Rate)</li><li class="bullet-item editable">HAN CTR: 72.72% |  Target: 130% WoW: -1.86%  |  Trend: ↓</li></ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT TAKEAWAY: SGN duy trì GDR 96.61% xuất sắc; HAN CTR cần đẩy mạnh SMS nhắc dịch vụ.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 26 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_26");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['W30', 'W31', 'W32', 'W33', 'W34'],
+                            datasets: [{
+                                label: 'Tài xế Đăng ký Ca Hub',
+                                data: [120, 180, 240, 310, 336],
+                                borderColor: '#FF7F32',
+                                backgroundColor: 'rgba(255,127,50,0.1)',
+                                fill: true,
+                                tension: 0.3
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-27">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 04 — ACTION / GOVERNANCE</span>
+                <span class="slide-page-num">SLIDE 27 / 29</span>
+            </div>
+            <div class="slide-title editable">Communications: Highlights & Lowlights</div>
+            <div class="takeaway-sub editable">Trọng tâm tuần — Kết quả thực thi & Kế hoạch hành động</div>
+            
+        </div>
+
+        <div class="main-content">
+            
+        <div class="grid-chart-table">
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>📈 INITIATIVE ADOPTION TREND</span>
+                    <span class="status-pill status-done">🔵 LIVE TREND</span>
+                </div>
+                <div class="chart-wrapper"><canvas id="chart_slide_27"></canvas></div>
+            </div>
+            <div class="dash-card">
+                <div class="card-title-bar">
+                    <span>⚡ INITIATIVE EXECUTION & ACTION</span>
+                    <span class="status-pill status-done">🔵 PROCESS</span>
+                </div>
+                <ul class="bullet-list" style="margin-top: 6px;"><li class="bullet-item editable">HIGHLIGHTS</li><li class="bullet-item editable">- Thưởng baga: Đã đủ lead đăng ký - Tuyển core Fuji, Ajinomoto, BigC: hầu hết đã đủ lead đăng ký - Truyền thông mở lại dịch vụ tại HAN: đã noti, SMS tần suất cao - Comms chuỗi bài push active CP 15.8 + Setup popup, bản tin lượng đơn + chuỗi content thưởng/điểm nóng trong CP 15.8, push active tần suất 2-3 tin/ngày - EV: Publish Landing page policy mới và các chtrình EV (AHA Creator + Đua top)</li><li class="bullet-item editable">LOWLIGHTS</li></ul>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">DECISION NEEDED: Phê duyệt danh sách mở rộng push noti tuyển dụng Core BigC Long Biên trước ngày 20/8.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 27 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById("chart_slide_27");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['W30', 'W31', 'W32', 'W33', 'W34'],
+                            datasets: [{
+                                label: 'Tài xế Đăng ký Ca Hub',
+                                data: [120, 180, 240, 310, 336],
+                                borderColor: '#FF7F32',
+                                backgroundColor: 'rgba(255,127,50,0.1)',
+                                fill: true,
+                                tension: 0.3
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                }
+            });
+        </script>
+        
+    
+
+    <div class="slide-page" id="slide-28">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 04 — GOVERNANCE PULSE</span>
+                <span class="slide-page-num">SLIDE 28 / 29</span>
+            </div>
+            <div class="slide-title editable">Event & Partnership: Highlights & Lowlights</div>
+            <div class="takeaway-sub editable">Nhịp quản trị: 48% hạng mục On Track, tập trung giải quyết 3 điểm nghẽn ưu tiên trước 21/8</div>
+        </div>
+
+        <div class="main-content">
+            <div class="grid-gov-asymmetric">
+                <!-- 32% Governance Pulse Scorecard -->
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <span>📊 GOVERNANCE PULSE</span>
+                        <span class="status-pill status-on-track">🟢 AUDIT SCORE</span>
+                    </div>
+                    <div class="gov-pulse-card">
+                        <div class="pulse-stat-row green">
+                            <span>🟢 48% ON TRACK</span>
+                            <span>Healthy</span>
+                        </div>
+                        <div class="pulse-stat-row yellow">
+                            <span>🟠 27% WATCH</span>
+                            <span>Attention</span>
+                        </div>
+                        <div class="pulse-stat-row red">
+                            <span>🔴 12% OFF TRACK</span>
+                            <span>Escalate</span>
+                        </div>
+                        <div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid #CBD5E1; font-size: 11.5px; font-weight: 800; color: #0E4174; display: flex; justify-content: space-between;">
+                            <span>NEXT DEADLINE</span>
+                            <span>21 AUG (Livestream)</span>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper" style="height: 140px; margin-top: 4px;"><canvas id="chart_slide_28"></canvas></div>
+                </div>
+
+                <!-- 66% Strategic Action Tracker -->
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <span>📋 STRATEGIC ACTION TRACKER</span>
+                        <span class="status-pill status-on-track">🟢 EXECUTIVE AUDIT</span>
+                    </div>
+                    <table class="dash-table">
+                        <thead><tr><th>Hạng mục</th><th>Nguyên nhân/Bối cảnh</th><th>Hành động</th><th>Deadline</th><th>PIC</th></tr></thead>
+                        <tbody><tr><td class="editable">Sinh nhật AHM 11 tuổi</td><td class="editable"></td><td class="editable">Livestream Sinh nhật Ahamove (21/8)</td><td class="editable">21/8</td><td class="editable">Khoa/Vân/Thúy</td></tr><tr><td class="editable">Thuê xe điện AIZEN</td><td class="editable">Chương trình mới adapt cho SGN & cần txe hiểu rõ hơn về ctrinh</td><td class="editable">- Tách blog riêng truyền thông về chương trình
+- Seeding về chtrinh để training & tăng awareness</td><td class="editable">21/8</td><td class="editable">Khoa/Vân</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">MANAGEMENT ATTENTION: Chuẩn bị kỹ thuật cho Livestream Sinh nhật 11 Tuổi ngày 21/8 và đẩy nhanh deal bảo hiểm.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 28 • Ingested Data Log</span>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById("chart_slide_28");
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['On Track', 'Watch', 'Off Track', 'Done'],
+                        datasets: [{
+                            data: [14, 8, 3, 4],
+                            backgroundColor: ['#10B981', '#F59E0B', '#EF4444', '#0284C7']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+        });
+    </script>
+    
+
+    <div class="slide-page" id="slide-29">
+        <div class="top-accent-bar"></div>
+        <div class="slide-header">
+            <div class="header-meta">
+                <span class="slide-brand-tag">DRIVER MANAGEMENT • 03 — DRIVER VOICE & VOC</span>
+                <span class="slide-page-num">SLIDE 29 / 29</span>
+            </div>
+            <div class="slide-title editable">HIGHLIGHTS DRIVER’s VOICES & EVENT - NW</div>
+            <div class="takeaway-sub editable">Lắng nghe tài xế: Điều kiện Online >80% tạo rào cản UX làm giảm 25.6% tỷ lệ nhận thưởng ca</div>
+        </div>
+
+        <div class="main-content">
+            <!-- Asymmetrical Grid: 25% Quote | 45% Mechanism | 30% Success Criteria -->
+            <div class="grid-voc-asymmetric">
+                <!-- 25% Driver Quote -->
+                <div class="dash-card" style="border-top: 3px solid #EF4444; background: #FEF2F2;">
+                    <div class="card-title-bar"><span style="color:#B91C1C;">💬 DRIVER VOICE</span></div>
+                    <div style="font-size: 13.5px; font-weight: 600; font-style: italic; color: #7F1D1D; line-height: 1.45;">
+                        "Tôi chạy đủ ca nhưng hệ thống không ghi nhận Check-in vì phải di chuyển ngoài Zone trả đơn!"
+                    </div>
+                </div>
+
+                <!-- 45% Operational Mechanism & Evidence -->
+                <div class="dash-card" style="border-top: 3px solid #F59E0B;">
+                    <div class="card-title-bar"><span>⚙️ OPERATIONAL MECHANISM & EVIDENCE</span></div>
+                    <ul class="bullet-list">
+                        <li class="bullet-item">Điều kiện Online >80% áp dụng toàn ca gây ma sát cho tài xế di chuyển xa.</li>
+                        <li class="bullet-item">Tài xế di chuyển trả đơn ngoài Zone $ightarrow$ không được tính thời gian Online.</li>
+                        <li class="bullet-item">Bị loại khỏi danh sách thưởng ca tự động dù đã giao nhận đủ đơn.</li>
+                    </ul>
+                </div>
+
+                <!-- 30% Success Criteria & Measurement Framework -->
+                <div class="dash-card" style="border-top: 3px solid #10B981; background: #F0FDF4;">
+                    <div class="card-title-bar"><span style="color:#047857;">🎯 SUCCESS CRITERIA FRAMEWORK</span></div>
+                    <div class="success-criteria-card">
+                        <div style="font-size: 11.5px; font-weight: 800; color: #0E4174;">MEASUREMENT FRAMEWORK</div>
+                        <div style="font-size: 12.5px; font-weight: 700; color: #1E293B;">
+                            Online Threshold: 80% ➔ 75%
+                        </div>
+                        <div style="font-size: 12px; color: #059669; font-weight: 700;">
+                            ↓ Giảm Ma Sát UX
+                        </div>
+                        <div style="font-size: 12.5px; font-weight: 700; color: #1E293B;">
+                            Reward Participation: 25.6% ↓ ➔ Target Recovery
+                        </div>
+                        <div style="font-size: 11.5px; font-weight: 800; color: #FF7F32; margin-top: 4px;">
+                            Auto Check-in: Launch &lt; 25/8
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mgmt-banner">
+            <div class="mgmt-label"><span>💡</span> <span>Management Decision / Ask</span></div>
+            <div class="mgmt-text editable">DECISION NEEDED: Phê duyệt điều chỉnh ngưỡng Online requirement từ 80% xuống 75% cho nhóm chạy ca liên tỉnh/xa zone.</div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="editable">Ahamove Confidential • Decision Architecture Suite</span>
+            <span class="editable">Source: Slide 29 • Ingested Data Log</span>
+        </div>
+    </div>
+    
+
+    <script>
+        let isEdit = false;
+        function toggleEditMode() {
+            isEdit = !isEdit;
+            document.querySelectorAll('.editable').forEach(el => {
+                el.contentEditable = isEdit;
+            });
+            const btn = document.getElementById('editBtn');
+            btn.innerText = isEdit ? '💾 Save Mode (E)' : '✏️ Edit Mode (E)';
+            btn.style.background = isEdit ? '#10B981' : '#FF7F32';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'e' || e.key === 'E') {
+                if (document.activeElement.isContentEditable) return;
+                toggleEditMode();
+            }
+        });
+    </script>
+</body>
+</html>

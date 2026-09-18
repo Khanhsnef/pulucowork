@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Operations Report — Driver Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Lexend', system-ui, sans-serif;
+    background: #111827;
+    color: #0F172A;
+  }
+  .controls {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: flex; gap: 12px; align-items: center;
+    background: rgba(0,0,0,.7); padding: 10px 20px; border-radius: 40px;
+    backdrop-filter: blur(8px);
+  }
+  .controls button {
+    background: #0E4174; color: white; border: none;
+    padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 14px;
+    font-family: 'Lexend', sans-serif;
+  }
+  .controls button:hover { background: #FF7F32; }
+  .slide-counter {
+    color: white; font-size: 14px; min-width: 80px; text-align: center;
+  }
+  .slide-nav { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    padding: 0 20px; }
+  .slide-nav span {
+    cursor: pointer; color: #9CA3AF; font-size: 12px;
+    padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,.1);
+  }
+  .slide-nav span.active, .slide-nav span:hover {
+    background: #0E4174; color: white;
+  }
+  .slides-container { padding-top: 72px; }
+  .slide {
+    width: 1920px; height: 1080px;
+    margin: 24px auto; display: none; position: relative; overflow: hidden;
+    border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+  .slide.active { display: flex; }
+  /* Print / export: show all */
+  @media print {
+    .controls { display: none; }
+    .slide { display: block !important; page-break-after: always;
+      margin: 0; border-radius: 0; box-shadow: none; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+<div class="controls">
+  <button onclick="prevSlide()">← Prev</button>
+  <span class="slide-counter" id="counter">1 / 5</span>
+  <button onclick="nextSlide()">Next →</button>
+  <button onclick="window.print()">Export PDF</button>
+  <span style="color:#9CA3AF;font-size:12px">10 slides → 5 slides</span>
+</div>
+<div class="slides-container" id="container">
+  <div class="slide" id="slide-1">
+    <div style="width:100%;height:100%;background:#F8FAFC;display:flex;flex-direction:column;padding:48px 64px">
+      <div style="font-size:26px;font-weight:800;color:#0E4174;margin-bottom:6px;line-height:1.3">Tuần này: NW vượt target — HAN/SGN còn gap RPH, RR và Capacity</div>
+      <div style="font-size:13px;color:#64748B;margin-bottom:24px">NW ghi nhận kết quả tích cực với CTR 77.38% (130% target) và GDR 95.52% (120% target). HAN RPH gap ~5% vs target và SGN Retention giảm cả MoM lẫn YoY là 2 rủi ro cần theo dõi.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex:1;min-height:0">
+        <div style="background:white;border-radius:20px;padding:28px 32px;border-top:4px solid #10B981;overflow:auto">
+          <div style="font-size:11px;font-weight:700;color:#10B981;letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px">Highlights</div>
+          <div style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:#10B981;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">▲ NW</div><div style="display:flex;gap:10px;margin-bottom:6px;padding-left:4px"><span style="color:#10B981;flex-shrink:0">·</span><span style="font-size:14px;color:#1e293b;line-height:1.5">CTR đạt 77.38% — vượt 130% target</span></div><div style="display:flex;gap:10px;margin-bottom:6px;padding-left:4px"><span style="color:#10B981;flex-shrink:0">·</span><span style="font-size:14px;color:#1e293b;line-height:1.5">GDR đạt 95.52% — vượt 120% target</span></div></div><div style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:#10B981;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">▲ HAN</div><div style="display:flex;gap:10px;margin-bottom:6px;padding-left:4px"><span style="color:#10B981;flex-shrink:0">·</span><span style="font-size:14px;color:#1e293b;line-height:1.5">Retention Rate >=22t đạt 74.2%, cải thiện +0.7% MoM</span></div><div style="display:flex;gap:10px;margin-bottom:6px;padding-left:4px"><span style="color:#10B981;flex-shrink:0">·</span><span style="font-size:14px;color:#1e293b;line-height:1.5">CR PoC chung giảm 0.5% WoW</span></div></div>
+        </div>
+        <div style="background:white;border-radius:20px;padding:28px 32px;border-top:4px solid #EF4444;overflow:auto">
+          <div style="font-size:11px;font-weight:700;color:#EF4444;letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px">Lowlights</div>
+          <div style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:#EF4444;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">▼ HAN</div><div style="display:flex;gap:10px;margin-bottom:6px;padding-left:4px"><span style="color:#EF4444;flex-shrink:0">·</span><span style="font-size:14px;color:#1e293b;line-height:1.5">RPH đạt 2.07 — gap target ~5%</span></div></div><div style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:#EF4444;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">▼ SGN</div><div style="display:flex;gap:10px;margin-bottom:6px;padding-left:4px"><span style="color:#EF4444;flex-shrink:0">·</span><span style="font-size:14px;color:#1e293b;line-height:1.5">Retention Rate hụt >1% MoM và YoY</span></div><div style="display:flex;gap:10px;margin-bottom:6px;padding-left:4px"><span style="color:#EF4444;flex-shrink:0">·</span><span style="font-size:14px;color:#1e293b;line-height:1.5">Supply Hours hụt 2% so với planning</span></div></div>
+        </div>
+      </div>
+      
+        <div style="margin-top:20px;padding:16px 20px;background:rgba(14,65,116,.06);border-radius:14px;border-left:3px solid #0E4174">
+          <div style="font-size:11px;font-weight:700;color:#0E4174;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Actions Đã Thực Hiện</div>
+          <div style="display:flex;gap:12px;margin-bottom:10px;align-items:flex-start"><span style="color:#0E4174;flex-shrink:0;font-weight:700">→</span><div><div style="font-size:13px;color:#1e293b;font-weight:600">Baga Bulky — Truyền thông form đăng ký</div><div style="font-size:12px;color:#64748B">HAN: 178 tài xế | SGN: 336 tài xế  ·  <span style="color:#FF7F32">Đang triển khai</span></div></div></div><div style="display:flex;gap:12px;margin-bottom:10px;align-items:flex-start"><span style="color:#0E4174;flex-shrink:0;font-weight:700">→</span><div><div style="font-size:13px;color:#1e293b;font-weight:600">Thưởng thời tiết cực đoan</div><div style="font-size:12px;color:#64748B">97% Max Cost đã được claim  ·  <span style="color:#10B981">Hoàn thành</span></div></div></div>
+        </div>
+    </div></div>
+<div class="slide" id="slide-2">
+    <div style="width:100%;height:100%;background:linear-gradient(135deg,#0E4174 0%,#0a2a52 100%);
+                display:flex;flex-direction:column;padding:48px 64px">
+      <div style="font-size:11px;font-weight:700;color:#FF7F32;letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px">KPI</div>
+      <div style="font-size:30px;font-weight:800;color:white;line-height:1.25;margin-bottom:8px;max-width:900px">
+        NLM là nhóm churn lớn nhất — SGN RR giảm đồng loạt cả MoM lẫn YoY
+      </div>
+      <div style="font-size:13px;color:rgba(255,255,255,.55);margin-bottom:28px">HAN RR phục hồi nhẹ (+0.7% MoM) nhờ NLM bật tăng 3.68%; SGN ngược chiều với RR -1.4% MoM và NLM giảm sâu -5.45% MoM / -8.41% YoY. Cần khảo sát nguyên nhân churn nhóm NLM SGN ngay.</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,.1);border-radius:20px;padding:24px 22px;flex:1;min-width:160px;backdrop-filter:blur(4px)">
+          <div style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">RR HAN</div>
+          <div style="font-size:44px;font-weight:900;color:white;line-height:1;letter-spacing:-.02em">74.17%</div>
+          <div style="margin-top:8px;font-size:14px;font-weight:700;color:#10B981">+0.7%</div>
+          
+        </div>
+        <div style="background:rgba(255,255,255,.1);border-radius:20px;padding:24px 22px;flex:1;min-width:160px;backdrop-filter:blur(4px)">
+          <div style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">RR SGN</div>
+          <div style="font-size:44px;font-weight:900;color:white;line-height:1;letter-spacing:-.02em">76.13%</div>
+          <div style="margin-top:8px;font-size:14px;font-weight:700;color:#EF4444">-1.4%</div>
+          
+        </div></div>
+      
+        <div style="background:rgba(255,255,255,.07);border-radius:16px;overflow:auto;flex:1">
+          <table style="width:100%;border-collapse:collapse">
+            <thead><tr style="border-bottom:1px solid rgba(255,255,255,.12)">
+              <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase">Market</th><th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase">Segment</th><th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase">RR</th><th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase">MoM</th><th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase">YoY</th><th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase">Active</th>
+            </tr></thead>
+            <tbody><tr>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.5)">HAN</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:white">FT</td>
+                  <td style="padding:10px 14px;font-size:13px;color:white">95.32%</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#EF4444">-0.05%</td>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.6)">-1.95%</td>
+                  <td style="padding:10px 14px;font-size:12px;color:rgba(255,255,255,.5)">1,201</td>
+                </tr><tr>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.5)">HAN</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:white">PT</td>
+                  <td style="padding:10px 14px;font-size:13px;color:white">70.39%</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#EF4444">-0.35%</td>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.6)">+0.82%</td>
+                  <td style="padding:10px 14px;font-size:12px;color:rgba(255,255,255,.5)">4,956</td>
+                </tr><tr>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.5)">HAN</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:white">NLM</td>
+                  <td style="padding:10px 14px;font-size:13px;color:white">68.74%</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#10B981">+3.68%</td>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.6)">-6.08%</td>
+                  <td style="padding:10px 14px;font-size:12px;color:rgba(255,255,255,.5)">587</td>
+                </tr><tr>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.5)">SGN</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:white">FT</td>
+                  <td style="padding:10px 14px;font-size:13px;color:white">96.46%</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#EF4444">-0.52%</td>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.6)">+0.04%</td>
+                  <td style="padding:10px 14px;font-size:12px;color:rgba(255,255,255,.5)">3,157</td>
+                </tr><tr>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.5)">SGN</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:white">PT</td>
+                  <td style="padding:10px 14px;font-size:13px;color:white">69.14%</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#EF4444">-2.78%</td>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.6)">-1.64%</td>
+                  <td style="padding:10px 14px;font-size:12px;color:rgba(255,255,255,.5)">6,870</td>
+                </tr><tr>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.5)">SGN</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:white">NLM</td>
+                  <td style="padding:10px 14px;font-size:13px;color:white">65.15%</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#EF4444">-5.45%</td>
+                  <td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.6)">-8.41%</td>
+                  <td style="padding:10px 14px;font-size:12px;color:rgba(255,255,255,.5)">1,342</td>
+                </tr></tbody>
+          </table>
+        </div>
+    </div></div>
+<div class="slide" id="slide-3">
+    <div style="width:100%;height:100%;background:linear-gradient(135deg,#0E4174 0%,#0a2a52 100%);
+                display:flex;flex-direction:column;padding:48px 64px">
+      <div style="font-size:11px;font-weight:700;color:#FF7F32;letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px">KPI</div>
+      <div style="font-size:30px;font-weight:800;color:white;line-height:1.25;margin-bottom:8px;max-width:900px">
+        SGN Supply Hours hụt 10.5% — Thời tiết xấu kéo AR/FR giảm 2.5%
+      </div>
+      <div style="font-size:13px;color:rgba(255,255,255,.55);margin-bottom:28px">SGN SH gap 10.5% vs planning (chủ yếu FT/PT/NIM), AR giảm 2.5% và FR giảm 2.7% WoW do ảnh hưởng thời tiết cực đoan và demand Bulky tăng đột biến. HAN ổn định hơn với gap chỉ -2.6% và AR/FR tích cực.</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,.1);border-radius:20px;padding:24px 22px;flex:1;min-width:160px;backdrop-filter:blur(4px)">
+          <div style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">Supply Hours HAN</div>
+          <div style="font-size:44px;font-weight:900;color:white;line-height:1;letter-spacing:-.02em">275,823</div>
+          <div style="margin-top:8px;font-size:14px;font-weight:700;color:#EF4444">-2.6%</div>
+          <div style="margin-top:4px;font-size:12px;color:rgba(255,255,255,.5)">vs plan</div>
+        </div>
+        <div style="background:rgba(255,255,255,.1);border-radius:20px;padding:24px 22px;flex:1;min-width:160px;backdrop-filter:blur(4px)">
+          <div style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">RPH HAN</div>
+          <div style="font-size:44px;font-weight:900;color:white;line-height:1;letter-spacing:-.02em">1.47</div>
+          <div style="margin-top:8px;font-size:14px;font-weight:700;color:#EF4444">-3.3%</div>
+          <div style="margin-top:4px;font-size:12px;color:rgba(255,255,255,.5)">WoW</div>
+        </div>
+        <div style="background:rgba(255,255,255,.1);border-radius:20px;padding:24px 22px;flex:1;min-width:160px;backdrop-filter:blur(4px)">
+          <div style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">AR HAN</div>
+          <div style="font-size:44px;font-weight:900;color:white;line-height:1;letter-spacing:-.02em">95.0%</div>
+          <div style="margin-top:8px;font-size:14px;font-weight:700;color:#10B981">+0.43%</div>
+          <div style="margin-top:4px;font-size:12px;color:rgba(255,255,255,.5)">WoW</div>
+        </div>
+        <div style="background:rgba(255,255,255,.1);border-radius:20px;padding:24px 22px;flex:1;min-width:160px;backdrop-filter:blur(4px)">
+          <div style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">FR HAN</div>
+          <div style="font-size:44px;font-weight:900;color:white;line-height:1;letter-spacing:-.02em">86.5%</div>
+          <div style="margin-top:8px;font-size:14px;font-weight:700;color:#10B981">+0.13%</div>
+          <div style="margin-top:4px;font-size:12px;color:rgba(255,255,255,.5)">WoW</div>
+        </div>
+        <div style="background:rgba(255,255,255,.1);border-radius:20px;padding:24px 22px;flex:1;min-width:160px;backdrop-filter:blur(4px)">
+          <div style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">Request_stp HAN</div>
+          <div style="font-size:44px;font-weight:900;color:white;line-height:1;letter-spacing:-.02em">438K</div>
+          <div style="margin-top:8px;font-size:14px;font-weight:700;color:#EF4444">-5.1%</div>
+          <div style="margin-top:4px;font-size:12px;color:rgba(255,255,255,.5)">WoW</div>
+        </div>
+        <div style="background:rgba(255,255,255,.1);border-radius:20px;padding:24px 22px;flex:1;min-width:160px;backdrop-filter:blur(4px)">
+          <div style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">Completed_stp HAN</div>
+          <div style="font-size:44px;font-weight:900;color:white;line-height:1;letter-spacing:-.02em">379K</div>
+          <div style="margin-top:8px;font-size:14px;font-weight:700;color:#EF4444">-4.9%</div>
+          <div style="margin-top:4px;font-size:12px;color:rgba(255,255,255,.5)">WoW</div>
+        </div></div>
+      
+        <div style="background:rgba(255,255,255,.07);border-radius:16px;overflow:auto;flex:1">
+          <div style="padding:14px 18px;font-size:12px;color:rgba(255,255,255,.5);border-bottom:1px solid rgba(255,255,255,.1)">CR giảm đều ở hầu hết các tập; Return segment có CR cao nhất 17.13%; NIM đóng góp +2.08% vào biến động tăng WoW.</div>
+          <table style="width:100%;border-collapse:collapse">
+            <thead><tr style="border-bottom:1px solid rgba(255,255,255,.12)">
+              <th style="padding:8px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase">Segment</th><th style="padding:8px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase">CR</th><th style="padding:8px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase">Cancel/Active</th>
+            </tr></thead>
+            <tbody><tr><td style="padding:8px 14px;font-size:13px;font-weight:600;color:white">FT</td><td style="padding:8px 14px;font-size:13px;color:white">9.60%</td><td style="padding:8px 14px;font-size:12px;color:rgba(255,255,255,.5)">13.02</td></tr><tr><td style="padding:8px 14px;font-size:13px;font-weight:600;color:white">NIM</td><td style="padding:8px 14px;font-size:13px;color:white">11.33%</td><td style="padding:8px 14px;font-size:12px;color:rgba(255,255,255,.5)">4.57</td></tr><tr><td style="padding:8px 14px;font-size:13px;font-weight:600;color:white">NLM</td><td style="padding:8px 14px;font-size:13px;color:#EF4444">14.19%</td><td style="padding:8px 14px;font-size:12px;color:rgba(255,255,255,.5)">5.97</td></tr><tr><td style="padding:8px 14px;font-size:13px;font-weight:600;color:white">PT</td><td style="padding:8px 14px;font-size:13px;color:#EF4444">14.55%</td><td style="padding:8px 14px;font-size:12px;color:rgba(255,255,255,.5)">6.81</td></tr><tr><td style="padding:8px 14px;font-size:13px;font-weight:600;color:white">Return</td><td style="padding:8px 14px;font-size:13px;color:#EF4444">17.13%</td><td style="padding:8px 14px;font-size:12px;color:rgba(255,255,255,.5)">5.58</td></tr></tbody>
+          </table>
+        </div>
+    </div></div>
+<div class="slide" id="slide-4">
+    <div style="width:100%;height:100%;background:#F8FAFC;display:flex;flex-direction:column;padding:44px 56px">
+      <div style="font-size:26px;font-weight:800;color:#0E4174;margin-bottom:6px;line-height:1.3">Bulky Momentum tăng mạnh — Baga GĐ1 triển khai, Core 2H đội ổn định sau thanh lọc</div>
+      <div style="font-size:13px;color:#64748B;margin-bottom:20px">Đơn Bulky high-COD (>=1M) tăng chiếm 50–60% tổng volume trong 2 tuần gần nhất. Baga Bulky GĐ1 đang triển khai với 514 tài xế đăng ký. Core 2H team đã thanh lọc 9 tài xế không đạt, bổ sung 5 tài xế mới, duy trì 77 tài xế active/ngày.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:16px;flex:1;min-height:0">
+        
+        <div style="background:white;border-radius:18px;padding:22px 24px;border-left:4px solid #0E4174;overflow:auto">
+          <div style="font-size:10px;font-weight:700;color:#0E4174;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">📦 Bulky Demand</div>
+          <div style="font-size:13px;color:#0F172A;line-height:1.65"><b>insight:</b> Tỷ trọng đơn high-COD (total_cod >=1M) chiếm 50–60% tổng đơn Bulky trong 2 tuần gần nhất. Số tài xế hoàn thành >=1 trip Bulky high-COD tăng gấp 1.3–3 lần.<br><b>next_action:</b> · Review hiệu suất nhóm được tăng COD balance 10M → 15M<br>· Đẩy tuyển dụng tài xế COD balance cao vào đội chuyển</div>
+        </div>
+
+        <div style="background:white;border-radius:18px;padding:22px 24px;border-left:4px solid #FF7F32;overflow:auto">
+          <div style="font-size:10px;font-weight:700;color:#FF7F32;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">🔧 Baga Bulky Phase1</div>
+          <div style="font-size:13px;color:#0F172A;line-height:1.65"><b>phase:</b> GĐ1 — 15/8 đến 30/8<br><b>registration:</b> <b>HAN:</b> 178<br><b>SGN:</b> 336<br><b>total:</b> 514<br><b>process_steps:</b> · Đăng ký qua form/app<br>· Tự mua & lắp baga<br>· Xác thực in-app<br>· Nhận hoàn phí nếu hoàn thành nhiệm vụ<br><b>next_action:</b> · Follow timeline truyền thông, push lead đăng ký GĐ 2 & 3<br>· Theo dõi quá trình tham gia thưởng + xác thực baga → ghi nhận driver voice</div>
+        </div>
+
+        <div style="background:white;border-radius:18px;padding:22px 24px;border-left:4px solid #10B981;overflow:auto">
+          <div style="font-size:10px;font-weight:700;color:#10B981;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">📋 Core 2H Team</div>
+          <div style="font-size:13px;color:#0F172A;line-height:1.65"><b>personnel:</b> <b>current:</b> 80<br><b>added:</b> 5<br><b>exited:</b> 9<br><b>note:</b> 9 tài xế rời: 7 case không đảm bảo hiệu suất + tài khoản không chính chủ<br><b>performance:</b> <b>active_drivers:</b> 77<br><b>active_rate:</b> 96%<br><b>lead_time_over_4h:</b> 16% (13 tài xế)<br><b>lead_time_over_12h:</b> 9% (7 tài xế)<br><b>cod_balance_under_3M:</b> 33% (26 tài xế)<br><b>next_action:</b> · Rà soát & chế tài tài xế lead-time >12h, yêu cầu rời đội<br>· Chặn lệnh bot gán đơn sau 18h<br>· Tiếp tục thúc đẩy hiệu suất</div>
+        </div>
+      </div>
+    </div></div>
+<div class="slide" id="slide-5">
+    <div style="width:100%;height:100%;background:linear-gradient(135deg,#0E4174 0%,#0a2a52 100%);
+                display:flex;flex-direction:column;padding:48px 64px">
+      <div style="font-size:11px;font-weight:700;color:#FF7F32;letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px">KPI</div>
+      <div style="font-size:30px;font-weight:800;color:white;line-height:1.25;margin-bottom:8px;max-width:900px">
+        Ân xá 13.8 đạt 110% target — Capacity HAN M8 hụt 7.4% MTD do NIM tăng chậm
+      </div>
+      <div style="font-size:13px;color:rgba(255,255,255,.55);margin-bottom:28px">Chiến dịch Ân xá đạt 220/200 tài xế active trở lại (vượt 110% target). Tuy nhiên Capacity tổng HAN tháng 8 hụt 7.4% MTD, NIM chỉ đạt 26.73% target do tốc độ tăng trưởng chậm so với cùng kỳ. Cần push ký quỹ và kích hoạt nhóm chưa đủ điều kiện trước khi kết thúc hạn ân xá.</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,.1);border-radius:20px;padding:24px 22px;flex:1;min-width:160px;backdrop-filter:blur(4px)">
+          <div style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">Ân Xá Đạt</div>
+          <div style="font-size:44px;font-weight:900;color:white;line-height:1;letter-spacing:-.02em">220</div>
+          <div style="margin-top:8px;font-size:14px;font-weight:700;color:rgba(255,255,255,.5)">Target 200</div>
+          <div style="margin-top:4px;font-size:12px;color:rgba(255,255,255,.5)">110%</div>
+        </div>
+        <div style="background:rgba(255,255,255,.1);border-radius:20px;padding:24px 22px;flex:1;min-width:160px;backdrop-filter:blur(4px)">
+          <div style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">Capacity HAN M8</div>
+          <div style="font-size:44px;font-weight:900;color:white;line-height:1;letter-spacing:-.02em">44.2%</div>
+          <div style="margin-top:8px;font-size:14px;font-weight:700;color:#EF4444">-7.4% vs tiến độ MTD</div>
+          <div style="margin-top:4px;font-size:12px;color:rgba(255,255,255,.5)">Active NIM tăng chậm, chỉ đạt ~65% so vớ</div>
+        </div></div>
+      
+        <div style="background:rgba(255,255,255,.07);border-radius:16px;overflow:auto;flex:1">
+          <table style="width:100%;border-collapse:collapse">
+            <thead><tr style="border-bottom:1px solid rgba(255,255,255,.12)">
+              <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase">Segment</th><th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase">Actual</th><th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase">Target</th><th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase">% Target</th><th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase">Status</th>
+            </tr></thead>
+            <tbody><tr><td style="padding:10px 14px;font-size:13px;font-weight:600;color:white">NIM</td><td style="padding:10px 14px;font-size:13px;color:white">22,826</td><td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.6)">85,400</td><td style="padding:10px 14px;font-size:13px;font-weight:700;color:#EF4444">26.73%</td><td style="padding:10px 14px"><span style="font-size:11px;padding:3px 10px;border-radius:10px;background:rgba(239,68,68,.2);color:#FCA5A5">Nguy hiểm</span></td></tr><tr><td style="padding:10px 14px;font-size:13px;font-weight:600;color:white">NLM</td><td style="padding:10px 14px;font-size:13px;color:white">56,487</td><td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.6)">104,800</td><td style="padding:10px 14px;font-size:13px;font-weight:700;color:#EF4444">53.90%</td><td style="padding:10px 14px"><span style="font-size:11px;padding:3px 10px;border-radius:10px;background:rgba(251,191,36,.2);color:#FCD34D">Cần theo dõi</span></td></tr><tr><td style="padding:10px 14px;font-size:13px;font-weight:600;color:white">RIM</td><td style="padding:10px 14px;font-size:13px;color:white">24,517</td><td style="padding:10px 14px;font-size:13px;color:rgba(255,255,255,.6)">44,600</td><td style="padding:10px 14px;font-size:13px;font-weight:700;color:#EF4444">54.97%</td><td style="padding:10px 14px"><span style="font-size:11px;padding:3px 10px;border-radius:10px;background:rgba(251,191,36,.2);color:#FCD34D">Cần theo dõi</span></td></tr></tbody>
+          </table>
+        </div>
+    </div></div>
+</div>
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  function showSlide(n) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    counter.textContent = (n+1) + ' / ' + slides.length;
+  }
+  function nextSlide() { if (current < slides.length-1) showSlide(++current); }
+  function prevSlide() { if (current > 0) showSlide(--current); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+  });
+  showSlide(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!-- EXECUTIVE SUMMARY & HERO KPI MASTER LAYOUT (16:9) -->
+<div class="slide-page layout-hero-kpi">
+    <div class="slide-header">
+        <div class="slide-meta">
+            <span>Ahamove Driver Management • Executive Brief</span>
+            <span>Slide {{slide_id}}</span>
+        </div>
+        <div class="takeaway-title editable">{{takeaway_header}}</div>
+        
+        <div class="hero-kpi-grid">
+            {{#hero_kpis}}
+            <div class="hero-kpi-card">
+                <div class="hero-kpi-label editable">{{label}}</div>
+                <div class="hero-kpi-val editable">{{value}}</div>
+                {{#delta}}<span class="hero-kpi-badge badge-{{badge_status}}">{{delta}}</span>{{/delta}}
+            </div>
+            {{/hero_kpis}}
+        </div>
+    </div>
+
+    <div class="content-grid">
+        {{#cards}}
+        <div class="glass-card">
+            <div class="card-header">
+                <span>{{icon_badge}}</span>
+                <span class="editable">{{title}}</span>
+            </div>
+            <ul class="bullet-list">
+                {{#bullets}}<li class="bullet-item editable">{{.}}</li>{{/bullets}}
+            </ul>
+        </div>
+        {{/cards}}
+    </div>
+
+    <div class="slide-footer">
+        <span>Confidential • Executive Summary Layout</span>
+        <span>Source: Slide {{source_slides}}</span>
+    </div>
+</div>

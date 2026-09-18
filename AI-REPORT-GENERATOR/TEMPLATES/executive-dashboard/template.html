@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+    <title>{deck_title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Chart.js for Executive Visual Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {{
+            --primary: #0E4174;
+            --primary-dark: #0A2E52;
+            --secondary: #FF7F32;
+            --secondary-light: #FFF7ED;
+            --success: #10B981;
+            --success-light: #F0FDF4;
+            --danger: #EF4444;
+            --danger-light: #FEF2F2;
+            --warning: #F59E0B;
+            --warning-light: #FFFBEB;
+            --bg: #0F172A;
+            --stage-bg: #F8FAFC;
+            --slide-bg: #FFFFFF;
+            --text-main: #0F172A;
+            --text-sub: #334155;
+            --muted: #64748B;
+            --border: #E2E8F0;
+            --border-dark: #CBD5E1;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }}
+
+        * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+        html {{ background: #0F172A; }}
+        body {{
+            background: #0F172A;
+            font-family: var(--font-family); color: var(--text-main);
+            display: flex; flex-direction: column; align-items: center; padding: 28px 0; gap: 28px;
+            -webkit-font-smoothing: antialiased;
+        }}
+
+        /* Floating Toolbar controls */
+        .toolbar {{
+            position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+            background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2); padding: 10px 18px; border-radius: 999px;
+            display: flex; gap: 12px; align-items: center; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+        }}
+        .toolbar button {{
+            background: linear-gradient(135deg, var(--secondary), #ff9a5b); color: #fff; border: 0;
+            padding: 8px 16px; border-radius: 999px; font-weight: 800; font-size: 13px; cursor: pointer;
+            transition: transform 0.2s;
+        }}
+        .toolbar button:hover {{ transform: translateY(-2px); filter: brightness(1.08); }}
+
+        /* 16:9 Slide Stage Container */
+        .slide-page {{
+            width: 1920px; height: 1080px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 36px 48px; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); overflow: hidden;
+        }}
+
+        /* Top Accent Bar (Gradient Secondary to Primary) */
+        .top-accent-bar {{
+            height: 6px; width: 100%;
+            background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+            position: absolute; top: 0; left: 0;
+        }}
+
+        /* Header Architecture */
+        .slide-header {{
+            display: flex; flex-direction: column; gap: 5px;
+            border-bottom: 2px solid #E2E8F0; padding-bottom: 10px; margin-bottom: 4px;
+        }}
+        .header-meta {{
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1.2px;
+        }}
+        .slide-brand-tag {{
+            font-size: 11px; font-weight: 700; color: var(--secondary); text-transform: uppercase;
+            letter-spacing: 0.06em; background: var(--secondary-light); border: 1px solid #FFEDD5;
+            padding: 3px 10px; border-radius: 9999px;
+        }}
+        .slide-page-num {{
+            font-size: 11px; font-weight: 700; color: var(--muted); background: #F1F5F9;
+            border: 1px solid var(--border); padding: 3px 10px; border-radius: 9999px;
+        }}
+        .slide-title {{
+            font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1.2; letter-spacing: -0.02em;
+        }}
+        
+        /* Key Takeaways Subtitle Banner (Ahamove Gradient Style) */
+        .takeaway-sub {{
+            font-size: 14.5px; font-weight: 600; color: #1E293B; line-height: 1.35;
+            background: linear-gradient(90deg, #FFF7ED 0%, #F0FDF4 100%);
+            border: 1px solid #FED7AA; border-left: 4px solid var(--secondary);
+            padding: 8px 14px; border-radius: 8px; margin-top: 2px;
+        }}
+
+        /* 4-Tier Insight KPI Cards */
+        .kpi-row {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 8px; }}
+        .kpi-card {{
+            background: #F8FAFC; border: 1px solid var(--border); border-top: 3px solid var(--secondary);
+            border-radius: 10px; padding: 12px 16px; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; min-height: 105px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        }}
+        .kpi-card.navy-top {{ border-top: 3px solid var(--primary); }}
+        .kpi-label {{ font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; }}
+        .kpi-num {{ font-size: 42px; font-weight: 800; color: var(--secondary); line-height: 0.98; letter-spacing: -0.02em; margin: 3px 0; }}
+        .kpi-num.navy {{ color: var(--primary); }}
+        .kpi-delta-row {{ display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; font-weight: 700; }}
+        .delta-pill {{ padding: 2px 7px; border-radius: 9999px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px; }}
+        .pill-up {{ background: #DCFCE7; color: #15803D; }}
+        .pill-down {{ background: #FEE2E2; color: #B91C1C; }}
+        .pill-neutral {{ background: #E0F2FE; color: #0369A1; }}
+        .kpi-target {{ font-size: 11px; font-weight: 600; color: var(--muted); }}
+
+        /* Main Content Container & Content-Aware Grids */
+        .main-content {{
+            flex: 1; display: flex; flex-direction: column; gap: 12px; margin-top: 10px; min-height: 0;
+        }}
+        .grid-2col {{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; flex: 1; min-height: 0; }}
+        .grid-3col {{ display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; align-items: start; flex: 1; min-height: 0; }}
+        .grid-chart-table {{ display: grid; grid-template-columns: 48% 50%; gap: 2%; align-items: start; flex: 1; min-height: 0; }}
+        
+        .grid-voc-asymmetric {{ display: grid; grid-template-columns: 25% 45% 30%; gap: 14px; align-items: start; flex: 1; min-height: 0; }}
+        .grid-gov-asymmetric {{ display: grid; grid-template-columns: 32% 66%; gap: 2%; align-items: start; flex: 1; min-height: 0; }}
+
+        .dash-card {{
+            background: #FFFFFF; border: 1px solid var(--border); border-radius: 10px;
+            padding: 16px 20px; display: flex; flex-direction: column; gap: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); height: auto; min-height: 0; overflow: hidden;
+        }}
+        .card-title-bar {{
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 15px; font-weight: 800; color: var(--primary); border-bottom: 1px solid #F1F5F9; padding-bottom: 6px;
+        }}
+
+        /* RICH VISUAL MODULES LIBRARY */
+        
+        /* 1. Process Flowchart Container */
+        .flowchart-container {{
+            display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 8px 0;
+        }}
+        .flow-step {{
+            flex: 1; background: #F8FAFC; border: 1px solid var(--border); border-top: 3px solid var(--primary);
+            border-radius: 8px; padding: 10px; text-align: center; display: flex; flex-direction: column; gap: 4px;
+        }}
+        .flow-arrow {{ font-size: 18px; font-weight: 900; color: var(--secondary); flex-shrink: 0; }}
+
+        /* 2. Milestone Timeline Pipeline */
+        .milestone-timeline {{
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 8px 0; position: relative;
+        }}
+        .milestone-box {{
+            background: #F8FAFC; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+            display: flex; flex-direction: column; gap: 4px; position: relative;
+        }}
+        .milestone-date {{ font-size: 11px; font-weight: 800; color: var(--secondary); text-transform: uppercase; }}
+        .milestone-title {{ font-size: 13px; font-weight: 800; color: var(--primary); }}
+
+        /* 3. Variance Waterfall Gauge Box */
+        .waterfall-box {{
+            display: flex; flex-direction: column; gap: 8px; background: #F8FAFC; border: 1px solid var(--border);
+            border-radius: 8px; padding: 12px;
+        }}
+        .waterfall-row {{ display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; font-weight: 700; }}
+
+        /* 4. Scorecard & Governance Pulse Cards */
+        .gov-pulse-card {{
+            background: #F8FAFC; border: 1px solid var(--border); border-top: 4px solid var(--primary);
+            border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px;
+        }}
+        .pulse-stat-row {{ display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }}
+        .pulse-stat-row.green {{ background: #DCFCE7; color: #15803D; }}
+        .pulse-stat-row.yellow {{ background: #FEF3C7; color: #B45309; }}
+        .pulse-stat-row.red {{ background: #FEE2E2; color: #B91C1C; }}
+
+        /* 5. Success Criteria & Measurement Framework Card */
+        .success-criteria-card {{
+            background: #FFF7ED; border: 1px solid #FED7AA; border-left: 4px solid var(--secondary);
+            border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px;
+        }}
+
+        /* Chart Canvas Container */
+        .chart-wrapper {{
+            position: relative; width: 100%; height: 220px; display: flex; align-items: center; justify-content: center;
+        }}
+        .chart-wrapper canvas {{ max-height: 210px !important; width: 100% !important; }}
+
+        /* Segment Progress Bars */
+        .progress-list {{ display: flex; flex-direction: column; gap: 8px; margin-top: 2px; }}
+        .progress-item {{ display: flex; flex-direction: column; gap: 2px; }}
+        .progress-meta {{ display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--text-main); }}
+        .progress-track {{ height: 9px; background: #F1F5F9; border-radius: 9999px; overflow: hidden; display: flex; border: 1px solid #E2E8F0; }}
+        .progress-fill {{ height: 100%; background: var(--primary); border-radius: 9999px; }}
+        .progress-fill.orange {{ background: var(--secondary); }}
+        .progress-fill.green {{ background: var(--success); }}
+
+        /* Bullet List */
+        .bullet-list {{ list-style: none; display: flex; flex-direction: column; gap: 7px; }}
+        .bullet-item {{
+            font-size: 13px; line-height: 1.42; color: #334155; position: relative; padding-left: 16px; font-weight: 500;
+        }}
+        .bullet-item:before {{
+            content: ""; position: absolute; left: 0; top: 6px; width: 5px; height: 5px; border-radius: 50%;
+            background: var(--secondary);
+        }}
+
+        /* Master Table Styling */
+        .dash-table {{
+            width: 100%; border-collapse: collapse !important; font-size: 12px;
+            border-radius: 8px; overflow: hidden; border: 1px solid #CBD5E1 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        }}
+        .dash-table th {{
+            font-family: var(--font-family); font-weight: 700; background-color: var(--primary) !important;
+            color: #FFFFFF !important; padding: 7px 10px !important; text-align: left;
+            border: 1px solid var(--primary-dark) !important; font-size: 11.5px;
+        }}
+        .dash-table td {{
+            padding: 7px 10px !important; color: #1E293B !important; border: 1px solid #E2E8F0 !important;
+            background: #FFFFFF; font-weight: 500;
+        }}
+        .dash-table tbody tr:nth-child(even) td {{ background: #F8FAFC; }}
+        .dash-table tbody tr:hover td {{ background: #FFF7ED; }}
+
+        /* Standardized Executive Status Pills */
+        .status-pill {{ display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; }}
+        .status-on-track {{ background: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; }}
+        .status-watch {{ background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; }}
+        .status-off-track {{ background: #FEE2E2; color: #B91C1C; border: 1px solid #FECACA; }}
+        .status-done {{ background: #E0F2FE; color: #0369A1; border: 1px solid #BAE6FD; }}
+        .status-not-started {{ background: #F1F5F9; color: #64748B; border: 1px solid #E2E8F0; }}
+
+        /* Management Decision Callout Banner */
+        .mgmt-banner {{
+            background: #FFF7ED; border: 1px solid #FED7AA; border-left: 4px solid var(--secondary);
+            border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+        }}
+        .mgmt-label {{ font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0; display: flex; align-items: center; gap: 5px; }}
+        .mgmt-text {{ font-size: 13px; font-weight: 600; color: #1E293B; line-height: 1.35; }}
+
+        /* Footer */
+        .slide-footer {{
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 10.5px; color: var(--muted); border-top: 1px solid #E2E8F0; padding-top: 6px; margin-top: 2px;
+        }}
+        [contenteditable="true"]:focus {{ outline: 2px solid var(--secondary); background: rgba(255, 127, 50, 0.08); border-radius: 4px; }}
+        @media print {{
+            body {{ background: #FFFFFF; padding: 0; }} .toolbar {{ display: none; }}
+            .slide-page {{ page-break-after: always; box-shadow: none; border-radius: 0; border: none; }}
+        }}
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <span style="color:var(--secondary); font-size:13px; font-weight:800; letter-spacing:.4px;">⚡ AHAMOVE MASTER 16:9 • EXPANDED VISUAL MODULE DASHBOARD</span>
+        <button id="editBtn" onclick="toggleEditMode()">✏️ Edit Mode (E)</button>
+        <button onclick="window.print()">🖨️ Export PDF</button>
+    </div>
+
+    {slides_html}
+
+    <script>
+        let isEdit = false;
+        function toggleEditMode() {{
+            isEdit = !isEdit;
+            document.querySelectorAll('.editable').forEach(el => {{
+                el.contentEditable = isEdit;
+            }});
+            const btn = document.getElementById('editBtn');
+            btn.innerText = isEdit ? '💾 Save Mode (E)' : '✏️ Edit Mode (E)';
+            btn.style.background = isEdit ? '#10B981' : '#FF7F32';
+        }}
+
+        document.addEventListener('keydown', (e) => {{
+            if (e.key === 'e' || e.key === 'E') {{
+                if (document.activeElement.isContentEditable) return;
+                toggleEditMode();
+            }}
+        }});
+    </script>
+</body>
+</html>

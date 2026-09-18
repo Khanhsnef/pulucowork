@@ -221,6 +221,8 @@ Output/Ahamove/
 #### `monitoring/`
 | File | Mô tả |
 |------|-------|
+| `2026-09-14-weekly-market-brief.md` | Bản tin thị trường đầu tuần (07/09 - 14/09/2026): Làn sóng tài xế Grab 2 bánh đình công/tắt app (11/09), công đoàn California thắng lớn & DoorDash Retail expansion |
+| `2026-09-14-weekly-market-brief.html` | Bản HTML tương tác của bản tin vận hành & thị trường đầu tuần ngày 14/09 |
 | `2026-08-llm-supply-strategy-brief.md` | Tóm tắt meeting T6 với MT: LLM (Lalamove) đã vượt AHM (Ent&SME, HCM 71%), chiến lược oversupply+giá rẻ, call-to-action Supply 2W/4W |
 | `2026-06-22-weekly-market-brief.md` | BẢN TIN VẬN HÀNH & THỊ TRƯỜNG ĐẦU TUẦN (16/06 - 22/06/2026) |
 | `2026-06-22-weekly-market-brief.html` | Bản HTML tương tác của Bản tin thị trường đầu tuần 22/06 |

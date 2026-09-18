@@ -1,0 +1,2420 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+    <title>Ahamove DM NW Meeting — Full 29-Slide Executive Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F8FAFC;
+            --panel: #FFFFFF;
+            --panel-2: #F1F5F9;
+            --border: rgba(226, 232, 240, 0.9);
+            --text: #0F172A;
+            --muted: #64748B;
+            --blue: #0284C7;
+            --cyan: #0369A1;
+            --orange: #FF7F32;
+            --primary-navy: #0E4174;
+            --green: #059669;
+            --red: #DC2626;
+            --purple: #7C3AED;
+            --font-family: Inter, Lexend, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { background: #E2E8F0; }
+        body {
+            background:
+                radial-gradient(circle at 10% 8%, rgba(14, 65, 116, 0.06), transparent 30%),
+                radial-gradient(circle at 90% 12%, rgba(255, 127, 50, 0.07), transparent 28%),
+                radial-gradient(circle at 75% 85%, rgba(2, 132, 199, 0.05), transparent 32%),
+                #F8FAFC;
+            font-family: var(--font-family); color: var(--text);
+            display: flex; flex-direction: column; align-items: center; padding: 34px 0; gap: 34px;
+        }
+        body:before {
+            content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0.35;
+            background-image: linear-gradient(rgba(14, 65, 116, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(14, 65, 116, 0.03) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+        .toolbar {
+            position: fixed; bottom: 22px; right: 22px; z-index: 9999;
+            background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(18px);
+            border: 1px solid rgba(226, 232, 240, 0.9); padding: 10px 18px; border-radius: 999px;
+            display: flex; gap: 12px; align-items: center; box-shadow: 0 16px 40px rgba(14, 65, 116, 0.12);
+        }
+        .toolbar button { background: linear-gradient(135deg, var(--primary-navy), #1e5896); color: #fff; border: 0; padding: 9px 16px; border-radius: 999px; font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.2s; }
+        .toolbar button:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .slide-page {
+            width: 1920px; height: 1080px;
+            background:
+                radial-gradient(circle at 92% 0%, rgba(2, 132, 199, 0.04), transparent 25%),
+                radial-gradient(circle at 4% 100%, rgba(255, 127, 50, 0.04), transparent 24%),
+                linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 52%, #F1F5F9 100%);
+            border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 24px;
+            padding: 44px 54px; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; box-shadow: 0 25px 70px rgba(14, 65, 116, 0.08); overflow: hidden;
+        }
+        .slide-page:after {
+            content: ""; position: absolute; width: 520px; height: 520px; right: -240px; top: -280px;
+            border: 1px solid rgba(14, 65, 116, 0.06); border-radius: 50%;
+            box-shadow: 0 0 0 80px rgba(14, 65, 116, 0.015), 0 0 0 160px rgba(14, 65, 116, 0.008);
+            pointer-events: none;
+        }
+        .slide-header { display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 1; }
+        .slide-meta {
+            display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 800;
+            color: var(--primary-navy); text-transform: uppercase; letter-spacing: 1.5px;
+        }
+        .slide-meta span:last-child {
+            color: var(--primary-navy); background: rgba(14, 65, 116, 0.06); border: 1px solid rgba(14, 65, 116, 0.12);
+            padding: 6px 12px; border-radius: 999px;
+        }
+        .takeaway-title {
+            font-size: 28px; font-weight: 800; color: var(--primary-navy); line-height: 1.22; letter-spacing: -0.6px;
+            max-width: 1760px;
+        }
+        
+        .takeaway-banner {
+            background: rgba(255, 127, 50, 0.08); border: 1px solid rgba(255, 127, 50, 0.25);
+            border-radius: 12px; padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+            font-size: 14px; font-weight: 700; color: #C2410C; margin-top: 4px;
+        }
+
+        .hero-kpi-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 10px;
+        }
+        .hero-kpi-card, .glass-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border); border-radius: 16px;
+            box-shadow: 0 10px 30px -5px rgba(14, 65, 116, 0.06), 0 4px 12px rgba(0, 0, 0, 0.02);
+            position: relative; overflow: hidden;
+        }
+        .hero-kpi-card { padding: 16px 20px; display: flex; flex-direction: column; gap: 6px; min-height: 110px; }
+        .hero-kpi-card:before {
+            content: ""; position: absolute; left: 0; top: 0; width: 4px; height: 100%;
+            background: linear-gradient(180deg, var(--orange), var(--primary-navy));
+        }
+        .hero-kpi-label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+        .hero-kpi-val {
+            font-size: 44px; font-weight: 900; color: var(--primary-navy); line-height: 0.98; letter-spacing: -1.5px;
+        }
+        .hero-kpi-badge {
+            display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 999px;
+            font-size: 11px; font-weight: 800; width: max-content; border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .badge-positive { background: #ECFDF5; color: #047857; }
+        .badge-negative { background: #FEF2F2; color: #B91C1C; }
+        .badge-neutral { background: #F0F9FF; color: #0369A1; }
+        .badge-warning { background: #FFFBEB; color: #B45309; }
+
+        .content-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; flex: 1; margin-top: 14px; min-height: 0;
+        }
+        .glass-card {
+            padding: 18px 22px; display: flex; flex-direction: column; gap: 12px; min-height: 0;
+        }
+        .card-header {
+            display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 800; color: var(--primary-navy);
+        }
+        .card-header span:first-child {
+            width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px;
+            background: linear-gradient(135deg, rgba(14, 65, 116, 0.08), rgba(255, 127, 50, 0.08));
+            border: 1px solid rgba(14, 65, 116, 0.12); font-size: 15px;
+        }
+        .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .bullet-item {
+            font-size: 13.5px; line-height: 1.45; color: #1E293B; position: relative; padding-left: 18px;
+        }
+        .bullet-item:before {
+            content: ""; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 50%;
+            background: var(--orange); box-shadow: 0 0 6px rgba(255, 127, 50, 0.4);
+        }
+
+        .executive-comment-card {
+            background: linear-gradient(135deg, rgba(14, 65, 116, 0.04), rgba(255, 127, 50, 0.04));
+            border: 1px solid rgba(14, 65, 116, 0.15); border-radius: 14px;
+            padding: 12px 18px; display: flex; flex-direction: column; gap: 4px;
+            margin-top: 12px;
+        }
+        .comment-header { font-size: 12px; font-weight: 800; color: var(--primary-navy); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 6px; }
+        .comment-body { font-size: 13px; font-weight: 600; color: #0F172A; line-height: 1.4; }
+
+        .data-table {
+            width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 4px; font-size: 12.5px; overflow: hidden;
+            border: 1px solid var(--border); border-radius: 12px;
+        }
+        .data-table th {
+            background: rgba(14, 65, 116, 0.06); color: var(--primary-navy); font-weight: 800; text-align: left;
+            padding: 8px 12px; border-bottom: 1px solid var(--border);
+        }
+        .data-table td {
+            padding: 8px 12px; color: #1E293B; border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            background: #FFFFFF;
+        }
+        .data-table tr:last-child td { border-bottom: 0; }
+        .data-table tbody tr:hover td { background: rgba(14, 65, 116, 0.03); }
+        .slide-footer {
+            display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted);
+            border-top: 1px solid rgba(226, 232, 240, 0.9); padding-top: 10px; margin-top: 10px;
+        }
+        [contenteditable="true"]:focus { outline: 2px solid var(--orange); background: rgba(255, 127, 50, 0.08); border-radius: 6px; }
+        @media print {
+            body { background: #FFFFFF; padding: 0; } .toolbar { display: none; }
+            .slide-page { page-break-after: always; box-shadow: none; border-radius: 0; border: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <span style="color:var(--primary-navy); font-size:13px; font-weight:800; letter-spacing:.4px;">☀️ AHAMOVE • 16:9 LIGHT GLASS REPORT</span>
+        <button id="editBtn" onclick="toggleEditMode()">✏️ Edit Mode (E)</button>
+        <button onclick="window.print()">🖨️ Export PDF</button>
+    </div>
+
+    
+        <div class="slide-page" id="slide-1">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 1</span>
+                </div>
+                <div class="takeaway-title editable">Summary: Highlights & Lowlights</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HAN</div>
+                    <div class="hero-kpi-val editable">74.2%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HAN</div>
+                    <div class="hero-kpi-val editable">0.7%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HAN</div>
+                    <div class="hero-kpi-val editable">0.5%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HAN</div>
+                    <div class="hero-kpi-val editable">77.38%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HIGHLIGHTS</li><li class="bullet-item editable">ACTIONS ĐÃ THỰC THI TUẦN QUA</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">LOWLIGHTS</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Trọng tâm tuần — Kết quả thực thi & Kế hoạch hành động</li><li class="bullet-item editable">HAN:1. Retention rate >= 22 đạt 74.2%, gap nhẹ MoM ~0.7%2. CR PoC chung giảm 0.5% WoW
+NW:
+1. CTR đạt 77.38%, đạt 130% target
+2. GDR đạt 95.52%, đạt 120% target</li><li class="bullet-item editable">HAN:1. RPH đạt 2.07, FR gap target ~5%
+SGN:
+1. RR hụt hơn 1% MoM, YoY
+2. SH hụt 2% so với planning</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Action</th><th class="editable">Kết quả</th><th class="editable">Impact (KPI)</th><th class="editable">Status</th></tr></thead>
+                    <tbody><tr><td class="editable">[Baga bulky] Truyền thông form đăng ký tham gia chương trình</td><td class="editable">HAN: 178 txSGN: 336 txPush mass</td><td class="editable"></td><td class="editable">✅/⚠️</td></tr><tr><td class="editable">Thưởng thời tiết</td><td class="editable">Total claim: 97% Max Cost</td><td class="editable"></td><td class="editable">✅/⚠️</td></tr><tr><td class="editable"></td><td class="editable"></td><td class="editable"></td><td class="editable"></td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 1: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 1</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-2">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 2</span>
+                </div>
+                <div class="takeaway-title editable">Retention Rate - HAN</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">6.08%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">74.17%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">0.7%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">0.17%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">- Mức RR MoM đã có sự cải thiện so với tháng trước, bên cạnh đó RR YoY 
+- Nhóm FT và NLM 2 nhóm có gap YoY lớn dao động -1.9-6.08%</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Tỷ lệ giữ chân tài xế >=22t — Bóc tách biến động theo thời điểm & segment</li><li class="bullet-item editable">ROOT CAUSE ANALYSIS</li><li class="bullet-item editable">74.17%+0.7% MoM
+-0.17% YoY</li><li class="bullet-item editable">78.76%</li><li class="bullet-item editable">80.09%</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Segment</th><th class="editable">Segment driver</th><th class="editable">Active driver</th><th class="editable">RR_this month</th><th class="editable">MoM</th><th class="editable">YoY</th></tr></thead>
+                    <tbody><tr><td class="editable">FT</td><td class="editable">1,260</td><td class="editable">1,201</td><td class="editable">95.32%</td><td class="editable">-0.05%</td><td class="editable">-1.95%</td></tr><tr><td class="editable">PT</td><td class="editable">7,041</td><td class="editable">4,956</td><td class="editable">70.39%</td><td class="editable">-0.35%</td><td class="editable">0.82%</td></tr><tr><td class="editable">NLM</td><td class="editable">854</td><td class="editable">587</td><td class="editable">68.74%</td><td class="editable">3.68%</td><td class="editable">-6.08%</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 2: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 2</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-3">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 3</span>
+                </div>
+                <div class="takeaway-title editable">Retention Rate - SGN</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">76.13%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">1.4%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">1.06%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Tóm Tắt Diễn Giải Nội Dung</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Tỷ lệ giữ chân tài xế >=22t — Bóc tách biến động theo thời điểm & segment</li><li class="bullet-item editable">ROOT CAUSE ANALYSIS</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Phân Tích Bổ Sung & Kế Hoạch</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">- RR hụt MoM, YoY. Hụt mạnh nhất ở nhóm NLM
+Next action:
+- Work với GR để lên plan khảo sát nhóm tx churn tìm hiểu mục đích đăng ký app, lí do vì sao không tiếp tục hoạt động -> tìm ra phương án hỗ trợ sớm</li><li class="bullet-item editable">76.13%
+-1.4% MoM
+-1.06% YoY</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Segment</th><th class="editable">Segment driver</th><th class="editable">Active driver</th><th class="editable">RR_this month</th><th class="editable">MoM</th><th class="editable">YoY</th></tr></thead>
+                    <tbody><tr><td class="editable">FT</td><td class="editable">3,273</td><td class="editable">3,157</td><td class="editable">96.46%</td><td class="editable">-0.52%</td><td class="editable">0.04%</td></tr><tr><td class="editable">PT</td><td class="editable">9,937</td><td class="editable">6,870</td><td class="editable">69.14%</td><td class="editable">-2.78%</td><td class="editable">-1.64%</td></tr><tr><td class="editable">NLM</td><td class="editable">2,060</td><td class="editable">1,342</td><td class="editable">65.15%</td><td class="editable">-5.45%</td><td class="editable">-8.41%</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 3: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 3</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-4">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 4</span>
+                </div>
+                <div class="takeaway-title editable">Supply Hours</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">INSIGHT</div>
+                    <div class="hero-kpi-val editable">2.6%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">INSIGHT</div>
+                    <div class="hero-kpi-val editable">10.5%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">INSIGHT</div>
+                    <div class="hero-kpi-val editable">11.5%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">INSIGHT</div>
+                    <div class="hero-kpi-val editable">2.5%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Tóm Tắt Diễn Giải Nội Dung</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Thời gian hoạt động của tài xế</li><li class="bullet-item editable">HAN</li><li class="bullet-item editable">SGN</li><li class="bullet-item editable">Total SH by segment</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Phân Tích Bổ Sung & Kế Hoạch</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Demand</li><li class="bullet-item editable">Total SH by segment</li><li class="bullet-item editable">INSIGHT:
+- SH gap 2.6% so với planning, hụt ở nhóm FT/PT và NIM</li><li class="bullet-item editable">INSIGHT: 
+- SH gap 10.5% so với planning, hụt chủ yếu ở nhóm FT/PT- RPH tăng11.5% WoW, AR-FR giảm mạnh ~2.5% do ảnh hưởng do thời tiết xấu (nắng gắt + mưa giông) + tăng mạnh demand nhánh bulky. Details link thời tiết</li><li class="bullet-item editable">Demand</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Metric</th><th class="editable">This Week</th><th class="editable">WoW</th></tr></thead>
+                    <tbody><tr><td class="editable">RPH</td><td class="editable">2.07</td><td class="editable">▲ 11.9%</td></tr><tr><td class="editable">Request_stp</td><td class="editable">392K</td><td class="editable">▲ 7.7%</td></tr><tr><td class="editable">Accept_stp</td><td class="editable">335K</td><td class="editable">▲ 4.7%</td></tr><tr><td class="editable">Completed_stp</td><td class="editable">297K</td><td class="editable">▲ 4.1%</td></tr><tr><td class="editable">AR</td><td class="editable">85.5%</td><td class="editable">▼ -2.5%</td></tr><tr><td class="editable">FR</td><td class="editable">75.8%</td><td class="editable">▼ -2.7%</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 4: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 4</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-5">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 5</span>
+                </div>
+                <div class="takeaway-title editable">Cancel Rate- HAN</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">INSIGHT</div>
+                    <div class="hero-kpi-val editable">0.6%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">INSIGHT</div>
+                    <div class="hero-kpi-val editable">13%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">INSIGHT</div>
+                    <div class="hero-kpi-val editable">0.7%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Tóm Tắt Diễn Giải Nội Dung</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">INSIGHT: 
+- CR PoC chung giảm 0.6% trong, đạt mốc 13%. 
+- CR đều giảm ở các tập, Retention giảm từ 0.2-0.7%</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Phân Tích Bổ Sung & Kế Hoạch</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Overview CR by Segment</li><li class="bullet-item editable">CR(Rule PoC) by Segment</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">segment</th><th class="editable">accept
+_order</th><th class="editable">cancel
+_order</th><th class="editable">CR</th><th class="editable">Active</th><th class="editable">cancel_
+per_active</th><th class="editable">Gap avg
+cancel WoW</th><th class="editable">Gap % contrib cancel WoW</th></tr></thead>
+                    <tbody><tr><td class="editable">FT</td><td class="editable">113.61K</td><td class="editable">16.14K</td><td class="editable">9.60%</td><td class="editable">1,239</td><td class="editable">13.02</td><td class="editable">0.09</td><td class="editable">-0.09%</td></tr><tr><td class="editable">NIM</td><td class="editable">19.82K</td><td class="editable">3.05K</td><td class="editable">11.33%</td><td class="editable">667</td><td class="editable">4.57</td><td class="editable">0.32</td><td class="editable">2.08%</td></tr><tr><td class="editable">NLM</td><td class="editable">30.08K</td><td class="editable">5.69K</td><td class="editable">14.19%</td><td class="editable">954</td><td class="editable">5.97</td><td class="editable">-0.11</td><td class="editable">-1.74%</td></tr><tr><td class="editable">PT</td><td class="editable">206.61K</td><td class="editable">41.09K</td><td class="editable">14.55%</td><td class="editable">6,030</td><td class="editable">6.81</td><td class="editable">-0.10</td><td class="editable">-2.03%</td></tr><tr><td class="editable">Return</td><td class="editable">18.58K</td><td class="editable">4.12K</td><td class="editable">17.13%</td><td class="editable">738</td><td class="editable">5.58</td><td class="editable">0.23</td><td class="editable">1.78%</td></tr><tr><td class="editable">Total</td><td class="editable">0.39M</td><td class="editable">70.08K</td><td class="editable">13.04%</td><td class="editable"></td><td class="editable"></td><td class="editable"></td><td class="editable"></td></tr><tr><td class="editable">WoW (%)</td><td class="editable">3.32%</td><td class="editable">-1.24%</td><td class="editable">-0.56%</td><td class="editable"></td><td class="editable"></td><td class="editable"></td><td class="editable"></td></tr><tr><td class="editable">WoW (Actual)</td><td class="editable">12.50K</td><td class="editable">-0.88K</td><td class="editable"></td><td class="editable"></td><td class="editable"></td><td class="editable"></td><td class="editable"></td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 5: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 5</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-6">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 6</span>
+                </div>
+                <div class="takeaway-title editable">Bulky performance</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">INSIGHT</div>
+                    <div class="hero-kpi-val editable">1M</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">INSIGHT</div>
+                    <div class="hero-kpi-val editable">60%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">INSIGHT</div>
+                    <div class="hero-kpi-val editable">10M</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">INSIGHT</div>
+                    <div class="hero-kpi-val editable">15M</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Tóm Tắt Diễn Giải Nội Dung</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Demand Bulky & Active by Total COD đơn cha</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Phân Tích Bổ Sung & Kế Hoạch</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">INSIGHT: 
+- Tỷ trọng đơn Bulky high COD (total_cod >=1M) tăng mạnh trong 2 tuần gần nhất, chiếm 50-60%- Active bulky chung cũng tăng theo trend. SL TX có hoàn thành tối thiểu 1 trip Bulky high COD tăng gấp 1.3-3 lần
+
+NEXT ACTION:- Review perform nhóm được tăng COD balance 10M->15M- Đẩy tuyển dụng TX COD balance cao vào đội chuyển</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 6: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 6</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-7">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 7</span>
+                </div>
+                <div class="takeaway-title editable">CORE 2H/BULKY</div>
+                
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Action
+- Phát hiện các tài khoản không chính chủ trong đội=> Gửi list QM để rà soát và xử lý => 9 tài xế ngưng hợp tác ( 7 case không đảm bảo hiệu suất)
+- Tiến hành tuyển mới để bổ sung tài xế xử lý C.P. Bổ sung thêm 5 tài xế
+- Số lượng tài xế Active đã cải thiện tuy nhiên biến động không ổn định, các ngày chỉ duy trì được 50-70 tài xế hoạt động
+- Sau khi tiến hành nhắc nhở đội về việc đảm bảo lead-time đơn hàng số, lượng tài xế vi phạm đã giảm 1 nửa.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Đội core chuyên chạy đơn 2H, 2H - Cỡ Lớn - Plan Core 2H</li><li class="bullet-item editable">Issue/Next Action:
+-Rà soát lại các tài xế lead-time 12h => Gửi QM tiến hành chế tài và yêu cầu rời khỏi đội.- Chặn lệnh bot gán đơn sau 18h 
+- Tiếp tục rà soát và thúc đẩy hiệu suất đội</li><li class="bullet-item editable">Tình hình nhân sự của đội</li><li class="bullet-item editable">Hiệu suất của đội</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Thành viên trong đội</th><th class="editable"></th><th class="editable"></th><th class="editable"></th><th class="editable"></th></tr></thead>
+                    <tbody><tr><td class="editable"></td><td class="editable">Số lượng hiện tại</td><td class="editable">Số lượng bổ sung</td><td class="editable">Số lượng rời đội</td><td class="editable"></td></tr><tr><td class="editable"></td><td class="editable">80</td><td class="editable">5</td><td class="editable">9</td><td class="editable"></td></tr><tr><td class="editable">Highlight</td><td class="editable"></td><td class="editable"></td><td class="editable"></td><td class="editable"></td></tr><tr><td class="editable"></td><td class="editable">Active</td><td class="editable">Số tài khoản Lead-time> 4H</td><td class="editable">Số tài khoản Lead-time > 12H</td><td class="editable">% Số thành viên COD_Bal <3M</td></tr><tr><td class="editable"></td><td class="editable">77</td><td class="editable">13</td><td class="editable">7</td><td class="editable">26</td></tr><tr><td class="editable"></td><td class="editable">96%</td><td class="editable">16%</td><td class="editable">9%</td><td class="editable">33%</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 7: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 7</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-8">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 8</span>
+                </div>
+                <div class="takeaway-title editable">Plan Active tài xế Ân xá 13.8</div>
+                
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Action
+Ân xá: Hoàn tất danh sách tài xế và gửi QM gán tag hỗ trợ — 14/8.
+Truyền thông kích hoạt: Triển khai từ 14/8, đạt 220/200 tài xế active trở lại.
+Gap: 32/ 63 đã ful dịch vụ  thời tiết cực đoan (nắng nóng, mưa dông cuối tuần).
+Next Action 
+Tiếp tục push Noti, đồng thời loại trừ nhóm tài xế đã active để tránh spam.
+Từ 26/8: Gửi cảnh báo đến nhóm đã active nhưng chưa ký quỹ đủ, thúc đẩy hoàn tất ký quỹ để duy trì hoạt động.
+Call-out trực tiếp: Gọi điện nhắc nhở và thúc đẩy tài xế ký quỹ đủ điều kiện hoạt động trước khi kết thúc hạn ân xá.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Action
+Ân xá: Hoàn tất danh sách tài xế và gửi QM gán tag hỗ trợ — 14/8.
+Truyền thông kích hoạt: Triển khai từ 14/8, đạt 220/200 tài xế active trở lại.
+Gap: 32/ 63 đã ful dịch vụ  thời tiết cực đoan (nắng nóng, mưa dông cuối tuần).
+Next Action 
+Tiếp tục push Noti, đồng thời loại trừ nhóm tài xế đã active để tránh spam.
+Từ 26/8: Gửi cảnh báo đến nhóm đã active nhưng chưa ký quỹ đủ, thúc đẩy hoàn tất ký quỹ để duy trì hoạt động.
+Call-out trực tiếp: Gọi điện nhắc nhở và thúc đẩy tài xế ký quỹ đủ điều kiện hoạt động trước khi kết thúc hạn ân xá.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Tỷ lệ chuyển đổi</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 8: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 8</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-9">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 9</span>
+                </div>
+                <div class="takeaway-title editable">BB</div>
+                
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Tóm Tắt Diễn Giải Nội Dung</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Baga Bulky: Giai đoạn triển khai lần đầu (GĐ 1 - 15/8 đến 30/8)</li><li class="bullet-item editable">5</li><li class="bullet-item editable">BƯỚC 1</li><li class="bullet-item editable">Đăng ký</li><li class="bullet-item editable">Tài xế đăng ký tham gia chương trình qua form/app</li><li class="bullet-item editable">BƯỚC 2</li><li class="bullet-item editable">Mua & lắp baga</li><li class="bullet-item editable">Tài xế tự mua và lắp đặt baga chở hàng cồng kềnh</li><li class="bullet-item editable">BƯỚC 3</li><li class="bullet-item editable">Xác nhận</li><li class="bullet-item editable">Tài xế xác nhận tham gia chương trình thưởng & thực hiện xác thực in app</li><li class="bullet-item editable">BƯỚC 4</li><li class="bullet-item editable">Hoàn phí</li><li class="bullet-item editable">Nhận tiền hoàn phí nếu hoàn thành nhiệm vụ</li><li class="bullet-item editable">➜</li><li class="bullet-item editable">➜</li><li class="bullet-item editable">➜</li><li class="bullet-item editable">Quy trình vận hành</li><li class="bullet-item editable">Timeline</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Phân Tích Bổ Sung & Kế Hoạch</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Giai đoạn
+Chuẩn bị</li><li class="bullet-item editable">[23/7–1/8]</li><li class="bullet-item editable">Hoàn thành</li><li class="bullet-item editable">[3/8–14/8]</li><li class="bullet-item editable">Hoàn thành</li><li class="bullet-item editable">[15/8–30/8]</li><li class="bullet-item editable">Đang triển khai</li><li class="bullet-item editable">[16/8 – 30/8]</li><li class="bullet-item editable">Sắp tới</li><li class="bullet-item editable">PA: Build & set up chl in app
+QM: Flow xác thực baga
+DS: Plan truyền thông form tham gia chương trình</li><li class="bullet-item editable">Giai đoạn
+Đăng ký</li><li class="bullet-item editable">Push notifications form đăng ký tham gia chương trình
+Confirm flow xác thực baga với QM</li><li class="bullet-item editable">Giai đoạn
+Triển khai</li><li class="bullet-item editable">Triển khai flow thưởng GĐ 1 + HAN: 178 tx, SGN: 336 tx
+Hoàn thành quy trình 1Of cf cost với PA -> chuẩn bị cho GĐ 2, 3</li><li class="bullet-item editable">Giai đoạn
+Theo dõi</li><li class="bullet-item editable">Follow timeline truyền thông, tiếp tục push lead đăng ký GĐ 2, 3
+Follow quá trình tham gia thưởng + xác thực baga -> ghi nhận driver voice</li><li class="bullet-item editable">Giai đoạn
+Hoàn tất</li><li class="bullet-item editable">Sắp tới</li><li class="bullet-item editable">[1/9 – 30/9]</li><li class="bullet-item editable">Follow & push số lượng tài xế tick baga/bulky</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 9: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 9</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-10">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 10</span>
+                </div>
+                <div class="takeaway-title editable">Growth Weekly Report</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">44.2%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">7.4%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">65%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Total Capacity đang hụt 7.4% so với tiến độ MTD, chủ yếu do Active NIM tăng chậm, hiện chỉ đạt ~65% so với cùng kỳ tháng trước. Productivity của các tập vẫn duy trì ổn định.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">[HAN] OPERATION GROWTH</li><li class="bullet-item editable">44.2%</li><li class="bullet-item editable">Capacity HAN M8</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">SGN</th><th class="editable">NIM</th><th class="editable">NLM</th><th class="editable">RIM</th></tr></thead>
+                    <tbody><tr><td class="editable">ACTUAL</td><td class="editable">22,826</td><td class="editable">56,487</td><td class="editable">24,517</td></tr><tr><td class="editable">TARGET</td><td class="editable">85,400</td><td class="editable">104,800</td><td class="editable">44,600</td></tr><tr><td class="editable">% TARGET</td><td class="editable">26.73%</td><td class="editable">53.90%</td><td class="editable">54.97%</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 10: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 10</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-11">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 11</span>
+                </div>
+                <div class="takeaway-title editable">Growth Weekly Report</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">51.8%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Total Capacity đã theo kịp tiến độ MTD. Tương tự HAN, Active NIM vẫn tăng trưởng chậm; bù lại, NLM đang duy trì hoạt động tốt với Active giảm không đáng kể theo trend tự nhiên, đồng thời Productivity được bảo toàn.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Total Capacity đã theo kịp tiến độ MTD. Tương tự HAN, Active NIM vẫn tăng trưởng chậm; bù lại, NLM đang duy trì hoạt động tốt với Active giảm không đáng kể theo trend tự nhiên, đồng thời Productivity được bảo toàn.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">[SGN] OPERATION GROWTH</li><li class="bullet-item editable">51.8%</li><li class="bullet-item editable">Capacity SGN M8</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">SGN</th><th class="editable">NIM</th><th class="editable">NLM</th><th class="editable">RIM</th></tr></thead>
+                    <tbody><tr><td class="editable">ACTUAL</td><td class="editable">31,707</td><td class="editable">76,465</td><td class="editable">21,680</td></tr><tr><td class="editable">TARGET</td><td class="editable">89,300</td><td class="editable">119,300</td><td class="editable">42,100</td></tr><tr><td class="editable">% TARGET</td><td class="editable">35.51%</td><td class="editable">64.09%</td><td class="editable">51.50%</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 11: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 11</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-12">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 12</span>
+                </div>
+                <div class="takeaway-title editable">Growth Weekly Report</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">100%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">93.17%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">100%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">12.57%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">GDR đạt 100%.
+CR không biến động quá nhiều WoW. 
+DFD Retention đã vượt tỷ lệ tháng trước, nhờ nhóm tài xế trẻ bắt đầu quay lại hoạt động sau kỳ hè. Tuy nhiên, thời tiết vẫn ảnh hưởng đến khả năng hoạt động, khiến tỷ lệ tăng hằng ngày còn khá chậm.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">GDR đạt 100%.
+CR không biến động quá nhiều WoW. 
+DFD Retention đã vượt tỷ lệ tháng trước, nhờ nhóm tài xế trẻ bắt đầu quay lại hoạt động sau kỳ hè. Tuy nhiên, thời tiết vẫn ảnh hưởng đến khả năng hoạt động, khiến tỷ lệ tăng hằng ngày còn khá chậm.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">[HAN] OPERATION GROWTH</li><li class="bullet-item editable">100%</li><li class="bullet-item editable">Achieved</li><li class="bullet-item editable">Actual
+93.17%</li><li class="bullet-item editable">100%</li><li class="bullet-item editable">Achieved</li><li class="bullet-item editable">Actual
+12.57%</li><li class="bullet-item editable">85%</li><li class="bullet-item editable">Achieved</li><li class="bullet-item editable">Actual
+70.48%</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 12: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 12</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-13">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 13</span>
+                </div>
+                <div class="takeaway-title editable">Growth Weekly Report</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">110%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">96.34%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">85%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">11.10%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Tóm Tắt Diễn Giải Nội Dung</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">[SGN] OPERATION GROWTH</li><li class="bullet-item editable">110%</li><li class="bullet-item editable">Achieved</li><li class="bullet-item editable">Actual
+96.34%</li><li class="bullet-item editable">85%</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Phân Tích Bổ Sung & Kế Hoạch</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Achieved</li><li class="bullet-item editable">Actual
+11.10%</li><li class="bullet-item editable">80%</li><li class="bullet-item editable">Achieved</li><li class="bullet-item editable">Actual
+65.34%</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 13: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 13</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-14">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 14</span>
+                </div>
+                <div class="takeaway-title editable">DJ</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Tiếp cận</div>
+                    <div class="hero-kpi-val editable">60%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Tiếp cận: Với 100 TX có FCT từ 3-7/8, team đã tiếp cận 84 TX, trong đó kết nối được 50 TX (~60%).
+Feedback: 26/50 TX đã xem video đánh giá nội dung trực quan, dễ hiểu và có thể áp dụng ngay, những tx chưa xem được kết bạn gửi lại qua zalo.
+Insight: TX phát sinh thêm các nhu cầu về sai vị trí đơn, hủy đơn khi không liên lạc được người nhận, rút tiền... → phù hợp với các nội dung training trong plan tiếp theo.</li><li class="bullet-item editable">Tiếp tục follow hoàn thiện nội dung training, và luồng automation.
+
+D2 – Hướng dẫn phòng tránh & xử lý khiếu nại đúng cách - hoàn thành các feedback.
+
+D5: Đã có thông tin đầu vào, chuẩn bị kịch bản.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Tiếp cận: Với 100 TX có FCT từ 3-7/8, team đã tiếp cận 84 TX, trong đó kết nối được 50 TX (~60%).
+Feedback: 26/50 TX đã xem video đánh giá nội dung trực quan, dễ hiểu và có thể áp dụng ngay, những tx chưa xem được kết bạn gửi lại qua zalo.
+Insight: TX phát sinh thêm các nhu cầu về sai vị trí đơn, hủy đơn khi không liên lạc được người nhận, rút tiền... → phù hợp với các nội dung training trong plan tiếp theo.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Driver Journey: Mô hình onboarding theo giai đoạn D0 - D60</li><li class="bullet-item editable">5 / 9</li><li class="bullet-item editable">Giai đoạn (D0-D8) hoàn thành đúng tiến độ</li><li class="bullet-item editable">MỤC TIÊU</li><li class="bullet-item editable">Hoàn thành Video training D2-D5 trong tháng 8</li><li class="bullet-item editable">TIẾN ĐỘ</li><li class="bullet-item editable">1</li><li class="bullet-item editable">Action</li><li class="bullet-item editable">Hoàn thành video training ở D4
+
+Thảo luận với CM và DT lên nội dung cho D2.
+Tiến hành build luồng noti tự động đến đúng nhóm tài xế theo giai đoạn.
+Hoàn thiện hình ảnh banner kèm nội dung noti D0 - D4.</li><li class="bullet-item editable">!</li><li class="bullet-item editable">Khảo sát nhanh</li><li class="bullet-item editable">→</li><li class="bullet-item editable">BƯỚC TIẾP THEO</li><li class="bullet-item editable">◆</li><li class="bullet-item editable">CẦN SUPPORT TỪ</li><li class="bullet-item editable">S&P: Theo dõi cohort retention tại các mốc D3 – D7 – D14 – D21.</li><li class="bullet-item editable">D0: Hướng dẫn xem số tiền cần thu ứng Hoàn thành
+D1: Xử lý hủy đơn Hoàn thành
+D2: Hướng dẫn phòng tránh & xử lý khiếu nại đúng cách - Lên kịch bản
+D3: Bật tắt ngưng gán đơn/ cài đặt dịch vụ Hoàn thành
+D4: Sử dụng điều hướng Hoàn thành</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 14: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 14</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-15">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 15</span>
+                </div>
+                <div class="takeaway-title editable">Slide 15</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">92.54%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">89.09%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">MoM</div>
+                    <div class="hero-kpi-val editable">7.77%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">MoM</div>
+                    <div class="hero-kpi-val editable">2.28%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Tóm Tắt Diễn Giải Nội Dung</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">2,017 ca</li><li class="bullet-item editable">Checkin</li><li class="bullet-item editable">92.54%</li><li class="bullet-item editable">Utlz</li><li class="bullet-item editable">89.09%</li><li class="bullet-item editable">Onlinerate</li><li class="bullet-item editable">MoM: - 7.77%</li><li class="bullet-item editable">MoM: + 2.28%</li><li class="bullet-item editable">MoM: + 0.27%</li><li class="bullet-item editable">MiniHub - OPERATIONS</li><li class="bullet-item editable">Checkin</li><li class="bullet-item editable">Checkin 
+rate</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Phân Tích Bổ Sung & Kế Hoạch</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Coverage</li><li class="bullet-item editable">Checkin</li><li class="bullet-item editable">Utlz</li><li class="bullet-item editable">Onlinerate</li><li class="bullet-item editable">3,447 ca</li><li class="bullet-item editable">85.91%</li><li class="bullet-item editable">89.61%</li><li class="bullet-item editable">MoM: + 2.10%</li><li class="bullet-item editable">MoM: - 0.39%</li><li class="bullet-item editable">MoM: + 3.30%</li><li class="bullet-item editable">HAN</li><li class="bullet-item editable">SGN</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Metrics</th><th class="editable">DD</th><th class="editable">HK</th><th class="editable">HBT</th><th class="editable">CG</th><th class="editable">BD</th><th class="editable">TX</th><th class="editable">136</th><th class="editable">BIGZONE</th><th class="editable">Z24</th><th class="editable">Z578</th></tr></thead>
+                    <tbody><tr><td class="editable">Active</td><td class="editable">13</td><td class="editable">14</td><td class="editable">9</td><td class="editable">21</td><td class="editable">7</td><td class="editable">11</td><td class="editable">44</td><td class="editable">71</td><td class="editable">22</td><td class="editable">10</td></tr><tr><td class="editable">Online rate</td><td class="editable">96.26%</td><td class="editable">95.35%</td><td class="editable">94.69%</td><td class="editable">90.59%</td><td class="editable">94.13%</td><td class="editable">86.09%</td><td class="editable">90.14%</td><td class="editable">85.02%</td><td class="editable">82.99%</td><td class="editable">78.25%</td></tr><tr><td class="editable">Utilization</td><td class="editable">92.04%</td><td class="editable">86.62%</td><td class="editable">81.63%</td><td class="editable">95.15%</td><td class="editable">94.46%</td><td class="editable">92.81%</td><td class="editable">93.52%</td><td class="editable">93.58%</td><td class="editable">92.67%</td><td class="editable">96.36%</td></tr><tr><td class="editable">Prod per hour</td><td class="editable">3.88</td><td class="editable">3.96</td><td class="editable">3.58</td><td class="editable">4.34</td><td class="editable">4.21</td><td class="editable">3.95</td><td class="editable">3.79</td><td class="editable">2.75</td><td class="editable">2.96</td><td class="editable">3.17</td></tr><tr><td class="editable">Earning per hour</td><td class="editable">57.1K</td><td class="editable">59.9K</td><td class="editable">55.8K</td><td class="editable">73.3K</td><td class="editable">64.9K</td><td class="editable">72.6K</td><td class="editable">66.5K</td><td class="editable">70.2K</td><td class="editable">58.0K</td><td class="editable">59.6K</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 15: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 15</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-16">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 16</span>
+                </div>
+                <div class="takeaway-title editable">Slide 16</div>
+                
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Tóm Tắt Diễn Giải Nội Dung</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">MiniHub - COVERAGE</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Phân Tích Bổ Sung & Kế Hoạch</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HAN</li><li class="bullet-item editable">SGN</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">WoW</th></tr></thead>
+                    <tbody><tr><td class="editable">3.23%</td></tr><tr><td class="editable">-3.01%</td></tr><tr><td class="editable">3.62%</td></tr><tr><td class="editable">1.18%</td></tr><tr><td class="editable">1.22%</td></tr><tr><td class="editable">1.84%</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 16: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 16</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-17">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 17</span>
+                </div>
+                <div class="takeaway-title editable">Slide 17</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT
+
+HAN</div>
+                    <div class="hero-kpi-val editable">90.61%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT
+
+HAN</div>
+                    <div class="hero-kpi-val editable">100%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT
+
+HAN</div>
+                    <div class="hero-kpi-val editable">94.67%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT
+
+HAN</div>
+                    <div class="hero-kpi-val editable">91.30%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HIGHLIGHT
+
+HAN:
+Tỷ lệ Active/Registered đạt 90.61% (222/245), cho thấy khả năng chuyển đổi từ tài xế đăng ký sang active đang ở mức tốt, vẫn còn khả năng chuyển đổi thêm.
+DD, HK và HBT đạt 100%, trong khi BIGZONE (94.67%) duy trì tỷ lệ chuyển đổi tốt trên quy mô lớn; CG (91.30%), TX và Zone 136 (91.67%) cũng ghi nhận hiệu quả tích cực.
+Z24 (78.57%) và Z578 (66.67%) là các khu vực cần ưu tiên theo dõi, đặc biệt Z578 có tỷ lệ chuyển đổi thấp nhất, trong khi Z24 ghi nhận số lượng hụt lớn nhất với 6 tài xế (28 Registered → 22 Active), ảnh hưởng đến hiệu quả chung của HAN.
+
+
+SGN:
+Tỷ lệ Active/Registered đạt 96.72% (383/396), cho thấy khả năng chuyển đổi từ tài xế đăng ký sang active đang ở mức rất tốt, với mức hụt chỉ 13 tài xế.
+Zone 4 (100%), Zone 3 (98.77%) và Zone 5 (97.22%) duy trì tỷ lệ chuyển đổi tốt; trong đó Zone 3 có quy mô lớn nhất (81 Registered → 80 Active) nhưng vẫn đảm bảo hiệu quả chuyển đổi cao.
+Zone 6 (93.55%) và Zone 1 (95.95%) là các khu vực cần ưu tiên theo dõi, đặc biệt Zone 6 có tỷ lệ chuyển đổi thấp nhất, với 4 tài xế chưa chuyển đổi từ Registered sang Active.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HIGHLIGHT
+
+HAN:
+Tỷ lệ Active/Registered đạt 90.61% (222/245), cho thấy khả năng chuyển đổi từ tài xế đăng ký sang active đang ở mức tốt, vẫn còn khả năng chuyển đổi thêm.
+DD, HK và HBT đạt 100%, trong khi BIGZONE (94.67%) duy trì tỷ lệ chuyển đổi tốt trên quy mô lớn; CG (91.30%), TX và Zone 136 (91.67%) cũng ghi nhận hiệu quả tích cực.
+Z24 (78.57%) và Z578 (66.67%) là các khu vực cần ưu tiên theo dõi, đặc biệt Z578 có tỷ lệ chuyển đổi thấp nhất, trong khi Z24 ghi nhận số lượng hụt lớn nhất với 6 tài xế (28 Registered → 22 Active), ảnh hưởng đến hiệu quả chung của HAN.
+
+
+SGN:
+Tỷ lệ Active/Registered đạt 96.72% (383/396), cho thấy khả năng chuyển đổi từ tài xế đăng ký sang active đang ở mức rất tốt, với mức hụt chỉ 13 tài xế.
+Zone 4 (100%), Zone 3 (98.77%) và Zone 5 (97.22%) duy trì tỷ lệ chuyển đổi tốt; trong đó Zone 3 có quy mô lớn nhất (81 Registered → 80 Active) nhưng vẫn đảm bảo hiệu quả chuyển đổi cao.
+Zone 6 (93.55%) và Zone 1 (95.95%) là các khu vực cần ưu tiên theo dõi, đặc biệt Zone 6 có tỷ lệ chuyển đổi thấp nhất, với 4 tài xế chưa chuyển đổi từ Registered sang Active.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">MiniHub - DRIVER FUNNEL</li><li class="bullet-item editable">HAN</li><li class="bullet-item editable">SGN</li><li class="bullet-item editable">100%</li><li class="bullet-item editable">100%</li><li class="bullet-item editable">100%</li><li class="bullet-item editable">91.30%</li><li class="bullet-item editable">87.50%</li><li class="bullet-item editable">91.67%</li><li class="bullet-item editable">91.67%</li><li class="bullet-item editable">94.67%</li><li class="bullet-item editable">78.57%</li><li class="bullet-item editable">66.67%</li><li class="bullet-item editable">95.95%</li><li class="bullet-item editable">96.05%</li><li class="bullet-item editable">98.77%</li><li class="bullet-item editable">100%</li><li class="bullet-item editable">97.22%</li><li class="bullet-item editable">93.55%</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 17: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 17</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-18">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 18</span>
+                </div>
+                <div class="takeaway-title editable">Slide 18</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT
+
+HAN</div>
+                    <div class="hero-kpi-val editable">72.6K</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT
+
+HAN</div>
+                    <div class="hero-kpi-val editable">72.3K</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT
+
+HAN</div>
+                    <div class="hero-kpi-val editable">70.2K</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT
+
+HAN</div>
+                    <div class="hero-kpi-val editable">58.4K</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HIGHLIGHT
+
+HAN:
+EPH tuần 10/08 tăng mạnh, hầu hết các Zone đều cải thiện so với tuần 03/08.
+TX (72.6K), CG (72.3K) và BIGZONE (70.2K) đạt EPH cao nhất; TX và CG có mức tăng nổi bật.
+Z24 (58.4K) và HBT (55.8K) vẫn là 2 khu vực có EPH thấp nhất, cần tiếp tục theo dõi và cải thiện.
+
+
+SGN:
+EPH tuần 10/08 phân hóa giữa các Zone: Zone 6 đạt cao nhất 50.7K, tăng nhẹ so với tuần trước.
+Zone 1 (49.5K) và Zone 2 (49.1K) tiếp tục duy trì EPH tốt; Zone 4 ổn định ở 47.5K.
+Zone 3 (45.8K) giảm mạnh 4.4% WoW, là khu vực có EPH thấp nhất và cần ưu tiên theo dõi.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">MiniHub - EARNING PER HOUR</li><li class="bullet-item editable">HAN</li><li class="bullet-item editable">SGN</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 18: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 18</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-19">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 19</span>
+                </div>
+                <div class="takeaway-title editable">Slide 19</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">34.23%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">34.23%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">13.69%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">6.85%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HIGHLIGHT
+34.23% driver thuộc nhóm Valid (251/555), là nhóm chiếm tỷ trọng cao nhất; 34.23% thuộc nhóm 2nd violation (190 driver).
+13.69% driver thuộc nhóm 1st violation (76 driver), trong khi 6.85% đang ở tuần đầu tham gia MiniHub (38 driver).
+Tỷ lệ driver vi phạm vẫn ở mức đáng lưu ý → cần tiếp tục rà soát và cải thiện chất lượng hoạt động, đặc biệt nhóm 1st & 2nd violation.</li><li class="bullet-item editable">HIGHLIGHT
+79.84% driver thuộc nhóm 2nd violation (820/1,027), tỷ lệ vi phạm cao và là nhóm chiếm tỷ trọng lớn nhất.
+11.98% driver đạt Valid, trong khi 4.09% đang ở tuần đầu tham gia Hub và 4.09% thuộc nhóm 1st violation.
+Tỷ trọng driver vi phạm vẫn ở mức cao → cần tập trung rà soát và cải thiện chất lượng hoạt động, đặc biệt nhóm 2nd violation.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">MiniHub - SANCTION</li><li class="bullet-item editable">HAN</li><li class="bullet-item editable">SGN</li><li class="bullet-item editable">Total_drivers: 1,027</li><li class="bullet-item editable">Total_drivers: 555</li><li class="bullet-item editable">88.41%</li><li class="bullet-item editable">52.95%</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 19: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 19</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-20">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 20</span>
+                </div>
+                <div class="takeaway-title editable">Slide 20</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">86.62%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">63.78%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT
+
+HAN</div>
+                    <div class="hero-kpi-val editable">86.89%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT
+
+HAN</div>
+                    <div class="hero-kpi-val editable">46.62%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HIGHLIGHT
+
+HAN: 86.89% tài xế vi phạm do không phát sinh hoạt động (749/862), chiếm áp đảo trong tổng số vi phạm.
+SGN: 46.62% tài xế không phát sinh hoạt động (124/266); nhóm Fail Online chiếm 23.68% (63 driver) là lỗi nổi bật nhất.
+Tổng số tài xế vi phạm tại HAN (862) cao hơn đáng kể so với SGN (266), cần ưu tiên xử lý nhóm không hoạt động tại HAN.
+
+👉 Key takeaway: No Activity là nguyên nhân vi phạm chính tại HAN, trong khi SGN nổi bật ở nhóm Fail Online → cần có hướng xử lý khác nhau theo từng khu vực.
+
+NEXT ACTION
+HAN: Gửi list No Activity cho Đội trưởng → remind và rà soát nguyên nhân không hoạt động.
+SGN: Gửi cảnh báo nhóm Fail Online và các nhóm vi phạm Online/CR/STP → remind tiêu chuẩn hoạt động.
+Follow-up: Theo dõi tỷ lệ vi phạm sau remind và ưu tiên nhóm tái vi phạm.</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">MiniHub - SANCTION</li><li class="bullet-item editable">86.62%</li><li class="bullet-item editable">63.78%</li><li class="bullet-item editable">Total: 862 tài xế vi phạm</li><li class="bullet-item editable">Total: 266 tài xế vi phạm</li><li class="bullet-item editable">86.89%</li><li class="bullet-item editable">13.11%</li><li class="bullet-item editable">46.62%</li><li class="bullet-item editable">26.7%</li><li class="bullet-item editable">23.68%</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 20: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 20</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-21">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 21</span>
+                </div>
+                <div class="takeaway-title editable">MiniHub Leader</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT</div>
+                    <div class="hero-kpi-val editable">1.19%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT</div>
+                    <div class="hero-kpi-val editable">5.51%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT</div>
+                    <div class="hero-kpi-val editable">80%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HIGHLIGHT</div>
+                    <div class="hero-kpi-val editable">95%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HIGHLIGHT:
+Active và Online rate duy trì tăng trưởng tốt, Checkin rate giảm nhẹ 1.19%, giảm mạnh ở Avg shift hour với 5.51%
+Performance zone 2 (có ĐT) tốt hơn trung bình các zone còn lại của city
+
+NEXT ACTION:
+Lọc DS tài xế low performance
+Maintain online rate, checkin rate, kéo checkin rate, avg shift hour
+
+DRIVER VOICE:
+Tiêu chí số giờ online trong bộ tiêu chuẩn hoạt động khá gắt (>80%)
+Hiệu suất hoạt động chưa được improve</li><li class="bullet-item editable">HIGHLIGHT:
+Các chỉ số Chất lượng duy trì > 95% Target. TX vẫn duy trì hành vi đăng ký ca vượt trội
+Z2&Z4 giảm bộ chỉ số do giảm active + chất lượng Zone BD, Z136 lọc nhóm TX yếu 
+NEXT ACTION:
+Chăm sóc lứa TX mới tuyển Z136, Plan vận hành Zone 24
+Đánh giá mô hình và Propose next phase
+DRIVER VOICE:
+TX phải linh hoạt di chuyển ra ngoài Zone cho tiện đường 
+-> không ghi nhận Onl ->  Giảm tiền thưởng của TX</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HIGHLIGHT:
+Active và Online rate duy trì tăng trưởng tốt, Checkin rate giảm nhẹ 1.19%, giảm mạnh ở Avg shift hour với 5.51%
+Performance zone 2 (có ĐT) tốt hơn trung bình các zone còn lại của city
+
+NEXT ACTION:
+Lọc DS tài xế low performance
+Maintain online rate, checkin rate, kéo checkin rate, avg shift hour
+
+DRIVER VOICE:
+Tiêu chí số giờ online trong bộ tiêu chuẩn hoạt động khá gắt (>80%)
+Hiệu suất hoạt động chưa được improve</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HAN</li><li class="bullet-item editable">SGN</li><li class="bullet-item editable">Overview KPIs</li><li class="bullet-item editable">Overview KPIs</li><li class="bullet-item editable">***Data KPIs tính từ 25/7/2026</li><li class="bullet-item editable">***Data KPIs tính từ 25/07/2026.</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Week</th><th class="editable">Z2&Z4</th><th class="editable"></th><th class="editable"></th><th class="editable"></th><th class="editable">Z136</th><th class="editable"></th><th class="editable"></th><th class="editable"></th></tr></thead>
+                    <tbody><tr><td class="editable"></td><td class="editable">Active</td><td class="editable">Shift Hour</td><td class="editable">Checkin rate</td><td class="editable">Online rate</td><td class="editable">Active</td><td class="editable">Shift Hour</td><td class="editable">Checkin rate</td><td class="editable">Online rate</td></tr><tr><td class="editable">03/08/2026</td><td class="editable">30</td><td class="editable">38.48</td><td class="editable">91.1%</td><td class="editable">92.1%</td><td class="editable">50</td><td class="editable">33.04</td><td class="editable">92.1%</td><td class="editable">91.6%</td></tr><tr><td class="editable">10/08/2026</td><td class="editable">28</td><td class="editable">36.20</td><td class="editable">88.4%</td><td class="editable">91.6%</td><td class="editable">44</td><td class="editable">36.64</td><td class="editable">89.8%</td><td class="editable">90.1%</td></tr><tr><td class="editable">WoW</td><td class="editable">-2</td><td class="editable">-2.28</td><td class="editable">-2.7%</td><td class="editable">-0.5%</td><td class="editable">-6</td><td class="editable">3.60</td><td class="editable">-2.4%</td><td class="editable">-1.5%</td></tr><tr><td class="editable">Compared others</td><td class="editable"></td><td class="editable">8.9%</td><td class="editable">-3.4%</td><td class="editable">-1.6%</td><td class="editable"></td><td class="editable">126.7%</td><td class="editable">4.4%</td><td class="editable">7.2%</td></tr><tr><td class="editable">KPIs Target</td><td class="editable">70</td><td class="editable">130</td><td class="editable">92%</td><td class="editable">92%</td><td class="editable">80</td><td class="editable">130</td><td class="editable">90%</td><td class="editable">92%</td></tr><tr><td class="editable">Achieved KPIs MTD</td><td class="editable">52.9%</td><td class="editable">72.7%</td><td class="editable">98.2%</td><td class="editable">100.5%</td><td class="editable">71.3%</td><td class="editable">70.4%</td><td class="editable">98.2%</td><td class="editable">97.3%</td></tr><tr><td class="editable">Total KPIs</td><td class="editable">80.1%</td><td class="editable"></td><td class="editable"></td><td class="editable"></td><td class="editable">82.2%</td><td class="editable"></td><td class="editable"></td><td class="editable"></td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị Slide 21: Cần theo dõi sát sao chỉ số SLA và tiến độ thực thi của các PIC phụ trách để đảm bảo mục tiêu AOP.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 21</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-22">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 22</span>
+                </div>
+                <div class="takeaway-title editable">Cityzone</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">4%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">100%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">30.1%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">13.5%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">55% tài xế đã đăng ký chưa từng check-in lần nào (128/232).</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">55% tài xế đã đăng ký chưa từng check-in lần nào (128/232).</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Review lại tình hình cityzone</li><li class="bullet-item editable">ACTIVE HUB FUNNEL</li><li class="bullet-item editable">727</li><li class="bullet-item editable">770</li><li class="bullet-item editable">94,4%</li><li class="bullet-item editable">100%</li><li class="bullet-item editable">232</li><li class="bullet-item editable">104</li><li class="bullet-item editable">30.1%</li><li class="bullet-item editable">13.5%</li><li class="bullet-item editable">97</li><li class="bullet-item editable">Phát hiện quan trọng — tài xế vẫn chạy nhưng không check-in</li><li class="bullet-item editable">39% số ca no-show/hủy (99/254) VẪN có đơn hoàn thành trong đúng khung giờ ca đó → tổng 401 đơn, chiếm 25.6% tổng đơn. Năng suất nhóm này (4.05 đơn/ca) gần bằng nhóm check-in (4.63 đơn/ca).
+
+→ Đây KHÔNG PHẢI vấn đề tài xế lười, mà là vấn đề UX / nhận biết thao tác check-in.</li><li class="bullet-item editable">Fat</li><li class="bullet-item editable">Fct</li><li class="bullet-item editable">Registered</li><li class="bullet-item editable">Checkin</li><li class="bullet-item editable">Active</li><li class="bullet-item editable">12.6%</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Trạng thái</th><th class="editable">Số ca</th><th class="editable">%</th></tr></thead>
+                    <tbody><tr><td class="editable">Đăng ký</td><td class="editable">506</td><td class="editable">100%</td></tr><tr><td class="editable">Hủy ca</td><td class="editable">91</td><td class="editable">18.0%</td></tr><tr><td class="editable">No-show (đk nhưng không check-in)</td><td class="editable">163</td><td class="editable">32.2%</td></tr><tr><td class="editable">Check-in</td><td class="editable">252</td><td class="editable">49.8%</td></tr><tr><td class="editable">Check-in + có đơn</td><td class="editable">231</td><td class="editable">45.7%</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn quản trị: Tỷ lệ no-show 32.2% không xuất phát từ thái độ tài xế mà do rào cản UX khi quên ấn Check-in (25.6% đơn hoàn thành trong ca nhưng không ghi nhận). Cần ưu tiên nâng cấp tính năng Auto Check-in trên App Driver.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 22</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-23">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 23</span>
+                </div>
+                <div class="takeaway-title editable">Cityzone</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">18</div>
+                    <div class="hero-kpi-val editable">19%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">18</div>
+                    <div class="hero-kpi-val editable">35%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">18</div>
+                    <div class="hero-kpi-val editable">63.2%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">18:00–20:00 thu hút 19% đăng ký nhưng chỉ 35% check-in, 2.26 đơn/ca
+
+08:00–12:00 tốt nhất: 63.2% check-in, 6.25 đơn/ca (gấp 2.8 lần ca tối).</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Perf theo ca làm ( 252 ca checkin )</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Độ dài ca</th><th class="editable">Số ca</th><th class="editable">Đơn/ca</th><th class="editable">Đơn/giờ</th><th class="editable">Online rate</th></tr></thead>
+                    <tbody><tr><td class="editable">2h</td><td class="editable">114</td><td class="editable">3.62</td><td class="editable">1.93</td><td class="editable">80.9%</td></tr><tr><td class="editable">3h</td><td class="editable">78</td><td class="editable">4.85</td><td class="editable">2.02</td><td class="editable">80.1%</td></tr><tr><td class="editable">4h</td><td class="editable">60</td><td class="editable">6.25</td><td class="editable">2.06</td><td class="editable">75.9%</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn vận hành: Ca sáng 08:00–12:00 đạt hiệu suất cao nhất (6.25 đơn/ca, gấp 2.8 lần ca tối). Đề xuất cắt giảm quota ca tối 18:00–20:00 (chỉ 2.26 đơn/ca) để tập trung nguồn lực thưởng cho khung giờ sáng.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 23</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-24">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 24</span>
+                </div>
+                <div class="takeaway-title editable">Cityzone</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">25.6%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">Metric</div>
+                    <div class="hero-kpi-val editable">56%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">56% bỏ sau ca đầu. Là do cảm giác không hiệu quả hay chưa hình thành thói quen?</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Perf của tài xế</li><li class="bullet-item editable">RETENTION tập chạy HUB</li><li class="bullet-item editable">QUY MÔ TĂNG NHƯNG CHẤT LƯỢNG ĐI NGANG</li><li class="bullet-item editable">1</li><li class="bullet-item editable">Fix check-in</li><li class="bullet-item editable">25.6% đơn chạy ngoài ca là do không bấm check-in. Thêm push notification trước giờ ca 15 phút + auto-check-in khi tài xế online trong khung giờ ca.</li><li class="bullet-item editable">2</li><li class="bullet-item editable">Cắt/giảm ca 18:00–20:00, đẩy ca sáng 08:00–12:00 và ca 4h</li><li class="bullet-item editable">Chuyển quota sang khung sáng (đơn/ca cao gấp 2.8 lần slot tối).</li><li class="bullet-item editable">3</li><li class="bullet-item editable">Có điểm chạm tập chạy hub lần đầu</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable"></th><th class="editable">Số TX</th><th class="editable">%</th></tr></thead>
+                    <tbody><tr><td class="editable">Chạy 1 ca rồi thôi</td><td class="editable">58</td><td class="editable">55.8%</td></tr><tr><td class="editable">Quay lại ≥ 2 ca</td><td class="editable">46</td><td class="editable">44.2%</td></tr><tr><td class="editable">Quay lại ≥ 2 ngày khác nhau</td><td class="editable">41</td><td class="editable">39.4%</td></tr><tr><td class="editable">Quay lại ≥ 3 ngày khác nhau</td><td class="editable">18</td><td class="editable">17.3%</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn Retention: 55.8% tài xế dừng lại sau ca đầu tiên. Cần xây dựng ngay điểm chạm Onboarding & hướng dẫn chạy Hub cho tài xế mới để giảm tỷ lệ rời bỏ và duy trì đà tăng trưởng quy mô x3.5 lần.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 24</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-25">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 25</span>
+                </div>
+                <div class="takeaway-title editable">EV</div>
+                
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Tóm Tắt Diễn Giải Nội Dung</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Tổng hợp nhu cầu đối tác</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Phân Tích Bổ Sung & Kế Hoạch</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Số lượng tài xế quan tâm đến EV từ tháng 8 bắt đầu có dấu hiệu tăng trở lại, nhưng chủ yếu là từ khu vực HCM
+Tài xế HCM có sự quan tâm mạnh đến Datbike/số lượng quan tâm gói thuê Aizen đang chiếm phần đông tại 2 city</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn chuyển đổi EV: Nhu cầu tài xế quan tâm đến phương tiện điện tăng mạnh tại TP.HCM đối với các gói mượn Dat Bike & thuê Aizen. Cần sớm hoàn thiện hệ sinh thái trạm sạc & đối tác để bứt phá.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 25</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-26">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 26</span>
+                </div>
+                <div class="takeaway-title editable">CTR · GDR</div>
+                <div class="hero-kpi-grid">
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HAN CTR</div>
+                    <div class="hero-kpi-val editable">72.72%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HAN CTR</div>
+                    <div class="hero-kpi-val editable">130%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HAN CTR</div>
+                    <div class="hero-kpi-val editable">1.86%</div>
+                    
+                </div>
+                
+                <div class="hero-kpi-card">
+                    <div class="hero-kpi-label editable">HAN GDR</div>
+                    <div class="hero-kpi-val editable">94.21%</div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Tóm Tắt Diễn Giải Nội Dung</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Compliance True Rate · Good Driver Rate</li><li class="bullet-item editable">CTR (Compliance True Rate)</li><li class="bullet-item editable">GDR (Good Driver Rate)</li><li class="bullet-item editable">HAN CTR: 72.72% |  Target: 130%
+WoW: -1.86%  |  Trend: ↓</li><li class="bullet-item editable">HAN GDR: 94.21%   |  Target: 120%
+WoW: -1.36%  |  Trend: ↓</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>⚡</span>
+                    <span class="editable">Phân Tích Bổ Sung & Kế Hoạch</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">CTR (Compliance True Rate)</li><li class="bullet-item editable">SGN CTR: 79.91%  |  Target: 130%
+WoW: -1.29%  |  Trend: ↓</li><li class="bullet-item editable">GDR (Good Driver Rate)</li><li class="bullet-item editable">SGN GDR: 96.61%   |  Target: 120%
+WoW: -0.69%  |  Trend: ↓</li><li class="bullet-item editable">[NW] CTR: 77.38% | Target: 130%
+WoW: -1.11%  |  Trend: ↓</li><li class="bullet-item editable">[NW] GDR: 95.52% | Target: 120%
+WoW: -0.04% |  Trend: ↓</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn tuân thủ SLA: SGN duy trì GDR xuất sắc (96.61%), trong khi HAN CTR (72.72%) còn khoảng cách xa so với Target 130%. Cần tăng tần suất push notification & SMS nhắc nhở mở dịch vụ tại Hà Nội.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 26</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-27">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 27</span>
+                </div>
+                <div class="takeaway-title editable">Communications: Highlights & Lowlights</div>
+                
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HIGHLIGHTS</li><li class="bullet-item editable">- Thưởng baga: Đã đủ lead đăng ký
+- Tuyển core Fuji, Ajinomoto, BigC: hầu hết đã đủ lead đăng ký
+- Truyền thông mở lại dịch vụ tại HAN: đã noti, SMS tần suất cao
+- Comms chuỗi bài push active CP 15.8
++ Setup popup, bản tin lượng đơn + chuỗi content thưởng/điểm nóng trong CP 15.8, push active tần suất 2-3 tin/ngày
+- EV: Publish Landing page policy mới và các chtrình EV (AHA Creator + Đua top)</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">LOWLIGHTS</li><li class="bullet-item editable">- Tuyển core BigC lead đk đang chưa đạt kỳ vòng</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Trọng tâm tuần — Kết quả thực thi & Kế hoạch hành động</li><li class="bullet-item editable">NEXT ACTION: (Solutions & upcoming activities)</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Hạng mục</th><th class="editable">Nguyên nhân/Bối cảnh</th><th class="editable">Hành động</th><th class="editable">Deadline</th><th class="editable">PIC</th></tr></thead>
+                    <tbody><tr><td class="editable">Tuyển core BigC</td><td class="editable">- Lead đăng ký cắm chốt kv Long Biên chưa đạt kỳ vọng</td><td class="editable">- Tăng tần suất + mở rộng danh sách push noti</td><td class="editable">20/8</td><td class="editable">Hoa</td></tr><tr><td class="editable">Minihub</td><td class="editable">Các thông tin truyền thông chưa được hệ thống</td><td class="editable">- Review lại các content có sẵn
+- Tạo content & flow comms theo cycle & các điểm chạm tài xế</td><td class="editable">20/8</td><td class="editable">Hoa/Khoa/Vân</td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn truyền thông: Đạt chỉ tiêu tuyển dụng Core cho Fuji & Ajinomoto, nhưng Core BigC Long Biên chưa đạt kỳ vọng. Cần mở rộng danh sách push noti trước ngày 20/8.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 27</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-28">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 28</span>
+                </div>
+                <div class="takeaway-title editable">Event & Partnership: Highlights & Lowlights</div>
+                
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">HIGHLIGHTS</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">LOWLIGHTS</li><li class="bullet-item editable">- Tiến độ deal quyền lợi Bảo hiểm cho txe chậm
+- Các data update chuyển đổi từ partner còn rời rạc</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>💡</span>
+                    <span class="editable">Chi Tiết Diễn Giải & Chi Tiết Hoạt Động</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Trọng tâm tuần — Kết quả thực thi & Kế hoạch hành động</li><li class="bullet-item editable">1. Event:
+- Triển khai hoạt động pre-event Sinh nhật: CHL & minigame online “Chuyển ý tưởng - Ghép tương lai”
+
+2. Partnership: 
+- Done review hợp đồng mượn xe Dat Bike
+- Bàn giao xe Selex cho KOC mượn và hỗ trợ thông tin cho KOC tư vấn txe đang quan tâm NW</li><li class="bullet-item editable">NEXT ACTION: (upcoming activities)</li></ul>
+            </div>
+            
+                
+            <div class="glass-card" style="grid-column: span 2;">
+                <table class="data-table">
+                    <thead><tr><th class="editable">Hạng mục</th><th class="editable">Nguyên nhân/Bối cảnh</th><th class="editable">Hành động</th><th class="editable">Deadline</th><th class="editable">PIC</th><th class="editable">Need to support</th></tr></thead>
+                    <tbody><tr><td class="editable">Sinh nhật AHM 11 tuổi</td><td class="editable"></td><td class="editable">Livestream Sinh nhật Ahamove (21/8)</td><td class="editable">21/8</td><td class="editable">Khoa/Vân/Thúy</td><td class="editable">DM/GR Team</td></tr><tr><td class="editable">Thuê xe điện AIZEN</td><td class="editable">Chương trình mới adapt cho SGN & cần txe hiểu rõ hơn về ctrinh</td><td class="editable">- Tách blog riêng truyền thông về chương trình
+- Seeding về chtrinh để training & tăng awareness</td><td class="editable">21/8</td><td class="editable">Khoa/Vân</td><td class="editable"></td></tr></tbody>
+                </table>
+            </div>
+            
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn đối tác & Event: Chuỗi minigame pre-event 11 tuổi đang đúng tiến độ. Cần đẩy nhanh tiến độ đàm phán deal bảo hiểm tài xế & truyền thông gói thuê xe AIZEN trước 21/8.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 28</span>
+            </div>
+        </div>
+        
+
+        <div class="slide-page" id="slide-29">
+            <div class="slide-header">
+                <div class="slide-meta">
+                    <span>Ahamove Driver Management • Executive Brief</span>
+                    <span>Slide 29</span>
+                </div>
+                <div class="takeaway-title editable">HIGHLIGHTS DRIVER’s VOICES & EVENT - NW</div>
+                
+            </div>
+
+            <div class="content-grid">
+                
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🏆</span>
+                    <span class="editable">Highlights & Thành Quả Đạt Được</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Driver’s Voices - Community - Event Highlight</li><li class="bullet-item editable">Tự động bật dịch vụ 2h-4h cho nhóm tài xế: Tài xế khá gay gắt, liên hệ tổng đài thắc mắc, bức xúc đăng bài trên các hội nhóm
+Ngày 14/8 xảy ra tình trạng tài xế không login được vào app -> đã fix trong ngày</li></ul>
+            </div>
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <span>🔴</span>
+                    <span class="editable">Lowlights & Thách Thức Cần Tháo Gỡ</span>
+                </div>
+                <ul class="bullet-list"><li class="bullet-item editable">Tự động bật dịch vụ 2h-4h cho nhóm tài xế: Tài xế khá gay gắt, liên hệ tổng đài thắc mắc, bức xúc đăng bài trên các hội nhóm
+Ngày 14/8 xảy ra tình trạng tài xế không login được vào app -> đã fix trong ngày</li></ul>
+            </div>
+            
+                
+            </div>
+
+            
+            <div class="executive-comment-card">
+                <div class="comment-header">
+                    <span>💡</span>
+                    <span>Góc Nhìn Quản Trị & Đánh Giá Vận Hành (Executive Comment)</span>
+                </div>
+                <div class="comment-body editable">Góc nhìn VOC & Sự cố: Sự cố ngày 14/8 tự động bật dịch vụ 2H-4H gây bức xúc truyền thông trên nhóm Zalo/FB. Cần thắt chặt quy định testing release và nâng cao chất lượng CSKH hỗ trợ tài xế.</div>
+            </div>
+            
+
+            <div class="slide-footer">
+                <span class="editable">Confidential • For Internal Decision Architecture Only</span>
+                <span class="editable">Source: Slide 29</span>
+            </div>
+        </div>
+        
+
+    <script>
+        let isEdit = false;
+        function toggleEditMode() {
+            isEdit = !isEdit;
+            document.querySelectorAll('.editable').forEach(el => {
+                el.contentEditable = isEdit;
+            });
+            const btn = document.getElementById('editBtn');
+            btn.innerText = isEdit ? '💾 Save Mode (E)' : '✏️ Edit Mode (E)';
+            btn.style.background = isEdit ? '#059669' : '#FF7F32';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'e' || e.key === 'E') {
+                if (document.activeElement.isContentEditable) return;
+                toggleEditMode();
+            }
+        });
+    </script>
+</body>
+</html>

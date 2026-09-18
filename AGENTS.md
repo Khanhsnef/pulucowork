@@ -98,16 +98,21 @@ Mọi tài liệu đầu ra phải tuân thủ cấu trúc 3 phần sau:
 
 ## 🤖 SUB-AGENTS (`.claude/agents/`)
 
-Claude tự chọn agent phù hợp theo task — không cần gọi thủ công.
+Hệ thống tự chọn Sub-Agent phù hợp theo bối cảnh công việc:
 
 | File | Agent | Kích hoạt khi |
 |---|---|---|
-| `sql-analyst.md` | SQL Data Analyst | Cần query AR, FR, CPO, Active Drivers... |
-| `report-writer.md` | Report Writer | Có data sẵn → cần viết báo cáo Lark Docs |
-| `competitive-intel.md` | Competitive Intel | Phân tích động thái Grab, Be, XanhSM |
-| `driver-comms.md` | Driver Comms Writer | Viết thông báo/script cho tài xế |
-| `landing-page-builder.md` | Landing Page Builder | Tạo landing page HTML |
-| `content-writer.md` | Content Writer | Caption, blog, LinkedIn, script vlog |
-| `event-planner.md` | Event Planner | Lên kế hoạch event offline/online |
-| `meeting-prep.md` | Meeting Prep | Chuẩn bị trước cuộc họp quan trọng |
-| `weekly-review.md` | Weekly Review | Review cuối tuần + plan tuần tới |
+| `sql-analyst.md` | SQL Data Analyst | Cần query AR, FR, CPO, Active Drivers, Cohort metrics |
+| `report-writer.md` | Report Writer | Có data sẵn → cần soạn báo cáo Lark Docs chuẩn Enterprise |
+| `competitive-intel.md` | Competitive Intel | Phân tích thị trường & động thái Grab, Be, XanhSM |
+| `driver-comms.md` | Driver Comms Writer | Viết thông báo, kịch bản Zalo/SMS truyền thông tài xế |
+| `landing-page-builder.md` | Landing Page Builder | Thiết kế & dựng HTML Landing Page/Dashboard |
+| `content-writer.md` | Content Writer | Viết nội dung bài đăng, blog, LinkedIn, kịch bản media |
+| `event-planner.md` | Event Planner | Lên kế hoạch sự kiện tri ân, offline/online cho tài xế |
+| `meeting-prep.md` | Meeting Prep | Chuẩn bị nội dung, tài liệu trước cuộc họp quan trọng |
+| `weekly-review.md` | Weekly Review | Đánh giá hiệu suất tuần và lập kế hoạch tuần kế tiếp |
+| `ahamove-html-dashboard-designer.md` | HTML Dashboard Designer | Thiết kế Dashboard HTML/Bento Grid trực quan |
+| `ahamove-strategy-architect.md` | Strategy Architect | Định hướng chiến lược cung ứng & quản trị tài xế |
+| `sql-reviewer.md` | SQL Reviewer | Review và tối ưu query SQL production-grade |
+| `home-design.md` | Smart Home Designer | Tư vấn/thiết kế kịch bản tự động hóa nhà thông minh |
+| `pulu-workspace-repo-automation-manager.md` | Repo Automation Manager | Quản lý tự động hóa & dọn dẹp cấu trúc Workspace |

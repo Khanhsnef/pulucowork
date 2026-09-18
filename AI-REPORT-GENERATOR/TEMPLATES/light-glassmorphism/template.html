@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+    <title>{deck_title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {{
+            --bg: #F8FAFC;
+            --panel: #FFFFFF;
+            --panel-2: #F1F5F9;
+            --border: rgba(226, 232, 240, 0.9);
+            --text: #0F172A;
+            --muted: #64748B;
+            --blue: #0284C7;
+            --cyan: #0369A1;
+            --orange: #FF7F32;
+            --primary-navy: #0E4174;
+            --green: #059669;
+            --red: #DC2626;
+            --purple: #7C3AED;
+            --font-family: Inter, Lexend, sans-serif;
+        }}
+        * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+        html {{ background: #E2E8F0; }}
+        body {{
+            background:
+                radial-gradient(circle at 10% 8%, rgba(14, 65, 116, 0.06), transparent 30%),
+                radial-gradient(circle at 90% 12%, rgba(255, 127, 50, 0.07), transparent 28%),
+                radial-gradient(circle at 75% 85%, rgba(2, 132, 199, 0.05), transparent 32%),
+                #F8FAFC;
+            font-family: var(--font-family); color: var(--text);
+            display: flex; flex-direction: column; align-items: center; padding: 34px 0; gap: 34px;
+        }}
+        body:before {{
+            content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0.35;
+            background-image: linear-gradient(rgba(14, 65, 116, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(14, 65, 116, 0.03) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }}
+        .toolbar {{
+            position: fixed; bottom: 22px; right: 22px; z-index: 9999;
+            background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(18px);
+            border: 1px solid rgba(226, 232, 240, 0.9); padding: 10px 18px; border-radius: 999px;
+            display: flex; gap: 12px; align-items: center; box-shadow: 0 16px 40px rgba(14, 65, 116, 0.12);
+        }}
+        .toolbar button {{ background: linear-gradient(135deg, var(--primary-navy), #1e5896); color: #fff; border: 0; padding: 9px 16px; border-radius: 999px; font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.2s; }}
+        .toolbar button:hover {{ transform: translateY(-2px); filter: brightness(1.1); }}
+        .slide-page {{
+            width: 1920px; height: 1080px;
+            background:
+                radial-gradient(circle at 92% 0%, rgba(2, 132, 199, 0.04), transparent 25%),
+                radial-gradient(circle at 4% 100%, rgba(255, 127, 50, 0.04), transparent 24%),
+                linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 52%, #F1F5F9 100%);
+            border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 24px;
+            padding: 44px 54px; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; box-shadow: 0 25px 70px rgba(14, 65, 116, 0.08); overflow: hidden;
+        }}
+        .slide-page:after {{
+            content: ""; position: absolute; width: 520px; height: 520px; right: -240px; top: -280px;
+            border: 1px solid rgba(14, 65, 116, 0.06); border-radius: 50%;
+            box-shadow: 0 0 0 80px rgba(14, 65, 116, 0.015), 0 0 0 160px rgba(14, 65, 116, 0.008);
+            pointer-events: none;
+        }}
+        .slide-header {{ display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 1; }}
+        .slide-meta {{
+            display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 800;
+            color: var(--primary-navy); text-transform: uppercase; letter-spacing: 1.5px;
+        }}
+        .slide-meta span:last-child {{
+            color: var(--primary-navy); background: rgba(14, 65, 116, 0.06); border: 1px solid rgba(14, 65, 116, 0.12);
+            padding: 6px 12px; border-radius: 999px;
+        }}
+        .takeaway-title {{
+            font-size: 28px; font-weight: 800; color: var(--primary-navy); line-height: 1.22; letter-spacing: -0.6px;
+            max-width: 1760px;
+        }}
+        
+        .takeaway-banner {{
+            background: rgba(255, 127, 50, 0.08); border: 1px solid rgba(255, 127, 50, 0.25);
+            border-radius: 12px; padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+            font-size: 14px; font-weight: 700; color: #C2410C; margin-top: 4px;
+        }}
+
+        .hero-kpi-grid {{
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 10px;
+        }}
+        .hero-kpi-card, .glass-card {{
+            background: #FFFFFF;
+            border: 1px solid var(--border); border-radius: 16px;
+            box-shadow: 0 10px 30px -5px rgba(14, 65, 116, 0.06), 0 4px 12px rgba(0, 0, 0, 0.02);
+            position: relative; overflow: hidden;
+        }}
+        .hero-kpi-card {{ padding: 16px 20px; display: flex; flex-direction: column; gap: 6px; min-height: 110px; }}
+        .hero-kpi-card:before {{
+            content: ""; position: absolute; left: 0; top: 0; width: 4px; height: 100%;
+            background: linear-gradient(180deg, var(--orange), var(--primary-navy));
+        }}
+        .hero-kpi-label {{ font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }}
+        .hero-kpi-val {{
+            font-size: 44px; font-weight: 900; color: var(--primary-navy); line-height: 0.98; letter-spacing: -1.5px;
+        }}
+        .hero-kpi-badge {{
+            display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 999px;
+            font-size: 11px; font-weight: 800; width: max-content; border: 1px solid rgba(0, 0, 0, 0.04);
+        }}
+        .badge-positive {{ background: #ECFDF5; color: #047857; }}
+        .badge-negative {{ background: #FEF2F2; color: #B91C1C; }}
+        .badge-neutral {{ background: #F0F9FF; color: #0369A1; }}
+        .badge-warning {{ background: #FFFBEB; color: #B45309; }}
+
+        .content-grid {{
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; flex: 1; margin-top: 14px; min-height: 0;
+        }}
+        .glass-card {{
+            padding: 18px 22px; display: flex; flex-direction: column; gap: 12px; min-height: 0;
+        }}
+        .card-header {{
+            display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 800; color: var(--primary-navy);
+        }}
+        .card-header span:first-child {{
+            width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px;
+            background: linear-gradient(135deg, rgba(14, 65, 116, 0.08), rgba(255, 127, 50, 0.08));
+            border: 1px solid rgba(14, 65, 116, 0.12); font-size: 15px;
+        }}
+        .bullet-list {{ list-style: none; display: flex; flex-direction: column; gap: 8px; }}
+        .bullet-item {{
+            font-size: 13.5px; line-height: 1.45; color: #1E293B; position: relative; padding-left: 18px;
+        }}
+        .bullet-item:before {{
+            content: ""; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 50%;
+            background: var(--orange); box-shadow: 0 0 6px rgba(255, 127, 50, 0.4);
+        }}
+
+        .executive-comment-card {{
+            background: linear-gradient(135deg, rgba(14, 65, 116, 0.04), rgba(255, 127, 50, 0.04));
+            border: 1px solid rgba(14, 65, 116, 0.15); border-radius: 14px;
+            padding: 12px 18px; display: flex; flex-direction: column; gap: 4px;
+            margin-top: 12px;
+        }}
+        .comment-header {{ font-size: 12px; font-weight: 800; color: var(--primary-navy); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 6px; }}
+        .comment-body {{ font-size: 13px; font-weight: 600; color: #0F172A; line-height: 1.4; }}
+
+        .data-table {{
+            width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 4px; font-size: 12.5px; overflow: hidden;
+            border: 1px solid var(--border); border-radius: 12px;
+        }}
+        .data-table th {{
+            background: rgba(14, 65, 116, 0.06); color: var(--primary-navy); font-weight: 800; text-align: left;
+            padding: 8px 12px; border-bottom: 1px solid var(--border);
+        }}
+        .data-table td {{
+            padding: 8px 12px; color: #1E293B; border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            background: #FFFFFF;
+        }}
+        .data-table tr:last-child td {{ border-bottom: 0; }}
+        .data-table tbody tr:hover td {{ background: rgba(14, 65, 116, 0.03); }}
+        .slide-footer {{
+            display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted);
+            border-top: 1px solid rgba(226, 232, 240, 0.9); padding-top: 10px; margin-top: 10px;
+        }}
+        [contenteditable="true"]:focus {{ outline: 2px solid var(--orange); background: rgba(255, 127, 50, 0.08); border-radius: 6px; }}
+        @media print {{
+            body {{ background: #FFFFFF; padding: 0; }} .toolbar {{ display: none; }}
+            .slide-page {{ page-break-after: always; box-shadow: none; border-radius: 0; border: none; }}
+        }}
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <span style="color:var(--primary-navy); font-size:13px; font-weight:800; letter-spacing:.4px;">☀️ AHAMOVE • 16:9 LIGHT GLASS REPORT</span>
+        <button id="editBtn" onclick="toggleEditMode()">✏️ Edit Mode (E)</button>
+        <button onclick="window.print()">🖨️ Export PDF</button>
+    </div>
+
+    {slides_html}
+
+    <script>
+        let isEdit = false;
+        function toggleEditMode() {{
+            isEdit = !isEdit;
+            document.querySelectorAll('.editable').forEach(el => {{
+                el.contentEditable = isEdit;
+            }});
+            const btn = document.getElementById('editBtn');
+            btn.innerText = isEdit ? '💾 Save Mode (E)' : '✏️ Edit Mode (E)';
+            btn.style.background = isEdit ? '#059669' : '#FF7F32';
+        }}
+
+        document.addEventListener('keydown', (e) => {{
+            if (e.key === 'e' || e.key === 'E') {{
+                if (document.activeElement.isContentEditable) return;
+                toggleEditMode();
+            }}
+        }});
+    </script>
+</body>
+</html>

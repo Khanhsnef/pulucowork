@@ -60,6 +60,8 @@ export default {
     },
   },
   models: [
+    { id: "claude-3-7-sonnet-20250219", name: "Claude 3.7 Sonnet" },
+    { id: "claude-3-7-sonnet", name: "Claude 3.7 Sonnet" },
     { id: "claude-fable-5", name: "Claude Fable 5" },
     { id: "claude-mythos-5", name: "Claude Mythos 5" },
     { id: "claude-opus-4-8", name: "Claude Opus 4.8" },
