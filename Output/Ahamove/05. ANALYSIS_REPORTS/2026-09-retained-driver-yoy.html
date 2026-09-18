@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<title>Retained Driver YoY</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap">
+<style>
+:root {
+  --blue: #0E4174;
+  --blue-mid: #1a5fa8;
+  --orange: #FF7F32;
+  --orange-light: #FFB07A;
+  --success: #10B981;
+  --danger: #EF4444;
+  --warn: #F59E0B;
+  --bg: #F0F4FA;
+  --surface: #ffffff;
+  --surface2: #EDF2FA;
+  --border: #D6E2F0;
+  --text: #0D1B2E;
+  --text-mid: #3D5A80;
+  --text-muted: #7A94B0;
+  --shadow: 0 2px 12px rgba(14,65,116,0.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0A1628;
+    --surface: #101F38;
+    --surface2: #162848;
+    --border: #1E3A5F;
+    --text: #E8F0F8;
+    --text-mid: #9BB5D5;
+    --text-muted: #5A7FA8;
+    --shadow: 0 2px 16px rgba(0,0,0,0.4);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0A1628;
+  --surface: #101F38;
+  --surface2: #162848;
+  --border: #1E3A5F;
+  --text: #E8F0F8;
+  --text-mid: #9BB5D5;
+  --text-muted: #5A7FA8;
+  --shadow: 0 2px 16px rgba(0,0,0,0.4);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; }
+body {
+  font-family: 'Lexend', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  padding: 24px 20px 60px;
+}
+
+/* ── HEADER ── */
+.report-header {
+  max-width: 1080px;
+  margin: 0 auto 32px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.header-left { display: flex; flex-direction: column; gap: 4px; }
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+h1 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.header-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  display: flex;
+  gap: 16px;
+  margin-top: 2px;
+}
+.header-meta span { display: flex; align-items: center; gap: 4px; }
+.hypothesis-tag {
+  background: var(--blue);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+/* ── KPI STRIP ── */
+.kpi-strip {
+  max-width: 1080px;
+  margin: 0 auto 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.kpi-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.kpi-val {
+  font-size: 1.6rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  line-height: 1;
+}
+.kpi-val.positive { color: var(--success); }
+.kpi-val.negative { color: var(--danger); }
+.kpi-val.neutral { color: var(--orange); }
+.kpi-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.kpi-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  width: fit-content;
+}
+.badge-up { background: rgba(16,185,129,0.12); color: var(--success); }
+.badge-dn { background: rgba(239,68,68,0.12); color: var(--danger); }
+.badge-nt { background: rgba(255,127,50,0.12); color: var(--orange); }
+
+/* ── INSIGHT BOX ── */
+.insight-box {
+  max-width: 1080px;
+  margin: 0 auto 28px;
+  background: linear-gradient(135deg, var(--blue) 0%, #1a5fa8 100%);
+  border-radius: 18px;
+  padding: 22px 28px;
+  color: #fff;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.insight-icon { font-size: 1.8rem; flex-shrink: 0; }
+.insight-body { flex: 1; min-width: 220px; }
+.insight-title { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; margin-bottom: 4px; }
+.insight-text { font-size: 0.95rem; font-weight: 500; line-height: 1.55; opacity: 0.95; }
+.insight-text strong { color: var(--orange-light); font-weight: 700; }
+
+/* ── SECTION LABEL ── */
+.section-wrap { max-width: 1080px; margin: 0 auto 24px; }
+.section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── CHART CARD ── */
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px 24px 20px;
+  box-shadow: var(--shadow);
+}
+.chart-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.chart-subtitle {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* SVG CHARTS */
+.chart-svg-wrap { width: 100%; overflow-x: auto; }
+svg text { font-family: 'Lexend', sans-serif; }
+
+/* ── 3-PANEL GRID ── */
+.panel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+/* ── YoY TABLE ── */
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+thead th {
+  text-align: left;
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--border);
+}
+thead th:not(:first-child) { text-align: right; }
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface2); }
+tbody td {
+  padding: 9px 12px;
+  color: var(--text);
+}
+tbody td:not(:first-child) { text-align: right; }
+.td-month { font-weight: 600; color: var(--text); }
+.td-pos { color: var(--success); font-weight: 600; }
+.td-neg { color: var(--danger); font-weight: 600; }
+.td-yr { color: var(--text-muted); font-size: 0.68rem; }
+.row-sep td { background: var(--surface2); font-weight: 700; color: var(--text-mid); border-top: 2px solid var(--border); }
+
+/* ── FOOTER NOTE ── */
+.footnote {
+  max-width: 1080px;
+  margin: 28px auto 0;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 1.4rem; }
+  .kpi-val { font-size: 1.35rem; }
+  .insight-box { padding: 16px 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="report-header">
+  <div class="header-left">
+    <span class="eyebrow">Driver Management · SGN · Retained Cohort</span>
+    <h1>Tài xế 2025–2026:<br>Làm ít hơn, kiếm hiệu quả hơn</h1>
+    <div class="header-meta">
+      <span>📅 Jan 2025 – Aug 2026</span>
+      <span>🏍️ MOTORBIKE + EV-BIKE</span>
+      <span>👥 15,825 tài xế retained</span>
+    </div>
+  </div>
+  <span class="hypothesis-tag">Hypothesis Validated ✓</span>
+</div>
+
+<!-- KPI STRIP -->
+<div class="kpi-strip">
+  <div class="kpi-card">
+    <div class="kpi-label">EPH (Jan–Aug avg)</div>
+    <div class="kpi-val positive">+15.6%</div>
+    <div class="kpi-sub">40,992 → 47,380 VND/giờ</div>
+    <span class="kpi-badge badge-up">↑ Thu nhập/giờ tăng</span>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">PPH (STP/giờ)</div>
+    <div class="kpi-val positive">+13.3%</div>
+    <div class="kpi-sub">1.33 → 1.50 stops/giờ</div>
+    <span class="kpi-badge badge-up">↑ Năng suất tăng</span>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Giờ làm trung bình/tháng</div>
+    <div class="kpi-val negative">−11.6%</div>
+    <div class="kpi-sub">105.2 → 93.0 giờ</div>
+    <span class="kpi-badge badge-dn">↓ Effort giảm</span>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Thu nhập avg/tháng</div>
+    <div class="kpi-val neutral">+2.2%</div>
+    <div class="kpi-sub">4,312k → 4,407k VND</div>
+    <span class="kpi-badge badge-nt">→ Ổn định</span>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Total supply hours</div>
+    <div class="kpi-val positive">+9.0%</div>
+    <div class="kpi-sub">6.67M → 7.27M giờ</div>
+    <span class="kpi-badge badge-up">↑ Fleet lớn hơn</span>
+  </div>
+</div>
+
+<!-- INSIGHT BOX -->
+<div class="insight-box">
+  <div class="insight-icon">💡</div>
+  <div class="insight-body">
+    <div class="insight-title">Key Insight — Efficiency Hypothesis</div>
+    <div class="insight-text">
+      Retained driver cần <strong>274 giờ/tháng</strong> để đạt 13M VND năm 2026, so với <strong>317 giờ</strong> năm 2025 — tiết kiệm <strong>42.8 giờ/tháng (−13.5%)</strong>. EPH tăng +15.6% và PPH tăng +13.3% cho thấy platform hiệu quả hơn, không phải tài xế lười hơn. Total supply hours fleet vẫn tăng +9% do số lượng tài xế active tăng mạnh (+40%).
+    </div>
+  </div>
+</div>
+
+<!-- EPH TIMELINE CHART -->
+<div class="section-wrap">
+  <div class="section-label">EPH Trend 20 tháng</div>
+  <div class="chart-card">
+    <div class="chart-title">Earnings Per Hour (VND/giờ) — Jan 2025 → Aug 2026</div>
+    <div class="chart-subtitle">Đường cam = 2026 · Đường xanh = 2025 · Vùng xám = khoảng cách YoY</div>
+    <div class="chart-svg-wrap">
+      <svg viewBox="0 0 920 260" width="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad26" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FF7F32" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#FF7F32" stop-opacity="0.01"/>
+          </linearGradient>
+          <linearGradient id="grad25" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0E4174" stop-opacity="0.12"/>
+            <stop offset="100%" stop-color="#0E4174" stop-opacity="0.01"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Grid lines -->
+        <line x1="60" y1="30" x2="900" y2="30" stroke="currentColor" stroke-opacity="0.08" stroke-width="1"/>
+        <line x1="60" y1="80" x2="900" y2="80" stroke="currentColor" stroke-opacity="0.08" stroke-width="1"/>
+        <line x1="60" y1="130" x2="900" y2="130" stroke="currentColor" stroke-opacity="0.08" stroke-width="1"/>
+        <line x1="60" y1="180" x2="900" y2="180" stroke="currentColor" stroke-opacity="0.08" stroke-width="1"/>
+        <line x1="60" y1="220" x2="900" y2="220" stroke="currentColor" stroke-opacity="0.08" stroke-width="1"/>
+
+        <!-- Y-axis labels -->
+        <text x="54" y="34" text-anchor="end" font-size="9" fill="currentColor" opacity="0.45">65k</text>
+        <text x="54" y="84" text-anchor="end" font-size="9" fill="currentColor" opacity="0.45">55k</text>
+        <text x="54" y="134" text-anchor="end" font-size="9" fill="currentColor" opacity="0.45">45k</text>
+        <text x="54" y="184" text-anchor="end" font-size="9" fill="currentColor" opacity="0.45">35k</text>
+        <text x="54" y="224" text-anchor="end" font-size="9" fill="currentColor" opacity="0.45">25k</text>
+
+        <!-- scale: min=35k, max=65k, range=30k, height=190 (30..220) -->
+        <!-- formula: y = 220 - ((val-35000)/30000)*190 -->
+        <!-- 2025 data: 50760,41103,37612,38281,40021,40415,38445,42330 -->
+        <!-- 2026 data: 46403,59176,47078,45724,48003,46197,42659,45486 -->
+        <!-- x positions: 8 months, x from 80 to 880, step=(880-80)/7=114.3 -->
+
+        <!-- 2025 area fill -->
+        <polygon points="
+          80,136 194,182 309,202 423,201 537,195 652,194 766,202 880,188
+          880,220 766,220 652,220 537,220 423,220 309,220 194,220 80,220
+        " fill="url(#grad25)"/>
+
+        <!-- 2026 area fill -->
+        <polygon points="
+          80,153 194,70 309,148 423,157 537,141 652,152 766,185 880,158
+          880,220 766,220 652,220 537,220 423,220 309,220 194,220 80,220
+        " fill="url(#grad26)"/>
+
+        <!-- 2025 line -->
+        <polyline points="
+          80,136 194,182 309,202 423,201 537,195 652,194 766,202 880,188
+        " fill="none" stroke="#0E4174" stroke-width="2.5" stroke-linejoin="round"/>
+
+        <!-- 2026 line -->
+        <polyline points="
+          80,153 194,70 309,148 423,157 537,141 652,152 766,185 880,158
+        " fill="none" stroke="#FF7F32" stroke-width="2.5" stroke-linejoin="round"/>
+
+        <!-- 2025 dots -->
+        <circle cx="80" cy="136" r="4" fill="#0E4174"/>
+        <circle cx="194" cy="182" r="4" fill="#0E4174"/>
+        <circle cx="309" cy="202" r="4" fill="#0E4174"/>
+        <circle cx="423" cy="201" r="4" fill="#0E4174"/>
+        <circle cx="537" cy="195" r="4" fill="#0E4174"/>
+        <circle cx="652" cy="194" r="4" fill="#0E4174"/>
+        <circle cx="766" cy="202" r="4" fill="#0E4174"/>
+        <circle cx="880" cy="188" r="4" fill="#0E4174"/>
+
+        <!-- 2026 dots -->
+        <circle cx="80" cy="153" r="4" fill="#FF7F32"/>
+        <circle cx="194" cy="70" r="4" fill="#FF7F32"/>
+        <circle cx="309" cy="148" r="4" fill="#FF7F32"/>
+        <circle cx="423" cy="157" r="4" fill="#FF7F32"/>
+        <circle cx="537" cy="141" r="4" fill="#FF7F32"/>
+        <circle cx="652" cy="152" r="4" fill="#FF7F32"/>
+        <circle cx="766" cy="185" r="4" fill="#FF7F32"/>
+        <circle cx="880" cy="158" r="4" fill="#FF7F32"/>
+
+        <!-- Callout: Feb 2026 spike -->
+        <line x1="194" y1="70" x2="194" y2="55" stroke="#FF7F32" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="194" y="50" text-anchor="middle" font-size="9" fill="#FF7F32" font-weight="700">59,176</text>
+        <text x="194" y="40" text-anchor="middle" font-size="8" fill="#FF7F32" opacity="0.7">Feb peak</text>
+
+        <!-- Callout: Jan 2025 -->
+        <text x="80" y="126" text-anchor="middle" font-size="9" fill="#0E4174" font-weight="700">50,760</text>
+
+        <!-- X labels -->
+        <text x="80" y="242" text-anchor="middle" font-size="8.5" fill="currentColor" opacity="0.6">Jan</text>
+        <text x="194" y="242" text-anchor="middle" font-size="8.5" fill="currentColor" opacity="0.6">Feb</text>
+        <text x="309" y="242" text-anchor="middle" font-size="8.5" fill="currentColor" opacity="0.6">Mar</text>
+        <text x="423" y="242" text-anchor="middle" font-size="8.5" fill="currentColor" opacity="0.6">Apr</text>
+        <text x="537" y="242" text-anchor="middle" font-size="8.5" fill="currentColor" opacity="0.6">May</text>
+        <text x="652" y="242" text-anchor="middle" font-size="8.5" fill="currentColor" opacity="0.6">Jun</text>
+        <text x="766" y="242" text-anchor="middle" font-size="8.5" fill="currentColor" opacity="0.6">Jul</text>
+        <text x="880" y="242" text-anchor="middle" font-size="8.5" fill="currentColor" opacity="0.6">Aug</text>
+
+        <!-- Legend -->
+        <line x1="680" y1="18" x2="700" y2="18" stroke="#0E4174" stroke-width="2.5"/>
+        <circle cx="690" cy="18" r="3" fill="#0E4174"/>
+        <text x="704" y="22" font-size="9" fill="currentColor" opacity="0.7">2025</text>
+        <line x1="740" y1="18" x2="760" y2="18" stroke="#FF7F32" stroke-width="2.5"/>
+        <circle cx="750" cy="18" r="3" fill="#FF7F32"/>
+        <text x="764" y="22" font-size="9" fill="currentColor" opacity="0.7">2026</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- 3-PANEL: HOURS / INCOME / PPH -->
+<div class="section-wrap">
+  <div class="section-label">So sánh chi tiết theo tháng (Jan–Aug)</div>
+  <div class="panel-grid">
+
+    <!-- Panel 1: Avg Hours -->
+    <div class="chart-card">
+      <div class="chart-title">Giờ làm TB/tài xế/tháng</div>
+      <div class="chart-subtitle">2025 (xanh) vs 2026 (cam)</div>
+      <svg viewBox="0 0 340 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+        <!-- scale: 60-120, range=60, h=140 (30..170) -->
+        <!-- 2025: 107.4,91.1,110.8,107.1,107.3,103.2,108.4,105.5 -->
+        <!-- 2026: 95.4,70.4,92.1,93.9,94.2,98.4,103.7,102.1 -->
+        <!-- x: 8 bars pairs, from 20 to 320, each pair width=38, gap=0, bar_w=16 -->
+        <line x1="18" y1="30" x2="332" y2="30" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <line x1="18" y1="70" x2="332" y2="70" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <line x1="18" y1="110" x2="332" y2="110" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <line x1="18" y1="150" x2="332" y2="150" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <text x="14" y="33" text-anchor="end" font-size="8" fill="currentColor" opacity="0.4">120h</text>
+        <text x="14" y="73" text-anchor="end" font-size="8" fill="currentColor" opacity="0.4">105h</text>
+        <text x="14" y="113" text-anchor="end" font-size="8" fill="currentColor" opacity="0.4">90h</text>
+        <text x="14" y="153" text-anchor="end" font-size="8" fill="currentColor" opacity="0.4">75h</text>
+
+        <!-- formula: y_bot=170, h = (val-60)/60*140 -->
+        <!-- Jan: 107.4→h=110.3→y=59.7; 95.4→h=82.3→y=87.7 -->
+        <rect x="24" y="60" width="15" height="110" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="41" y="88" width="15" height="82" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Feb: 91.1→72.6→97.4; 70.4→24.4→145.6 -->
+        <rect x="65" y="97" width="15" height="73" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="82" y="146" width="15" height="24" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Mar: 110.8→118.7→51.3; 92.1→75.2→94.8 -->
+        <rect x="106" y="51" width="15" height="119" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="123" y="95" width="15" height="75" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Apr: 107.1→110.2→59.8; 93.9→79.8→90.2 -->
+        <rect x="147" y="60" width="15" height="110" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="164" y="90" width="15" height="80" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- May: 107.3→110.6→59.4; 94.2→80.5→89.5 -->
+        <rect x="188" y="60" width="15" height="110" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="205" y="90" width="15" height="80" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Jun: 103.2→101.1→68.9; 98.4→89.7→80.3 -->
+        <rect x="229" y="69" width="15" height="101" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="246" y="80" width="15" height="90" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Jul: 108.4→113.4→56.6; 103.7→103.0→67.0 -->
+        <rect x="270" y="57" width="15" height="113" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="287" y="67" width="15" height="103" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Aug: 105.5→107.2→62.8; 102.1→100.2→69.8 -->
+        <rect x="311" y="63" width="15" height="107" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="328" y="70" width="15" height="100" rx="3" fill="#FF7F32" opacity="0.85"/>
+
+        <!-- x labels -->
+        <text x="40" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Jan</text>
+        <text x="81" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Feb</text>
+        <text x="122" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Mar</text>
+        <text x="163" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Apr</text>
+        <text x="204" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">May</text>
+        <text x="245" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Jun</text>
+        <text x="286" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Jul</text>
+        <text x="327" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Aug</text>
+
+        <!-- avg lines -->
+        <!-- avg25=105.2h → y=170-(105.2-60)/60*140=170-105.5=64.5 -->
+        <line x1="18" y1="65" x2="332" y2="65" stroke="#0E4174" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+        <!-- avg26=93h → y=170-(93-60)/60*140=170-77=93 -->
+        <line x1="18" y1="93" x2="332" y2="93" stroke="#FF7F32" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+        <text x="334" y="63" font-size="7.5" fill="#0E4174" opacity="0.7">avg 105h</text>
+        <text x="334" y="91" font-size="7.5" fill="#FF7F32" opacity="0.7">avg 93h</text>
+      </svg>
+    </div>
+
+    <!-- Panel 2: EPH bar -->
+    <div class="chart-card">
+      <div class="chart-title">EPH (VND/giờ)</div>
+      <div class="chart-subtitle">2025 (xanh) vs 2026 (cam)</div>
+      <svg viewBox="0 0 340 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+        <!-- scale: 30k-65k, range=35k, h=140 -->
+        <line x1="18" y1="30" x2="332" y2="30" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <line x1="18" y1="77" x2="332" y2="77" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <line x1="18" y1="123" x2="332" y2="123" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <line x1="18" y1="170" x2="332" y2="170" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <text x="14" y="33" text-anchor="end" font-size="8" fill="currentColor" opacity="0.4">65k</text>
+        <text x="14" y="80" text-anchor="end" font-size="8" fill="currentColor" opacity="0.4">48k</text>
+        <text x="14" y="126" text-anchor="end" font-size="8" fill="currentColor" opacity="0.4">35k</text>
+
+        <!-- formula: y_bot=170, h=(val-30000)/35000*140 -->
+        <!-- Jan25:50760→h=83.8→y=86.2; 26:46403→h=65.6→y=104.4 -->
+        <rect x="24" y="86" width="15" height="84" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="41" y="104" width="15" height="66" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Feb25:41103→h=44.9→y=125.1; 26:59176→h=116.6→y=53.4 -->
+        <rect x="65" y="125" width="15" height="45" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="82" y="53" width="15" height="117" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Mar25:37612→h=31.2→y=138.8; 26:47078→h=68.7→y=101.3 -->
+        <rect x="106" y="139" width="15" height="31" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="123" y="101" width="15" height="69" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Apr25:38281→h=33.9→y=136.1; 26:45724→h=63.3→y=106.7 -->
+        <rect x="147" y="136" width="15" height="34" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="164" y="107" width="15" height="63" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- May25:40021→h=40.1→y=129.9; 26:48003→h=72.0→y=98 -->
+        <rect x="188" y="130" width="15" height="40" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="205" y="98" width="15" height="72" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Jun25:40415→h=41.7→y=128.3; 26:46197→h=65.5→y=104.5 -->
+        <rect x="229" y="128" width="15" height="42" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="246" y="105" width="15" height="65" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Jul25:38445→h=34.0→y=136; 26:42659→h=51.9→y=118.1 -->
+        <rect x="270" y="136" width="15" height="34" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="287" y="118" width="15" height="52" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Aug25:42330→h=49.7→y=120.3; 26:45486→h=62.3→y=107.7 -->
+        <rect x="311" y="120" width="15" height="50" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="328" y="108" width="15" height="62" rx="3" fill="#FF7F32" opacity="0.85"/>
+
+        <text x="40" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Jan</text>
+        <text x="81" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Feb</text>
+        <text x="122" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Mar</text>
+        <text x="163" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Apr</text>
+        <text x="204" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">May</text>
+        <text x="245" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Jun</text>
+        <text x="286" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Jul</text>
+        <text x="327" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Aug</text>
+
+        <!-- Feb 2026 callout -->
+        <text x="89" y="47" text-anchor="middle" font-size="8" fill="#FF7F32" font-weight="700">59k ↑</text>
+      </svg>
+    </div>
+
+    <!-- Panel 3: Income bar -->
+    <div class="chart-card">
+      <div class="chart-title">Thu nhập TB/tài xế/tháng (k VND)</div>
+      <div class="chart-subtitle">2025 (xanh) vs 2026 (cam)</div>
+      <svg viewBox="0 0 340 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+        <!-- scale: 3000k-6000k, range=3000k, h=140 -->
+        <line x1="18" y1="30" x2="332" y2="30" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <line x1="18" y1="77" x2="332" y2="77" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <line x1="18" y1="123" x2="332" y2="123" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <line x1="18" y1="170" x2="332" y2="170" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"/>
+        <text x="14" y="33" text-anchor="end" font-size="8" fill="currentColor" opacity="0.4">6M</text>
+        <text x="14" y="80" text-anchor="end" font-size="8" fill="currentColor" opacity="0.4">4.7M</text>
+        <text x="14" y="126" text-anchor="end" font-size="8" fill="currentColor" opacity="0.4">3.3M</text>
+
+        <!-- formula: y_bot=170, h=(val-3000)/3000*140 -->
+        <!-- Jan25:5451→h=114.4→y=55.6; 26:4426→h=66.5→y=103.5 -->
+        <rect x="24" y="56" width="15" height="114" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="41" y="104" width="15" height="66" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Feb25:3744→h=34.6→y=135.4; 26:4165→h=54.3→y=115.7 -->
+        <rect x="65" y="135" width="15" height="35" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="82" y="116" width="15" height="54" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Mar25:4166→h=54.5→y=115.5; 26:4337→h=62.5→y=107.5 -->
+        <rect x="106" y="116" width="15" height="54" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="123" y="108" width="15" height="62" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Apr25:4099→h=51.4→y=118.6; 26:4294→h=60.5→y=109.5 -->
+        <rect x="147" y="119" width="15" height="51" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="164" y="110" width="15" height="60" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- May25:4296→h=60.5→y=109.5; 26:4520→h=70.9→y=99.1 -->
+        <rect x="188" y="110" width="15" height="60" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="205" y="99" width="15" height="71" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Jun25:4170→h=54.7→y=115.3; 26:4545→h=72.2→y=97.8 -->
+        <rect x="229" y="115" width="15" height="55" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="246" y="98" width="15" height="72" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Jul25:4169→h=54.7→y=115.3; 26:4423→h=66.4→y=103.6 -->
+        <rect x="270" y="115" width="15" height="55" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="287" y="104" width="15" height="66" rx="3" fill="#FF7F32" opacity="0.85"/>
+        <!-- Aug25:4465→h=68.5→y=101.5; 26:4643→h=76.9→y=93.1 -->
+        <rect x="311" y="102" width="15" height="68" rx="3" fill="#0E4174" opacity="0.85"/>
+        <rect x="328" y="93" width="15" height="77" rx="3" fill="#FF7F32" opacity="0.85"/>
+
+        <text x="40" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Jan</text>
+        <text x="81" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Feb</text>
+        <text x="122" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Mar</text>
+        <text x="163" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Apr</text>
+        <text x="204" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">May</text>
+        <text x="245" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Jun</text>
+        <text x="286" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Jul</text>
+        <text x="327" y="186" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.55">Aug</text>
+
+        <!-- note Jan25 spike -->
+        <text x="31" y="50" text-anchor="middle" font-size="8" fill="#0E4174" font-weight="700">5.5M</text>
+      </svg>
+    </div>
+
+  </div>
+</div>
+
+<!-- YoY TABLE -->
+<div class="section-wrap">
+  <div class="section-label">Bảng chi tiết YoY cùng tháng (Jan–Aug)</div>
+  <div class="chart-card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tháng</th>
+            <th>EPH 2025</th>
+            <th>EPH 2026</th>
+            <th>EPH Δ</th>
+            <th>Giờ/TX 2025</th>
+            <th>Giờ/TX 2026</th>
+            <th>Giờ Δ</th>
+            <th>Income 2025</th>
+            <th>Income 2026</th>
+            <th>Income Δ</th>
+            <th>PPH Δ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-month">Jan</td>
+            <td>50,760</td><td>46,403</td><td class="td-neg">−8.6%</td>
+            <td>107.4h</td><td>95.4h</td><td class="td-neg">−11.2%</td>
+            <td>5,451k</td><td>4,426k</td><td class="td-neg">−18.8%</td>
+            <td>+0.3%</td>
+          </tr>
+          <tr>
+            <td class="td-month">Feb</td>
+            <td>41,103</td><td>59,176</td><td class="td-pos">+44.0%</td>
+            <td>91.1h</td><td>70.4h</td><td class="td-neg">−22.7%</td>
+            <td>3,744k</td><td>4,165k</td><td class="td-pos">+11.3%</td>
+            <td class="td-pos">+15.8%</td>
+          </tr>
+          <tr>
+            <td class="td-month">Mar</td>
+            <td>37,612</td><td>47,078</td><td class="td-pos">+25.2%</td>
+            <td>110.8h</td><td>92.1h</td><td class="td-neg">−16.8%</td>
+            <td>4,166k</td><td>4,337k</td><td class="td-pos">+4.1%</td>
+            <td class="td-pos">+18.9%</td>
+          </tr>
+          <tr>
+            <td class="td-month">Apr</td>
+            <td>38,281</td><td>45,724</td><td class="td-pos">+19.4%</td>
+            <td>107.1h</td><td>93.9h</td><td class="td-neg">−12.3%</td>
+            <td>4,099k</td><td>4,294k</td><td class="td-pos">+4.8%</td>
+            <td class="td-pos">+19.6%</td>
+          </tr>
+          <tr>
+            <td class="td-month">May</td>
+            <td>40,021</td><td>48,003</td><td class="td-pos">+19.9%</td>
+            <td>107.3h</td><td>94.2h</td><td class="td-neg">−12.3%</td>
+            <td>4,296k</td><td>4,520k</td><td class="td-pos">+5.2%</td>
+            <td class="td-pos">+20.8%</td>
+          </tr>
+          <tr>
+            <td class="td-month">Jun</td>
+            <td>40,415</td><td>46,197</td><td class="td-pos">+14.3%</td>
+            <td>103.2h</td><td>98.4h</td><td class="td-neg">−4.6%</td>
+            <td>4,170k</td><td>4,545k</td><td class="td-pos">+9.0%</td>
+            <td class="td-pos">+13.8%</td>
+          </tr>
+          <tr>
+            <td class="td-month">Jul</td>
+            <td>38,445</td><td>42,659</td><td class="td-pos">+11.0%</td>
+            <td>108.4h</td><td>103.7h</td><td class="td-neg">−4.4%</td>
+            <td>4,169k</td><td>4,423k</td><td class="td-pos">+6.1%</td>
+            <td class="td-pos">+12.1%</td>
+          </tr>
+          <tr>
+            <td class="td-month">Aug</td>
+            <td>42,330</td><td>45,486</td><td class="td-pos">+7.5%</td>
+            <td>105.5h</td><td>102.1h</td><td class="td-neg">−3.2%</td>
+            <td>4,465k</td><td>4,643k</td><td class="td-pos">+4.0%</td>
+            <td class="td-pos">+7.7%</td>
+          </tr>
+          <tr class="row-sep">
+            <td>Jan–Aug avg</td>
+            <td>40,992</td><td>47,380</td><td class="td-pos">+15.6%</td>
+            <td>105.2h</td><td>93.0h</td><td class="td-neg">−11.6%</td>
+            <td>4,312k</td><td>4,407k</td><td class="td-pos">+2.2%</td>
+            <td class="td-pos">+13.3%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- WATCH OUT BOX -->
+<div class="section-wrap" style="margin-top:20px;">
+  <div class="section-label">Điểm cần theo dõi</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px;">
+    <div class="chart-card" style="border-left:3px solid var(--warn);">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--warn);margin-bottom:6px;">⚠️ Jan 2026 — EPH thấp hơn Jan 2025</div>
+      <div style="font-size:0.78rem;color:var(--text-mid);line-height:1.55;">EPH Jan 2026 (46,403) < Jan 2025 (50,760), −8.6%. Đây là tháng duy nhất EPH 2026 thấp hơn. Cần kiểm tra incentive scheme đầu năm hoặc fleet surge quá lớn.</div>
+    </div>
+    <div class="chart-card" style="border-left:3px solid var(--success);">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--success);margin-bottom:6px;">✅ Feb–May 2026 — EPH tăng mạnh nhất</div>
+      <div style="font-size:0.78rem;color:var(--text-mid);line-height:1.55;">+44%, +25%, +19%, +20% — giai đoạn Q1-Q2 2026 driver được hưởng lợi nhiều nhất từ platform efficiency. PPH cũng tăng đồng thời → không phải do reward tăng đơn thuần.</div>
+    </div>
+    <div class="chart-card" style="border-left:3px solid var(--blue-mid);">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--blue-mid);margin-bottom:6px;">📉 EPH trend Q3 2026 giảm dần</div>
+      <div style="font-size:0.78rem;color:var(--text-mid);line-height:1.55;">Jun→Jul→Aug: 46,197 → 42,659 → 45,486. Xu hướng EPH đang hội tụ dần về mức 2025. Nếu H2 tiếp tục hội tụ → fleet giờ sẽ tăng trở lại → cần monitor tháng Sep–Oct.</div>
+    </div>
+    <div class="chart-card" style="border-left:3px solid var(--orange);">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--orange);margin-bottom:6px;">🔺 Driver count tăng +40% (Jan-Aug pool)</div>
+      <div style="font-size:0.78rem;color:var(--text-mid);line-height:1.55;">11,231 → 15,731 unique retained drivers. Total supply hours fleet tăng +9% dù giờ/người giảm 11.6% → fleet growth đang bù offset cho efficiency-driven hour reduction.</div>
+    </div>
+  </div>
+</div>
+
+<div class="footnote">
+  <strong>Nguồn:</strong> ahamove_archive_ops.fct_supplier_performance · ahamove_archive.ops_suppliers_online_hours · Cohort: active cả 2025 lẫn 2026 (stp_complete &gt; 0 cả hai năm) · SGN, MOTORBIKE + EV-BIKE · Loại WH/Lazada-KA/SALESFORCE/test accounts · Tháng Sep 2026 partial (18 ngày) — không đưa vào bảng YoY · Prepared: 2026-09-18
+</div>
+
+</body>
+</html>
