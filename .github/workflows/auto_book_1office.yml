@@ -2,8 +2,8 @@ name: 1Office Auto Booking 24/7
 
 on:
   schedule:
-    # 08:59 UTC Thứ 6 hàng tuần = 15:59 ICT (Giờ Việt Nam)
-    - cron: '59 8 * * 5'
+    # 09:00 UTC Thứ 6 hàng tuần = 16:00 ICT (Giờ Việt Nam)
+    - cron: '0 9 * * 5'
   workflow_dispatch: # Cho phép bấm nút kích hoạt chạy thử thủ công bất kỳ lúc nào trên GitHub
 
 jobs:

@@ -112,6 +112,8 @@ class OneOfficeClient:
 
     def notify(self, title: str, message: str, is_error: bool = False):
         """Hiển thị thông báo macOS Desktop Notification."""
+        if sys.platform != "darwin":
+            return
         sound = "Basso" if is_error else "Glass"
         subtitle = "FAILED - Cần kiểm tra" if is_error else "Thành công"
         script = f'display notification "{message}" with title "{title}" subtitle "{subtitle}" sound name "{sound}"'
