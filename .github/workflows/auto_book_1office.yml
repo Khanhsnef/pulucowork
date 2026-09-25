@@ -2,9 +2,14 @@ name: 1Office Auto Booking 24/7
 
 on:
   schedule:
-    # 09:00 UTC Thứ 6 hàng tuần = 16:00 ICT (Giờ Việt Nam)
-    - cron: '0 9 * * 5'
-  workflow_dispatch: # Cho phép bấm nút kích hoạt chạy thử thủ công bất kỳ lúc nào trên GitHub
+    # 08:58 UTC Thứ 6 hàng tuần = 15:58 ICT (Khởi chạy trước 2 phút để runner kịp boot & đợi đúng 16:00:01 ICT)
+    - cron: '58 8 * * 5'
+  workflow_dispatch:
+    inputs:
+      skip_sleep:
+        description: 'Bỏ qua đếm ngược (1 = Bỏ qua)'
+        required: false
+        default: '0'
 
 jobs:
   book-meeting-rooms:
@@ -31,6 +36,6 @@ jobs:
         env:
           ONE_OFFICE_USERNAME: ${{ secrets.ONE_OFFICE_USERNAME }}
           ONE_OFFICE_PASSWORD: ${{ secrets.ONE_OFFICE_PASSWORD }}
-          SKIP_SLEEP: "1"
+          SKIP_SLEEP: ${{ inputs.skip_sleep || '' }}
         run: |
           python3 scripts/1office-booking/book_rooms.py

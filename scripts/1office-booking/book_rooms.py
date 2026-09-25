@@ -8,8 +8,10 @@ import os
 import sys
 import time
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from oneoffice_client import OneOfficeClient
+
+ICT = timezone(timedelta(hours=7))
 
 # Tự động tạo thư mục log phù hợp trên macOS hoặc Linux (GitHub Actions)
 log_dir = os.path.expanduser("~/Library/Logs") if sys.platform == "darwin" else os.path.join(os.path.dirname(__file__), "logs")
@@ -53,24 +55,24 @@ MEETINGS = [
 DAY_MAP = {"monday": 0, "tuesday": 1, "wednesday": 2, "thursday": 3, "friday": 4, "saturday": 5, "sunday": 6}
 
 def next_weekday(day: str) -> str:
-    """Tính ngày weekday kế tiếp (tuần sau), VD: 'monday', 'friday'."""
+    """Tính ngày weekday kế tiếp (tuần sau), VD: 'monday', 'friday' theo giờ ICT."""
     target = DAY_MAP[day]
-    today = datetime.now()
+    today = datetime.now(ICT)
     days = (target - today.weekday()) % 7 or 7
     return (today + timedelta(days=days)).strftime("%d/%m/%Y")
 
 
 def main():
-    # Chờ tới đúng 16:00:01 (Bỏ qua nếu SKIP_SLEEP=1)
+    # Chờ tới đúng 16:00:01 (ICT) (Bỏ qua nếu SKIP_SLEEP=1)
     if not os.getenv("SKIP_SLEEP"):
-        now = datetime.now()
+        now = datetime.now(ICT)
         target = now.replace(hour=16, minute=0, second=1, microsecond=0)
         wait_seconds = (target - now).total_seconds()
         if wait_seconds > 0:
-            log.info(f"Hiện tại: {now.strftime('%H:%M:%S')}. Đang chờ {wait_seconds:.1f}s để tới đúng 16:00:01...")
+            log.info(f"Hiện tại: {now.strftime('%H:%M:%S')} (ICT). Đang chờ {wait_seconds:.1f}s để tới đúng 16:00:01...")
             time.sleep(wait_seconds)
         else:
-            log.info(f"Hiện tại: {now.strftime('%H:%M:%S')} (đã quá 16:00:01), thực thi ngay lập tức.")
+            log.info(f"Hiện tại: {now.strftime('%H:%M:%S')} (ICT) (đã quá 16:00:01), thực thi ngay lập tức.")
 
     log.info("=== 1Office Auto Booking Starting ===")
     client = OneOfficeClient()
