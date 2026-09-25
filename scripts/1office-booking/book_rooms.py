@@ -106,6 +106,11 @@ def main():
         sys.exit(0)
     else:
         failed = [m["title"] for m, _, ok in results if not ok]
+        client.notify(
+            title="1Office: Đặt phòng THẤT BẠI",
+            message=f"Chỉ đặt được {success}/{total} phòng.\nPhòng lỗi: {', '.join(failed)}",
+            is_error=True
+        )
         log.error(f"=== Done: {success}/{total} OK | FAIL: {failed} ===")
         sys.exit(1)
 

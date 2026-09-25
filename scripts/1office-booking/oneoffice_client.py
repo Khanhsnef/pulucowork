@@ -73,6 +73,20 @@ class OneOfficeClient:
         # Đọc trực tiếp từ Environment Variables (ưu tiên cho GitHub Actions / Cloud)
         self.username = os.getenv("ONE_OFFICE_USERNAME") or self.username
         self.password = os.getenv("ONE_OFFICE_PASSWORD") or self.password
+        self.telegram_token = os.getenv("TELEGRAM_BOT_TOKEN")
+        self.telegram_chat_id = os.getenv("TELEGRAM_CHAT_ID")
+        
+        # Nếu chưa có telegram token, thử đọc từ file .env gốc của workspace
+        if not self.telegram_token or not self.telegram_chat_id:
+            root_env = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), ".env")
+            if os.path.exists(root_env):
+                with open(root_env, "r") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line.startswith("TELEGRAM_BOT_TOKEN=") and not self.telegram_token:
+                            self.telegram_token = line.split("=", 1)[1].strip("\"' ")
+                        elif line.startswith("TELEGRAM_CHAT_ID=") and not self.telegram_chat_id:
+                            self.telegram_chat_id = line.split("=", 1)[1].strip("\"' ")
 
     def _save_env_cookies(self):
         """Lưu tự động các Cookie mới thu thập được vào file .env.1office."""
@@ -110,8 +124,36 @@ class OneOfficeClient:
             f.writelines(new_lines)
         log.info("Đã cập nhật Cookie mới vào .env.1office")
 
+    def send_telegram(self, message: str) -> bool:
+        """Gửi thông báo về Telegram bot nếu có cấu hình."""
+        if not self.telegram_token or not self.telegram_chat_id:
+            return False
+        try:
+            url = f"https://api.telegram.org/bot{self.telegram_token}/sendMessage"
+            payload = {
+                "chat_id": self.telegram_chat_id,
+                "text": message,
+                "parse_mode": "HTML"
+            }
+            resp = requests.post(url, json=payload, timeout=10)
+            if resp.status_code == 200 and resp.json().get("ok"):
+                log.info("Đã gửi thông báo Telegram thành công.")
+                return True
+            else:
+                log.warning(f"Gửi Telegram thất bại: {resp.text}")
+                return False
+        except Exception as e:
+            log.warning(f"Lỗi gửi Telegram: {e}")
+            return False
+
     def notify(self, title: str, message: str, is_error: bool = False):
-        """Hiển thị thông báo macOS Desktop Notification."""
+        """Hiển thị thông báo macOS Desktop Notification và gửi thông báo Telegram."""
+        # 1. Gửi Telegram về điện thoại (hoạt động cả khi chạy trên GitHub Actions hoặc tắt máy Mac)
+        icon = "❌" if is_error else "✅"
+        tg_text = f"{icon} <b>{title}</b>\n\n{message}"
+        self.send_telegram(tg_text)
+
+        # 2. Desktop Notification nếu đang chạy trên macOS
         if sys.platform != "darwin":
             return
         sound = "Basso" if is_error else "Glass"
@@ -225,6 +267,12 @@ class OneOfficeClient:
                 return {"success": True, "notice": result.get("notice"), "room": room_name, "date": date}
 
             msg = result.get("notice") or result.get("message") or str(result.get("error")) or str(result)
+            
+            # Nếu phòng đã được bạn đặt trước đó (trùng sự kiện do chính bạn tạo) -> xem như thành công (idempotent)
+            if "trùng thời gian" in msg.lower() and any(name in msg.lower() for name in ["khoa", "ngô huỳnh khoa"]):
+                log.info(f"OK (Đã được bạn đặt trước đó): {title} | Phòng {room_name} ({date} {time_start}-{time_end})")
+                return {"success": True, "notice": "Đã được bạn đặt trước đó", "room": room_name, "date": date}
+
             log.error(f"FAIL: {title} | {msg}")
             self.notify(title=f"1Office FAIL: {title}", message=f"{date} {time_start}-{time_end}\n{msg}", is_error=True)
             return {"success": False, "message": msg}
