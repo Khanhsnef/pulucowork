@@ -28,6 +28,7 @@ export default {
     { id: "claude-3-7-sonnet", name: "Claude 3.7 Sonnet" },
     { id: "claude-fable-5", name: "Claude Fable 5" },
     { id: "claude-mythos-5", name: "Claude Mythos 5" },
+    { id: "claude-sonnet-5", name: "Claude Sonnet 5" },
     { id: "claude-sonnet-4-20250514", name: "Claude Sonnet 4" },
     { id: "claude-opus-4-20250514", name: "Claude Opus 4" },
     { id: "claude-3-5-sonnet-20241022", name: "Claude 3.5 Sonnet" },
