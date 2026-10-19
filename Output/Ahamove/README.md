@@ -2,7 +2,7 @@
 
 **Owner:** Lê Phương Khanh | Driver Management Leader  
 **Scope:** Xe máy (Instant) — Giao ngay 1H, Siêu tốc, Ghép đơn, 4H  
-**Last updated:** 2026-07-29
+**Last updated:** 2026-10-19
 
 ---
 
@@ -125,6 +125,8 @@ Output/Ahamove/
 |------|-------|
 | `2026-06-driver-journey-milestones.html` | Milestones HTML standalone (77KB) |
 | `2026-06-open-source-repos-application.md` | Tài liệu chiến lược ứng dụng open-source repositories vào tối ưu vận hành |
+| `2027-supply-strategy-driver-specialization.md` | **v1.0 Brand Vision** — Twin Specialized Fleets (Bulky Baga Pro & COD Champion), Virtual COD Overdraft tiers, FinTech T0 luồng vận hành |
+| `2026-10-driver-specialization-moat-strategy.md` | **v2.0 Data-Backed Proposal** — Pyramid Principle; 3 painpoints SQL-backed; Virtual COD Overdraft phân tầng; FinTech T0 Partner; G1-G6 roadmap Q4/2026→Q3/2027; RACI; Risk register |
 
 ---
 
@@ -183,6 +185,7 @@ Output/Ahamove/
 | `q3-cohort-retention.sql` | Query cohort retention analysis |
 | `q4-segment-transition.sql` | Query segment transition tracking |
 | `churn-feature-mart.sql` | **Feature mart cho Churn Scoring Model** — label activity-gap (NEW 14d/OLD 30d), 12 features, tách cohort NEW/OLD |
+| `2026-10-cod-balance-ar-fr-analysis.sql` | **3 queries phân tích AR/FR đơn COD/Transfer COD** — Q1: AR/FR đơn COD bị từ chối do thiếu tiền mặt × COD value block × Ranking; Q2: AR/FR đơn transfer_COD cần COD Balance × block × Ranking; Q3: Baseline AR/FR/CR toàn ranking để validate threshold SC≥95%/CN≥90% |
 
 #### `raw-data/`
 | File | Mô tả |

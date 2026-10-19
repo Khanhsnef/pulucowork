@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '$CLAUDE_TOOL_INPUT' | python3 -c \"import json,sys; p=json.load(sys.stdin).get('file_path',''); exit(1 if '_scripts/' in p else 0)\"",
+            "command": "python3 -c \"import json,sys,os; raw=sys.stdin.read(); data={}; (raw and data.update(json.loads(raw) if raw.strip().startswith('{') else {})) if raw else None; p=data.get('file_path') or data.get('tool_input',{}).get('file_path','') or os.environ.get('CLAUDE_TOOL_FILE_PATH',''); sys.exit(1 if '_scripts/' in p else 0)\"",
             "statusMessage": "Checking protected files..."
           }
         ]
