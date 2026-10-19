@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahamove COD Balance Moat & Embedded FinTech Strategy — YTD 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f8fafc;
+    color: #1e293b;
+    font-size: 14px;
+    line-height: 1.6;
+    padding-bottom: 90px;
+  }
+
+  /* HEADER */
+  .page-header {
+    background: linear-gradient(135deg, #07223D 0%, #0E4174 50%, #1a5fa8 100%);
+    color: white;
+    padding: 44px 56px 36px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(14,65,116,0.15);
+  }
+  .page-header .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FF7F32;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 99px;
+    margin-bottom: 14px;
+  }
+  .page-header h1 {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    line-height: 1.25;
+  }
+  .page-header .subtitle {
+    font-size: 14.5px;
+    color: #cbd5e1;
+    font-weight: 400;
+    max-width: 950px;
+    line-height: 1.5;
+  }
+  .page-header .meta {
+    margin-top: 18px;
+    display: flex;
+    gap: 28px;
+    font-size: 12.5px;
+    color: #94a3b8;
+    flex-wrap: wrap;
+  }
+  .page-header .meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: -24px auto 0;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* KPI STRIP */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .kpi-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .kpi-card.danger::before { background: #EF4444; }
+  .kpi-card.warning::before { background: #f59e0b; }
+  .kpi-card.info::before { background: #0E4174; }
+  .kpi-card.success::before { background: #10B981; }
+
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .kpi-value {
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+    line-height: 1.1;
+  }
+  .kpi-value.red { color: #EF4444; }
+  .kpi-value.orange { color: #FF7F32; }
+  .kpi-value.green { color: #10B981; }
+  .kpi-value.navy { color: #0E4174; }
+  .kpi-sub {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 5px;
+  }
+
+  /* SECTION */
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0E4174;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #FF7F32;
+    flex-shrink: 0;
+  }
+
+  /* CARD */
+  .card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 24px 26px;
+    box-shadow: 0 2px 12px rgba(14,65,116,0.03);
+  }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  /* TABLES */
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  .styled-table th {
+    font-size: 11px;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 2px solid #e2e8f0;
+    background: #f8fafc;
+  }
+  .styled-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+  }
+  .styled-table tr:hover td {
+    background: #f8fafc;
+  }
+  .styled-table .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tag-balance {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 99px;
+    background: #eff6ff;
+    color: #1e40af;
+    font-family: monospace;
+  }
+  .tick { color: #10B981; font-weight: 800; font-size: 14px; }
+  .cross { color: #cbd5e1; font-weight: 700; font-size: 14px; }
+
+  /* PILLS */
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+  .pill.red { background: #fef2f2; color: #dc2626; }
+  .pill.amber { background: #fffbeb; color: #d97706; }
+  .pill.green { background: #ecfdf5; color: #059669; }
+  .pill.blue { background: #eff6ff; color: #2563eb; }
+
+  /* MOAT CARDS */
+  .moat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .moat-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 18px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .moat-card.featured {
+    border-color: #FF7F32;
+    background: #fffaf5;
+  }
+  .moat-card h4 {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0E4174;
+    margin-bottom: 2px;
+  }
+  .moat-card .tenure {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 10px;
+  }
+  .moat-card .limit {
+    font-size: 18px;
+    font-weight: 800;
+    color: #FF7F32;
+    margin-bottom: 10px;
+  }
+  .moat-card ul {
+    list-style: none;
+    font-size: 11.5px;
+    color: #475569;
+  }
+  .moat-card ul li {
+    margin-bottom: 5px;
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  .moat-card ul li::before {
+    content: '•';
+    color: #FF7F32;
+    font-weight: 800;
+  }
+
+  /* INSIGHT BOX */
+  .insight-box {
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .insight-box.blue { background: #eff6ff; border: 1px solid #dbeafe; }
+  .insight-box.orange { background: #fff7ed; border: 1px solid #ffedd5; }
+  .insight-box.green { background: #ecfdf5; border: 1px solid #d1fae5; }
+  .insight-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 12px;
+    flex-shrink: 0;
+  }
+  .insight-box.blue .insight-icon { background: #1e40af; color: white; }
+  .insight-box.orange .insight-icon { background: #c2410c; color: white; }
+  .insight-box.green .insight-icon { background: #059669; color: white; }
+  .insight-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .insight-body { font-size: 12px; color: #475569; line-height: 1.5; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 36px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="badge">Ahamove Supply Strategy 2027 · Driver Management</div>
+  <h1>CHIẾN LƯỢC MOAT: TỐI ƯU COD BALANCE & EMBEDDED FINTECH CHO TÀI XẾ</h1>
+  <div class="subtitle">Báo cáo bằng chứng thực địa (Evidence-based Analysis) YTD 2026 và Phương án Ma trận Tín chấp Ký quỹ (Virtual Overdraft) phục vụ bảo vệ đề án cùng QM & Ban Giám Đốc.</div>
+  <div class="meta">
+    <span>👤 <strong>PIC:</strong> @Lephuongkhanh (KhanhLP)</span>
+    <span>🎯 <strong>Mục tiêu:</strong> Giải quyết đứt gãy FR đơn COD cao & Khóa chân tài xế</span>
+    <span>🏙️ <strong>Phạm vi:</strong> Hà Nội (HAN) vs Hồ Chí Minh (SGN) · Bike Delivery</span>
+    <span>📅 <strong>Thời gian đo lường:</strong> YTD 2026 (01/01/2026 – 15/10/2026)</span>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- KPI STRIP -->
+  <section class="kpi-strip">
+    <div class="kpi-card danger">
+      <div class="kpi-label">FR Đơn COD > 3M (HAN YTD)</div>
+      <div class="kpi-value red">23.2% – 33.6%</div>
+      <div class="kpi-sub">Đáy lịch sử từng rơi 2.3% · SGN đạt 54.2% – 58.3%</div>
+    </div>
+    <div class="kpi-card warning">
+      <div class="kpi-label">Pool Tài Xế Balance ≥ 1M (HAN)</div>
+      <div class="kpi-value orange">717 / 4,632 TX</div>
+      <div class="kpi-sub">Vỏn vẹn <strong>15.5%</strong> · SGN đạt <strong>41.1%</strong> (2,742 TX)</div>
+    </div>
+    <div class="kpi-card info">
+      <div class="kpi-label">Ước Tính Lost GMV Hàng Tháng</div>
+      <div class="kpi-value navy">~165 Tỷ VNĐ</div>
+      <div class="kpi-sub">Do đơn COD cao không có tài xế nhận trôi dạt hủy cuốc</div>
+    </div>
+    <div class="kpi-card success">
+      <div class="kpi-label">Kỳ Vọng Khi Mở Virtual COD</div>
+      <div class="kpi-value green">+220% Supply</div>
+      <div class="kpi-sub">Đẩy 2,300+ tài xế eligible · Nâng FR > 3M lên ≥ 55%</div>
+    </div>
+  </section>
+
+  <!-- SECTION 0: ELIGIBILITY LOGIC -->
+  <section class="section">
+    <div class="section-title"><div class="dot"></div>0. Logic Ký Quỹ Thực Tế — Nguyên Nhân Gốc Rễ Đứt Gãy Nguồn Cung</div>
+    <div class="card">
+      <p style="font-size:12.5px;color:#475569;margin-bottom:14px;">
+        Hệ thống quy định: Tài xế chỉ đủ điều kiện (eligible) nhận đơn có giá trị COD ≤ số dư ví (Balance). Tài xế nạp balance cao eligible cho tất cả các tier COD thấp hơn, nhưng <strong>85% tài xế HAN không có đủ tiền tươi ≥ 1M trong ví</strong>.
+      </p>
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Nhóm Balance Tài Xế</th>
+            <th class="num">Số Lượng HAN</th>
+            <th class="num">Số Lượng SGN</th>
+            <th style="text-align:center;">Eligible &lt;200k</th>
+            <th style="text-align:center;">Eligible 200–500k</th>
+            <th style="text-align:center;">Eligible 500k–1M</th>
+            <th style="text-align:center;">Eligible 1M–2M</th>
+            <th style="text-align:center;">Eligible 2M–3M</th>
+            <th style="text-align:center;">Eligible &gt;3M</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#fef2f2;">
+            <td><span class="tag-balance">balance &lt; 200k</span></td>
+            <td class="num"><strong>883</strong> (19.1%)</td>
+            <td class="num"><strong>726</strong> (10.9%)</td>
+            <td style="text-align:center;" class="cross">✗</td>
+            <td style="text-align:center;" class="cross">✗</td>
+            <td style="text-align:center;" class="cross">✗</td>
+            <td style="text-align:center;" class="cross">✗</td>
+            <td style="text-align:center;" class="cross">✗</td>
+            <td style="text-align:center;" class="cross">✗</td>
+          </tr>
+          <tr>
+            <td><span class="tag-balance">balance 200k–500k</span></td>
+            <td class="num"><strong>732</strong> (15.8%)</td>
+            <td class="num"><strong>608</strong> (9.1%)</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="cross">✗</td>
+            <td style="text-align:center;" class="cross">✗</td>
+            <td style="text-align:center;" class="cross">✗</td>
+            <td style="text-align:center;" class="cross">✗</td>
+          </tr>
+          <tr>
+            <td><span class="tag-balance">balance 500k–1M</span></td>
+            <td class="num"><strong>2,300</strong> (49.6%)</td>
+            <td class="num"><strong>2,595</strong> (38.9%)</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="cross">✗</td>
+            <td style="text-align:center;" class="cross">✗</td>
+            <td style="text-align:center;" class="cross">✗</td>
+          </tr>
+          <tr style="background:#f0fdf4;">
+            <td><span class="tag-balance" style="background:#dcfce7;color:#166534;">balance 1M–2M</span></td>
+            <td class="num"><strong>473</strong> (10.2%)</td>
+            <td class="num"><strong>1,264</strong> (18.9%)</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="cross">✗</td>
+            <td style="text-align:center;" class="cross">✗</td>
+          </tr>
+          <tr style="background:#f0fdf4;">
+            <td><span class="tag-balance" style="background:#dcfce7;color:#166534;">balance 2M–3M</span></td>
+            <td class="num"><strong>126</strong> (2.7%)</td>
+            <td class="num"><strong>626</strong> (9.4%)</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="cross">✗</td>
+          </tr>
+          <tr style="background:#f0fdf4;">
+            <td><span class="tag-balance" style="background:#dcfce7;color:#166534;">balance ≥ 3M</span></td>
+            <td class="num"><strong>118</strong> (2.5%)</td>
+            <td class="num"><strong>852</strong> (12.8%)</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+            <td style="text-align:center;" class="tick">✓</td>
+          </tr>
+          <tr style="background:#f8fafc;font-weight:700;border-top:2px solid #cbd5e1;">
+            <td>Tổng Lũy Kế Eligible (HAN)</td>
+            <td class="num" colspan="2" style="text-align:center;color:#0E4174;">4,632 TX Active</td>
+            <td style="text-align:center;">3,749</td>
+            <td style="text-align:center;">3,749</td>
+            <td style="text-align:center;">3,017</td>
+            <td style="text-align:center;color:#b91c1c;">717 (15.5%)</td>
+            <td style="text-align:center;color:#b91c1c;">244 (5.3%)</td>
+            <td style="text-align:center;color:#b91c1c;">118 (2.5%)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECTION 1: CHARTS -->
+  <section class="section">
+    <div class="section-title"><div class="dot"></div>1. Dữ Liệu Thực Tế YTD 2026: Sụt Giảm FR & Khoảng Trống Cung Ứng</div>
+    <div class="grid-2">
+      <div class="card">
+        <h4 style="font-size:13.5px;margin-bottom:12px;color:#0E4174;">Tỷ Lệ Hoàn Thành (FR%) Theo Khoảng Giá Trị COD</h4>
+        <canvas id="frChart" height="210"></canvas>
+      </div>
+      <div class="card">
+        <h4 style="font-size:13.5px;margin-bottom:12px;color:#0E4174;">Phân Bổ Ký Quỹ (Balance) Tài Xế Active: HAN vs SGN</h4>
+        <canvas id="balanceChart" height="210"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: MOAT VIRTUAL OVERDRAFT PROPOSAL -->
+  <section class="section">
+    <div class="section-title"><div class="dot"></div>2. Phương Án Xây Dựng COD Balance Đề Xuất Trao Đổi Với QM</div>
+    <div class="card">
+      <div style="background:#eff6ff;padding:14px 18px;border-radius:12px;margin-bottom:18px;border-left:4px solid #0E4174;">
+        <strong style="color:#0E4174;font-size:13.5px;">Cơ chế Moat cốt lõi:</strong>
+        <p style="font-size:12.5px;color:#334155;margin-top:4px;">
+          Chuyển từ cơ chế <em>"100% cọc tiền mặt"</em> sang <strong>"Hạn Mức Ký Quỹ Tín Chấp Ảo" (Dynamic Virtual COD Overdraft)</strong>:
+          <br>
+          $$\text{Effective COD Balance} = \text{Ví Thực (Cash Balance)} + \text{Hạn Mức Tín Chấp (Virtual Overdraft)}$$
+          Tài xế chỉ cần có số dư tối thiểu trong ví nhưng được cấp thêm hạn mức tín chấp theo Ranking để nhận đơn COD lớn.
+        </p>
+      </div>
+
+      <div class="moat-grid">
+        <div class="moat-card">
+          <div>
+            <h4>Tân Binh (Unrank)</h4>
+            <div class="tenure">&lt; 1 tháng thâm niên</div>
+            <div class="limit">+ 0 VNĐ</div>
+          </div>
+          <ul>
+            <li>Cọc 100% tiền tươi</li>
+            <li>Hoàn thành test COD</li>
+            <li>Zero vi phạm</li>
+            <li>Chưa cấp tín chấp</li>
+          </ul>
+        </div>
+
+        <div class="moat-card">
+          <div>
+            <h4>Bán Chuyên (BC)</h4>
+            <div class="tenure">≥ 1 tháng thâm niên</div>
+            <div class="limit">+ 500k VNĐ</div>
+          </div>
+          <ul>
+            <li>Ví thực min: 300k</li>
+            <li>Max COD: 1.500.000đ</li>
+            <li>DQS ≥ 4.80</li>
+            <li>≥ 30 đơn an toàn</li>
+            <li>Auto-freeze sau 120p</li>
+          </ul>
+        </div>
+
+        <div class="moat-card">
+          <div>
+            <h4>Chuyên Nghiệp (CN)</h4>
+            <div class="tenure">≥ 3 tháng thâm niên</div>
+            <div class="limit">+ 1.5M VNĐ</div>
+          </div>
+          <ul>
+            <li>Ví thực min: 500k</li>
+            <li>Max COD: 3.000.000đ</li>
+            <li>DQS ≥ 4.85</li>
+            <li>≥ 100 đơn an toàn</li>
+            <li>Khấu trừ ví thu nhập</li>
+          </ul>
+        </div>
+
+        <div class="moat-card featured">
+          <div>
+            <h4 style="color:#FF7F32;">Siêu Cấp (SC Elite)</h4>
+            <div class="tenure">≥ 6 tháng thâm niên</div>
+            <div class="limit">+ 3.0M VNĐ</div>
+          </div>
+          <ul>
+            <li>Ví thực min: 1.000k</li>
+            <li>Max COD: 5.000.000đ</li>
+            <li>DQS ≥ 4.90 · FR ≥ 92%</li>
+            <li>≥ 250 đơn an toàn</li>
+            <li>Ưu tiên Dispatch đơn lớn</li>
+          </ul>
+        </div>
+
+        <div class="moat-card" style="border-color:#7C3AED;background:#faf5ff;">
+          <div>
+            <h4 style="color:#7C3AED;">Đội Core Bulky</h4>
+            <div class="tenure">≥ 6 tháng thâm niên</div>
+            <div class="limit" style="color:#7C3AED;">+ 8.0M VNĐ</div>
+          </div>
+          <ul>
+            <li>Ví thực min: 2.000k</li>
+            <li>Max COD: 10.000.000đ</li>
+            <li>Ký cam kết Fleet Bulky</li>
+            <li>eKYC Mức 2 chính chủ</li>
+            <li>Bảo hiểm rủi ro thất thoát</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PERF GAIN & RISK MITIGATION -->
+      <div class="grid-2" style="margin-top:24px;">
+        <div>
+          <h4 style="font-size:13px;font-weight:700;color:#059669;margin-bottom:8px;text-transform:uppercase;">📈 Ước Tính Hiệu Suất Tăng Trưởng (Perf Gain)</h4>
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>Chỉ số (Metric)</th>
+                <th class="num">Hiện trạng</th>
+                <th class="num">Sau khi cấp Moat</th>
+                <th>Mức tăng trưởng</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Supply Balance ≥ 1M (HAN)</td>
+                <td class="num">717 TX</td>
+                <td class="num"><strong>2,350 TX</strong></td>
+                <td><span class="pill green">+227% (+3.2x)</span></td>
+              </tr>
+              <tr>
+                <td>FR Đơn 1M – 2M (HAN)</td>
+                <td class="num">34.5%</td>
+                <td class="num"><strong>55.0%</strong></td>
+                <td><span class="pill green">+20.5% pts</span></td>
+              </tr>
+              <tr>
+                <td>FR Đơn > 3M (HAN)</td>
+                <td class="num">23.2%</td>
+                <td class="num"><strong>45.0% – 50.0%</strong></td>
+                <td><span class="pill green">Gấp 2 lần</span></td>
+              </tr>
+              <tr>
+                <td>GMV Cứu Vãn / Tháng</td>
+                <td class="num">—</td>
+                <td class="num"><strong>+45 Tỷ VNĐ</strong></td>
+                <td><span class="pill green">Tăng Take-rate sàn</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h4 style="font-size:13px;font-weight:700;color:#dc2626;margin-bottom:8px;text-transform:uppercase;">🛡️ Kiểm Soát Rủi Ro & Thu Hồi Nợ (Risk Control)</h4>
+          <div class="insight-box orange" style="margin-bottom:8px;">
+            <div class="insight-icon">1</div>
+            <div>
+              <div class="insight-title" style="color:#c2410c;">Quy tắc hoàn ứng 120 phút (Cut-off Time)</div>
+              <div class="insight-body">Tài xế giao hàng xong phải nộp lại tiền COD trong 120 phút. Quá hạn tự động đóng băng app không cho nhận đơn mới.</div>
+            </div>
+          </div>
+          <div class="insight-box orange" style="margin-bottom:8px;">
+            <div class="insight-icon">2</div>
+            <div>
+              <div class="insight-title" style="color:#c2410c;">Cấn trừ tự động vào ví thu nhập & thưởng</div>
+              <div class="insight-body">Ràng buộc điều khoản tự động trích nợ từ doanh thu cuốc xe tiếp theo, thưởng tuần và tiền tip nếu xảy ra chậm hoàn COD.</div>
+            </div>
+          </div>
+          <div class="insight-box orange">
+            <div class="insight-icon">3</div>
+            <div>
+              <div class="insight-title" style="color:#c2410c;">Quỹ dự phòng rủi ro 0.5% – 0.8%</div>
+              <div class="insight-body">Trích lập 0.5% cước phí chuyến xe sử dụng Virtual Balance để bù trừ nợ xấu, đảm bảo Unit Economics luôn dương.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 3: EMBEDDED FINTECH PARTNERSHIP -->
+  <section class="section">
+    <div class="section-title"><div class="dot"></div>3. Giải Pháp Tài Chính Trong Ngày (FinTech Partnership Research)</div>
+    <div class="grid-2">
+      <div class="card">
+        <h4 style="font-size:14px;color:#0E4174;margin-bottom:14px;font-weight:700;">Kiến Trúc Tích Hợp 2 Sản Phẩm</h4>
+
+        <div style="background:#f8fafc;padding:14px;border-radius:12px;margin-bottom:12px;border:1px solid #e2e8f0;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <span class="pill blue">Sản phẩm 1</span>
+            <strong style="color:#0E4174;">Ứng Vốn COD Tức Thời (T0 Micro-Advance)</strong>
+          </div>
+          <p style="font-size:12px;color:#475569;">
+            • Chu kỳ: 2 – 6 tiếng (từ lúc nhận đơn đến khi giao xong).<br>
+            • Hạn mức: 1.000.000 – 5.000.000 VNĐ.<br>
+            • <strong>Cấu trúc phí:</strong> Thu phí dịch vụ cố định (Flat Fee) <strong>5.000 – 12.000 VNĐ / lần ứng</strong>. Không tính % lãi suất năm để tuân thủ trần lãi suất Dân sự.<br>
+            • Tài xế sẵn sàng trả vì cước đơn lớn cao hơn 30.000 – 60.000 VNĐ.
+          </p>
+        </div>
+
+        <div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #e2e8f0;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <span class="pill green">Sản phẩm 2</span>
+            <strong style="color:#0E4174;">Vay Tiêu Dùng & Đổi Xe Điện EV (1 – 12 Tháng)</strong>
+          </div>
+          <p style="font-size:12px;color:#475569;">
+            • Đối tượng: Hạng SC, CN có thu nhập đều trên app ≥ 8 triệu/tháng.<br>
+            • Hạn mức: 5.000.000 – 25.000.000 VNĐ.<br>
+            • <strong>Lãi suất theo Rank:</strong> SC hưởng <strong>1.5%/tháng (~18%/năm)</strong>; CN hưởng <strong>2.0%/tháng (~24%/năm)</strong>.<br>
+            • Cơ chế trả nợ: Tự động trích trừ đều đặn hàng tuần từ ví thu nhập Ahamove.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h4 style="font-size:14px;color:#0E4174;margin-bottom:14px;font-weight:700;">Hành Lang Pháp Lý & Benchmark Thị Trường</h4>
+
+        <div style="margin-bottom:14px;">
+          <h5 style="font-size:12px;font-weight:700;color:#92400e;text-transform:uppercase;margin-bottom:4px;">⚖️ Yêu Cầu Pháp Lý Bắt Buộc:</h5>
+          <ul style="font-size:12px;color:#475569;line-height:1.7;padding-left:16px;">
+            <li><strong>Ranh giới cốt tử:</strong> Ahamove tuyệt đối không tự cho vay. Toàn bộ nguồn vốn và cấp tín dụng do Đối tác Tín dụng (Cake by VPBank, Kredivo, MoMo...) thực hiện.</li>
+            <li><strong>Mã ngành bổ sung:</strong> Đăng ký <strong>6619</strong> (Hỗ trợ tài chính - môi giới, trung gian kỹ thuật) và <strong>7310</strong> (Quảng cáo/Tiếp thị).</li>
+            <li><strong>Tuân thủ PDPD (Nghị định 13/2023):</strong> Thiết kế checkbox "Explicit Consent" xin phép chia sẻ lịch sử doanh thu cho đối tác tài chính khi tài xế bấm vay.</li>
+          </ul>
+        </div>
+
+        <h5 style="font-size:12px;font-weight:700;color:#1e40af;text-transform:uppercase;margin-bottom:6px;">🔍 Benchmark Thị Trường:</h5>
+        <table class="styled-table" style="font-size:11.5px;">
+          <thead>
+            <tr>
+              <th>Nền tảng</th>
+              <th>Đối tác</th>
+              <th>Lãi suất / Phí</th>
+              <th>Thu hồi nợ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>GrabFinancial</strong></td>
+              <td>VietCredit / VPBank</td>
+              <td>18% – 28%/năm</td>
+              <td>Trừ ví theo ngày</td>
+            </tr>
+            <tr>
+              <td><strong>Be Group</strong></td>
+              <td>Cake by VPBank</td>
+              <td>20% – 32%/năm</td>
+              <td>Trừ ví theo tuần</td>
+            </tr>
+            <tr>
+              <td><strong>Shopee SPX</strong></td>
+              <td>Easy Credit</td>
+              <td>24% – 36%/năm</td>
+              <td>Trừ ShopeePay</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: ACTION PLAN -->
+  <section class="section">
+    <div class="section-title"><div class="dot"></div>4. Kế Hoạch Phối Hợp & Các Bước Tiếp Theo Với QM</div>
+    <div class="card">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Hạng Mục</th>
+            <th>Nội Dung Chi Tiết</th>
+            <th>PIC</th>
+            <th>Timeline</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Họp thống nhất Logic với QM</strong></td>
+            <td>Trình bày ma trận Virtual Overdraft và cơ chế gác cổng (DQS, thâm niên, auto-freeze).</td>
+            <td><strong>@Lephuongkhanh & QM</strong></td>
+            <td><span class="pill amber">18/10/2026</span></td>
+          </tr>
+          <tr>
+            <td><strong>2. Soạn PRD Kỹ thuật Dispatch</strong></td>
+            <td>Thiết kế rule hiển thị đơn COD cho tài xế sở hữu Virtual Balance & đồng hồ đếm ngược 120p.</td>
+            <td><strong>Product & Tech Lead</strong></td>
+            <td><span class="pill blue">25/10/2026</span></td>
+          </tr>
+          <tr>
+            <td><strong>3. Rà soát Pháp lý & PDPD</strong></td>
+            <td>Làm việc với Legal về điều khoản khấu trừ nợ trên ví và đăng ký bổ sung mã ngành 6619, 7310.</td>
+            <td><strong>Legal & Khanh</strong></td>
+            <td><span class="pill blue">30/10/2026</span></td>
+          </tr>
+          <tr>
+            <td><strong>4. Gửi RFP Đối tác FinTech</strong></td>
+            <td>Tiếp xúc 3 đối tác: Cake by VPBank, MoMo, Kredivo để chốt chính sách phí chia sẻ và API SDK.</td>
+            <td><strong>BD Team & Khanh</strong></td>
+            <td><span class="pill green">10/11/2026</span></td>
+          </tr>
+          <tr>
+            <td><strong>5. Pilot HAN (Top 300 Tài Xế SC)</strong></td>
+            <td>Kích hoạt thử nghiệm Virtual Balance cho 300 tài xế SC tại Hà Nội; đo lường FR đơn 1M+ và nợ xấu.</td>
+            <td><strong>HAN Ops & DM</strong></td>
+            <td><span class="pill green">20/11/2026</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  Ahamove Driver Management & Strategy Division · Confidential · Generated on 15/10/2026
+</footer>
+
+<script>
+  // FR Chart
+  const ctxFr = document.getElementById('frChart').getContext('2d');
+  new Chart(ctxFr, {
+    type: 'line',
+    data: {
+      labels: ['No COD', '< 200k', '200k-500k', '500k-1M', '1M-2M', '2M-3M', '> 3M'],
+      datasets: [
+        {
+          label: 'HAN (Hà Nội)',
+          data: [74.7, 53.7, 52.1, 44.3, 34.5, 28.6, 23.2],
+          borderColor: '#EF4444',
+          backgroundColor: 'rgba(239, 68, 68, 0.08)',
+          borderWidth: 3,
+          tension: 0.35,
+          fill: true,
+          pointRadius: 5,
+          pointBackgroundColor: '#EF4444'
+        },
+        {
+          label: 'SGN (Hồ Chí Minh)',
+          data: [76.1, 55.2, 57.9, 56.7, 50.5, 54.2, 55.4],
+          borderColor: '#10B981',
+          backgroundColor: 'rgba(16, 185, 129, 0.08)',
+          borderWidth: 3,
+          tension: 0.35,
+          fill: true,
+          pointRadius: 5,
+          pointBackgroundColor: '#10B981'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top', labels: { font: { family: 'Lexend', size: 11, weight: 'bold' } } },
+        tooltip: { callbacks: { label: (ctx) => ctx.dataset.label + ': ' + ctx.raw + '%' } }
+      },
+      scales: {
+        y: { min: 0, max: 100, ticks: { callback: (v) => v + '%', font: { family: 'Lexend', size: 10 } } },
+        x: { ticks: { font: { family: 'Lexend', size: 10 } } }
+      }
+    }
+  });
+
+  // Balance Distribution Chart
+  const ctxBal = document.getElementById('balanceChart').getContext('2d');
+  new Chart(ctxBal, {
+    type: 'bar',
+    data: {
+      labels: ['< 200k', '200k-500k', '500k-1M', '1M-2M', '2M-3M', '≥ 3M'],
+      datasets: [
+        {
+          label: 'Tài Xế HAN (4,632 TX)',
+          data: [883, 732, 2300, 473, 126, 118],
+          backgroundColor: '#0E4174',
+          borderRadius: 6
+        },
+        {
+          label: 'Tài Xế SGN (6,671 TX)',
+          data: [726, 608, 2595, 1264, 626, 852],
+          backgroundColor: '#FF7F32',
+          borderRadius: 6
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top', labels: { font: { family: 'Lexend', size: 11, weight: 'bold' } } }
+      },
+      scales: {
+        y: { ticks: { callback: (v) => v.toLocaleString() + ' TX', font: { family: 'Lexend', size: 10 } } },
+        x: { ticks: { font: { family: 'Lexend', size: 10 } } }
+      }
+    }
+  });
+</script>
+</body>
+</html>

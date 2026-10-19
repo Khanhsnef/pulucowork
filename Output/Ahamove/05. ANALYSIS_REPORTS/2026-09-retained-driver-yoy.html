@@ -718,6 +718,133 @@ tbody td:not(:first-child) { text-align: right; }
   </div>
 </div>
 
+<!-- BEHAVIORAL DEEP DIVE & CITY BREAKDOWN (SGN VS HAN) -->
+<div class="section-wrap" style="margin-top:28px;">
+  <div class="section-label">Phân tích Chuyên sâu Hành vi & Bóc tách Khu vực (SGN vs HAN)</div>
+  
+  <!-- 4 Behavioral Mechanisms Grid -->
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin-bottom:20px;">
+    <div class="chart-card" style="border-top:3px solid var(--orange);">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--orange);margin-bottom:6px;">1. Target Wage Equilibrium (Chiếm ~60%)</div>
+      <div style="font-size:0.78rem;color:var(--text-mid);line-height:1.55;">
+        Tài xế có mục tiêu chi tiêu cố định (~250k - 300k/ngày). Khi EPH tăng (+10% đến +18%), họ đạt chỉ tiêu sớm hơn 40–50 phút mỗi ngày. Thay vì cày tiếp giờ tan tầm kẹt xe, <strong>60% tài xế chọn tắt app về nhà nghỉ ngơi</strong> (Hiệu ứng thu nhập lấn át).
+      </div>
+    </div>
+    <div class="chart-card" style="border-top:3px solid var(--blue-mid);">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--blue-mid);margin-bottom:6px;">2. Multi-App Cherry-Picking (Chiếm ~25%)</div>
+      <div style="font-size:0.78rem;color:var(--text-mid);line-height:1.55;">
+        Tài xế cũ trở thành "lão làng", chỉ bật Ahamove vào các khung giờ vàng có đơn ghép/giá cao (11h–13h và 17h–19h). Hết cao điểm, họ <strong>tắt Ahamove để chạy Grab, ShopeeFood, Be, XanhSM</strong>. EPH Ahamove tăng nhưng supply hours thấp điểm bị sụt giảm.
+      </div>
+    </div>
+    <div class="chart-card" style="border-top:3px solid var(--warn);">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--warn);margin-bottom:6px;">3. Cắt Giảm Thưởng Treo Giờ (Chiếm ~15%)</div>
+      <div style="font-size:0.78rem;color:var(--text-mid);line-height:1.55;">
+        Tỷ trọng tiền thưởng (Reward Share) giảm từ 1.64% xuống 1.35%, loại bỏ bớt các mốc thưởng treo máy ảo năm 2025. <strong>Loại bỏ giờ online rác không nhận đơn</strong>, giúp PPH thực chất tăng mạnh từ 1.38 lên 1.50 đơn/h ở SGN và 1.60 lên 1.68 đơn/h ở HAN.
+      </div>
+    </div>
+    <div class="chart-card" style="border-top:3px solid var(--success);">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--success);margin-bottom:6px;">4. Sự Bền Bỉ Của Full-Time Cốt Cán (Top 10-15%)</div>
+      <div style="font-size:0.78rem;color:var(--text-mid);line-height:1.55;">
+        1,313 TX SGN và 528 TX HAN coi Ahamove là nghề chính <strong>hoàn toàn không giảm giờ (vẫn chạy 202–208h/tháng)</strong>. Họ hưởng trọn lợi ích khi EPH tăng, đẩy thu nhập lên đỉnh cao: <strong>10.4M đ/tháng ở SGN (+10%)</strong> và <strong>13.0M đ/tháng ở HAN (+9%)</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- SGN vs HAN Comparison Table -->
+  <div class="chart-card">
+    <div class="chart-title">Bảng Đối Đầu Toàn Diện: SGN vs HAN (Chuẩn hóa Cùng kỳ Tháng 1 – Tháng 8, 2025 vs 2026)</div>
+    <div class="chart-subtitle">So sánh quy mô, hiệu suất đơn giờ, cường độ online và mức độ rơi rụng Full-Time giữa 2 miền</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Chỉ số đo lường</th>
+            <th style="text-align:right;">SGN 2025</th>
+            <th style="text-align:right;">SGN 2026</th>
+            <th style="text-align:right;">SGN YoY %</th>
+            <th style="text-align:right;">HAN 2025</th>
+            <th style="text-align:right;">HAN 2026</th>
+            <th style="text-align:right;">HAN YoY %</th>
+            <th>Nhận định chiến lược</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;">Tài xế duy trì (Unique)</td>
+            <td style="text-align:right;">15,825</td>
+            <td style="text-align:right;">15,731</td>
+            <td style="text-align:right;" class="td-neg">−0.6%</td>
+            <td style="text-align:right;">19,056</td>
+            <td style="text-align:right;">18,954</td>
+            <td style="text-align:right;" class="td-neg">−0.5%</td>
+            <td>HAN có quy mô tài xế đông hơn SGN +20.5%</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Tổng giờ Fleet (Hours)</td>
+            <td style="text-align:right;">10,803k</td>
+            <td style="text-align:right;">7,273k</td>
+            <td style="text-align:right;" class="td-neg">−32.7%</td>
+            <td style="text-align:right;">8,135k</td>
+            <td style="text-align:right;">5,113k</td>
+            <td style="text-align:right;" class="td-neg">−37.1%</td>
+            <td>SGN đóng góp nhiều giờ online hơn HAN +42.2%</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Giờ online TB / TX / tháng</td>
+            <td style="text-align:right;">101.8h</td>
+            <td style="text-align:right;">93.0h</td>
+            <td style="text-align:right;" class="td-neg">−8.6%</td>
+            <td style="text-align:right;">73.3h</td>
+            <td style="text-align:right;">62.5h</td>
+            <td style="text-align:right;" class="td-neg">−14.7%</td>
+            <td>Tài xế SGN cày nhiều hơn HAN +48.8%</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">EPH trung bình (VND/h)</td>
+            <td style="text-align:right;">43,046</td>
+            <td style="text-align:right;">47,380</td>
+            <td style="text-align:right;" class="td-pos">+10.1%</td>
+            <td style="text-align:right;">50,814</td>
+            <td style="text-align:right;">56,140</td>
+            <td style="text-align:right;" class="td-pos">+10.5%</td>
+            <td>EPH tại HAN cao hơn SGN +18.5%</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">PPH trung bình (Đơn/h)</td>
+            <td style="text-align:right;">1.38</td>
+            <td style="text-align:right;">1.50</td>
+            <td style="text-align:right;" class="td-pos">+8.7%</td>
+            <td style="text-align:right;">1.60</td>
+            <td style="text-align:right;">1.68</td>
+            <td style="text-align:right;" class="td-pos">+5.0%</td>
+            <td>PPH HAN cao hơn SGN +12.0% do ghép đơn dày</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Thu nhập TB / TX / tháng</td>
+            <td style="text-align:right;">4,384k</td>
+            <td style="text-align:right;">4,407k</td>
+            <td style="text-align:right;" class="td-pos">+0.5%</td>
+            <td style="text-align:right;">3,725k</td>
+            <td style="text-align:right;">3,506k</td>
+            <td style="text-align:right;" class="td-neg">−5.9%</td>
+            <td>Thu nhập thực tế TX SGN cao hơn HAN +25.7%</td>
+          </tr>
+          <tr class="row-sep">
+            <td style="font-weight:600;">Tỷ lệ rơi rụng Full-Time (≥150h)</td>
+            <td style="text-align:right;">2,365 TX</td>
+            <td style="text-align:right;">1,313 TX</td>
+            <td style="text-align:right;" class="td-neg">−44.5%</td>
+            <td style="text-align:right;">1,223 TX</td>
+            <td style="text-align:right;">528 TX</td>
+            <td style="text-align:right;" class="td-neg">−56.8%</td>
+            <td>HAN rớt Full-Time nặng hơn SGN rất nhiều</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <!-- WATCH OUT BOX -->
 <div class="section-wrap" style="margin-top:20px;">
   <div class="section-label">Điểm cần theo dõi</div>

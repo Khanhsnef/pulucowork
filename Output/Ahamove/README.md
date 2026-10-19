@@ -209,6 +209,7 @@ Output/Ahamove/
 | `2026-05-fr-decline-root-cause-analysis.html` | FR decline root cause analysis |
 | `2026-06-pulu-smartflow-risk-assessment.md` | **Đánh giá rủi ro & đề xuất bảo mật/hiệu năng** hệ thống PuluSmartFlow |
 | `2026-07-driver-churn-detection-data-design.md` | **Data design cho Churn Detection Framework** — label activity-gap, kiến trúc 3 bảng, 12 features, roadmap scoring model |
+| `2026-09-driver-supply-monthly-analysis.xlsx` | **Phân tích supply 2025 vs 2026** từ metabase_driver_monthly_full — 6 sheets: Executive Summary, Monthly Flow (active/new/churn), YoY Cohort, Segmentation theo giờ, Newcomer vs Churn profile, YoY Summary gốc |
 | `data-spec-driver-analysis.html` | Data spec cho driver analysis queries |
 
 ---
