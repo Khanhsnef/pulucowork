@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan Strategy 2027 – Chuyên biệt hóa Tài xế & Moat Vận hành | Ahamove</title>
+<meta name="description" content="Báo cáo chiến lược 2027: phân tầng tài xế theo 3 trục năng lực, nới COD Balance theo ranking SC-CN và giải pháp tài chính trong ngày.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e1a;--bg2:#0f1526;--card:rgba(255,255,255,.04);--line:rgba(255,255,255,.09);
+  --txt:#e6e9f2;--mute:#8d96b0;--a:#ff7a3d;--b:#ffb347;--c:#4cc9f0;--d:#7c5cff;--ok:#2ee59d;--bad:#ff5d73;
+  --g:linear-gradient(135deg,#ff7a3d,#ffb347);--g2:linear-gradient(135deg,#7c5cff,#4cc9f0);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--txt);line-height:1.65;
+  background-image:radial-gradient(900px 500px at 85% -5%,rgba(124,92,255,.18),transparent),radial-gradient(800px 500px at -10% 10%,rgba(255,122,61,.14),transparent);background-attachment:fixed}
+h1,h2,h3{font-family:Outfit,Inter,sans-serif;line-height:1.2}
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(10,14,26,.75);border-bottom:1px solid var(--line)}
+nav .in{max-width:1180px;margin:auto;padding:12px 24px;display:flex;gap:6px;align-items:center;overflow-x:auto}
+nav b{font-family:Outfit;margin-right:14px;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+nav a{color:var(--mute);text-decoration:none;font-size:.85rem;padding:6px 12px;border-radius:99px;white-space:nowrap;transition:.2s}
+nav a:hover,nav a.on{color:#fff;background:var(--card);box-shadow:inset 0 0 0 1px var(--line)}
+.wrap{max-width:1180px;margin:auto;padding:0 24px}
+header.hero{padding:90px 0 60px}
+.tag{display:inline-block;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--b);border:1px solid rgba(255,179,71,.35);padding:5px 14px;border-radius:99px;margin-bottom:22px}
+.hero h1{font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:800;max-width:900px}
+.hero h1 span{background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{margin-top:22px;max-width:780px;font-size:1.12rem;color:var(--mute)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:44px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;transition:.3s;position:relative;overflow:hidden}
+.kpi:hover{transform:translateY(-4px);border-color:rgba(255,179,71,.5)}
+.kpi .n{font-family:Outfit;font-size:2.3rem;font-weight:800;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent}
+.kpi .l{color:var(--mute);font-size:.88rem}
+section{padding:64px 0;border-top:1px solid var(--line)}
+section>.wrap>h2{font-size:clamp(1.7rem,3.2vw,2.5rem);margin-bottom:8px}
+.sub{color:var(--mute);margin-bottom:30px;max-width:760px}
+h3{font-size:1.25rem;margin:34px 0 14px}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;transition:.3s}
+.card:hover{border-color:rgba(124,92,255,.5);transform:translateY(-3px)}
+.card h4{font-family:Outfit;font-size:1.1rem;margin-bottom:10px}
+.card p,.card li{color:#c3c9dc;font-size:.95rem}
+.card ul{padding-left:18px}.card li{margin:5px 0}
+.ico{font-size:1.8rem;margin-bottom:10px}
+.bad{border-left:4px solid var(--bad)}.good{border-left:4px solid var(--ok)}
+.callout{background:linear-gradient(135deg,rgba(255,122,61,.12),rgba(124,92,255,.12));border:1px solid var(--line);border-radius:18px;padding:24px 28px;margin:26px 0}
+.callout b{color:var(--b)}
+.axis .num{width:42px;height:42px;border-radius:12px;background:var(--g2);display:grid;place-items:center;font-family:Outfit;font-weight:800;margin-bottom:14px}
+.badge{display:inline-block;margin-top:12px;padding:6px 14px;border-radius:99px;font-size:.82rem;font-weight:600;background:rgba(46,229,157,.12);color:var(--ok);border:1px solid rgba(46,229,157,.35)}
+.badge.n{background:rgba(141,150,176,.12);color:var(--mute);border-color:var(--line)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:18px;background:var(--card)}
+table{width:100%;border-collapse:collapse;min-width:760px;font-size:.92rem}
+th{background:rgba(255,255,255,.05);text-align:left;padding:14px 16px;font-size:.78rem;text-transform:uppercase;letter-spacing:.07em;color:var(--b)}
+td{padding:14px 16px;border-top:1px solid var(--line);vertical-align:top;color:#c9cfe2}
+tr:hover td{background:rgba(255,255,255,.025)}
+td strong{color:#fff}
+.formula{font-family:'Courier New',monospace;background:#05080f;border:1px dashed rgba(255,179,71,.5);color:var(--b);padding:18px 22px;border-radius:14px;margin:18px 0;overflow-x:auto;font-size:.95rem}
+code{font-family:'Courier New',monospace;background:rgba(124,92,255,.18);padding:2px 7px;border-radius:6px;color:#c9bdff;font-size:.88em}
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin:20px 0}
+.step{flex:1 1 170px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;position:relative}
+.step i{font-style:normal;font-family:Outfit;font-weight:800;color:var(--a);font-size:1.5rem}
+.step p{font-size:.88rem;color:#c3c9dc;margin-top:4px}
+.step:not(:last-child)::after{content:"→";position:absolute;right:-16px;top:50%;transform:translateY(-50%);color:var(--b);z-index:2;font-size:1.2rem}
+@media(max-width:700px){.step::after{display:none}}
+.bar{height:12px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin:6px 0 16px}
+.bar>div{height:100%;border-radius:99px;background:var(--g);width:0;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.todo{list-style:none;padding:0}
+.todo li{padding:12px 16px 12px 44px;margin:8px 0;background:var(--card);border:1px solid var(--line);border-radius:12px;position:relative;font-size:.93rem;color:#c9cfe2;cursor:pointer;transition:.2s}
+.todo li::before{content:"";position:absolute;left:14px;top:15px;width:18px;height:18px;border-radius:6px;border:2px solid var(--b);transition:.2s}
+.todo li.done{opacity:.55;text-decoration:line-through}
+.todo li.done::before{background:var(--ok);border-color:var(--ok)}
+.tl{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;position:relative;overflow:hidden}
+.q::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--g)}
+.q h4{font-family:Outfit;font-size:1.5rem;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:12px}
+.q .t{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--c);margin-top:12px;display:block}
+.q p{font-size:.88rem;color:#c3c9dc}
+.risk{border-top:4px solid var(--bad)}
+.risk.f{border-top-color:var(--b)}.risk.l{border-top-color:var(--d)}
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.tabs button{background:var(--card);color:var(--mute);border:1px solid var(--line);padding:9px 18px;border-radius:99px;cursor:pointer;font:600 .88rem Inter;transition:.2s}
+.tabs button.on{background:var(--g);color:#1a0d00;border-color:transparent}
+.pane{display:none}.pane.on{display:block;animation:f .4s}
+@keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;align-items:end}
+.calc label{font-size:.82rem;color:var(--mute);display:block;margin-bottom:6px}
+.calc input,.calc select{width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:#05080f;color:#fff;font:500 1rem Inter}
+.res{font-family:Outfit;font-size:1.9rem;font-weight:800;color:var(--ok)}
+.reveal{opacity:0;transform:translateY(24px);transition:.8s}
+.reveal.in{opacity:1;transform:none}
+footer{padding:48px 0;border-top:1px solid var(--line);color:var(--mute);font-size:.88rem}
+footer li{margin:4px 0}
+</style>
+</head>
+<body>
+<nav><div class="in"><b>AHAMOVE · 2027</b>
+<a href="#context">Bối cảnh</a><a href="#moat">Chuyên biệt hóa</a><a href="#cod">COD Balance</a><a href="#deposit">Deposit</a><a href="#fin">Tài chính trong ngày</a><a href="#roadmap">Lộ trình</a><a href="#value">Value</a><a href="#risk">Rủi ro</a><a href="#grocery">Grocery</a></div></nav>
+
+<header class="hero"><div class="wrap">
+<span class="tag">Plan Strategy 2027 · Driver Management</span>
+<h1>Chuyên biệt hóa Tài xế &amp; <span>Moat Vận hành</span></h1>
+<p class="lead">Ahamove biến năng lực tài xế thành <b>moat nhìn thấy được</b>: phân tầng theo 3 trục (Bulky &amp; baga · Cash-handling · Độ tin cậy vận hành) để định vị thương hiệu, làm cơ sở nới <b>COD Balance theo ranking SC-CN</b> và triển khai <b>giải pháp tài chính trong ngày</b> cho tài xế.</p>
+<div class="kpis">
+<div class="kpi"><div class="n" data-n="3">0</div><div class="l">Trục năng lực đo lường được</div></div>
+<div class="kpi"><div class="n">10M</div><div class="l">Base COD Limit đề xuất cho SC</div></div>
+<div class="kpi"><div class="n">5–20M</div><div class="l">Hạn mức tín dụng ứng COD / tài xế</div></div>
+<div class="kpi"><div class="n">0 đ</div><div class="l">Vốn trực tiếp Ahamove bỏ ra</div></div>
+</div>
+</div></header>
+
+<section id="exec"><div class="wrap reveal">
+<h2>📊 Executive Summary</h2>
+<p class="sub">Ba vướng mắc là một bài toán duy nhất: năng lực tài xế → moat → cơ sở nới COD → nền chấm điểm sản phẩm tài chính.</p>
+<div class="grid g3">
+<div class="card"><div class="ico">🏷️</div><h4>1 · Moat nhìn thấy được</h4><p>Badge năng lực hiển thị trên app khách hàng thay cho rating sao chung chung – điểm Grab/Be/Gojek chưa làm rõ.</p></div>
+<div class="card"><div class="ico">🔓</div><h4>2 · Nới COD có kiểm soát</h4><p>COD Balance = Base Limit × Hệ số lịch sử × Hệ số thời gian. Mở khóa GSV đơn giá trị cao bị từ chối.</p></div>
+<div class="card"><div class="ico">💳</div><h4>3 · Tài chính giữ chân</h4><p>Hợp tác đối tác tín dụng (Phương án A) – hạn mức ứng COD thay Deposit tiền túi, rủi ro tín dụng chuyển sang đối tác.</p></div>
+</div>
+<div class="callout"><b>Khuyến nghị:</b> Ưu tiên <b>Phương án A (embedded partner)</b> cho 2027; Phương án B (sandbox P2P, NĐ 94/2025) là mục tiêu 2028+ nếu quy mô ứng COD đủ lớn.</div>
+</div></section>
+
+<section id="context"><div class="wrap reveal">
+<h2>🧭 Bối cảnh &amp; Vấn đề</h2>
+<p class="sub">Mạng lưới tài xế xe máy &amp; xe tải tại TP.HCM, Hà Nội và các tỉnh mở rộng. 4 bậc: <b>SC</b> · <b>CN</b> · <b>BC</b> · <b>CXH</b> – phản ánh mức hoạt động chung, chưa gắn với năng lực xử lý đơn đặc thù.</p>
+<div class="grid g2">
+<div class="card bad"><h4>⚠️ COD Balance áp dụng chung</h4><ul><li>SC/CN đáng tin bị giới hạn thấp → từ chối đơn giá trị cao → <b>mất GSV</b>.</li><li>Tài xế low performance / highrisk vẫn nhận đơn COD/transfer_COD cao → tăng hủy đơn, chiếm dụng vốn khi rời nền tảng.</li></ul></div>
+<div class="card bad"><h4>💸 Không có kênh tài chính trong ngày</h4><p>Tài xế tự chuẩn bị tiền mặt hoặc xoay sở bên ngoài → ảnh hưởng <b>Remain rate</b>, giảm khả năng nhận đơn ứng COD lớn.</p></div>
+<div class="card bad"><h4>🪞 Thương hiệu chưa truyền tải thế mạnh</h4><p>Mạng lưới có thể mạnh bulky/COD cao nhưng khách hàng không có cách nhận biết để chọn nền tảng tin cậy.</p></div>
+<div class="card good"><h4>✅ Hướng giải quyết</h4><p>Đo lường năng lực → công khai bằng badge → dùng làm cơ sở nới COD → làm đầu vào chấm điểm cho đối tác tài chính.</p></div>
+</div>
+</div></section>
+
+<section id="moat"><div class="wrap reveal">
+<h2>🛡️ Chiến lược Chuyên biệt hóa Tài xế</h2>
+<p class="sub">3 trục không chồng nhau, công khai một phần ra thị trường dưới dạng badge trên app khách hàng.</p>
+<div class="grid g3">
+<div class="card axis"><div class="num">1</div><h4>Bulky &amp; trang bị baga</h4><p>Chuyên đơn cồng kềnh, có baga chở hàng an toàn; làm nền cho chiến lược lắp đặt baga sắp tới.</p><span class="badge">Tài xế chuyên chở hàng cồng kềnh</span></div>
+<div class="card axis"><div class="num">2</div><h4>Cash-handling</h4><p>Đủ tin cậy nhận đơn COD giá trị cao và <code>transfer_COD</code>.</p><span class="badge">Tài xế xử lý đơn giá trị cao</span></div>
+<div class="card axis"><div class="num">3</div><h4>Độ tin cậy vận hành</h4><p>Lịch sử, thời gian hoạt động, AR/FR/cancellation true rate. Điều kiện nền cho 2 trục trên.</p><span class="badge n">Không có badge riêng</span></div>
+</div>
+<h3>Tiêu chí chi tiết</h3>
+<div class="tw"><table>
+<tr><th>Trục</th><th>Tiêu chí đo</th><th>Ranking tối thiểu</th><th>Hiển thị khách hàng</th></tr>
+<tr><td><strong>Bulky &amp; trang bị</strong></td><td>Có baga; lịch sử giao đơn bulky / cồng kềnh Tier 3 &gt; x đơn/tháng</td><td>CN trở lên</td><td>Badge “Tài xế chuyên chở hàng cồng kềnh”</td></tr>
+<tr><td><strong>Cash-handling</strong></td><td>COD Balance ≥ <b>3M</b>; cancellation true rate &lt; <b>10%</b>; không chiếm dụng COD 3 tháng gần nhất</td><td>SC, CN</td><td>Badge “Tài xế xử lý đơn giá trị cao”</td></tr>
+<tr><td><strong>Độ tin cậy</strong></td><td>Hoạt động ≥ <b>6 tháng</b>; AR ≥ <b>95%</b>; FR ≥ <b>90%</b></td><td>SC, CN</td><td>Không badge – điều kiện nền</td></tr>
+</table></div>
+<div class="callout">Khách hàng chọn Ahamove biết sẽ được <b>ghép đúng tài xế cho nhu cầu cụ thể</b> thay vì ghép ngẫu nhiên – khác biệt Grab/Be/Gojek chưa làm rõ.</div>
+<h3>Giờ làm gì <small style="color:var(--mute);font-weight:400">(bấm để tick)</small></h3>
+<ul class="todo">
+<li>Chốt ngưỡng số cho 3 trục dựa trên dữ liệu AR/FR/CR thật – <b>chủ trì: Khanh</b>, phối hợp SnP.</li>
+<li>Thiết kế badge trên app khách hàng và app tài xế – phối hợp Product.</li>
+<li>Trang bị baga chuẩn cho nhóm đạt trục Bulky – ước tính chi phí, nguồn ngân sách/đối tác, chương trình hoàn tiền baga.</li>
+</ul>
+</div></section>
+
+<section id="cod"><div class="wrap reveal">
+<h2>⚙️ Ứng dụng 1: COD Balance theo ranking SC-CN</h2>
+<p class="sub">Hai lớp xử lý cùng lúc: (1) COD Balance – mức tin cậy do team QM cấp; (2) Deposit (ký quỹ) – van xả thứ hai khi COD Balance tức thời không đủ.</p>
+<h3>Cơ chế dispatch hiện tại</h3>
+<div class="flow">
+<div class="step"><i>01</i><p>Đơn cần thu hộ giá trị <b>V</b> → dispatch cho tài xế có COD Balance ≥ V.</p></div>
+<div class="step"><i>02</i><p>Nếu COD Balance &lt; V → xét Deposit ≥ V.</p></div>
+<div class="step"><i>03</i><p>Khả năng nhận đơn = <code>max(COD Balance, Deposit)</code></p></div>
+</div>
+<div class="callout"><b>Điểm nghẽn thật:</b> COD Balance biến thiên liên tục (giảm khi nhận đơn, hồi phục khi nộp lại). Khi tức thời thấp mà Deposit không bù được, SC/CN giỏi vẫn bị loại khỏi đơn giá trị cao – <b>không phải do thiếu tài xế đạt chuẩn</b>.</div>
+<h3>Công thức đề xuất</h3>
+<div class="formula">COD Balance (đề xuất) = Base Limit (theo ranking) × Hệ số lịch sử hoạt động × Hệ số thời gian hoạt động</div>
+<div class="tw"><table>
+<tr><th>Ranking</th><th>Base COD Limit</th><th>Điều kiện lịch sử</th><th>Điều kiện thời gian</th></tr>
+<tr><td><strong>Siêu Cấp (SC)</strong></td><td><b style="color:var(--ok)">10M</b></td><td>≥ 3 tháng không vi phạm (không default COD, cancellation true rate &lt; 10%)</td><td>≥ 35 giờ/tuần (≈ FT)</td></tr>
+<tr><td><strong>Chuyên Nghiệp (CN)</strong></td><td><b style="color:var(--ok)">5M</b></td><td>≥ 3 tháng</td><td>≥ 28 giờ/tuần (≥ 4h/ngày)</td></tr>
+<tr><td><strong>Bán Chuyên (BC)</strong></td><td>Giữ nguyên logic QM</td><td>–</td><td>–</td></tr>
+<tr><td><strong>Chưa xếp hạng (CXH)</strong></td><td>Theo mức ký quỹ</td><td>–</td><td>–</td></tr>
+</table></div>
+<h3>🧮 Mô phỏng nhanh khả năng nhận đơn</h3>
+<div class="card"><div class="calc">
+<div><label>Ranking</label><select id="rk"><option value="10">Siêu Cấp (10M)</option><option value="5" selected>Chuyên Nghiệp (5M)</option></select></div>
+<div><label>Hệ số lịch sử (0.5–1.2)</label><input id="h1" type="number" step="0.1" value="1"></div>
+<div><label>Hệ số thời gian (0.5–1.2)</label><input id="h2" type="number" step="0.1" value="1"></div>
+<div><label>Deposit / hạn mức đối tác (triệu)</label><input id="dp" type="number" value="5"></div>
+<div><label>Khả năng nhận đơn hiệu dụng</label><div class="res" id="out">–</div></div>
+</div><p style="margin-top:12px;font-size:.8rem;color:var(--mute)">Hệ số minh họa – cần chốt bằng dữ liệu thật. Công thức: max(COD Balance đề xuất, Deposit).</p></div>
+</div></section>
+
+<section id="deposit"><div class="wrap reveal">
+<h2>🏦 Tăng Deposit hiệu dụng – không bắt tài xế nộp thêm tiền</h2>
+<p class="sub">Hợp tác 1 đối tác tín dụng/ngân hàng (cùng đối tác ở phần Tài chính) cấp hạn mức ứng COD riêng <b>5–20 triệu/tài xế</b>, dùng thay Deposit tiền túi.</p>
+<div class="flow">
+<div class="step"><i>1</i><p>Nhận đơn cần ứng COD → rút từ hạn mức tín dụng đối tác.</p></div>
+<div class="step"><i>2</i><p>Giao hàng, thu tiền người nhận.</p></div>
+<div class="step"><i>3</i><p>Trong ngày: nộp Ahamove đối soát + hoàn trả đối tác.</p></div>
+<div class="step"><i>4</i><p>Hạn mức giải phóng ngay cho đơn tiếp theo.</p></div>
+</div>
+<div class="grid g2">
+<div class="card good"><h4>💰 Vì sao tài xế có lợi</h4><ul><li>Hiện tự ứng &gt;2M bằng tiền túi được trả <b>0,88%</b> (cod_fee).</li><li>0,88%/lần ≈ trần <b>321%/năm</b> – cao hơn nhiều lãi tiêu dùng (≈20–65%/năm, số cũ cần xác minh).</li><li>Đối tác định giá 30–60%/năm (≈0,08–0,16%/ngày) vẫn có lãi, tài xế vẫn lãi ròng.</li></ul></div>
+<div class="card bad"><h4>⚠️ Điều kiện bắt buộc</h4><p>Chỉ có lợi khi tất toán <b>trong ngày</b>. Quá 24h lãi cộng dồn có thể vượt 0,88% → cần cơ chế chuyển lãi chuẩn / phí trễ hạn rõ ràng.</p></div>
+<div class="card"><h4>🔒 Xử lý rủi ro “ôm hàng”</h4><ul><li>Ahamove cấn trừ trực tiếp qua ví tín dụng đối tác cấp.</li><li>Hợp đồng ba bên (Ahamove – tài xế – đối tác) làm rõ quyền yêu cầu cấn trừ và <b>thứ tự ưu tiên</b> giữa nợ đối tác và COD bị mất.</li></ul></div>
+<div class="card"><h4>📐 Ước tính perf &amp; rủi ro</h4><p><code>ΔGSV = số đơn transfer_COD bị từ chối vì Deposit (2026) × giá trị TB đơn × % tài xế được duyệt</code></p><p style="margin-top:8px"><code>Risk = Σ đơn bị ôm × giá trị TB × xác suất không cấn trừ đủ</code></p><p style="margin-top:8px">Chi phí: ≈0 vốn; 0,88% giữ nguyên + chia sẻ doanh thu (nếu có). <i>Cần check lại số liệu.</i></p></div>
+</div>
+<div class="callout"><b>Khung trao đổi QM (S-C-R, 1 trang):</b> Deposit bị giới hạn ở tiền túi → thay bằng hạn mức đối tác 5–20M → tài xế không mất chi phí, Ahamove chuyển rủi ro tín dụng sang đối tác, chỉ giữ rủi ro vận hành → kèm ΔGSV &amp; risk còn lại để QM duyệt pilot.</div>
+<h3>Giờ làm gì</h3>
+<ul class="todo">
+<li>Đưa yêu cầu “hạn mức ứng COD trong ngày 5–20M” vào tiêu chí chọn đối tác; đàm phán lãi suất mục tiêu thấp hơn hẳn trần 321%/năm.</li>
+<li>Thiết kế luồng kỹ thuật API giải ngân/thu hồi, đồng bộ dispatch (hạn mức = Deposit).</li>
+<li>Soạn điều khoản cấn trừ ba bên và thứ tự ưu tiên xử lý nợ.</li>
+<li>Xác định ngưỡng ranking/năng lực để đối tác duyệt hạn mức (dùng 3 trục).</li>
+<li>Pilot nhóm Siêu Cấp tại 1 địa bàn, theo dõi tỷ lệ tất toán đúng ngày trước khi lên 20M.</li>
+</ul>
+</div></section>
+
+<section id="fin"><div class="wrap reveal">
+<h2>💳 Ứng dụng 2: Giải pháp tài chính trong ngày</h2>
+<h3>Mô hình thị trường đã có</h3>
+<div class="grid g2">
+<div class="card"><h4>Grab Partner Cash Advance</h4><ul><li>Chấm điểm theo hiệu suất nền tảng (≥3 tháng lái, hoạt động 7 ngày gần nhất), không dùng điểm tín dụng ngân hàng.</li><li>Hạn mức 500–15.000 SGD; phí xử lý tối đa ≈2%.</li><li>Thu hồi tự động hàng tuần qua ví thu nhập.</li></ul></div>
+<div class="card"><h4>GIMO &amp; Vui App × Visa (VN)</h4><ul><li>Earned wage access, tích hợp payroll doanh nghiệp (B2B2C).</li><li>Chưa áp dụng cho lao động tự do → cần thay “lương đã làm ra” bằng “thu nhập chuyến đã hoàn thành”.</li></ul></div>
+</div>
+<div class="callout"><b>Nhận định:</b> cả hai chấm điểm bằng dữ liệu nội bộ nền tảng – đúng hướng Ahamove vì đã có AR/FR/CR/thâm niên từng tài xế (chính là 3 trục).</div>
+<h3>Khung pháp lý Việt Nam</h3>
+<div class="grid g3">
+<div class="card"><h4>P2P tự vận hành</h4><p>Từ 1/7/2025, <b>NĐ 94/2025/NĐ-CP</b> mở sandbox NHNN, tối đa 2 năm. Fintech 100% vốn VN, lãnh đạo ≥2 năm kinh nghiệm, hạ tầng tại VN, kỳ hạn tối đa 2 năm, không bảo lãnh khoản vay.</p></div>
+<div class="card"><h4>Kênh phân phối</h4><p>Chỉ làm kênh cho TCTD có giấy phép (như Vui App × Visa): không cần xin sandbox → <b>nhanh hơn trong 2027</b>.</p></div>
+<div class="card"><h4>Lãi suất</h4><p>Trần 20%/năm (BLDS) chỉ áp dụng cá nhân–cá nhân; TCTD thỏa thuận theo Luật TCTD 2024 (Điều 91), TT 39/2016, 43/2016. Mức % cần xác minh với đối tác.</p></div>
+</div>
+<h3>So sánh phương án</h3>
+<div class="tabs"><button class="on" data-t="pa">Phương án A</button><button data-t="pb">Phương án B</button></div>
+<div class="pane on" id="pa"><div class="tw"><table><tr><th>Mô tả</th><th>Ưu điểm</th><th>Rủi ro</th><th>Giấy phép</th></tr><tr><td>Tích hợp sản phẩm vay của TCTD có giấy phép trên app, chia sẻ dữ liệu hoạt động (có đồng ý tài xế) để chấm điểm &amp; giải ngân.</td><td>Triển khai nhanh 2027; không cần giấy phép P2P; rủi ro tín dụng do đối tác chịu.</td><td>Phụ thuộc khẩu vị rủi ro &amp; tốc độ đối tác; biên lợi nhuận thấp (hoa hồng giới thiệu).</td><td>Không cần giấy phép tài chính; cần thỏa thuận chia sẻ dữ liệu tuân thủ bảo vệ dữ liệu cá nhân.</td></tr></table></div></div>
+<div class="pane" id="pb"><div class="tw"><table><tr><th>Mô tả</th><th>Ưu điểm</th><th>Rủi ro</th><th>Giấy phép</th></tr><tr><td>Ahamove (hoặc công ty con) xin sandbox NHNN theo NĐ 94/2025 để tự cho vay ứng COD.</td><td>Kiểm soát trải nghiệm &amp; dữ liệu; biên lợi nhuận dài hạn cao hơn.</td><td>Cấp phép phức tạp, cần nhân sự tài chính, thử nghiệm giới hạn 2 năm, tự chịu rủi ro tín dụng.</td><td>Lập pháp nhân/ngành nghề tài chính, xin sandbox, hạ tầng CNTT, báo cáo định kỳ.</td></tr></table></div></div>
+<div class="callout"><b>Khuyến nghị:</b> A cho 2027. B đặt mục tiêu 2028+, chỉ theo đuổi nếu quy mô ứng COD đủ biện minh chi phí cấp phép và vận hành.</div>
+<h3>Giờ làm gì</h3>
+<ul class="todo">
+<li>Làm việc Legal: quy định chia sẻ dữ liệu tài xế cho đối tác tài chính bên thứ 3 (Phương án A).</li>
+<li>Shortlist 3–5 công ty tài chính/fintech VN (tham khảo GIMO và các CTTC tiêu dùng được NHNN cấp phép).</li>
+<li>Xác định tiêu chí chấm điểm nội bộ (3 trục) cung cấp cho đối tác.</li>
+<li>Pilot nhóm SC/CN tại 1 city trước khi mở rộng.</li>
+</ul>
+</div></section>
+
+<section id="roadmap"><div class="wrap reveal">
+<h2>🗺️ Lộ trình triển khai 2027</h2>
+<p class="sub">3 luồng song song: Chuyên biệt hóa · COD Balance &amp; Deposit · Giải pháp tài chính.</p>
+<div class="tl">
+<div class="q"><h4>Q1 2027</h4><span class="t">Chuyên biệt hóa</span><p>Chốt 3 trục &amp; ngưỡng số thật; thiết kế badge.</p><span class="t">COD &amp; Deposit</span><p>Chốt ngưỡng nâng COD theo ranking; trích xuất đơn bị từ chối do Deposit, tách theo ranking.</p><span class="t">Tài chính</span><p>Làm việc Legal; shortlist đối tác; đưa yêu cầu hạn mức 5–20M; align QM.</p></div>
+<div class="q"><h4>Q2 2027</h4><span class="t">Chuyên biệt hóa</span><p>Thí điểm baga 1 Mini-Hub (zone 2, nhiều vol TMĐT); ra mắt badge.</p><span class="t">COD &amp; Deposit</span><p>Pilot hạn mức tín dụng thật (5M) nhóm Siêu Cấp tại 1 city; theo dõi tất toán đúng ngày.</p><span class="t">Tài chính</span><p>Ký thỏa thuận 1 đối tác (PA A); điều khoản cấn trừ ba bên; thiết kế API giải ngân/thu hồi.</p></div>
+<div class="q"><h4>Q3 2027</h4><span class="t">Chuyên biệt hóa</span><p>Đánh giá badge (GSV bulky/COD cao); mở rộng 2–3 Mini-Hub.</p><span class="t">COD &amp; Deposit</span><p>Mở rộng toàn quốc.</p><span class="t">Tài chính</span><p>Hoàn tất tích hợp kỹ thuật; vận hành pilot chung (1 pilot, 2 góc nhìn).</p></div>
+<div class="q"><h4>Q4 2027</h4><span class="t">Chuyên biệt hóa</span><p>Mở rộng toàn mạng lưới; rà OKR 2028.</p><span class="t">COD &amp; Deposit</span><p>Hạn mức lên 20M cho nhóm đạt chuẩn; giảm phụ thuộc holdback/ký quỹ ảo; chuẩn hóa chính sách.</p><span class="t">Tài chính</span><p>Mở rộng tài xế/địa bàn; đánh giá, cân nhắc đối tác 2 hoặc PA B cho 2028.</p></div>
+</div>
+</div></section>
+
+<section id="value"><div class="wrap reveal">
+<h2>📈 Hiện thực hóa giá trị</h2>
+<p class="sub">Chuyển đổi BEFORE → AFTER (số liệu tác động cần xác thực qua pilot).</p>
+<div class="tw"><table>
+<tr><th>Hiện trạng</th><th>Chuyển đổi</th><th>Trạng thái mục tiêu</th><th>Tác động</th></tr>
+<tr><td>COD Balance chung, SC/CN bị giới hạn → từ chối đơn giá trị cao.</td><td><b style="color:var(--b)">↓ NỚI THEO RANKING ↓</b></td><td>Base 10M/5M × hệ số lịch sử &amp; thời gian.</td><td><strong>↑ GSV đơn COD cao, ↓ rủi ro từ tài xế highrisk</strong></td></tr>
+<tr><td>Deposit giới hạn ở tiền túi tài xế.</td><td><b style="color:var(--b)">↓ HẠN MỨC ĐỐI TÁC ↓</b></td><td>Hạn mức ứng COD 5–20M, tất toán trong ngày.</td><td><strong>Mở rộng khả năng nhận transfer_COD, vốn Ahamove ≈ 0</strong></td></tr>
+<tr><td>Ghép đơn ngẫu nhiên, thương hiệu chưa thể hiện năng lực.</td><td><b style="color:var(--b)">↓ BADGE NĂNG LỰC ↓</b></td><td>Badge bulky / giá trị cao trên app khách hàng.</td><td><strong>Moat hữu hình vs Grab/Be/Gojek</strong></td></tr>
+</table></div>
+<h3>KPI theo dõi</h3>
+<div class="grid g2"><div class="card">
+<p>Tỷ lệ tất toán đúng ngày</p><div class="bar"><div data-w="95"></div></div>
+<p>Acceptance rate ≥ 95%</p><div class="bar"><div data-w="95"></div></div>
+<p>Fulfillment rate ≥ 90%</p><div class="bar"><div data-w="90"></div></div>
+<p>Cancellation true rate &lt; 10%</p><div class="bar"><div data-w="10"></div></div></div>
+<div class="card"><h4>Chỉ số cốt lõi</h4><ul><li>Active drivers theo ranking SC/CN</li><li>Số đơn transfer_COD bị từ chối do Deposit</li><li>Remain rate tài xế</li><li>GSV đơn bulky &amp; COD cao</li><li>Risk exposure – theo dõi <b>hàng tuần</b></li></ul></div></div>
+</div></section>
+
+<section id="risk"><div class="wrap reveal">
+<h2>🚨 Rủi ro tổng thể</h2>
+<div class="grid g3">
+<div class="card risk"><h4>Vận hành</h4><p>Gian lận để đạt badge/ranking giả (mượn tài khoản, báo cáo sai) → <b>audit định kỳ</b>.</p></div>
+<div class="card risk f"><h4>Tài chính</h4><p>Default COD/khoản vay tăng khi mở rộng nhanh (blitzscaling) → giới hạn tốc độ mở rộng pilot, theo dõi risk exposure <b>theo tuần</b>.</p></div>
+<div class="card risk l"><h4>Pháp lý / Đối tác</h4><p>NHNN đổi chính sách sandbox hoặc đối tác rút lui → chọn <b>≥ 2 đối tác</b>.</p></div>
+</div>
+</div></section>
+
+<section id="grocery"><div class="wrap reveal">
+<h2>🛒 Grocery – Ghi chú mô hình riêng</h2>
+<p class="sub">Nhánh Grocery cần thiết kế tách biệt khỏi mạng lưới tài xế chung.</p>
+<div class="grid g3">
+<div class="card"><div class="ico">🎁</div><h4>Benefits riêng</h4><p>Bộ phúc lợi dành riêng cho tài xế Grocery.</p></div>
+<div class="card"><div class="ico">🏅</div><h4>Quyền lợi riêng</h4><p>Chính sách quyền lợi tách biệt theo đặc thù đơn Grocery.</p></div>
+<div class="card"><div class="ico">🧰</div><h4>Công cụ &amp; System riêng</h4><p>Công cụ dụng cụ và hệ thống quản lý riêng.</p></div>
+</div>
+</div></section>
+
+<footer><div class="wrap"><b>Nguồn tham khảo</b><ul>
+<li>Grab – Driver Loan campaign page</li><li>Roshi.sg – Grab Partner Cash Advance</li><li>Promptloop – What does GIMO do</li><li>Visa – Visa and Vui App Collaborate on Earned Wage Access in Vietnam</li><li>DFDL – Vietnam Decree No. 94/2025/ND-CP on Regulatory Sandbox</li><li>div.gov.vn – Cho vay tiêu dùng: TCTD và khách hàng phải thực hiện đúng luật</li></ul></div></footer>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll('[data-w]').forEach(b=>b.style.width=b.dataset.w+'%')}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+document.querySelectorAll('.todo li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');document.getElementById(b.dataset.t).classList.add('on')});
+function calc(){const v=+rk.value*(+h1.value)*(+h2.value),d=+dp.value;
+  out.textContent=Math.max(v,d).toFixed(1).replace('.0','')+'M ('+(v>=d?'COD Balance':'Deposit')+')'}
+['rk','h1','h2','dp'].forEach(i=>document.getElementById(i).addEventListener('input',calc));calc();
+document.querySelectorAll('[data-n]').forEach(e=>{let n=+e.dataset.n,i=0;const t=setInterval(()=>{e.textContent=++i;if(i>=n)clearInterval(t)},300)});
+const links=[...document.querySelectorAll('nav a')];
+addEventListener('scroll',()=>{let cur='';document.querySelectorAll('section').forEach(s=>{if(scrollY>=s.offsetTop-120)cur=s.id});
+  links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+cur))});
+</script>
+</body>
+</html>
