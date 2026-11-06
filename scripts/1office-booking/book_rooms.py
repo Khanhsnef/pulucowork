@@ -32,13 +32,15 @@ MEETINGS = [
     {
         "title": "[Supply] Weekly Meeting",
         "room": "NANGA",
+        "fallback_room": "DENALI",
         "time_start": "14:02",
         "time_end": "15:59",
         "day": "monday",
     },
     {
         "title": "[DM] Catchup",
-        "room": "NANGA",
+        "room": "DENALI",
+        "fallback_room": "NANGA",
         "time_start": "16:02",
         "time_end": "16:59",
         "day": "monday",
@@ -46,6 +48,7 @@ MEETINGS = [
     {
         "title": "[DM] Catchup",
         "room": "DENALI",
+        "fallback_room": "NANGA",
         "time_start": "16:02",
         "time_end": "18:00",
         "day": "friday",
@@ -72,7 +75,7 @@ def main():
     log.info(f"Pre-flight session check: {session_status.get('reason')}")
 
     # Chờ tới đúng 16:00:01 (ICT) (Bỏ qua nếu SKIP_SLEEP=1)
-    if not os.getenv("SKIP_SLEEP"):
+    if os.getenv("SKIP_SLEEP") != "1":
         now = datetime.now(ICT)
         target = now.replace(hour=16, minute=0, second=target_second, microsecond=0)
         wait_seconds = (target - now).total_seconds()
@@ -87,22 +90,36 @@ def main():
     results = []
     for meeting in MEETINGS:
         date = next_weekday(meeting["day"])
+        room_to_book = meeting["room"]
         res = client.book_room(
             title=meeting["title"],
-            room_name_or_id=meeting["room"],
+            room_name_or_id=room_to_book,
             date=date,
             time_start=meeting["time_start"],
             time_end=meeting["time_end"],
         )
-        ok = res["success"]
-        results.append((meeting, date, ok))
+        if not res["success"] and meeting.get("fallback_room"):
+            fallback = meeting["fallback_room"]
+            log.warning(f"Phòng {room_to_book} không khả dụng, thử fallback sang {fallback}...")
+            res = client.book_room(
+                title=meeting["title"],
+                room_name_or_id=fallback,
+                date=date,
+                time_start=meeting["time_start"],
+                time_end=meeting["time_end"],
+            )
+            if res["success"]:
+                room_to_book = fallback
 
-    success = sum(1 for _, _, ok in results if ok)
+        ok = res["success"]
+        results.append((meeting, date, room_to_book, ok))
+
+    success = sum(1 for _, _, _, ok in results if ok)
     total = len(results)
 
     if success == total:
         lines = "\n".join(
-            f"{m['title']} ({m['room']}) {m['time_start']}-{m['time_end']} ({d})" for m, d, _ in results
+            f"{m['title']} ({room}) {m['time_start']}-{m['time_end']} ({d})" for m, d, room, _ in results
         )
         client.notify(
             title="1Office: Đã book phòng họp thành công",
@@ -112,7 +129,7 @@ def main():
         log.info(f"=== Done: {success}/{total} OK ===")
         sys.exit(0)
     else:
-        failed = [m["title"] for m, _, ok in results if not ok]
+        failed = [f"{m['title']} ({m['room']})" for m, _, _, ok in results if not ok]
         client.notify(
             title="1Office: Đặt phòng THẤT BẠI",
             message=f"Chỉ đặt được {success}/{total} phòng.\nPhòng lỗi: {', '.join(failed)}",
