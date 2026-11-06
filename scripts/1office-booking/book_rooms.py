@@ -63,20 +63,27 @@ def next_weekday(day: str) -> str:
 
 
 def main():
-    # Chờ tới đúng 16:00:01 (ICT) (Bỏ qua nếu SKIP_SLEEP=1)
-    if not os.getenv("SKIP_SLEEP"):
-        now = datetime.now(ICT)
-        target = now.replace(hour=16, minute=0, second=1, microsecond=0)
-        wait_seconds = (target - now).total_seconds()
-        if wait_seconds > 0:
-            log.info(f"Hiện tại: {now.strftime('%H:%M:%S')} (ICT). Đang chờ {wait_seconds:.1f}s để tới đúng 16:00:01...")
-            time.sleep(wait_seconds)
-        else:
-            log.info(f"Hiện tại: {now.strftime('%H:%M:%S')} (ICT) (đã quá 16:00:01), thực thi ngay lập tức.")
-
+    target_second = int(os.getenv("BOOKING_SECOND", "1"))
     log.info("=== 1Office Auto Booking Starting ===")
     client = OneOfficeClient()
 
+    # Pre-flight check & warm-up CSRF token cache
+    session_status = client.check_session()
+    log.info(f"Pre-flight session check: {session_status.get('reason')}")
+
+    # Chờ tới đúng 16:00:01 (ICT) (Bỏ qua nếu SKIP_SLEEP=1)
+    if not os.getenv("SKIP_SLEEP"):
+        now = datetime.now(ICT)
+        target = now.replace(hour=16, minute=0, second=target_second, microsecond=0)
+        wait_seconds = (target - now).total_seconds()
+        if wait_seconds > 0:
+            target_str = f"16:00:{target_second:02d}"
+            log.info(f"Hiện tại: {now.strftime('%H:%M:%S')} (ICT). Đang đếm ngược {wait_seconds:.1f}s (~{wait_seconds/60:.1f} phút) để tới đúng {target_str}...")
+            time.sleep(wait_seconds)
+        else:
+            log.info(f"Hiện tại: {now.strftime('%H:%M:%S')} (ICT) (đã quá 16:00:{target_second:02d}), thực thi ngay lập tức.")
+
+    log.info("=== Đang gửi yêu cầu đặt phòng tới 1Office ===")
     results = []
     for meeting in MEETINGS:
         date = next_weekday(meeting["day"])

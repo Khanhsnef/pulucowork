@@ -12,6 +12,10 @@ on:
         description: 'Bỏ qua đếm ngược (1 = Bỏ qua)'
         required: false
         default: '0'
+      booking_second:
+        description: 'Giây thực thi lúc 16:00:xx (mặc định 1)'
+        required: false
+        default: '1'
 
 concurrency:
   group: 1office-auto-booking
@@ -42,6 +46,10 @@ jobs:
         env:
           ONE_OFFICE_USERNAME: ${{ secrets.ONE_OFFICE_USERNAME }}
           ONE_OFFICE_PASSWORD: ${{ secrets.ONE_OFFICE_PASSWORD }}
+          PHPSESSID: ${{ secrets.PHPSESSID }}
+          ONE_OFFICE_REMEMBER: ${{ secrets.ONE_OFFICE_REMEMBER }}
+          CSRF_TOKEN: ${{ secrets.CSRF_TOKEN }}
+          BOOKING_SECOND: ${{ inputs.booking_second || '1' }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           SKIP_SLEEP: ${{ inputs.skip_sleep || '' }}
