@@ -31,26 +31,26 @@ Khi người dùng yêu cầu liên quan đến **1Office** (VD: "đặt phòng 
 ### 1. Kiểm tra trạng thái phiên kết nối 1Office
 Chạy lệnh CLI:
 ```bash
-python3 scripts/1office-booking/cli.py status
+python3 _scripts/1office-booking/cli.py status
 ```
 
 ### 2. Tra cứu lịch phòng họp trong ngày
 Chạy lệnh CLI:
 ```bash
-python3 scripts/1office-booking/cli.py check-rooms --date DD/MM/YYYY
+python3 _scripts/1office-booking/cli.py check-rooms --date DD/MM/YYYY
 ```
 
 ### 3. Đặt phòng họp linh hoạt
 Chạy lệnh CLI với thông số tương ứng:
 ```bash
-python3 scripts/1office-booking/cli.py book --room NANGA --date DD/MM/YYYY --start HH:MM --end HH:MM --title "Tên Buổi Họp"
+python3 _scripts/1office-booking/cli.py book --room NANGA --date DD/MM/YYYY --start HH:MM --end HH:MM --title "Tên Buổi Họp"
 ```
 
 ---
 
 ## 📁 Cấu Trúc Các File Liên Quan
 
-- `scripts/1office-booking/1office_client.py`: Module xử lý API, Auth & Cookie 1Office.
-- `scripts/1office-booking/cli.py`: Tool CLI cho Antigravity Agent thực thi trực tiếp.
-- `scripts/1office-booking/book_rooms.py`: Script chạy tự động hàng tuần (kết hợp LaunchAgent `com.ahamove.book-meeting-rooms`).
-- `scripts/1office-booking/.env.1office`: Nơi lưu trữ thông tin cấu hình Cookie / Credentials an toàn.
+- `_scripts/1office-booking/1office_client.py`: Module xử lý API, Auth & Cookie 1Office.
+- `_scripts/1office-booking/cli.py`: Tool CLI cho Antigravity Agent thực thi trực tiếp.
+- `_scripts/1office-booking/book_rooms.py`: Script chạy tự động hàng tuần (kết hợp LaunchAgent `com.ahamove.book-meeting-rooms`).
+- `_scripts/1office-booking/.env.1office`: Nơi lưu trữ thông tin cấu hình Cookie / Credentials an toàn.

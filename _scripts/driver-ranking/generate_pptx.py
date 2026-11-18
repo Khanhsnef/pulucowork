@@ -469,6 +469,6 @@ run_ins2.font.italic = True
 run_ins2.font.color.rgb = GRAY_TEXT
 
 # Save Presentation
-output_path = "/Users/ts-1148/Desktop/Pulu-workspace/Output/Ahamove/01. STRATEGY & PLANNING/driver-ranking/2026-07-driver-ranking-layer-benefits.pptx"
+output_path = "/Users/ts-1148/Desktop/Pulu-workspace/Output/Ahamove/01. STRATEGY_PLANNING/driver-ranking/2026-07-driver-ranking-layer-benefits.pptx"
 prs.save(output_path)
 print(f"PowerPoint slide deck successfully generated and saved to: {output_path}")

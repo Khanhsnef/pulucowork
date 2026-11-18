@@ -31,7 +31,7 @@ GREEN_PILL = RGBColor(209, 250, 229)       # #D1FAE5 Light Green Fill
 
 FONT_NAME = "Helvetica Neue"
 
-prs = pptx.Presentation('/Users/ts-1148/Desktop/Pulu-workspace/Data sources/BaoCao_ThangDM_T7_Core_v7_1.pptx')
+prs = pptx.Presentation('/Users/ts-1148/Desktop/Pulu-workspace/data/sources/BaoCao_ThangDM_T7_Core_v7_1.pptx')
 
 def apply_font_family(shape, font_family=FONT_NAME):
     if not shape.has_text_frame:
@@ -229,6 +229,6 @@ for slide_idx, slide in enumerate(prs.slides):
                                 else:
                                     r.font.color.rgb = TEXT_BODY
 
-output_file = '/Users/ts-1148/Desktop/Pulu-workspace/Data sources/BaoCao_ThangDM_T7_Core_v7_1.pptx'
+output_file = '/Users/ts-1148/Desktop/Pulu-workspace/data/sources/BaoCao_ThangDM_T7_Core_v7_1.pptx'
 prs.save(output_file)
 print("Executive Light theme deck saved successfully:", output_file)

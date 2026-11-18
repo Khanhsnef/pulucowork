@@ -11,7 +11,7 @@
 ```
 Output/Ahamove/
 │
-├── 01. STRATEGY & PLANNING/        # Chiến lược cung ứng, Tiering, OKR, Roadmap
+├── 01. STRATEGY_PLANNING/        # Chiến lược cung ứng, Tiering, OKR, Roadmap
 │   ├── ahabenefits/                # AhaBenefits points flow & proposal
 │   ├── driver-journey/             # Driver Journey framework, milestones, proposal
 │   ├── driver-ranking/             # Ranking params, layer benefits, priority registration
@@ -38,7 +38,7 @@ Output/Ahamove/
 │   ├── dashboards/                 # Dashboard spec, layout, config
 │   └── raw-data/                   # CSV export từ Aira / BigQuery
 │
-├── 05. ANALYSIS & REPORTS/         # Phân tích chuyên sâu, báo cáo định kỳ
+├── 05. ANALYSIS_REPORTS/         # Phân tích chuyên sâu, báo cáo định kỳ
 │   ├── monthly/                    # Monthly performance report
 │   ├── root-cause/                 # RCA: AR drop, supply shock, fraud investigation
 │   └── unit-economics/             # CPO breakdown, EPH/RPH, LTV/CAC analysis
@@ -58,7 +58,7 @@ Output/Ahamove/
 
 ## 📁 File Index — Đầy Đủ
 
-### 01. STRATEGY & PLANNING
+### 01. STRATEGY_PLANNING
 
 #### `ahabenefits/`
 | File | Mô tả |
@@ -120,7 +120,7 @@ Output/Ahamove/
 | `Ahamove_FT_Driver_Pool_PRD.docx` | PRD: Full-time Driver Pool |
 | `Supply Strategy 2026 - Internal.docx` | Supply strategy document (internal) |
 
-#### Root của `01. STRATEGY & PLANNING/`
+#### Root của `01. STRATEGY_PLANNING/`
 | File | Mô tả |
 |------|-------|
 | `2026-06-driver-journey-milestones.html` | Milestones HTML standalone (77KB) |
@@ -199,7 +199,7 @@ Output/Ahamove/
 
 ---
 
-### 05. ANALYSIS & REPORTS
+### 05. ANALYSIS_REPORTS
 
 #### Root
 | File | Mô tả |

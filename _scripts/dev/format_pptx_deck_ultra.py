@@ -30,7 +30,7 @@ AMBER_BG = RGBColor(50, 38, 20)
 GREEN_ACCENT = RGBColor(16, 185, 129)     # #10B981 Glossy Emerald
 GREEN_BG = RGBColor(20, 50, 40)
 
-prs = pptx.Presentation('/Users/ts-1148/Desktop/Pulu-workspace/Data sources/BaoCao_ThangDM_T7_Core_v7_1.pptx')
+prs = pptx.Presentation('/Users/ts-1148/Desktop/Pulu-workspace/data/sources/BaoCao_ThangDM_T7_Core_v7_1.pptx')
 
 def style_text_runs(shape, font_family="Arial", default_color=TEXT_BRIGHT):
     if not shape.has_text_frame:
@@ -179,6 +179,6 @@ for slide_idx, slide in enumerate(prs.slides):
                                     # Ensure high contrast text inside dark table cells
                                     r.font.color.rgb = TEXT_BRIGHT
 
-output_file = '/Users/ts-1148/Desktop/Pulu-workspace/Data sources/BaoCao_ThangDM_T7_Core_v7_1.pptx'
+output_file = '/Users/ts-1148/Desktop/Pulu-workspace/data/sources/BaoCao_ThangDM_T7_Core_v7_1.pptx'
 prs.save(output_file)
 print("Ultra formatted presentation saved to:", output_file)

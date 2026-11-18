@@ -292,35 +292,35 @@ def get_system_context(user_message=""):
     # Map keywords to relative paths of documents from Output/Ahamove/
     rag_map = {
         ("okr", "kr", "mục tiêu", "target"): [
-            "Output/Ahamove/01. STRATEGY & PLANNING/okr/2026-q2-dm-team-okr.md",
-            "Output/Ahamove/01. STRATEGY & PLANNING/okr/2026-q2-okr-dm-internal.md"
+            "Output/Ahamove/01. STRATEGY_PLANNING/okr/2026-q2-dm-team-okr.md",
+            "Output/Ahamove/01. STRATEGY_PLANNING/okr/2026-q2-okr-dm-internal.md"
         ],
         ("journey", "lifecycle", "vòng đời", "trải nghiệm", "hành trình"): [
-            "Output/Ahamove/01. STRATEGY & PLANNING/driver-journey/2026-05-driver-journey-summary.md",
-            "Output/Ahamove/01. STRATEGY & PLANNING/driver-journey/2026-06-driver-journey-milestones.md",
-            "Output/Ahamove/01. STRATEGY & PLANNING/driver-journey/2026-06-driver-journey-proposal.md",
+            "Output/Ahamove/01. STRATEGY_PLANNING/driver-journey/2026-05-driver-journey-summary.md",
+            "Output/Ahamove/01. STRATEGY_PLANNING/driver-journey/2026-06-driver-journey-milestones.md",
+            "Output/Ahamove/01. STRATEGY_PLANNING/driver-journey/2026-06-driver-journey-proposal.md",
             "Output/Ahamove/06. COMPETITIVE_INTEL/2026-06-global-driver-lifecycle-benchmark.md"
         ],
         ("benchmark", "toàn cầu", "thế giới", "nước ngoài", "uber", "meituan", "doordash", "swiggy", "gojek", "deliveroo", "rappi", "ifood"): [
             "Output/Ahamove/06. COMPETITIVE_INTEL/2026-06-global-driver-lifecycle-benchmark.md"
         ],
         ("ranking", "phân hạng", "params", "level", "benefits", "ahabenefits", "quyền lợi", "thưởng điểm"): [
-            "Output/Ahamove/01. STRATEGY & PLANNING/ahabenefits/2026-05-ahabenefits-points-flow.md",
-            "Output/Ahamove/01. STRATEGY & PLANNING/driver-ranking/2026-05-driver-ranking-params.md",
-            "Output/Ahamove/01. STRATEGY & PLANNING/driver-ranking/2026-05-driver-ranking-priority-registration.md"
+            "Output/Ahamove/01. STRATEGY_PLANNING/ahabenefits/2026-05-ahabenefits-points-flow.md",
+            "Output/Ahamove/01. STRATEGY_PLANNING/driver-ranking/2026-05-driver-ranking-params.md",
+            "Output/Ahamove/01. STRATEGY_PLANNING/driver-ranking/2026-05-driver-ranking-priority-registration.md"
         ],
         ("restructure", "tái cơ cấu", "cơ cấu", "org", "raci"): [
-            "Output/Ahamove/01. STRATEGY & PLANNING/team-restructure/2026-06-driver-restructure-kickoff.md"
+            "Output/Ahamove/01. STRATEGY_PLANNING/team-restructure/2026-06-driver-restructure-kickoff.md"
         ],
         ("open-source", "mã nguồn mở", "github", "git"): [
-            "Output/Ahamove/01. STRATEGY & PLANNING/2026-06-open-source-repos-application.md"
+            "Output/Ahamove/01. STRATEGY_PLANNING/2026-06-open-source-repos-application.md"
         ],
         ("áo khỉ", "monkey", "campaign", "chiến dịch"): [
             "Output/Ahamove/02. CAMPAIGNS_PROJECTS/2026-05-ao-khi-campaign-plan.md",
             "Output/Ahamove/02. CAMPAIGNS_PROJECTS/2026-05-ao-khi-comms-drafts.md"
         ],
         ("pulu", "smartflow", "risk", "bảo mật", "hiệu năng"): [
-            "Output/Ahamove/05. ANALYSIS & REPORTS/2026-06-pulu-smartflow-risk-assessment.md"
+            "Output/Ahamove/05. ANALYSIS_REPORTS/2026-06-pulu-smartflow-risk-assessment.md"
         ],
         ("dashboard", "sop", "duckdb", "streamlit"): [
             "Output/Ahamove/07. TEAM_MANAGEMENT/2026-06-new-dashboard-sop.md"

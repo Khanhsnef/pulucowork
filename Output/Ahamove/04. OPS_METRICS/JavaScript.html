@@ -346,6 +346,7 @@
         type: document.getElementById('req-type').value, tagName: document.getElementById('req-tag-name').value,
         driverListSource: isAddTag ? `[${dsType}] ${dsVal}` : '-', reason: document.getElementById('req-reason').value,
         duration: duration, dueDate: document.getElementById('req-deadline').value || '-',
+        submitterEmail: CURRENT_EMAIL || '',
         state:'PENDING_TEAM_LEAD', leadDecision:'PENDING', dmDecision:'PENDING', qmStatus:'HOLD', qmSuccessCount:0, qmRef:'', dmTagCode:'-', breach:''
       };
       if (!IS_LOCAL) {

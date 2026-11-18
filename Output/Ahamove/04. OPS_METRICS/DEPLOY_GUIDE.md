@@ -68,7 +68,35 @@
    | Type | **Hour timer** ▸ **Every 1 hour** (hoặc 2 giờ) |
 3. **Save** → authorize thêm quyền gửi mail (`MailApp`) nếu được hỏi.
 
-Trigger sẽ quét mọi request chưa `DONE`/`REJECTED`, so deadline với hiện tại → đánh cờ **`QUÁ HẠN SLA`** (badge đỏ nhấp nháy) + gửi email nhắc đúng nhóm approver (Lead/DM/QM). Chỉ gửi mail **1 lần** cho mỗi request quá hạn.
+Trigger sẽ quét mọi request chưa `DONE`/`REJECTED`, so deadline với hiện tại → đánh cờ **`QUÁ HẠN SLA`** (badge đỏ nhấp nháy) + gửi email & bắn tin nhắn Telegram nhắc đúng nhóm approver (Lead/DM/QM). Chỉ gửi **1 lần** cho mỗi request quá hạn.
+
+---
+
+## 4.1. Hệ Thống Thông Báo Đa Kênh (Telegram & Email)
+
+Hệ thống đã tích hợp sẵn cơ chế gửi thông báo tự động theo từng bước của State Machine:
+
+| Sự kiện (Event) | Kênh thông báo | Người nhận thông báo | Mục đích |
+| :--- | :--- | :--- | :--- |
+| **Tạo Request mới** | Telegram Group + Email | Team Lead của Team đó + CC DM | Nhắc Lead duyệt Gate 1 (SLA ≤ 4h) |
+| **Lead Duyệt (Tag mới)** | Telegram Group + Email | DM Lead (`khanhlp@`, `trangdtt@`) | Nhắc DM thẩm định & cấp Tag Code (SLA ≤ 8h) |
+| **Lead Duyệt (Add tag)** | Telegram Group + Email | QM Specialists (`phundk@`, `vayhc@`) | Nhắc QM nhận xử lý gắn tag (SLA ≤ 24h) |
+| **DM Duyệt & Gán Tag** | Telegram Group + Email | QM Specialists + CC Requester, Lead | QM nhận Tag Code chuẩn để add tag |
+| **QM Hoàn Tất Add Tag** | Telegram Group + Email | Requester + Lead + DM | Báo tag đã sẵn sàng hoạt động |
+| **Từ Chối Đề Xuất** | Telegram Group + Email | Requester (+ Lead nếu DM từ chối) | Báo lý do để requester chỉnh sửa |
+| **Quá Hạn SLA** | Telegram Group + Email | Approver phụ trách Gate bị nghẽn | Cảnh báo khẩn cấp escalate xử lý |
+
+### 🛠️ Kiểm thử thông báo ngay trên Apps Script:
+1. Mở Apps Script Editor.
+2. Tại thanh công cụ chọn hàm **`testNotificationWorkflow`** ▸ bấm **Run**.
+3. Xem log thực thi và kiểm tra group Telegram / Email nhận tin nhắn mẫu.
+
+### ⚙️ Tùy chỉnh qua Sheet `00_CONFIG_SETTINGS`:
+- `TELEGRAM_ENABLED`: `TRUE` / `FALSE`
+- `TELEGRAM_BOT_TOKEN`: Token bot Telegram (mặc định đã điền bot nội bộ)
+- `TELEGRAM_CHAT_ID`: ID group nhận tin (mặc định đã điền `-4601794194`)
+- `EMAIL_NOTIF_ENABLED`: `TRUE` / `FALSE`
+- `PORTAL_URL`: Link Web App Portal để người nhận bấm vào là mở trực tiếp trang duyệt.
 
 ---
 

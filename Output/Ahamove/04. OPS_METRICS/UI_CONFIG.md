@@ -130,3 +130,20 @@ Anh/Chị có thể sửa trực tiếp bất kỳ nội dung text, tiêu đề,
 
 - Hàm `checkSLABreaches()` quét sheet, đánh cờ **`QUÁ HẠN SLA`** (badge đỏ nhấp nháy) + gửi email nhắc đúng nhóm approver.
 - **Gắn trigger:** Apps Script → *Triggers* → `checkSLABreaches`, time-driven, mỗi 1–2h.
+
+---
+
+## 11. Cấu Hình Thông Báo Tự Động (Telegram & Email)
+
+Hệ thống hỗ trợ gửi thông báo theo thời gian thực tới Telegram Bot và Email Google Workspace để approver chủ động nắm bắt thông tin và vào duyệt:
+
+| Key | Mặc định | Ý nghĩa |
+| :--- | :--- | :--- |
+| `TELEGRAM_ENABLED` | `TRUE` | Bật/tắt thông báo Telegram (`TRUE`/`FALSE`) |
+| `TELEGRAM_BOT_TOKEN` | *(Token bot nội bộ)* | Bot Token từ @BotFather |
+| `TELEGRAM_CHAT_ID` | `-4601794194` | ID Group / Channel Telegram nhận tin |
+| `EMAIL_NOTIF_ENABLED` | `TRUE` | Bật/tắt thông báo qua Email (`TRUE`/`FALSE`) |
+| `PORTAL_URL` | `.../exec` | Đường dẫn Web App Portal để đính kèm vào nút "Mở Portal để Duyệt" |
+
+- Mọi thông báo được định dạng HTML chuyên nghiệp, hiển thị đầy đủ thông tin: Mã Request, Team, Người tạo, Loại Tag, Lý do, Hạn duyệt SLA và nút bấm mở portal duyệt trực tiếp.
+- Người dùng có thể chạy thử nghiệm tức thì với hàm `testNotificationWorkflow()` trong Apps Script.

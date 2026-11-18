@@ -24,7 +24,7 @@ RED_ACCENT = RGBColor(239, 68, 68)        # #EF4444 Glossy Red
 AMBER_ACCENT = RGBColor(245, 158, 11)     # #F59E0B Glossy Amber
 GREEN_ACCENT = RGBColor(16, 185, 129)     # #10B981 Glossy Emerald
 
-prs = pptx.Presentation('/Users/ts-1148/Desktop/Pulu-workspace/Data sources/BaoCao_ThangDM_T7_Core_v7_1.pptx')
+prs = pptx.Presentation('/Users/ts-1148/Desktop/Pulu-workspace/data/sources/BaoCao_ThangDM_T7_Core_v7_1.pptx')
 
 def apply_text_styling(shape, font_family="Arial", default_color=TEXT_MAIN):
     if not shape.has_text_frame:

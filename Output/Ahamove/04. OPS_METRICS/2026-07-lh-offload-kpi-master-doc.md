@@ -11,8 +11,8 @@
 
 ### Executive Summary
 Tài liệu này hệ thống hóa toàn bộ quy trình tính toán, phán định trách nhiệm lỗi và cơ chế loại trừ cho chỉ số **KPI Linehaul Offload (FM Offload & SOC Offload)**. Toàn bộ logic được tổng hợp và hợp nhất từ **2 file dữ liệu nguồn gốc (Source Files)**:
-1. `Data sources/LH logic review (1) (1).xlsx` (Bảng tính SQL thô gồm 3 Sheet: `FM_offload`, `SOC_offload`, `đơn return_revert`).
-2. `Data sources/Review workflow LH offload KPI.xlsx` (Bảng tra cứu Status ID, chuẩn hóa tên Station và Metadata Workflow).
+1. `data/sources/LH logic review (1) (1).xlsx` (Bảng tính SQL thô gồm 3 Sheet: `FM_offload`, `SOC_offload`, `đơn return_revert`).
+2. `data/sources/Review workflow LH offload KPI.xlsx` (Bảng tra cứu Status ID, chuẩn hóa tên Station và Metadata Workflow).
 
 Toàn bộ 213 dòng SQL logic cùng ma trận phán định lỗi `offload_fault` (Cột N, O, P) và thuật toán kiểm soát FIFO đã được chuyển hóa thành các tài liệu báo cáo chuẩn hóa dạng Excel và Markdown nhằm loại bỏ tình trạng đứt gãy thông tin giữa các bộ phận **Vận hành (OPS)**, **Hạ tầng Đội xe (Linehaul)**, **Trung tâm Phân loại (SOC)** và **Dữ liệu (BI)**.
 

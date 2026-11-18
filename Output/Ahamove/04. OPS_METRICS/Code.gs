@@ -120,6 +120,11 @@ function getAppConfig() {
     sheet.appendRow(["SLA_LEAD_HOURS", "4", "SLA giờ chờ Lead duyệt (Gate 1)"]);
     sheet.appendRow(["SLA_DM_HOURS", "8", "SLA giờ chờ DM review (Gate 2)"]);
     sheet.appendRow(["SLA_QM_HOURS", "24", "SLA giờ chờ QM add tag (Gate 3)"]);
+    sheet.appendRow(["TELEGRAM_ENABLED", "TRUE", "Bật/Tắt thông báo Telegram (TRUE/FALSE)"]);
+    sheet.appendRow(["TELEGRAM_BOT_TOKEN", "8502919754:AAFGjkjrizuZ40ucUjFZ-CXA6TP6W40tXYE", "Telegram Bot Token"]);
+    sheet.appendRow(["TELEGRAM_CHAT_ID", "-4601794194", "Telegram Group Chat ID"]);
+    sheet.appendRow(["EMAIL_NOTIF_ENABLED", "TRUE", "Bật/Tắt thông báo qua Email (TRUE/FALSE)"]);
+    sheet.appendRow(["PORTAL_URL", "https://script.google.com/macros/s/AKfycbyqUdTw-palPPXOyR4OAzrVlsgEF0ospSQl2E47G3lyEv-W1jvINrGmlYxKWjx-RvLMbg/exec", "URL Portal để mở trực tiếp từ thông báo"]);
   }
 
   const rows = sheet.getDataRange().getValues();
@@ -135,7 +140,12 @@ function getAppConfig() {
     TAB3_NAME: "🛡️ Bước 3: DM Review",
     TAB4_NAME: "⚙️ Bước 4: QM Add Tags",
     TAB5_NAME: "📊 Master Request Tracker",
-    SLA_LEAD_HOURS: "4", SLA_DM_HOURS: "8", SLA_QM_HOURS: "24"
+    SLA_LEAD_HOURS: "4", SLA_DM_HOURS: "8", SLA_QM_HOURS: "24",
+    TELEGRAM_ENABLED: "TRUE",
+    TELEGRAM_BOT_TOKEN: "8502919754:AAFGjkjrizuZ40ucUjFZ-CXA6TP6W40tXYE",
+    TELEGRAM_CHAT_ID: "-4601794194",
+    EMAIL_NOTIF_ENABLED: "TRUE",
+    PORTAL_URL: "https://script.google.com/macros/s/AKfycbyqUdTw-palPPXOyR4OAzrVlsgEF0ospSQl2E47G3lyEv-W1jvINrGmlYxKWjx-RvLMbg/exec"
   };
   for (const k in defaults) { if (!config[k]) config[k] = defaults[k]; }
   // Inject user identity so JS can set role/email without template variables
@@ -172,9 +182,9 @@ function saveAppConfig(newConfig) {
 /* ============================================================
  *  SHEET SETUP & HELPERS
  * ============================================================ */
-// 23 cột gốc + 8 cột mới (append cuối để không vỡ data cũ)
+// 23 cột gốc + 11 cột mới (append cuối để không vỡ data cũ)
 const BASE_HEADERS = ["Mã Request", "Ngày Tạo", "Hình Thức", "Team Đề Xuất", "Người Đề Xuất", "Loại Tag", "Tên Tag Yêu Cầu", "Nguồn Danh Sách TX", "Số Lượng TX", "Lý Do", "Thời Gian", "DM Reviewer", "Ngày DM Review", "DM Quyết Định", "DM Note", "DM Tag Code", "QM Handover", "QM Specialist", "Ngày QM Nhận", "QM Trạng Thái Add Tag", "Ngày Add Tag Xong", "Số TX Add Thành Công", "Ghi Chú QM"];
-const NEW_HEADERS = ["Lead Approver", "Ngày Lead Duyệt", "Lead Quyết Định", "Lead Note", "Trạng Thái Tổng", "Deadline Lead", "Deadline DM", "Deadline QM", "Cờ Quá Hạn", "Cần Add Tag Xong Trước"];
+const NEW_HEADERS = ["Lead Approver", "Ngày Lead Duyệt", "Lead Quyết Định", "Lead Note", "Trạng Thái Tổng", "Deadline Lead", "Deadline DM", "Deadline QM", "Cờ Quá Hạn", "Cần Add Tag Xong Trước", "Email Người Tạo"];
 // Cột (1-based) — vị trí cột mới bắt đầu từ 24
 const COL = {
   ID: 1, DATE: 2, CATEGORY: 3, TEAM: 4, NAME: 5, TYPE: 6, TAGNAME: 7,
@@ -182,7 +192,8 @@ const COL = {
   DM_REVIEWER: 12, DM_DATE: 13, DM_DECISION: 14, DM_NOTE: 15, DM_TAGCODE: 16, QM_HANDOVER: 17,
   QM_SPECIALIST: 18, QM_DATE: 19, QM_STATUS: 20, QM_DONE_DATE: 21, QM_SUCCESS: 22, QM_NOTE: 23,
   LEAD_APPROVER: 24, LEAD_DATE: 25, LEAD_DECISION: 26, LEAD_NOTE: 27,
-  STATE: 28, DL_LEAD: 29, DL_DM: 30, DL_QM: 31, BREACH: 32, DUE_DATE: 33
+  STATE: 28, DL_LEAD: 29, DL_DM: 30, DL_QM: 31, BREACH: 32, DUE_DATE: 33,
+  SUBMITTER: 34
 };
 
 function getMainSheet() {
@@ -244,7 +255,8 @@ function getSheetDataJson() {
         deadlineLead: r[COL.DL_LEAD-1] ? fmtCell(r[COL.DL_LEAD-1]) : '',
         deadlineDM: r[COL.DL_DM-1] ? fmtCell(r[COL.DL_DM-1]) : '',
         deadlineQM: r[COL.DL_QM-1] ? fmtCell(r[COL.DL_QM-1]) : '',
-        breach: r[COL.BREACH-1] || ''
+        breach: r[COL.BREACH-1] || '',
+        submitterEmail: (COL.SUBMITTER && r[COL.SUBMITTER-1]) ? r[COL.SUBMITTER-1] : ''
       });
     }
   }
@@ -302,7 +314,28 @@ function saveNewRequest(data) {
   row[COL.BREACH-1] = '';
 
   sheet.appendRow(row);
-  return { status: "success" };
+
+  // Gửi thông báo đến Lead và nhóm Telegram
+  try {
+    notifyWorkflowStep('NEW_REQUEST', {
+      id: reqId,
+      team: data.team,
+      name: data.name,
+      submitterEmail: submitterEmail,
+      requestCategory: data.requestCategory,
+      tagName: data.tagName,
+      type: data.type,
+      count: data.count || 0,
+      reason: data.reason,
+      duration: data.duration,
+      dueDate: data.dueDate,
+      deadlineLead: fmt(dlLead)
+    });
+  } catch (err) {
+    Logger.log('[saveNewRequest] Notification error: ' + err);
+  }
+
+  return { status: "success", id: reqId };
 }
 
 /* ============================================================
@@ -364,20 +397,25 @@ function saveLeadApproval(reqId, decision, note) {
       sheet.getRange(rowIdx, COL.LEAD_DECISION).setValue(decision);
       sheet.getRange(rowIdx, COL.LEAD_NOTE).setValue(note || '');
 
+      let nextDeadline = '';
       if (decision === 'APPROVED') {
         if (isAddTag) {
           // Bỏ qua DM -> thẳng QM
+          const dlQM = addHours(now, slaHours(config, 'SLA_QM_HOURS', 24));
+          nextDeadline = fmt(dlQM);
           sheet.getRange(rowIdx, COL.STATE).setValue('PENDING_QM');
           sheet.getRange(rowIdx, COL.DM_DECISION).setValue('SKIPPED');
           sheet.getRange(rowIdx, COL.DM_NOTE).setValue('Add tag có sẵn — bỏ qua DM review');
           sheet.getRange(rowIdx, COL.QM_HANDOVER).setValue('READY_FOR_QM');
           sheet.getRange(rowIdx, COL.QM_STATUS).setValue('PENDING_QM');
-          sheet.getRange(rowIdx, COL.DL_QM).setValue(fmt(addHours(now, slaHours(config, 'SLA_QM_HOURS', 24))));
+          sheet.getRange(rowIdx, COL.DL_QM).setValue(nextDeadline);
         } else {
           // Tag mới -> DM review
+          const dlDM = addHours(now, slaHours(config, 'SLA_DM_HOURS', 8));
+          nextDeadline = fmt(dlDM);
           sheet.getRange(rowIdx, COL.STATE).setValue('PENDING_DM');
           sheet.getRange(rowIdx, COL.DM_NOTE).setValue('Đang chờ DM Lead kiểm duyệt');
-          sheet.getRange(rowIdx, COL.DL_DM).setValue(fmt(addHours(now, slaHours(config, 'SLA_DM_HOURS', 8))));
+          sheet.getRange(rowIdx, COL.DL_DM).setValue(nextDeadline);
         }
       } else { // REJECTED
         sheet.getRange(rowIdx, COL.STATE).setValue('REJECTED');
@@ -385,6 +423,32 @@ function saveLeadApproval(reqId, decision, note) {
         sheet.getRange(rowIdx, COL.QM_STATUS).setValue('N/A');
       }
       sheet.getRange(rowIdx, COL.BREACH).setValue(''); // reset cờ quá hạn khi đã xử lý
+
+      // Bắn thông báo Telegram & Email
+      try {
+        const reqSnapshot = {
+          id: reqId,
+          team: reqTeam,
+          name: rows[i][COL.NAME-1],
+          submitterEmail: (COL.SUBMITTER && rows[i][COL.SUBMITTER-1]) ? rows[i][COL.SUBMITTER-1] : '',
+          requestCategory: rows[i][COL.CATEGORY-1],
+          tagName: rows[i][COL.TAGNAME-1],
+          type: rows[i][COL.TYPE-1],
+          leadApprover: getUserEmail() || 'Team Lead',
+          leadNote: note || '',
+          nextDeadline: nextDeadline,
+          driverListSource: rows[i][COL.SRC-1],
+          count: rows[i][COL.COUNT-1]
+        };
+
+        if (decision === 'APPROVED') {
+          notifyWorkflowStep(isAddTag ? 'LEAD_APPROVED_ADD_TAG' : 'LEAD_APPROVED_NEW_TAG', reqSnapshot);
+        } else {
+          notifyWorkflowStep('LEAD_REJECTED', reqSnapshot);
+        }
+      } catch (err) {
+        Logger.log('[saveLeadApproval] Notification error: ' + err);
+      }
       break;
     }
   }
@@ -416,17 +480,46 @@ function saveDMReview(reqId, decision, note, tagCode) {
       sheet.getRange(rowIdx, COL.DM_NOTE).setValue(note);
       sheet.getRange(rowIdx, COL.DM_TAGCODE).setValue(tagCode);
 
+      let nextDeadline = '';
       if (decision === "APPROVED") {
+        const dlQM = addHours(now, slaHours(config, 'SLA_QM_HOURS', 24));
+        nextDeadline = fmt(dlQM);
         sheet.getRange(rowIdx, COL.STATE).setValue('PENDING_QM');
         sheet.getRange(rowIdx, COL.QM_HANDOVER).setValue("READY_FOR_QM");
         sheet.getRange(rowIdx, COL.QM_STATUS).setValue("PENDING_QM");
-        sheet.getRange(rowIdx, COL.DL_QM).setValue(fmt(addHours(now, slaHours(config, 'SLA_QM_HOURS', 24))));
+        sheet.getRange(rowIdx, COL.DL_QM).setValue(nextDeadline);
       } else {
         sheet.getRange(rowIdx, COL.STATE).setValue('REJECTED');
         sheet.getRange(rowIdx, COL.QM_HANDOVER).setValue("CANCELLED");
         sheet.getRange(rowIdx, COL.QM_STATUS).setValue("N/A");
       }
       sheet.getRange(rowIdx, COL.BREACH).setValue('');
+
+      // Bắn thông báo Telegram & Email
+      try {
+        const reqSnapshot = {
+          id: reqId,
+          team: rows[i][COL.TEAM-1],
+          name: rows[i][COL.NAME-1],
+          submitterEmail: (COL.SUBMITTER && rows[i][COL.SUBMITTER-1]) ? rows[i][COL.SUBMITTER-1] : '',
+          requestCategory: rows[i][COL.CATEGORY-1],
+          tagName: rows[i][COL.TAGNAME-1],
+          dmTagCode: tagCode,
+          dmReviewer: getUserEmail() || 'DM Lead',
+          dmNote: note || '',
+          nextDeadline: nextDeadline,
+          driverListSource: rows[i][COL.SRC-1],
+          count: rows[i][COL.COUNT-1]
+        };
+
+        if (decision === "APPROVED") {
+          notifyWorkflowStep('DM_APPROVED', reqSnapshot);
+        } else {
+          notifyWorkflowStep('DM_REJECTED', reqSnapshot);
+        }
+      } catch (err) {
+        Logger.log('[saveDMReview] Notification error: ' + err);
+      }
       break;
     }
   }
@@ -464,6 +557,26 @@ function saveQMStatus(reqId, status, successCount, ref) {
       }
       sheet.getRange(rowIdx, COL.QM_SUCCESS).setValue(successCount);
       sheet.getRange(rowIdx, COL.QM_NOTE).setValue(ref);
+
+      // Bắn thông báo Telegram & Email khi hoàn thành
+      if (status === "TAGGED_SUCCESS") {
+        try {
+          const reqSnapshot = {
+            id: reqId,
+            team: rows[i][COL.TEAM-1],
+            name: rows[i][COL.NAME-1],
+            submitterEmail: (COL.SUBMITTER && rows[i][COL.SUBMITTER-1]) ? rows[i][COL.SUBMITTER-1] : '',
+            tagName: rows[i][COL.TAGNAME-1],
+            dmTagCode: rows[i][COL.DM_TAGCODE-1] || rows[i][COL.TAGNAME-1],
+            qmSpecialist: getUserEmail() || 'QM Specialist',
+            successCount: successCount,
+            qmRef: ref
+          };
+          notifyWorkflowStep('QM_DONE', reqSnapshot);
+        } catch (err) {
+          Logger.log('[saveQMStatus] Notification error: ' + err);
+        }
+      }
       break;
     }
   }
@@ -471,7 +584,7 @@ function saveQMStatus(reqId, status, successCount, ref) {
 }
 
 /* ============================================================
- *  SLA — quét quá hạn + gửi email nhắc/escalate
+ *  SLA — quét quá hạn + gửi email & Telegram cảnh báo
  *  Gắn trigger: Edit > Triggers > checkSLABreaches, time-driven, mỗi 1-2h
  * ============================================================ */
 function checkSLABreaches() {
@@ -508,19 +621,431 @@ function checkSLABreaches() {
       const already = r[COL.BREACH-1];
       sheet.getRange(rowIdx, COL.BREACH).setValue('QUÁ HẠN SLA');
       breachCount++;
-      // Chỉ gửi email 1 lần (nếu chưa từng đánh dấu quá hạn)
+      // Chỉ gửi thông báo 1 lần (nếu chưa từng đánh dấu quá hạn)
       if (already !== 'QUÁ HẠN SLA' && targets.length > 0) {
         try {
-          MailApp.sendEmail({
-            to: targets.join(','),
-            subject: '[Tag Request Portal] ⚠️ Request quá hạn SLA: ' + r[COL.ID-1],
-            body: 'Request ' + r[COL.ID-1] + ' (' + r[COL.TEAM-1] + ' — ' + r[COL.TAGNAME-1] + ')'
-                + ' đang ở trạng thái ' + state + ' và đã QUÁ HẠN SLA (deadline: ' + deadlineCell + ').'
-                + '\nVui lòng xử lý sớm.'
+          notifyWorkflowStep('SLA_BREACH', {
+            id: r[COL.ID-1],
+            team: r[COL.TEAM-1],
+            tagName: r[COL.TAGNAME-1],
+            state: state,
+            deadline: deadlineCell,
+            targets: targets
           });
-        } catch (e) { /* bỏ qua lỗi gửi mail */ }
+        } catch (e) {
+          Logger.log('[checkSLABreaches] Alert error: ' + e);
+        }
       }
     }
   }
   return { status: "success", breaches: breachCount };
+}
+
+/* ============================================================
+ *  NOTIFICATION ENGINE (TELEGRAM & EMAIL)
+ * ============================================================ */
+function getPortalUrl(config) {
+  if (config && config.PORTAL_URL && config.PORTAL_URL.trim()) {
+    return config.PORTAL_URL.trim();
+  }
+  try {
+    const serviceUrl = ScriptApp.getService().getUrl();
+    if (serviceUrl) return serviceUrl;
+  } catch (e) {}
+  return "https://docs.google.com/spreadsheets/d/" + SS_ID + "/edit";
+}
+
+function getLeadEmailsForTeam(team) {
+  if (TEAM_LEAD_MAP[team] && TEAM_LEAD_MAP[team].length > 0) {
+    return TEAM_LEAD_MAP[team];
+  }
+  return TEAM_LEAD_MAP['DM'] || ['khanhlp@ahamove.com'];
+}
+
+function getDMEmails() {
+  return TEAM_LEAD_MAP['DM'] || ['khanhlp@ahamove.com', 'trangdtt@ahamove.com'];
+}
+
+function getQMEmails() {
+  return TEAM_LEAD_MAP['QM'] || ['phundk@ahamove.com', 'vayhc@ahamove.com'];
+}
+
+function sendTelegramNotification(htmlText) {
+  try {
+    const config = getAppConfig();
+    if (String(config.TELEGRAM_ENABLED).toUpperCase() !== 'TRUE') {
+      Logger.log('[Telegram] Tắt thông báo qua config.');
+      return { success: false, reason: 'disabled' };
+    }
+    const token = (config.TELEGRAM_BOT_TOKEN || '').trim();
+    const chatId = (config.TELEGRAM_CHAT_ID || '').trim();
+    if (!token || !chatId) {
+      Logger.log('[Telegram] Thiếu BOT_TOKEN hoặc CHAT_ID.');
+      return { success: false, reason: 'missing_credentials' };
+    }
+
+    const endpoint = 'https://api.telegram.org/bot' + token + '/sendMessage';
+    const payload = {
+      chat_id: chatId,
+      text: htmlText,
+      parse_mode: 'HTML',
+      disable_web_page_preview: true
+    };
+    const options = {
+      method: 'post',
+      contentType: 'application/json',
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true
+    };
+
+    const resp = UrlFetchApp.fetch(endpoint, options);
+    const code = resp.getResponseCode();
+    if (code >= 200 && code < 300) {
+      Logger.log('[Telegram] Gửi thành công.');
+      return { success: true };
+    } else {
+      Logger.log('[Telegram] Lỗi phản hồi HTTP ' + code + ': ' + resp.getContentText());
+      return { success: false, code: code, response: resp.getContentText() };
+    }
+  } catch (err) {
+    Logger.log('[Telegram] Exception: ' + err);
+    return { success: false, error: String(err) };
+  }
+}
+
+function sendEmailNotification(recipients, subject, htmlContent) {
+  try {
+    const config = getAppConfig();
+    if (String(config.EMAIL_NOTIF_ENABLED).toUpperCase() !== 'TRUE') {
+      Logger.log('[Email] Tắt gửi email qua config.');
+      return { success: false, reason: 'disabled' };
+    }
+    if (!recipients) return { success: false, reason: 'no_recipients' };
+
+    const list = (Array.isArray(recipients) ? recipients : [recipients])
+      .map(function(e) { return String(e).trim(); })
+      .filter(function(e) { return e && e.indexOf('@') !== -1; });
+
+    if (list.length === 0) return { success: false, reason: 'empty_valid_recipients' };
+
+    MailApp.sendEmail({
+      to: list.join(','),
+      subject: subject,
+      htmlBody: htmlContent
+    });
+    Logger.log('[Email] Gửi mail thành công tới: ' + list.join(', '));
+    return { success: true };
+  } catch (err) {
+    Logger.log('[Email] Exception: ' + err);
+    return { success: false, error: String(err) };
+  }
+}
+
+function buildEmailTemplate(title, intro, tableRows, ctaUrl) {
+  let rowsHtml = '';
+  for (let i = 0; i < tableRows.length; i++) {
+    const bg = (i % 2 === 0) ? '#F8FAFC' : '#FFFFFF';
+    rowsHtml += '<tr style="background-color: ' + bg + ';">'
+      + '<td style="padding: 10px 14px; font-weight: 600; color: #475569; width: 35%; border-bottom: 1px solid #E2E8F0;">' + tableRows[i][0] + '</td>'
+      + '<td style="padding: 10px 14px; color: #1E293B; border-bottom: 1px solid #E2E8F0;">' + tableRows[i][1] + '</td>'
+      + '</tr>';
+  }
+
+  return '<div style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Arial, sans-serif; max-width: 620px; margin: 0 auto; padding: 20px; background-color: #F1F5F9;">'
+    + '<div style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); padding: 22px 24px; border-radius: 12px 12px 0 0; border-bottom: 4px solid #FF6B00;">'
+    + '  <div style="color: #FF6B00; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">AHAMOVE DRIVER MANAGEMENT</div>'
+    + '  <div style="color: #FFFFFF; font-size: 18px; font-weight: 700; margin-top: 6px;">' + title + '</div>'
+    + '</div>'
+    + '<div style="background-color: #FFFFFF; padding: 24px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">'
+    + '  <p style="font-size: 14px; color: #334155; line-height: 1.6; margin: 0 0 18px 0;">' + intro + '</p>'
+    + '  <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 24px; border: 1px solid #E2E8F0; border-radius: 8px; overflow: hidden;">'
+    +      rowsHtml
+    + '  </table>'
+    + '  <div style="text-align: center; margin: 28px 0 10px 0;">'
+    + '    <a href="' + ctaUrl + '" style="display: inline-block; background-color: #FF6B00; color: #FFFFFF; font-weight: 700; font-size: 14px; text-decoration: none; padding: 12px 28px; border-radius: 6px; box-shadow: 0 4px 10px rgba(255, 107, 0, 0.35);">'
+    + '      👉 TRUY CẬP TAG PORTAL ĐỂ XỬ LÝ'
+    + '    </a>'
+    + '  </div>'
+    + '</div>'
+    + '<div style="text-align: center; margin-top: 16px; font-size: 11px; color: #94A3B8;">'
+    + '  Hệ thống thông báo tự động Tag Request Portal · Ahamove Driver Management'
+    + '</div>'
+    + '</div>';
+}
+
+function notifyWorkflowStep(step, data) {
+  const config = getAppConfig();
+  const portalUrl = getPortalUrl(config);
+
+  if (step === 'NEW_REQUEST') {
+    // 1. Tạo request mới -> Thông báo Lead + DM
+    const tgMsg = '🔔 <b>[TAG PORTAL] ĐỀ XUẤT TAG MỚI CẦN DUYỆT (GATE 1)</b>\n\n'
+      + '📌 <b>Mã Request:</b> <code>' + data.id + '</code>\n'
+      + '🏢 <b>Team đề xuất:</b> <b>' + data.team + '</b>\n'
+      + '👤 <b>Người đề xuất:</b> ' + data.name + (data.submitterEmail ? ' (' + data.submitterEmail + ')' : '') + '\n'
+      + '🏷️ <b>Tên Tag:</b> <code>' + data.tagName + '</code> (' + data.type + ')\n'
+      + '📦 <b>Hình thức:</b> ' + data.requestCategory + '\n'
+      + '👥 <b>Số lượng TX:</b> ' + (data.count || 0) + ' tài xế\n'
+      + '🎯 <b>Lý do:</b> ' + (data.reason || '-') + '\n'
+      + '⏰ <b>Hạn Lead duyệt (SLA):</b> <b>' + data.deadlineLead + '</b> (≤ 4h)\n\n'
+      + '👉 <i>Vui lòng vào Portal để xem xét và duyệt:</i>\n'
+      + '🔗 <a href="' + portalUrl + '"><b>MỞ TAG PORTAL ĐỂ DUYỆT NGAY</b></a>';
+
+    sendTelegramNotification(tgMsg);
+
+    const emailRows = [
+      ['Mã Request', '<b>' + data.id + '</b>'],
+      ['Team Đề Xuất', data.team],
+      ['Người Tạo', data.name + (data.submitterEmail ? ' (' + data.submitterEmail + ')' : '')],
+      ['Hình Thức', data.requestCategory],
+      ['Tên Tag Yêu Cầu', '<code>' + data.tagName + '</code> (' + data.type + ')'],
+      ['Số Lượng TX', String(data.count || 0)],
+      ['Lý Do & Tiêu Chí', data.reason || '-'],
+      ['Hạn SLA Duyệt', '<b style="color: #D97706;">' + data.deadlineLead + ' (≤ 4 giờ)</b>']
+    ];
+    const emailHtml = buildEmailTemplate(
+      'Yêu Cầu Duyệt Tag Mới: ' + data.id,
+      'Chào Anh/Chị Team Lead, hệ thống vừa nhận được 1 đề xuất Tag tài xế từ team <b>' + data.team + '</b> đang chờ phê duyệt ở Gate 1.',
+      emailRows,
+      portalUrl
+    );
+    const leadTargets = getLeadEmailsForTeam(data.team).concat(getDMEmails());
+    sendEmailNotification(leadTargets, '[Tag Portal] 🔔 Đề xuất Tag mới cần duyệt: ' + data.id + ' (' + data.team + ')', emailHtml);
+
+  } else if (step === 'LEAD_APPROVED_NEW_TAG') {
+    // 2. Lead duyệt Tag Mới -> Chờ DM Review (Gate 2)
+    const tgMsg = '🛡️ <b>[TAG PORTAL] LEAD ĐÃ DUYỆT! CHỜ DM THẨM ĐỊNH (GATE 2)</b>\n\n'
+      + '📌 <b>Mã Request:</b> <code>' + data.id + '</code>\n'
+      + '🏢 <b>Team:</b> <b>' + data.team + '</b>\n'
+      + '🏷️ <b>Tên Tag gợi ý:</b> <code>' + data.tagName + '</code>\n'
+      + '👤 <b>Lead đã duyệt:</b> ' + data.leadApprover + '\n'
+      + '💬 <b>Ghi chú Lead:</b> <i>' + (data.leadNote || '(Không có)') + '</i>\n'
+      + '⏰ <b>Hạn DM duyệt (SLA):</b> <b>' + (data.nextDeadline || '≤ 8h') + '</b>\n\n'
+      + '👉 <i>Cần DM thẩm định nghiệp vụ & cấp mã Tag Code chuẩn (Taxonomy):</i>\n'
+      + '🔗 <a href="' + portalUrl + '"><b>MỞ TAG PORTAL ĐỂ GÁN MÃ TAG</b></a>';
+
+    sendTelegramNotification(tgMsg);
+
+    const emailRows = [
+      ['Mã Request', '<b>' + data.id + '</b>'],
+      ['Team Đề Xuất', data.team],
+      ['Tên Tag Yêu Cầu', '<code>' + data.tagName + '</code>'],
+      ['Lead Đã Duyệt', data.leadApprover],
+      ['Ghi Chú Của Lead', data.leadNote || '(Không có)'],
+      ['Hạn SLA DM', '<b style="color: #4F46E5;">' + (data.nextDeadline || '≤ 8 giờ') + '</b>']
+    ];
+    const emailHtml = buildEmailTemplate(
+      'Lead Đã Duyệt! Cần DM Review: ' + data.id,
+      'Chào DM Lead, đề xuất Tag từ team <b>' + data.team + '</b> đã được Lead duyệt thành công. Vui lòng thẩm định và gán mã Tag chuẩn cho QM.',
+      emailRows,
+      portalUrl
+    );
+    sendEmailNotification(getDMEmails(), '[Tag Portal] 🛡️ Lead đã duyệt ' + data.id + '! Cần DM Review & Gán Tag Code', emailHtml);
+
+  } else if (step === 'LEAD_APPROVED_ADD_TAG') {
+    // 3. Lead duyệt Add Tag có sẵn -> Bỏ qua DM, nhảy thẳng QM Queue
+    const tgMsg = '⚙️ <b>[TAG PORTAL] YÊU CẦU ADD TAG SẴN CÓ (GATE 3 - QM QUEUE)</b>\n\n'
+      + '📌 <b>Mã Request:</b> <code>' + data.id + '</code>\n'
+      + '🏢 <b>Team:</b> <b>' + data.team + '</b>\n'
+      + '🏷️ <b>Tên Tag:</b> <code>' + data.tagName + '</code>\n'
+      + '👤 <b>Lead đã duyệt:</b> ' + data.leadApprover + ' <i>(Bỏ qua bước DM)</i>\n'
+      + '📋 <b>Nguồn DS tài xế:</b> ' + (data.driverListSource || '-') + '\n'
+      + '👥 <b>Số lượng TX:</b> ' + (data.count || 0) + ' tài xế\n'
+      + '⏰ <b>Hạn QM hoàn tất (SLA):</b> <b>' + (data.nextDeadline || '≤ 24h') + '</b>\n\n'
+      + '👉 <i>Cần QM vào hàng đợi để gắn tag cho đối tác:</i>\n'
+      + '🔗 <a href="' + portalUrl + '"><b>MỞ TAG PORTAL ĐỂ XỬ LÝ</b></a>';
+
+    sendTelegramNotification(tgMsg);
+
+    const emailRows = [
+      ['Mã Request', '<b>' + data.id + '</b>'],
+      ['Team Đề Xuất', data.team],
+      ['Tên Tag Gán', '<code>' + data.tagName + '</code>'],
+      ['Lead Phê Duyệt', data.leadApprover],
+      ['Nguồn Danh Sách TX', data.driverListSource || '-'],
+      ['Số Lượng TX', String(data.count || 0)],
+      ['Hạn SLA QM', '<b style="color: #059669;">' + (data.nextDeadline || '≤ 24 giờ') + '</b>']
+    ];
+    const emailHtml = buildEmailTemplate(
+      'Hàng Đợi QM: Yêu Cầu Add Tag ' + data.id,
+      'Chào QM Team, đề xuất Add Tag có sẵn đã được Lead duyệt và sẵn sàng trong hàng đợi để gắn tag trên hệ thống.',
+      emailRows,
+      portalUrl
+    );
+    sendEmailNotification(getQMEmails(), '[Tag Portal] ⚙️ Hàng đợi QM: Đề xuất Add Tag ' + data.id + ' (' + data.team + ')', emailHtml);
+
+  } else if (step === 'LEAD_REJECTED') {
+    // 4. Lead từ chối
+    const tgMsg = '❌ <b>[TAG PORTAL] ĐỀ XUẤT BỊ TỪ CHỐI TẠI GATE 1</b>\n\n'
+      + '📌 <b>Mã Request:</b> <code>' + data.id + '</code>\n'
+      + '🏢 <b>Team:</b> ' + data.team + ' | <b>Tag:</b> <code>' + data.tagName + '</code>\n'
+      + '👤 <b>Người từ chối:</b> Lead (' + data.leadApprover + ')\n'
+      + '💬 <b>Lý do từ chối:</b> <i>' + (data.leadNote || 'Không đạt tiêu chí') + '</i>\n\n'
+      + '👉 <i>Requester vui lòng kiểm tra lại lý do trên Portal:</i>\n'
+      + '🔗 <a href="' + portalUrl + '"><b>XEM CHI TIẾT TRÊN PORTAL</b></a>';
+
+    sendTelegramNotification(tgMsg);
+
+    if (data.submitterEmail) {
+      const emailRows = [
+        ['Mã Request', '<b>' + data.id + '</b>'],
+        ['Người Từ Chối', data.leadApprover],
+        ['Lý Do Từ Chối', '<span style="color:#EF4444; font-weight:600;">' + (data.leadNote || 'Không đạt yêu cầu') + '</span>']
+      ];
+      const emailHtml = buildEmailTemplate(
+        'Đề Xuất Bị Từ Chối: ' + data.id,
+        'Chào bạn, đề xuất Tag của bạn vừa bị từ chối bởi Team Lead ở Gate 1. Vui lòng xem lý do để điều chỉnh đề xuất mới.',
+        emailRows,
+        portalUrl
+      );
+      sendEmailNotification([data.submitterEmail], '[Tag Portal] ❌ Đề xuất ' + data.id + ' đã bị Từ chối bởi Lead', emailHtml);
+    }
+
+  } else if (step === 'DM_APPROVED') {
+    // 5. DM duyệt & gán Tag Code -> Giao QM
+    const tgMsg = '⚙️ <b>[TAG PORTAL] DM ĐÃ CẤP MÃ TAG! CHỜ QM GẮN TAG (GATE 3)</b>\n\n'
+      + '📌 <b>Mã Request:</b> <code>' + data.id + '</code>\n'
+      + '🏢 <b>Team:</b> <b>' + data.team + '</b>\n'
+      + '🏷️ <b>Mã Tag chuẩn (Taxonomy):</b> <code>' + data.dmTagCode + '</code>\n'
+      + '👤 <b>DM Reviewer:</b> ' + data.dmReviewer + '\n'
+      + '💬 <b>Ghi chú DM:</b> <i>' + (data.dmNote || '(Không có)') + '</i>\n'
+      + '📋 <b>Nguồn DS tài xế:</b> ' + (data.driverListSource || '-') + '\n'
+      + '👥 <b>Số lượng TX:</b> ' + (data.count || 0) + ' tài xế\n'
+      + '⏰ <b>Hạn QM hoàn tất (SLA):</b> <b>' + (data.nextDeadline || '≤ 24h') + '</b>\n\n'
+      + '👉 <i>Cần QM vào hàng đợi để gắn tag cho đối tác:</i>\n'
+      + '🔗 <a href="' + portalUrl + '"><b>MỞ TAG PORTAL ĐỂ CẬP NHẬT QM</b></a>';
+
+    sendTelegramNotification(tgMsg);
+
+    const emailRows = [
+      ['Mã Request', '<b>' + data.id + '</b>'],
+      ['Team Đề Xuất', data.team],
+      ['Mã Tag Chuẩn Cấp Phép', '<b style="color: #0D9488; font-size: 14px;">' + data.dmTagCode + '</b>'],
+      ['DM Reviewer', data.dmReviewer],
+      ['Ghi Chú Của DM', data.dmNote || '(Không có)'],
+      ['Hạn SLA QM', '<b style="color: #059669;">' + (data.nextDeadline || '≤ 24 giờ') + '</b>']
+    ];
+    const emailHtml = buildEmailTemplate(
+      'DM Đã Cấp Mã Tag! Chờ QM Xử Lý: ' + data.id,
+      'Chào QM Team, đề xuất Tag đã được DM thẩm định và chính thức cấp mã Tag chuẩn <b>' + data.dmTagCode + '</b>. Vui lòng tiến hành add tag cho tài xế.',
+      emailRows,
+      portalUrl
+    );
+    const qmTargets = getQMEmails().concat(data.submitterEmail ? [data.submitterEmail] : []);
+    sendEmailNotification(qmTargets, '[Tag Portal] ⚙️ DM đã duyệt & cấp Tag Code ' + data.dmTagCode + ': ' + data.id + ' (Chờ QM)', emailHtml);
+
+  } else if (step === 'DM_REJECTED') {
+    // 6. DM từ chối
+    const tgMsg = '❌ <b>[TAG PORTAL] ĐỀ XUẤT BỊ TỪ CHỐI BỞI DM</b>\n\n'
+      + '📌 <b>Mã Request:</b> <code>' + data.id + '</code>\n'
+      + '🏢 <b>Team:</b> ' + data.team + ' | <b>Tag:</b> <code>' + data.tagName + '</code>\n'
+      + '👤 <b>Người từ chối:</b> DM Lead (' + data.dmReviewer + ')\n'
+      + '💬 <b>Lý do từ chối:</b> <i>' + (data.dmNote || 'Không phù hợp taxonomy/chính sách') + '</i>\n\n'
+      + '👉 <i>Requester & Lead vui lòng xem lại lý do trên Portal:</i>\n'
+      + '🔗 <a href="' + portalUrl + '"><b>XEM CHI TIẾT TRÊN PORTAL</b></a>';
+
+    sendTelegramNotification(tgMsg);
+
+    const rejectTargets = (data.submitterEmail ? [data.submitterEmail] : []).concat(getLeadEmailsForTeam(data.team));
+    if (rejectTargets.length > 0) {
+      const emailRows = [
+        ['Mã Request', '<b>' + data.id + '</b>'],
+        ['Người Từ Chối', data.dmReviewer],
+        ['Lý Do Từ Chối', '<span style="color:#EF4444; font-weight:600;">' + (data.dmNote || 'Không đạt tiêu chí taxonomy') + '</span>']
+      ];
+      const emailHtml = buildEmailTemplate(
+        'DM Đã Từ Chối Đề Xuất: ' + data.id,
+        'Chào bạn và Team Lead, đề xuất Tag đã bị từ chối ở bước thẩm định của DM. Vui lòng xem lý do để có hướng điều chỉnh phù hợp.',
+        emailRows,
+        portalUrl
+      );
+      sendEmailNotification(rejectTargets, '[Tag Portal] ❌ Đề xuất ' + data.id + ' đã bị Từ chối bởi DM', emailHtml);
+    }
+
+  } else if (step === 'QM_DONE') {
+    // 7. QM hoàn tất gắn tag
+    const tgMsg = '🎉 <b>[TAG PORTAL] ĐÃ HOÀN TẤT GẮN TAG TÀI XẾ (DONE)</b>\n\n'
+      + '📌 <b>Mã Request:</b> <code>' + data.id + '</code>\n'
+      + '🏢 <b>Team:</b> <b>' + data.team + '</b>\n'
+      + '🏷️ <b>Mã Tag:</b> <code>' + data.dmTagCode + '</code>\n'
+      + '👤 <b>QM Specialist:</b> ' + data.qmSpecialist + '\n'
+      + '✅ <b>Số lượng TX gắn thành công:</b> <b>' + data.successCount + '</b> tài xế\n'
+      + '📝 <b>Batch Ref / Ghi chú:</b> <i>' + (data.qmRef || '-') + '</i>\n\n'
+      + '👉 <i>Tag đã sẵn sàng vận hành trên hệ thống!</i>\n'
+      + '🔗 <a href="' + portalUrl + '"><b>MỞ TAG PORTAL ĐỂ XEM</b></a>';
+
+    sendTelegramNotification(tgMsg);
+
+    const targets = (data.submitterEmail ? [data.submitterEmail] : [])
+      .concat(getLeadEmailsForTeam(data.team))
+      .concat(getDMEmails());
+
+    const emailRows = [
+      ['Mã Request', '<b>' + data.id + '</b>'],
+      ['Team Đề Xuất', data.team],
+      ['Mã Tag Đã Gắn', '<b style="color: #059669; font-size: 14px;">' + data.dmTagCode + '</b>'],
+      ['QM Phụ Trách', data.qmSpecialist],
+      ['Số Lượng TX Thành Công', '<b style="color: #059669;">' + data.successCount + ' tài xế</b>'],
+      ['Batch / Ghi Chú QM', data.qmRef || '-']
+    ];
+    const emailHtml = buildEmailTemplate(
+      'Hoàn Tất Gắn Tag Tài Xế: ' + data.id,
+      'Xin chúc mừng! Đề xuất Tag tài xế từ team <b>' + data.team + '</b> đã được bộ phận QM add thành công vào hệ thống.',
+      emailRows,
+      portalUrl
+    );
+    sendEmailNotification(targets, '[Tag Portal] 🎉 Hoàn tất gắn Tag ' + data.dmTagCode + ': ' + data.id + ' (' + data.successCount + ' TX)', emailHtml);
+
+  } else if (step === 'SLA_BREACH') {
+    // 8. Cảnh báo quá hạn SLA
+    const tgMsg = '⚠️ <b>[TAG PORTAL CẢNH BÁO] REQUEST QUÁ HẠN SLA!</b>\n\n'
+      + '📌 <b>Mã Request:</b> <code>' + data.id + '</code>\n'
+      + '🏢 <b>Team:</b> <b>' + data.team + '</b> | <b>Tag:</b> <code>' + data.tagName + '</code>\n'
+      + '🚦 <b>Trạng thái đang nghẽn:</b> <b>' + data.state + '</b>\n'
+      + '⏰ <b>Hạn SLA đã quá:</b> <b>' + data.deadline + '</b>\n\n'
+      + '👉 <i>Đề nghị Approver phụ trách vào xử lý khẩn cấp:</i>\n'
+      + '🔗 <a href="' + portalUrl + '"><b>TRUY CẬP PORTAL XỬ LÝ NGAY</b></a>';
+
+    sendTelegramNotification(tgMsg);
+
+    const emailRows = [
+      ['Mã Request', '<b>' + data.id + '</b>'],
+      ['Team Đề Xuất', data.team],
+      ['Tên Tag', data.tagName],
+      ['Trạng Thái Nghẽn', '<b style="color:#EF4444;">' + data.state + '</b>'],
+      ['Hạn SLA Ban Đầu', '<b style="color:#EF4444;">' + data.deadline + '</b>']
+    ];
+    const emailHtml = buildEmailTemplate(
+      '⚠️ Cảnh Báo Request Quá Hạn SLA: ' + data.id,
+      'Cảnh báo: Request <b>' + data.id + '</b> đang bị quá hạn so với cam kết SLA dịch vụ nội bộ. Vui lòng kiểm tra và xử lý ngay.',
+      emailRows,
+      portalUrl
+    );
+    sendEmailNotification(data.targets, '[Tag Request Portal] ⚠️ Cảnh báo quá hạn SLA: ' + data.id + ' (' + data.state + ')', emailHtml);
+  }
+}
+
+/**
+ * Hàm kiểm thử hệ thống thông báo Telegram & Email (Chạy từ Apps Script Run)
+ */
+function testNotificationWorkflow() {
+  const sample = {
+    id: "REQ-TEST-" + Utilities.formatDate(new Date(), "GMT+7", "HHmm"),
+    team: "S&P",
+    name: "Khánh LP (Test)",
+    submitterEmail: "khanhlp@ahamove.com",
+    requestCategory: "Tạo tag mới",
+    tagName: "TAG_TEST_NOTIFICATION_BOT",
+    type: "Priority Dispatch",
+    count: 100,
+    reason: "Kiểm thử hệ thống thông báo tự động đa kênh Telegram & Email",
+    duration: "2026-11-10",
+    dueDate: "2026-11-15",
+    deadlineLead: fmt(addHours(new Date(), 4))
+  };
+
+  Logger.log("--- BẮT ĐẦU KIỂM THỬ THÔNG BÁO ---");
+  notifyWorkflowStep('NEW_REQUEST', sample);
+  Logger.log("--- HOÀN TẤT KIỂM THỬ ---");
+  return { status: "success", message: "Đã gửi bản tin kiểm thử đến Telegram và Email!" };
 }

@@ -29,7 +29,7 @@ GREEN_ACCENT = RGBColor(5, 150, 105)       # #059669 Green Accent Text
 
 FONT_NAME = "Helvetica Neue"
 
-prs = pptx.Presentation('/Users/ts-1148/Desktop/Pulu-workspace/Data sources/BaoCao_ThangDM_T7_Core_v7_1.pptx')
+prs = pptx.Presentation('/Users/ts-1148/Desktop/Pulu-workspace/data/sources/BaoCao_ThangDM_T7_Core_v7_1.pptx')
 
 def make_subtle_rounded(shape, corner_val=2500):
     if shape.shape_type == MSO_SHAPE_TYPE.AUTO_SHAPE:
@@ -269,6 +269,6 @@ for slide_idx, slide in enumerate(prs.slides):
                                 else:
                                     r.font.color.rgb = TEXT_BODY
 
-output_file = '/Users/ts-1148/Desktop/Pulu-workspace/Data sources/BaoCao_ThangDM_T7_Core_v7_1.pptx'
+output_file = '/Users/ts-1148/Desktop/Pulu-workspace/data/sources/BaoCao_ThangDM_T7_Core_v7_1.pptx'
 prs.save(output_file)
 print("Perfect light theme presentation saved successfully:", output_file)

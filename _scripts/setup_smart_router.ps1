@@ -3,12 +3,15 @@
 # Configures profile for both PS5.1 and PS7 (OneDrive & Local)
 # ============================================================
 
-$smartflow = "C:\Users\lephu\pulucowork\_scripts\pulu_smartflow.ps1"
+$scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { (Get-Location).Path }
+$smartflow = Join-Path $scriptDir "pulu_smartflow.ps1"
 
 $profileSnippet = @"
 
 # === SMART AI ROUTER (PuluSmartFlow) ===
 if (Test-Path '$smartflow') { . '$smartflow' }
+elseif (Test-Path "`$env:USERPROFILE\Desktop\Pulu-workspace\_scripts\pulu_smartflow.ps1") { . "`$env:USERPROFILE\Desktop\Pulu-workspace\_scripts\pulu_smartflow.ps1" }
+elseif (Test-Path "`$env:USERPROFILE\pulucowork\_scripts\pulu_smartflow.ps1") { . "`$env:USERPROFILE\pulucowork\_scripts\pulu_smartflow.ps1" }
 # ============================================
 "@
 
@@ -39,4 +42,4 @@ foreach ($p in $targetProfiles) {
     }
 }
 
-Write-Host "`n🎉 Setup completed! Run `. `$PROFILE` or open a new terminal." -ForegroundColor Green
+Write-Host "`nSetup completed! Run `. `$PROFILE` or open a new terminal." -ForegroundColor Green

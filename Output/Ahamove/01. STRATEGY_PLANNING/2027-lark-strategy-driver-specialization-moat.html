@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ahamove 2027 Strategy Plan | Chuyên Biệt Hóa Tài Xế & Moat Vận Hành (Lark Docs Format)</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js & Mermaid.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'neutral',
+      themeVariables: {
+        primaryColor: '#FFF3EB',
+        primaryTextColor: '#1E293B',
+        primaryBorderColor: '#FF6B00',
+        lineColor: '#FF6B00',
+        secondaryColor: '#F8FAFC',
+        tertiaryColor: '#FFFFFF',
+        fontFamily: 'Plus Jakarta Sans, sans-serif'
+      }
+    });
+  </script>
+
+  <style>
+    :root {
+      --primary: #FF6B00;
+      --primary-hover: #E05E00;
+      --primary-light: #FFF3EB;
+      --primary-border: #FFD8BE;
+      
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-300: #CBD5E1;
+      --slate-400: #94A3B8;
+      --slate-500: #64748B;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+
+      --emerald-500: #10B981;
+      --emerald-50: #ECFDF5;
+      --indigo-500: #6366F1;
+      --indigo-50: #EEF2FF;
+      --amber-500: #F59E0B;
+      --amber-50: #FFFBEB;
+      --rose-500: #EF4444;
+      --rose-50: #FEF2F2;
+
+      --lark-bg: #FFFFFF;
+      --lark-sidebar: #F8FAFC;
+      --border-color: #E2E8F0;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--slate-800);
+      background-color: #F8FAFC;
+      line-height: 1.65;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Lark Doc Container Layout */
+    .lark-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Table of Contents */
+    .lark-sidebar {
+      width: 290px;
+      background: #FFFFFF;
+      border-right: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 28px 18px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      background: var(--primary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 18px;
+      box-shadow: 0 2px 8px rgba(255, 107, 0, 0.35);
+    }
+
+    .brand-meta h3 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--slate-900);
+      letter-spacing: -0.2px;
+    }
+
+    .brand-meta span {
+      font-size: 11.5px;
+      color: var(--slate-500);
+      display: block;
+    }
+
+    .toc-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--slate-400);
+      margin-bottom: 8px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--slate-600);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .toc-link:hover, .toc-link.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .toc-sublink {
+      padding-left: 26px;
+      font-size: 12.5px;
+      color: var(--slate-500);
+    }
+
+    /* Main Doc Canvas */
+    .lark-main {
+      flex: 1;
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 40px 48px 80px;
+      background: #FFFFFF;
+      min-height: 100vh;
+      border-left: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Document Header Banner */
+    .doc-meta-banner {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      margin-bottom: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .doc-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .doc-tag {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tag-orange { background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-border); }
+    .tag-blue { background: var(--indigo-50); color: var(--indigo-500); border: 1px solid #C7D2FE; }
+    .tag-green { background: var(--emerald-50); color: var(--emerald-500); border: 1px solid #A7F3D0; }
+    .tag-slate { background: var(--slate-100); color: var(--slate-600); border: 1px solid var(--slate-200); }
+
+    .doc-title-h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--slate-900);
+      line-height: 1.3;
+      letter-spacing: -0.6px;
+    }
+
+    .doc-subtitle {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: -6px;
+      margin-bottom: 10px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      font-size: 12.5px;
+      color: var(--slate-600);
+      padding-top: 12px;
+      border-top: 1px dashed var(--slate-200);
+    }
+
+    .meta-grid strong {
+      color: var(--slate-800);
+    }
+
+    /* Headings */
+    h2.lark-h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--slate-900);
+      margin: 40px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--slate-100);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2.lark-h2 span.num-badge {
+      background: var(--primary);
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h3.lark-h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--slate-800);
+      margin: 24px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h4.lark-h4 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--slate-700);
+      margin: 16px 0 8px;
+    }
+
+    /* Lark Callout Box */
+    .lark-callout {
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      margin: 16px 0;
+      font-size: 14px;
+      line-height: 1.6;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      border: 1px solid transparent;
+    }
+
+    .callout-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    .callout-content {
+      flex: 1;
+    }
+
+    .callout-orange {
+      background: var(--primary-light);
+      border-color: var(--primary-border);
+      border-left: 5px solid var(--primary);
+      color: #9A3412;
+    }
+
+    .callout-blue {
+      background: var(--indigo-50);
+      border-color: #C7D2FE;
+      border-left: 5px solid var(--indigo-500);
+      color: #3730A3;
+    }
+
+    .callout-green {
+      background: var(--emerald-50);
+      border-color: #A7F3D0;
+      border-left: 5px solid var(--emerald-500);
+      color: #065F46;
+    }
+
+    .callout-red {
+      background: var(--rose-50);
+      border-color: #FECACA;
+      border-left: 5px solid var(--rose-500);
+      color: #991B1B;
+    }
+
+    /* KPI Bento Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 20px 0 28px;
+    }
+
+    .kpi-card {
+      background: #FFFFFF;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .kpi-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--slate-500);
+      margin-bottom: 6px;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--slate-900);
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--slate-500);
+      margin-bottom: 10px;
+    }
+
+    .kpi-pill {
+      align-self: flex-start;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .pill-red { background: var(--rose-50); color: var(--rose-500); border: 1px solid #FECACA; }
+    .pill-green { background: var(--emerald-50); color: var(--emerald-500); border: 1px solid #A7F3D0; }
+    .pill-orange { background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-border); }
+
+    /* Tables */
+    .table-wrapper {
+      margin: 18px 0 24px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      background: #FFFFFF;
+      box-shadow: var(--shadow-sm);
+    }
+
+    table.lark-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      text-align: left;
+    }
+
+    table.lark-table th {
+      background: var(--slate-50);
+      color: var(--slate-700);
+      font-weight: 700;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    table.lark-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--slate-100);
+      color: var(--slate-700);
+    }
+
+    table.lark-table tbody tr:hover {
+      background: #F8FAFC;
+    }
+
+    table.lark-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .highlight-cell {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .danger-cell {
+      font-weight: 700;
+      color: var(--rose-500);
+    }
+
+    .success-cell {
+      font-weight: 700;
+      color: var(--emerald-500);
+    }
+
+    /* Mermaid Container */
+    .mermaid-card {
+      background: var(--slate-50);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: auto;
+    }
+
+    /* Chart Grid */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0 28px;
+    }
+
+    .chart-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .chart-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--slate-800);
+    }
+
+    /* Pillars Grid */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 20px;
+      margin: 20px 0 28px;
+    }
+
+    .pillar-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    .pillar-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .pillar-1::before { background: var(--primary); }
+    .pillar-2::before { background: var(--indigo-500); }
+    .pillar-3::before { background: var(--emerald-500); }
+
+    .pillar-tag {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .pillar-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--slate-900);
+    }
+
+    .pillar-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--slate-600);
+    }
+
+    .pillar-list li {
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .pillar-list li::before {
+      content: '•';
+      position: absolute;
+      left: 4px;
+      color: var(--slate-400);
+      font-weight: 800;
+    }
+
+    /* Print & Floating Action */
+    .top-action-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--slate-700);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      background: var(--slate-50);
+      border-color: var(--slate-300);
+      color: var(--slate-900);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+      color: #FFFFFF;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .lark-sidebar { display: none; }
+      .chart-grid { grid-template-columns: 1fr; }
+      .lark-main { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="lark-layout">
+  <!-- Sidebar Table of Contents -->
+  <aside class="lark-sidebar">
+    <div class="brand-header">
+      <div class="brand-logo">A</div>
+      <div class="brand-meta">
+        <h3>Ahamove Docs</h3>
+        <span>Enterprise Strategy 2027</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="toc-title">MỤC LỤC TÀI LIỆU</div>
+      <nav class="toc-nav">
+        <a href="#sec-summary" class="toc-link">1. Tóm Tắt Thực Thi</a>
+        <a href="#sec-pyramid" class="toc-link toc-sublink">• Luận Điểm Kim Tự Tháp</a>
+        <a href="#sec-scr" class="toc-link toc-sublink">• Mục Tiêu S-C-R</a>
+        <a href="#sec-kpis" class="toc-link toc-sublink">• Chỉ Số Cốt Lõi (KPIs)</a>
+
+        <a href="#sec-analysis" class="toc-link">2. Khung Phân Tích</a>
+        <a href="#sec-descriptive" class="toc-link toc-sublink">• Phân Tích Mô Tả</a>
+        <a href="#sec-table4" class="toc-link toc-sublink">• Bảng 4: Baga & Real Bulky</a>
+        <a href="#sec-diagnostic" class="toc-link toc-sublink">• Phân Tích Chẩn Đoán</a>
+        <a href="#sec-predictive" class="toc-link toc-sublink">• Phân Tích Dự Báo</a>
+        <a href="#sec-prescriptive" class="toc-link toc-sublink">• Phân Tích Đề Xuất (3 Trụ Cột)</a>
+        <a href="#sec-roadmap" class="toc-link toc-sublink">• Lộ Trình 4 Quý 2027</a>
+        <a href="#sec-raci" class="toc-link toc-sublink">• Ma Trận RACI & Rủi Ro</a>
+
+        <a href="#sec-value" class="toc-link">3. Hiện Thực Hóa Giá Trị</a>
+        <a href="#sec-before-after" class="toc-link toc-sublink">• So Sánh Before &rarr; After</a>
+      </nav>
+    </div>
+
+    <div style="margin-top:auto; padding-top:16px; border-top:1px solid var(--slate-200); font-size:11.5px; color:var(--slate-400);">
+      Lưu hành nội bộ • Driver Management<br>
+      Ahamove Corporation &copy; 2026-2027
+    </div>
+  </aside>
+
+  <!-- Main Canvas -->
+  <main class="lark-main">
+    <div class="top-action-bar">
+      <button class="btn-action" onclick="window.print()">🖨️ In / Xuất PDF</button>
+      <button class="btn-action btn-primary" onclick="alert('Đã cập nhật dữ liệu mới nhất T10/2026')">✓ Đã Cập Nhật (v6.2)</button>
+    </div>
+
+    <!-- Document Meta Banner -->
+    <header class="doc-meta-banner">
+      <div class="doc-tags">
+        <span class="doc-tag tag-orange">🚀 CHIẾN LƯỢC TOÀN DIỆN 2027</span>
+        <span class="doc-tag tag-blue">LARK DOCS OFFICIAL FORMAT</span>
+        <span class="doc-tag tag-green">CONFIDENTIAL / NỘI BỘ</span>
+        <span class="doc-tag tag-slate">VER: 6.2 (OCT 2026)</span>
+      </div>
+
+      <h1 class="doc-title-h1">CHUYÊN BIỆT HÓA TÀI XẾ & XÂY DỰNG MOAT VẬN HÀNH ĐỘC QUYỀN</h1>
+      <div class="doc-subtitle">TỐI ƯU HÓA DÒNG TIỀN COD (ORDER COD & DRIVER BALANCE) — BIỆT ĐỘI BULKY BAGA PRO — IN-STORE BOOTH & GIAO GOM SIÊU THỊ 4H</div>
+
+      <div class="meta-grid">
+        <div><strong>Chủ nhiệm đề án:</strong> Lê Phương Khanh (@Lephuongkhanh) — DM Leader</div>
+        <div><strong>Kính gửi:</strong> BOD & Head of Product (Anh Quang Minh - QM)</div>
+        <div><strong>Đơn vị soạn thảo:</strong> Driver Management (DM) & Strategy & Planning (S&P)</div>
+        <div><strong>Tập dữ liệu:</strong> 34.66M Order COD, 3.82M Balance & 2.85M Bulky Baga</div>
+      </div>
+    </header>
+
+    <!-- SECTION 1: EXECUTIVE SUMMARY -->
+    <section id="sec-summary">
+      <h2 class="lark-h2"><span class="num-badge">1</span> TÓM TẮT THỰC THI (EXECUTIVE SUMMARY)</h2>
+
+      <div id="sec-pyramid">
+        <h3 class="lark-h3">1.1. Luận Điểm Kim Tự Tháp (The Pyramid Principle)</h3>
+        <p style="margin-bottom:12px; font-size:14.5px; color:var(--slate-700);">
+          Ahamove kiên quyết không tham gia cuộc chiến "đốt tiền" promo cạnh tranh giá rẻ trong phân khúc giao hàng phổ thông. Chiến lược 2027 là <strong>Chuyên biệt hóa Nguồn cung (Driver Specialization)</strong> để kiểm soát tuyệt đối <strong>"Phân khúc Đơn Khó"</strong> (Hàng cồng kềnh, COD cao &gt;1M, Giao gom siêu thị) — nơi rào cản vận hành cao nhất mà đối thủ không thể giải quyết bằng công nghệ đơn thuần:
+        </p>
+
+        <div class="lark-callout callout-orange">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong>4 Đòn Bẩy Chiến Lược Then Chốt:</strong>
+            <ul style="margin-top:6px; margin-left:18px; line-height:1.6;">
+              <li><strong>Hiển thị năng lực thực tế lên App khách (Customer Badges):</strong> Badge <code>PRO_BULKY</code>, <code>COD_CHAMPION</code> triệt tiêu 100% tình trạng hủy đơn do không chở được hàng to hoặc không đủ tiền ứng.</li>
+              <li><strong>Giải phóng Dòng tiền COD 2 mặt:</strong> Cấp <em>Virtual Overdraft (+1.5M đến +3.0M)</em> đưa hơn 5,397 tài xế vào chia lửa + <em>FinTech T0 Advance (5M–20M)</em> giải phóng 100% năng lực tài xế Full-Time.</li>
+              <li><strong>Chuẩn hóa & Tái cấu trúc Biệt đội Bulky Baga Pro:</strong> QM Audit qua App loại bỏ ảo giác 17.4k tự tick; tài trợ Baga 40/60 mở rộng khẩn cấp 1,500–2,000 tài xế tại Hà Nội để kéo FR từ 67% lên &ge;82%.</li>
+              <li><strong>Mô hình In-Store Service Booth & Giao Gom 4 Tiếng:</strong> Quầy cắm chốt tại siêu thị tiếp nhận hàng gửi tại chỗ &amp; đơn siêu thị đẩy ra; bộ 3 thuật toán gom đợt sóng 4 tiếng nâng PPH lên 3.0–4.0 đơn/giờ, giảm 40% CPO.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mermaid-card">
+          <div class="mermaid">
+          graph TD
+              A["MOAT CHIẾN LƯỢC AHAMOVE 2027<br>Chuyên Biệt Hóa Nguồn Cung"] --> B["TRỤ CỘT 1: TÀI CHÍNH DÒNG TIỀN KÉP<br>(COD Balance & FinTech T0)"]
+              A --> C["TRỤ CỘT 2: VẬN HÀNH BAGA THỰC CHIẾN<br>(Bulky Baga Pro Fleet)"]
+              A --> D["TRỤ CỘT 3: GIAO GOM BÁN LẺ & SIÊU THỊ<br>(In-Store Booth & 4H Batching)"]
+
+              B --> B1["Virtual Overdraft +1.5M - +3.0M<br>Kéo 5.3k TX chia lửa đơn 1M-3M"]
+              B --> B2["FinTech T0 Advance 5M - 20M<br>Giải phóng 100% nhóm Full-Time lõi"]
+
+              C --> C1["QM Audit qua App gắn tag VERIFIED_BAGA<br>Bảo vệ chuẩn Baga sắt 70-100kg"]
+              C --> C2["Tài trợ Baga 40/60 & Hoàn tiền 100%<br>Mở rộng khẩn cấp 1.5k-2k TX tại HAN"]
+
+              D --> D1["Quầy cắm chốt tiếp nhận 2 nguồn hàng:<br>Khách mua gửi tại chỗ + Đơn siêu thị"]
+              D --> D2["Bộ 3 Thuật toán: Wave + Cluster + TSP<br>PPH vọt lên 3.0 - 4.0 đơn/h, giảm 40% CPO"]
+          </div>
+        </div>
+      </div>
+
+      <div id="sec-scr" style="margin-top:24px;">
+        <h3 class="lark-h3">1.2. Mục Tiêu Kinh Doanh Theo Khung S-C-R (Situation - Complication - Resolution)</h3>
+        
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-top:12px;">
+          <div style="background:var(--slate-50); border:1px solid var(--slate-200); border-radius:var(--radius-md); padding:16px;">
+            <div style="font-size:12px; font-weight:800; color:var(--slate-500); text-transform:uppercase;">1. BỐI CẢNH (SITUATION)</div>
+            <p style="font-size:13px; color:var(--slate-700); margin-top:6px; line-height:1.55;">
+              Ahamove xử lý 34.66M đơn hàng toàn sàn, trong đó hàng cồng kềnh chiếm 15.8% (5.47M đơn) mang lại 237.4 Tỷ thu nhập cho tài xế. Nhóm tài xế Full-time thâm niên (SC/CN) là xương sống gánh 53%–58% các đơn hàng COD lớn.
+            </p>
+          </div>
+          <div style="background:#FFF1F2; border:1px solid #FECDD3; border-radius:var(--radius-md); padding:16px;">
+            <div style="font-size:12px; font-weight:800; color:#E11D48; text-transform:uppercase;">2. THÁCH THỨC (COMPLICATION)</div>
+            <p style="font-size:13px; color:#9F1239; margin-top:6px; line-height:1.55;">
+              FR đơn COD >2M chạm đáy 36.5%–51.6% do 53.5% tài xế bị giam ở balance &le; 1M; nguồn cung Bulky Thật sụt giảm -29.8% (HAN giảm từ 5.6k xuống 4.0k TX) khiến FR cồng kềnh tại Hà Nội rơi xuống 67%; mảng siêu thị lãng phí chi phí chạy đơn lẻ.
+            </p>
+          </div>
+          <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:var(--radius-md); padding:16px;">
+            <div style="font-size:12px; font-weight:800; color:#16A34A; text-transform:uppercase;">3. GIẢI PHÁP (RESOLUTION)</div>
+            <p style="font-size:13px; color:#14532D; margin-top:6px; line-height:1.55;">
+              Triển khai giải pháp tài chính kép (Overdraft + FinTech T0) cho 7.5k–8k TX FT; QM Audit App chuẩn hóa 3.5k–4.5k Baga Pro & tài trợ 40/60 bù 1.5k–2k TX tại HAN; In-Store Booth giao gom 4 tiếng với bộ 3 thuật toán tối ưu.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="sec-kpis" style="margin-top:28px;">
+        <h3 class="lark-h3">1.3. Bộ Chỉ Số Cốt Lõi (Core Enterprise KPIs)</h3>
+        
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div>
+              <div class="kpi-label">Tổng Đơn Hàng COD (Ứng)</div>
+              <div class="kpi-value">34.66 Triệu</div>
+              <div class="kpi-sub">Lũy kế 10T/2026 (cod block.xlsx)</div>
+            </div>
+            <span class="kpi-pill pill-orange">87.8% đơn &lt; 500k</span>
+          </div>
+
+          <div class="kpi-card">
+            <div>
+              <div class="kpi-label">Đơn Cần Baga (Tier 4 & MP)</div>
+              <div class="kpi-value">2,849,494</div>
+              <div class="kpi-sub">52.05% tổng đơn cồng kềnh</div>
+            </div>
+            <span class="kpi-pill pill-red">Cần 3.5k–4.5k Baga Pro</span>
+          </div>
+
+          <div class="kpi-card">
+            <div>
+              <div class="kpi-label">TX Active Bulky Thật (MP & T4)</div>
+              <div class="kpi-value">12,727 TX</div>
+              <div class="kpi-sub">SGN: 6,570 | HAN: 4,054 (T10/2026)</div>
+            </div>
+            <span class="kpi-pill pill-red">Giảm -29.8% từ T1 (18.1k TX)</span>
+          </div>
+
+          <div class="kpi-card">
+            <div>
+              <div class="kpi-label">Đáy FR Đơn Hạn Mức >2M</div>
+              <div class="kpi-value">36.5%</div>
+              <div class="kpi-sub">Rơi tự do ở block 10M (HAN 33%)</div>
+            </div>
+            <span class="kpi-pill pill-green">Mục tiêu kéo lên &ge; 58%–65%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: ANALYSIS FRAMEWORK -->
+    <section id="sec-analysis">
+      <h2 class="lark-h2"><span class="num-badge">2</span> KHUNG PHÂN TÍCH CHIẾN LƯỢC (STRATEGIC ANALYSIS FRAMEWORK)</h2>
+
+      <!-- 2.1 Descriptive Analysis -->
+      <div id="sec-descriptive">
+        <h3 class="lark-h3">2.1. Phân Tích Mô Tả (Descriptive Analysis — Đánh Giá Hiện Trạng)</h3>
+        
+        <div class="lark-callout callout-blue">
+          <div class="callout-icon">📌</div>
+          <div class="callout-content">
+            <strong>Bản Chất Khác Biệt Giữa 2 Khái Niệm Dòng Tiền COD:</strong><br>
+            • <strong>Tiền Ứng COD Đơn Hàng (Order COD):</strong> Số tiền thu hộ Shop yêu cầu tài xế phải tự ứng tiền túi trả trước tại điểm pickup. (Dữ liệu 34.66M đơn `cod block.xlsx`).<br>
+            • <strong>Hạn Mức COD Balance Của Tài Xế (Driver Balance Limit):</strong> Trần số dư tối đa hệ thống cho phép tài xế được giữ/nhận đơn tại 1 thời điểm (`max(Balance, Deposit)`). (Dữ liệu 3.82M lượt kiểm tra &amp; 27.11k tài xế `cod_balance.xlsx`).
+          </div>
+        </div>
+
+        <div class="chart-grid">
+          <div class="chart-box">
+            <div class="chart-header">
+              <span class="chart-title">Tỷ Lệ Hoàn Thành (FR%) Theo 5 Block Tiền Ứng COD</span>
+              <span style="font-size:11px; color:var(--slate-400)">cod block.xlsx</span>
+            </div>
+            <canvas id="chartCodFR" height="200"></canvas>
+          </div>
+
+          <div class="chart-box">
+            <div class="chart-header">
+              <span class="chart-title">Tỉ Trọng Đơn Hoàn Thành Theo Nhóm Tài Xế</span>
+              <span style="font-size:11px; color:var(--slate-400)">FT gánh 53.1% đơn &gt;5M</span>
+            </div>
+            <canvas id="chartDriverRole" height="200"></canvas>
+          </div>
+        </div>
+
+        <!-- Table 1: Order COD -->
+        <h4 class="lark-h4">Bảng 1: Phân Tầng Tiền Ứng COD Đơn Hàng &amp; Điểm Gãy Tỷ Lệ Hoàn Thành (34.66M Đơn)</h4>
+        <div class="table-wrapper">
+          <table class="lark-table">
+            <thead>
+              <tr>
+                <th>Block Tiền Ứng COD</th>
+                <th>Tổng Đơn Tạo</th>
+                <th>Tỉ Trọng (%)</th>
+                <th>Đơn Hoàn Thành</th>
+                <th>Tỷ Lệ FR (%)</th>
+                <th>Active Driver TB/Tháng</th>
+                <th>Độ Co Hẹp Nguồn Cung</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. &lt; 500k</strong></td>
+                <td>30,445,880</td>
+                <td>87.84%</td>
+                <td>23,222,655</td>
+                <td class="success-cell">76.28%</td>
+                <td><strong>14,975</strong></td>
+                <td>Baseline (100%)</td>
+              </tr>
+              <tr>
+                <td><strong>2. &lt; 1M</strong></td>
+                <td>2,446,786</td>
+                <td>7.06%</td>
+                <td>1,640,809</td>
+                <td>67.06%</td>
+                <td>9,051</td>
+                <td>Giảm -39.6%</td>
+              </tr>
+              <tr>
+                <td><strong>3. &lt; 3M</strong></td>
+                <td>1,523,009</td>
+                <td>4.39%</td>
+                <td>979,423</td>
+                <td>64.31%</td>
+                <td>6,640</td>
+                <td>Giảm -55.7%</td>
+              </tr>
+              <tr>
+                <td><strong>4. &lt; 5M</strong></td>
+                <td>188,008</td>
+                <td>0.54%</td>
+                <td>117,009</td>
+                <td class="danger-cell">62.24%</td>
+                <td>2,333</td>
+                <td>Giảm -84.4%</td>
+              </tr>
+              <tr>
+                <td><strong>5. &gt;= 5M</strong></td>
+                <td>56,465</td>
+                <td>0.16%</td>
+                <td>35,934</td>
+                <td>63.64%</td>
+                <td><strong>935</strong></td>
+                <td class="danger-cell">Giảm -93.8%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table 2: Driver Balance Limit -->
+        <h4 class="lark-h4">Bảng 2: Điểm Gãy Tỷ Lệ Nhận Đơn (AR%) &amp; Hoàn Thành (FR%) Theo 8 Block COD Balance</h4>
+        <div class="table-wrapper">
+          <table class="lark-table">
+            <thead>
+              <tr>
+                <th>Block Hạn Mức Balance</th>
+                <th>Đơn Yêu Cầu</th>
+                <th>Đơn Nhận (AR%)</th>
+                <th>Đơn Hoàn Thành</th>
+                <th>Tỷ Lệ FR (%)</th>
+                <th>Đánh Giá Tác Động Của Hạn Mức</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>a. 200k</strong></td>
+                <td>1,944,110 (50.8%)</td>
+                <td>1,459,251 (75.1%)</td>
+                <td>1,120,382</td>
+                <td>57.63%</td>
+                <td>Hạn mức thấp, phục vụ đơn nhỏ</td>
+              </tr>
+              <tr style="background:#FFF8F3;">
+                <td><strong>b. 500k</strong></td>
+                <td>1,227,299 (32.1%)</td>
+                <td>963,348 (<strong>78.49%</strong>)</td>
+                <td>746,228</td>
+                <td class="success-cell"><strong>60.80%</strong></td>
+                <td><strong>Đỉnh điểm hiệu suất toàn hệ thống</strong></td>
+              </tr>
+              <tr>
+                <td><strong>c. 1M</strong></td>
+                <td>538,947 (14.1%)</td>
+                <td>405,697 (75.3%)</td>
+                <td>311,157</td>
+                <td>57.73%</td>
+                <td>Bắt đầu bị nghẽn số dư ký quỹ</td>
+              </tr>
+              <tr>
+                <td><strong>d. 2M</strong></td>
+                <td>219,336 (5.7%)</td>
+                <td>154,317 (70.4%)</td>
+                <td>113,186</td>
+                <td class="danger-cell">51.60%</td>
+                <td>Giảm sâu -9.2% pts vs block 500k</td>
+              </tr>
+              <tr>
+                <td><strong>e. 4M</strong></td>
+                <td>87,759 (2.3%)</td>
+                <td>55,676 (63.4%)</td>
+                <td>39,092</td>
+                <td class="danger-cell">44.54%</td>
+                <td>Thiếu hụt tài xế có số dư lớn</td>
+              </tr>
+              <tr>
+                <td><strong>h. 10M</strong></td>
+                <td>941 (0.02%)</td>
+                <td>546 (58.0%)</td>
+                <td>344</td>
+                <td class="danger-cell"><strong>36.56%</strong></td>
+                <td><strong>Rơi tự do chạm đáy, thất thoát lớn</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table 2.1: Granular COD Balance Driver Distribution -->
+        <h4 class="lark-h4">Bảng 2.1: Thống Kê Phân Bổ Số Lượng Tài Xế Theo 10 Block COD Balance Năm 2026 (Dữ Liệu Mới Nhất)</h4>
+        <div class="table-wrapper">
+          <table class="lark-table">
+            <thead>
+              <tr>
+                <th>Tháng</th>
+                <th>Khu Vực</th>
+                <th>Tổng TX Active</th>
+                <th>&le; 200k</th>
+                <th>200k–500k</th>
+                <th>500k–1M</th>
+                <th style="background:#FFF1F2; color:#E11D48;">Tổng &le; 1M</th>
+                <th>1M–2M</th>
+                <th>2M–3M</th>
+                <th>3M–4M</th>
+                <th>4M–6M</th>
+                <th>6M–8M</th>
+                <th>8M–10M</th>
+                <th style="background:#ECFDF5; color:#059669; font-weight:800;">&ge; 10M</th>
+                <th style="background:#FFF8F3; color:var(--primary); font-weight:800;">Tổng &gt; 3M</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#FFF8F3; font-weight:600;">
+                <td><strong>10/2026</strong></td>
+                <td><strong>SGN</strong></td>
+                <td>13,612</td>
+                <td>1,475</td>
+                <td>1,932</td>
+                <td>2,677</td>
+                <td style="color:#E11D48; font-weight:700;">6,084 (44.7%)</td>
+                <td>1,097</td>
+                <td>364</td>
+                <td>158</td>
+                <td>169</td>
+                <td>56</td>
+                <td>281</td>
+                <td style="color:#059669; font-weight:800;">5,399</td>
+                <td style="color:var(--primary); font-weight:800;">6,063 (44.5%)</td>
+              </tr>
+              <tr style="background:#FFF8F3; font-weight:600;">
+                <td><strong>10/2026</strong></td>
+                <td><strong>HAN</strong></td>
+                <td>13,501</td>
+                <td>2,720</td>
+                <td>3,071</td>
+                <td>2,720</td>
+                <td style="color:#E11D48; font-weight:700;">8,511 (63.0%)</td>
+                <td>496</td>
+                <td>75</td>
+                <td>35</td>
+                <td>25</td>
+                <td>10</td>
+                <td>391</td>
+                <td style="color:#059669; font-weight:800;">3,956</td>
+                <td style="color:var(--primary); font-weight:800;">4,417 (32.7%)</td>
+              </tr>
+              <tr style="background:#FFF3EB; font-weight:800; border-top:2px solid var(--primary);">
+                <td><strong>10/2026</strong></td>
+                <td><strong>TOÀN MẠNG</strong></td>
+                <td><strong>27,113</strong></td>
+                <td><strong>4,195</strong></td>
+                <td><strong>5,003</strong></td>
+                <td><strong>5,397</strong></td>
+                <td style="color:#E11D48; font-weight:900;">14,595 (53.8%)</td>
+                <td><strong>1,593</strong></td>
+                <td><strong>439</strong></td>
+                <td><strong>193</strong></td>
+                <td><strong>194</strong></td>
+                <td><strong>66</strong></td>
+                <td><strong>672</strong></td>
+                <td style="color:#059669; font-weight:900;">9,355 (34.5%)</td>
+                <td style="color:var(--primary); font-weight:900;">10,480 (38.7%)</td>
+              </tr>
+              <tr>
+                <td>09/2026</td>
+                <td>SGN / HAN</td>
+                <td>15,327 / 14,574</td>
+                <td>1,996 / 3,045</td>
+                <td>2,044 / 2,984</td>
+                <td>2,826 / 3,141</td>
+                <td>6,866 / 9,170</td>
+                <td>1,295 / 690</td>
+                <td>429 / 109</td>
+                <td>210 / 42</td>
+                <td>373 / 41</td>
+                <td>83 / 12</td>
+                <td>126 / 180</td>
+                <td>5,944 / 4,327</td>
+                <td><strong>6,736 / 4,602</strong></td>
+              </tr>
+              <tr>
+                <td>08/2026</td>
+                <td>SGN / HAN</td>
+                <td>15,516 / 14,227</td>
+                <td>2,055 / 2,742</td>
+                <td>1,948 / 2,770</td>
+                <td>2,825 / 3,314</td>
+                <td>6,828 / 8,826</td>
+                <td>1,405 / 709</td>
+                <td>548 / 97</td>
+                <td>269 / 39</td>
+                <td>205 / 32</td>
+                <td>83 / 13</td>
+                <td>118 / 103</td>
+                <td>6,059 / 4,404</td>
+                <td><strong>6,734 / 4,591</strong></td>
+              </tr>
+              <tr>
+                <td>07/2026</td>
+                <td>SGN / HAN</td>
+                <td>15,729 / 14,171</td>
+                <td>2,324 / 3,254</td>
+                <td>2,102 / 2,652</td>
+                <td>2,951 / 3,166</td>
+                <td>7,377 / 9,072</td>
+                <td>1,222 / 458</td>
+                <td>462 / 62</td>
+                <td>221 / 25</td>
+                <td>151 / 27</td>
+                <td>58 / 14</td>
+                <td>6,220 / 4,491</td>
+                <td>7 / 0</td>
+                <td><strong>6,657 / 4,557</strong></td>
+              </tr>
+              <tr>
+                <td>02/2026</td>
+                <td>SGN / HAN</td>
+                <td>12,469 / 14,121</td>
+                <td>2,017 / 3,696</td>
+                <td>605 / 752</td>
+                <td>1,947 / 1,930</td>
+                <td>4,569 / 6,378</td>
+                <td>1,388 / 1,251</td>
+                <td>510 / 341</td>
+                <td>236 / 117</td>
+                <td>206 / 82</td>
+                <td>57 / 36</td>
+                <td>29 / 29</td>
+                <td>6 / 1</td>
+                <td><strong>534 / 265</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="background:var(--slate-50); border:1px solid var(--slate-200); border-radius:var(--radius-md); padding:14px; margin-bottom:20px;">
+          <h5 style="font-size:13.5px; font-weight:700; color:var(--slate-900); margin-bottom:6px;">🎯 Nhận Định Vận Hành Cốt Lõi: Nhóm Tài Xế &gt;3M Bao Phủ (Cover) Toàn Bộ Đơn 1M – 3M</h5>
+          <p style="font-size:13px; color:var(--slate-700); line-height:1.6; margin:0;">
+            • <strong>Nguyên lý phủ cộng dồn (Cumulative Coverage):</strong> Tài xế có <code>COD Balance &gt; 3M</code> hiển nhiên thỏa điều kiện nhận toàn bộ các đơn hàng có Transfer COD/COD dưới 3M. Nhóm tài xế &gt;3M hiện tại rất dồi dào: <strong>4,417 tài xế HAN (32.7%)</strong> và <strong>6,063 tài xế SGN (44.5%)</strong>, tổng cộng toàn mạng tới <strong>10,480 tài xế (38.7%)</strong>. Đặc biệt, có tới <strong>9,355 tài xế sở hữu số dư &ge; 10M</strong>. Vì vậy, <strong>khoảng 1M – 3M hoàn toàn được bao bọc an toàn bởi lực lượng &gt;3M này</strong>.<br>
+            • <strong>Điểm nghẽn thật sự:</strong> Hiệu ứng giam hạn mức tức thời (Dynamic Capacity Lock) khi nhận đơn lớn khiến số dư bị trừ ngay xuống chờ giao và nộp lại thành công. Đồng thời, <strong>14,595 tài xế (53.8%)</strong> có số dư &le; 1M bị khóa cứng không thể chia lửa.
+          </p>
+        </div>
+
+        <!-- Table 3: Bulky Tiers -->
+        <h4 class="lark-h4">Bảng 3: Phân Tầng 5 Nhóm Hàng Cồng Kềnh (Bulky Tiers — 5.47M Đơn)</h4>
+        <div class="table-wrapper">
+          <table class="lark-table">
+            <thead>
+              <tr>
+                <th>Phân Nhóm Cồng Kềnh</th>
+                <th>Quy Chuẩn Kỹ Thuật</th>
+                <th>Tổng Đơn Tạo</th>
+                <th>Đơn Hoàn Thành</th>
+                <th>Tỷ Lệ FR (%)</th>
+                <th>Thu Nhập Tài Xế</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Tier 1–3</strong></td>
+                <td>Nhỏ đến vừa, bật nút nhận cồng kềnh, không cần Baga</td>
+                <td>2,625,395</td>
+                <td>2,064,241</td>
+                <td>78.63%</td>
+                <td>109.93 Tỷ VNĐ</td>
+              </tr>
+              <tr style="background:#FFF8F3;">
+                <td><strong>Tier 4</strong></td>
+                <td><strong>Cồng kềnh nặng: BẮT BUỘC CÓ BAGA CHỊU LỰC</strong></td>
+                <td>1,073,976</td>
+                <td>808,034</td>
+                <td>75.24%</td>
+                <td>62.89 Tỷ VNĐ</td>
+              </tr>
+              <tr style="background:#FFF8F3;">
+                <td><strong>MP Bulky</strong></td>
+                <td><strong>Đơn Marketplace Sàn TMĐT: BẮT BUỘC CÓ BAGA</strong></td>
+                <td>1,775,518</td>
+                <td>1,316,958</td>
+                <td>74.17%</td>
+                <td>64.58 Tỷ VNĐ</td>
+              </tr>
+              <tr style="background:#FEE2E2; font-weight:700;">
+                <td><strong>NHÓM CẦN BAGA</strong></td>
+                <td><strong>Tier 4 + MP Bulky (Hàng khó nhất hệ thống)</strong></td>
+                <td><strong>2,849,494</strong></td>
+                <td><strong>2,124,992</strong></td>
+                <td><strong>74.57%</strong></td>
+                <td><strong>127.47 Tỷ VNĐ</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2.2 Table 4 & Deep Dive -->
+      <div id="sec-table4" style="margin-top:24px;">
+        <h4 class="lark-h4">Bảng 4: Thống Kê Tài Xế Tick Baga (`baga_active`) vs Chạy Bulky Mọi Loại (`bulky_active`) vs Active Bulky Thật (`bulky_real_active` — Tier 4 &amp; MP)</h4>
+        
+        <div class="table-wrapper">
+          <table class="lark-table">
+            <thead>
+              <tr>
+                <th>Tháng</th>
+                <th>Khu Vực</th>
+                <th>Tick Baga (`baga_active`)</th>
+                <th>Chạy Bulky Mọi Tier (`bulky_active`)</th>
+                <th style="background:#FFF3EB; color:var(--primary); font-weight:800;">Active Bulky Thật: Tier 4 & MP (`bulky_real_active`)</th>
+                <th>Tỷ Lệ MP&T4 / Tick</th>
+                <th>Đơn Xong (`bulky_stp`)</th>
+                <th>Tổng Sàn Real Bulky</th>
+                <th>Đánh Giá Vận Hành Thực Địa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#FFF8F3; font-weight:600;">
+                <td><strong>10/2026</strong></td>
+                <td><strong>SGN</strong></td>
+                <td>9,479</td>
+                <td>8,212</td>
+                <td style="color:var(--primary); font-weight:800;">6,570</td>
+                <td>69.3%</td>
+                <td>172,554</td>
+                <td>12,727</td>
+                <td>Giảm -17.8% so với đỉnh T3 (7,997 TX)</td>
+              </tr>
+              <tr style="background:#FFF8F3; font-weight:600;">
+                <td><strong>10/2026</strong></td>
+                <td><strong>HAN</strong></td>
+                <td>7,943</td>
+                <td>6,491</td>
+                <td style="color:var(--rose-500); font-weight:800;">4,054</td>
+                <td class="danger-cell">51.0%</td>
+                <td>105,279</td>
+                <td>12,727</td>
+                <td><strong>Báo động: Chỉ 51% chạy hàng khó &rarr; FR HAN đáy 67%</strong></td>
+              </tr>
+              <tr style="background:#FEE2E2; font-weight:800; border-top:2px solid #EF4444;">
+                <td><strong>10/2026</strong></td>
+                <td><strong>TOÀN MẠNG</strong></td>
+                <td><strong>17,422</strong></td>
+                <td><strong>21,612 (sàn)</strong></td>
+                <td style="color:#B91C1C; font-weight:900;">12,727</td>
+                <td><strong>73.1%</strong></td>
+                <td><strong>277,833</strong></td>
+                <td><strong>12,727</strong></td>
+                <td><strong>Đáy nguồn cung 2026 (Sụt giảm -29.8% từ 18,140 T1)</strong></td>
+              </tr>
+              <tr>
+                <td>09/2026</td>
+                <td>SGN / HAN</td>
+                <td>10,773 / 8,787</td>
+                <td>9,287 / 7,241</td>
+                <td>7,417 / 4,598</td>
+                <td>68.8% / 52.3%</td>
+                <td>265,404 / 149,580</td>
+                <td>14,889</td>
+                <td>Đà suy giảm duy trì liên tục ở cả 2 miền</td>
+              </tr>
+              <tr>
+                <td>08/2026</td>
+                <td>SGN / HAN</td>
+                <td>11,065 / 8,778</td>
+                <td>9,592 / 7,319</td>
+                <td>7,544 / 4,599</td>
+                <td>68.2% / 52.4%</td>
+                <td>286,305 / 153,877</td>
+                <td>14,514</td>
+                <td>HAN chững lại quanh mốc 4.6k tài xế</td>
+              </tr>
+              <tr>
+                <td>07/2026</td>
+                <td>SGN / HAN</td>
+                <td>11,263 / 9,027</td>
+                <td>9,728 / 7,385</td>
+                <td>7,634 / 4,366</td>
+                <td>67.8% / 48.4%</td>
+                <td>271,353 / 137,021</td>
+                <td>14,267</td>
+                <td>HAN chạm đáy tỷ lệ phục vụ T7 (chỉ 48.4%)</td>
+              </tr>
+              <tr>
+                <td>03/2026</td>
+                <td>SGN / HAN</td>
+                <td>10,320 / 9,085</td>
+                <td>9,131 / 7,364</td>
+                <td><strong>7,997 / 5,633</strong></td>
+                <td>77.5% / 62.0%</td>
+                <td>260,192 / 131,384</td>
+                <td>17,140</td>
+                <td>Đỉnh cao nguồn cung phục vụ cồng kềnh Q1/2026</td>
+              </tr>
+              <tr>
+                <td>01/2026</td>
+                <td>SGN / HAN</td>
+                <td>9,379 / 8,317</td>
+                <td>8,569 / 7,041</td>
+                <td><strong>7,639 / 5,532</strong></td>
+                <td>81.4% / 66.5%</td>
+                <td>248,940 / 139,283</td>
+                <td>18,140</td>
+                <td>Mốc đầu năm 2026: Toàn sàn có 18,140 TX cồng kềnh</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2.3 Diagnostic Analysis -->
+      <div id="sec-diagnostic" style="margin-top:28px;">
+        <h3 class="lark-h3">2.2. Phân Tích Chẩn Đoán (Diagnostic Analysis — Điều Tra Nguyên Nhân Gốc Rễ)</h3>
+
+        <div style="background:var(--slate-50); border:1px solid var(--slate-200); border-radius:var(--radius-md); padding:18px; margin-bottom:18px;">
+          <h4 style="font-size:14px; font-weight:800; color:var(--slate-900); margin-bottom:8px;">🎯 3 Bằng Chứng Thực Địa Cốt Lõi (Root Causes):</h4>
+          <ol style="margin-left:20px; line-height:1.65; font-size:13.5px; color:var(--slate-700);">
+            <li><strong>Khoảng trống chất lượng giữa "Tự tick" và "Thực tế chạy":</strong> 17,422 TX tick Baga chỉ là con số tự khai trên app để nhận thêm cuốc. Thực chiến chạy đơn Tier 4 và MP Bulky toàn sàn chỉ có <strong>12,727 TX</strong>. Tại Hà Nội, tỷ lệ thực chạy chỉ đạt <strong>51.0%</strong> (gần một nửa chỉ tick để đó hoặc không có Baga chuẩn để chở hàng nặng).</li>
+            <li><strong>Sự suy thoái liên tục của nguồn cung cồng kềnh (-29.8%):</strong> Toàn hệ thống bốc hơi hơn <strong>5,413 tài xế cồng kềnh</strong> từ đầu năm đến nay do thiếu chính sách trang bị CCDC chuẩn và hao mòn xe lớn. Tại Hà Nội, lượng tài xế rơi từ 5,633 xuống 4,054 TX &rarr; <strong>FR Tier 4 tại HAN rơi xuống 67.09% và MP rơi xuống 67.88%</strong>.</li>
+            <li><strong>Nghịch lý Dòng tiền COD &amp; Hiệu ứng giam hạn mức tức thời (Dynamic Capacity Lock):</strong> 10,480 tài xế nhóm &gt;3M (trong đó 9,355 tài xế &ge; 10M) thừa sức bao phủ (cover) đơn 1M–3M, nhưng khi nhận 1 đơn 2M–3M, hạn mức khả dụng của họ bị trừ ngay xuống chờ giao và nộp lại thành công. Trong khi đó, 14,595 tài xế (53.8%) ở mức &le; 1M bị khóa cứng không thể chia lửa.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 2.4 Predictive Analysis -->
+      <div id="sec-predictive" style="margin-top:24px;">
+        <h3 class="lark-h3">2.3. Phân Tích Dự Báo (Predictive Analysis — Mô Hình Hóa Tương Lai)</h3>
+
+        <div class="lark-callout callout-green">
+          <div class="callout-icon">📈</div>
+          <div class="callout-content">
+            <strong>Dự Phóng Tác Động Kinh Doanh Có Cơ Sở Dữ Liệu (SQL-backed Evidence):</strong><br>
+            • <strong>Thu hồi GMV COD lớn:</strong> Nâng FR đơn hạn mức &gt;2M từ 36.5%–51.6% lên &ge; 58%–65% giúp giải cứu <strong>+35 đến +45 Tỷ VNĐ GMV thất thoát mỗi tháng</strong>, mang lại thêm 450–600 triệu VNĐ Take-rate ròng.<br>
+            • <strong>Bảo vệ thị phần đơn TMĐT cồng kềnh:</strong> Kéo FR Tier 4 &amp; MP tại Hà Nội từ 67% lên &ge; 82% giúp hoàn thành thêm <strong>18,000 – 22,000 đơn cồng kềnh/tháng</strong>.<br>
+            • <strong>Giảm Churn Rate tài xế Full-Time:</strong> Thu nhập tăng 25%–35% giúp giảm tỷ lệ rời bỏ từ 14%/tháng xuống dưới 5%/tháng.
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.5 Prescriptive Analysis -->
+      <div id="sec-prescriptive" style="margin-top:28px;">
+        <h3 class="lark-h3">2.4. Phân Tích Đề Xuất (Prescriptive Analysis — Khuyến Nghị 3 Trụ Cột)</h3>
+
+        <div class="pillars-grid">
+          <!-- Pillar 1 -->
+          <div class="pillar-card pillar-1">
+            <div class="pillar-tag" style="color:var(--primary);">Trụ Cột 1 • Dòng Tiền & Tín Dụng</div>
+            <div class="pillar-title">COD Balance & FinTech T0 Advance</div>
+            <ul class="pillar-list">
+              <li><strong>Đối tượng thụ hưởng:</strong> 7,500 – 8,000 tài xế Full-time thâm niên (SC/CN) hoạt động &ge; 35h/tuần.</li>
+              <li><strong>Virtual Overdraft (+1.5M đến +3.0M):</strong> Cấp hạn mức tín chấp kéo ngay hơn 5,397 tài xế từ nhóm 500k–1M lên nhóm 2M–5M mà không bắt nộp thêm cọc.</li>
+              <li><strong>FinTech T0 Advance (5M – 20M):</strong> Ứng vốn trong ngày tức thì trong 30 giây qua ngân hàng số Cake/Kredivo.</li>
+              <li><strong>Win-Win Economics:</strong> Lãi vay ngày 0.08%–0.16% thấp hơn nhiều mức phí 0.88% cod_fee tài xế nhận &rarr; Tài xế có lãi ròng 36k–40k/đơn.</li>
+            </ul>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="pillar-card pillar-2">
+            <div class="pillar-tag" style="color:var(--indigo-500);">Trụ Cột 2 • Thực Địa & CCDC</div>
+            <div class="pillar-title">Bulky Baga Pro Fleet</div>
+            <ul class="pillar-list">
+              <li><strong>Quy chuẩn CCDC:</strong> Baga sắt ống công nghiệp chịu tải 70–100kg, gờ chắn chống trượt, dây dù siết tăng đơ &amp; màng PE.</li>
+              <li><strong>QM Audit qua App:</strong> Chụp ảnh thực tế xe gắn Baga duyệt trong 24h (bỏ hoàn toàn audit thực địa tại Station/Hub).</li>
+              <li><strong>Mở rộng khẩn cấp tại HAN:</strong> Mở rộng thêm 1,500 – 2,000 tài xế Baga mới tại Hà Nội để bù đắp điểm nghẽn thiếu hụt.</li>
+              <li><strong>Tài trợ 40/60 &amp; Cashback 100%:</strong> Ahamove tài trợ 40%, tài xế trả góp 35k/tuần; hoàn tiền 100% sau 6 tháng nếu đạt KPI.</li>
+            </ul>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="pillar-card pillar-3">
+            <div class="pillar-tag" style="color:var(--emerald-500);">Trụ Cột 3 • Siêu Thị & Bán Lẻ</div>
+            <div class="pillar-title">In-Store Booth & Giao Gom 4 Tiếng</div>
+            <ul class="pillar-list">
+              <li><strong>Tiếp nhận 2 nguồn hàng:</strong> (1) Khách mua tại chỗ gửi hàng cồng kềnh; (2) Siêu thị đưa ra các đơn hotline, Zalo, telesale.</li>
+              <li><strong>Không làm khâu nhặt hàng (picker):</strong> Tập trung 100% xử lý hàng hóa vật lý sẵn có tại điểm bán.</li>
+              <li><strong>Bộ 3 thuật toán 4 tiếng:</strong> Wave Cut-off (10h, 14h, 17h30) &rarr; Geo-Clustering (bó 5–8 đơn) &rarr; TSP Routing.</li>
+              <li><strong>Hiệu quả vượt trội:</strong> Nâng PPH từ 1.2 lên 3.0–4.0 đơn/giờ, giảm 35%–45% CPO, lấp đầy 85%–90% tải xe.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h4 class="lark-h4">Quy Trình 1: Ứng Vốn T0 Trong Ngày &amp; Cấn Trừ 3 Bên (COD FinTech)</h4>
+        <div class="mermaid-card">
+          <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor D as Tài Xế SC/CN (FT)
+    participant APP as App Ahamove
+    participant FIN as Đối Tác FinTech (Cake/Kredivo)
+    participant M as Merchant / Shop
+
+    D->>APP: Bấm nhận đơn COD cao (Ví dụ: 5.000.000 VNĐ)
+    APP->>FIN: Kích hoạt hạn mức ứng T0 đã phê duyệt trước (5M - 20M)
+    FIN->>D: Giải ngân tức thì 5.000.000 VNĐ vào ví trong 30 giây
+    D->>M: Ứng tiền mặt nhận hàng và đi giao
+    D->>APP: Khách thanh toán, hoàn tất đơn hàng
+    APP->>FIN: Tự động trích hoàn ứng trong ngày (Phí lãi vay 0.08% - 0.16%/ngày)
+    APP->>D: Giải phóng hạn mức, nhận trọn 0.88% cod_fee từ Ahamove
+          </div>
+        </div>
+
+        <h4 class="lark-h4">Quy Trình 2: Vận Hành Quầy In-Store Booth &amp; Thuật Toán Giao Gom 4 Tiếng</h4>
+        <div class="mermaid-card">
+          <div class="mermaid">
+graph LR
+    subgraph S1 ["1. Tiếp Nhận Tại Booth"]
+        A1["Khách gửi tại chỗ"] --> B["Quầy In-Store Booth"]
+        A2["Siêu thị đưa ra"] --> B
+    end
+
+    subgraph S2 ["2. Thuật Toán Gom 4H"]
+        B --> C["Gom Wave và Cụm Tuyến<br/>(5 - 8 đơn/chuyến)"]
+        C --> D["Tối ưu lộ trình TSP"]
+    end
+
+    subgraph S3 ["3. Đội Cắm Chốt Giao"]
+        D --> E["Tài xế giao trong 4H<br/>(PPH 3.0 - 4.0 đơn/h)"]
+    end
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.6 Roadmap -->
+      <div id="sec-roadmap" style="margin-top:28px;">
+        <h3 class="lark-h3">2.5. Lộ Trình Thực Thi Chi Tiết 4 Quý Năm 2027 (Execution Roadmap)</h3>
+        
+        <div class="mermaid-card">
+          <div class="mermaid">
+          gantt
+              title LỘ TRÌNH THỰC THI CHIẾN LƯỢC TOÀN DIỆN 4 QUÝ 2027
+              dateFormat  YYYY-MM-DD
+              section Q1/2027: Chuẩn Bị & Chốt Tiêu Chuẩn
+              Chốt tiêu chuẩn 3 trục & Customer Badges       :2027-01-01, 30d
+              Nới COD Balance SC-CN (Align Product/QM)        :2027-01-15, 30d
+              Ký kết đối tác FinTech T0 & Chuẩn bị Baga      :2027-01-20, 40d
+              section Q2/2027: Thí Điểm Thực Địa (Pilot)
+              Tài trợ 500 Baga tại Zone 2 TMĐT                :2027-04-01, 45d
+              Pilot FinTech T0 (hạn mức 5M) cho SC tại HAN   :2027-04-15, 45d
+              Thí điểm In-Store Booth tại 10 Siêu thị lớn    :2027-05-01, 45d
+              section Q3/2027: Mở Rộng Hệ Thống
+              Nâng hạn mức FinTech T0 lên 10M - 20M          :2027-07-01, 60d
+              Mở rộng 1,500 TX Baga Pro & 50 Siêu thị        :2027-07-15, 60d
+              Hoàn tiền 100% CCDC đợt 1 (Cashback)           :2027-08-01, 45d
+              section Q4/2027: Chuẩn Hóa Toàn Quốc
+              Mở rộng 3,000 - 4,500 TX Baga Pro toàn quốc    :2027-10-01, 90d
+              Chiến dịch truyền thông Chuyên Gia Trị Đơn Khó :2027-10-15, 60d
+              Rà soát OKR 2027 & Đánh giá Sandbox P2P        :2027-11-01, 45d
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.7 RACI & Risk -->
+      <div id="sec-raci" style="margin-top:24px;">
+        <h3 class="lark-h3">2.6. Ma Trận RACI &amp; Quản Trị Rủi Ro (RACI &amp; Risk Guardrails)</h3>
+        
+        <div class="table-wrapper">
+          <table class="lark-table">
+            <thead>
+              <tr>
+                <th>Hạng Mục Chiến Lược</th>
+                <th>Driver Management (Khanh)</th>
+                <th>Product & Tech (QM)</th>
+                <th>Business Dev (KA)</th>
+                <th>Operations (Hubs)</th>
+                <th>Legal & Compliance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Chốt 3 trục năng lực &amp; Badges</strong></td>
+                <td><strong>Accountable (A)</strong></td>
+                <td>Responsible (R)</td>
+                <td>Consulted (C)</td>
+                <td>Informed (I)</td>
+                <td>Informed (I)</td>
+              </tr>
+              <tr>
+                <td><strong>2. Thuật toán Dispatch &amp; COD Balance</strong></td>
+                <td>Responsible (R)</td>
+                <td><strong>Accountable (A - QM)</strong></td>
+                <td>Informed (I)</td>
+                <td>Consulted (C)</td>
+                <td>Consulted (C)</td>
+              </tr>
+              <tr>
+                <td><strong>3. Đàm phán Đối tác FinTech T0</strong></td>
+                <td>Responsible (R)</td>
+                <td>Consulted (C)</td>
+                <td><strong>Accountable (A)</strong></td>
+                <td>Informed (I)</td>
+                <td>Responsible (R)</td>
+              </tr>
+              <tr>
+                <td><strong>4. QM Audit Baga qua App &amp; Tài trợ</strong></td>
+                <td><strong>Accountable (A)</strong></td>
+                <td>Informed (I)</td>
+                <td>Consulted (C)</td>
+                <td>Responsible (R)</td>
+                <td>Consulted (C)</td>
+              </tr>
+              <tr>
+                <td><strong>5. In-Store Booth &amp; Giao Gom 4H</strong></td>
+                <td><strong>Accountable (A)</strong></td>
+                <td>Responsible (R)</td>
+                <td>Consulted (C)</td>
+                <td>Responsible (R)</td>
+                <td>Consulted (C)</td>
+              </tr>
+              <tr>
+                <td><strong>6. Quản trị cấn trừ 3 bên &amp; Rủi ro nợ</strong></td>
+                <td>Responsible (R)</td>
+                <td>Responsible (R)</td>
+                <td>Informed (I)</td>
+                <td>Informed (I)</td>
+                <td><strong>Accountable (A)</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: VALUE REALIZATION -->
+    <section id="sec-value">
+      <h2 class="lark-h2"><span class="num-badge">3</span> HIỆN THỰC HÓA GIÁ TRỊ (VALUE REALIZATION)</h2>
+      
+      <div id="sec-before-after">
+        <h3 class="lark-h3">Đo Lường Tác Động Kinh Doanh Chuyển Đổi (BEFORE &rarr; AFTER)</h3>
+        
+        <div class="table-wrapper">
+          <table class="lark-table">
+            <thead>
+              <tr>
+                <th>Chiều Không Gian Vận Hành</th>
+                <th>Hiện Trạng (Current State 2026)</th>
+                <th>Chuyển Đổi Chiến Lược</th>
+                <th>Trạng Thái Mục Tiêu (Target State 2027)</th>
+                <th>Tác Động Đo Lường Được (Impact)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Hiệu Suất Đơn Hàng COD Lớn</strong></td>
+                <td>FR đơn COD &gt;2M rơi xuống đáy <strong>36.5% – 51.6%</strong>; mất 93.8% tài xế ở block &ge; 5M; thất thoát ~165 Tỷ GMV/tháng.</td>
+                <td style="text-align:center; font-weight:700; color:var(--primary); font-size:12px;">↓ GIẢI PHÁP TÀI CHÍNH KÉP ↓</td>
+                <td>Nới COD Balance theo SC/CN (5M–10M) + Tín dụng T0 FinTech (5M–20M) giải phóng 100% nhóm FT.</td>
+                <td class="success-cell">Kéo FR đơn COD cao lên &ge; 58% – 65%; cứu vãn +35–45 Tỷ GMV/tháng.</td>
+              </tr>
+              <tr>
+                <td><strong>Độ Phủ Tài Xế COD</strong></td>
+                <td>53.8% tài xế (14,595 TX) bị giam ở mức &le; 1M; nhóm 1M–3M chỉ chiếm 7.5% tạo ra "vực thẳm nguồn cung".</td>
+                <td style="text-align:center; font-weight:700; color:var(--primary); font-size:12px;">↓ VIRTUAL OVERDRAFT ↓</td>
+                <td>Cấp Virtual Overdraft kéo ngay hơn 5,397 tài xế từ nhóm 500k–1M lên nhóm 1.5M–2.5M.</td>
+                <td class="success-cell">Xóa bỏ vực thẳm 1M–3M, tăng +227% lượng tài xế đủ điều kiện nhận đơn lớn.</td>
+              </tr>
+              <tr>
+                <td><strong>Năng Lực Hàng Cồng Kềnh</strong></td>
+                <td>FR của HAN chỉ đạt <strong>67%</strong> cho thấy lực lượng tx có baga thấp; tỷ lệ hư hại 1.5%–2.0%; nguồn cung thật giảm -29.8%.</td>
+                <td style="text-align:center; font-weight:700; color:var(--primary); font-size:12px;">↓ BAGA PRO &amp; QM AUDIT ↓</td>
+                <td>QM Audit qua App + Chuẩn hóa 3,500 – 4,500 tài xế Baga Pro + Mở rộng 1,500–2,000 TX tại HAN.</td>
+                <td class="success-cell">Nâng FR Tier 4 &amp; MP lên &ge; 82%–85%; giảm tỷ lệ hư hại xuống &lt;0.3%.</td>
+              </tr>
+              <tr>
+                <td><strong>Mảng Giao Siêu Thị &amp; Bán Lẻ</strong></td>
+                <td>Khách tự chở hàng nặng; siêu thị tự tìm xe lẻ tẻ; CPO cao; PPH chỉ 1.0–1.2 đơn/h; xe chạy rỗng chiều về.</td>
+                <td style="text-align:center; font-weight:700; color:var(--primary); font-size:12px;">↓ BOOTH &amp; GIAO GOM 4H ↓</td>
+                <td>Quầy Booth cắm chốt + Bộ 3 thuật toán gom đợt sóng 4 tiếng + Fleet giao 5–8 đơn/chuyến.</td>
+                <td class="success-cell">Đẩy vọt PPH lên 3.0 – 4.0 đơn/giờ; giảm 35%–45% CPO; lấp đầy 85%–90% tải xe.</td>
+              </tr>
+              <tr>
+                <td><strong>Định Vị &amp; Hàng Rào Cạnh Tranh</strong></td>
+                <td>Khách chỉ thấy số sao chung chung; cạnh tranh giá rẻ và bị bào mòn bởi promo burn của Grab/Be.</td>
+                <td style="text-align:center; font-weight:700; color:var(--primary); font-size:12px;">↓ CUSTOMER BADGES ↓</td>
+                <td>Hiển thị Badge năng lực thực tế: <em>"Chuyên gia hàng cồng kềnh"</em>, <em>"Thủ lĩnh xử lý đơn giá trị cao"</em>.</td>
+                <td class="success-cell">Định vị độc quyền "Chuyên gia trị đơn khó", tạo Moat vận hành không thể sao chép trong 18 tháng.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="margin-top:60px; padding-top:20px; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; font-size:12.5px; color:var(--slate-500);">
+      <div>Ahamove Corporation • Driver Management &amp; Strategy</div>
+      <div>Confidential • Internal Distribution Only</div>
+    </footer>
+  </main>
+</div>
+
+<!-- Chart Scripts -->
+<script>
+  // Chart 1: COD FR
+  const ctxCod = document.getElementById('chartCodFR').getContext('2d');
+  new Chart(ctxCod, {
+    type: 'bar',
+    data: {
+      labels: ['< 500k', '< 1M', '< 3M', '< 5M', '>= 5M'],
+      datasets: [{
+        label: 'Tỷ Lệ Hoàn Thành (FR %)',
+        data: [76.28, 67.06, 64.31, 62.24, 63.64],
+        backgroundColor: [
+          '#10B981',
+          '#F59E0B',
+          '#F59E0B',
+          '#EF4444',
+          '#EF4444'
+        ],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { min: 50, max: 85, ticks: { callback: v => v + '%' } }
+      }
+    }
+  });
+
+  // Chart 2: Driver Segment Role
+  const ctxDriver = document.getElementById('chartDriverRole').getContext('2d');
+  new Chart(ctxDriver, {
+    type: 'doughnut',
+    data: {
+      labels: ['Full-Time (FT)', 'Part-Time (PT)', 'Tài Xế Mới (New)'],
+      datasets: [{
+        data: [53.14, 46.20, 0.66],
+        backgroundColor: ['#FF6B00', '#6366F1', '#CBD5E1'],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+      }
+    }
+  });
+
+  // Scroll Spy for TOC
+  const sections = document.querySelectorAll('section, div[id]');
+  const navLinks = document.querySelectorAll('.toc-link');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      if (pageYOffset >= sectionTop - 120) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+
+  if (window.mermaid) {
+    try { mermaid.run(); } catch(e) {}
+  }
+</script>
+
+</body>
+</html>
