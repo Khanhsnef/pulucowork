@@ -141,8 +141,10 @@ Output/Ahamove/
 | `2026-05-ao-khi-campaign-tracker.xlsx` | **Master tracker 6 sheets**: Plan, Nội dung, Form, Slot tracking, Track B EV, Checklist 31 items |
 | `2026-05-ao-khi-gantt-plan.xlsx` | **Gantt-style plan 3 sheets**: Timeline 4 tuần, Phân tích SC/CN vs TL, Nội dung 5 bài |
 | `2026-05-mar-weekly-w20.pptx` | Weekly review W20 presentation |
-| `2026-11-dmx-mega-sale-routing-plan.xlsx` | **ĐMX Mega Sale 20/11 & 29/11 — 6 sheets**: Tóm tắt, Kế hoạch theo giờ, Cụm phường, Chuyến đội cắm chốt, Danh sách đơn (Team/Instant), Giả định |
-| `2026-11-dmx-mega-sale-brief.html` | One-pager trình Điện máy xanh: Hybrid đội cắm chốt + Instant, nhịp vận hành, cụm phường, đề nghị phối hợp |
+| `2026-11-dmx-2011-routing-plan.xlsx` | **ĐMX 20/11 (SGN, 30 TX cắm chốt, 721 đơn)** — 7 sheets: Tóm tắt, Kế hoạch theo giờ, Lịch tài xế, Chuyến chi tiết, Cụm phường, Danh sách đơn, Giả định |
+| `2026-11-dmx-2911-routing-plan.xlsx` | **ĐMX 29/11 (SGN+HAN, 80 TX cắm chốt, 2.500 đơn)** — cùng cấu trúc 7 sheets |
+| `2026-11-dmx-mega-sale-brief.html` | One-pager trình Điện máy xanh: 100% đội cắm chốt, phân bổ theo kho, lũy kế giao theo giờ, đề nghị phối hợp |
+| `2026-11-dmx-mega-sale-routing-plan.xlsx` | *(Bản cũ — phương án Hybrid Team + Instant, đã thay bằng 2 file theo ngày)* |
 | `create-form.gs` | Google Apps Script tạo form tự động |
 
 #### `landing-pages/`
