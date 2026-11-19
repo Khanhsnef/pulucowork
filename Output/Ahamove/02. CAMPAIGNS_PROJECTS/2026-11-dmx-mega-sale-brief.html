@@ -1,0 +1,155 @@
+<title>Ahamove × ĐMX 20/11 & 29/11</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&display=swap">
+<style>
+/* Layout: one column one-pager; hero numbers → per-day hourly plan → cluster strategy → commitments */
+:root{
+  --bg:#F9FAFB; --card:#FFFFFF; --fg:#0F1B2D; --muted:#5B6B80; --line:#E8EDF3;
+  --blue:#0E4174; --orange:#FF7F32; --ok:#10B981; --bad:#EF4444; --blue-soft:#E7EEF6; --orange-soft:#FFF0E6;
+  --font:'Lexend',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0B1320; --card:#121C2B; --fg:#E8EEF6; --muted:#9AA9BC; --line:#22304A;
+  --blue:#6FA3DA; --orange:#FF9A5C; --blue-soft:#17263C; --orange-soft:#2E2016; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1320; --card:#121C2B; --fg:#E8EEF6; --muted:#9AA9BC; --line:#22304A;
+  --blue:#6FA3DA; --orange:#FF9A5C; --blue-soft:#17263C; --orange-soft:#2E2016; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-weight:300;line-height:1.55}
+.wrap{max-width:1040px;margin:0 auto;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;text-wrap:balance;margin:0}
+h1{font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.15}
+h2{font-size:1.25rem}
+h3{font-size:1rem}
+p{margin:0}
+.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);font-weight:600}
+.lead{color:var(--muted);max-width:68ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:2.5rem;padding:28px clamp(18px,3vw,32px);display:flex;flex-direction:column;gap:18px;min-width:0}
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.day-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.tag{font-size:.72rem;font-weight:600;padding:4px 12px;border-radius:999px;background:var(--blue-soft);color:var(--blue)}
+.tag.hot{background:var(--orange-soft);color:var(--orange)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kpi{display:flex;flex-direction:column;gap:2px}
+.kpi b{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.kpi span{font-size:.75rem;color:var(--muted)}
+.bar{display:flex;height:14px;border-radius:999px;overflow:hidden;background:var(--line)}
+.bar i{display:block;height:100%}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.75rem;color:var(--muted)}
+.legend em{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;font-style:normal}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.85rem;font-variant-numeric:tabular-nums}
+th{font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:right;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+tr.sub td{font-weight:600}
+td.net{color:var(--orange);font-weight:600}
+td.zero{color:var(--muted);opacity:.5}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.step{border:1px solid var(--line);border-radius:1.5rem;padding:16px;display:flex;flex-direction:column;gap:6px}
+.step .t{font-weight:800;font-size:1.1rem;color:var(--blue);font-variant-numeric:tabular-nums}
+.step p{font-size:.82rem;color:var(--muted)}
+.clusters{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.cl{display:flex;flex-direction:column;gap:8px;min-width:0}
+.cl h3{font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.74rem;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+.chip.team{background:var(--blue-soft);color:var(--blue);border-color:transparent}
+.chip.net{background:var(--orange-soft);color:var(--orange);border-color:transparent}
+.asks{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;padding:0;margin:0;list-style:none}
+.asks li{border-left:3px solid var(--orange);padding:4px 0 4px 14px;font-size:.88rem}
+.asks li b{font-weight:600}
+.note{font-size:.78rem;color:var(--muted)}
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <div class="eyebrow">Ahamove × Điện máy xanh · Kế hoạch vận hành Mega Sale</div>
+    <h1>3.267 đơn ngày 20/11 và 29/11 được giao trước giờ hẹn, nhờ kết hợp đội tài xế cắm chốt tại kho với mạng lưới tài xế Ahamove</h1>
+    <p class="lead">Phạm vi: 6 kho Online gồm Tân Bình, Bình Chánh, Thủ Đức 1, Tam Hiệp, Đông Anh và Buôn Ma Thuột. Đơn mốc 12:00 và 14:00 giao đúng giờ hẹn. Đơn mốc 16:00, 18:00 và 21:00 giao trước 18:00. Đơn được gom theo cụm phường, mỗi tài xế chở khoảng 10–12 đơn một chuyến và quay về kho lấy chuyến tiếp theo.</p>
+  </header>
+
+  <section class="days">
+    <div class="card">
+      <div class="day-h"><h2>Thứ Sáu 20/11</h2><span class="tag">4 kho HCM, BMT</span></div>
+      <div class="kpis">
+        <div class="kpi"><b>738</b><span>đơn</span></div>
+        <div class="kpi"><b>23</b><span>tài xế cắm chốt</span></div>
+        <div class="kpi"><b>54</b><span>chuyến</span></div>
+      </div>
+      <div class="bar" role="img" aria-label="61% đội cắm chốt, 39% mạng lưới"><i style="width:60.6%;background:var(--blue)"></i><i style="width:39.4%;background:var(--orange)"></i></div>
+      <div class="legend"><span><em style="background:var(--blue)"></em>Đội cắm chốt 447 đơn</span><span><em style="background:var(--orange)"></em>Mạng lưới Ahamove 291 đơn</span></div>
+      <p class="note">Ngày 20/11 có 339 đơn mốc 12:00 và 414 đơn mốc 14:00, tức giao 2 đợt trong buổi sáng.</p>
+    </div>
+    <div class="card">
+      <div class="day-h"><h2>Chủ Nhật 29/11</h2><span class="tag hot">89% đơn hẹn 14:00</span></div>
+      <div class="kpis">
+        <div class="kpi"><b>2.529</b><span>đơn</span></div>
+        <div class="kpi"><b>50</b><span>tài xế cắm chốt</span></div>
+        <div class="kpi"><b>118</b><span>chuyến</span></div>
+      </div>
+      <div class="bar" role="img" aria-label="48% đội cắm chốt, 52% mạng lưới"><i style="width:47.9%;background:var(--blue)"></i><i style="width:52.1%;background:var(--orange)"></i></div>
+      <div class="legend"><span><em style="background:var(--blue)"></em>Đội cắm chốt 1.211 đơn</span><span><em style="background:var(--orange)"></em>Mạng lưới Ahamove 1.318 đơn</span></div>
+      <p class="note">Tam Hiệp (899 đơn) và Tân Bình (782 đơn) chiếm 66% sản lượng và có khung giao chỉ 5 tiếng (9:00–14:00), nên cần thêm tài xế ngay từ đầu.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Nhịp vận hành trong ngày</h2>
+    <div class="flow">
+      <div class="step"><span class="t">Trước 9:00</span><p>Kho soạn hàng theo cụm phường. Đội cắm chốt có mặt và chất hàng chuyến 1 (tối đa 10 xe cùng lúc).</p></div>
+      <div class="step"><span class="t">9:00–9:30</span><p>Điện máy xanh đẩy đơn. Chuyến 1 xuất phát. Các cụm xa được đẩy ngay cho mạng lưới tài xế Ahamove.</p></div>
+      <div class="step"><span class="t">11:00–12:00</span><p>Tài xế quay về kho lấy chuyến 2. Toàn bộ đơn mốc 12:00 giao xong.</p></div>
+      <div class="step"><span class="t">12:00–14:00</span><p>Chuyến cuối cho đơn mốc 14:00. Đơn rời kho sau 12:30 không giao kịp mốc 14:00.</p></div>
+      <div class="step"><span class="t">14:00–18:00</span><p>Giao đơn mốc 16:00, 18:00, 21:00 và các đơn còn lại. Đối soát COD cuối ngày.</p></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Số đơn rời kho theo từng khung giờ</h2>
+    <p class="note">Đội cắm chốt tính theo giờ tài xế rời kho. Cột Mạng lưới là số đơn đẩy lên app trong khoảng 9:00–9:30.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Ngày · Kho</th><th>Đơn</th><th>Tài xế</th><th>9–10h</th><th>10–11h</th><th>11–12h</th><th>12–14h</th><th>Sau 14h</th><th>Mạng lưới</th></tr></thead>
+      <tbody>
+        <tr class="sub"><td>20/11 · Tân Bình</td><td>521</td><td>10</td><td>103</td><td class="zero">0</td><td>107</td><td>20</td><td class="zero">0</td><td class="net">291</td></tr>
+        <tr><td>20/11 · Bình Chánh</td><td>152</td><td>8</td><td>81</td><td>10</td><td>56</td><td>5</td><td class="zero">0</td><td class="zero">0</td></tr>
+        <tr><td>20/11 · Thủ Đức 1</td><td>48</td><td>4</td><td>28</td><td>12</td><td>8</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td></tr>
+        <tr><td>20/11 · Buôn Ma Thuột</td><td>17</td><td>1</td><td>9</td><td>6</td><td class="zero">0</td><td>2</td><td class="zero">0</td><td class="zero">0</td></tr>
+        <tr class="sub"><td>29/11 · Tam Hiệp</td><td>899</td><td>10</td><td>120</td><td class="zero">0</td><td>24</td><td>78</td><td>13</td><td class="net">664</td></tr>
+        <tr class="sub"><td>29/11 · Tân Bình</td><td>782</td><td>16</td><td>188</td><td class="zero">0</td><td>182</td><td>9</td><td>20</td><td class="net">383</td></tr>
+        <tr><td>29/11 · Thủ Đức 1</td><td>355</td><td>12</td><td>136</td><td class="zero">0</td><td>114</td><td>42</td><td class="zero">0</td><td class="net">63</td></tr>
+        <tr><td>29/11 · Đông Anh</td><td>251</td><td>3</td><td>35</td><td class="zero">0</td><td>36</td><td class="zero">0</td><td>4</td><td class="net">176</td></tr>
+        <tr><td>29/11 · Bình Chánh</td><td>213</td><td>8</td><td>88</td><td>11</td><td>67</td><td>18</td><td class="zero">0</td><td class="net">29</td></tr>
+        <tr><td>29/11 · Buôn Ma Thuột</td><td>29</td><td>1</td><td>12</td><td class="zero">0</td><td>11</td><td class="zero">0</td><td>3</td><td class="net">3</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h2>Phân chia cụm phường cho kho lớn ngày 29/11</h2>
+    <p class="note">Đội cắm chốt nhận các cụm gần kho và có nhiều đơn để chạy nhiều vòng. Các cụm xa hoặc nằm ngược hướng được đẩy nguyên cụm cho mạng lưới ngay từ đầu.</p>
+    <div class="legend"><span><em style="background:var(--blue)"></em>Đội cắm chốt</span><span><em style="background:var(--orange)"></em>Mạng lưới Ahamove</span></div>
+    <div class="clusters">
+      <div class="cl"><h3>Tam Hiệp · 899 đơn</h3><div class="chips">
+        <span class="chip team">Hà Đông 121</span><span class="chip team">Thanh Trì, Hoàng Liệt, Định Công 114</span>
+        <span class="chip net">Hoàng Mai, Hai Bà Trưng 192</span><span class="chip net">Nam Từ Liêm, Cầu Giấy 175</span><span class="chip net">Thanh Xuân, Đống Đa 164</span><span class="chip net">Ba Đình, Hoàn Kiếm, Long Biên 53</span><span class="chip net">Thường Tín, Chương Mỹ 52</span></div></div>
+      <div class="cl"><h3>Tân Bình · 782 đơn</h3><div class="chips">
+        <span class="chip team">Bình Tân, Vĩnh Lộc 100</span><span class="chip team">Q12 gần 92</span><span class="chip team">Tân Phú, Q6, Q11 86</span><span class="chip team">Tân Bình Bắc 61</span><span class="chip team">Gò Vấp Tây 60</span>
+        <span class="chip net">Phú Nhuận, Q3 76</span><span class="chip net">Gò Vấp Đông 72</span><span class="chip net">Tân Bình Nam, Q10 65</span><span class="chip net">Q1, Q4, Q8, Q7 65</span><span class="chip net">Hóc Môn 57</span><span class="chip net">Bình Thạnh 29</span></div></div>
+      <div class="cl"><h3>Thủ Đức 1 · 355 đơn</h3><div class="chips">
+        <span class="chip team">Linh Xuân, Tam Bình 89</span><span class="chip team">Q9 69</span><span class="chip team">Tăng Nhơn Phú 61</span><span class="chip team">Hiệp Bình 47</span><span class="chip team">Q2 26</span><span class="chip net">Bình Thạnh, nội thành 50</span></div></div>
+      <div class="cl"><h3>Đông Anh · 251 đơn</h3><div class="chips">
+        <span class="chip team">Bắc Từ Liêm 75</span><span class="chip net">Hoài Đức, Đan Phượng 71</span><span class="chip net">Tây Hồ, Cầu Giấy 56</span><span class="chip net">Mê Linh, Sóc Sơn 49</span></div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Đề nghị Điện máy xanh phối hợp</h2>
+    <ul class="asks">
+      <li><b>Soạn hàng theo cụm phường từ trước 9:00.</b> Ahamove gửi danh sách cụm trước 1 ngày. Kho xếp sẵn hàng theo cụm để tài xế chỉ mất 10 phút chất hàng.</li>
+      <li><b>Mở tối thiểu 10 vị trí lấy hàng song song</b> tại Tam Hiệp và Tân Bình trong khung 9:00–9:30 và 11:00–12:30.</li>
+      <li><b>Đẩy đơn đúng 9:00 qua API, kèm địa chỉ đầy đủ.</b> Mỗi 15 phút chậm sẽ làm giảm khoảng 1 chuyến giao trước mốc 14:00.</li>
+      <li><b>Chọn 1 đầu mối tại mỗi kho</b> để xử lý hàng thiếu, đổi sản phẩm và khách hẹn lại giờ.</li>
+    </ul>
+    <p class="note">Giả định tính toán: mỗi chuyến chở 12 chảo (máy xay, nồi chiên tính bằng 1,4 chảo), mỗi điểm giao 6 phút gồm thu COD, tốc độ di chuyển 18–25 km/h tùy khu vực. Chi tiết từng chuyến, từng đơn và từng cụm có trong file Excel đi kèm.</p>
+  </section>
+</div>
