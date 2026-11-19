@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    try {
+      document.querySelector('meta[name="color-scheme"]').content = localStorage.getItem('color-scheme') ?? 'light dark';
+    } catch {}
+  </script>
+  <title>My HCM GIS — Bản Đồ Quy Hoạch & Ranh Thửa Thực Tế (Live WMS Sở TN&MT)</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="brand-group">
+        <button type="button" class="btn btn-icon" id="btn-toggle-sidebar" title="Ẩn / hiện bảng điều khiển" aria-label="Ẩn hoặc hiện bảng điều khiển">☰</button>
+        <div class="brand-badge">GIS</div>
+        <div class="brand-title">My HCM GIS</div>
+        <span class="live-pill" id="wms-status-pill" title="Kết nối trực tiếp GeoServer OGC WMS của Sở Tài nguyên & Môi trường TP.HCM">
+          <span class="live-dot"></span>
+          Live WMS Sở TN&MT
+        </span>
+      </div>
+
+      <form class="search-box" id="search-form">
+        <input type="text" id="search-input" placeholder="Tìm địa chỉ, tên đường, phường (VD: 57 Bông Sao Quận 8, Thủ Thiêm, Bình Chánh)..." autocomplete="off" />
+        <button type="submit" class="btn btn-primary">Tìm</button>
+      </form>
+
+      <div class="topbar-actions">
+        <button type="button" class="btn" id="btn-gps" title="Định vị vị trí GPS hiện tại">📍 GPS</button>
+        <button type="button" class="btn" id="btn-open-legend" title="Bảng tra cứu mã ký hiệu đất">🎨 Mã đất</button>
+        <button type="button" class="btn btn-icon" id="btn-open-settings" title="Cài đặt giao diện & dữ liệu" aria-label="Cài đặt">⚙️</button>
+      </div>
+    </header>
+
+    <!-- Left GIS Inspector & Controls Sidebar -->
+    <aside class="sidebar" aria-label="Bảng điều khiển GIS">
+      <div class="tablist" focusgroup="tablist nomemory" aria-label="Chức năng bản đồ GIS" id="sidebar-tablist">
+        <button type="button" id="tab-inspect" aria-selected="true" focusgroupstart>🔍 Soi thửa</button>
+        <button type="button" id="tab-roads">🛣️ Đường giải tỏa</button>
+        <button type="button" id="tab-prices">💰 Giá đất</button>
+        <button type="button" id="tab-layers">🗺️ Lớp bản đồ</button>
+        <button type="button" id="tab-vn2000">📐 VN-2000</button>
+        <button type="button" id="tab-watchlist">⭐ Đã lưu (<span id="watch-count">0</span>)</button>
+      </div>
+
+      <div class="tabpanels-grid">
+        <!-- TAB 1: LIVE PARCEL & PLANNING INSPECTOR -->
+        <div role="tabpanel" aria-labelledby="tab-inspect" tabindex="0" id="panel-inspect">
+          <div class="tabpanel-inner">
+            <div class="section-card">
+              <div class="section-title">
+                <span>Nhảy nhanh khu vực</span>
+              </div>
+              <div class="field">
+                <select id="quick-jump-select" aria-label="Chọn khu vực cần xem nhanh"></select>
+              </div>
+            </div>
+
+            <div class="section-card" id="inspector-card">
+              <div class="section-title">
+                <span>Kết quả soi thực địa (Live WMS)</span>
+                <span class="mono" id="inspect-coords-badge" style="font-size:11px; color:var(--accent);">Click bản đồ</span>
+              </div>
+              <div id="inspector-content">
+                <p style="margin:0; font-size:12.5px; color:var(--text-muted); line-height:1.55;">
+                  <strong>Bấm chuột vào bất kỳ căn nhà hoặc khu đất nào trên bản đồ</strong> để hệ thống truy vấn trực tiếp dữ liệu từ máy chủ <strong>Sở Tài nguyên & Môi trường TP.HCM</strong>:
+                </p>
+                <ul style="margin:8px 0 0; padding-left:18px; font-size:12px; color:var(--text-muted); line-height:1.6;">
+                  <li>Vẽ sáng ranh giới đa giác thửa đất thật trên ảnh vệ tinh.</li>
+                  <li>Hiển thị <strong>Số tờ, Số thửa, Địa chỉ, Diện tích đo đạc & pháp lý</strong>.</li>
+                  <li>Kiểm tra <strong>Mã quy hoạch sử dụng đất</strong> & <strong>Kế hoạch thu hồi 2024–2025</strong>.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: PLANNED ROAD CLEARANCE CORRIDORS (2025-2026) -->
+        <div role="tabpanel" aria-labelledby="tab-roads" hidden="until-found" id="panel-roads">
+          <div class="tabpanel-inner">
+            <div class="section-card">
+              <div class="section-title">
+                <span>Tuyến Giải Phóng Đường Mới Nhất (2025–2026)</span>
+              </div>
+              <label class="layer-label" style="font-size:12.5px;">
+                <input type="checkbox" id="toggle-clearance-roads" checked />
+                <span>Hiển thị vạch đỏ tuyến giải tỏa mặt bằng lên bản đồ</span>
+              </label>
+              <div class="field">
+                <input type="text" id="road-filter-input" placeholder="Lọc theo tên đường / quận (VD: Kênh Đôi, Vành Đai 2, QL13)..." />
+              </div>
+              <div id="roads-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: LAND PRICES (QD 79/2024) & CONVERSION TAX CALCULATOR -->
+        <div role="tabpanel" aria-labelledby="tab-prices" hidden="until-found" id="panel-prices">
+          <div class="tabpanel-inner">
+            <div class="section-card">
+              <div class="section-title">
+                <span>Bảng Giá Đất Mới Nhất (QĐ 79/2024 & Vùng Ven)</span>
+              </div>
+              <div class="field">
+                <input type="text" id="price-filter-input" placeholder="Tìm tuyến đường, quận/huyện (VD: Quận 8, Thủ Đức, Bình Chánh)..." />
+              </div>
+              <div id="prices-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-title"><span>Tính Tiền Lên Thổ Cư (Luật Đất Đai 2024)</span></div>
+              <div class="field">
+                <label for="calc-road-select">Chọn tuyến đường áp dụng</label>
+                <select id="calc-road-select"></select>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <div class="field">
+                  <label for="calc-area">Diện tích chuyển (m²)</label>
+                  <input type="number" id="calc-area" value="100" min="1" step="1" />
+                </div>
+                <div class="field">
+                  <label for="calc-position">Vị trí đất</label>
+                  <select id="calc-position">
+                    <option value="1">Vị trí 1 (Mặt tiền — 100%)</option>
+                    <option value="0.5">Vị trí 2 (Hẻm ≥ 5m — 50%)</option>
+                    <option value="0.4">Vị trí 3 (Hẻm 3–5m — 40%)</option>
+                    <option value="0.32">Vị trí 4 (Hẻm &lt; 3m — 32%)</option>
+                  </select>
+                </div>
+              </div>
+              <div id="calc-output" class="risk-banner risk-caution" style="font-weight:600;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: LIVE WMS LAYERS & BASEMAPS -->
+        <div role="tabpanel" aria-labelledby="tab-layers" hidden="until-found" id="panel-layers">
+          <div class="tabpanel-inner">
+            <div class="section-card">
+              <div class="section-title"><span>Bản đồ nền (Basemap)</span></div>
+              <div class="basemap-grid" id="basemap-grid">
+                <button type="button" class="basemap-btn active" data-basemap="google_hybrid">🛰️ Google Vệ tinh</button>
+                <button type="button" class="basemap-btn" data-basemap="google_road">🛣️ Google Đường phố</button>
+                <button type="button" class="basemap-btn" data-basemap="osm">🗺️ OpenStreetMap</button>
+                <button type="button" class="basemap-btn" data-basemap="carto_dark">🌙 Nền tối GIS</button>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-title">
+                <span>Lớp dữ liệu Sở TN&MT TP.HCM (Live WMS)</span>
+              </div>
+              <div id="wms-layers-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-title"><span>Nạp lớp GeoJSON riêng của bạn</span></div>
+              <p style="margin:0; font-size:12px; color:var(--text-muted); line-height:1.45;">
+                Tải file <code>.geojson</code> / <code>.json</code> ranh dự án, ranh thửa đo đạc hoặc tuyến đường riêng để đè trực tiếp lên bản đồ.
+              </p>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <input type="file" id="geojson-file-input" accept=".geojson,.json" style="font-size:12px; max-width:100%;" />
+                <button type="button" class="btn btn-sm" id="btn-clear-geojson">Xóa lớp nạp thêm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: VN-2000 PLOTTER & MEASUREMENT -->
+        <div role="tabpanel" aria-labelledby="tab-vn2000" hidden="until-found" id="panel-vn2000">
+          <div class="tabpanel-inner">
+            <div class="section-card">
+              <div class="section-title"><span>Vẽ thửa đất từ tọa độ VN-2000 (Sổ hồng)</span></div>
+              <div class="field">
+                <label for="vn2000-zone">Hệ tọa độ & Kinh tuyến trục</label>
+                <select id="vn2000-zone"></select>
+              </div>
+              <div class="field">
+                <label for="vn2000-input">Dán bảng tọa độ X, Y (mỗi góc ranh 1 dòng: X Y)</label>
+                <textarea id="vn2000-input" placeholder="VD (Trang 2 Sổ hồng TP.HCM):&#10;1187820.50 607450.20&#10;1187835.10 607458.40&#10;1187828.90 607470.10&#10;1187814.30 607461.90"></textarea>
+              </div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn btn-primary" id="btn-plot-vn2000">Vẽ thửa lên bản đồ</button>
+                <button type="button" class="btn" id="btn-clear-vn2000">Xóa khung</button>
+              </div>
+              <div id="vn2000-result" style="font-size:12px; color:var(--text-muted);"></div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-title"><span>Đo lộ giới & Diện tích trực tiếp</span></div>
+              <p style="margin:0; font-size:12px; color:var(--text-muted); line-height:1.5;">
+                Dùng thước đo để kéo trực tiếp từ mép đường hiện hữu vào chỉ giới đường đỏ (đo lộ giới cắt vào nhà) hoặc khoanh vùng tính diện tích khu đất.
+              </p>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn" id="btn-measure-dist-side">📏 Đo khoảng cách (m)</button>
+                <button type="button" class="btn" id="btn-measure-area-side">⬛ Đo diện tích (m²)</button>
+                <button type="button" class="btn" id="btn-measure-clear-side">🧹 Xóa đo</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: PERSONAL WATCHLIST -->
+        <div role="tabpanel" aria-labelledby="tab-watchlist" hidden="until-found" id="panel-watchlist">
+          <div class="tabpanel-inner">
+            <div class="section-card">
+              <div class="section-title">
+                <span>Sổ tay khu đất đang theo dõi</span>
+                <div style="display:flex; gap:6px;">
+                  <button type="button" class="btn btn-sm" id="btn-export-csv">Xuất CSV</button>
+                  <button type="button" class="btn btn-sm" id="btn-export-json">Xuất JSON</button>
+                </div>
+              </div>
+              <p style="margin:0; font-size:12px; color:var(--text-muted);">
+                Dữ liệu lưu tự động trên trình duyệt máy của bạn (<code>localStorage</code>). Bấm vào bất kỳ thửa đất nào rồi chọn <strong>"Lưu vào sổ tay"</strong>.
+              </p>
+              <div id="watchlist-items" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Interactive Map Stage -->
+    <main class="map-stage">
+      <div id="map"></div>
+
+      <!-- Quick Floating Map Toolbar -->
+      <div class="map-toolbar">
+        <div class="map-tool-group">
+          <button type="button" class="btn btn-sm btn-active" id="tool-inspect" title="Chế độ bấm soi thửa & quy hoạch">🔍 Soi đất</button>
+          <button type="button" class="btn btn-sm" id="tool-dist" title="Đo chiều dài / lộ giới (m)">📏 Đo dài</button>
+          <button type="button" class="btn btn-sm" id="tool-area" title="Đo diện tích khu đất (m²)">⬛ Đo diện tích</button>
+          <button type="button" class="btn btn-sm" id="tool-clear" title="Xóa nét đo và ghim tạm">🧹 Xóa</button>
+        </div>
+      </div>
+
+      <!-- Active Measurement HUD -->
+      <div class="measure-hud" id="measure-hud" hidden>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong id="measure-mode-label">📏 Đang đo khoảng cách</strong>
+          <button type="button" class="btn btn-sm" id="btn-stop-measure">Xong</button>
+        </div>
+        <div id="measure-output" class="mono" style="font-size:14px; font-weight:800; color:var(--accent);">0.0 m</div>
+        <div style="font-size:11px; color:var(--text-muted);">Click từng điểm trên bản đồ để đo. Bấm "Xong" để quay lại chế độ soi đất.</div>
+      </div>
+
+      <!-- Live Bottom Coordinate Bar -->
+      <div class="map-statusbar mono">
+        <span>WGS84: <strong id="coord-wgs">10.74050, 106.66200</strong></span>
+        <span>VN-2000 (HCM): <strong id="coord-vn2000">--</strong></span>
+        <span>Zoom: <strong id="coord-zoom">16</strong></span>
+      </div>
+    </main>
+  </div>
+
+  <!-- Legend Modal (light-dismiss-a-dialog) -->
+  <dialog id="legend-dialog" closedby="any" aria-labelledby="legend-title">
+    <div class="dialog-head">
+      <h2 id="legend-title">🎨 Bảng Tra Cứu Mã Ký Hiệu Đất & Rủi Ro Quy Hoạch</h2>
+      <form method="dialog"><button type="submit" class="btn btn-sm">Đóng ✕</button></form>
+    </div>
+    <div class="dialog-body">
+      <p style="margin-top:0; color:var(--text-muted);">
+        Áp dụng theo chuẩn <strong>Thông tư 08/2024/TT-BTNMT</strong> & hệ thống bản đồ Sở TN&MT TP.HCM:
+      </p>
+      <div class="legend-grid" id="legend-grid"></div>
+    </div>
+  </dialog>
+
+  <!-- Settings Modal (3-state dark-mode-toggle per modern-web-guidance) -->
+  <dialog id="settings-dialog" closedby="any" aria-labelledby="settings-title">
+    <div class="dialog-head">
+      <h2 id="settings-title">⚙️ Cài Đặt Hệ Thống GIS Cá Nhân</h2>
+      <form method="dialog"><button type="submit" class="btn btn-sm">Đóng ✕</button></form>
+    </div>
+    <div class="dialog-body" style="display:flex; flex-direction:column; gap:14px;">
+      <div class="field">
+        <label for="theme-select">Chế độ giao diện (Color Scheme)</label>
+        <select id="theme-select">
+          <option value="system">Theo hệ thống (System)</option>
+          <option value="light">Sáng (Light)</option>
+          <option value="dark">Tối (Dark)</option>
+        </select>
+      </div>
+      <div class="section-card">
+        <div class="section-title"><span>Nguồn Dữ Liệu Trực Tuyến Đang Kết Nối</span></div>
+        <div style="font-size:12px; color:var(--text-muted); line-height:1.6;">
+          • <strong>WMS GeoServer:</strong> <code>geodata-stnmt.tphcm.gov.vn/geoserver/wms</code> (Sở TN&MT TP.HCM — 832 lớp ranh thửa & quy hoạch).<br/>
+          • <strong>Bản đồ vệ tinh:</strong> Google Satellite Hybrid / OpenStreetMap.<br/>
+          • <strong>Hệ quy chiếu trắc địa:</strong> Proj4js VN-2000 ↔ WGS84 (7 tham số chuẩn Bộ TN&MT).<br/>
+          • <strong>Lưu trữ cá nhân:</strong> Lưu trực tiếp trên trình duyệt của bạn (không gửi dữ liệu riêng tư lên server ngoài).
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/proj4@2.11.0/dist/proj4.js" crossorigin=""></script>
+  <script src="./layers.js"></script>
+  <script src="./data-market.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

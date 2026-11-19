@@ -1,4 +1,4 @@
-# ============================================================
+﻿# ============================================================
 # PULU POWERSHELL PROFILE -- PuluSmartFlow v4.1 Verified Engine (Windows)
 # Sync với pulu_smartflow.sh (macOS/Linux)
 # Architecture: 9Router High-Speed Gateway (http://127.0.0.1:20128/v1)
