@@ -180,6 +180,8 @@ Output/Ahamove/
 |------|-------|
 | `incentive_simulation_app.py` | App Streamlit giả lập incentive giờ cao điểm & tối ưu nguồn cung |
 | `sgn_overview_dashboard.py` | SGN Ops Overview dashboard — live pull từ Google Sheet `SGN Overview` |
+| `dmx_mega_sale_ops.py` | **ĐMX Mega Sale 20/11 & 29/11** — Streamlit + DuckDB: diễn biến theo giờ (thanh thời gian), sơ đồ cụm ước lượng quanh kho, đơn còn lại vs mốc 12h/14h, lịch tài xế, what-if (số TX/sức chở/phút giao/giờ đẩy đơn), Kế hoạch vs Thực tế (nạp CSV Ahamove). Data: `raw-data/dmx-mega-sale/orders.parquet` |
+| `dmx_sim_engine.py` | Engine mô phỏng điều phối đội cắm chốt (dùng chung cho `dmx_mega_sale_ops.py`) |
 
 #### `sql/`
 | File | Mô tả |
