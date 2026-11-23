@@ -40,6 +40,6 @@ Tất cả các báo cáo slide PowerPoint (`.pptx`) của Ahamove phải tuân 
 ## 🔍 QUY TẮC KÍCH HOẠT CLAUDE VIEW DASHBOARD AUTOMATION
 
 *   Bất kỳ khi nào người dùng yêu cầu: `"mở claude view"`, `"open claude view"`, `"bật claude view"`, `"xem claude view"`, `"cv"`, hoặc các cụm từ tương tự:
-    1.  Tự động kích hoạt mở URL Dashboard [http://localhost:47892](http://localhost:47892) trên trình duyệt mặc định bằng lệnh `open http://127.0.0.1:47892`.
+    1.  Tự động kích hoạt mở URL Dashboard [http://localhost:47892](http://localhost:47892) trên trình duyệt mặc định bằng lệnh `open http://127.0.0.1:47892` (macOS) hoặc `start http://127.0.0.1:47892` (Windows).
     2.  Nếu dịch vụ chưa chạy, khởi chạy ngầm bằng `npx claude-view &`.
     3.  Trả về phản hồi kèm đường dẫn truy cập trực tiếp `http://localhost:47892`.

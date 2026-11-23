@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import json,sys,os; raw=sys.stdin.read(); data={}; (raw and data.update(json.loads(raw) if raw.strip().startswith('{') else {})) if raw else None; p=data.get('file_path') or data.get('tool_input',{}).get('file_path','') or os.environ.get('CLAUDE_TOOL_FILE_PATH',''); sys.exit(1 if '_scripts/' in p else 0)\"",
+            "command": "node setup/claude_pretool_guard.js",
             "statusMessage": "Checking protected files..."
           }
         ]
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd /Users/ts-1148/Desktop/Pulu-workspace && git add -A && if ! git diff --cached --quiet; then CHANGED=$(git diff --cached --name-only | head -3 | tr '\\n' ' ' | sed 's/ $//'); COUNT=$(git diff --cached --name-only | wc -l | tr -d ' '); MSG=\"auto-sync: ${CHANGED}\"; [ \"$COUNT\" -gt 3 ] && MSG=\"${MSG} (+$((COUNT-3)) more)\"; git commit -m \"$MSG\" && git push 2>/dev/null || true; fi; rsync -a --delete --exclude='.git/' /Users/ts-1148/Desktop/Pulu-workspace/ \"/Users/ts-1148/Library/CloudStorage/GoogleDrive-lephuongkhanh1995@gmail.com/My Drive/Pulu-workspace/\" 2>/dev/null || true",
+            "command": "node setup/claude_stop_sync.js",
             "timeout": 60,
             "statusMessage": "Syncing to GitHub & Drive..."
           }

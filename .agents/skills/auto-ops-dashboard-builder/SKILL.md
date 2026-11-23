@@ -66,4 +66,4 @@ Mọi Dashboard tạo ra phải tuân thủ nghiêm ngặt hệ thống màu s�
 ## Common Mistakes
 1.  **Lỗi Ép kiểu DuckDB:** Quên cấu hình `types={'column': 'VARCHAR'}` khi đọc CSV dẫn đến crash giữa chừng khi gặp số lớn có dấu phẩy.
 2.  **Thiếu Font & CSS:** Dùng giao diện Streamlit thô mặc định (không có font Lexend và bo góc metrics card) làm giảm tính premium của tài liệu.
-3.  **Lỗi đường dẫn BASE_DIR:** Sử dụng `dirname(__file__)` quá nhiều cấp dẫn đến trỏ sai thư mục `raw-data`. Hãy mặc định sử dụng đường dẫn tuyệt đối `/Users/ts-1148/Desktop/Pulu-workspace`.
+3.  **Lỗi đường dẫn BASE_DIR:** Sử dụng `dirname(__file__)` quá nhiều cấp dẫn đến trỏ sai thư mục `raw-data`. Hãy dùng `pathlib.Path(__file__).resolve().parents[4]` (hoặc tìm ngược lên thư mục chứa `AGENTS.md` / `Output/`) để chạy đồng nhất trên cả macOS và Windows.
