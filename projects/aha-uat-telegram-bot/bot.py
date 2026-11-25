@@ -362,12 +362,16 @@ def prompt_service_step(chat_id: int, user_id: int) -> None:
     kb = {
         "inline_keyboard": [
             [
-                {"text": "🛵 SGN-BIKE", "callback_data": "new:service:SGN-BIKE"},
-                {"text": "⚡ SGN-EXPRESS", "callback_data": "new:service:SGN-EXPRESS"},
+                {"text": "🛵 SGN-BIKE (Siêu tốc ≤50km)", "callback_data": "new:service:SGN-BIKE"},
+                {"text": "⚡ SGN-ECO (Nhanh ≤50km)", "callback_data": "new:service:SGN-ECO"},
             ],
             [
-                {"text": "📦 SGN-SAMEDAY", "callback_data": "new:service:SGN-SAMEDAY"},
-                {"text": "🚚 SGN-TRUCK-500", "callback_data": "new:service:SGN-TRUCK-500"},
+                {"text": "📦 SGN-SAMEDAY (4H ≤30km)", "callback_data": "new:service:SGN-SAMEDAY"},
+                {"text": "🏷 SGN-INDAY (Đồng giá ≤50km)", "callback_data": "new:service:SGN-INDAY"},
+            ],
+            [
+                {"text": "🚐 SGN-VAN-500 (Van ≤300km)", "callback_data": "new:service:SGN-VAN-500"},
+                {"text": "🚚 SGN-TRUCK-500 (Tải ≤300km)", "callback_data": "new:service:SGN-TRUCK-500"},
             ],
             [
                 {"text": "⏩ Đi thẳng tới Xác nhận đơn", "callback_data": "new:goto:confirm"},
@@ -377,7 +381,10 @@ def prompt_service_step(chat_id: int, user_id: int) -> None:
     }
     send_msg(
         chat_id,
-        "1️⃣ <b>Chọn Dịch vụ (service_id)</b> hoặc gõ mã dịch vụ khác:" + _group_reply_hint(chat_id),
+        "1️⃣ <b>Chọn Dịch vụ (service_id)</b>:\n"
+        "• <i>Xe máy (BIKE/ECO/INDAY): tối đa 50km (SAMEDAY tối đa 30km)</i>\n"
+        "• <i>Đơn đi tỉnh 50km – 300km: chọn <b>SGN-VAN-500</b> hoặc <b>SGN-TRUCK-500</b> (Bot cũng sẽ tự động nâng lên VAN-500 nếu lộ trình &gt; 50km)</i>"
+        + _group_reply_hint(chat_id),
         reply_markup=kb,
     )
 
@@ -509,13 +516,15 @@ def prompt_total_pay_step(chat_id: int, user_id: int) -> None:
     est_pay = est.get("total_pay", d.get("total_pay", 58000))
     dist = est.get("distance")
     warn = est.get("warning")
+    if est.get("auto_switched_service"):
+        d["service_id"] = est["auto_switched_service"]
     d["estimated_distance"] = dist
     d["total_pay"] = est_pay
-    if warn and d.get("cod", 0) > 0:
+    if warn and "COD về 0đ" in warn and d.get("cod", 0) > 0:
         d["cod"] = 0
 
     dist_label = f" ({dist} km)" if dist is not None else ""
-    warn_line = f"⚠️ <i>Lưu ý Ahamove UAT: {_esc(warn)} (Đã tự đưa COD về 0đ)</i>\n" if warn else ""
+    warn_line = f"⚠️ <i>{_esc(warn)}</i>\n" if warn else ""
     kb = {
         "inline_keyboard": [
             [
@@ -531,6 +540,7 @@ def prompt_total_pay_step(chat_id: int, user_id: int) -> None:
         chat_id,
         f"7️⃣ 💰 <b>Cước phí đơn hàng (total_pay)</b>\n"
         + warn_line
+        + f"• Dịch vụ áp dụng: <code>{_esc(d['service_id'])}</code>\n"
         + f"• Hệ thống Ahamove UAT tự tính theo lộ trình: <b>{est_pay:,}đ</b>{dist_label}\n"
         "👉 Bấm nút bên dưới để dùng mức phí chuẩn này hoặc nhập số tiền khác:"
         + _group_reply_hint(chat_id),
@@ -564,9 +574,14 @@ def show_order_confirmation(chat_id: int, user_id: int) -> None:
 
     # Refresh fee estimate whenever addresses/service change
     est = estimate_order_fee(d)
+    if est.get("auto_switched_service"):
+        d["service_id"] = est["auto_switched_service"]
     if est.get("ok"):
         d["total_pay"] = est["total_pay"]
         d["estimated_distance"] = est.get("distance")
+    if est.get("warning") and "COD về 0đ" in est["warning"]:
+        d["cod"] = 0
+    warn_banner = f"⚠️ <i>{_esc(est['warning'])}</i>\n\n" if est.get("warning") else ""
 
     p0 = d["pickup"]
     p1 = d["dropoff"]
@@ -579,7 +594,8 @@ def show_order_confirmation(chat_id: int, user_id: int) -> None:
 
     summary = (
         "📋 <b>XÁC NHẬN ĐƠN HÀNG TÙY CHỈNH (UAT)</b>\n\n"
-        f"• 🛵 <b>Dịch vụ:</b> <code>{_esc(d['service_id'])}</code> (Quãng đường: <b>{dist_str}</b>)\n\n"
+        + warn_banner
+        + f"• 🛵 <b>Dịch vụ:</b> <code>{_esc(d['service_id'])}</code> (Quãng đường: <b>{dist_str}</b>)\n\n"
         f"• 📍 <b>Điểm lấy (Pickup):</b>\n"
         f"  <code>{_esc(p0['address'])}</code>\n"
         f"  🌐 Tọa độ: <a href=\"{gmap_p0}\">{p0['lat']}, {p0['lng']} (Xem bản đồ)</a>\n"

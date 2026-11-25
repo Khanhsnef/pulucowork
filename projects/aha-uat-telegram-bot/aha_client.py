@@ -410,20 +410,49 @@ def parse_curl_credentials(text: str) -> dict[str, Any]:
     return result
 
 
+SERVICE_ALIASES: dict[str, str] = {
+    "SGN-EXPRESS": "SGN-ECO",
+    "EXPRESS": "SGN-ECO",
+    "ECO": "SGN-ECO",
+    "BIKE": "SGN-BIKE",
+    "SAMEDAY": "SGN-SAMEDAY",
+    "INDAY": "SGN-INDAY",
+    "VAN": "SGN-VAN-500",
+    "TRUCK": "SGN-TRUCK-500",
+}
+
+
+def normalize_service_id(raw_sid: str) -> str:
+    sid = raw_sid.strip().upper()
+    return SERVICE_ALIASES.get(sid, sid)
+
+
+def is_truck_or_van_service(sid: str) -> bool:
+    return any(k in sid for k in ("VAN", "TRUCK", "TRICYCLE"))
+
+
 def build_order_payload(overrides: dict[str, Any] | None = None) -> dict[str, Any]:
     """Build order creation payload from saved template (or default) + overrides."""
     store = load_store()
     base_tmpl = store.get("order_template") or DEFAULT_ORDER_TEMPLATE
     payload = copy.deepcopy(base_tmpl)
+
+    sid = normalize_service_id((overrides or {}).get("service_id") or payload.get("service_id") or "SGN-BIKE")
+    payload["service_id"] = sid
+    req = [{"_id": f"{sid}-INSURANCE"}]
+    payload["requests"] = req
+    payload["service"] = {"_id": sid, "requests": req}
+
+    # Truck / Van services (up to 300km) reject Bike-only package_size="S" metadata
+    if is_truck_or_van_service(sid):
+        payload.pop("package_size", None)
+        payload.pop("package_weight", None)
+        payload.pop("item_descriptions", None)
+        payload.pop("package_detail", None)
+        payload.pop("reorder_from", None)
+
     if not overrides:
         return payload
-
-    if overrides.get("service_id"):
-        sid = overrides["service_id"].strip().upper()
-        payload["service_id"] = sid
-        req = [{"_id": "SGN-BIKE-INSURANCE"}] if sid == "SGN-BIKE" else []
-        payload["requests"] = req
-        payload["service"] = {"_id": sid, "requests": req}
 
     for idx, key in ((0, "pickup"), (1, "dropoff")):
         pt = overrides.get(key)
@@ -455,15 +484,18 @@ def build_order_payload(overrides: dict[str, Any] | None = None) -> dict[str, An
 
 
 def estimate_order_fee(overrides: dict[str, Any] | None = None, timeout: int = 12) -> dict[str, Any]:
-    """Call POST https://apiuat.ahamove.com/api/v3/private/order/estimate to calculate real total_pay & distance."""
-    payload = build_order_payload(overrides)
+    """Call POST https://apiuat.ahamove.com/api/v3/private/order/estimate with auto COD & >50km Van fallback."""
+    work_overrides = copy.deepcopy(overrides or {})
+    payload = build_order_payload(work_overrides)
     payload["services"] = [payload["service"]]
     user_token = ensure_valid_user_token(force_refresh=False)
     if not user_token:
         return {"ok": False, "total_pay": payload.get("total_pay", 58000)}
 
-    warning_msg = None
-    for attempt in range(2):
+    warnings: list[str] = []
+    auto_switched_service: str | None = None
+
+    for attempt in range(4):
         headers = {
             "accept": "application/json, text/plain, */*",
             "authorization": f"Bearer {user_token}",
@@ -489,16 +521,43 @@ def estimate_order_fee(overrides: dict[str, Any] | None = None, timeout: int = 1
                             "total_pay": int(data["total_pay"]),
                             "distance": data.get("distance"),
                             "duration": data.get("duration"),
-                            "warning": warning_msg,
+                            "service_id": payload["service_id"],
+                            "auto_switched_service": auto_switched_service,
+                            "warning": " | ".join(warnings) if warnings else None,
                         }
-                    # If COD exceeds account limit (e.g. INVALID_MAX_COD), retry fee calculation with cod=0
-                    if err and payload["path"][1].get("cod", 0) > 0:
-                        warning_msg = err.get("description") or err.get("title")
-                        payload["path"][1]["cod"] = 0
+                    err_code = err.get("code") or ""
+                    err_desc = err.get("description") or err.get("title") or "Lỗi dịch vụ"
+
+                    # Case 1: Distance > 50km limit on Bike/Eco/Sameday -> Auto upgrade to SGN-VAN-500 (supports 300km)
+                    if err_code == "INVALID_MAX_DISTANCE" and not is_truck_or_van_service(payload["service_id"]):
+                        old_sid = payload["service_id"]
+                        auto_switched_service = "SGN-VAN-500"
+                        work_overrides["service_id"] = auto_switched_service
+                        payload = build_order_payload(work_overrides)
+                        payload["services"] = [payload["service"]]
+                        warnings.append(
+                            f"{err_desc} (Xe máy giới hạn ≤50km) → Đã tự động chuyển từ {old_sid} sang {auto_switched_service} (hỗ trợ tới 300km)"
+                        )
                         continue
+
+                    # Case 2: COD exceeds account limit -> retry with COD = 0
+                    if err_code == "INVALID_MAX_COD" and payload["path"][1].get("cod", 0) > 0:
+                        work_overrides["cod"] = 0
+                        payload["path"][1]["cod"] = 0
+                        warnings.append(f"{err_desc} → Đã tự đưa COD về 0đ")
+                        continue
+
+                    warnings.append(f"[{err_code}] {err_desc}")
+                    break
         except Exception:
             break
-    return {"ok": False, "total_pay": payload.get("total_pay", 58000), "warning": warning_msg}
+    return {
+        "ok": False,
+        "total_pay": payload.get("total_pay", 58000),
+        "service_id": payload["service_id"],
+        "auto_switched_service": auto_switched_service,
+        "warning": " | ".join(warnings) if warnings else None,
+    }
 
 
 def create_order(payload: dict[str, Any], timeout: int = 20) -> dict[str, Any]:
