@@ -17,6 +17,10 @@ DPLACES_AUTOCOMPLETE_URL = "https://ep.ahamove.com/stg/dplaces/web/v2/autocomple
 NOMINATIM_SEARCH_URL = "https://nominatim.openstreetmap.org/search"
 NOMINATIM_REVERSE_URL = "https://nominatim.openstreetmap.org/reverse"
 ASSIGN_ORDER_URL_TMPL = "https://adminv3uat.ahamove.com/api/orders/{order_id}/assign/{driver_id}"
+NEARBY_SUPPLIERS_URL = "https://adminv3uat.ahamove.com/api/suppliers/nearby"
+ADMINV2_UPDATE_SUPPLIER_URL = "https://adminv2uat.ahamove.com/api/custom_action/update/supplier"
+SUPPLIER_PROFILE_URL = "https://apiuat.ahamove.com/api/v3/private/supplier/profile"
+SUPPLIER_SERVICES_URL = "https://apiuat.ahamove.com/api/v3/private/supplier/services"
 USER_REFRESH_URL = "https://apiuat.ahamove.com/api/v3/public/user/token/refresh"
 ADMIN_REFRESH_URL = "https://apiuat.ahamove.com/api/v3/public/supplier/token/refresh"
 ADMIN_COOKIE_ACTION_ID = "4078ab85377a01afe7dbaaca5adfcf050f1cce6777"
@@ -612,6 +616,154 @@ def create_order(payload: dict[str, Any], timeout: int = 20) -> dict[str, Any]:
             return {"ok": False, "status_code": 0, "error": str(exc)}
 
     return {"ok": False, "status_code": 401, "error": "Không thể làm mới User Token"}
+
+
+def _encrypt_ahamove_timestamp(token: str) -> str:
+    """Generate X-Ahamove-Timestamp header used by AdminV2 API (XOR ISO timestamp with token)."""
+    import datetime
+
+    ts_raw = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+    key = token or "123123"
+    xor_chars = [chr(ord(c) ^ ord(key[i % len(key)])) for i, c in enumerate(ts_raw)]
+    return base64.b64encode("".join(xor_chars).encode("latin1")).decode("ascii")
+
+
+def add_service_to_driver(driver_id: str, service_ids: list[str] | None = None) -> dict[str, Any]:
+    """
+    Attach service_ids (default: SGN-VAN-500, SGN-TRUCK-500, SGN-TRUCK-ECO-500, SGN-SAMEDAY, SGN-INDAY)
+    to driver_id on Ahamove UAT via AdminV2 custom_action/update/supplier + v3 supplier/services.
+    """
+    clean_driver_id = normalize_driver_id(driver_id)
+    target_services = [
+        normalize_service_id(s)
+        for s in (service_ids or ["SGN-VAN-500", "SGN-TRUCK-500", "SGN-TRUCK-ECO-500", "SGN-SAMEDAY", "SGN-INDAY"])
+        if s.strip()
+    ]
+    admin_token = ensure_valid_admin_token(force_refresh=False)
+    if not admin_token:
+        return {"ok": False, "error": "Chưa có Admin Token"}
+
+    headers_v3 = {"Authorization": f"Bearer {admin_token}"}
+    curr_services: list[str] = []
+    try:
+        r_prof = requests.get(
+            f"{SUPPLIER_PROFILE_URL}?supplier_id={clean_driver_id}",
+            headers=headers_v3,
+            timeout=10,
+        )
+        if r_prof.status_code == 200:
+            curr_services = (r_prof.json().get("supplier") or {}).get("services") or []
+    except requests.RequestException:
+        pass
+
+    # Call AdminV2 custom_action/update/supplier ($addToSet services & enabled_services)
+    v2_status = 0
+    v2_body: Any = None
+    try:
+        r_v2 = requests.post(
+            ADMINV2_UPDATE_SUPPLIER_URL,
+            headers={
+                "Token": admin_token,
+                "X-Ahamove-Timestamp": _encrypt_ahamove_timestamp(admin_token),
+                "Content-Type": "application/json",
+                "Origin": "https://adminv2uat.ahamove.com",
+                "Referer": f"https://adminv2uat.ahamove.com/#/app/driver-detail/{clean_driver_id}",
+                "User-Agent": USER_AGENT,
+            },
+            json={
+                "identifier": {"_id": clean_driver_id},
+                "fields": {
+                    "$addToSet": {
+                        "services": {"$each": target_services},
+                        "enabled_services": {"$each": target_services},
+                    }
+                },
+            },
+            timeout=10,
+        )
+        v2_status = r_v2.status_code
+        v2_body = r_v2.text[:300]
+    except requests.RequestException as exc:
+        v2_body = str(exc)
+
+    # Sync v3 supplier/services group_services
+    try:
+        requests.put(
+            SUPPLIER_SERVICES_URL,
+            headers=headers_v3,
+            json={
+                "group_services": ["2H-INTERNAL", "BIKE", "HUB-SE", "HUB-SP", "TRUCK-INSTANT", "STANDARD"],
+                "group_requests": ["BULKY", "FRAGILE", "THERMALBAG"],
+            },
+            timeout=8,
+        )
+    except requests.RequestException:
+        pass
+
+    # Re-verify profile
+    after_services = list(curr_services)
+    try:
+        r_prof2 = requests.get(
+            f"{SUPPLIER_PROFILE_URL}?supplier_id={clean_driver_id}",
+            headers=headers_v3,
+            timeout=10,
+        )
+        if r_prof2.status_code == 200:
+            after_services = (r_prof2.json().get("supplier") or {}).get("services") or []
+    except requests.RequestException:
+        pass
+
+    added = [s for s in target_services if s in after_services]
+    missing = [s for s in target_services if s not in after_services]
+    return {
+        "ok": len(missing) == 0,
+        "driver_id": clean_driver_id,
+        "requested": target_services,
+        "added": added,
+        "missing": missing,
+        "adminv2_status": v2_status,
+        "adminv2_response": v2_body,
+        "current_services_count": len(after_services),
+    }
+
+
+def find_nearby_drivers_for_order(order_id: str, limit: int = 5) -> list[dict[str, Any]]:
+    """Query adminv3uat /api/suppliers/nearby for drivers eligible around the order pickup."""
+    clean_order_id = order_id.strip().upper()
+    admin_token = ensure_valid_admin_token(force_refresh=False, order_id_hint=clean_order_id)
+    if not admin_token:
+        return []
+    store = load_store()
+    headers = {
+        "Authorization": f"Bearer {admin_token}",
+        "Content-Type": "application/json",
+        "Origin": "https://adminv3uat.ahamove.com",
+        "Referer": f"https://adminv3uat.ahamove.com/orders/detail/{clean_order_id}",
+        "User-Agent": USER_AGENT,
+    }
+    if store.get("admin_cookie"):
+        headers["Cookie"] = store["admin_cookie"]
+
+    try:
+        resp = requests.post(
+            NEARBY_SUPPLIERS_URL,
+            headers=headers,
+            json={"broadcast_distance": 100000, "order_id": clean_order_id, "limit": 50},
+            timeout=10,
+        )
+        if resp.status_code == 200:
+            drivers = resp.json().get("data") or []
+            # Prioritize VAN/TRUCK drivers and ONLINE drivers
+            drivers.sort(
+                key=lambda d: (
+                    0 if "VAN" in str(d.get("vehicle_type", "")) else (1 if "TRUCK" in str(d.get("vehicle_type", "")) else 2),
+                    0 if d.get("status") == "ONLINE" else 1,
+                )
+            )
+            return drivers[:limit]
+    except requests.RequestException:
+        pass
+    return []
 
 
 def assign_order(order_id: str, driver_id: str, timeout: int = 20) -> dict[str, Any]:
