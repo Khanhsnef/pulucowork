@@ -1,4 +1,4 @@
-"""Ahamove UAT API Client with 100% Automatic Token & Cookie Refresh."""
+"""Ahamove UAT API Client with Auto-Refresh, DPlaces Address Search, Reverse Geocode & Fee Estimate."""
 
 import base64
 import copy
@@ -12,6 +12,10 @@ import requests
 from config import DEFAULT_ORDER_TEMPLATE, load_store, save_store
 
 CREATE_ORDER_URL = "https://apiuat.ahamove.com/api/v3/private/order/create"
+ESTIMATE_ORDER_URL = "https://apiuat.ahamove.com/api/v3/private/order/estimate"
+DPLACES_AUTOCOMPLETE_URL = "https://ep.ahamove.com/stg/dplaces/web/v2/autocomplete"
+NOMINATIM_SEARCH_URL = "https://nominatim.openstreetmap.org/search"
+NOMINATIM_REVERSE_URL = "https://nominatim.openstreetmap.org/reverse"
 ASSIGN_ORDER_URL_TMPL = "https://adminv3uat.ahamove.com/api/orders/{order_id}/assign/{driver_id}"
 USER_REFRESH_URL = "https://apiuat.ahamove.com/api/v3/public/user/token/refresh"
 ADMIN_REFRESH_URL = "https://apiuat.ahamove.com/api/v3/public/supplier/token/refresh"
@@ -110,7 +114,6 @@ def refresh_user_token() -> str | None:
                 if new_token:
                     save_store({"user_token": new_token, "user_refresh_token": new_rt})
                     return new_token
-            # If stored refresh_token expired, try syncing a newer one from Chrome once
             if attempt == 0:
                 chrome_rt = sync_user_refresh_from_chrome()
                 if chrome_rt and chrome_rt != rt:
@@ -166,7 +169,6 @@ def refresh_admin_token(order_id_hint: str = "26I8NU9H") -> str | None:
             "admin_refresh_token": new_rt,
         }
 
-        # Also refresh supplierAuthDataV2 cookie on adminv3uat via Next-Action
         try:
             r_act = requests.post(
                 f"https://adminv3uat.ahamove.com/orders/detail/{order_id_hint}",
@@ -203,17 +205,153 @@ def ensure_valid_admin_token(force_refresh: bool = False, order_id_hint: str = "
     return refreshed or token
 
 
+def _split_address_labels(full_address: str) -> tuple[str, str]:
+    """Split full address into first_label and second_label matching Ahamove payload format."""
+    parts = [p.strip() for p in full_address.split(",") if p.strip()]
+    if not parts:
+        return full_address, full_address
+    first_label = parts[0]
+    second_label = ", ".join(parts[1:]) if len(parts) > 1 else first_label
+    return first_label, second_label
+
+
+def search_places(query: str, bias_lat: float = 10.772, bias_lng: float = 106.698, limit: int = 5) -> list[dict[str, Any]]:
+    """
+    Search places by text query or 'lat,lng' coordinates using Ahamove DPlaces API + OpenStreetMap fallback.
+    Returns list of dicts: {address, lat, lng, adr_source, first_label, second_label}.
+    """
+    cleaned = query.strip()
+
+    # Check if user pasted raw lat,lng coordinates or Google Maps @lat,lng URL
+    coord_match = re.search(r"(-?\d{1,2}\.\d{3,8})\s*[,;\s]\s*(-?\d{2,3}\.\d{3,8})", cleaned)
+    if coord_match:
+        lat_val = float(coord_match.group(1))
+        lng_val = float(coord_match.group(2))
+        place = reverse_geocode_location(lat_val, lng_val)
+        return [place]
+
+    results: list[dict[str, Any]] = []
+    seen_names: set[str] = set()
+
+    # 1. Primary: Ahamove DPlaces Autocomplete API
+    token = ensure_valid_user_token()
+    headers = {
+        "accept": "application/json, text/plain, */*",
+        "origin": "https://appuat.ahamove.com",
+        "referer": "https://appuat.ahamove.com/",
+        "user-agent": USER_AGENT,
+    }
+    if token:
+        headers["authorization"] = f"Bearer {token}"
+
+    try:
+        resp = requests.get(
+            DPLACES_AUTOCOMPLETE_URL,
+            params={"text": cleaned, "lat": bias_lat, "lng": bias_lng},
+            headers=headers,
+            timeout=8,
+        )
+        if resp.status_code == 200:
+            features = resp.json().get("features") or []
+            for feat in features:
+                coords = (feat.get("geometry") or {}).get("coordinates") or []
+                props = feat.get("properties") or {}
+                name = (props.get("name") or "").strip()
+                if len(coords) >= 2 and name and name.lower() not in seen_names:
+                    seen_names.add(name.lower())
+                    lng_f, lat_f = float(coords[0]), float(coords[1])
+                    first_lbl, second_lbl = _split_address_labels(name)
+                    results.append(
+                        {
+                            "address": name,
+                            "lat": round(lat_f, 6),
+                            "lng": round(lng_f, 6),
+                            "adr_source": props.get("source") or "pelias",
+                            "first_label": first_lbl,
+                            "second_label": second_lbl,
+                        }
+                    )
+                    if len(results) >= limit:
+                        return results
+    except requests.RequestException:
+        pass
+
+    # 2. Fallback / Supplement: OpenStreetMap Nominatim (focused on Vietnam)
+    if len(results) < limit:
+        try:
+            r_nom = requests.get(
+                NOMINATIM_SEARCH_URL,
+                params={
+                    "q": cleaned,
+                    "format": "jsonv2",
+                    "countrycodes": "vn",
+                    "limit": limit - len(results),
+                    "accept-language": "vi",
+                },
+                headers={"User-Agent": "Ahamove-UAT-Telegram-Bot/2.0"},
+                timeout=8,
+            )
+            if r_nom.status_code == 200:
+                for item in r_nom.json():
+                    disp = (item.get("display_name") or "").strip()
+                    if disp and disp.lower() not in seen_names:
+                        seen_names.add(disp.lower())
+                        lat_f = float(item["lat"])
+                        lng_f = float(item["lon"])
+                        first_lbl, second_lbl = _split_address_labels(disp)
+                        results.append(
+                            {
+                                "address": disp,
+                                "lat": round(lat_f, 6),
+                                "lng": round(lng_f, 6),
+                                "adr_source": "pelias",
+                                "first_label": first_lbl,
+                                "second_label": second_lbl,
+                            }
+                        )
+        except Exception:
+            pass
+
+    return results[:limit]
+
+
+def reverse_geocode_location(lat: float, lng: float) -> dict[str, Any]:
+    """Convert GPS coordinates (lat, lng) into Ahamove address dict."""
+    address = f"Ghim bản đồ ({lat:.6f}, {lng:.6f}), TP. Hồ Chí Minh, Việt Nam"
+    try:
+        resp = requests.get(
+            NOMINATIM_REVERSE_URL,
+            params={"format": "jsonv2", "lat": lat, "lon": lng, "accept-language": "vi"},
+            headers={"User-Agent": "Ahamove-UAT-Telegram-Bot/2.0"},
+            timeout=8,
+        )
+        if resp.status_code == 200:
+            disp = (resp.json().get("display_name") or "").strip()
+            if disp:
+                address = disp
+    except Exception:
+        pass
+
+    first_lbl, second_lbl = _split_address_labels(address)
+    return {
+        "address": address,
+        "lat": round(float(lat), 6),
+        "lng": round(float(lng), 6),
+        "adr_source": "pelias",
+        "first_label": first_lbl,
+        "second_label": second_lbl,
+    }
+
+
 def parse_curl_credentials(text: str) -> dict[str, Any]:
     """Extract user_token, admin_token, refresh_token, admin_cookie, and order_template from a cURL or JWT."""
     result: dict[str, Any] = {}
     cleaned = text.strip()
 
-    # Case 1: Raw 32-char hex refresh_token
     if re.fullmatch(r"[0-9a-f]{32}", cleaned):
         result["user_refresh_token"] = cleaned
         return result
 
-    # Case 2: Raw JWT string
     if re.fullmatch(r"eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+", cleaned):
         info = decode_jwt_info(cleaned)
         if info.get("typ") == "supplier" or info.get("role") == "admin":
@@ -228,7 +366,6 @@ def parse_curl_credentials(text: str) -> dict[str, Any]:
                 result["user_imei"] = info["imei"]
         return result
 
-    # Case 3: cURL command
     auth_match = re.search(r"authorization:\s*Bearer\s+([A-Za-z0-9_.-]+)", cleaned, re.IGNORECASE)
     cookie_match = re.search(r"(?:-b|--cookie)\s+['\"]([^'\"]+)['\"]", cleaned)
     data_match = re.search(r"(?:--data-raw|--data|-d)\s+'(\{.*?\})'", cleaned, re.DOTALL)
@@ -288,6 +425,23 @@ def build_order_payload(overrides: dict[str, Any] | None = None) -> dict[str, An
         payload["requests"] = req
         payload["service"] = {"_id": sid, "requests": req}
 
+    for idx, key in ((0, "pickup"), (1, "dropoff")):
+        pt = overrides.get(key)
+        if isinstance(pt, dict):
+            for field in ("address", "lat", "lng", "adr_source", "first_label", "second_label", "name", "mobile"):
+                if field in pt and pt[field] is not None:
+                    payload["path"][idx][field] = pt[field]
+
+    if overrides.get("sender_name") is not None:
+        payload["path"][0]["name"] = overrides["sender_name"]
+    if overrides.get("sender_mobile") is not None:
+        payload["path"][0]["mobile"] = overrides["sender_mobile"]
+
+    if overrides.get("recipient_name") is not None:
+        payload["path"][1]["name"] = overrides["recipient_name"]
+    if overrides.get("recipient_mobile") is not None:
+        payload["path"][1]["mobile"] = overrides["recipient_mobile"]
+
     if overrides.get("cod") is not None:
         payload["path"][1]["cod"] = int(overrides["cod"])
 
@@ -298,6 +452,53 @@ def build_order_payload(overrides: dict[str, Any] | None = None) -> dict[str, An
         payload["remarks"] = overrides["remarks"]
 
     return payload
+
+
+def estimate_order_fee(overrides: dict[str, Any] | None = None, timeout: int = 12) -> dict[str, Any]:
+    """Call POST https://apiuat.ahamove.com/api/v3/private/order/estimate to calculate real total_pay & distance."""
+    payload = build_order_payload(overrides)
+    payload["services"] = [payload["service"]]
+    user_token = ensure_valid_user_token(force_refresh=False)
+    if not user_token:
+        return {"ok": False, "total_pay": payload.get("total_pay", 58000)}
+
+    warning_msg = None
+    for attempt in range(2):
+        headers = {
+            "accept": "application/json, text/plain, */*",
+            "authorization": f"Bearer {user_token}",
+            "content-type": "application/json",
+            "origin": "https://appuat.ahamove.com",
+            "referer": "https://appuat.ahamove.com/",
+            "user-agent": USER_AGENT,
+        }
+        try:
+            resp = requests.post(ESTIMATE_ORDER_URL, headers=headers, json=payload, timeout=timeout)
+            if resp.status_code == 401 and attempt == 0:
+                user_token = ensure_valid_user_token(force_refresh=True)
+                continue
+            if resp.status_code == 200:
+                body = resp.json()
+                if isinstance(body, list) and body:
+                    first = body[0]
+                    data = first.get("data") or {}
+                    err = first.get("error") or {}
+                    if data.get("total_pay") is not None:
+                        return {
+                            "ok": True,
+                            "total_pay": int(data["total_pay"]),
+                            "distance": data.get("distance"),
+                            "duration": data.get("duration"),
+                            "warning": warning_msg,
+                        }
+                    # If COD exceeds account limit (e.g. INVALID_MAX_COD), retry fee calculation with cod=0
+                    if err and payload["path"][1].get("cod", 0) > 0:
+                        warning_msg = err.get("description") or err.get("title")
+                        payload["path"][1]["cod"] = 0
+                        continue
+        except Exception:
+            break
+    return {"ok": False, "total_pay": payload.get("total_pay", 58000), "warning": warning_msg}
 
 
 def create_order(payload: dict[str, Any], timeout: int = 20) -> dict[str, Any]:

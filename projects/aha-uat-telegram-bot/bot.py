@@ -14,8 +14,11 @@ from aha_client import (
     decode_jwt_info,
     ensure_valid_admin_token,
     ensure_valid_user_token,
+    estimate_order_fee,
     normalize_driver_id,
     parse_curl_credentials,
+    reverse_geocode_location,
+    search_places,
 )
 from config import ALLOW_DM, BOT_TOKEN, ENV_FILE, GIST_ID, MAX_RUNTIME_SEC, load_store, save_store
 
@@ -42,14 +45,14 @@ def register_bot_commands() -> None:
     """Delete any existing webhook and register slash commands menu in Telegram."""
     wh = tg_call("deleteWebhook", {"drop_pending_updates": False})
     if wh.get("ok"):
-        print("🔓 Đã gỡ Webhook cũ (Make.com/n8n) để kích hoạt Long Polling.")
+        print("🔓 Đã gỡ Webhook cũ để kích hoạt Long Polling.")
     commands = [
         {"command": "menu", "description": "Bảng điều khiển Tạo đơn & Gán đơn"},
         {"command": "tao", "description": "Tạo đơn UAT nhanh theo mẫu"},
-        {"command": "new", "description": "Tạo đơn UAT tùy chỉnh (Dịch vụ, COD, Ghi chú)"},
+        {"command": "new", "description": "Tạo đơn tùy chỉnh (Địa chỉ, Người gửi/nhận, COD...)"},
         {"command": "gan", "description": "Gán đơn XYZ cho tài xế: /gan <MÃ_ĐƠN> [SĐT_TX]"},
         {"command": "taogan", "description": "Tạo đơn mới & Gán ngay: /taogan [SĐT_TX]"},
-        {"command": "nap", "description": "Nạp cURL / Token mới (hỗ trợ Group Privacy ON)"},
+        {"command": "nap", "description": "Nạp cURL / Token mới"},
         {"command": "token", "description": "Kiểm tra thời hạn User/Admin Token"},
         {"command": "bind_group", "description": "Khóa Bot chỉ phục vụ nhóm hiện tại"},
         {"command": "cancel", "description": "Hủy thao tác đang nhập"},
@@ -67,6 +70,7 @@ def send_msg(
         "chat_id": chat_id,
         "text": text,
         "parse_mode": "HTML",
+        "disable_web_page_preview": True,
     }
     if reply_markup:
         payload["reply_markup"] = reply_markup
@@ -123,7 +127,6 @@ def _format_token_line(label: str, token: str) -> str:
 
 
 def format_token_status() -> str:
-    # Auto-refresh tokens before displaying status so user always sees live state
     ensure_valid_user_token(force_refresh=False)
     ensure_valid_admin_token(force_refresh=False)
     store = load_store()
@@ -141,7 +144,7 @@ def format_token_status() -> str:
         + f"\n• <b>Admin Cookie:</b> {cookie_ok}"
         + f"\n• <b>Tài xế mặc định:</b> <code>{drv}</code>"
         + f"\n• <b>Nhóm được phép:</b> <code>{bound_grp}</code>\n\n"
-        "💡 <i>Bot đã bật cơ chế tự động làm mới JWT mỗi 5 phút bằng Refresh Token — bạn không cần dán lại cURL thủ công nữa!</i>"
+        "💡 <i>Bot tự động làm mới JWT mỗi 5 phút bằng Refresh Token trên Cloud 24/7.</i>"
     )
 
 
@@ -152,18 +155,17 @@ def format_json_preview(data: Any, limit: int = 700) -> str:
     return raw.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def _esc(text: Any) -> str:
+    return str(text or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
 def is_authorized_chat(chat_id: int, cmd: str = "") -> bool:
-    """Verify if message comes from the bound group or allowed DM."""
     if cmd in ("/chatid", "/bind_group"):
         return True
     store = load_store()
     bound_group = str(store.get("bound_group_id") or "").strip()
-    is_private = chat_id > 0
-
-    if is_private:
+    if chat_id > 0:
         return ALLOW_DM
-
-    # Group chat (< 0): if bound_group is configured, only allow that exact group
     if bound_group and str(chat_id) != bound_group:
         return False
     return True
@@ -192,17 +194,20 @@ def execute_create_order(
         return
 
     order_id = res.get("order_id") or "UNKNOWN"
-    pickup_addr = (payload.get("path") or [{}, {}])[0].get("first_label", "Điểm lấy")
-    drop_addr = (payload.get("path") or [{}, {}])[1].get("first_label", "Điểm giao")
-    cod_amt = (payload.get("path") or [{}, {}])[1].get("cod", 0)
+    p0 = (payload.get("path") or [{}, {}])[0]
+    p1 = (payload.get("path") or [{}, {}])[1]
+    cod_amt = p1.get("cod", 0)
 
     msg = (
         f"✅ <b>Tạo đơn UAT thành công!</b>\n"
         f"• Mã đơn: <code>{order_id}</code>\n"
         f"• Dịch vụ: <code>{payload.get('service_id')}</code>\n"
-        f"• Lộ trình: <b>{pickup_addr}</b> → <b>{drop_addr}</b>\n"
-        f"• COD: <b>{cod_amt:,}đ</b> | Total Pay: <b>{payload.get('total_pay', 0):,}đ</b>\n"
-        f"<pre>{format_json_preview(res.get('body'), 450)}</pre>"
+        f"• 📍 <b>Lấy:</b> {_esc(p0.get('address'))}\n"
+        f"  ↳ Người gửi: <b>{_esc(p0.get('name') or 'Mặc định')}</b> ({_esc(p0.get('mobile') or 'Trống')})\n"
+        f"• 🏁 <b>Giao:</b> {_esc(p1.get('address'))}\n"
+        f"  ↳ Người nhận: <b>{_esc(p1.get('name') or 'Mặc định')}</b> ({_esc(p1.get('mobile') or 'Trống')})\n"
+        f"• 💵 COD: <b>{cod_amt:,}đ</b> | 💰 Cước: <b>{payload.get('total_pay', 0):,}đ</b>\n"
+        f"• 📝 Ghi chú: <i>{_esc(payload.get('remarks') or 'Không có')}</i>"
     )
 
     if auto_assign_driver and order_id != "UNKNOWN":
@@ -304,18 +309,394 @@ def start_assign_flow(chat_id: int, user_id: int, prefilled_order_id: str | None
         )
 
 
+# ── CUSTOM ORDER WIZARD (/new) ───────────────────────────────────────────────
+
+def _group_reply_hint(chat_id: int) -> str:
+    if chat_id < 0:
+        return "\n💡 <i>(Trong nhóm: Hãy <b>Reply/Trả lời</b> tin nhắn này khi gõ chữ hoặc gửi ghim Vị trí 📎)</i>"
+    return ""
+
+
 def start_custom_order_flow(chat_id: int, user_id: int) -> None:
-    USER_STATES[(chat_id, user_id)] = {"flow": "new_order", "step": "service_id", "data": {}}
+    base = build_order_payload()
+    p0 = base["path"][0]
+    p1 = base["path"][1]
+    USER_STATES[(chat_id, user_id)] = {
+        "flow": "new_order",
+        "step": "service_id",
+        "return_to_confirm": False,
+        "candidates": [],
+        "data": {
+            "service_id": base.get("service_id", "SGN-BIKE"),
+            "pickup": {
+                "address": p0.get("address"),
+                "lat": p0.get("lat"),
+                "lng": p0.get("lng"),
+                "adr_source": p0.get("adr_source", "pelias"),
+                "first_label": p0.get("first_label"),
+                "second_label": p0.get("second_label"),
+            },
+            "sender_name": p0.get("name") or "Khanh Lê Phương",
+            "sender_mobile": p0.get("mobile") or "0981792046",
+            "dropoff": {
+                "address": p1.get("address"),
+                "lat": p1.get("lat"),
+                "lng": p1.get("lng"),
+                "adr_source": p1.get("adr_source", "pelias"),
+                "first_label": p1.get("first_label"),
+                "second_label": p1.get("second_label"),
+            },
+            "recipient_name": p1.get("name") or "Khanh Lê Phương",
+            "recipient_mobile": p1.get("mobile") or "0981792046",
+            "cod": p1.get("cod", 0),
+            "total_pay": base.get("total_pay", 58000),
+            "remarks": base.get("remarks"),
+        },
+    }
+    prompt_service_step(chat_id, user_id)
+
+
+def prompt_service_step(chat_id: int, user_id: int) -> None:
+    state = USER_STATES[(chat_id, user_id)]
+    state["step"] = "service_id"
     kb = {
         "inline_keyboard": [
             [
-                {"text": "SGN-BIKE", "callback_data": "new:service:SGN-BIKE"},
-                {"text": "SGN-EXPRESS", "callback_data": "new:service:SGN-EXPRESS"},
+                {"text": "🛵 SGN-BIKE", "callback_data": "new:service:SGN-BIKE"},
+                {"text": "⚡ SGN-EXPRESS", "callback_data": "new:service:SGN-EXPRESS"},
+            ],
+            [
+                {"text": "📦 SGN-SAMEDAY", "callback_data": "new:service:SGN-SAMEDAY"},
+                {"text": "🚚 SGN-TRUCK-500", "callback_data": "new:service:SGN-TRUCK-500"},
+            ],
+            [
+                {"text": "⏩ Đi thẳng tới Xác nhận đơn", "callback_data": "new:goto:confirm"},
+                {"text": "❌ Hủy", "callback_data": "menu:cancel"},
+            ],
+        ]
+    }
+    send_msg(
+        chat_id,
+        "1️⃣ <b>Chọn Dịch vụ (service_id)</b> hoặc gõ mã dịch vụ khác:" + _group_reply_hint(chat_id),
+        reply_markup=kb,
+    )
+
+
+def prompt_pickup_step(chat_id: int, user_id: int) -> None:
+    state = USER_STATES[(chat_id, user_id)]
+    state["step"] = "pickup_address"
+    cur = state["data"]["pickup"]
+    kb = {
+        "inline_keyboard": [
+            [{"text": f"⏭ Giữ: {cur['first_label'][:32]}", "callback_data": "new:pickup:keep"}],
+            [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
+        ]
+    }
+    send_msg(
+        chat_id,
+        "2️⃣ 📍 <b>Địa chỉ &amp; Tọa độ Điểm Lấy Hàng (Người gửi)</b>\n"
+        f"• Hiện tại: <code>{_esc(cur['address'])}</code> (<code>{cur['lat']}, {cur['lng']}</code>)\n\n"
+        "👉 <b>3 cách chọn đúng địa chỉ &amp; tọa độ:</b>\n"
+        "1. <b>Gõ tên địa chỉ / tòa nhà / số nhà</b> (VD: <code>Bitexco Quận 1</code> hoặc <code>268 Lý Thường Kiệt Q10</code>) để tìm trên bản đồ Ahamove.\n"
+        "2. <b>Bấm nút 📎 (Đính kèm) → Location (Vị trí)</b> trên Telegram điện thoại để kéo ghim trực tiếp trên bản đồ.\n"
+        "3. <b>Dán tọa độ</b> <code>lat, lng</code> (VD: <code>10.7721, 106.6983</code>)."
+        + _group_reply_hint(chat_id),
+        reply_markup=kb,
+    )
+
+
+def prompt_sender_step(chat_id: int, user_id: int) -> None:
+    state = USER_STATES[(chat_id, user_id)]
+    state["step"] = "sender_info"
+    d = state["data"]
+    kb = {
+        "inline_keyboard": [
+            [
+                {
+                    "text": f"⏭ Giữ: {d['sender_name']} ({d['sender_mobile']})",
+                    "callback_data": "new:sender:keep",
+                }
             ],
             [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
         ]
     }
-    send_msg(chat_id, "1️⃣ Chọn hoặc nhập <b>service_id</b> (VD: <code>SGN-BIKE</code>):", reply_markup=kb)
+    send_msg(
+        chat_id,
+        "3️⃣ 👤 <b>Thông tin Người gửi (Tên &amp; SĐT)</b>\n"
+        f"• Hiện tại: <b>{_esc(d['sender_name'])}</b> — <code>{_esc(d['sender_mobile'])}</code>\n\n"
+        "👉 Nhập theo cú pháp <code>Tên | SĐT</code> (VD: <code>Shop Aha | 0981792046</code>) hoặc bấm nút giữ mặc định:"
+        + _group_reply_hint(chat_id),
+        reply_markup=kb,
+    )
+
+
+def prompt_dropoff_step(chat_id: int, user_id: int) -> None:
+    state = USER_STATES[(chat_id, user_id)]
+    state["step"] = "dropoff_address"
+    cur = state["data"]["dropoff"]
+    kb = {
+        "inline_keyboard": [
+            [{"text": f"⏭ Giữ: {cur['first_label'][:32]}", "callback_data": "new:dropoff:keep"}],
+            [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
+        ]
+    }
+    send_msg(
+        chat_id,
+        "4️⃣ 🏁 <b>Địa chỉ &amp; Tọa độ Điểm Giao Hàng (Người nhận)</b>\n"
+        f"• Hiện tại: <code>{_esc(cur['address'])}</code> (<code>{cur['lat']}, {cur['lng']}</code>)\n\n"
+        "👉 <b>3 cách chọn đúng địa chỉ &amp; tọa độ:</b>\n"
+        "1. <b>Gõ tên địa chỉ / tòa nhà / số nhà</b> (VD: <code>Landmark 81</code> hoặc <code>113 Hồ Học Lãm</code>) để tìm và chọn từ danh sách Ahamove.\n"
+        "2. <b>Bấm nút 📎 (Đính kèm) → Location (Vị trí)</b> trên Telegram điện thoại để ghim trên bản đồ.\n"
+        "3. <b>Dán tọa độ</b> <code>lat, lng</code>."
+        + _group_reply_hint(chat_id),
+        reply_markup=kb,
+    )
+
+
+def prompt_recipient_step(chat_id: int, user_id: int) -> None:
+    state = USER_STATES[(chat_id, user_id)]
+    state["step"] = "recipient_info"
+    d = state["data"]
+    kb = {
+        "inline_keyboard": [
+            [
+                {
+                    "text": f"⏭ Giữ: {d['recipient_name']} ({d['recipient_mobile']})",
+                    "callback_data": "new:recipient:keep",
+                }
+            ],
+            [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
+        ]
+    }
+    send_msg(
+        chat_id,
+        "5️⃣ 📲 <b>Thông tin Người nhận (Tên &amp; SĐT)</b>\n"
+        f"• Hiện tại: <b>{_esc(d['recipient_name'])}</b> — <code>{_esc(d['recipient_mobile'])}</code>\n\n"
+        "👉 Nhập theo cú pháp <code>Tên | SĐT</code> (VD: <code>Nguyễn Văn A | 0909123456</code>) hoặc bấm giữ mặc định:"
+        + _group_reply_hint(chat_id),
+        reply_markup=kb,
+    )
+
+
+def prompt_cod_step(chat_id: int, user_id: int) -> None:
+    state = USER_STATES[(chat_id, user_id)]
+    state["step"] = "cod"
+    kb = {
+        "inline_keyboard": [
+            [
+                {"text": "COD = 0đ", "callback_data": "new:cod:0"},
+                {"text": "100,000đ", "callback_data": "new:cod:100000"},
+            ],
+            [
+                {"text": "200,000đ", "callback_data": "new:cod:200000"},
+                {"text": "500,000đ", "callback_data": "new:cod:500000"},
+            ],
+            [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
+        ]
+    }
+    send_msg(
+        chat_id,
+        "6️⃣ 💵 <b>Chọn hoặc nhập tiền thu hộ COD (VNĐ):</b>" + _group_reply_hint(chat_id),
+        reply_markup=kb,
+    )
+
+
+def prompt_total_pay_step(chat_id: int, user_id: int) -> None:
+    state = USER_STATES[(chat_id, user_id)]
+    state["step"] = "total_pay"
+    d = state["data"]
+    est = estimate_order_fee(d)
+    est_pay = est.get("total_pay", d.get("total_pay", 58000))
+    dist = est.get("distance")
+    warn = est.get("warning")
+    d["estimated_distance"] = dist
+    d["total_pay"] = est_pay
+    if warn and d.get("cod", 0) > 0:
+        d["cod"] = 0
+
+    dist_label = f" ({dist} km)" if dist is not None else ""
+    warn_line = f"⚠️ <i>Lưu ý Ahamove UAT: {_esc(warn)} (Đã tự đưa COD về 0đ)</i>\n" if warn else ""
+    kb = {
+        "inline_keyboard": [
+            [
+                {
+                    "text": f"💰 Dùng giá Ahamove tính: {est_pay:,}đ{dist_label}",
+                    "callback_data": f"new:pay:{est_pay}",
+                }
+            ],
+            [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
+        ]
+    }
+    send_msg(
+        chat_id,
+        f"7️⃣ 💰 <b>Cước phí đơn hàng (total_pay)</b>\n"
+        + warn_line
+        + f"• Hệ thống Ahamove UAT tự tính theo lộ trình: <b>{est_pay:,}đ</b>{dist_label}\n"
+        "👉 Bấm nút bên dưới để dùng mức phí chuẩn này hoặc nhập số tiền khác:"
+        + _group_reply_hint(chat_id),
+        reply_markup=kb,
+    )
+
+
+def prompt_remarks_step(chat_id: int, user_id: int) -> None:
+    state = USER_STATES[(chat_id, user_id)]
+    state["step"] = "remarks"
+    kb = {
+        "inline_keyboard": [
+            [{"text": "⏭ Không ghi chú → Xem tóm tắt đơn", "callback_data": "new:remarks:none"}],
+            [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
+        ]
+    }
+    send_msg(
+        chat_id,
+        "8️⃣ 📝 <b>Nhập ghi chú (remarks) cho tài xế</b> hoặc bấm bỏ qua:" + _group_reply_hint(chat_id),
+        reply_markup=kb,
+    )
+
+
+def show_order_confirmation(chat_id: int, user_id: int) -> None:
+    state = USER_STATES.get((chat_id, user_id))
+    if not state:
+        return
+    state["step"] = "confirm"
+    state["return_to_confirm"] = True
+    d = state["data"]
+
+    # Refresh fee estimate whenever addresses/service change
+    est = estimate_order_fee(d)
+    if est.get("ok"):
+        d["total_pay"] = est["total_pay"]
+        d["estimated_distance"] = est.get("distance")
+
+    p0 = d["pickup"]
+    p1 = d["dropoff"]
+    dist_str = f"{d.get('estimated_distance')} km" if d.get("estimated_distance") is not None else "N/A"
+    gmap_p0 = f"https://maps.google.com/?q={p0['lat']},{p0['lng']}"
+    gmap_p1 = f"https://maps.google.com/?q={p1['lat']},{p1['lng']}"
+
+    store = load_store()
+    default_drv = store.get("default_driver_id", "84981792046")
+
+    summary = (
+        "📋 <b>XÁC NHẬN ĐƠN HÀNG TÙY CHỈNH (UAT)</b>\n\n"
+        f"• 🛵 <b>Dịch vụ:</b> <code>{_esc(d['service_id'])}</code> (Quãng đường: <b>{dist_str}</b>)\n\n"
+        f"• 📍 <b>Điểm lấy (Pickup):</b>\n"
+        f"  <code>{_esc(p0['address'])}</code>\n"
+        f"  🌐 Tọa độ: <a href=\"{gmap_p0}\">{p0['lat']}, {p0['lng']} (Xem bản đồ)</a>\n"
+        f"  👤 Người gửi: <b>{_esc(d['sender_name'])}</b> — <code>{_esc(d['sender_mobile'])}</code>\n\n"
+        f"• 🏁 <b>Điểm giao (Dropoff):</b>\n"
+        f"  <code>{_esc(p1['address'])}</code>\n"
+        f"  🌐 Tọa độ: <a href=\"{gmap_p1}\">{p1['lat']}, {p1['lng']} (Xem bản đồ)</a>\n"
+        f"  📲 Người nhận: <b>{_esc(d['recipient_name'])}</b> — <code>{_esc(d['recipient_mobile'])}</code>\n\n"
+        f"• 💵 <b>Thu hộ COD:</b> <b>{d['cod']:,}đ</b>\n"
+        f"• 💰 <b>Cước phí (Total Pay):</b> <b>{d['total_pay']:,}đ</b>\n"
+        f"• 📝 <b>Ghi chú:</b> <i>{_esc(d.get('remarks') or 'Không có')}</i>\n\n"
+        "👇 <b>Chọn Tạo đơn hoặc bấm vào mục bất kỳ để sửa lại:</b>"
+    )
+
+    kb = {
+        "inline_keyboard": [
+            [
+                {"text": "✅ Tạo đơn ngay", "callback_data": "new:submit:create"},
+                {"text": f"⚡ Tạo & Gán → {default_drv}", "callback_data": "new:submit:create_assign"},
+            ],
+            [
+                {"text": "📍 Sửa Điểm lấy", "callback_data": "new:edit:pickup"},
+                {"text": "👤 Sửa Người gửi", "callback_data": "new:edit:sender"},
+            ],
+            [
+                {"text": "🏁 Sửa Điểm giao", "callback_data": "new:edit:dropoff"},
+                {"text": "📲 Sửa Người nhận", "callback_data": "new:edit:recipient"},
+            ],
+            [
+                {"text": "🛵 Sửa Dịch vụ", "callback_data": "new:edit:service"},
+                {"text": "💵 Sửa COD/Phí", "callback_data": "new:edit:cod"},
+                {"text": "📝 Sửa Ghi chú", "callback_data": "new:edit:remarks"},
+            ],
+            [{"text": "❌ Hủy đơn", "callback_data": "menu:cancel"}],
+        ]
+    }
+    send_msg(chat_id, summary, reply_markup=kb)
+
+
+def _parse_contact_input(raw: str, default_name: str, default_mobile: str) -> tuple[str, str]:
+    if "|" in raw:
+        left, right = raw.split("|", 1)
+        return left.strip() or default_name, right.strip() or default_mobile
+    cleaned = raw.strip()
+    # If user only typed a phone number
+    if cleaned.replace("+", "").replace(" ", "").isdigit() and len(cleaned) >= 9:
+        return default_name, cleaned
+    return cleaned, default_mobile
+
+
+def _show_place_candidates(chat_id: int, user_id: int, target_key: str, query: str) -> None:
+    state = USER_STATES[(chat_id, user_id)]
+    candidates = search_places(query, limit=5)
+    if not candidates:
+        send_msg(
+            chat_id,
+            f"⚠️ Không tìm thấy địa chỉ nào khớp với <code>{_esc(query)}</code>.\n"
+            "👉 Hãy thử gõ rõ hơn (VD: <code>Số nhà, Tên đường, Quận, TP.HCM</code>) hoặc gửi ghim <b>📎 Location (Vị trí)</b> trên Telegram:",
+        )
+        return
+
+    state["candidates"] = candidates
+    buttons: list[list[dict[str, str]]] = []
+    lines = [f"🔎 <b>Kết quả tìm địa chỉ cho:</b> <code>{_esc(query)}</code>\n"]
+    for idx, cand in enumerate(candidates):
+        num = idx + 1
+        lines.append(
+            f"<b>{num}.</b> {_esc(cand['address'])}\n"
+            f"   ↳ Tọa độ: <code>{cand['lat']}, {cand['lng']}</code>"
+        )
+        short_lbl = f"{num}. {cand['first_label']} ({cand['second_label'][:26]})"
+        buttons.append(
+            [
+                {
+                    "text": short_lbl[:60],
+                    "callback_data": f"new:pick_addr:{target_key}:{idx}",
+                }
+            ]
+        )
+
+    buttons.append([{"text": "❌ Hủy", "callback_data": "menu:cancel"}])
+    lines.append("\n👇 <b>Chạm vào địa chỉ đúng bên dưới (hoặc gõ từ khóa khác để tìm lại):</b>")
+    send_msg(chat_id, "\n".join(lines), reply_markup={"inline_keyboard": buttons})
+
+
+def handle_location_pin(chat_id: int, user_id: int, loc: dict[str, Any], msg_id: int | None = None) -> bool:
+    """Handle Telegram native GPS location pin (📎 -> Location) during pickup or dropoff step."""
+    state = USER_STATES.get((chat_id, user_id))
+    if not state or state.get("flow") != "new_order":
+        return False
+
+    step = state.get("step")
+    if step not in ("pickup_address", "dropoff_address"):
+        return False
+
+    lat = float(loc["latitude"])
+    lng = float(loc["longitude"])
+    place = reverse_geocode_location(lat, lng)
+    target_key = "pickup" if step == "pickup_address" else "dropoff"
+    state["data"][target_key] = place
+
+    label_vi = "Điểm lấy hàng" if target_key == "pickup" else "Điểm giao hàng"
+    send_msg(
+        chat_id,
+        f"📍 Đã nhận ghim bản đồ cho <b>{label_vi}</b>:\n"
+        f"• Địa chỉ: <code>{_esc(place['address'])}</code>\n"
+        f"• Tọa độ: <code>{place['lat']}, {place['lng']}</code>",
+        reply_to_message_id=msg_id,
+    )
+
+    if state.get("return_to_confirm"):
+        show_order_confirmation(chat_id, user_id)
+    elif target_key == "pickup":
+        prompt_sender_step(chat_id, user_id)
+    else:
+        prompt_recipient_step(chat_id, user_id)
+    return True
 
 
 def handle_state_input(chat_id: int, user_id: int, text: str, msg_id: int | None = None) -> bool:
@@ -341,55 +722,64 @@ def handle_state_input(chat_id: int, user_id: int, text: str, msg_id: int | None
     if flow == "new_order":
         if step == "service_id":
             data["service_id"] = text.strip().upper()
-            state["step"] = "cod"
-            kb = {
-                "inline_keyboard": [
-                    [
-                        {"text": "COD = 0đ", "callback_data": "new:cod:0"},
-                        {"text": "COD = 100,000đ", "callback_data": "new:cod:100000"},
-                    ],
-                    [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
-                ]
-            }
-            send_msg(chat_id, "2️⃣ Nhập tiền thu hộ <b>COD</b> (VNĐ):", reply_markup=kb)
+            if state.get("return_to_confirm"):
+                show_order_confirmation(chat_id, user_id)
+            else:
+                prompt_pickup_step(chat_id, user_id)
+            return True
+
+        if step == "pickup_address":
+            _show_place_candidates(chat_id, user_id, "pickup", text)
+            return True
+
+        if step == "sender_info":
+            name, mobile = _parse_contact_input(text, data["sender_name"], data["sender_mobile"])
+            data["sender_name"] = name
+            data["sender_mobile"] = mobile
+            if state.get("return_to_confirm"):
+                show_order_confirmation(chat_id, user_id)
+            else:
+                prompt_dropoff_step(chat_id, user_id)
+            return True
+
+        if step == "dropoff_address":
+            _show_place_candidates(chat_id, user_id, "dropoff", text)
+            return True
+
+        if step == "recipient_info":
+            name, mobile = _parse_contact_input(text, data["recipient_name"], data["recipient_mobile"])
+            data["recipient_name"] = name
+            data["recipient_mobile"] = mobile
+            if state.get("return_to_confirm"):
+                show_order_confirmation(chat_id, user_id)
+            else:
+                prompt_cod_step(chat_id, user_id)
             return True
 
         if step == "cod":
             try:
                 data["cod"] = int(text.replace(",", "").replace(".", "").strip())
             except ValueError:
-                send_msg(chat_id, "⚠️ Vui lòng nhập số nguyên cho COD (VD: <code>0</code> hoặc <code>50000</code>):")
+                send_msg(chat_id, "⚠️ Vui lòng nhập số nguyên cho COD (VD: <code>0</code> hoặc <code>150000</code>):")
                 return True
-            state["step"] = "total_pay"
-            kb = {
-                "inline_keyboard": [
-                    [{"text": "Mặc định (58,000đ)", "callback_data": "new:pay:58000"}],
-                    [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
-                ]
-            }
-            send_msg(chat_id, "3️⃣ Nhập <b>total_pay</b> (VNĐ):", reply_markup=kb)
+            prompt_total_pay_step(chat_id, user_id)
             return True
 
         if step == "total_pay":
             try:
                 data["total_pay"] = int(text.replace(",", "").replace(".", "").strip())
             except ValueError:
-                send_msg(chat_id, "⚠️ Vui lòng nhập số nguyên cho total_pay (VD: <code>58000</code>):")
+                send_msg(chat_id, "⚠️ Vui lòng nhập số nguyên cho cước phí (VD: <code>58000</code>):")
                 return True
-            state["step"] = "remarks"
-            kb = {
-                "inline_keyboard": [
-                    [{"text": "Bỏ qua ghi chú", "callback_data": "new:remarks:none"}],
-                    [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
-                ]
-            }
-            send_msg(chat_id, "4️⃣ Nhập <b>ghi chú (remarks)</b> cho tài xế:", reply_markup=kb)
+            if state.get("return_to_confirm"):
+                show_order_confirmation(chat_id, user_id)
+            else:
+                prompt_remarks_step(chat_id, user_id)
             return True
 
         if step == "remarks":
             data["remarks"] = None if text.strip().lower() in ("none", "skip", "không", "-") else text.strip()
-            USER_STATES.pop((chat_id, user_id), None)
-            execute_create_order(chat_id, data, reply_to_msg_id=msg_id)
+            show_order_confirmation(chat_id, user_id)
             return True
 
     return False
@@ -443,54 +833,97 @@ def handle_callback(cq: dict[str, Any]) -> None:
     elif data.startswith("ask_driver:"):
         _, order_id = data.split(":", 1)
         start_assign_flow(chat_id, user_id, order_id)
-    elif data.startswith("new:service:"):
-        sid = data.split(":", 2)[2]
-        state = USER_STATES.setdefault((chat_id, user_id), {"flow": "new_order", "step": "cod", "data": {}})
-        state["data"]["service_id"] = sid
-        state["step"] = "cod"
-        kb = {
-            "inline_keyboard": [
-                [
-                    {"text": "COD = 0đ", "callback_data": "new:cod:0"},
-                    {"text": "COD = 100,000đ", "callback_data": "new:cod:100000"},
-                ],
-                [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
-            ]
-        }
-        send_msg(chat_id, f"✅ Dịch vụ: <code>{sid}</code>\n2️⃣ Chọn hoặc nhập tiền thu hộ <b>COD</b>:", reply_markup=kb)
-    elif data.startswith("new:cod:"):
-        cod_val = int(data.split(":", 2)[2])
-        state = USER_STATES.setdefault((chat_id, user_id), {"flow": "new_order", "step": "total_pay", "data": {}})
-        state["data"]["cod"] = cod_val
-        state["step"] = "total_pay"
-        kb = {
-            "inline_keyboard": [
-                [{"text": "Mặc định (58,000đ)", "callback_data": "new:pay:58000"}],
-                [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
-            ]
-        }
-        send_msg(chat_id, f"✅ COD: <b>{cod_val:,}đ</b>\n3️⃣ Chọn hoặc nhập <b>total_pay</b>:", reply_markup=kb)
-    elif data.startswith("new:pay:"):
-        pay_val = int(data.split(":", 2)[2])
-        state = USER_STATES.setdefault((chat_id, user_id), {"flow": "new_order", "step": "remarks", "data": {}})
-        state["data"]["total_pay"] = pay_val
-        state["step"] = "remarks"
-        kb = {
-            "inline_keyboard": [
-                [{"text": "Bỏ qua ghi chú → Tạo đơn ngay", "callback_data": "new:remarks:none"}],
-                [{"text": "❌ Hủy", "callback_data": "menu:cancel"}],
-            ]
-        }
-        send_msg(
-            chat_id,
-            f"✅ Total Pay: <b>{pay_val:,}đ</b>\n4️⃣ Nhập <b>ghi chú (remarks)</b> hoặc bấm nút bỏ qua:",
-            reply_markup=kb,
-        )
-    elif data == "new:remarks:none":
-        state = USER_STATES.pop((chat_id, user_id), None)
-        order_data = (state or {}).get("data", {})
-        order_data["remarks"] = None
-        execute_create_order(chat_id, order_data)
+
+    # Custom order flow callbacks
+    elif data.startswith("new:"):
+        if (chat_id, user_id) not in USER_STATES:
+            start_custom_order_flow(chat_id, user_id)
+        state = USER_STATES[(chat_id, user_id)]
+        d = state["data"]
+
+        if data == "new:goto:confirm":
+            show_order_confirmation(chat_id, user_id)
+        elif data.startswith("new:service:"):
+            d["service_id"] = data.split(":", 2)[2]
+            if state.get("return_to_confirm"):
+                show_order_confirmation(chat_id, user_id)
+            else:
+                prompt_pickup_step(chat_id, user_id)
+        elif data == "new:pickup:keep":
+            if state.get("return_to_confirm"):
+                show_order_confirmation(chat_id, user_id)
+            else:
+                prompt_sender_step(chat_id, user_id)
+        elif data == "new:sender:keep":
+            if state.get("return_to_confirm"):
+                show_order_confirmation(chat_id, user_id)
+            else:
+                prompt_dropoff_step(chat_id, user_id)
+        elif data == "new:dropoff:keep":
+            if state.get("return_to_confirm"):
+                show_order_confirmation(chat_id, user_id)
+            else:
+                prompt_recipient_step(chat_id, user_id)
+        elif data == "new:recipient:keep":
+            if state.get("return_to_confirm"):
+                show_order_confirmation(chat_id, user_id)
+            else:
+                prompt_cod_step(chat_id, user_id)
+        elif data.startswith("new:pick_addr:"):
+            _, _, target_key, idx_str = data.split(":", 3)
+            idx = int(idx_str)
+            cands = state.get("candidates") or []
+            if 0 <= idx < len(cands):
+                chosen = cands[idx]
+                d[target_key] = chosen
+                lbl = "Điểm lấy hàng" if target_key == "pickup" else "Điểm giao hàng"
+                send_msg(
+                    chat_id,
+                    f"✅ Đã chọn <b>{lbl}</b>:\n"
+                    f"• <code>{_esc(chosen['address'])}</code>\n"
+                    f"• Tọa độ: <code>{chosen['lat']}, {chosen['lng']}</code>",
+                )
+                if state.get("return_to_confirm"):
+                    show_order_confirmation(chat_id, user_id)
+                elif target_key == "pickup":
+                    prompt_sender_step(chat_id, user_id)
+                else:
+                    prompt_recipient_step(chat_id, user_id)
+        elif data.startswith("new:cod:"):
+            d["cod"] = int(data.split(":", 2)[2])
+            prompt_total_pay_step(chat_id, user_id)
+        elif data.startswith("new:pay:"):
+            d["total_pay"] = int(data.split(":", 2)[2])
+            if state.get("return_to_confirm"):
+                show_order_confirmation(chat_id, user_id)
+            else:
+                prompt_remarks_step(chat_id, user_id)
+        elif data == "new:remarks:none":
+            d["remarks"] = None
+            show_order_confirmation(chat_id, user_id)
+        elif data.startswith("new:edit:"):
+            field = data.split(":", 2)[2]
+            state["return_to_confirm"] = True
+            if field == "service":
+                prompt_service_step(chat_id, user_id)
+            elif field == "pickup":
+                prompt_pickup_step(chat_id, user_id)
+            elif field == "sender":
+                prompt_sender_step(chat_id, user_id)
+            elif field == "dropoff":
+                prompt_dropoff_step(chat_id, user_id)
+            elif field == "recipient":
+                prompt_recipient_step(chat_id, user_id)
+            elif field == "cod":
+                prompt_cod_step(chat_id, user_id)
+            elif field == "remarks":
+                prompt_remarks_step(chat_id, user_id)
+        elif data == "new:submit:create":
+            order_data = USER_STATES.pop((chat_id, user_id))["data"]
+            execute_create_order(chat_id, order_data)
+        elif data == "new:submit:create_assign":
+            order_data = USER_STATES.pop((chat_id, user_id))["data"]
+            execute_create_order(chat_id, order_data, auto_assign_driver=default_drv)
 
 
 def handle_message(message: dict[str, Any]) -> None:
@@ -498,8 +931,17 @@ def handle_message(message: dict[str, Any]) -> None:
     chat_id = chat.get("id")
     user_id = (message.get("from") or {}).get("id") or chat_id
     msg_id = message.get("message_id")
+    if not chat_id:
+        return
+
+    # Handle Telegram native GPS Location Pin (📎 -> Location)
+    if "location" in message and message["location"]:
+        if is_authorized_chat(chat_id):
+            handle_location_pin(chat_id, user_id, message["location"], msg_id=msg_id)
+        return
+
     text = (message.get("text") or "").strip()
-    if not chat_id or not text:
+    if not text:
         return
 
     cmd = text.split()[0].split("@")[0].lower() if text.startswith("/") else ""
@@ -508,7 +950,7 @@ def handle_message(message: dict[str, Any]) -> None:
         print(f"⛔ Bỏ qua tin nhắn từ chat_id={chat_id} (chưa được cấp quyền)")
         return
 
-    # 1. Auto-detect cURL or raw JWT in Group or DM (including "/nap curl ..." or "/token curl ...")
+    # 1. Auto-detect cURL or raw JWT in Group or DM
     if ("curl " in text.lower() and "ahamove.com" in text.lower()) or text.startswith("eyJ") or (
         cmd in ("/nap", "/token") and len(text.split()) > 1
     ):
@@ -555,16 +997,15 @@ def handle_message(message: dict[str, Any]) -> None:
         if cmd in ("/start", "/menu", "/help"):
             USER_STATES.pop((chat_id, user_id), None)
             help_text = (
-                "🚀 <b>Ahamove UAT Group Bot — Tạo đơn &amp; Gán tài xế</b>\n\n"
-                "<b>Lệnh dùng nhanh trong nhóm:</b>\n"
+                "🚀 <b>Ahamove UAT Group Bot — Tạo đơn &amp; Gán tài xế (24/7 Cloud)</b>\n\n"
+                "<b>Lệnh dùng nhanh trên điện thoại:</b>\n"
                 "• <code>/tao</code> (hoặc <code>/quick</code>) — Tạo đơn UAT nhanh theo mẫu\n"
-                "• <code>/new</code> — Tạo đơn tùy chỉnh từng bước\n"
+                "• <code>/new</code> — Tạo đơn tùy chỉnh (Tìm địa chỉ Ahamove / Ghim GPS 📎, Người gửi, Người nhận, COD, Tự tính phí)\n"
                 "• <code>/gan &lt;MÃ_ĐƠN&gt; [SĐT_TX]</code> — Gán đơn XYZ trực tiếp\n"
                 "• <code>/taogan [SĐT_TX]</code> — Tạo đơn mới &amp; Gán luôn trong 1 bước\n"
-                "• <code>/token</code> — Xem thời hạn JWT User/Admin\n"
+                "• <code>/token</code> — Xem trạng thái Auto-Refresh Token\n"
                 "• <code>/bind_group</code> — Khóa Bot vào nhóm hiện tại\n"
-                "• <code>/cancel</code> — Hủy thao tác đang nhập\n\n"
-                "💡 <i>Khi hết hạn Token (5 phút), chỉ cần dán lệnh <code>cURL</code> vào nhóm hoặc nhắn riêng (DM) cho Bot.</i>"
+                "• <code>/cancel</code> — Hủy thao tác đang nhập"
             )
             send_msg(chat_id, help_text, reply_markup=main_menu_keyboard(), reply_to_message_id=msg_id)
             return
@@ -602,7 +1043,6 @@ def handle_message(message: dict[str, Any]) -> None:
             if len(parts) >= 3:
                 execute_assign_order(chat_id, parts[1], parts[2], reply_to_msg_id=msg_id)
             elif len(parts) == 2:
-                # If only order_id is provided: /gan 26I8NU9H -> ask or offer 1-click default driver
                 start_assign_flow(chat_id, user_id, parts[1])
             else:
                 start_assign_flow(chat_id, user_id)
@@ -628,7 +1068,6 @@ def handle_message(message: dict[str, Any]) -> None:
 def main() -> None:
     if not BOT_TOKEN or BOT_TOKEN.startswith("DÁN_TOKEN"):
         print(f"❌ Chưa cấu hình AHA_BOT_TOKEN trong file: {ENV_FILE}")
-        print("👉 Hãy copy .env.example thành .env và điền AHA_BOT_TOKEN của bot mới.")
         sys.exit(1)
 
     me = tg_call("getMe", {})
