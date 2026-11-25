@@ -1,0 +1,52 @@
+name: Ahamove UAT Telegram Bot 24/7
+
+on:
+  schedule:
+    # Tự động kích hoạt nối phiên mỗi 5 giờ (phòng hờ trường hợp self-dispatch bị gián đoạn)
+    - cron: '15 */5 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: aha-uat-telegram-bot-24-7
+  cancel-in-progress: true
+
+jobs:
+  run-telegram-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run Ahamove UAT Telegram Bot (5.5h Cloud Cycle)
+        env:
+          AHA_BOT_TOKEN: ${{ secrets.AHA_BOT_TOKEN }}
+          AHA_GIST_ID: ${{ secrets.AHA_GIST_ID }}
+          AHA_GIST_TOKEN: ${{ secrets.AHA_GIST_TOKEN }}
+          AHA_DEFAULT_DRIVER_ID: '84981792046'
+          AHA_ALLOW_DM: 'true'
+          AHA_MAX_RUNTIME_SEC: '19500'
+        run: |
+          python3 projects/aha-uat-telegram-bot/bot.py
+
+      - name: Chain Next 24/7 Cloud Session
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.AHA_GIST_TOKEN }}
+        run: |
+          echo "🔄 Tự động kích hoạt phiên Cloud kế tiếp để duy trì Bot 24/7..."
+          gh workflow run aha_uat_telegram_bot.yml --repo ${{ github.repository }} || true
