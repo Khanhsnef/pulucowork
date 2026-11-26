@@ -142,6 +142,7 @@ def load_store() -> dict[str, Any]:
         "admin_refresh_token": "",
         "admin_mobile": "84981792046",
         "admin_cookie": "",
+        "adminv2_cookie": "",
         "bound_group_id": GROUP_CHAT_ID,
         "default_driver_id": DEFAULT_DRIVER_ID,
         "order_template": None,

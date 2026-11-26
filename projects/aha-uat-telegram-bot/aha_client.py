@@ -643,8 +643,11 @@ def add_service_to_driver(driver_id: str, service_ids: list[str] | None = None) 
     if not admin_token:
         return {"ok": False, "error": "Chưa có Admin Token"}
 
+    store = load_store()
+    adminv2_cookie = store.get("adminv2_cookie", "")
     headers_v3 = {"Authorization": f"Bearer {admin_token}"}
     curr_services: list[str] = []
+    curr_enabled: list[str] = []
     try:
         r_prof = requests.get(
             f"{SUPPLIER_PROFILE_URL}?supplier_id={clean_driver_id}",
@@ -652,33 +655,46 @@ def add_service_to_driver(driver_id: str, service_ids: list[str] | None = None) 
             timeout=10,
         )
         if r_prof.status_code == 200:
-            curr_services = (r_prof.json().get("supplier") or {}).get("services") or []
+            sup = r_prof.json().get("supplier") or {}
+            curr_services = list(sup.get("services") or [])
+            curr_enabled = list(sup.get("enabled_services") or [])
     except requests.RequestException:
         pass
 
-    # Call AdminV2 custom_action/update/supplier ($addToSet services & enabled_services)
+    merged_services = list(curr_services)
+    merged_enabled = list(curr_enabled)
+    for s in target_services:
+        if s not in merged_services:
+            merged_services.append(s)
+        if s not in merged_enabled:
+            merged_enabled.append(s)
+
+    # Call AdminV2 custom_action/update/supplier (note: backend wraps fields in $set)
     v2_status = 0
     v2_body: Any = None
     try:
+        v2_headers = {
+            "Token": admin_token,
+            "X-Ahamove-Timestamp": _encrypt_ahamove_timestamp(admin_token),
+            "Content-Type": "application/json",
+            "Origin": "https://adminv2uat.ahamove.com",
+            "Referer": f"https://adminv2uat.ahamove.com/#/app/driver-detail/{clean_driver_id}",
+            "User-Agent": USER_AGENT,
+        }
+        if adminv2_cookie:
+            v2_headers["Cookie"] = adminv2_cookie
+
         r_v2 = requests.post(
             ADMINV2_UPDATE_SUPPLIER_URL,
-            headers={
-                "Token": admin_token,
-                "X-Ahamove-Timestamp": _encrypt_ahamove_timestamp(admin_token),
-                "Content-Type": "application/json",
-                "Origin": "https://adminv2uat.ahamove.com",
-                "Referer": f"https://adminv2uat.ahamove.com/#/app/driver-detail/{clean_driver_id}",
-                "User-Agent": USER_AGENT,
-            },
+            headers=v2_headers,
             json={
                 "identifier": {"_id": clean_driver_id},
                 "fields": {
-                    "$addToSet": {
-                        "services": {"$each": target_services},
-                        "enabled_services": {"$each": target_services},
-                    }
+                    "services": merged_services,
+                    "enabled_services": merged_enabled,
                 },
             },
+            allow_redirects=False,
             timeout=10,
         )
         v2_status = r_v2.status_code
@@ -725,6 +741,47 @@ def add_service_to_driver(driver_id: str, service_ids: list[str] | None = None) 
         "adminv2_response": v2_body,
         "current_services_count": len(after_services),
     }
+
+
+def cancel_order(order_id: str, comment: str = "Huỷ từ Telegram Bot", timeout: int = 15) -> dict[str, Any]:
+    """PUT https://adminv3uat.ahamove.com/api/orders/{order_id}/cancel"""
+    clean_order_id = order_id.strip().upper()
+    admin_token = ensure_valid_admin_token(force_refresh=False, order_id_hint=clean_order_id)
+    if not admin_token:
+        return {"ok": False, "status_code": 0, "order_id": clean_order_id, "error": "Chưa có Admin Token"}
+
+    url = f"https://adminv3uat.ahamove.com/api/orders/{clean_order_id}/cancel"
+    for attempt in range(2):
+        store = load_store()
+        headers = {
+            "Authorization": f"Bearer {admin_token}",
+            "Content-Type": "application/json",
+            "Origin": "https://adminv3uat.ahamove.com",
+            "Referer": f"https://adminv3uat.ahamove.com/orders/detail/{clean_order_id}",
+            "User-Agent": USER_AGENT,
+        }
+        if store.get("admin_cookie"):
+            headers["Cookie"] = store["admin_cookie"]
+        try:
+            resp = requests.put(url, headers=headers, json={"comment": comment}, timeout=timeout)
+            if resp.status_code in (401, 403) and attempt == 0:
+                new_tok = ensure_valid_admin_token(force_refresh=True, order_id_hint=clean_order_id)
+                if new_tok:
+                    admin_token = new_tok
+                    continue
+            try:
+                body = resp.json()
+            except ValueError:
+                body = {"raw": resp.text}
+            return {
+                "ok": 200 <= resp.status_code < 300,
+                "status_code": resp.status_code,
+                "order_id": clean_order_id,
+                "body": body,
+            }
+        except requests.RequestException as exc:
+            return {"ok": False, "status_code": 0, "order_id": clean_order_id, "error": str(exc)}
+    return {"ok": False, "status_code": 401, "order_id": clean_order_id, "error": "Không thể làm mới Admin Token"}
 
 
 def find_nearby_drivers_for_order(order_id: str, limit: int = 5) -> list[dict[str, Any]]:

@@ -11,6 +11,7 @@ from aha_client import (
     add_service_to_driver,
     assign_order,
     build_order_payload,
+    cancel_order,
     create_order,
     decode_jwt_info,
     ensure_valid_admin_token,
@@ -54,6 +55,7 @@ def register_bot_commands() -> None:
         {"command": "new", "description": "Tạo đơn tùy chỉnh (Địa chỉ, Người gửi/nhận, COD...)"},
         {"command": "gan", "description": "Gán đơn XYZ cho tài xế: /gan <MÃ_ĐƠN> [SĐT_TX]"},
         {"command": "taogan", "description": "Tạo đơn mới & Gán ngay: /taogan [SĐT_TX]"},
+        {"command": "huy", "description": "Huỷ đơn UAT: /huy <MÃ_ĐƠN>"},
         {"command": "add_service", "description": "Gắn dịch vụ cho tài xế: /add_service [SĐT_TX] [SERVICE_ID]"},
         {"command": "nap", "description": "Nạp cURL / Token mới"},
         {"command": "token", "description": "Kiểm tra thời hạn User/Admin Token"},
@@ -283,12 +285,34 @@ def execute_assign_order(
         if res.get("status_code") == 406 or body_dict.get("code") == "SERVICE_PERMISSION":
             nearby = find_nearby_drivers_for_order(order_id, limit=4)
             extra_note = (
-                "\n⚠️ <i>Hiện server <code>adminv2uat.ahamove.com</code> (nơi cấp quyền service mới cho tài xế) đang bảo trì (HTTP 503), nên tài xế <code>"
+                "\n⚠️ <i>Tài xế <code>"
                 + norm_driver
-                + "</code> hiện chỉ nhận được đơn Xe máy (SGN-BIKE / SGN-ECO).</i>\n"
+                + "</code> chưa có quyền dịch vụ của đơn này (hoặc phiên đăng nhập <code>adminv2uat</code> cần làm mới).</i>\n"
             )
             if nearby:
-                extra_note += "👇 <b>Bạn có thể chạm chọn gán đơn này cho các tài xế Van/Truck UAT đang có sẵn bên dưới:</b>"
+                extra_note += "👇 <b>Bạn có thể gán cho các tài xế Van/Truck UAT đang có sẵn bên dưới:</b>"
+                rows = []
+                for d in nearby:
+                    did = d.get("id")
+                    vtype = d.get("vehicle_type") or "DRIVER"
+                    st = d.get("status") or ""
+                    rows.append(
+                        [
+                            {
+                                "text": f"🚀 Gán {order_id.upper()} → {did} ({vtype} - {st})",
+                                "callback_data": f"quick_assign:{order_id.upper()}:{did}",
+                            }
+                        ]
+                    )
+                rows.append([{"text": "🏠 Menu chính", "callback_data": "menu:home"}])
+                kb = {"inline_keyboard": rows}
+        elif res.get("status_code") == 402 or body_dict.get("code") == "INSUFFICIENT_CREDIT":
+            nearby = find_nearby_drivers_for_order(order_id, limit=4)
+            extra_note = (
+                f"\n💸 <i>Ví tài xế <code>{norm_driver}</code> không đủ số dư để trừ chiết khấu đơn này (đơn Van/Truck phí cao cần ví đủ chiết khấu ~22%).</i>\n"
+            )
+            if nearby:
+                extra_note += "👇 <b>Hoặc chạm chọn gán nhanh cho tài xế Van/Truck UAT có sẵn bên dưới:</b>"
                 rows = []
                 for d in nearby:
                     did = d.get("id")
@@ -1112,6 +1136,18 @@ def handle_message(message: dict[str, Any]) -> None:
             execute_create_order(chat_id, auto_assign_driver=drv, reply_to_msg_id=msg_id)
             return
 
+        if cmd == "/huy":
+            USER_STATES.pop((chat_id, user_id), None)
+            if len(parts) < 2:
+                send_msg(chat_id, "⚠️ Cú pháp: <code>/huy &lt;MÃ_ĐƠN&gt;</code>", reply_to_message_id=msg_id)
+                return
+            c_res = cancel_order(parts[1])
+            if c_res.get("ok"):
+                send_msg(chat_id, f"🗑 Đã huỷ đơn <code>{c_res['order_id']}</code> thành công.", reply_markup=main_menu_keyboard(), reply_to_message_id=msg_id)
+            else:
+                send_msg(chat_id, f"❌ Huỷ đơn <code>{c_res['order_id']}</code> thất bại (HTTP {c_res.get('status_code')}):\n<pre>{format_json_preview(c_res.get('body'))}</pre>", reply_to_message_id=msg_id)
+            return
+
         if cmd == "/add_service":
             drv = parts[1] if len(parts) >= 2 else default_drv
             svcs = [s.strip() for s in parts[2].split(",") if s.strip()] if len(parts) >= 3 else None
@@ -1131,9 +1167,8 @@ def handle_message(message: dict[str, Any]) -> None:
                     chat_id,
                     f"⚠️ <b>Chưa thể gắn <code>{', '.join(res_add.get('missing', []))}</code> cho tài xế <code>{res_add.get('driver_id')}</code></b>\n"
                     f"• Trạng thái <code>adminv2uat.ahamove.com</code>: <b>HTTP {res_add.get('adminv2_status')}</b>\n"
-                    f"• Nguyên nhân: Server <code>adminv2uat.ahamove.com</code> và <code>apiuat.ahamove.com/v1/admin/*</code> của Ahamove UAT hiện đang trả về <b>HTTP 503 (Service Temporarily Unavailable)</b>.\n"
-                    f"• Tổng số service hiện có của tài xế: <b>{res_add.get('current_services_count')}</b> (Xe máy: <code>SGN-BIKE, SGN-ECO, SGN-POOL, SGN-EXPRESS...</code>)\n\n"
-                    "💡 <i>Ngay khi server <code>adminv2uat.ahamove.com</code> hết lỗi 503, bạn chỉ cần gõ lại <code>/add_service</code> trên Telegram là Bot sẽ tự gắn <code>SGN-VAN-500</code> cho tài xế.</i>",
+                    f"• Chi tiết: <pre>{_esc(res_add.get('adminv2_response'))}</pre>\n"
+                    f"• Tổng số service hiện có của tài xế: <b>{res_add.get('current_services_count')}</b>",
                     reply_markup=main_menu_keyboard(),
                     reply_to_message_id=msg_id,
                 )
