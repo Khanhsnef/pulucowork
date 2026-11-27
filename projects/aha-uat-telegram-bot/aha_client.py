@@ -743,14 +743,105 @@ def add_service_to_driver(driver_id: str, service_ids: list[str] | None = None) 
     }
 
 
-def cancel_order(order_id: str, comment: str = "Huỷ từ Telegram Bot", timeout: int = 15) -> dict[str, Any]:
+def get_order_detail(order_id: str, timeout: int = 10) -> dict[str, Any] | None:
+    """GET https://adminv3uat.ahamove.com/api/orders/{order_id}"""
+    clean_order_id = order_id.strip().upper()
+    admin_token = ensure_valid_admin_token(force_refresh=False, order_id_hint=clean_order_id)
+    if not admin_token:
+        return None
+    store = load_store()
+    headers = {
+        "Authorization": f"Bearer {admin_token}",
+        "Origin": "https://adminv3uat.ahamove.com",
+        "Referer": f"https://adminv3uat.ahamove.com/orders/detail/{clean_order_id}",
+        "User-Agent": USER_AGENT,
+    }
+    if store.get("admin_cookie"):
+        headers["Cookie"] = store["admin_cookie"]
+    try:
+        resp = requests.get(f"https://adminv3uat.ahamove.com/api/orders/{clean_order_id}", headers=headers, timeout=timeout)
+        if resp.status_code == 200:
+            return resp.json().get("data")
+    except requests.RequestException:
+        pass
+    return None
+
+
+def get_cancel_reasons(order_id: str, user_type: str = "user", limit: int = 6) -> list[dict[str, str]]:
+    """Fetch Ahamove cancel reasons for order_id from /api/proof_of_work/search."""
+    clean_order_id = order_id.strip().upper()
+    admin_token = ensure_valid_admin_token(force_refresh=False, order_id_hint=clean_order_id)
+    if not admin_token:
+        return []
+    detail = get_order_detail(clean_order_id) or {}
+    status = detail.get("status") or "ASSIGNING"
+    if status in ("CANCELLED", "COMPLETED", "FAILED"):
+        status = "ASSIGNING"
+    delivery_type = detail.get("delivery_type") or "INSTANT"
+    store = load_store()
+    headers = {
+        "Authorization": f"Bearer {admin_token}",
+        "Origin": "https://adminv3uat.ahamove.com",
+        "Referer": f"https://adminv3uat.ahamove.com/orders/detail/{clean_order_id}",
+        "User-Agent": USER_AGENT,
+    }
+    if store.get("admin_cookie"):
+        headers["Cookie"] = store["admin_cookie"]
+
+    try:
+        resp = requests.get(
+            "https://adminv3uat.ahamove.com/api/proof_of_work/search",
+            params={
+                "limit": 50,
+                "offset": 0,
+                "user_type": user_type,
+                "status": status,
+                "delivery_type": delivery_type,
+                "app_type": "USER" if user_type == "user" else "SUPPLIER",
+            },
+            headers=headers,
+            timeout=10,
+        )
+        if resp.status_code == 200:
+            seen_codes: set[str] = set()
+            items: list[dict[str, str]] = []
+            for row in resp.json().get("data") or []:
+                code = row.get("code") or ""
+                title_vi = row.get("title_vi") or row.get("title_en") or code
+                if not code or code in seen_codes or "{user input}" in title_vi:
+                    continue
+                seen_codes.add(code)
+                items.append({"code": code, "title": title_vi})
+                if len(items) >= limit:
+                    break
+            return items
+    except requests.RequestException:
+        pass
+    return []
+
+
+def cancel_order(
+    order_id: str,
+    comment: str = "Huỷ từ Telegram Bot",
+    cancel_code: str | None = None,
+    by_user: bool = True,
+    timeout: int = 15,
+) -> dict[str, Any]:
     """PUT https://adminv3uat.ahamove.com/api/orders/{order_id}/cancel"""
     clean_order_id = order_id.strip().upper()
+    clean_comment = (comment or "").strip() or "Huỷ từ Telegram Bot"
     admin_token = ensure_valid_admin_token(force_refresh=False, order_id_hint=clean_order_id)
     if not admin_token:
         return {"ok": False, "status_code": 0, "order_id": clean_order_id, "error": "Chưa có Admin Token"}
 
     url = f"https://adminv3uat.ahamove.com/api/orders/{clean_order_id}/cancel"
+    payload: dict[str, Any] = {
+        "comment": clean_comment,
+        "by_user": by_user,
+    }
+    if cancel_code:
+        payload["cancel_code"] = cancel_code
+
     for attempt in range(2):
         store = load_store()
         headers = {
@@ -763,7 +854,7 @@ def cancel_order(order_id: str, comment: str = "Huỷ từ Telegram Bot", timeou
         if store.get("admin_cookie"):
             headers["Cookie"] = store["admin_cookie"]
         try:
-            resp = requests.put(url, headers=headers, json={"comment": comment}, timeout=timeout)
+            resp = requests.put(url, headers=headers, json=payload, timeout=timeout)
             if resp.status_code in (401, 403) and attempt == 0:
                 new_tok = ensure_valid_admin_token(force_refresh=True, order_id_hint=clean_order_id)
                 if new_tok:
@@ -777,6 +868,8 @@ def cancel_order(order_id: str, comment: str = "Huỷ từ Telegram Bot", timeou
                 "ok": 200 <= resp.status_code < 300,
                 "status_code": resp.status_code,
                 "order_id": clean_order_id,
+                "comment": clean_comment,
+                "cancel_code": cancel_code,
                 "body": body,
             }
         except requests.RequestException as exc:

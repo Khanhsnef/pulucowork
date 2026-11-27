@@ -18,6 +18,7 @@ from aha_client import (
     ensure_valid_user_token,
     estimate_order_fee,
     find_nearby_drivers_for_order,
+    get_cancel_reasons,
     normalize_driver_id,
     parse_curl_credentials,
     reverse_geocode_location,
@@ -55,7 +56,7 @@ def register_bot_commands() -> None:
         {"command": "new", "description": "Tạo đơn tùy chỉnh (Địa chỉ, Người gửi/nhận, COD...)"},
         {"command": "gan", "description": "Gán đơn XYZ cho tài xế: /gan <MÃ_ĐƠN> [SĐT_TX]"},
         {"command": "taogan", "description": "Tạo đơn mới & Gán ngay: /taogan [SĐT_TX]"},
-        {"command": "huy", "description": "Huỷ đơn UAT: /huy <MÃ_ĐƠN>"},
+        {"command": "huy", "description": "Huỷ đơn kèm note: /huy <MÃ_ĐƠN> [Note huỷ]"},
         {"command": "add_service", "description": "Gắn dịch vụ cho tài xế: /add_service [SĐT_TX] [SERVICE_ID]"},
         {"command": "nap", "description": "Nạp cURL / Token mới"},
         {"command": "token", "description": "Kiểm tra thời hạn User/Admin Token"},
@@ -107,7 +108,10 @@ def main_menu_keyboard() -> dict[str, Any]:
                 {"text": f"⚡ Tạo & Gán → {drv}", "callback_data": "menu:create_assign"},
             ],
             [
+                {"text": "🗑 Huỷ đơn kèm Note (/huy)", "callback_data": "menu:cancel_order"},
                 {"text": "🔑 Trạng thái Token (/token)", "callback_data": "menu:token"},
+            ],
+            [
                 {"text": "📥 Nạp cURL (/nap)", "callback_data": "menu:nap"},
             ],
         ]
@@ -234,7 +238,11 @@ def execute_create_order(
                     {
                         "text": f"👤 Gán {order_id} cho SĐT khác",
                         "callback_data": f"ask_driver:{order_id}",
-                    }
+                    },
+                    {
+                        "text": f"🗑 Huỷ {order_id}",
+                        "callback_data": f"ask_cancel:{order_id}",
+                    },
                 ],
                 [{"text": "🏠 Menu chính", "callback_data": "menu:home"}],
             ]
@@ -269,13 +277,20 @@ def execute_assign_order(
             res = assign_order(order_id, norm_driver)
 
     if res.get("ok"):
+        oid_done = res["order_id"]
+        kb_done = {
+            "inline_keyboard": [
+                [{"text": f"🗑 Huỷ đơn {oid_done} (kèm Note)", "callback_data": f"ask_cancel:{oid_done}"}],
+                [{"text": "🏠 Menu chính", "callback_data": "menu:home"}],
+            ]
+        }
         send_msg(
             chat_id,
             f"🎉 <b>Gán đơn thành công!</b>\n"
-            f"• Mã đơn: <code>{res['order_id']}</code>\n"
+            f"• Mã đơn: <code>{oid_done}</code>\n"
             f"• Tài xế: <code>{res['driver_id']}</code>\n"
             f"<pre>{format_json_preview(res.get('body'), 450)}</pre>",
-            reply_markup=main_menu_keyboard(),
+            reply_markup=kb_done,
             reply_to_message_id=reply_to_msg_id,
         )
     else:
@@ -338,6 +353,75 @@ def execute_assign_order(
             reply_markup=kb,
             reply_to_message_id=reply_to_msg_id,
         )
+
+
+def execute_cancel_order(
+    chat_id: int,
+    order_id: str,
+    comment: str = "Huỷ từ Telegram Bot",
+    cancel_code: str | None = None,
+    by_user: bool = True,
+    reply_to_msg_id: int | None = None,
+) -> None:
+    clean_oid = order_id.strip().upper()
+    clean_note = (comment or "").strip() or "Huỷ từ Telegram Bot"
+    send_msg(
+        chat_id,
+        f"⏳ Đang huỷ đơn <code>{clean_oid}</code> với ghi chú: <i>{_esc(clean_note)}</i>...",
+        reply_to_message_id=reply_to_msg_id,
+    )
+    c_res = cancel_order(clean_oid, comment=clean_note, cancel_code=cancel_code, by_user=by_user)
+    if c_res.get("ok"):
+        send_msg(
+            chat_id,
+            f"🗑 <b>Đã huỷ đơn <code>{c_res['order_id']}</code> thành công!</b>\n"
+            f"• Note huỷ (Order Logs): <i>{_esc(c_res.get('comment') or clean_note)}</i>",
+            reply_markup=main_menu_keyboard(),
+            reply_to_message_id=reply_to_msg_id,
+        )
+    else:
+        send_msg(
+            chat_id,
+            f"❌ <b>Huỷ đơn <code>{c_res['order_id']}</code> thất bại</b> (HTTP {c_res.get('status_code')}):\n"
+            f"<pre>{format_json_preview(c_res.get('body') or c_res.get('error'))}</pre>",
+            reply_markup=main_menu_keyboard(),
+            reply_to_message_id=reply_to_msg_id,
+        )
+
+
+def start_cancel_flow(chat_id: int, user_id: int, prefilled_order_id: str | None = None) -> None:
+    if not prefilled_order_id:
+        USER_STATES[(chat_id, user_id)] = {"flow": "cancel_order", "step": "order_id", "data": {}}
+        send_msg(
+            chat_id,
+            "🗑 Nhập <b>Mã đơn hàng (VD: 266ODHS9)</b> cần huỷ:\n"
+            "<i>(Hoặc gõ trực tiếp: <code>/huy MÃ_ĐƠN Ghi chú huỷ</code>)</i>"
+            + _group_reply_hint(chat_id),
+            reply_markup={"force_reply": True, "selective": True},
+        )
+        return
+
+    oid = prefilled_order_id.strip().upper()
+    reasons = get_cancel_reasons(oid, user_type="user", limit=5)
+    USER_STATES[(chat_id, user_id)] = {
+        "flow": "cancel_order",
+        "step": "note",
+        "data": {"order_id": oid, "reasons": reasons},
+    }
+    buttons: list[list[dict[str, str]]] = []
+    for idx, r in enumerate(reasons):
+        buttons.append([{"text": f"📌 {r['title'][:50]}", "callback_data": f"cancel_preset:{oid}:{idx}"}])
+    buttons.append([{"text": "⚡ Huỷ với note mặc định (Huỷ từ Telegram Bot)", "callback_data": f"cancel_default:{oid}"}])
+    buttons.append([{"text": "❌ Quay lại / Đóng", "callback_data": "menu:cancel"}])
+
+    send_msg(
+        chat_id,
+        f"📝 <b>Nhập Note huỷ cho đơn <code>{oid}</code></b>\n"
+        "• Gõ trực tiếp lý do huỷ bạn muốn lưu vào <b>Order Logs</b> (VD: <code>Khách đổi lịch giao ngày mai</code>)\n"
+        "• Hoặc chọn nhanh một lý do bên dưới:"
+        + _group_reply_hint(chat_id),
+        reply_markup={"inline_keyboard": buttons},
+    )
 
 
 def start_assign_flow(chat_id: int, user_id: int, prefilled_order_id: str | None = None) -> None:
@@ -790,6 +874,17 @@ def handle_state_input(chat_id: int, user_id: int, text: str, msg_id: int | None
     step = state["step"]
     data = state["data"]
 
+    if flow == "cancel_order":
+        if step == "order_id":
+            oid = text.strip().upper()
+            start_cancel_flow(chat_id, user_id, oid)
+            return True
+        if step == "note":
+            oid = data["order_id"]
+            USER_STATES.pop((chat_id, user_id), None)
+            execute_cancel_order(chat_id, oid, comment=text.strip(), cancel_code="user_other", reply_to_msg_id=msg_id)
+            return True
+
     if flow == "assign":
         if step == "order_id":
             oid = text.strip().upper()
@@ -897,6 +992,8 @@ def handle_callback(cq: dict[str, Any]) -> None:
         start_custom_order_flow(chat_id, user_id)
     elif data == "menu:assign":
         start_assign_flow(chat_id, user_id)
+    elif data == "menu:cancel_order":
+        start_cancel_flow(chat_id, user_id)
     elif data == "menu:create_assign":
         USER_STATES.pop((chat_id, user_id), None)
         execute_create_order(chat_id, auto_assign_driver=default_drv)
@@ -915,6 +1012,23 @@ def handle_callback(cq: dict[str, Any]) -> None:
     elif data.startswith("ask_driver:"):
         _, order_id = data.split(":", 1)
         start_assign_flow(chat_id, user_id, order_id)
+    elif data.startswith("ask_cancel:"):
+        _, order_id = data.split(":", 1)
+        start_cancel_flow(chat_id, user_id, order_id)
+    elif data.startswith("cancel_preset:"):
+        _, order_id, idx_str = data.split(":", 2)
+        idx = int(idx_str)
+        state = USER_STATES.pop((chat_id, user_id), None) or {}
+        reasons = (state.get("data") or {}).get("reasons") or []
+        if 0 <= idx < len(reasons):
+            chosen = reasons[idx]
+            execute_cancel_order(chat_id, order_id, comment=chosen["title"], cancel_code=chosen["code"])
+        else:
+            execute_cancel_order(chat_id, order_id)
+    elif data.startswith("cancel_default:"):
+        _, order_id = data.split(":", 1)
+        USER_STATES.pop((chat_id, user_id), None)
+        execute_cancel_order(chat_id, order_id)
 
     # Custom order flow callbacks
     elif data.startswith("new:"):
@@ -1085,6 +1199,7 @@ def handle_message(message: dict[str, Any]) -> None:
                 "• <code>/new</code> — Tạo đơn tùy chỉnh (Tìm địa chỉ Ahamove / Ghim GPS 📎, Người gửi, Người nhận, COD, Tự tính phí)\n"
                 "• <code>/gan &lt;MÃ_ĐƠN&gt; [SĐT_TX]</code> — Gán đơn XYZ trực tiếp\n"
                 "• <code>/taogan [SĐT_TX]</code> — Tạo đơn mới &amp; Gán luôn trong 1 bước\n"
+                "• <code>/huy &lt;MÃ_ĐƠN&gt; [Note huỷ]</code> — Huỷ đơn kèm lý do / Note huỷ\n"
                 "• <code>/token</code> — Xem trạng thái Auto-Refresh Token\n"
                 "• <code>/bind_group</code> — Khóa Bot vào nhóm hiện tại\n"
                 "• <code>/cancel</code> — Hủy thao tác đang nhập"
@@ -1138,14 +1253,19 @@ def handle_message(message: dict[str, Any]) -> None:
 
         if cmd == "/huy":
             USER_STATES.pop((chat_id, user_id), None)
-            if len(parts) < 2:
-                send_msg(chat_id, "⚠️ Cú pháp: <code>/huy &lt;MÃ_ĐƠN&gt;</code>", reply_to_message_id=msg_id)
-                return
-            c_res = cancel_order(parts[1])
-            if c_res.get("ok"):
-                send_msg(chat_id, f"🗑 Đã huỷ đơn <code>{c_res['order_id']}</code> thành công.", reply_markup=main_menu_keyboard(), reply_to_message_id=msg_id)
+            huy_parts = text.split(None, 2)
+            if len(huy_parts) >= 3:
+                execute_cancel_order(
+                    chat_id,
+                    huy_parts[1],
+                    comment=huy_parts[2],
+                    cancel_code="user_other",
+                    reply_to_msg_id=msg_id,
+                )
+            elif len(huy_parts) == 2:
+                start_cancel_flow(chat_id, user_id, huy_parts[1])
             else:
-                send_msg(chat_id, f"❌ Huỷ đơn <code>{c_res['order_id']}</code> thất bại (HTTP {c_res.get('status_code')}):\n<pre>{format_json_preview(c_res.get('body'))}</pre>", reply_to_message_id=msg_id)
+                start_cancel_flow(chat_id, user_id)
             return
 
         if cmd == "/add_service":
