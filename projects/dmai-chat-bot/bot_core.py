@@ -200,8 +200,8 @@ def call_gemini_api(user_message, system_context, api_key):
             "googleSearch": {}
         }],
         "generationConfig": {
-            "maxOutputTokens": 512,
-            "temperature": 0.5
+            "maxOutputTokens": 2048,
+            "temperature": 0.4
         }
     }
     
@@ -212,11 +212,13 @@ def call_gemini_api(user_message, system_context, api_key):
     )
     
     try:
-        with urllib.request.urlopen(req, timeout=15) as response:
+        with urllib.request.urlopen(req, timeout=25) as response:
             res = json.loads(response.read().decode())
             candidates = res.get("candidates", [])
             if candidates and candidates[0].get("content", {}).get("parts"):
-                return candidates[0]["content"]["parts"][0]["text"]
+                parts = candidates[0]["content"]["parts"]
+                text_parts = [p.get("text", "") for p in parts if not p.get("thought") and p.get("text")]
+                return "".join(text_parts) or parts[0].get("text", "Tôi chưa xử lý được câu hỏi này.")
             return "Tôi chưa xử lý được câu hỏi này."
     except Exception as e:
         print(f"⚠️ Gemini API Error: {e}")
@@ -230,8 +232,8 @@ def call_openai_api(user_message, system_context, api_key):
             {"role": "system", "content": system_context},
             {"role": "user", "content": user_message}
         ],
-        "max_tokens": 512,
-        "temperature": 0.5
+        "max_tokens": 2048,
+        "temperature": 0.4
     }
     
     req = urllib.request.Request(
@@ -244,7 +246,7 @@ def call_openai_api(user_message, system_context, api_key):
     )
     
     try:
-        with urllib.request.urlopen(req, timeout=15) as response:
+        with urllib.request.urlopen(req, timeout=25) as response:
             res = json.loads(response.read().decode())
             choices = res.get("choices", [])
             if choices and choices[0].get("message", {}).get("content"):
