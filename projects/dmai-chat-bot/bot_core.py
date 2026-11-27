@@ -207,14 +207,11 @@ def parse_summary(md_path):
     return exec_summary, title
 
 # ── AI API CALLERS ────────────────────────────────────────────────────────────
-def call_gemini_api(user_message, system_context, api_key):
+def call_gemini_api(user_message, system_context, api_key, use_search=True):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
     payload = {
         "contents": [{
             "parts": [{"text": f"System Context:\n{system_context}\n\nUser Question:\n{user_message}"}]
-        }],
-        "tools": [{
-            "googleSearch": {}
         }],
         "generationConfig": {
             "maxOutputTokens": 8192,
@@ -222,6 +219,8 @@ def call_gemini_api(user_message, system_context, api_key):
             "thinkingConfig": {"thinkingBudget": 512}
         }
     }
+    if use_search:
+        payload["tools"] = [{"googleSearch": {}}]
     
     req = urllib.request.Request(
         url,
@@ -230,7 +229,7 @@ def call_gemini_api(user_message, system_context, api_key):
     )
     
     try:
-        with urllib.request.urlopen(req, timeout=25) as response:
+        with urllib.request.urlopen(req, timeout=35) as response:
             res = json.loads(response.read().decode())
             candidates = res.get("candidates", [])
             if candidates and candidates[0].get("content", {}).get("parts"):
@@ -307,8 +306,14 @@ def call_anthropic_api(user_message, system_context, api_key):
         return None
 
 def get_system_context(user_message=""):
-    md_file_daily, _ = get_latest_report("*-report.md")
-    md_file_weekly, _ = get_latest_report("*-weekly-market-brief.md")
+    msg_low = user_message.lower()
+    intel_keywords = ("đối thủ", "grab", "be", "xanhsm", "thị trường", "bản tin", "intel", "competitor", "chiến dịch")
+    is_ops_only = any(k in msg_low for k in (
+        "ops", "kpi", "sgn", "han", "exp", "nw", "tài xế", "driver", "active", "ar", "fr", "eph", "pph", "thu nhập", "vận hành", "đơn"
+    )) and not any(k in msg_low for k in intel_keywords)
+
+    md_file_daily, _ = (None, None) if is_ops_only else get_latest_report("*-report.md")
+    md_file_weekly, _ = (None, None) if is_ops_only else get_latest_report("*-weekly-market-brief.md")
     
     context = (
         "Bạn là trợ lý AI chuyên nghiệp, nhiệt tình và thực tế của đội ngũ Driver Management Ahamove.\n"
@@ -596,9 +601,10 @@ def handle_natural_message(chat_id, text, msg_id, message):
     # Try calling configured API Keys in sequence
     reply_text = None
     
-    # Let's try Gemini first (recommended)
+    # Let's try Gemini first (disable googleSearch when internal Ops data is already in context)
+    use_search = "DỮ LIỆU OPS (" not in context
     if GEMINI_API_KEY and not reply_text:
-        reply_text = call_gemini_api(text, context, GEMINI_API_KEY)
+        reply_text = call_gemini_api(text, context, GEMINI_API_KEY, use_search=use_search)
         
     # Then try OpenAI
     if OPENAI_API_KEY and not reply_text:
@@ -613,13 +619,17 @@ def handle_natural_message(chat_id, text, msg_id, message):
             print("⚠️ System ANTHROPIC_API_KEY does not start with 'sk-ant'. Skipping.")
             
     if not reply_text:
-        reply_text = (
-            "⚠️ *Trợ lý AI chưa được cấu hình khóa kết nối.*\n\n"
-            "Vui lòng điền một trong các API Key sau vào file `.env` của bạn để bắt đầu trò chuyện:\n"
-            "- `GEMINI_API_KEY`=\"key_của_bạn\" (khuyên dùng)\n"
-            "- `OPENAI_API_KEY`=\"key_của_bạn\"\n"
-            "- `ANTHROPIC_API_KEY`=\"key_của_bạn\""
-        )
+        has_any_key = bool(GEMINI_API_KEY or OPENAI_API_KEY or (ANTHROPIC_API_KEY and ANTHROPIC_API_KEY.startswith("sk-ant")))
+        if has_any_key:
+            reply_text = "⚠️ *Hệ thống AI tạm thời phản hồi chậm hoặc quá tải.* Vui lòng thử gửi lại sau vài giây (hoặc dùng `/ops`, `/kpi`, `/driver` để lấy số liệu tức thì)."
+        else:
+            reply_text = (
+                "⚠️ *Trợ lý AI chưa được cấu hình khóa kết nối.*\n\n"
+                "Vui lòng điền một trong các API Key sau vào file `.env` của bạn để bắt đầu trò chuyện:\n"
+                "- `GEMINI_API_KEY`=\"key_của_bạn\" (khuyên dùng)\n"
+                "- `OPENAI_API_KEY`=\"key_của_bạn\"\n"
+                "- `ANTHROPIC_API_KEY`=\"key_của_bạn\""
+            )
         
     send_telegram_msg(chat_id, reply_text, reply_to_message_id=msg_id)
 
