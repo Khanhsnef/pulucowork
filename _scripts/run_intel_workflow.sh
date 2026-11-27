@@ -7,7 +7,7 @@ if [ -z "$REPORT_TYPE" ]; then
     REPORT_TYPE="daily"
 fi
 
-cd /Users/ts-1148/Desktop/Pulu-workspace
+cd "$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "🚀 [1/4] Chạy Crawler thu thập tin tức..."
 python3 _scripts/crawl_competitor_intel.py

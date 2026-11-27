@@ -1,0 +1,72 @@
+name: Competitor Intel Report (Cloud 24/7)
+
+on:
+  schedule:
+    # Daily report at 09:00 AM ICT (02:00 UTC)
+    - cron: '0 2 * * *'
+    # Weekly market brief on Monday 08:30 AM ICT (01:30 UTC)
+    - cron: '30 1 * * 1'
+  workflow_dispatch:
+    inputs:
+      report_type:
+        description: 'Report type (daily or weekly)'
+        required: true
+        default: 'daily'
+        type: choice
+        options:
+          - daily
+          - weekly
+
+permissions:
+  contents: write
+
+jobs:
+  intel-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pip install markdown
+
+      - name: Run Competitor Intel Workflow
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TZ: Asia/Ho_Chi_Minh
+        run: |
+          TYPE="${{ github.event.inputs.report_type }}"
+          if [ -z "$TYPE" ]; then
+            if [ "${{ github.event.schedule }}" = "30 1 * * 1" ]; then
+              TYPE="weekly"
+            else
+              TYPE="daily"
+            fi
+          fi
+          chmod +x _scripts/run_intel_workflow.sh
+          ./_scripts/run_intel_workflow.sh "$TYPE"
+
+      - name: Commit & Push New Intel Reports
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "Output/Ahamove/06. COMPETITIVE_INTEL/monitoring/"
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(intel): auto-update competitor intel report"
+            git push
+          else
+            echo "No new report changes to commit."
+          fi
