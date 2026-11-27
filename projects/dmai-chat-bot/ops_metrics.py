@@ -33,10 +33,14 @@ GITHUB_RAW_BASE = (
 GITHUB_74433_URL = f"{GITHUB_RAW_BASE}/card_74433_63d.json"
 GITHUB_67888_URL = f"{GITHUB_RAW_BASE}/card_67888_63d.json"
 GITHUB_75557_URL = f"{GITHUB_RAW_BASE}/card_75557_63d.json"
+GITHUB_75557_WEEK_URL = f"{GITHUB_RAW_BASE}/card_75557_week.json"
+GITHUB_75557_MONTH_URL = f"{GITHUB_RAW_BASE}/card_75557_month.json"
 
 CACHE_74433_FILE = "/tmp/card_74433_cache_v2.json"
 CACHE_67888_FILE = "/tmp/card_67888_cache_v2.json"
 CACHE_75557_FILE = "/tmp/card_75557_cache_v2.json"
+CACHE_75557_WEEK_FILE = "/tmp/card_75557_week_cache.json"
+CACHE_75557_MONTH_FILE = "/tmp/card_75557_month_cache.json"
 CACHE_EXTRA_FILE = "/tmp/card_extra_tabs_cache.json"
 CACHE_TTL_SEC = 300
 
@@ -243,6 +247,46 @@ def fetch_card_67888_rows(force_refresh: bool = False) -> tuple[list[dict[str, A
 def fetch_card_75557_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
     return _fetch_dataset(
         SHEET_75557_CSV_URL, GITHUB_75557_URL, CACHE_75557_FILE, "period", _normalize_75557, "75557", force_refresh
+    )
+
+
+def _find_tab_csv_url(tab_name_hint: str) -> str:
+    """Find live CSV URL if a matching tab (e.g. 75557_week, 75557_month) exists on the Google Sheet."""
+    try:
+        req = urllib.request.Request(SHEET_HTMLVIEW_URL, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            html_text = resp.read().decode("utf-8", errors="ignore")
+        for name, gid in re.findall(r'name:\s*"([^"]+)".*?gid:\s*"(\d+)"', html_text):
+            if name.strip().lower() == tab_name_hint.lower():
+                return f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/export?format=csv&gid={gid}"
+    except Exception:
+        pass
+    return ""
+
+
+def fetch_card_75557_week_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
+    sheet_url = _find_tab_csv_url("75557_week") if force_refresh else ""
+    return _fetch_dataset(
+        sheet_url or "http://127.0.0.1:0/skip",
+        GITHUB_75557_WEEK_URL,
+        CACHE_75557_WEEK_FILE,
+        "period",
+        _normalize_75557,
+        "75557-week",
+        force_refresh,
+    )
+
+
+def fetch_card_75557_month_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
+    sheet_url = _find_tab_csv_url("75557_month") if force_refresh else ""
+    return _fetch_dataset(
+        sheet_url or "http://127.0.0.1:0/skip",
+        GITHUB_75557_MONTH_URL,
+        CACHE_75557_MONTH_FILE,
+        "period",
+        _normalize_75557,
+        "75557-month",
+        force_refresh,
     )
 
 
@@ -595,6 +639,69 @@ def fetch_ops_brief(force_refresh: bool = False) -> str:
     return fetch_full_executive_report(force_refresh=force_refresh)
 
 
+def fetch_period_report(timeview: str = "week", force_refresh: bool = False) -> str:
+    """Compact Executive Report for Weekly (WAU) or Monthly (MAU) using Card 75557 week/month + Card 67888."""
+    is_week = timeview == "week"
+    rows75, src75 = fetch_card_75557_week_rows(force_refresh) if is_week else fetch_card_75557_month_rows(force_refresh)
+    rows67, _ = fetch_card_67888_rows(force_refresh)
+    if not rows75:
+        raise RuntimeError(f"Chưa có dữ liệu Card 75557 ({timeview}).")
+
+    periods = sorted({r["period"] for r in rows75})
+    cur_p = periods[-1]
+    prv_p = periods[-2] if len(periods) >= 2 else None
+    delta_lbl = "WoW" if is_week else "MoM"
+    unit_lbl = "WAU" if is_week else "MAU"
+    title_lbl = f"TUẦN {cur_p}" if is_week else f"THÁNG {cur_p[:7]}"
+
+    def _in_period_67(d_str: str, p_start: str | None) -> bool:
+        if not p_start:
+            return False
+        if not is_week:
+            return d_str.startswith(p_start[:7])
+        try:
+            d = datetime.datetime.strptime(d_str, "%Y-%m-%d")
+            ps = datetime.datetime.strptime(p_start, "%Y-%m-%d")
+            return 0 <= (d - ps).days < 7
+        except Exception:
+            return False
+
+    out = [
+        f"📅 <b>OPS EXECUTIVE REPORT — {title_lbl} ({unit_lbl})</b>",
+        f"<i>So sánh {delta_lbl} (vs {prv_p or 'N/A'}) | Active Driver chuẩn Unique từ Card 75557 ({timeview})</i>",
+        "━━━━━━━━━━━━━━━━━━━━",
+    ]
+    for reg in ("NW", "SGN", "HAN", "EXP"):
+        icon = {"NW": "🌐", "SGN": "🏙️", "HAN": "🏛️", "EXP": "🧭"}[reg]
+        r_title = "NW (Toàn Quốc)" if reg == "NW" else reg
+        c_flt = None if reg == "NW" else reg
+
+        e_cur = _agg_75557([x for x in rows75 if x["period"] == cur_p and (c_flt is None or x["city_id"] == c_flt)])
+        e_prv = _agg_75557([x for x in rows75 if x["period"] == prv_p and (c_flt is None or x["city_id"] == c_flt)]) if prv_p else {}
+
+        d_cur = _agg_67888([x for x in rows67 if _in_period_67(x["period"], cur_p) and x["region"] == reg])
+        d_prv = _agg_67888([x for x in rows67 if _in_period_67(x["period"], prv_p) and x["region"] == reg]) if prv_p else {"req": 0, "fr": 0.0}
+
+        badge = "🟢" if d_cur["fr"] >= 84.0 else ("🟡" if d_cur["fr"] >= 81.0 else "🔴")
+        out.append(f"\n{icon} <b>{r_title}</b> {badge}")
+        if d_cur["req"] > 0:
+            out.append(
+                f"• <b>Demand:</b> <b>{int(d_cur['req']):,}</b> ({_pct_delta(d_cur['req'], d_prv['req'])} {delta_lbl}) | "
+                f"Comp <b>{int(d_cur['comp']):,}</b> | AR <b>{d_cur['ar']:.1f}%</b> | FR <b>{d_cur['fr']:.1f}%</b> ({_pp_delta(d_cur['fr'], d_prv['fr'], 1)})"
+            )
+        if e_cur["drv"] > 0:
+            out.append(
+                f"• <b>{unit_lbl} (Unique Supply):</b> <b>{int(e_cur['drv']):,}</b> TX ({_pct_delta(e_cur['drv'], e_prv.get('drv', 0))} {delta_lbl}) | "
+                f"Active/Rank <b>{e_cur['active_rate']:.1f}%</b> | Hard {e_cur['hard_pct']:.0f}% • AA {e_cur['aa_pct']:.0f}%"
+            )
+            out.append(
+                f"• <b>Driver:</b> <b>{e_cur['inc_per_drv']/1000:,.0f}k/TX</b> ({_pct_delta(e_cur['inc_per_drv'], e_prv.get('inc_per_drv', 0))}) | "
+                f"EPH <b>{e_cur['eph']/1000:,.1f}k</b> | PPH <b>{e_cur['pph']:.2f}</b> | Util {e_cur['util']:.0f}% | LCD {e_cur['lcd_pct']:.0f}% | CR {e_cur['cr_poc']:.1f}%"
+            )
+    out.append(f"\n<i>Lưu ý: {title_lbl} là dữ liệu lũy kế đến ngày mới nhất ({max(r['period'] for r in rows67) if rows67 else cur_p}).</i>")
+    return "\n".join(out)
+
+
 def fetch_supply_brief(force_refresh: bool = False) -> str:
     """Detailed Card 74433 Supply by Segment & All 14 Service Columns + DoD/WoW."""
     rows, source = fetch_card_74433_rows(force_refresh=force_refresh)
@@ -832,19 +939,50 @@ def build_query_context(user_message: str) -> str:
                     f"AR_noti={sa['ar_noti']:.1f}%,CR_tot={sa['cr_total']:.1f}%,CR_poc={sa['cr_poc']:.2f}%({r['cancel_poc']}),Rating={sa['rating']:.2f},bad={r['bad_rating_order']}"
                 )
 
-    # Weekly & Monthly multi-sheet trends
-    if r67 and r75:
-        parts.append("\n=== XU HƯỚNG THEO THÁNG & 7 NGÀY GẦN NHẤT (TỔNG HỢP 3 SHEETS) ===")
+    # Exact Weekly (WAU) & Monthly (MAU) Unique Active Driver + Economics from Card 75557 (week & month)
+    try:
+        r75_w, _ = fetch_card_75557_week_rows()
+        if r75_w:
+            w_list = sorted({r["period"] for r in r75_w})[-4:]
+            parts.append("\n=== CARD 75557 (TIMEVIEW=WEEK — UNIQUE ACTIVE DRIVER WAU CHÍNH XÁC, 4 TUẦN GẦN NHẤT) ===")
+            for wp in w_list:
+                wr = [r for r in r75_w if r["period"] == wp]
+                w_nw = _agg_75557(wr)
+                c_bits = []
+                for city in ("SGN", "HAN", "EXP"):
+                    ca = _agg_75557([r for r in wr if r["city_id"] == city])
+                    c_bits.append(f"{city}: WAU={int(ca['drv']):,}, TB/TX={ca['inc_per_drv']/1000:,.0f}k, EPH={ca['eph']/1000:,.1f}k, LCD={ca['lcd_pct']:.0f}%, CR={ca['cr_poc']:.1f}%")
+                parts.append(f"Tuần {wp} | NW WAU={int(w_nw['drv']):,} (TB/TX={w_nw['inc_per_drv']/1000:,.0f}k, EPH={w_nw['eph']/1000:,.1f}k, LCD={w_nw['lcd_pct']:.0f}%) | " + " ; ".join(c_bits))
+    except Exception as exc:
+        print(f"⚠️ Card 75557 week context error: {exc}")
+
+    try:
+        r75_m, _ = fetch_card_75557_month_rows()
+        if r75_m:
+            m_list = sorted({r["period"] for r in r75_m})[-4:]
+            parts.append("\n=== CARD 75557 (TIMEVIEW=MONTH — UNIQUE ACTIVE DRIVER MAU CHÍNH XÁC, 4 THÁNG GẦN NHẤT) ===")
+            for mp in m_list:
+                mr = [r for r in r75_m if r["period"] == mp]
+                m_nw = _agg_75557(mr)
+                c_bits = []
+                for city in ("SGN", "HAN", "EXP"):
+                    ca = _agg_75557([r for r in mr if r["city_id"] == city])
+                    c_bits.append(f"{city}: MAU={int(ca['drv']):,}, TB/TX={ca['inc_per_drv']/1000:,.0f}k, EPH={ca['eph']/1000:,.1f}k, LCD={ca['lcd_pct']:.0f}%, CR={ca['cr_poc']:.1f}%")
+                parts.append(f"Tháng {mp[:7]} | NW MAU={int(m_nw['drv']):,} (TB/TX={m_nw['inc_per_drv']/1000:,.0f}k, EPH={m_nw['eph']/1000:,.1f}k, LCD={m_nw['lcd_pct']:.0f}%) | " + " ; ".join(c_bits))
+    except Exception as exc:
+        print(f"⚠️ Card 75557 month context error: {exc}")
+
+    # Monthly Demand summary (Card 67888)
+    if r67:
+        parts.append("\n=== DEMAND & SLA THEO THÁNG (CARD 67888) ===")
         months = sorted({r["period"][:7] for r in r67})
         for m in months:
             m67 = [r for r in r67 if r["period"].startswith(m)]
-            m75 = [r for r in r75 if r["period"].startswith(m)]
             n_d = len({r["period"] for r in m67}) or 1
             a67 = _agg_67888([r for r in m67 if r["region"] == "NW"])
-            a75 = _agg_75557(m75)
             parts.append(
-                f"Tháng {m} ({n_d} ngày): NW Req={int(a67['req']):,} ({int(a67['req'])//n_d:,}/ng), Comp={int(a67['comp']):,}, "
-                f"AR={a67['ar']:.2f}%, FR={a67['fr']:.2f}% | TB TX/ng={int(a75['drv'])//n_d:,}, EPH={a75['eph']:,.0f}, PPH={a75['pph']:.2f}, Util={a75['util']:.1f}%, CR_poc={a75['cr_poc']:.2f}%"
+                f"Tháng {m} ({n_d} ngày): NW Demand={int(a67['req']):,} ({int(a67['req'])//n_d:,}/ng), Comp={int(a67['comp']):,}, "
+                f"AR={a67['ar']:.2f}%, FR={a67['fr']:.2f}%"
             )
 
     if bundle["extra_tabs"]:

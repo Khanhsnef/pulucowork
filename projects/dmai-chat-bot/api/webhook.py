@@ -49,6 +49,20 @@ def process_update(update: dict[str, Any]) -> None:
 
         if cmd in ("/report", "/ops", "/sgn"):
             _send_typing(chat_id)
+            if arg in ("week", "weekly", "tuan", "tuần"):
+                try:
+                    report_html = ops_metrics.fetch_period_report("week")
+                    bot_core.send_telegram_html(chat_id, report_html, reply_to_message_id=msg_id)
+                except Exception as exc:
+                    bot_core.send_telegram_msg(chat_id, f"⚠️ Không tạo được báo cáo tuần: `{exc}`", reply_to_message_id=msg_id)
+                return
+            if arg in ("month", "monthly", "thang", "tháng"):
+                try:
+                    report_html = ops_metrics.fetch_period_report("month")
+                    bot_core.send_telegram_html(chat_id, report_html, reply_to_message_id=msg_id)
+                except Exception as exc:
+                    bot_core.send_telegram_msg(chat_id, f"⚠️ Không tạo được báo cáo tháng: `{exc}`", reply_to_message_id=msg_id)
+                return
             refresh_note = ""
             if force_refresh:
                 ok, info = ops_metrics.trigger_metabase_refresh()
