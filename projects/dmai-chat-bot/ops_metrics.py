@@ -24,6 +24,8 @@ METABASE_EXPORT_URL = "https://ws.ahamove.com/ops/trigger/export_to_gs"
 SHEET_74433_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/export?format=csv&gid=0"
 SHEET_67888_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/export?format=csv&gid=49583103"
 SHEET_75557_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/export?format=csv&gid=2043805321"
+SHEET_75557_WEEK_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/export?format=csv&gid=1610938219"
+SHEET_75557_MONTH_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/export?format=csv&gid=1465916221"
 SHEET_HTMLVIEW_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/htmlview"
 
 GITHUB_RAW_BASE = (
@@ -44,7 +46,7 @@ CACHE_75557_MONTH_FILE = "/tmp/card_75557_month_cache.json"
 CACHE_EXTRA_FILE = "/tmp/card_extra_tabs_cache.json"
 CACHE_TTL_SEC = 300
 
-KNOWN_GIDS = {"0", "49583103", "2043805321"}
+KNOWN_GIDS = {"0", "49583103", "2043805321", "1610938219", "1465916221"}
 
 SERVICE_COLS_74433 = [
     "total_active", "active_1h", "active_2h", "active_4h",
@@ -90,13 +92,18 @@ def _esc(text: Any) -> str:
 
 # ── METABASE REFRESH (ALL 3 CARDS) ────────────────────────────────────────────
 def trigger_metabase_refresh() -> tuple[bool, str]:
-    """Trigger Metabase export for all configured cards (74433, 67888, 75557) in parallel."""
-    end_date = datetime.datetime.now().strftime("%Y-%m-%d")
-    start_date = (datetime.datetime.now() - datetime.timedelta(days=63)).strftime("%Y-%m-%d")
+    """Trigger Metabase export for all configured cards (74433, 67888, 75557 day/week/month) in parallel."""
+    now = datetime.datetime.now()
+    end_date = now.strftime("%Y-%m-%d")
+    start_63 = (now - datetime.timedelta(days=63)).strftime("%Y-%m-%d")
+    start_90 = (now - datetime.timedelta(days=90)).strftime("%Y-%m-%d")
+    start_210 = (now - datetime.timedelta(days=210)).strftime("%Y-%m-%d")
     jobs = [
-        (74433, "0", {"start_date": start_date, "end_date": end_date}),
-        (67888, "49583103", {"start_date": start_date, "end_date": end_date, "timeview": "day"}),
-        (75557, "2043805321", {"start_date": start_date, "end_date": end_date, "timeview": "day"}),
+        (74433, "0", {"start_date": start_63, "end_date": end_date}),
+        (67888, "49583103", {"start_date": start_63, "end_date": end_date, "timeview": "day"}),
+        (75557, "2043805321", {"start_date": start_63, "end_date": end_date, "timeview": "day"}),
+        (75557, "1610938219", {"start_date": start_90, "end_date": end_date, "timeview": "week"}),
+        (75557, "1465916221", {"start_date": start_210, "end_date": end_date, "timeview": "month"}),
     ]
 
     def _post_one(item: tuple[int, str, dict[str, str]]) -> tuple[int, bool, str]:
@@ -265,9 +272,8 @@ def _find_tab_csv_url(tab_name_hint: str) -> str:
 
 
 def fetch_card_75557_week_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
-    sheet_url = _find_tab_csv_url("75557_week") if force_refresh else ""
     return _fetch_dataset(
-        sheet_url or "http://127.0.0.1:0/skip",
+        SHEET_75557_WEEK_CSV_URL,
         GITHUB_75557_WEEK_URL,
         CACHE_75557_WEEK_FILE,
         "period",
@@ -278,9 +284,8 @@ def fetch_card_75557_week_rows(force_refresh: bool = False) -> tuple[list[dict[s
 
 
 def fetch_card_75557_month_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
-    sheet_url = _find_tab_csv_url("75557_month") if force_refresh else ""
     return _fetch_dataset(
-        sheet_url or "http://127.0.0.1:0/skip",
+        SHEET_75557_MONTH_CSV_URL,
         GITHUB_75557_MONTH_URL,
         CACHE_75557_MONTH_FILE,
         "period",
