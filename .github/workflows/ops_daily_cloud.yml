@@ -1,0 +1,72 @@
+name: Ops Daily Metabase & SGN Report (Cloud 24/7)
+
+on:
+  schedule:
+    # 06:00 AM ICT (23:00 UTC) - Trigger Metabase export to Google Sheets
+    - cron: '0 23 * * *'
+    # 07:00 AM ICT (00:00 UTC) - Generate & send SGN Daily Telegram Report
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Task to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - metabase
+          - sgn_report
+
+jobs:
+  metabase-export:
+    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.task == 'all' || github.event.inputs.task == 'metabase') || github.event.schedule == '0 23 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Trigger Metabase Export
+        env:
+          TZ: Asia/Ho_Chi_Minh
+        run: python3 _scripts/trigger_metabase_export.py
+
+  sgn-daily-report:
+    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.task == 'all' || github.event.inputs.task == 'sgn_report') || github.event.schedule == '0 0 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies & Chromium
+        run: |
+          pip install requests playwright
+          python3 -m playwright install chromium
+
+      - name: Run SGN Daily Telegram Report
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TZ: Asia/Ho_Chi_Minh
+        run: python3 _scripts/sgn_daily_telegram_report.py
