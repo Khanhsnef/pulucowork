@@ -565,8 +565,14 @@ def build_query_context(user_message: str) -> str:
     parts = [f"Nguồn: {source} | Khoảng dữ liệu: {dates[0]} đến {dates[-1]} (945 dòng)"]
 
     for dt in target_dates:
-        parts.append(f"--- CHI TIẾT NGÀY {dt} ---")
-        for r in sorted([x for x in rows if x["order_date"] == dt], key=lambda x: (x["city_id"], x["tag"])):
+        day_r = [x for x in rows if x["order_date"] == dt]
+        tot_all = sum(x["total_active"] for x in day_r)
+        city_sums = " | ".join(
+            f"{c}={sum(x['total_active'] for x in day_r if x['city_id'] == c):,}"
+            for c in ("SGN", "HAN", "EXP")
+        )
+        parts.append(f"--- CHI TIẾT NGÀY {dt} (TỔNG ACTIVE TOÀN QUỐC={tot_all:,} | {city_sums}) ---")
+        for r in sorted(day_r, key=lambda x: (x["city_id"], x["tag"])):
             parts.append(
                 f"{r['city_id']} | {r['tag']} | total={r['total_active']} | "
                 f"1h={r['active_1h']} 2h={r['active_2h']} 4h={r['active_4h']} | "
@@ -642,8 +648,14 @@ def build_query_context(user_message: str) -> str:
             t_dates7 = _extract_requested_dates(user_message, d7_list) or (d7_list[-2:] if len(d7_list) >= 2 else d7_list[-1:])
             parts.append(f"\n=== CARD 75557 ({src_75557}: {d7_list[0]} -> {d7_list[-1]}) ===")
             for dt in t_dates7:
-                parts.append(f"--- DRIVER INCOME & QUALITY NGÀY {dt} ---")
-                for r in sorted([x for x in rows_75557 if x["period"] == dt], key=lambda x: (x["city_id"], x["driver_segment"])):
+                d7_rows = [x for x in rows_75557 if x["period"] == dt]
+                tot7_all = sum(x["total_driver"] for x in d7_rows)
+                c7_sums = " | ".join(
+                    f"{c}={sum(x['total_driver'] for x in d7_rows if x['city_id'] == c):,}"
+                    for c in ("SGN", "HAN", "EXP")
+                )
+                parts.append(f"--- DRIVER INCOME & QUALITY NGÀY {dt} (TỔNG TX={tot7_all:,} | {c7_sums}) ---")
+                for r in sorted(d7_rows, key=lambda x: (x["city_id"], x["driver_segment"])):
                     inc = r["order_income"] + r["reward_income"]
                     drv = r["total_driver"] or 1
                     onl = r["online_hours"] or 1
