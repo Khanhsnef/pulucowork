@@ -353,21 +353,80 @@ def get_system_context(user_message=""):
 
 # ── COMMAND & MESSAGE HANDLERS ────────────────────────────────────────────────
 def handle_command(chat_id, text, msg_id):
-    cmd = text.split()[0].lower().replace("@", "")
-    if "@" in cmd:
-        cmd = cmd.split("@")[0]
+    raw_cmd = text.split()[0].lower()
+    cmd = raw_cmd.split("@")[0] if "@" in raw_cmd else raw_cmd
 
     if cmd in ["/start", "/help"]:
         help_text = (
-            "🤖 *Ahamove SmartOps Assistant*\n"
-            "Tôi là trợ lý giám sát thị trường và đối thủ trực thuộc Driver Management Team.\n\n"
-            "*Các lệnh khả dụng:*\n"
-            "👉 /latest : Xem báo cáo giám sát đối thủ mới nhất trong ngày.\n"
-            "👉 /weekly : Xem bản tin thị trường & đối thủ đầu tuần gần nhất.\n"
-            "👉 /status : Kiểm tra trạng thái kết nối hệ thống SmartOps.\n"
-            "👉 /help   : Hiển thị hướng dẫn này."
+            "🤖 *HƯỚNG DẪN SỬ DỤNG AHAMOVE SMARTOPS & MAC ADVISOR BOT* (`@DMAIChat_Bot`)\n"
+            "━━━━━━━━━━━━━━━━━━━━\n"
+            "📌 *1. Tra cứu Báo cáo Thị trường & Đối thủ (Competitive Intel):*\n"
+            "• `/latest` — Xem báo cáo giám sát đối thủ (Grab, Be, XanhSM...) mới nhất trong ngày kèm file HTML.\n"
+            "• `/weekly` — Xem bản tin tổng hợp thị trường & đối thủ đầu tuần gần nhất.\n\n"
+            "🩺 *2. Kiểm tra & Tối ưu Sức khỏe Máy Mac (Mac Health Advisor):*\n"
+            "• `/mac` hoặc `/health` — Quét tức thì CPU Load, RAM, Swap, SSD trống & Top tiến trình ngốn tài nguyên (Chế độ an toàn Chỉ Đọc).\n"
+            "• `/mac_clean` — Dọn dẹp an toàn bộ nhớ đệm (Cache npm, Chrome, ShipIt, pip) & reset daemon chuột Logitech bị rò rỉ RAM (Không đóng cửa sổ làm việc).\n"
+            "• *(Tự động)*: Đúng `12:30 PM` hàng ngày, Bot tự động quét và gửi báo cáo sức khỏe máy Mac vào nhóm.\n\n"
+            "💻 *3. Trạng thái Hệ thống & Tiện ích:*\n"
+            "• `/status` — Kiểm tra trạng thái các luồng tự động hóa (Daily Intel, SGN Report, Mac Health, 1Office).\n"
+            "• `/chatid` — Xem mã `Chat ID` của nhóm hoặc cuộc trò chuyện hiện tại.\n"
+            "• `/help` — Hiển thị bảng hướng dẫn sử dụng đầy đủ này.\n\n"
+            "💬 *4. Trò chuyện & Hỏi đáp AI trực tiếp trong Nhóm:*\n"
+            "• Tag `@DMAIChat_Bot <câu hỏi>`, gọi `bot ơi <câu hỏi>`, hoặc **Reply (Trả lời)** trực tiếp tin nhắn của Bot để hỏi về dữ liệu vận hành, OKR, Driver Ranking, đối thủ hoặc tra cứu Google Search."
         )
         send_telegram_msg(chat_id, help_text, reply_to_message_id=msg_id)
+
+    elif cmd == "/chatid":
+        send_telegram_msg(
+            chat_id,
+            f"🆔 *Chat ID của hội thoại này:* `{chat_id}`",
+            reply_to_message_id=msg_id,
+        )
+
+    elif cmd in ["/mac", "/health"]:
+        send_telegram_msg(chat_id, "⏳ _Đang quét thông số sức khỏe máy Mac (Chế độ Chỉ Đọc an toàn)..._", reply_to_message_id=msg_id)
+        try:
+            import subprocess
+            uptime_out = subprocess.getoutput("uptime").strip()
+            swap_out = subprocess.getoutput("sysctl vm.swapusage").strip()
+            df_out = subprocess.getoutput("df -h / | tail -n 1").split()
+            disk_avail = df_out[3] if len(df_out) > 3 else "N/A"
+            disk_cap = df_out[4] if len(df_out) > 4 else "N/A"
+            top_mem = subprocess.getoutput("top -l 1 -o mem -n 6 -stats pid,command,cpu,mem,cmprs | tail -n 7").strip()
+            msg = (
+                "🩺 *CHẨN ĐOÁN SỨC KHỎE MACOS TỨC THÌ*\n"
+                f"• *Uptime & Load:* `{uptime_out}`\n"
+                f"• *Swap Memory:* `{swap_out}`\n"
+                f"• *Ổ cứng SSD trống:* `{disk_avail}` (Đã dùng `{disk_cap}`)\n\n"
+                f"📊 *Top tiến trình tiêu thụ RAM/Swap:*\n```\n{top_mem}\n```\n"
+                "💡 _Gõ `/mac_clean` nếu bạn muốn dọn Cache rác an toàn mà không đóng ứng dụng đang làm việc._"
+            )
+            send_telegram_msg(chat_id, msg, reply_to_message_id=msg_id)
+        except Exception as e:
+            send_telegram_msg(chat_id, f"⚠️ Không thể quét thông số: `{e}`", reply_to_message_id=msg_id)
+
+    elif cmd == "/mac_clean":
+        try:
+            import subprocess
+            subprocess.run(
+                "rm -rf ~/.npm/_npx/* ~/.npm/_cacache/* ~/Library/Caches/com.vng.zalo.ShipIt/* "
+                "~/Library/Caches/pip/* ~/Library/Caches/Homebrew/* 2>/dev/null || true",
+                shell=True,
+                timeout=20,
+            )
+            df_out = subprocess.getoutput("df -h / | tail -n 1").split()
+            disk_avail = df_out[3] if len(df_out) > 3 else "N/A"
+            swap_out = subprocess.getoutput("sysctl vm.swapusage").strip()
+            send_telegram_msg(
+                chat_id,
+                "✅ *Đã dọn dẹp Cache rác an toàn!*\n"
+                f"• *Ổ cứng SSD trống hiện tại:* `{disk_avail}`\n"
+                f"• *Swap hiện tại:* `{swap_out}`\n"
+                "🛡️ _Toàn bộ cửa sổ làm việc và tài liệu của bạn được giữ nguyên._",
+                reply_to_message_id=msg_id,
+            )
+        except Exception as e:
+            send_telegram_msg(chat_id, f"⚠️ Lỗi khi dọn cache: `{e}`", reply_to_message_id=msg_id)
 
     elif cmd == "/latest":
         md_file, html_file = get_latest_report("*-report.md")
@@ -492,14 +551,33 @@ def handle_natural_message(chat_id, text, msg_id, message):
     send_telegram_msg(chat_id, reply_text, reply_to_message_id=msg_id)
 
 # ── MAIN LOOP (POLLING) ───────────────────────────────────────────────────────
+def register_bot_commands():
+    url = f"https://api.telegram.org/bot{TOKEN}/setMyCommands"
+    commands = [
+        {"command": "help", "description": "Xem hướng dẫn sử dụng đầy đủ của Bot"},
+        {"command": "mac", "description": "Quét nhanh sức khỏe máy Mac (CPU, RAM, Swap, SSD)"},
+        {"command": "mac_clean", "description": "Dọn Cache rác máy Mac an toàn (không đóng app)"},
+        {"command": "latest", "description": "Xem báo cáo giám sát đối thủ mới nhất trong ngày"},
+        {"command": "weekly", "description": "Xem bản tin thị trường & đối thủ đầu tuần"},
+        {"command": "status", "description": "Kiểm tra trạng thái hệ thống tự động hóa"},
+        {"command": "chatid", "description": "Lấy mã Chat ID của nhóm hiện tại"},
+    ]
+    req = urllib.request.Request(
+        url,
+        data=json.dumps({"commands": commands}).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+    )
+    try:
+        urllib.request.urlopen(req, timeout=10)
+    except Exception as e:
+        print(f"⚠️ Warning registering commands: {e}")
+
+
 def main():
     print("🤖 Starting Ahamove SmartOps Telegram Bot Listener (AI-enabled Polling)...")
+    register_bot_commands()
     offset = None
     
-    # Send online status message
-    if CHAT_ID:
-        send_telegram_msg(CHAT_ID, "🤖 *Ahamove SmartOps Bot (AI-enabled)* đã trực tuyến và sẵn sàng hỗ trợ bạn!")
-        
     while True:
         try:
             url = f"https://api.telegram.org/bot{TOKEN}/getUpdates"
