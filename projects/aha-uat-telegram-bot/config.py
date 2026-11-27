@@ -10,7 +10,8 @@ import requests
 
 BASE_DIR = Path(__file__).resolve().parent
 ENV_FILE = BASE_DIR / ".env"
-STATE_FILE = BASE_DIR / ".tokens.json"
+_IS_VERCEL = bool(os.environ.get("VERCEL") or os.environ.get("VERCEL_ENV"))
+STATE_FILE = Path("/tmp/.tokens.json") if _IS_VERCEL else (BASE_DIR / ".tokens.json")
 GIST_FILENAME = "aha_uat_tokens.json"
 
 _GIST_CACHE: dict[str, Any] = {"ts": 0.0, "data": None}
@@ -104,7 +105,10 @@ def _fetch_from_gist() -> dict[str, Any] | None:
                 parsed = json.loads(content)
                 _GIST_CACHE["ts"] = now
                 _GIST_CACHE["data"] = parsed
-                STATE_FILE.write_text(json.dumps(parsed, indent=2, ensure_ascii=False), encoding="utf-8")
+                try:
+                    STATE_FILE.write_text(json.dumps(parsed, indent=2, ensure_ascii=False), encoding="utf-8")
+                except OSError:
+                    pass
                 return parsed
     except Exception as exc:
         print(f"⚠️ Gist read warning: {exc}")
@@ -146,6 +150,7 @@ def load_store() -> dict[str, Any]:
         "bound_group_id": GROUP_CHAT_ID,
         "default_driver_id": DEFAULT_DRIVER_ID,
         "order_template": None,
+        "user_states": {},
     }
     if not STATE_FILE.exists():
         _fetch_from_gist()
@@ -177,7 +182,10 @@ def save_store(updates: dict[str, Any]) -> dict[str, Any]:
             if current.get(k) != clean_v:
                 current[k] = clean_v
                 changed = True
-    STATE_FILE.write_text(json.dumps(current, indent=2, ensure_ascii=False), encoding="utf-8")
+    try:
+        STATE_FILE.write_text(json.dumps(current, indent=2, ensure_ascii=False), encoding="utf-8")
+    except OSError:
+        pass
     if changed:
         _push_to_gist(current)
     return current
