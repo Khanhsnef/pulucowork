@@ -47,6 +47,8 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && (github.event.inputs.task == 'all' || github.event.inputs.task == 'sgn_report') || github.event.schedule == '0 0 * * *'
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: write
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
@@ -70,3 +72,22 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TZ: Asia/Ho_Chi_Minh
         run: python3 _scripts/sgn_daily_telegram_report.py
+
+      - name: Update & Push Ops Pulse Snapshot for @DMAIChat_Bot
+        run: |
+          python3 -c "
+          import sys
+          sys.path.insert(0, 'projects/dmai-chat-bot')
+          import ops_metrics
+          from pathlib import Path
+          brief = ops_metrics.build_ops_brief_from_sheet()
+          Path('Output/Ahamove/04. OPS_METRICS/latest_ops_pulse.md').write_text(brief + '\n', encoding='utf-8')
+          print('Saved latest_ops_pulse.md')
+          "
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Output/Ahamove/04.\ OPS_METRICS/latest_ops_pulse.md
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(ops): update daily SGN Ops Pulse snapshot"
+            git push
+          fi

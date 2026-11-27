@@ -377,6 +377,14 @@ def get_system_context(user_message=""):
     if loaded_files:
         print(f"📚 Loaded dynamic context files for query '{user_message}': {loaded_files}")
         
+    ops_keywords = ("ops", "kpi", "sgn", "đơn", "request", "demand", "fr", "fulfillment", "active", "supply", "productivity", "vận hành", "chỉ số", "hôm qua")
+    if any(k in user_message.lower() for k in ops_keywords):
+        try:
+            import ops_metrics
+            context += f"### CHỈ SỐ VẬN HÀNH SGN HÀNG NGÀY (LIVE GOOGLE SHEET):\n{ops_metrics.fetch_ops_brief()}\n\n"
+        except Exception as exc:
+            print(f"⚠️ Ops metrics context error: {exc}")
+
     return context
 
 # ── COMMAND & MESSAGE HANDLERS ────────────────────────────────────────────────

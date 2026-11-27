@@ -12,6 +12,7 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 import bot_core  # noqa: E402
+import ops_metrics  # noqa: E402
 
 
 def process_update(update: dict[str, Any]) -> None:
@@ -29,6 +30,19 @@ def process_update(update: dict[str, Any]) -> None:
 
     if text.startswith("/"):
         cmd = text.split()[0].split("@")[0].lower()
+        arg = text.partition(" ")[2].strip().lower()
+        if cmd in ("/ops", "/kpi", "/sgn"):
+            refresh_note = ""
+            force_refresh = arg == "refresh"
+            if force_refresh:
+                ok, info = ops_metrics.trigger_metabase_refresh()
+                refresh_note = "✅ Đã kích hoạt Metabase export mới.\n\n" if ok else f"⚠️ Metabase refresh cảnh báo: `{info}`\n\n"
+            try:
+                brief = ops_metrics.fetch_ops_brief(force_refresh=force_refresh)
+                bot_core.send_telegram_msg(chat_id, refresh_note + brief, reply_to_message_id=msg_id)
+            except Exception as exc:
+                bot_core.send_telegram_msg(chat_id, f"⚠️ Không lấy được chỉ số Ops: `{exc}`", reply_to_message_id=msg_id)
+            return
         if cmd in ("/mac", "/health", "/mac_clean") and os.environ.get("VERCEL"):
             bot_core.send_telegram_msg(
                 chat_id,
