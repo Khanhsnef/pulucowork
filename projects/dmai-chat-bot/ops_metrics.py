@@ -13,7 +13,7 @@ from typing import Any
 METABASE_EXPORT_URL = "https://ws.ahamove.com/ops/trigger/export_to_gs"
 SHEET_74433_CSV_URL = (
     "https://docs.google.com/spreadsheets/d/"
-    "1BniOS6rJHulyyCLJb13jkc3UWuSRZBraLEmJI6xFNG0/export?format=csv&gid=2008886787"
+    "1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/export?format=csv&gid=0"
 )
 GITHUB_74433_URL = (
     "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
@@ -58,7 +58,7 @@ def trigger_metabase_refresh() -> tuple[bool, str]:
         "filter": {"start_date": start_date, "end_date": end_date},
         "spreadsheet_url": (
             "https://docs.google.com/spreadsheets/d/"
-            "1BniOS6rJHulyyCLJb13jkc3UWuSRZBraLEmJI6xFNG0/edit?gid=2008886787#gid=2008886787"
+            "1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/edit?gid=0#gid=0"
         ),
     }
     req = urllib.request.Request(

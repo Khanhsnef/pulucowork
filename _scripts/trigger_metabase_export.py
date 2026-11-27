@@ -50,7 +50,7 @@ if __name__ == "__main__":
     # Thay đổi các thông số dưới đây theo Card bạn muốn xuất
     EMAIL = "khanhlp@ahamove.com"
     CARD_ID = 74433
-    SHEET_URL = "https://docs.google.com/spreadsheets/d/1BniOS6rJHulyyCLJb13jkc3UWuSRZBraLEmJI6xFNG0/edit?gid=2008886787#gid=2008886787"
+    SHEET_URL = "https://docs.google.com/spreadsheets/d/1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/edit?gid=0#gid=0"
     
     trigger_metabase_export(
         card_id=CARD_ID,
