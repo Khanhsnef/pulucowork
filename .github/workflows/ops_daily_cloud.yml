@@ -63,7 +63,7 @@ jobs:
 
       - name: Install Dependencies & Chromium
         run: |
-          pip install requests playwright
+          pip install requests pandas streamlit playwright
           python3 -m playwright install chromium
 
       - name: Run SGN Daily Telegram Report
