@@ -1,0 +1,33 @@
+name: Daily Cloud Bot Health Report
+
+on:
+  schedule:
+    # 08:15 AM ICT (01:15 UTC) every day - runs even when office PC is OFF
+    - cron: '15 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  cloud-bot-health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check Cloud Bot Webhook & Report to Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          AHA_BOT_TOKEN: ${{ secrets.AHA_BOT_TOKEN }}
+          TZ: Asia/Ho_Chi_Minh
+        run: |
+          python3 _scripts/check_cloud_bot_health.py --notify
