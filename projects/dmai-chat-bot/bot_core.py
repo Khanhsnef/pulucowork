@@ -504,17 +504,20 @@ def get_system_context(user_message=""):
             ops_ctx = ops_metrics.build_query_context(user_message)
             if ops_ctx:
                 context += (
-                    "### QUY TẮC LẬP BÁO CÁO & INSIGHTS VẬN HÀNH (BẮT BUỘC TUÂN THỦ):\n"
-                    "1. Đọc và kết hợp ĐẦY ĐỦ tất cả chỉ số từ cả 3 bảng: "
-                    "Card 67888 (Đơn hàng: Requested, Accept, Completed, Đơn rớt, AR, FR theo dịch vụ) + "
-                    "Card 74433 (Nguồn cung Tài xế Active theo Segment FT/PT/return/NIM/NLM & kênh dịch vụ) + "
-                    "Card 75557 (Thu nhập TB/TX, EPH, PPH, Utilization, Tỷ trọng thưởng, Active/Ranking, Auto-Accept %, Hard %, LCD, GDR, AR Noti, CR POC, Rating).\n"
+                    "### QUY TẮC LẬP BÁO CÁO & TỪ ĐIỂN THUẬT NGỮ AHAMOVE (BẮT BUỘC TUÂN THỦ):\n"
+                    "- **Thuật ngữ chuẩn:**\n"
+                    "  + Không gọi là 'Cầu' → luôn gọi là **Demand** hoặc **Volume** (Card 67888: Requested, Accept, Completed, Đơn rớt, AR, FR).\n"
+                    "  + Không gọi là 'Cung' → luôn gọi là **Active Driver** hoặc **Nguồn Supply** (Card 74433 & 75557).\n"
+                    "  + **LCD (`lcd_driver`)** = **Low Cancellation Rate Driver** (tài xế có **tỷ lệ hủy đơn thấp** — chỉ số TÍCH CỰC, tỷ lệ LCD càng cao càng tốt, tuyệt đối KHÔNG hiểu nhầm là churn risk).\n"
+                    "  + **GDR (`gdr_driver`)** = Good Driver Rate / tài xế đạt chuẩn chất lượng.\n"
+                    "  + **Hard Driver (`hard_driver`)** = tài xế chạy đều/nòng cốt.\n"
+                    "  + **AA (`total_aa_driver`)** = tài xế bật Auto-Accept.\n"
+                    "1. Đọc và kết hợp ĐẦY ĐỦ tất cả chỉ số từ cả 3 bảng: Card 67888 (Demand/Volume & SLA) + Card 74433 (Active Driver theo Segment/Service) + Card 75557 (Thu nhập TB/TX, EPH, PPH, Utilization, Tỷ trọng thưởng, Active/Ranking, AA%, Hard%, LCD%, GDR%, AR Noti, CR POC, Rating).\n"
                     "2. Mọi chỉ số quan trọng PHẢI đi kèm **tỷ lệ tăng/giảm** (`▲/▼ +x.x% DoD`, `WoW`, hoặc `±x.xx pp`).\n"
                     "3. Trình bày theo cấu trúc chuẩn dễ đọc:\n"
                     "   - **📊 TÓM TẮT ĐIỀU HÀNH (Executive Summary):** 2-3 câu kết luận quan trọng nhất toàn mạng lưới.\n"
-                    "   - **🌐 1. NW (Toàn Quốc)** | **🏙️ 2. SGN** | **🏛️ 3. HAN** | **🧭 4. EXP**: Mỗi khu vực nêu rõ Cầu & SLA, Nguồn cung, Thu nhập & Chất lượng.\n"
-                    "   - **🧠 INSIGHTS CHÉO & ĐỀ XUẤT HÀNH ĐỘNG:** Chỉ rõ nguyên nhân gốc rễ (VD: tương quan giữa AA%/CR POC với FR, biến động Cung vs Cầu, cảnh báo nhóm LCD hoặc dịch vụ kéo tụt SLA) và hành động ưu tiên.\n"
-                    "4. Tuyệt đối KHÔNG gọi số tài xế ở Card 74433/75557 là 'đơn hàng'.\n\n"
+                    "   - **🌐 1. NW (Toàn Quốc)** | **🏙️ 2. SGN** | **🏛️ 3. HAN** | **🧭 4. EXP**: Mỗi khu vực nêu rõ Demand/Volume & SLA, Active Driver/Supply, Thu nhập & Chất lượng (LCD, CR POC, AA%).\n"
+                    "   - **🧠 INSIGHTS CHÉO & ĐỀ XUẤT HÀNH ĐỘNG:** Chỉ rõ nguyên nhân gốc rễ (tương quan giữa AA%/CR POC/LCD với FR, biến động Supply vs Demand, dịch vụ kéo tụt SLA) và hành động ưu tiên.\n\n"
                     f"### DỮ LIỆU OPS ĐA CHIỀU (ALL SHEETS):\n{ops_ctx}\n\n"
                 )
         except Exception as exc:
@@ -535,7 +538,7 @@ def handle_command(chat_id, text, msg_id):
             "• <code>/report</code> hoặc <code>/ops</code> — <b>Báo cáo Tổng hợp Điều hành</b> (đọc toàn bộ Sheet 67888 + 74433 + 75557, tách riêng NW/SGN/HAN/EXP kèm % DoD, % WoW &amp; Insights chéo).\n"
             "• <code>/ops refresh</code> — Kích hoạt đồng bộ mới từ Metabase cho cả 3 Card rồi xuất báo cáo.\n"
             "• <code>/kpi</code> — Chi tiết Đơn hàng, Đơn rớt, AR &amp; FR theo từng <code>service_type</code> (Card 67888).\n"
-            "• <code>/supply</code> — Chi tiết Nguồn cung Tài xế theo Segment &amp; 14 kênh dịch vụ (Card 74433).\n"
+            "• <code>/supply</code> — Chi tiết Active Driver / Nguồn Supply theo Segment &amp; 14 kênh dịch vụ (Card 74433).\n"
             "• <code>/driver</code> — Chi tiết Thu nhập, EPH, PPH, Utilization, AA%, Hard%, LCD, GDR, CR POC &amp; Rating (Card 75557).\n\n"
             "📰 <b>2. Báo cáo Thị trường &amp; Đối thủ:</b>\n"
             "• <code>/latest</code> — Báo cáo giám sát đối thủ mới nhất trong ngày.\n"

@@ -454,7 +454,7 @@ def fetch_full_executive_report(force_refresh: bool = False) -> str:
         # 1A. Demand & SLA
         if d_cur["req"] > 0:
             out.append(
-                f"📦 <b>Đơn &amp; SLA:</b> Req <b>{int(d_cur['req']):,}</b> "
+                f"📦 <b>Demand / Volume &amp; SLA:</b> Req <b>{int(d_cur['req']):,}</b> "
                 f"({_pct_delta(d_cur['req'], d_prv['req'])} DoD | {_pct_delta(d_cur['req'], d_wow['req'])} WoW | "
                 f"{_pct_delta(d_cur['req'], d_7d_req_avg)} vs TB7d)\n"
                 f"  ├ Hoàn thành: <b>{int(d_cur['comp']):,}</b> | "
@@ -486,7 +486,7 @@ def fetch_full_executive_report(force_refresh: bool = False) -> str:
                 v_p = s_prv[f"seg_{seg}"]
                 seg_parts.append(f"<code>{seg}</code> {v_c:,} ({_pct_delta(v_c, v_p, 0)})")
             out.append(
-                f"🛵 <b>Nguồn Cung (Tag):</b> <b>{tot_s:,}</b> TX "
+                f"🛵 <b>Active Driver / Supply (Tag):</b> <b>{tot_s:,}</b> TX "
                 f"({_pct_delta(tot_s, s_prv['total_active'])} DoD | {_pct_delta(tot_s, s_wow['total_active'])} WoW)\n"
                 f"  ├ Segment: {' | '.join(seg_parts)}\n"
                 f"  └ Kênh chạy: Bike {s_cur['bike']:,} • Eco {s_cur['eco']:,} • 2H {s_cur['_2H']:,} • "
@@ -562,12 +562,12 @@ def _build_cross_sheet_insights(
         sup_chg = (nw_s_cur - nw_s_prv) / nw_s_prv * 100
         gap = req_chg - sup_chg
         balance_msg = (
-            "Cầu tăng nhanh hơn Cung (áp lực thiếu TX giờ cao điểm)"
+            "Demand tăng nhanh hơn Active Driver (áp lực thiếu supply giờ cao điểm)"
             if gap > 2.0
-            else ("Cung giữ nhịp tốt hơn đà giảm của Cầu (giúp FR cải thiện)" if gap < -1.5 else "Cung - Cầu biến động cân bằng")
+            else ("Nguồn Supply giữ nhịp tốt hơn đà giảm của Demand (giúp FR cải thiện)" if gap < -1.5 else "Supply - Demand biến động cân bằng")
         )
         insights.append(
-            f"<b>Cân bằng Cung - Cầu (NW):</b> Cầu biến động <b>{req_chg:+.1f}%</b> DoD trong khi Nguồn cung biến động "
+            f"<b>Cân bằng Supply - Demand (NW):</b> Demand (Volume) biến động <b>{req_chg:+.1f}%</b> DoD trong khi Active Driver biến động "
             f"<b>{sup_chg:+.1f}%</b> DoD → <i>{balance_msg}</i> (FR đạt <b>{nw_d_cur['fr']:.2f}%</b>, "
             f"{_pp_delta(nw_d_cur['fr'], nw_d_prv['fr'])})."
         )
@@ -603,22 +603,23 @@ def _build_cross_sheet_insights(
             f"với CR POC <b>{w_rate:.1f}%</b> ({worst_cr['cancel_poc']:,} đơn hủy)."
         )
 
-    # 4. Driver Unit Economics & Churn Risk (EPH, Utilization, LCD)
+    # 4. Driver Unit Economics & LCD Quality (EPH, Utilization, Low Cancellation Rate Driver)
     tot_75 = _agg_75557(cur75)
     prv_75 = _agg_75557(prv75) if prv75 else {}
     if tot_75["drv"] > 0:
         eph_chg = _pct_delta(tot_75["eph"], prv_75.get("eph", 0))
         inc_chg = _pct_delta(tot_75["inc_per_drv"], prv_75.get("inc_per_drv", 0))
-        # Find segment with highest LCD risk
+        # LCD = Low Cancellation Rate Driver (higher is better -> flag lowest LCD% segment)
         lcd_segs = [x for x in cur75 if x["total_driver"] >= 100]
-        top_lcd = max(lcd_segs, key=lambda x: x["lcd_driver"] / x["total_driver"]) if lcd_segs else None
+        low_lcd = min(lcd_segs, key=lambda x: x["lcd_driver"] / x["total_driver"]) if lcd_segs else None
         lcd_clause = (
-            f"; nhóm nguy cơ giảm hoạt động (LCD) cao nhất là <code>{top_lcd['city_id']}-{top_lcd['driver_segment']}</code> "
-            f"(<b>{top_lcd['lcd_driver']/top_lcd['total_driver']*100:.1f}%</b> ~ {top_lcd['lcd_driver']:,} TX)"
-            if top_lcd else ""
+            f"; tỷ lệ LCD (TX hủy thấp) đạt <b>{tot_75['lcd_pct']:.1f}%</b> NW, thấp nhất ở "
+            f"<code>{low_lcd['city_id']}-{low_lcd['driver_segment']}</code> "
+            f"(<b>{low_lcd['lcd_driver']/low_lcd['total_driver']*100:.1f}%</b> ~ {low_lcd['lcd_driver']:,}/{low_lcd['total_driver']:,} TX)"
+            if low_lcd else ""
         )
         insights.append(
-            f"<b>Thu nhập &amp; Rủi ro Nguồn cung:</b> Thu nhập TB đạt <b>{tot_75['inc_per_drv']/1000:,.0f}k/TX</b> ({inc_chg} DoD), "
+            f"<b>Thu nhập &amp; Chất lượng Supply:</b> Thu nhập TB đạt <b>{tot_75['inc_per_drv']/1000:,.0f}k/TX</b> ({inc_chg} DoD), "
             f"EPH đạt <b>{tot_75['eph']/1000:,.1f}k/h</b> ({eph_chg} DoD), Utilization <b>{tot_75['util']:.1f}%</b>{lcd_clause}."
         )
 
@@ -668,7 +669,7 @@ def fetch_supply_brief(force_refresh: bool = False) -> str:
     tot_w = sum(x["total_active"] for x in wov)
 
     lines = [
-        f"🛵 <b>CHI TIẾT NGUỒN CUNG CARD 74433 — {latest}</b>",
+        f"🛵 <b>CHI TIẾT ACTIVE DRIVER / SUPPLY CARD 74433 — {latest}</b>",
         f"<i>{source}</i> | NW Active: <b>{tot_c:,}</b> ({_pct_delta(tot_c, tot_p)} DoD | {_pct_delta(tot_c, tot_w)} WoW)",
         "━━━━━━━━━━━━━━━━━━━━",
     ]
