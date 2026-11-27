@@ -380,10 +380,11 @@ def get_system_context(user_message=""):
         print(f"📚 Loaded dynamic context files for query '{user_message}': {loaded_files}")
         
     ops_keywords = (
-        "ops", "kpi", "sgn", "han", "exp", "đơn", "tài xế", "driver", "active",
+        "ops", "kpi", "sgn", "han", "exp", "nw", "nationwide", "đơn", "tài xế", "driver", "active",
         "segment", "tag", "ft", "pt", "nim", "nlm", "return", "bike", "eco",
-        "pool", "aifood", "aibot", "tmdt", "2h", "bulky", "inday", "vận hành",
-        "chỉ số", "hôm qua", "tuần", "tháng", "trend", "ngày", "74433",
+        "pool", "aifood", "aibot", "tmdt", "2h", "4h", "bulky", "inday", "vận hành",
+        "chỉ số", "hôm qua", "tuần", "tháng", "trend", "ngày", "74433", "67888",
+        "requested", "accept", "accepted", "completed", "ar", "fr", "fulfillment", "acceptance", "service",
     )
     if any(k in user_message.lower() for k in ops_keywords):
         try:

@@ -19,7 +19,12 @@ GITHUB_74433_URL = (
     "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
     "Output/Ahamove/04.%20OPS_METRICS/card_74433_63d.json"
 )
+GITHUB_67888_URL = (
+    "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
+    "Output/Ahamove/04.%20OPS_METRICS/card_67888_63d.json"
+)
 CACHE_FILE = "/tmp/card_74433_cache.json"
+CACHE_67888_FILE = "/tmp/card_67888_cache.json"
 CACHE_TTL_SEC = 300
 SERVICE_COLS = [
     "total_active", "active_1h", "active_2h", "active_4h",
@@ -218,13 +223,152 @@ def fetch_ops_brief(force_refresh: bool = False) -> str:
 
     insights = _build_insights(rows, dates)
 
+    # Compact Card 67888 NW/Region KPI line
+    kpi_summary = ""
+    try:
+        rows_67888, _ = fetch_card_67888_rows()
+        if rows_67888:
+            d6 = sorted({r["period"] for r in rows_67888})[-1]
+            kpi_lines = []
+            for reg in ("NW", "SGN", "HAN", "EXP"):
+                reg_rows = [r for r in rows_67888 if r["period"] == d6 and r["region"] == reg]
+                req_s = sum(r["requested"] for r in reg_rows)
+                acc_s = sum(r["accept"] for r in reg_rows)
+                comp_s = sum(r["completed"] for r in reg_rows)
+                if req_s > 0:
+                    kpi_lines.append(
+                        f"• `{reg}`: Req *{req_s:,}* | Comp *{comp_s:,}* | AR *{acc_s/req_s*100:.1f}%* | FR *{comp_s/req_s*100:.1f}%*"
+                    )
+            if kpi_lines:
+                kpi_summary = f"\n\n📦 *Card 67888 — Orders & KPI ({d6})* _(chi tiết: /kpi)_\n" + "\n".join(kpi_lines)
+    except Exception:
+        pass
+
     return (
         f"📊 *Card 74433 — Active Drivers theo Segment ({latest})*\n"
         f"_Nguồn: {source}_ | Tổng Active: *{tot_latest:,}*{dod_str}{wow_str}\n\n"
         + _format_day_table(rows, latest)
+        + kpi_summary
         + "\n\n💡 *Insights nhanh*\n"
         + "\n".join(f"• {line}" for line in insights)
     )
+
+
+def _to_float(v: Any) -> float:
+    try:
+        return float(v)
+    except Exception:
+        return 0.0
+
+
+def fetch_card_67888_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
+    """Fetch Card 67888 rows from GitHub snapshot with 5-min /tmp cache."""
+    if not force_refresh and os.path.exists(CACHE_67888_FILE):
+        try:
+            cached = json.loads(open(CACHE_67888_FILE, encoding="utf-8").read())
+            if time.time() - float(cached.get("ts", 0)) < CACHE_TTL_SEC and cached.get("rows"):
+                return cached["rows"], cached.get("source", "cache")
+        except Exception:
+            pass
+
+    req = urllib.request.Request(GITHUB_67888_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
+    with urllib.request.urlopen(req, timeout=12) as resp:
+        raw_list = json.loads(resp.read().decode("utf-8"))
+
+    rows = [
+        {
+            "period": str(r.get("period", ""))[:10],
+            "region": str(r.get("region", "")).strip(),
+            "service_type": str(r.get("service_type", "")).strip(),
+            "requested": _to_int(r.get("requested", 0)),
+            "accept": _to_int(r.get("accept", 0)),
+            "completed": _to_int(r.get("completed", 0)),
+            "ar": _to_float(r.get("ar", 0)),
+            "fr": _to_float(r.get("fr", 0)),
+        }
+        for r in raw_list
+        if r.get("period")
+    ]
+    source = "GitHub Snapshot (Card 67888)"
+    if rows:
+        try:
+            with open(CACHE_67888_FILE, "w", encoding="utf-8") as f:
+                json.dump({"ts": time.time(), "source": source, "rows": rows}, f, ensure_ascii=False)
+        except Exception:
+            pass
+    return rows, source
+
+
+def fetch_kpi_brief(force_refresh: bool = False) -> str:
+    """Return formatted Card 67888 summary (Requested, Accept, Completed, AR, FR) + insights."""
+    rows, source = fetch_card_67888_rows(force_refresh=force_refresh)
+    if not rows:
+        raise RuntimeError("Chưa có dữ liệu Card 67888.")
+    dates = sorted({r["period"] for r in rows})
+    latest = dates[-1]
+    prev = dates[-2] if len(dates) >= 2 else None
+    wow = dates[-8] if len(dates) >= 8 else None
+
+    cur = [r for r in rows if r["period"] == latest]
+    prv = [r for r in rows if r["period"] == prev] if prev else []
+    wov = [r for r in rows if r["period"] == wow] if wow else []
+
+    def agg(sub: list[dict[str, Any]]) -> tuple[int, int, int, float, float]:
+        rq = sum(x["requested"] for x in sub)
+        ac = sum(x["accept"] for x in sub)
+        cp = sum(x["completed"] for x in sub)
+        return rq, ac, cp, (ac / rq * 100 if rq else 0.0), (cp / rq * 100 if rq else 0.0)
+
+    nw_rq, nw_ac, nw_cp, nw_ar, nw_fr = agg([r for r in cur if r["region"] == "NW"])
+    p_rq, _, p_cp, _, p_fr = agg([r for r in prv if r["region"] == "NW"])
+    w_rq, _, _, _, w_fr = agg([r for r in wov if r["region"] == "NW"])
+
+    dod_rq = f" ({(nw_rq - p_rq) / p_rq * 100:+.1f}% DoD)" if p_rq else ""
+    wow_rq = f" | {(nw_rq - w_rq) / w_rq * 100:+.1f}% WoW" if w_rq else ""
+    dod_fr = f" ({nw_fr - p_fr:+.2f}pp DoD)" if p_rq else ""
+
+    lines = [
+        f"📦 *Card 67888 — Orders & KPI theo Service Type ({latest})*",
+        f"_Nguồn: {source}_ | NW Requested: *{nw_rq:,}*{dod_rq}{wow_rq} | FR: *{nw_fr:.2f}%*{dod_fr}\n",
+    ]
+    for reg in ("NW", "SGN", "HAN", "EXP"):
+        r_rows = [r for r in cur if r["region"] == reg]
+        rq, ac, cp, ar, fr = agg(r_rows)
+        if rq == 0:
+            continue
+        lines.append(f"*{reg}* — Req: *{rq:,}* | Acc: *{ac:,}* | Comp: *{cp:,}* | AR: *{ar:.1f}%* | FR: *{fr:.1f}%*")
+        top_svc = sorted(r_rows, key=lambda x: -x["requested"])[:5]
+        for s in top_svc:
+            lines.append(
+                f"• `{s['service_type']}`: Req {s['requested']:,}, Acc {s['accept']:,}, "
+                f"Comp {s['completed']:,} | AR *{s['ar']*100:.1f}%* | FR *{s['fr']*100:.1f}%*"
+            )
+        lines.append("")
+
+    # Insights
+    insights = []
+    if p_rq:
+        insights.append(f"Nationwide (NW) đạt *{nw_cp:,}/{nw_rq:,}* đơn hoàn thành (FR *{nw_fr:.2f}%*, AR *{nw_ar:.2f}%*, {nw_fr - p_fr:+.2f}pp DoD).")
+    reg_frs = []
+    for reg in ("SGN", "HAN", "EXP"):
+        rq, _, _, _, fr = agg([r for r in cur if r["region"] == reg])
+        if rq > 0:
+            reg_frs.append((fr, reg, rq))
+    if reg_frs:
+        reg_frs.sort()
+        low_fr, low_reg, _ = reg_frs[0]
+        high_fr, high_reg, _ = reg_frs[-1]
+        insights.append(f"Khu vực FR cao nhất: `{high_reg}` (*{high_fr:.1f}%*) | Thấp nhất: `{low_reg}` (*{low_fr:.1f}%*).")
+    nw_svcs = [r for r in cur if r["region"] == "NW" and r["requested"] >= 100]
+    if nw_svcs:
+        weak_svc = min(nw_svcs, key=lambda x: x["fr"])
+        insights.append(
+            f"Dịch vụ cần chú ý (NW >=100 req): `{weak_svc['service_type']}` có FR thấp nhất (*{weak_svc['fr']*100:.1f}%*, AR *{weak_svc['ar']*100:.1f}%*, {weak_svc['requested']:,} req)."
+        )
+    if w_rq:
+        insights.append(f"So với tuần trước (WoW): NW Requested *{(nw_rq - w_rq) / w_rq * 100:+.1f}%*, FR *{nw_fr - w_fr:+.2f}pp*.")
+
+    return "\n".join(lines).strip() + "\n\n💡 *Insights nhanh*\n" + "\n".join(f"• {x}" for x in insights)
 
 
 def _extract_requested_dates(text: str, available_dates: list[str]) -> list[str]:
@@ -277,9 +421,9 @@ def build_query_context(user_message: str) -> str:
         summary = ", ".join(f"{c}-{t}:{v//n_days}/ng" for (c, t), v in sorted(by_ct.items()))
         parts.append(f"Tuần {w} ({n_days} ngày): {summary}")
 
-    # Monthly trend
+    # Monthly trend (Card 74433)
     months = sorted({r["month"] for r in rows if r["month"]})
-    parts.append("--- TREND THÁNG (TB ngày theo tháng/city/tag) ---")
+    parts.append("--- TREND THÁNG CARD 74433 (TB ngày theo tháng/city/tag) ---")
     for m in months:
         m_rows = [r for r in rows if r["month"] == m]
         n_days = len({r["order_date"] for r in m_rows}) or 1
@@ -289,5 +433,38 @@ def build_query_context(user_message: str) -> str:
             by_ct[k] = by_ct.get(k, 0) + r["total_active"]
         summary = ", ".join(f"{c}-{t}:{v//n_days}/ng" for (c, t), v in sorted(by_ct.items()))
         parts.append(f"Tháng {m[:7]} ({n_days} ngày): {summary}")
+
+    # Card 67888 context (Requested, Accept, Completed, AR, FR by region & service_type)
+    try:
+        rows_67888, src_67888 = fetch_card_67888_rows()
+        if rows_67888:
+            d6_list = sorted({r["period"] for r in rows_67888})
+            t_dates6 = _extract_requested_dates(user_message, d6_list) or (d6_list[-2:] if len(d6_list) >= 2 else d6_list[-1:])
+            parts.append(f"\n=== CARD 67888 ({src_67888}: {d6_list[0]} -> {d6_list[-1]}) ===")
+            for dt in t_dates6:
+                parts.append(f"--- CHI TIẾT ĐƠN/KPI NGÀY {dt} ---")
+                for r in sorted([x for x in rows_67888 if x["period"] == dt], key=lambda x: (x["region"], -x["requested"])):
+                    parts.append(
+                        f"{r['region']} | {r['service_type']} | req={r['requested']} acc={r['accept']} "
+                        f"comp={r['completed']} | AR={r['ar']*100:.2f}% FR={r['fr']*100:.2f}%"
+                    )
+            # Monthly & last-7-days region summary
+            parts.append("--- TỔNG HỢP 7 NGÀY GẦN NHẤT & THEO THÁNG (CARD 67888) ---")
+            for label, cond in [("7d gần nhất", set(d6_list[-7:])), ("Tháng 11", {d for d in d6_list if d.startswith("2026-11")}), ("Tháng 10", {d for d in d6_list if d.startswith("2026-10")})]:
+                sub_all = [r for r in rows_67888 if r["period"] in cond]
+                if not sub_all:
+                    continue
+                reg_parts = []
+                for reg in ("NW", "SGN", "HAN", "EXP"):
+                    sr = [r for r in sub_all if r["region"] == reg]
+                    rq = sum(x["requested"] for x in sr)
+                    ac = sum(x["accept"] for x in sr)
+                    cp = sum(x["completed"] for x in sr)
+                    if rq:
+                        reg_parts.append(f"{reg}(req={rq:,},acc={ac:,},comp={cp:,},AR={ac/rq*100:.1f}%,FR={cp/rq*100:.1f}%)")
+                if reg_parts:
+                    parts.append(f"{label}: " + " | ".join(reg_parts))
+    except Exception as exc:
+        print(f"⚠️ Card 67888 context error: {exc}")
 
     return "\n".join(parts)

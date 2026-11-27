@@ -31,7 +31,7 @@ def process_update(update: dict[str, Any]) -> None:
     if text.startswith("/"):
         cmd = text.split()[0].split("@")[0].lower()
         arg = text.partition(" ")[2].strip().lower()
-        if cmd in ("/ops", "/kpi", "/sgn"):
+        if cmd in ("/ops", "/sgn"):
             refresh_note = ""
             force_refresh = arg == "refresh"
             if force_refresh:
@@ -42,6 +42,13 @@ def process_update(update: dict[str, Any]) -> None:
                 bot_core.send_telegram_msg(chat_id, refresh_note + brief, reply_to_message_id=msg_id)
             except Exception as exc:
                 bot_core.send_telegram_msg(chat_id, f"⚠️ Không lấy được chỉ số Ops: `{exc}`", reply_to_message_id=msg_id)
+            return
+        if cmd in ("/kpi", "/orders", "/perf"):
+            try:
+                brief = ops_metrics.fetch_kpi_brief(force_refresh=(arg == "refresh"))
+                bot_core.send_telegram_msg(chat_id, brief, reply_to_message_id=msg_id)
+            except Exception as exc:
+                bot_core.send_telegram_msg(chat_id, f"⚠️ Không lấy được chỉ số KPI (Card 67888): `{exc}`", reply_to_message_id=msg_id)
             return
         if cmd in ("/mac", "/health", "/mac_clean") and os.environ.get("VERCEL"):
             bot_core.send_telegram_msg(
