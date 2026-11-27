@@ -128,13 +128,41 @@ def send_telegram_doc(chat_id, doc_path, reply_to_message_id=None):
 
 def get_latest_report(pattern):
     files = glob.glob(os.path.join(MONITOR_DIR, pattern))
-    if not files:
+    if files:
+        latest_md = max(files, key=os.path.getmtime)
+        latest_html = latest_md.replace(".md", ".html")
+        if not os.path.exists(latest_html):
+            latest_html = None
+        return latest_md, latest_html
+
+    # Cloud fallback (Vercel): fetch latest matching report from GitHub repo
+    try:
+        import fnmatch
+        api_url = (
+            "https://api.github.com/repos/Khanhsnef/pulucowork/contents/"
+            "Output/Ahamove/06.%20COMPETITIVE_INTEL/monitoring"
+        )
+        req = urllib.request.Request(api_url, headers={"User-Agent": "DMAIChat_Bot/1.0"})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            items = json.loads(resp.read().decode("utf-8"))
+        matches = [it for it in items if fnmatch.fnmatch(it.get("name", ""), pattern)]
+        if not matches:
+            return None, None
+        latest_item = max(matches, key=lambda x: x["name"])
+        md_name = latest_item["name"]
+        md_tmp = os.path.join("/tmp", md_name)
+        urllib.request.urlretrieve(latest_item["download_url"], md_tmp)
+
+        html_name = md_name.replace(".md", ".html")
+        html_item = next((it for it in items if it.get("name") == html_name), None)
+        html_tmp = None
+        if html_item and html_item.get("download_url"):
+            html_tmp = os.path.join("/tmp", html_name)
+            urllib.request.urlretrieve(html_item["download_url"], html_tmp)
+        return md_tmp, html_tmp
+    except Exception as exc:
+        print(f"⚠️ GitHub report fetch error: {exc}")
         return None, None
-    latest_md = max(files, key=os.path.getmtime)
-    latest_html = latest_md.replace(".md", ".html")
-    if not os.path.exists(latest_html):
-        latest_html = None
-    return latest_md, latest_html
 
 def parse_summary(md_path):
     try:
