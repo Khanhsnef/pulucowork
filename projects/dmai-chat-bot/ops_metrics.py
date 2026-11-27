@@ -1,199 +1,228 @@
-"""Pure-stdlib SGN Ops daily metrics fetcher & Metabase refresh trigger for @DMAIChat_Bot."""
+"""Card 74433 (Driver Active by Segment/Tag & Service) fetcher & analyzer for @DMAIChat_Bot."""
 
 import csv
 import datetime
 import io
 import json
 import os
+import re
 import time
 import urllib.request
 from typing import Any
 
-SHEET_ID = "1Nbc4NYg3u8TxEh1acuWvDH-p6_8Nz8bDNF3j4bLGWvM"
-SHEET_GID = "743032311"
-SHEET_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={SHEET_GID}"
-GITHUB_PULSE_URL = "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/Output/Ahamove/04.%20OPS_METRICS/latest_ops_pulse.md"
 METABASE_EXPORT_URL = "https://ws.ahamove.com/ops/trigger/export_to_gs"
-REPORT_YEAR = 2026
-DAILY_START_COL = 5
-CACHE_FILE = "/tmp/sgn_ops_brief_cache.json"
+SHEET_74433_CSV_URL = (
+    "https://docs.google.com/spreadsheets/d/"
+    "1BniOS6rJHulyyCLJb13jkc3UWuSRZBraLEmJI6xFNG0/export?format=csv&gid=2008886787"
+)
+GITHUB_74433_URL = (
+    "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
+    "Output/Ahamove/04.%20OPS_METRICS/card_74433_63d.json"
+)
+CACHE_FILE = "/tmp/card_74433_cache.json"
 CACHE_TTL_SEC = 300
+SERVICE_COLS = [
+    "total_active", "active_1h", "active_2h", "active_4h",
+    "bike", "eco", "aibot", "pool", "aifood", "TMDT", "_2H", "_2HBULKY", "INDAY", "_1HTMDT",
+]
 
 
-def _parse_value(value: Any) -> float | None:
-    if value is None:
-        return None
-    text = str(value).strip()
-    if text in {"", "-", "nan", "None"}:
-        return None
-    is_percent = "%" in text
-    text = text.replace(",", "").replace("%", "").strip()
-    if not text:
-        return None
+def _to_int(v: Any) -> int:
     try:
-        number = float(text)
-    except ValueError:
-        return None
-    return number / 100.0 if is_percent else number
+        return int(float(str(v).replace(",", "").strip()))
+    except Exception:
+        return 0
 
 
-def _safe_cell(rows: list[list[str]], row_idx: int, col_idx: int) -> str:
-    if row_idx < len(rows) and col_idx < len(rows[row_idx]):
-        return rows[row_idx][col_idx]
-    return ""
-
-
-def _parse_sheet_date(label: str) -> datetime.datetime | None:
-    text = str(label or "").strip()
-    if not text or text in {"-", "nan", "None"}:
-        return None
-    for fmt in ("%d-%b-%Y", "%d-%b"):
-        try:
-            dt = datetime.datetime.strptime(text, fmt)
-            return dt.replace(year=REPORT_YEAR) if fmt == "%d-%b" else dt
-        except ValueError:
-            continue
-    return None
-
-
-def _fmt_num(v: float | None, dec: int = 0) -> str:
-    if v is None:
-        return "N/A"
-    return f"{v:,.0f}" if dec == 0 else f"{v:,.{dec}f}"
-
-
-def _fmt_pct(v: float | None) -> str:
-    return "N/A" if v is None else f"{v * 100:.2f}%"
-
-
-def _delta_pct(cur: float | None, base: float | None) -> float | None:
-    if cur is None or base in (None, 0):
-        return None
-    return (cur - base) / abs(base)
-
-
-def _delta_str(cur: float | None, base: float | None, is_rate: bool = False) -> str:
-    if cur is None or base is None:
-        return "N/A"
-    if is_rate:
-        diff_pp = (cur - base) * 100
-        return f"{'+' if diff_pp >= 0 else ''}{diff_pp:.2f}pp"
-    pct = _delta_pct(cur, base)
-    if pct is None:
-        return "N/A"
-    return f"{'+' if pct >= 0 else ''}{pct * 100:.1f}%"
+def _normalize_row(raw: dict[str, Any]) -> dict[str, Any]:
+    row = {
+        "city_id": str(raw.get("city_id", "")).strip(),
+        "month": str(raw.get("month", ""))[:10],
+        "week": str(raw.get("week", ""))[:10],
+        "order_date": str(raw.get("order_date", ""))[:10],
+        "tag": str(raw.get("tag", "")).strip(),
+    }
+    for col in SERVICE_COLS:
+        row[col] = _to_int(raw.get(col, 0))
+    return row
 
 
 def trigger_metabase_refresh() -> tuple[bool, str]:
-    """Trigger Metabase export to Google Sheets."""
+    """Trigger Metabase Card 74433 export to Google Sheets."""
+    end_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    start_date = (datetime.datetime.now() - datetime.timedelta(days=63)).strftime("%Y-%m-%d")
+    payload = {
+        "email": "khanhlp@ahamove.com",
+        "card_id": 74433,
+        "source": "metabase",
+        "filter": {"start_date": start_date, "end_date": end_date},
+        "spreadsheet_url": (
+            "https://docs.google.com/spreadsheets/d/"
+            "1BniOS6rJHulyyCLJb13jkc3UWuSRZBraLEmJI6xFNG0/edit?gid=2008886787#gid=2008886787"
+        ),
+    }
     req = urllib.request.Request(
         METABASE_EXPORT_URL,
-        data=json.dumps({}).encode("utf-8"),
+        data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json", "User-Agent": "DMAIChat_Bot/1.0"},
         method="POST",
     )
     try:
         with urllib.request.urlopen(req, timeout=25) as resp:
-            body = resp.read().decode("utf-8", errors="ignore")
-            return resp.status == 200, body[:200]
+            return resp.status in (200, 201, 202, 204), resp.read().decode("utf-8", errors="ignore")[:200]
     except Exception as exc:
         return False, str(exc)
 
 
-def fetch_ops_brief(force_refresh: bool = False) -> str:
-    """Fetch latest SGN Ops Pulse from GitHub snapshot (fast <200ms) with 5-min /tmp cache."""
+def fetch_card_74433_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
+    """Fetch Card 74433 rows from live Google Sheet CSV (if public) or GitHub JSON snapshot."""
     if not force_refresh and os.path.exists(CACHE_FILE):
         try:
             cached = json.loads(open(CACHE_FILE, encoding="utf-8").read())
-            if time.time() - float(cached.get("ts", 0)) < CACHE_TTL_SEC and cached.get("brief"):
-                return cached["brief"]
+            if time.time() - float(cached.get("ts", 0)) < CACHE_TTL_SEC and cached.get("rows"):
+                return cached["rows"], cached.get("source", "cache")
         except Exception:
             pass
 
-    req = urllib.request.Request(GITHUB_PULSE_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
-    with urllib.request.urlopen(req, timeout=10) as resp:
-        brief = resp.read().decode("utf-8", errors="replace").strip()
-    if not brief:
-        raise RuntimeError("Chưa có dữ liệu Ops Pulse trên GitHub.")
+    rows: list[dict[str, Any]] = []
+    source = ""
+
+    # 1. Try live Google Sheet CSV (works if sheet is shared "Anyone with the link -> Viewer")
     try:
-        with open(CACHE_FILE, "w", encoding="utf-8") as f:
-            json.dump({"ts": time.time(), "brief": brief}, f, ensure_ascii=False)
+        req = urllib.request.Request(SHEET_74433_CSV_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            text = resp.read().decode("utf-8", errors="replace")
+        if text and not text.lstrip().startswith("<"):
+            reader = csv.DictReader(io.StringIO(text))
+            parsed = [_normalize_row(r) for r in reader if r.get("order_date")]
+            if parsed:
+                rows = parsed
+                source = "Google Sheet Live"
     except Exception:
         pass
-    return brief
+
+    # 2. Fallback to GitHub snapshot (fast <200ms)
+    if not rows:
+        req = urllib.request.Request(GITHUB_74433_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
+        with urllib.request.urlopen(req, timeout=12) as resp:
+            raw_list = json.loads(resp.read().decode("utf-8"))
+        rows = [_normalize_row(r) for r in raw_list if r.get("order_date")]
+        source = "GitHub Snapshot (Card 74433)"
+
+    if rows:
+        try:
+            with open(CACHE_FILE, "w", encoding="utf-8") as f:
+                json.dump({"ts": time.time(), "source": source, "rows": rows}, f, ensure_ascii=False)
+        except Exception:
+            pass
+    return rows, source
 
 
-def build_ops_brief_from_sheet() -> str:
-    """Fetch heavy SGN Ops Google Sheet CSV (120s timeout, for GitHub Actions) and build brief."""
-    req = urllib.request.Request(SHEET_CSV_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
-    with urllib.request.urlopen(req, timeout=120) as resp:
-        csv_text = resp.read().decode("utf-8", errors="replace")
-
-    rows = list(csv.reader(io.StringIO(csv_text)))
-    if len(rows) <= 180:
-        raise RuntimeError("Dữ liệu Google Sheet chưa đầy đủ.")
-
-    cols: list[tuple[int, datetime.datetime]] = []
-    max_cols = len(rows[4]) if len(rows) > 4 else 0
-    for c in range(DAILY_START_COL, max_cols):
-        dt = _parse_sheet_date(_safe_cell(rows, 4, c))
-        if dt:
-            cols.append((c, dt))
-
-    if len(cols) < 3:
-        raise RuntimeError("Không đủ cột ngày để tổng hợp chỉ số.")
-
-    _, _ = cols[0]
-    col_y, date_y = cols[1]
-    col_dod, _ = cols[2]
-    col_lw = col_y + 7
-
-    def val(row: int, col: int) -> float | None:
-        return _parse_value(_safe_cell(rows, row, col))
-
-    request_y = val(21, col_y)
-    demand_y = val(28, col_y)
-    fr_y = val(180, col_y)
-    active_y = val(50, col_y)
-    sh_y = val(66, col_y)
-    prod_y = val(74, col_y)
-
-    request_dod = _delta_str(request_y, val(21, col_dod))
-    request_wow = _delta_str(request_y, val(21, col_lw))
-    demand_dod = _delta_str(demand_y, val(28, col_dod))
-    fr_dod = _delta_str(fr_y, val(180, col_dod), is_rate=True)
-    active_dod = _delta_str(active_y, val(50, col_dod))
-    sh_dod = _delta_str(sh_y, val(66, col_dod))
-    prod_dod = _delta_str(prod_y, val(74, col_dod))
-
-    notes = []
-    if fr_y is not None:
-        notes.append("FR đạt ngưỡng 81%" if fr_y >= 0.81 else "FR dưới ngưỡng 81%, cần soi channel/segment kéo tụt")
-    if request_y is not None and demand_y is not None and request_y > 0:
-        notes.append("Demand bám Request tốt" if demand_y / request_y >= 0.80 else "Demand/Request còn thấp, ưu tiên xử lý fulfillment")
-    if active_y is not None and sh_y is not None:
-        d_act = _delta_pct(active_y, val(50, col_dod)) or 0
-        d_sh = _delta_pct(sh_y, val(66, col_dod)) or 0
-        notes.append(
-            "Supply pool ổn định hơn hôm trước"
-            if d_act >= 0 and d_sh >= 0
-            else "Theo dõi supply/online hours vì có tín hiệu giảm DoD"
+def _format_day_table(rows: list[dict[str, Any]], target_date: str) -> str:
+    day_rows = [r for r in rows if r["order_date"] == target_date]
+    if not day_rows:
+        return f"Không có dữ liệu cho ngày `{target_date}`."
+    day_rows.sort(key=lambda r: (r["city_id"], -r["total_active"]))
+    lines = []
+    cur_city = None
+    for r in day_rows:
+        if r["city_id"] != cur_city:
+            cur_city = r["city_id"]
+            city_sum = sum(x["total_active"] for x in day_rows if x["city_id"] == cur_city)
+            lines.append(f"\n*{cur_city}* (Tổng active: *{city_sum:,}*)")
+        lines.append(
+            f"• `{r['tag']}`: *{r['total_active']:,}* "
+            f"(bike {r['bike']:,}, eco {r['eco']:,}, pool {r['pool']:,}, "
+            f"food {r['aifood']:,}, 2H {r['_2H']:,}, bulky {r['_2HBULKY']:,}, tmdt {r['TMDT']:,})"
         )
+    return "\n".join(lines).strip()
 
-    brief = (
-        f"🚀 *SGN Ops Daily Pulse — {date_y.strftime('%d-%b-%Y')}*\n\n"
-        f"*Tóm tắt nhanh hôm qua*\n"
-        f"• Request: *{_fmt_num(request_y)}* | DoD {request_dod} | WoW {request_wow}\n"
-        f"• Demand: *{_fmt_num(demand_y)}* | DoD {demand_dod}\n"
-        f"• FR: *{_fmt_pct(fr_y)}* | DoD {fr_dod}\n"
-        f"• Active: *{_fmt_num(active_y)}* | DoD {active_dod}\n"
-        f"• Supply Hours: *{_fmt_num(sh_y)}* | DoD {sh_dod}\n"
-        f"• Productivity: *{_fmt_num(prod_y, 1)}* | DoD {prod_dod}\n\n"
-        f"*Nhận định ngắn*\n" + "\n".join(f"• {n}" for n in notes)
+
+def fetch_ops_brief(force_refresh: bool = False) -> str:
+    """Return formatted Card 74433 summary for the latest available date."""
+    rows, source = fetch_card_74433_rows(force_refresh=force_refresh)
+    if not rows:
+        raise RuntimeError("Chưa có dữ liệu Card 74433.")
+    dates = sorted({r["order_date"] for r in rows})
+    latest = dates[-1]
+    prev = dates[-2] if len(dates) >= 2 else None
+
+    tot_latest = sum(r["total_active"] for r in rows if r["order_date"] == latest)
+    dod_str = ""
+    if prev:
+        tot_prev = sum(r["total_active"] for r in rows if r["order_date"] == prev)
+        if tot_prev > 0:
+            pct = (tot_latest - tot_prev) / tot_prev * 100
+            dod_str = f" | DoD {'+' if pct >= 0 else ''}{pct:.1f}%"
+
+    return (
+        f"📊 *Card 74433 — Active Drivers theo Segment ({latest})*\n"
+        f"_Nguồn: {source} | Tổng Active: *{tot_latest:,}*{dod_str}_\n\n"
+        + _format_day_table(rows, latest)
     )
-    try:
-        with open(CACHE_FILE, "w", encoding="utf-8") as f:
-            json.dump({"ts": time.time(), "brief": brief}, f, ensure_ascii=False)
-    except Exception:
-        pass
-    return brief
+
+
+def _extract_requested_dates(text: str, available_dates: list[str]) -> list[str]:
+    found: list[str] = []
+    for m in re.findall(r"(20\d{2}-\d{2}-\d{2})", text):
+        if m in available_dates and m not in found:
+            found.append(m)
+    for d_m in re.findall(r"\b(\d{1,2})[/-](\d{1,2})(?:[/-](20\d{2}))?\b", text):
+        dd, mm, yyyy = int(d_m[0]), int(d_m[1]), d_m[2] or "2026"
+        cand = f"{yyyy}-{mm:02d}-{dd:02d}"
+        if cand in available_dates and cand not in found:
+            found.append(cand)
+    return found
+
+
+def build_query_context(user_message: str) -> str:
+    """Build compact Card 74433 context (specific day, latest day, weekly & monthly trends) for AI."""
+    rows, source = fetch_card_74433_rows()
+    if not rows:
+        return ""
+
+    dates = sorted({r["order_date"] for r in rows})
+    target_dates = _extract_requested_dates(user_message, dates)
+    if not target_dates:
+        target_dates = dates[-2:] if len(dates) >= 2 else dates[-1:]
+
+    parts = [f"Nguồn: {source} | Khoảng dữ liệu: {dates[0]} đến {dates[-1]} (945 dòng)"]
+
+    for dt in target_dates:
+        parts.append(f"--- CHI TIẾT NGÀY {dt} ---")
+        for r in sorted([x for x in rows if x["order_date"] == dt], key=lambda x: (x["city_id"], x["tag"])):
+            parts.append(
+                f"{r['city_id']} | {r['tag']} | total={r['total_active']} | "
+                f"1h={r['active_1h']} 2h={r['active_2h']} 4h={r['active_4h']} | "
+                f"bike={r['bike']} eco={r['eco']} aibot={r['aibot']} pool={r['pool']} "
+                f"aifood={r['aifood']} TMDT={r['TMDT']} 2H={r['_2H']} 2HBULKY={r['_2HBULKY']} "
+                f"INDAY={r['INDAY']} 1HTMDT={r['_1HTMDT']}"
+            )
+
+    # Weekly trend (average daily active per week by city & tag)
+    weeks = sorted({r["week"] for r in rows if r["week"]})[-6:]
+    parts.append("--- TREND TUẦN (Tổng & TB ngày theo tuần/city/tag, 6 tuần gần nhất) ---")
+    for w in weeks:
+        w_rows = [r for r in rows if r["week"] == w]
+        n_days = len({r["order_date"] for r in w_rows}) or 1
+        by_ct: dict[tuple[str, str], int] = {}
+        for r in w_rows:
+            k = (r["city_id"], r["tag"])
+            by_ct[k] = by_ct.get(k, 0) + r["total_active"]
+        summary = ", ".join(f"{c}-{t}:{v//n_days}/ng" for (c, t), v in sorted(by_ct.items()))
+        parts.append(f"Tuần {w} ({n_days} ngày): {summary}")
+
+    # Monthly trend
+    months = sorted({r["month"] for r in rows if r["month"]})
+    parts.append("--- TREND THÁNG (TB ngày theo tháng/city/tag) ---")
+    for m in months:
+        m_rows = [r for r in rows if r["month"] == m]
+        n_days = len({r["order_date"] for r in m_rows}) or 1
+        by_ct = {}
+        for r in m_rows:
+            k = (r["city_id"], r["tag"])
+            by_ct[k] = by_ct.get(k, 0) + r["total_active"]
+        summary = ", ".join(f"{c}-{t}:{v//n_days}/ng" for (c, t), v in sorted(by_ct.items()))
+        parts.append(f"Tháng {m[:7]} ({n_days} ngày): {summary}")
+
+    return "\n".join(parts)

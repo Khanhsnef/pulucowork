@@ -377,11 +377,18 @@ def get_system_context(user_message=""):
     if loaded_files:
         print(f"📚 Loaded dynamic context files for query '{user_message}': {loaded_files}")
         
-    ops_keywords = ("ops", "kpi", "sgn", "đơn", "request", "demand", "fr", "fulfillment", "active", "supply", "productivity", "vận hành", "chỉ số", "hôm qua")
+    ops_keywords = (
+        "ops", "kpi", "sgn", "han", "exp", "đơn", "tài xế", "driver", "active",
+        "segment", "tag", "ft", "pt", "nim", "nlm", "return", "bike", "eco",
+        "pool", "aifood", "aibot", "tmdt", "2h", "bulky", "inday", "vận hành",
+        "chỉ số", "hôm qua", "tuần", "tháng", "trend", "ngày", "74433",
+    )
     if any(k in user_message.lower() for k in ops_keywords):
         try:
             import ops_metrics
-            context += f"### CHỈ SỐ VẬN HÀNH SGN HÀNG NGÀY (LIVE GOOGLE SHEET):\n{ops_metrics.fetch_ops_brief()}\n\n"
+            ops_ctx = ops_metrics.build_query_context(user_message)
+            if ops_ctx:
+                context += f"### DỮ LIỆU CARD 74433 (TÀI XẾ ACTIVE THEO SEGMENT/TAG & DỊCH VỤ):\n{ops_ctx}\n\n"
         except Exception as exc:
             print(f"⚠️ Ops metrics context error: {exc}")
 
