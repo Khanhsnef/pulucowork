@@ -46,14 +46,18 @@ Chạy lệnh sau trên Terminal:
 
 ---
 
-## Bước 4: Các lệnh sử dụng trong Nhóm
-| Lệnh trong Nhóm | Tác dụng |
+## Bước 4: Các lệnh sử dụng trong Nhóm & DM
+| Lệnh | Tác dụng & Ví dụ |
 | :--- | :--- |
-| `/menu` | Mở bảng nút bấm tương tác Tạo đơn & Gán đơn |
-| `/tao` | Tạo đơn UAT nhanh ngay lập tức, trả về mã đơn + nút **🚀 Gán ngay** |
-| `/new` | Tạo đơn tùy chỉnh từng bước (Dịch vụ, COD, Total Pay, Ghi chú) |
-| `/gan 26I8NU9H 84981792046` | Gán trực tiếp đơn `26I8NU9H` cho tài xế `84981792046` |
-| `/gan 26I8NU9H` | Hiển thị nút bấm 1 chạm gán đơn `26I8NU9H` cho tài xế mặc định hoặc nhập SĐT khác |
-| `/taogan` | Tạo đơn mới **và** tự động gán luôn cho tài xế mặc định trong 1 bước |
-| `/taogan 0981792046` | Tạo đơn mới **và** gán luôn cho tài xế `84981792046` |
-| `/token` | Kiểm tra thời hạn còn lại của JWT User & Admin |
+| `/menu` | Mở bảng nút bấm tương tác Tạo đơn, Gán đơn & Huỷ đơn |
+| `/help` | Xem hướng dẫn chi tiết toàn bộ câu lệnh & ví dụ |
+| `/tao` | Tạo đơn UAT nhanh theo mẫu, trả về mã đơn + nút **🚀 Gán ngay** / **🗑 Huỷ** |
+| `/new` | Tạo đơn tùy chỉnh (Tìm địa chỉ Ahamove / Ghim GPS 📎, Người gửi/nhận, COD, Tự tính phí; >50km tự nâng lên `SGN-VAN-500`) |
+| `/gan 26I8NU9H 0981792046` | Gán trực tiếp đơn `26I8NU9H` cho tài xế `84981792046` |
+| `/taogan [SĐT_TX]` | Tạo đơn mới **và** tự động gán luôn cho tài xế trong 1 bước |
+| `/huy 26Y4SFDF Khách hẹn mai` | Huỷ đơn kèm Note huỷ (lưu vào Order Logs) hoặc gõ `/huy <MÃ_ĐƠN>` để chọn lý do chuẩn Ahamove |
+| `/add_service [SĐT_TX] [SERVICE]` | Gắn thêm dịch vụ cho tài xế UAT (VD: `/add_service 84981792046 SGN-VAN-500`) |
+| `/token` | Kiểm tra thời hạn & trạng thái Auto-Refresh của JWT User/Admin |
+| `/nap` | Nạp cURL hoặc JWT mới (hỗ trợ Reply trực tiếp trong nhóm) |
+| `/bind_group` | Khóa Bot chỉ phục vụ duy nhất nhóm hiện tại |
+| `/cancel` | Hủy thao tác đang nhập dở |

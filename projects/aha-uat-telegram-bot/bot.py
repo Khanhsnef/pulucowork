@@ -52,6 +52,7 @@ def register_bot_commands() -> None:
         print("🔓 Đã gỡ Webhook cũ để kích hoạt Long Polling.")
     commands = [
         {"command": "menu", "description": "Bảng điều khiển Tạo đơn & Gán đơn"},
+        {"command": "help", "description": "Xem hướng dẫn đầy đủ tất cả câu lệnh & ví dụ"},
         {"command": "tao", "description": "Tạo đơn UAT nhanh theo mẫu"},
         {"command": "new", "description": "Tạo đơn tùy chỉnh (Địa chỉ, Người gửi/nhận, COD...)"},
         {"command": "gan", "description": "Gán đơn XYZ cho tài xế: /gan <MÃ_ĐƠN> [SĐT_TX]"},
@@ -1190,19 +1191,56 @@ def handle_message(message: dict[str, Any]) -> None:
                 )
             return
 
-        if cmd in ("/start", "/menu", "/help"):
+        if cmd in ("/start", "/menu"):
+            USER_STATES.pop((chat_id, user_id), None)
+            menu_text = (
+                "🚀 <b>Ahamove UAT Group Bot — Tạo đơn &amp; Gán tài xế (24/7 Cloud)</b>\n\n"
+                "<b>Lệnh dùng nhanh:</b>\n"
+                "• <code>/tao</code> — Tạo đơn nhanh theo mẫu\n"
+                "• <code>/new</code> — Tạo đơn tùy chỉnh (Địa chỉ/GPS, Người gửi/nhận, COD)\n"
+                "• <code>/gan &lt;MÃ_ĐƠN&gt; [SĐT_TX]</code> — Gán đơn cho tài xế\n"
+                "• <code>/taogan [SĐT_TX]</code> — Tạo đơn &amp; Gán ngay trong 1 bước\n"
+                "• <code>/huy &lt;MÃ_ĐƠN&gt; [Note huỷ]</code> — Huỷ đơn kèm Note\n"
+                "• <code>/help</code> — Xem chi tiết toàn bộ câu lệnh &amp; ví dụ cách dùng"
+            )
+            send_msg(chat_id, menu_text, reply_markup=main_menu_keyboard(), reply_to_message_id=msg_id)
+            return
+
+        if cmd == "/help":
             USER_STATES.pop((chat_id, user_id), None)
             help_text = (
-                "🚀 <b>Ahamove UAT Group Bot — Tạo đơn &amp; Gán tài xế (24/7 Cloud)</b>\n\n"
-                "<b>Lệnh dùng nhanh trên điện thoại:</b>\n"
-                "• <code>/tao</code> (hoặc <code>/quick</code>) — Tạo đơn UAT nhanh theo mẫu\n"
-                "• <code>/new</code> — Tạo đơn tùy chỉnh (Tìm địa chỉ Ahamove / Ghim GPS 📎, Người gửi, Người nhận, COD, Tự tính phí)\n"
-                "• <code>/gan &lt;MÃ_ĐƠN&gt; [SĐT_TX]</code> — Gán đơn XYZ trực tiếp\n"
-                "• <code>/taogan [SĐT_TX]</code> — Tạo đơn mới &amp; Gán luôn trong 1 bước\n"
-                "• <code>/huy &lt;MÃ_ĐƠN&gt; [Note huỷ]</code> — Huỷ đơn kèm lý do / Note huỷ\n"
-                "• <code>/token</code> — Xem trạng thái Auto-Refresh Token\n"
-                "• <code>/bind_group</code> — Khóa Bot vào nhóm hiện tại\n"
-                "• <code>/cancel</code> — Hủy thao tác đang nhập"
+                "📖 <b>HƯỚNG DẪN SỬ DỤNG AHAMOVE UAT BOT (24/7 CLOUD)</b>\n\n"
+                "<b>1️⃣ TẠO ĐƠN HÀNG UAT</b>\n"
+                "• <code>/tao</code> (hoặc <code>/quick</code>)\n"
+                "  ↳ Tạo ngay 1 đơn mẫu UAT, trả về Mã đơn kèm nút bấm <b>Gán ngay</b> / <b>Huỷ</b>.\n"
+                "• <code>/new</code>\n"
+                "  ↳ Luồng tạo đơn tùy chỉnh từng bước:\n"
+                "    - Chọn dịch vụ: <code>SGN-BIKE</code>, <code>SGN-ECO</code> (≤50km), <code>SGN-SAMEDAY</code> (≤30km), <code>SGN-VAN-500</code> / <code>SGN-TRUCK-500</code> (≤300km). Đơn &gt; 50km tự động nâng lên <code>SGN-VAN-500</code>.\n"
+                "    - Chọn địa chỉ Điểm lấy / Điểm giao: gõ tên đường/tòa nhà để tìm trên bản đồ Ahamove, <b>bấm 📎 → Location</b> để kéo ghim GPS trên điện thoại, hoặc dán tọa độ <code>lat, lng</code>.\n"
+                "    - Nhập Tên | SĐT người gửi &amp; người nhận, COD, Ghi chú (tự động tính cước phí chuẩn UAT).\n"
+                "• <code>/taogan [SĐT_TX]</code> (hoặc <code>/create_assign</code>)\n"
+                "  ↳ Tạo đơn mẫu mới và <b>tự động gán ngay</b> cho tài xế mặc định (<code>" + _esc(default_drv) + "</code>) hoặc SĐT chỉ định.\n"
+                "  <i>VD:</i> <code>/taogan 0981792046</code>\n\n"
+                "<b>2️⃣ GÁN ĐƠN CHO TÀI XẾ</b>\n"
+                "• <code>/gan &lt;MÃ_ĐƠN&gt; [SĐT_TX]</code> (hoặc <code>/assign</code>)\n"
+                "  ↳ Gán đơn XYZ cho tài xế (tự đổi <code>0xxx</code> → <code>84xxx</code>). Nếu bỏ trống SĐT sẽ hiện nút chọn tài xế mặc định.\n"
+                "  <i>VD:</i> <code>/gan 26I8NU9H 0981792046</code>\n\n"
+                "<b>3️⃣ HUỶ ĐƠN KÈM NOTE (ORDER LOGS)</b>\n"
+                "• <code>/huy &lt;MÃ_ĐƠN&gt; [Note huỷ]</code>\n"
+                "  ↳ Nhập trực tiếp Note huỷ hoặc gõ <code>/huy &lt;MÃ_ĐƠN&gt;</code> để chọn lý do chuẩn Ahamove / nhập note tự do.\n"
+                "  <i>VD:</i> <code>/huy 26Y4SFDF Khách hẹn giao ngày mai</code>\n\n"
+                "<b>4️⃣ QUẢN TRỊ TÀI XẾ &amp; TOKEN</b>\n"
+                "• <code>/add_service [SĐT_TX] [SERVICE_ID]</code>\n"
+                "  ↳ Gắn thêm dịch vụ cho tài xế UAT (mặc định: <code>SGN-VAN-500, SGN-TRUCK-500...</code>).\n"
+                "  <i>VD:</i> <code>/add_service 84981792046 SGN-VAN-500</code>\n"
+                "• <code>/token</code> — Kiểm tra thời hạn User/Admin Token &amp; trạng thái Auto-Refresh.\n"
+                "• <code>/nap [cURL hoặc JWT]</code> — Nạp mới cURL/Token thủ công (hỗ trợ Reply trong nhóm).\n\n"
+                "<b>5️⃣ CÀI ĐẶT NHÓM &amp; TIỆN ÍCH</b>\n"
+                "• <code>/menu</code> — Mở bảng nút bấm tương tác.\n"
+                "• <code>/chatid</code> — Xem Chat ID hiện tại.\n"
+                "• <code>/bind_group</code> — Khoá Bot chỉ phục vụ riêng nhóm hiện tại.\n"
+                "• <code>/cancel</code> — Huỷ thao tác đang nhập dở.\n\n"
+                "💡 <i>Mẹo dùng trong Nhóm: Khi Bot hỏi nhập chữ hoặc gửi ghim Vị trí 📎, hãy <b>Reply (Trả lời)</b> trực tiếp vào tin nhắn của Bot.</i>"
             )
             send_msg(chat_id, help_text, reply_markup=main_menu_keyboard(), reply_to_message_id=msg_id)
             return
