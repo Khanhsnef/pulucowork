@@ -168,44 +168,39 @@ def _build_insights(rows: list[dict[str, Any]], dates: list[str]) -> list[str]:
     tot_cur = sum(r["total_active"] for r in cur_rows) or 1
     insights: list[str] = []
 
-    # 1. City DoD & WoW movers
-    city_parts = []
+    # 1. Separate insights for NW, SGN, HAN, EXP
+    nw_prev = sum(r["total_active"] for r in prev_rows) if prev_rows else 0
+    nw_wow = sum(r["total_active"] for r in wow_rows) if wow_rows else 0
+    nw_dod_s = f"{((tot_cur - nw_prev) / nw_prev * 100):+.1f}%" if nw_prev else "N/A"
+    nw_wow_s = f"{((tot_cur - nw_wow) / nw_wow * 100):+.1f}%" if nw_wow else "N/A"
+    ft_pt = sum(r["total_active"] for r in cur_rows if r["tag"] in ("FT", "PT"))
+    ret_cur = sum(r["total_active"] for r in cur_rows if r["tag"] == "return")
+    new_cur = sum(r["total_active"] for r in cur_rows if r["tag"] in ("NIM", "NLM"))
+    insights.append(
+        f"*NW:* *{tot_cur:,}* TX (DoD {nw_dod_s}, WoW {nw_wow_s}) — Core `FT+PT` *{ft_pt / tot_cur * 100:.1f}%*, "
+        f"`return` *{ret_cur:,}*, mới (`NIM+NLM`) *{new_cur:,}*."
+    )
+
     for city in ("SGN", "HAN", "EXP"):
         c_cur = sum(r["total_active"] for r in cur_rows if r["city_id"] == city)
         c_prev = sum(r["total_active"] for r in prev_rows if r["city_id"] == city)
         c_wow = sum(r["total_active"] for r in wow_rows if r["city_id"] == city)
         dod = f"{((c_cur - c_prev) / c_prev * 100):+.1f}%" if c_prev else "N/A"
         wow = f"{((c_cur - c_wow) / c_wow * 100):+.1f}%" if c_wow else "N/A"
-        city_parts.append(f"{city} (DoD {dod}, WoW {wow})")
-    insights.append("Biến động khu vực: " + " | ".join(city_parts) + ".")
-
-    # 2. Segment mix (Core FT+PT vs Return vs New NIM+NLM)
-    ft_pt = sum(r["total_active"] for r in cur_rows if r["tag"] in ("FT", "PT"))
-    ret_cur = sum(r["total_active"] for r in cur_rows if r["tag"] == "return")
-    ret_prev = sum(r["total_active"] for r in prev_rows if r["tag"] == "return")
-    new_cur = sum(r["total_active"] for r in cur_rows if r["tag"] in ("NIM", "NLM"))
-    ret_dod = f" ({((ret_cur - ret_prev) / ret_prev * 100):+.1f}% DoD)" if ret_prev else ""
-    insights.append(
-        f"Cơ cấu lực lượng: Core `FT+PT` chiếm *{ft_pt / tot_cur * 100:.1f}%* ({ft_pt:,} TX), "
-        f"`return` đạt *{ret_cur:,}*{ret_dod}, tài xế mới (`NIM+NLM`) đạt *{new_cur:,}* ({new_cur / tot_cur * 100:.1f}%)."
-    )
-
-    # 3. Alert on sharpest DoD drop or service highlight
-    if prev_rows:
-        drops = []
-        for city in ("SGN", "HAN", "EXP"):
+        top_seg = max([r for r in cur_rows if r["city_id"] == city], key=lambda x: x["total_active"], default=None)
+        seg_note = f" | Top: `{top_seg['tag']}` ({top_seg['total_active']:,})" if top_seg else ""
+        drop_note = ""
+        if prev_rows:
+            c_drops = []
             for tag in ("FT", "PT", "return", "NIM", "NLM"):
                 v1 = sum(r["total_active"] for r in cur_rows if r["city_id"] == city and r["tag"] == tag)
                 v0 = sum(r["total_active"] for r in prev_rows if r["city_id"] == city and r["tag"] == tag)
                 if v0 >= 50:
-                    pct = (v1 - v0) / v0 * 100
-                    drops.append((pct, city, tag, v1 - v0))
-        drops.sort()
-        if drops and drops[0][0] <= -3.0:
-            p, c, t, diff = drops[0]
-            insights.append(f"Điểm cần chú ý: `{c}-{t}` giảm mạnh nhất (*{p:.1f}%*, {diff:+,} TX so với hôm trước).")
-        else:
-            insights.append("Ổn định: Không có segment lớn nào giảm sâu (>3%) so với hôm trước.")
+                    c_drops.append(((v1 - v0) / v0 * 100, tag, v1 - v0))
+            c_drops.sort()
+            if c_drops and c_drops[0][0] <= -3.0:
+                drop_note = f" | Chú ý `{c_drops[0][1]}` *{c_drops[0][0]:.1f}%* ({c_drops[0][2]:+,})"
+        insights.append(f"*{city}:* *{c_cur:,}* TX (DoD {dod}, WoW {wow}){seg_note}{drop_note}.")
 
     return insights
 
@@ -372,28 +367,21 @@ def fetch_kpi_brief(force_refresh: bool = False) -> str:
             )
         lines.append("")
 
-    # Insights
+    # Insights separated by NW, SGN, HAN, EXP
     insights = []
-    if p_rq:
-        insights.append(f"Nationwide (NW) đạt *{nw_cp:,}/{nw_rq:,}* đơn hoàn thành (FR *{nw_fr:.2f}%*, AR *{nw_ar:.2f}%*, {nw_fr - p_fr:+.2f}pp DoD).")
-    reg_frs = []
-    for reg in ("SGN", "HAN", "EXP"):
-        rq, _, _, _, fr = agg([r for r in cur if r["region"] == reg])
-        if rq > 0:
-            reg_frs.append((fr, reg, rq))
-    if reg_frs:
-        reg_frs.sort()
-        low_fr, low_reg, _ = reg_frs[0]
-        high_fr, high_reg, _ = reg_frs[-1]
-        insights.append(f"Khu vực FR cao nhất: `{high_reg}` (*{high_fr:.1f}%*) | Thấp nhất: `{low_reg}` (*{low_fr:.1f}%*).")
-    nw_svcs = [r for r in cur if r["region"] == "NW" and r["requested"] >= 100]
-    if nw_svcs:
-        weak_svc = min(nw_svcs, key=lambda x: x["fr"])
-        insights.append(
-            f"Dịch vụ cần chú ý (NW >=100 req): `{weak_svc['service_type']}` có FR thấp nhất (*{weak_svc['fr']*100:.1f}%*, AR *{weak_svc['ar']*100:.1f}%*, {weak_svc['requested']:,} req)."
-        )
-    if w_rq:
-        insights.append(f"So với tuần trước (WoW): NW Requested *{(nw_rq - w_rq) / w_rq * 100:+.1f}%*, FR *{nw_fr - w_fr:+.2f}pp*.")
+    for reg in ("NW", "SGN", "HAN", "EXP"):
+        r_cur = [r for r in cur if r["region"] == reg]
+        rq, ac, cp, ar, fr = agg(r_cur)
+        if rq == 0:
+            continue
+        p_r_rq, _, _, _, p_r_fr = agg([r for r in prv if r["region"] == reg])
+        w_r_rq, _, _, _, w_r_fr = agg([r for r in wov if r["region"] == reg])
+        dod_s = f" | DoD Req {(rq - p_r_rq) / p_r_rq * 100:+.1f}%, FR {fr - p_r_fr:+.2f}pp" if p_r_rq else ""
+        wow_s = f" | WoW Req {(rq - w_r_rq) / w_r_rq * 100:+.1f}%" if w_r_rq else ""
+        svcs = [r for r in r_cur if r["requested"] >= 50]
+        weak = min(svcs, key=lambda x: x["fr"]) if svcs else None
+        weak_s = f" | Yếu nhất: `{weak['service_type']}` (FR *{weak['fr']*100:.1f}%*)" if weak else ""
+        insights.append(f"*{reg}:* *{cp:,}/{rq:,}* đơn (AR *{ar:.1f}%*, FR *{fr:.1f}%*){dod_s}{wow_s}{weak_s}.")
 
     return "\n".join(lines).strip() + "\n\n💡 *Insights nhanh*\n" + "\n".join(f"• {x}" for x in insights)
 
@@ -524,15 +512,20 @@ def fetch_driver_brief(force_refresh: bool = False) -> str:
         lines.append("")
 
     insights = [
-        f"Toàn quốc: Utilization *{tot['util']:.1f}%*, Auto-Accept *{tot['aa_pct']:.1f}%*, AR Noti *{tot['ar_noti']:.1f}%*, CR POC *{tot['cr_poc']:.2f}%*.",
-        f"Tỷ trọng thưởng chiếm *{tot['rew_pct']:.2f}%* tổng thu nhập tài xế.",
+        f"*NW:* TB/TX *{tot['inc_per_drv']/1000:,.0f}k*, EPH *{tot['eph']/1000:,.1f}k*, PPH *{tot['pph']:.2f}*, "
+        f"Util *{tot['util']:.1f}%*, AA *{tot['aa_pct']:.1f}%*, CR POC *{tot['cr_poc']:.2f}%* (Thưởng *{tot['rew_pct']:.2f}%*)."
     ]
-    high_cr = [r for r in cur if r["accept_order"] >= 200]
-    if high_cr:
-        worst = max(high_cr, key=lambda x: x["cancel_poc"] / x["accept_order"])
+    for city in ("SGN", "HAN", "EXP"):
+        c_rows = [r for r in cur if r["city_id"] == city]
+        if not c_rows:
+            continue
+        ca = agg(c_rows)
+        hi_cr = [r for r in c_rows if r["accept_order"] >= 100]
+        worst = max(hi_cr, key=lambda x: x["cancel_poc"] / x["accept_order"]) if hi_cr else None
+        w_note = f" | CR cao nhất: `{worst['driver_segment']}` (*{worst['cancel_poc']/worst['accept_order']*100:.1f}%*)" if worst else ""
         insights.append(
-            f"Segment CR POC cao nhất: `{worst['city_id']}-{worst['driver_segment']}` "
-            f"(*{worst['cancel_poc']/worst['accept_order']*100:.1f}%*, {worst['cancel_poc']:,} đơn hủy)."
+            f"*{city}:* *{int(ca['drv']):,}* TX | TB/TX *{ca['inc_per_drv']/1000:,.0f}k* | "
+            f"EPH *{ca['eph']/1000:,.1f}k* | PPH *{ca['pph']:.2f}* | AA *{ca['aa_pct']:.1f}%*{w_note}."
         )
 
     return "\n".join(lines).strip() + "\n\n💡 *Insights nhanh*\n" + "\n".join(f"• {x}" for x in insights)

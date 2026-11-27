@@ -411,7 +411,14 @@ def get_system_context(user_message=""):
             import ops_metrics
             ops_ctx = ops_metrics.build_query_context(user_message)
             if ops_ctx:
-                context += f"### DỮ LIỆU CARD 74433 (TÀI XẾ ACTIVE THEO SEGMENT/TAG & DỊCH VỤ):\n{ops_ctx}\n\n"
+                context += (
+                    "### QUY TẮC TRẢ LỜI OPS INSIGHTS:\n"
+                    "- Khi trả lời hoặc đưa ra insights vận hành, BẮT BUỘC bóc tách riêng thành 4 mục rõ ràng: "
+                    "**1. NW (Nationwide)**, **2. SGN**, **3. HAN**, **4. EXP**.\n"
+                    "- Phân biệt chính xác: Card 74433 & Card 75557 là số lượng **Tài xế Active** (không gọi là đơn hàng); "
+                    "Card 67888 mới là số lượng **Đơn hàng** (Requested, Accept, Completed, AR, FR).\n\n"
+                    f"### DỮ LIỆU OPS (CARD 74433, 67888, 75557):\n{ops_ctx}\n\n"
+                )
         except Exception as exc:
             print(f"⚠️ Ops metrics context error: {exc}")
 
