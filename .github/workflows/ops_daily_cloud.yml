@@ -54,6 +54,7 @@ jobs:
           jobs = [
               ('0', 'order_date', 'Output/Ahamove/04. OPS_METRICS/card_74433_63d.json'),
               ('49583103', 'period', 'Output/Ahamove/04. OPS_METRICS/card_67888_63d.json'),
+              ('2043805321', 'period', 'Output/Ahamove/04. OPS_METRICS/card_75557_63d.json'),
           ]
           for gid, date_col, out_path in jobs:
               url = f'https://docs.google.com/spreadsheets/d/1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/export?format=csv&gid={gid}'
@@ -70,7 +71,7 @@ jobs:
           "
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "Output/Ahamove/04. OPS_METRICS/card_74433_63d.json" "Output/Ahamove/04. OPS_METRICS/card_67888_63d.json"
+          git add "Output/Ahamove/04. OPS_METRICS/card_74433_63d.json" "Output/Ahamove/04. OPS_METRICS/card_67888_63d.json" "Output/Ahamove/04. OPS_METRICS/card_75557_63d.json"
           if ! git diff --staged --quiet; then
             git commit -m "chore(ops): sync Card 74433 & 67888 63-day snapshots"
             git push

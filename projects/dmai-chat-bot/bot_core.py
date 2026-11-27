@@ -383,8 +383,10 @@ def get_system_context(user_message=""):
         "ops", "kpi", "sgn", "han", "exp", "nw", "nationwide", "đơn", "tài xế", "driver", "active",
         "segment", "tag", "ft", "pt", "nim", "nlm", "return", "bike", "eco",
         "pool", "aifood", "aibot", "tmdt", "2h", "4h", "bulky", "inday", "vận hành",
-        "chỉ số", "hôm qua", "tuần", "tháng", "trend", "ngày", "74433", "67888",
+        "chỉ số", "hôm qua", "tuần", "tháng", "trend", "ngày", "74433", "67888", "75557",
         "requested", "accept", "accepted", "completed", "ar", "fr", "fulfillment", "acceptance", "service",
+        "income", "thu nhập", "thưởng", "reward", "eph", "pph", "utilization", "auto-accept",
+        "hard", "lcd", "gdr", "rating", "cancel", "cr", "ranking",
     )
     if any(k in user_message.lower() for k in ops_keywords):
         try:

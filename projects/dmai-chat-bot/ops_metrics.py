@@ -19,6 +19,10 @@ SHEET_67888_CSV_URL = (
     "https://docs.google.com/spreadsheets/d/"
     "1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/export?format=csv&gid=49583103"
 )
+SHEET_75557_CSV_URL = (
+    "https://docs.google.com/spreadsheets/d/"
+    "1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/export?format=csv&gid=2043805321"
+)
 GITHUB_74433_URL = (
     "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
     "Output/Ahamove/04.%20OPS_METRICS/card_74433_63d.json"
@@ -27,8 +31,13 @@ GITHUB_67888_URL = (
     "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
     "Output/Ahamove/04.%20OPS_METRICS/card_67888_63d.json"
 )
+GITHUB_75557_URL = (
+    "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
+    "Output/Ahamove/04.%20OPS_METRICS/card_75557_63d.json"
+)
 CACHE_FILE = "/tmp/card_74433_cache.json"
 CACHE_67888_FILE = "/tmp/card_67888_cache.json"
+CACHE_75557_FILE = "/tmp/card_75557_cache.json"
 CACHE_TTL_SEC = 300
 SERVICE_COLS = [
     "total_active", "active_1h", "active_2h", "active_4h",
@@ -389,6 +398,146 @@ def fetch_kpi_brief(force_refresh: bool = False) -> str:
     return "\n".join(lines).strip() + "\n\n💡 *Insights nhanh*\n" + "\n".join(f"• {x}" for x in insights)
 
 
+def fetch_card_75557_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
+    """Fetch Card 75557 rows from live Google Sheet CSV (tab 75557) or GitHub snapshot."""
+    if not force_refresh and os.path.exists(CACHE_75557_FILE):
+        try:
+            cached = json.loads(open(CACHE_75557_FILE, encoding="utf-8").read())
+            if time.time() - float(cached.get("ts", 0)) < CACHE_TTL_SEC and cached.get("rows"):
+                return cached["rows"], cached.get("source", "cache")
+        except Exception:
+            pass
+
+    def _norm7(r: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "period": str(r.get("period", ""))[:10],
+            "city_id": str(r.get("city_id", "")).strip(),
+            "driver_segment": str(r.get("driver_segment", "")).strip(),
+            "ranking_driver": _to_int(r.get("ranking_driver", 0)),
+            "total_driver": _to_int(r.get("total_driver", 0)),
+            "total_stp": _to_int(r.get("total_stp", 0)),
+            "order_income": _to_float(r.get("order_income", 0)),
+            "reward_income": _to_float(r.get("reward_income", 0)),
+            "online_hours": _to_float(r.get("online_hours", 0)),
+            "busy_hours": _to_float(r.get("busy_hours", 0)),
+            "accept_order": _to_int(r.get("accept_order", 0)),
+            "cancel_poc": _to_int(r.get("cancel_poc", 0)),
+            "accept_noti": _to_int(r.get("accept_noti", 0)),
+            "total_noti": _to_int(r.get("total_noti", 0)),
+            "rating_order": _to_int(r.get("rating_order", 0)),
+            "rating_star": _to_int(r.get("rating_star", 0)),
+            "bad_rating_order": _to_int(r.get("bad_rating_order", 0)),
+            "total_aa_driver": _to_int(r.get("total_aa_driver", 0)),
+            "hard_driver": _to_int(r.get("hard_driver", 0)),
+            "lcd_driver": _to_int(r.get("lcd_driver", 0)),
+            "gdr_driver": _to_int(r.get("gdr_driver", 0)),
+        }
+
+    rows: list[dict[str, Any]] = []
+    source = ""
+    try:
+        req = urllib.request.Request(SHEET_75557_CSV_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            text = resp.read().decode("utf-8", errors="replace")
+        if text and not text.lstrip().startswith("<"):
+            parsed = [_norm7(r) for r in csv.DictReader(io.StringIO(text)) if r.get("period")]
+            if parsed:
+                rows = parsed
+                source = "Google Sheet Live (75557)"
+    except Exception:
+        pass
+
+    if not rows:
+        req = urllib.request.Request(GITHUB_75557_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
+        with urllib.request.urlopen(req, timeout=12) as resp:
+            raw_list = json.loads(resp.read().decode("utf-8"))
+        rows = [_norm7(r) for r in raw_list if r.get("period")]
+        source = "GitHub Snapshot (Card 75557)"
+
+    if rows:
+        try:
+            with open(CACHE_75557_FILE, "w", encoding="utf-8") as f:
+                json.dump({"ts": time.time(), "source": source, "rows": rows}, f, ensure_ascii=False)
+        except Exception:
+            pass
+    return rows, source
+
+
+def fetch_driver_brief(force_refresh: bool = False) -> str:
+    """Return formatted Card 75557 summary (Driver Income, EPH, PPH, Util, AA, CR POC) + insights."""
+    rows, source = fetch_card_75557_rows(force_refresh=force_refresh)
+    if not rows:
+        raise RuntimeError("Chưa có dữ liệu Card 75557.")
+    dates = sorted({r["period"] for r in rows})
+    latest = dates[-1]
+    prev = dates[-2] if len(dates) >= 2 else None
+    cur = [r for r in rows if r["period"] == latest]
+    prv = [r for r in rows if r["period"] == prev] if prev else []
+
+    def agg(sub: list[dict[str, Any]]) -> dict[str, float]:
+        drv = sum(x["total_driver"] for x in sub)
+        stp = sum(x["total_stp"] for x in sub)
+        inc = sum(x["order_income"] + x["reward_income"] for x in sub)
+        rew = sum(x["reward_income"] for x in sub)
+        onl = sum(x["online_hours"] for x in sub)
+        bsy = sum(x["busy_hours"] for x in sub)
+        aa = sum(x["total_aa_driver"] for x in sub)
+        acc = sum(x["accept_order"] for x in sub)
+        cpoc = sum(x["cancel_poc"] for x in sub)
+        anoti = sum(x["accept_noti"] for x in sub)
+        tnoti = sum(x["total_noti"] for x in sub)
+        return {
+            "drv": drv,
+            "inc_per_drv": inc / drv if drv else 0.0,
+            "eph": inc / onl if onl else 0.0,
+            "pph": stp / onl if onl else 0.0,
+            "util": bsy / onl * 100 if onl else 0.0,
+            "aa_pct": aa / drv * 100 if drv else 0.0,
+            "cr_poc": cpoc / acc * 100 if acc else 0.0,
+            "ar_noti": anoti / tnoti * 100 if tnoti else 0.0,
+            "rew_pct": rew / inc * 100 if inc else 0.0,
+        }
+
+    tot = agg(cur)
+    tot_p = agg(prv) if prv else {}
+    inc_dod = f" ({(tot['inc_per_drv'] - tot_p['inc_per_drv']) / tot_p['inc_per_drv'] * 100:+.1f}% DoD)" if tot_p.get("inc_per_drv") else ""
+
+    lines = [
+        f"🛵 *Card 75557 — Driver Income & Efficiency ({latest})*",
+        f"_Nguồn: {source}_ | TB Thu nhập/TX: *{tot['inc_per_drv']/1000:,.0f}k*{inc_dod} | EPH: *{tot['eph']/1000:,.1f}k* | PPH: *{tot['pph']:.2f}*\n",
+    ]
+    for city in ("SGN", "HAN", "EXP"):
+        c_rows = sorted([r for r in cur if r["city_id"] == city], key=lambda x: -x["total_driver"])
+        if not c_rows:
+            continue
+        ca = agg(c_rows)
+        lines.append(
+            f"*{city}* — TX: *{int(ca['drv']):,}* | TB/TX: *{ca['inc_per_drv']/1000:,.0f}k* | "
+            f"EPH: *{ca['eph']/1000:,.1f}k* | PPH: *{ca['pph']:.2f}* | Util: *{ca['util']:.1f}%* | AA: *{ca['aa_pct']:.1f}%*"
+        )
+        for r in c_rows:
+            sa = agg([r])
+            lines.append(
+                f"• `{r['driver_segment']}`: {r['total_driver']:,} TX | {sa['inc_per_drv']/1000:,.0f}k/TX | "
+                f"EPH {sa['eph']/1000:,.1f}k | PPH {sa['pph']:.2f} | AA {sa['aa_pct']:.0f}% | CR {sa['cr_poc']:.1f}%"
+            )
+        lines.append("")
+
+    insights = [
+        f"Toàn quốc: Utilization *{tot['util']:.1f}%*, Auto-Accept *{tot['aa_pct']:.1f}%*, AR Noti *{tot['ar_noti']:.1f}%*, CR POC *{tot['cr_poc']:.2f}%*.",
+        f"Tỷ trọng thưởng chiếm *{tot['rew_pct']:.2f}%* tổng thu nhập tài xế.",
+    ]
+    high_cr = [r for r in cur if r["accept_order"] >= 200]
+    if high_cr:
+        worst = max(high_cr, key=lambda x: x["cancel_poc"] / x["accept_order"])
+        insights.append(
+            f"Segment CR POC cao nhất: `{worst['city_id']}-{worst['driver_segment']}` "
+            f"(*{worst['cancel_poc']/worst['accept_order']*100:.1f}%*, {worst['cancel_poc']:,} đơn hủy)."
+        )
+
+    return "\n".join(lines).strip() + "\n\n💡 *Insights nhanh*\n" + "\n".join(f"• {x}" for x in insights)
+
+
 def _extract_requested_dates(text: str, available_dates: list[str]) -> list[str]:
     found: list[str] = []
     for m in re.findall(r"(20\d{2}-\d{2}-\d{2})", text):
@@ -484,5 +633,31 @@ def build_query_context(user_message: str) -> str:
                     parts.append(f"{label}: " + " | ".join(reg_parts))
     except Exception as exc:
         print(f"⚠️ Card 67888 context error: {exc}")
+
+    # Card 75557 context (Driver Income, EPH, PPH, Util, AA, CR POC, Rating)
+    try:
+        rows_75557, src_75557 = fetch_card_75557_rows()
+        if rows_75557:
+            d7_list = sorted({r["period"] for r in rows_75557})
+            t_dates7 = _extract_requested_dates(user_message, d7_list) or (d7_list[-2:] if len(d7_list) >= 2 else d7_list[-1:])
+            parts.append(f"\n=== CARD 75557 ({src_75557}: {d7_list[0]} -> {d7_list[-1]}) ===")
+            for dt in t_dates7:
+                parts.append(f"--- DRIVER INCOME & QUALITY NGÀY {dt} ---")
+                for r in sorted([x for x in rows_75557 if x["period"] == dt], key=lambda x: (x["city_id"], x["driver_segment"])):
+                    inc = r["order_income"] + r["reward_income"]
+                    drv = r["total_driver"] or 1
+                    onl = r["online_hours"] or 1
+                    acc = r["accept_order"] or 1
+                    tnoti = r["total_noti"] or 1
+                    rord = r["rating_order"] or 1
+                    parts.append(
+                        f"{r['city_id']} | {r['driver_segment']} | rank_drv={r['ranking_driver']} active={r['total_driver']} "
+                        f"hard={r['hard_driver']} aa={r['total_aa_driver']} lcd={r['lcd_driver']} gdr={r['gdr_driver']} | "
+                        f"inc/drv={inc/drv:,.0f} rew={r['reward_income']:,.0f} EPH={inc/onl:,.0f} PPH={r['total_stp']/onl:.2f} "
+                        f"Util={r['busy_hours']/onl*100:.1f}% AR_noti={r['accept_noti']/tnoti*100:.1f}% "
+                        f"CR_poc={r['cancel_poc']/acc*100:.2f}% Rating={r['rating_star']/rord:.2f}"
+                    )
+    except Exception as exc:
+        print(f"⚠️ Card 75557 context error: {exc}")
 
     return "\n".join(parts)

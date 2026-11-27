@@ -50,6 +50,13 @@ def process_update(update: dict[str, Any]) -> None:
             except Exception as exc:
                 bot_core.send_telegram_msg(chat_id, f"⚠️ Không lấy được chỉ số KPI (Card 67888): `{exc}`", reply_to_message_id=msg_id)
             return
+        if cmd in ("/driver", "/income"):
+            try:
+                brief = ops_metrics.fetch_driver_brief(force_refresh=(arg == "refresh"))
+                bot_core.send_telegram_msg(chat_id, brief, reply_to_message_id=msg_id)
+            except Exception as exc:
+                bot_core.send_telegram_msg(chat_id, f"⚠️ Không lấy được chỉ số Driver (Card 75557): `{exc}`", reply_to_message_id=msg_id)
+            return
         if cmd in ("/mac", "/health", "/mac_clean") and os.environ.get("VERCEL"):
             bot_core.send_telegram_msg(
                 chat_id,
