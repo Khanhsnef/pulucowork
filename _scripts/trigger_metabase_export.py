@@ -47,14 +47,5 @@ def trigger_metabase_export(card_id: int, spreadsheet_url: str, email: str, days
         print(f"\n❌ LỖI KẾT NỐI: {str(e)}")
 
 if __name__ == "__main__":
-    # Thay đổi các thông số dưới đây theo Card bạn muốn xuất
-    EMAIL = "khanhlp@ahamove.com"
-    CARD_ID = 74433
-    SHEET_URL = "https://docs.google.com/spreadsheets/d/1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/edit?gid=0#gid=0"
-    
-    trigger_metabase_export(
-        card_id=CARD_ID,
-        spreadsheet_url=SHEET_URL,
-        email=EMAIL,
-        days_back=63 # Mặc định lùi về 63 ngày như kịch bản Make của bạn
-    )
+    import sync_metabase_to_sheets
+    sync_metabase_to_sheets.main()

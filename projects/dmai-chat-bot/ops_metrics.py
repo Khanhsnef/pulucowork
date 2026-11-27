@@ -15,6 +15,10 @@ SHEET_74433_CSV_URL = (
     "https://docs.google.com/spreadsheets/d/"
     "1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/export?format=csv&gid=0"
 )
+SHEET_67888_CSV_URL = (
+    "https://docs.google.com/spreadsheets/d/"
+    "1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/export?format=csv&gid=49583103"
+)
 GITHUB_74433_URL = (
     "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
     "Output/Ahamove/04.%20OPS_METRICS/card_74433_63d.json"
@@ -262,7 +266,7 @@ def _to_float(v: Any) -> float:
 
 
 def fetch_card_67888_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
-    """Fetch Card 67888 rows from GitHub snapshot with 5-min /tmp cache."""
+    """Fetch Card 67888 rows from live Google Sheet CSV (tab 67888) or GitHub snapshot."""
     if not force_refresh and os.path.exists(CACHE_67888_FILE):
         try:
             cached = json.loads(open(CACHE_67888_FILE, encoding="utf-8").read())
@@ -271,12 +275,8 @@ def fetch_card_67888_rows(force_refresh: bool = False) -> tuple[list[dict[str, A
         except Exception:
             pass
 
-    req = urllib.request.Request(GITHUB_67888_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
-    with urllib.request.urlopen(req, timeout=12) as resp:
-        raw_list = json.loads(resp.read().decode("utf-8"))
-
-    rows = [
-        {
+    def _norm6(r: dict[str, Any]) -> dict[str, Any]:
+        return {
             "period": str(r.get("period", ""))[:10],
             "region": str(r.get("region", "")).strip(),
             "service_type": str(r.get("service_type", "")).strip(),
@@ -286,10 +286,28 @@ def fetch_card_67888_rows(force_refresh: bool = False) -> tuple[list[dict[str, A
             "ar": _to_float(r.get("ar", 0)),
             "fr": _to_float(r.get("fr", 0)),
         }
-        for r in raw_list
-        if r.get("period")
-    ]
-    source = "GitHub Snapshot (Card 67888)"
+
+    rows: list[dict[str, Any]] = []
+    source = ""
+    try:
+        req = urllib.request.Request(SHEET_67888_CSV_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            text = resp.read().decode("utf-8", errors="replace")
+        if text and not text.lstrip().startswith("<"):
+            parsed = [_norm6(r) for r in csv.DictReader(io.StringIO(text)) if r.get("period")]
+            if parsed:
+                rows = parsed
+                source = "Google Sheet Live (67888)"
+    except Exception:
+        pass
+
+    if not rows:
+        req = urllib.request.Request(GITHUB_67888_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
+        with urllib.request.urlopen(req, timeout=12) as resp:
+            raw_list = json.loads(resp.read().decode("utf-8"))
+        rows = [_norm6(r) for r in raw_list if r.get("period")]
+        source = "GitHub Snapshot (Card 67888)"
+
     if rows:
         try:
             with open(CACHE_67888_FILE, "w", encoding="utf-8") as f:
