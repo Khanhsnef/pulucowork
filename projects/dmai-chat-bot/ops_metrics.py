@@ -414,120 +414,65 @@ def fetch_full_executive_report(force_refresh: bool = False) -> str:
             if x[d_key] == dt and (c_val is None or x[c_key] == c_val)
         ]
 
-    # Pre-aggregate NW & Regions
+    # Pre-aggregate NW & Regions (compact 1-message Executive Report)
     out: list[str] = []
-    out.append(f"🏛️ <b>BÁO CÁO VẬN HÀNH TỔNG HỢP — {latest}</b>")
-    out.append(
-        f"<i>So sánh: DoD (vs {prev or 'N/A'}) | WoW (vs {wow or 'N/A'}) | "
-        f"Nguồn: 3 Sheets Live (74433 • 67888 • 75557)"
-        + (f" + {len(bundle['extra_tabs'])} tab phụ" if bundle["extra_tabs"] else "")
-        + "</i>"
-    )
+    out.append(f"🏛️ <b>OPS EXECUTIVE REPORT — {latest}</b>")
+    out.append(f"<i>DoD vs {prev or 'N/A'} | WoW vs {wow or 'N/A'} | 3 Sheets Live</i>")
     out.append("━━━━━━━━━━━━━━━━━━━━")
 
-    # ── SECTION 1: 4 REGIONS BREAKDOWN (NW, SGN, HAN, EXP)
-    for idx, reg in enumerate(("NW", "SGN", "HAN", "EXP"), 1):
+    for reg in ("NW", "SGN", "HAN", "EXP"):
         reg_icon = {"NW": "🌐", "SGN": "🏙️", "HAN": "🏛️", "EXP": "🧭"}[reg]
         reg_title = "NW (Toàn Quốc)" if reg == "NW" else reg
 
-        # Demand (67888)
         d_cur = _agg_67888(_slice(r67, "period", latest, "region", reg))
         d_prv = _agg_67888(_slice(r67, "period", prev, "region", reg))
         d_wow = _agg_67888(_slice(r67, "period", wow, "region", reg))
-        d_7d_rows = [x for x in r67 if x["period"] in last7_dates and x["region"] == reg]
-        d_7d_req_avg = (sum(x["requested"] for x in d_7d_rows) / max(1, len(last7_dates))) if d_7d_rows else 0
 
-        # Supply (74433) — for NW sum all cities
         c_filter = None if reg == "NW" else reg
         s_cur = _agg_74433(_slice(r74, "order_date", latest, "city_id", c_filter))
         s_prv = _agg_74433(_slice(r74, "order_date", prev, "city_id", c_filter))
         s_wow = _agg_74433(_slice(r74, "order_date", wow, "city_id", c_filter))
 
-        # Driver Economics & Quality (75557)
         e_cur = _agg_75557(_slice(r75, "period", latest, "city_id", c_filter))
         e_prv = _agg_75557(_slice(r75, "period", prev, "city_id", c_filter))
-        e_wow = _agg_75557(_slice(r75, "period", wow, "city_id", c_filter))
 
         fr_badge = "🟢" if d_cur["fr"] >= 84.0 else ("🟡" if d_cur["fr"] >= 81.0 else "🔴")
-        out.append(f"\n{reg_icon} <b>{idx}. {reg_title}</b> {fr_badge}")
+        out.append(f"\n{reg_icon} <b>{reg_title}</b> {fr_badge}")
 
-        # 1A. Demand & SLA
         if d_cur["req"] > 0:
+            svcs = [x for x in _slice(r67, "period", latest, "region", reg) if x["requested"] >= 100]
+            weak = min(svcs, key=lambda x: x["fr"]) if svcs else None
+            weak_s = f" | Thấp nhất: <code>{_esc(weak['service_type'])}</code> {weak['fr']*100:.1f}%" if weak else ""
             out.append(
-                f"📦 <b>Demand / Volume &amp; SLA:</b> Req <b>{int(d_cur['req']):,}</b> "
-                f"({_pct_delta(d_cur['req'], d_prv['req'])} DoD | {_pct_delta(d_cur['req'], d_wow['req'])} WoW | "
-                f"{_pct_delta(d_cur['req'], d_7d_req_avg)} vs TB7d)\n"
-                f"  ├ Hoàn thành: <b>{int(d_cur['comp']):,}</b> | "
-                f"AR: <b>{d_cur['ar']:.1f}%</b> ({_pp_delta(d_cur['ar'], d_prv['ar'])}) | "
-                f"FR: <b>{d_cur['fr']:.2f}%</b> ({_pp_delta(d_cur['fr'], d_prv['fr'])} DoD, {_pp_delta(d_cur['fr'], d_wow['fr'])} WoW)\n"
-                f"  └ Đơn rớt: <b>{int(d_cur['unful']):,}</b> (chưa nhận {int(d_cur['req'] - d_cur['acc']):,}, "
-                f"hủy sau nhận {int(d_cur['drop']):,} ~ {d_cur['drop_rate']:.1f}%)"
+                f"• <b>Demand:</b> <b>{int(d_cur['req']):,}</b> ({_pct_delta(d_cur['req'], d_prv['req'])} DoD, {_pct_delta(d_cur['req'], d_wow['req'])} WoW) | "
+                f"AR <b>{d_cur['ar']:.1f}%</b> | FR <b>{d_cur['fr']:.1f}%</b> ({_pp_delta(d_cur['fr'], d_prv['fr'], 1)}){weak_s}"
             )
-            # Top services in region with DoD
-            svc_cur = sorted(_slice(r67, "period", latest, "region", reg), key=lambda x: -x["requested"])[:4]
-            svc_prv_map = {x["service_type"]: x for x in _slice(r67, "period", prev, "region", reg)}
-            svc_bits = []
-            for sv in svc_cur:
-                sp = svc_prv_map.get(sv["service_type"])
-                fr_d = f" {_pp_delta(sv['fr']*100, sp['fr']*100, 1)}" if sp else ""
-                rq_d = f" {_pct_delta(sv['requested'], sp['requested'], 0)}" if sp else ""
-                svc_bits.append(
-                    f"<code>{_esc(sv['service_type'])}</code> {sv['requested']:,} ({rq_d.strip()})•FR {sv['fr']*100:.1f}%{fr_d}"
-                )
-            if svc_bits:
-                out.append("  • <i>Dịch vụ:</i> " + " | ".join(svc_bits))
 
-        # 1B. Supply & Segment Mix (74433)
         if s_cur["total_active"] > 0:
             tot_s = s_cur["total_active"]
-            seg_parts = []
-            for seg in ("PT", "FT", "return", "NIM", "NLM"):
-                v_c = s_cur[f"seg_{seg}"]
-                v_p = s_prv[f"seg_{seg}"]
-                seg_parts.append(f"<code>{seg}</code> {v_c:,} ({_pct_delta(v_c, v_p, 0)})")
+            ft_pt_pct = (s_cur["seg_FT"] + s_cur["seg_PT"]) / tot_s * 100
+            new_cnt = s_cur["seg_NIM"] + s_cur["seg_NLM"]
             out.append(
-                f"🛵 <b>Active Driver / Supply (Tag):</b> <b>{tot_s:,}</b> TX "
-                f"({_pct_delta(tot_s, s_prv['total_active'])} DoD | {_pct_delta(tot_s, s_wow['total_active'])} WoW)\n"
-                f"  ├ Segment: {' | '.join(seg_parts)}\n"
-                f"  └ Kênh chạy: Bike {s_cur['bike']:,} • Eco {s_cur['eco']:,} • 2H {s_cur['_2H']:,} • "
-                f"Bulky {s_cur['_2HBULKY']:,} • Pool {s_cur['pool']:,} • Food {s_cur['aifood']:,} • TMDT {s_cur['TMDT']:,}"
+                f"• <b>Supply:</b> <b>{tot_s:,}</b> TX ({_pct_delta(tot_s, s_prv['total_active'])} DoD, {_pct_delta(tot_s, s_wow['total_active'])} WoW) | "
+                f"Core {ft_pt_pct:.0f}% • Ret {s_cur['seg_return']:,} • New {new_cnt:,}"
             )
 
-        # 1C. Driver Economics, Engagement & Quality (75557 - ALL 20 METRICS)
         if e_cur["drv"] > 0:
             out.append(
-                f"💰 <b>Hiệu suất &amp; Thu nhập ({int(e_cur['drv']):,} TX):</b> "
-                f"TB <b>{e_cur['inc_per_drv']/1000:,.0f}k/TX</b> ({_pct_delta(e_cur['inc_per_drv'], e_prv['inc_per_drv'])} DoD | "
-                f"{_pct_delta(e_cur['inc_per_drv'], e_wow['inc_per_drv'])} WoW)\n"
-                f"  ├ EPH: <b>{e_cur['eph']/1000:,.1f}k</b> ({_pct_delta(e_cur['eph'], e_prv['eph'])}) | "
-                f"PPH: <b>{e_cur['pph']:.2f}</b> ({_pct_delta(e_cur['pph'], e_prv['pph'])}) | "
-                f"STP/TX: <b>{e_cur['stp_per_drv']:.1f}</b> | Online: <b>{e_cur['hrs_per_drv']:.1f}h/TX</b>\n"
-                f"  ├ Util: <b>{e_cur['util']:.1f}%</b> ({_pp_delta(e_cur['util'], e_prv['util'], 1)}) | "
-                f"Thưởng: <b>{e_cur['rew_pct']:.2f}%</b> ({e_cur['rew_per_stp']:,.0f}đ/STP) | "
-                f"Active/Rank: <b>{e_cur['active_rate']:.1f}%</b>\n"
-                f"  └ Chất lượng: AA <b>{e_cur['aa_pct']:.1f}%</b> • Hard <b>{e_cur['hard_pct']:.1f}%</b> • "
-                f"AR Noti <b>{e_cur['ar_noti']:.1f}%</b> • CR POC <b>{e_cur['cr_poc']:.2f}%</b> (Tổng CR {e_cur['cr_total']:.1f}%) • "
-                f"LCD <b>{int(e_cur['lcd']):,}</b> ({e_cur['lcd_pct']:.1f}%) • GDR <b>{e_cur['gdr_pct']:.1f}%</b> • "
-                f"⭐ <b>{e_cur['rating']:.2f}</b> (Bad: {int(e_cur['bad_rating'])})"
+                f"• <b>Driver:</b> <b>{e_cur['inc_per_drv']/1000:,.0f}k/TX</b> ({_pct_delta(e_cur['inc_per_drv'], e_prv['inc_per_drv'])}) | "
+                f"EPH <b>{e_cur['eph']/1000:,.1f}k</b> | PPH <b>{e_cur['pph']:.2f}</b> | Util {e_cur['util']:.0f}% | "
+                f"AA {e_cur['aa_pct']:.0f}% | LCD {e_cur['lcd_pct']:.0f}% | CR {e_cur['cr_poc']:.1f}%"
             )
 
-    # ── SECTION 2: EXTRA AUTO-DISCOVERED TABS (IF ANY)
     if bundle["extra_tabs"]:
-        out.append("\n━━━━━━━━━━━━━━━━━━━━")
-        out.append("📑 <b>DỮ LIỆU TỪ CÁC SHEET MỞ RỘNG</b>")
-        for tb in bundle["extra_tabs"]:
-            out.append(
-                f"• Tab <code>{_esc(tb['name'])}</code>: {tb['row_count']:,} dòng | "
-                f"Cột: <i>{_esc(', '.join(tb['columns'][:8]))}</i>"
-            )
+        names = ", ".join(f"<code>{_esc(tb['name'])}</code>" for tb in bundle["extra_tabs"])
+        out.append(f"\n📑 <i>Tab mở rộng:</i> {names}")
 
-    # ── SECTION 3: DEEP CROSS-SHEET DIAGNOSTIC INSIGHTS & ACTIONABLE ALERTS
     out.append("\n━━━━━━━━━━━━━━━━━━━━")
-    out.append("🧠 <b>PHÂN TÍCH CHÉO &amp; INSIGHTS HÀNH ĐỘNG</b>")
-
-    cross_insights = _build_cross_sheet_insights(r74, r67, r75, latest, prev, wow)
-    for bullet in cross_insights:
+    out.append("🧠 <b>INSIGHTS CHÍNH</b>")
+    for bullet in _build_cross_sheet_insights(r74, r67, r75, latest, prev, wow):
         out.append(f"• {bullet}")
+    out.append("\n<i>Chi tiết từng bảng: /kpi • /supply • /driver</i>")
 
     return "\n".join(out)
 
