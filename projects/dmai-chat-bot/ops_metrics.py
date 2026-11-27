@@ -1,7 +1,15 @@
-"""Card 74433 (Driver Active by Segment/Tag & Service) fetcher & analyzer for @DMAIChat_Bot."""
+"""Multi-sheet Operations & Driver Analytics Engine for @DMAIChat_Bot.
 
+Reads all metrics from Card 74433 (Supply by Segment/Service), Card 67888 (Demand/AR/FR),
+Card 75557 (Driver Income/EPH/PPH/Utilization/Quality/LCD/GDR), plus auto-discovers any
+new tabs added to the Google Sheet, producing executive reports with DoD/WoW/7d deltas
+and cross-sheet diagnostic insights.
+"""
+
+from concurrent.futures import ThreadPoolExecutor
 import csv
 import datetime
+import html as html_lib
 import io
 import json
 import os
@@ -10,36 +18,31 @@ import time
 import urllib.request
 from typing import Any
 
+SPREADSHEET_ID = "1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg"
 METABASE_EXPORT_URL = "https://ws.ahamove.com/ops/trigger/export_to_gs"
-SHEET_74433_CSV_URL = (
-    "https://docs.google.com/spreadsheets/d/"
-    "1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/export?format=csv&gid=0"
-)
-SHEET_67888_CSV_URL = (
-    "https://docs.google.com/spreadsheets/d/"
-    "1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/export?format=csv&gid=49583103"
-)
-SHEET_75557_CSV_URL = (
-    "https://docs.google.com/spreadsheets/d/"
-    "1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/export?format=csv&gid=2043805321"
-)
-GITHUB_74433_URL = (
+
+SHEET_74433_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/export?format=csv&gid=0"
+SHEET_67888_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/export?format=csv&gid=49583103"
+SHEET_75557_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/export?format=csv&gid=2043805321"
+SHEET_HTMLVIEW_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/htmlview"
+
+GITHUB_RAW_BASE = (
     "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
-    "Output/Ahamove/04.%20OPS_METRICS/card_74433_63d.json"
+    "Output/Ahamove/04.%20OPS_METRICS"
 )
-GITHUB_67888_URL = (
-    "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
-    "Output/Ahamove/04.%20OPS_METRICS/card_67888_63d.json"
-)
-GITHUB_75557_URL = (
-    "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
-    "Output/Ahamove/04.%20OPS_METRICS/card_75557_63d.json"
-)
-CACHE_FILE = "/tmp/card_74433_cache.json"
-CACHE_67888_FILE = "/tmp/card_67888_cache.json"
-CACHE_75557_FILE = "/tmp/card_75557_cache.json"
+GITHUB_74433_URL = f"{GITHUB_RAW_BASE}/card_74433_63d.json"
+GITHUB_67888_URL = f"{GITHUB_RAW_BASE}/card_67888_63d.json"
+GITHUB_75557_URL = f"{GITHUB_RAW_BASE}/card_75557_63d.json"
+
+CACHE_74433_FILE = "/tmp/card_74433_cache_v2.json"
+CACHE_67888_FILE = "/tmp/card_67888_cache_v2.json"
+CACHE_75557_FILE = "/tmp/card_75557_cache_v2.json"
+CACHE_EXTRA_FILE = "/tmp/card_extra_tabs_cache.json"
 CACHE_TTL_SEC = 300
-SERVICE_COLS = [
+
+KNOWN_GIDS = {"0", "49583103", "2043805321"}
+
+SERVICE_COLS_74433 = [
     "total_active", "active_1h", "active_2h", "active_4h",
     "bike", "eco", "aibot", "pool", "aifood", "TMDT", "_2H", "_2HBULKY", "INDAY", "_1HTMDT",
 ]
@@ -47,282 +50,653 @@ SERVICE_COLS = [
 
 def _to_int(v: Any) -> int:
     try:
-        return int(float(str(v).replace(",", "").strip()))
+        s = str(v).replace(",", "").strip()
+        return int(float(s)) if s and s.lower() not in ("none", "nan", "-") else 0
     except Exception:
         return 0
 
 
-def _normalize_row(raw: dict[str, Any]) -> dict[str, Any]:
-    row = {
+def _to_float(v: Any) -> float:
+    try:
+        s = str(v).replace(",", "").replace("%", "").strip()
+        return float(s) if s and s.lower() not in ("none", "nan", "-") else 0.0
+    except Exception:
+        return 0.0
+
+
+def _pct_delta(cur: float, base: float, digits: int = 1) -> str:
+    if not base:
+        return "N/A"
+    pct = (cur - base) / abs(base) * 100.0
+    arrow = "▲" if pct > 0.05 else ("▼" if pct < -0.05 else "▬")
+    return f"{arrow}{pct:+.{digits}f}%"
+
+
+def _pp_delta(cur_pct: float, base_pct: float, digits: int = 2) -> str:
+    if base_pct is None:
+        return "N/A"
+    diff = cur_pct - base_pct
+    arrow = "▲" if diff > 0.02 else ("▼" if diff < -0.02 else "▬")
+    return f"{arrow}{diff:+.{digits}f}pp"
+
+
+def _esc(text: Any) -> str:
+    return html_lib.escape(str(text))
+
+
+# ── METABASE REFRESH (ALL 3 CARDS) ────────────────────────────────────────────
+def trigger_metabase_refresh() -> tuple[bool, str]:
+    """Trigger Metabase export for all configured cards (74433, 67888, 75557) in parallel."""
+    end_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    start_date = (datetime.datetime.now() - datetime.timedelta(days=63)).strftime("%Y-%m-%d")
+    jobs = [
+        (74433, "0", {"start_date": start_date, "end_date": end_date}),
+        (67888, "49583103", {"start_date": start_date, "end_date": end_date, "timeview": "day"}),
+        (75557, "2043805321", {"start_date": start_date, "end_date": end_date, "timeview": "day"}),
+    ]
+
+    def _post_one(item: tuple[int, str, dict[str, str]]) -> tuple[int, bool, str]:
+        cid, gid, flt = item
+        payload = {
+            "email": "khanhlp@ahamove.com",
+            "card_id": cid,
+            "source": "metabase",
+            "filter": flt,
+            "spreadsheet_url": f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/edit?gid={gid}#gid={gid}",
+        }
+        req = urllib.request.Request(
+            METABASE_EXPORT_URL,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json", "User-Agent": "DMAIChat_Bot/2.0"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=20) as resp:
+                return cid, resp.status in (200, 201, 202, 204), resp.read().decode("utf-8", errors="ignore")[:80]
+        except Exception as exc:
+            return cid, False, str(exc)[:80]
+
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        results = list(pool.map(_post_one, jobs))
+    ok_all = all(r[1] for r in results)
+    summary = ", ".join(f"{cid}:{'OK' if ok else err}" for cid, ok, err in results)
+    return ok_all, summary
+
+
+# ── DATA FETCHERS (WITH CACHE + GITHUB FALLBACK + PARALLEL LOADING) ───────────
+def _normalize_74433(raw: dict[str, Any]) -> dict[str, Any]:
+    row: dict[str, Any] = {
         "city_id": str(raw.get("city_id", "")).strip(),
         "month": str(raw.get("month", ""))[:10],
         "week": str(raw.get("week", ""))[:10],
         "order_date": str(raw.get("order_date", ""))[:10],
         "tag": str(raw.get("tag", "")).strip(),
     }
-    for col in SERVICE_COLS:
+    for col in SERVICE_COLS_74433:
         row[col] = _to_int(raw.get(col, 0))
     return row
 
 
-def trigger_metabase_refresh() -> tuple[bool, str]:
-    """Trigger Metabase Card 74433 export to Google Sheets."""
-    end_date = datetime.datetime.now().strftime("%Y-%m-%d")
-    start_date = (datetime.datetime.now() - datetime.timedelta(days=63)).strftime("%Y-%m-%d")
-    payload = {
-        "email": "khanhlp@ahamove.com",
-        "card_id": 74433,
-        "source": "metabase",
-        "filter": {"start_date": start_date, "end_date": end_date},
-        "spreadsheet_url": (
-            "https://docs.google.com/spreadsheets/d/"
-            "1gUUHLPoeY4pRnUjModVe4fYNmFwiDy_U8dWR38y78Cg/edit?gid=0#gid=0"
-        ),
+def _normalize_67888(r: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "period": str(r.get("period", ""))[:10],
+        "region": str(r.get("region", "")).strip(),
+        "service_type": str(r.get("service_type", "")).strip(),
+        "requested": _to_int(r.get("requested", 0)),
+        "accept": _to_int(r.get("accept", 0)),
+        "completed": _to_int(r.get("completed", 0)),
+        "ar": _to_float(r.get("ar", 0)),
+        "fr": _to_float(r.get("fr", 0)),
     }
-    req = urllib.request.Request(
-        METABASE_EXPORT_URL,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json", "User-Agent": "DMAIChat_Bot/1.0"},
-        method="POST",
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=25) as resp:
-            return resp.status in (200, 201, 202, 204), resp.read().decode("utf-8", errors="ignore")[:200]
-    except Exception as exc:
-        return False, str(exc)
 
 
-def fetch_card_74433_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
-    """Fetch Card 74433 rows from live Google Sheet CSV (if public) or GitHub JSON snapshot."""
-    if not force_refresh and os.path.exists(CACHE_FILE):
+def _normalize_75557(r: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "period": str(r.get("period", ""))[:10],
+        "city_id": str(r.get("city_id", "")).strip(),
+        "driver_segment": str(r.get("driver_segment", "")).strip(),
+        "ranking_driver": _to_int(r.get("ranking_driver", 0)),
+        "total_driver": _to_int(r.get("total_driver", 0)),
+        "total_stp": _to_int(r.get("total_stp", 0)),
+        "order_income": _to_float(r.get("order_income", 0)),
+        "reward_income": _to_float(r.get("reward_income", 0)),
+        "online_hours": _to_float(r.get("online_hours", 0)),
+        "busy_hours": _to_float(r.get("busy_hours", 0)),
+        "accept_order": _to_int(r.get("accept_order", 0)),
+        "cancel_order": _to_int(r.get("cancel_order", 0)),
+        "cancel_poc": _to_int(r.get("cancel_poc", 0)),
+        "accept_noti": _to_int(r.get("accept_noti", 0)),
+        "total_noti": _to_int(r.get("total_noti", 0)),
+        "rating_order": _to_int(r.get("rating_order", 0)),
+        "rating_star": _to_int(r.get("rating_star", 0)),
+        "bad_rating_order": _to_int(r.get("bad_rating_order", 0)),
+        "total_aa_driver": _to_int(r.get("total_aa_driver", 0)),
+        "hard_driver": _to_int(r.get("hard_driver", 0)),
+        "lcd_driver": _to_int(r.get("lcd_driver", 0)),
+        "lcd_driver_kpi": _to_int(r.get("lcd_driver_kpi", 0)),
+        "gdr_driver": _to_int(r.get("gdr_driver", 0)),
+    }
+
+
+def _fetch_dataset(
+    sheet_url: str,
+    github_url: str,
+    cache_file: str,
+    date_key: str,
+    normalizer: Any,
+    label: str,
+    force_refresh: bool = False,
+) -> tuple[list[dict[str, Any]], str]:
+    if not force_refresh and os.path.exists(cache_file):
         try:
-            cached = json.loads(open(CACHE_FILE, encoding="utf-8").read())
+            cached = json.loads(open(cache_file, encoding="utf-8").read())
             if time.time() - float(cached.get("ts", 0)) < CACHE_TTL_SEC and cached.get("rows"):
-                return cached["rows"], cached.get("source", "cache")
+                return cached["rows"], cached.get("source", f"Cache ({label})")
         except Exception:
             pass
 
     rows: list[dict[str, Any]] = []
     source = ""
-
-    # 1. Try live Google Sheet CSV (works if sheet is shared "Anyone with the link -> Viewer")
     try:
-        req = urllib.request.Request(SHEET_74433_CSV_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
+        req = urllib.request.Request(sheet_url, headers={"User-Agent": "DMAIChat_Bot/2.0"})
         with urllib.request.urlopen(req, timeout=8) as resp:
             text = resp.read().decode("utf-8", errors="replace")
         if text and not text.lstrip().startswith("<"):
-            reader = csv.DictReader(io.StringIO(text))
-            parsed = [_normalize_row(r) for r in reader if r.get("order_date")]
+            parsed = [normalizer(r) for r in csv.DictReader(io.StringIO(text)) if r.get(date_key)]
             if parsed:
                 rows = parsed
-                source = "Google Sheet Live"
+                source = f"Sheet Live ({label})"
     except Exception:
         pass
 
-    # 2. Fallback to GitHub snapshot (fast <200ms)
     if not rows:
-        req = urllib.request.Request(GITHUB_74433_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
+        req = urllib.request.Request(github_url, headers={"User-Agent": "DMAIChat_Bot/2.0"})
         with urllib.request.urlopen(req, timeout=12) as resp:
             raw_list = json.loads(resp.read().decode("utf-8"))
-        rows = [_normalize_row(r) for r in raw_list if r.get("order_date")]
-        source = "GitHub Snapshot (Card 74433)"
+        rows = [normalizer(r) for r in raw_list if r.get(date_key)]
+        source = f"GitHub Snapshot ({label})"
 
     if rows:
         try:
-            with open(CACHE_FILE, "w", encoding="utf-8") as f:
+            with open(cache_file, "w", encoding="utf-8") as f:
                 json.dump({"ts": time.time(), "source": source, "rows": rows}, f, ensure_ascii=False)
         except Exception:
             pass
     return rows, source
 
 
-def _format_day_table(rows: list[dict[str, Any]], target_date: str) -> str:
-    day_rows = [r for r in rows if r["order_date"] == target_date]
-    if not day_rows:
-        return f"Không có dữ liệu cho ngày `{target_date}`."
-    day_rows.sort(key=lambda r: (r["city_id"], -r["total_active"]))
-    lines = []
-    cur_city = None
-    for r in day_rows:
-        if r["city_id"] != cur_city:
-            cur_city = r["city_id"]
-            city_sum = sum(x["total_active"] for x in day_rows if x["city_id"] == cur_city)
-            lines.append(f"\n*{cur_city}* (Tổng active: *{city_sum:,}*)")
-        lines.append(
-            f"• `{r['tag']}`: *{r['total_active']:,}* "
-            f"(bike {r['bike']:,}, eco {r['eco']:,}, pool {r['pool']:,}, "
-            f"food {r['aifood']:,}, 2H {r['_2H']:,}, bulky {r['_2HBULKY']:,}, tmdt {r['TMDT']:,})"
-        )
-    return "\n".join(lines).strip()
-
-
-def _build_insights(rows: list[dict[str, Any]], dates: list[str]) -> list[str]:
-    latest = dates[-1]
-    prev = dates[-2] if len(dates) >= 2 else None
-    wow_date = dates[-8] if len(dates) >= 8 else None
-
-    cur_rows = [r for r in rows if r["order_date"] == latest]
-    prev_rows = [r for r in rows if r["order_date"] == prev] if prev else []
-    wow_rows = [r for r in rows if r["order_date"] == wow_date] if wow_date else []
-
-    tot_cur = sum(r["total_active"] for r in cur_rows) or 1
-    insights: list[str] = []
-
-    # 1. Separate insights for NW, SGN, HAN, EXP
-    nw_prev = sum(r["total_active"] for r in prev_rows) if prev_rows else 0
-    nw_wow = sum(r["total_active"] for r in wow_rows) if wow_rows else 0
-    nw_dod_s = f"{((tot_cur - nw_prev) / nw_prev * 100):+.1f}%" if nw_prev else "N/A"
-    nw_wow_s = f"{((tot_cur - nw_wow) / nw_wow * 100):+.1f}%" if nw_wow else "N/A"
-    ft_pt = sum(r["total_active"] for r in cur_rows if r["tag"] in ("FT", "PT"))
-    ret_cur = sum(r["total_active"] for r in cur_rows if r["tag"] == "return")
-    new_cur = sum(r["total_active"] for r in cur_rows if r["tag"] in ("NIM", "NLM"))
-    insights.append(
-        f"*NW:* *{tot_cur:,}* TX (DoD {nw_dod_s}, WoW {nw_wow_s}) — Core `FT+PT` *{ft_pt / tot_cur * 100:.1f}%*, "
-        f"`return` *{ret_cur:,}*, mới (`NIM+NLM`) *{new_cur:,}*."
+def fetch_card_74433_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
+    return _fetch_dataset(
+        SHEET_74433_CSV_URL, GITHUB_74433_URL, CACHE_FILE_74433, "order_date", _normalize_74433, "74433", force_refresh
     )
 
-    for city in ("SGN", "HAN", "EXP"):
-        c_cur = sum(r["total_active"] for r in cur_rows if r["city_id"] == city)
-        c_prev = sum(r["total_active"] for r in prev_rows if r["city_id"] == city)
-        c_wow = sum(r["total_active"] for r in wow_rows if r["city_id"] == city)
-        dod = f"{((c_cur - c_prev) / c_prev * 100):+.1f}%" if c_prev else "N/A"
-        wow = f"{((c_cur - c_wow) / c_wow * 100):+.1f}%" if c_wow else "N/A"
-        top_seg = max([r for r in cur_rows if r["city_id"] == city], key=lambda x: x["total_active"], default=None)
-        seg_note = f" | Top: `{top_seg['tag']}` ({top_seg['total_active']:,})" if top_seg else ""
-        drop_note = ""
-        if prev_rows:
-            c_drops = []
-            for tag in ("FT", "PT", "return", "NIM", "NLM"):
-                v1 = sum(r["total_active"] for r in cur_rows if r["city_id"] == city and r["tag"] == tag)
-                v0 = sum(r["total_active"] for r in prev_rows if r["city_id"] == city and r["tag"] == tag)
-                if v0 >= 50:
-                    c_drops.append(((v1 - v0) / v0 * 100, tag, v1 - v0))
-            c_drops.sort()
-            if c_drops and c_drops[0][0] <= -3.0:
-                drop_note = f" | Chú ý `{c_drops[0][1]}` *{c_drops[0][0]:.1f}%* ({c_drops[0][2]:+,})"
-        insights.append(f"*{city}:* *{c_cur:,}* TX (DoD {dod}, WoW {wow}){seg_note}{drop_note}.")
+
+CACHE_FILE_74433 = CACHE_74433_FILE
+
+
+def fetch_card_67888_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
+    return _fetch_dataset(
+        SHEET_67888_CSV_URL, GITHUB_67888_URL, CACHE_67888_FILE, "period", _normalize_67888, "67888", force_refresh
+    )
+
+
+def fetch_card_75557_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
+    return _fetch_dataset(
+        SHEET_75557_CSV_URL, GITHUB_75557_URL, CACHE_75557_FILE, "period", _normalize_75557, "75557", force_refresh
+    )
+
+
+def fetch_extra_tabs(force_refresh: bool = False) -> list[dict[str, Any]]:
+    """Auto-discover and read any additional tabs added to the Google Sheet."""
+    if not force_refresh and os.path.exists(CACHE_EXTRA_FILE):
+        try:
+            cached = json.loads(open(CACHE_EXTRA_FILE, encoding="utf-8").read())
+            if time.time() - float(cached.get("ts", 0)) < CACHE_TTL_SEC:
+                return cached.get("tabs", [])
+        except Exception:
+            pass
+
+    extra_tabs: list[dict[str, Any]] = []
+    try:
+        req = urllib.request.Request(SHEET_HTMLVIEW_URL, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=6) as resp:
+            html_text = resp.read().decode("utf-8", errors="ignore")
+        tabs = re.findall(r'name:\s*"([^"]+)".*?gid:\s*"(\d+)"', html_text)
+        for name, gid in tabs:
+            if gid in KNOWN_GIDS:
+                continue
+            csv_url = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/export?format=csv&gid={gid}"
+            try:
+                with urllib.request.urlopen(
+                    urllib.request.Request(csv_url, headers={"User-Agent": "DMAIChat_Bot/2.0"}), timeout=6
+                ) as c_resp:
+                    c_txt = c_resp.read().decode("utf-8", errors="replace")
+                if c_txt and not c_txt.lstrip().startswith("<"):
+                    r_list = list(csv.DictReader(io.StringIO(c_txt)))
+                    if r_list:
+                        extra_tabs.append({
+                            "name": name,
+                            "gid": gid,
+                            "row_count": len(r_list),
+                            "columns": list(r_list[0].keys()),
+                            "sample_latest": r_list[-10:],
+                        })
+            except Exception:
+                continue
+        with open(CACHE_EXTRA_FILE, "w", encoding="utf-8") as f:
+            json.dump({"ts": time.time(), "tabs": extra_tabs}, f, ensure_ascii=False)
+    except Exception:
+        pass
+    return extra_tabs
+
+
+def fetch_all_sheets_parallel(force_refresh: bool = False) -> dict[str, Any]:
+    """Fetch all 3 core sheets + any extra tabs in parallel."""
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        f74 = pool.submit(fetch_card_74433_rows, force_refresh)
+        f67 = pool.submit(fetch_card_67888_rows, force_refresh)
+        f75 = pool.submit(fetch_card_75557_rows, force_refresh)
+        fex = pool.submit(fetch_extra_tabs, force_refresh)
+        r74, s74 = f74.result()
+        r67, s67 = f67.result()
+        r75, s75 = f75.result()
+        extra = fex.result()
+    return {
+        "74433": r74, "src_74433": s74,
+        "67888": r67, "src_67888": s67,
+        "75557": r75, "src_75557": s75,
+        "extra_tabs": extra,
+    }
+
+
+# ── AGGREGATION HELPERS ───────────────────────────────────────────────────────
+def _agg_67888(sub: list[dict[str, Any]]) -> dict[str, float]:
+    rq = sum(x["requested"] for x in sub)
+    ac = sum(x["accept"] for x in sub)
+    cp = sum(x["completed"] for x in sub)
+    unful = rq - cp
+    drop_after_acc = max(0, ac - cp)
+    return {
+        "req": rq,
+        "acc": ac,
+        "comp": cp,
+        "unful": unful,
+        "drop": drop_after_acc,
+        "ar": (ac / rq * 100.0) if rq else 0.0,
+        "fr": (cp / rq * 100.0) if rq else 0.0,
+        "drop_rate": (drop_after_acc / ac * 100.0) if ac else 0.0,
+    }
+
+
+def _agg_74433(sub: list[dict[str, Any]]) -> dict[str, int]:
+    out = {c: sum(x[c] for x in sub) for c in SERVICE_COLS_74433}
+    for seg in ("FT", "PT", "return", "NIM", "NLM"):
+        out[f"seg_{seg}"] = sum(x["total_active"] for x in sub if x["tag"].lower() == seg.lower())
+    return out
+
+
+def _agg_75557(sub: list[dict[str, Any]]) -> dict[str, float]:
+    drv = sum(x["total_driver"] for x in sub)
+    rnk = sum(x["ranking_driver"] for x in sub if x["ranking_driver"] > 0)
+    drv_with_rnk = sum(x["total_driver"] for x in sub if x["ranking_driver"] > 0)
+    stp = sum(x["total_stp"] for x in sub)
+    o_inc = sum(x["order_income"] for x in sub)
+    r_inc = sum(x["reward_income"] for x in sub)
+    inc = o_inc + r_inc
+    onl = sum(x["online_hours"] for x in sub)
+    bsy = sum(x["busy_hours"] for x in sub)
+    acc = sum(x["accept_order"] for x in sub)
+    canc = sum(x["cancel_order"] for x in sub)
+    cpoc = sum(x["cancel_poc"] for x in sub)
+    anoti = sum(x["accept_noti"] for x in sub)
+    tnoti = sum(x["total_noti"] for x in sub)
+    r_ord = sum(x["rating_order"] for x in sub)
+    r_star = sum(x["rating_star"] for x in sub)
+    bad_r = sum(x["bad_rating_order"] for x in sub)
+    aa = sum(x["total_aa_driver"] for x in sub)
+    hard = sum(x["hard_driver"] for x in sub)
+    lcd = sum(x["lcd_driver"] for x in sub)
+    lcd_kpi = sum(x["lcd_driver_kpi"] for x in sub)
+    gdr = sum(x["gdr_driver"] for x in sub)
+    return {
+        "drv": drv,
+        "rnk": rnk,
+        "active_rate": (drv_with_rnk / rnk * 100.0) if rnk else 0.0,
+        "stp": stp,
+        "stp_per_drv": (stp / drv) if drv else 0.0,
+        "hrs_per_drv": (onl / drv) if drv else 0.0,
+        "inc": inc,
+        "rew": r_inc,
+        "inc_per_drv": (inc / drv) if drv else 0.0,
+        "rew_per_stp": (r_inc / stp) if stp else 0.0,
+        "rew_pct": (r_inc / inc * 100.0) if inc else 0.0,
+        "eph": (inc / onl) if onl else 0.0,
+        "pph": (stp / onl) if onl else 0.0,
+        "util": (bsy / onl * 100.0) if onl else 0.0,
+        "aa_pct": (aa / drv * 100.0) if drv else 0.0,
+        "hard_pct": (hard / drv * 100.0) if drv else 0.0,
+        "lcd": lcd,
+        "lcd_kpi": lcd_kpi,
+        "lcd_pct": (lcd / drv * 100.0) if drv else 0.0,
+        "gdr_pct": (gdr / drv * 100.0) if drv else 0.0,
+        "ar_noti": (anoti / tnoti * 100.0) if tnoti else 0.0,
+        "cr_total": (canc / acc * 100.0) if acc else 0.0,
+        "cr_poc": (cpoc / acc * 100.0) if acc else 0.0,
+        "cpoc_cnt": cpoc,
+        "canc_cnt": canc,
+        "rating": (r_star / r_ord) if r_ord else 0.0,
+        "bad_rating": bad_r,
+        "bad_pct": (bad_r / r_ord * 100.0) if r_ord else 0.0,
+    }
+
+
+# ── MASTER FULL CROSS-SHEET EXECUTIVE REPORT (HTML) ───────────────────────────
+def fetch_full_executive_report(force_refresh: bool = False) -> str:
+    """Read ALL metrics across ALL sheets and produce a rich, scannable HTML Executive Report."""
+    bundle = fetch_all_sheets_parallel(force_refresh=force_refresh)
+    r74, r67, r75 = bundle["74433"], bundle["67888"], bundle["75557"]
+    if not r74 and not r67 and not r75:
+        raise RuntimeError("Chưa tải được dữ liệu từ các sheet.")
+
+    dates_all = sorted(
+        {r["order_date"] for r in r74} | {r["period"] for r in r67} | {r["period"] for r in r75}
+    )
+    latest = dates_all[-1]
+    prev = dates_all[-2] if len(dates_all) >= 2 else None
+    wow = dates_all[-8] if len(dates_all) >= 8 else None
+    last7_dates = set(dates_all[-8:-1]) if len(dates_all) >= 8 else set(dates_all[:-1])
+
+    def _slice(dataset: list[dict[str, Any]], d_key: str, dt: str | None, c_key: str | None = None, c_val: str | None = None) -> list[dict[str, Any]]:
+        if not dt:
+            return []
+        return [
+            x for x in dataset
+            if x[d_key] == dt and (c_val is None or x[c_key] == c_val)
+        ]
+
+    # Pre-aggregate NW & Regions
+    out: list[str] = []
+    out.append(f"🏛️ <b>BÁO CÁO VẬN HÀNH TỔNG HỢP — {latest}</b>")
+    out.append(
+        f"<i>So sánh: DoD (vs {prev or 'N/A'}) | WoW (vs {wow or 'N/A'}) | "
+        f"Nguồn: 3 Sheets Live (74433 • 67888 • 75557)"
+        + (f" + {len(bundle['extra_tabs'])} tab phụ" if bundle["extra_tabs"] else "")
+        + "</i>"
+    )
+    out.append("━━━━━━━━━━━━━━━━━━━━")
+
+    # ── SECTION 1: 4 REGIONS BREAKDOWN (NW, SGN, HAN, EXP)
+    for idx, reg in enumerate(("NW", "SGN", "HAN", "EXP"), 1):
+        reg_icon = {"NW": "🌐", "SGN": "🏙️", "HAN": "🏛️", "EXP": "🧭"}[reg]
+        reg_title = "NW (Toàn Quốc)" if reg == "NW" else reg
+
+        # Demand (67888)
+        d_cur = _agg_67888(_slice(r67, "period", latest, "region", reg))
+        d_prv = _agg_67888(_slice(r67, "period", prev, "region", reg))
+        d_wow = _agg_67888(_slice(r67, "period", wow, "region", reg))
+        d_7d_rows = [x for x in r67 if x["period"] in last7_dates and x["region"] == reg]
+        d_7d_req_avg = (sum(x["requested"] for x in d_7d_rows) / max(1, len(last7_dates))) if d_7d_rows else 0
+
+        # Supply (74433) — for NW sum all cities
+        c_filter = None if reg == "NW" else reg
+        s_cur = _agg_74433(_slice(r74, "order_date", latest, "city_id", c_filter))
+        s_prv = _agg_74433(_slice(r74, "order_date", prev, "city_id", c_filter))
+        s_wow = _agg_74433(_slice(r74, "order_date", wow, "city_id", c_filter))
+
+        # Driver Economics & Quality (75557)
+        e_cur = _agg_75557(_slice(r75, "period", latest, "city_id", c_filter))
+        e_prv = _agg_75557(_slice(r75, "period", prev, "city_id", c_filter))
+        e_wow = _agg_75557(_slice(r75, "period", wow, "city_id", c_filter))
+
+        fr_badge = "🟢" if d_cur["fr"] >= 84.0 else ("🟡" if d_cur["fr"] >= 81.0 else "🔴")
+        out.append(f"\n{reg_icon} <b>{idx}. {reg_title}</b> {fr_badge}")
+
+        # 1A. Demand & SLA
+        if d_cur["req"] > 0:
+            out.append(
+                f"📦 <b>Đơn &amp; SLA:</b> Req <b>{int(d_cur['req']):,}</b> "
+                f"({_pct_delta(d_cur['req'], d_prv['req'])} DoD | {_pct_delta(d_cur['req'], d_wow['req'])} WoW | "
+                f"{_pct_delta(d_cur['req'], d_7d_req_avg)} vs TB7d)\n"
+                f"  ├ Hoàn thành: <b>{int(d_cur['comp']):,}</b> | "
+                f"AR: <b>{d_cur['ar']:.1f}%</b> ({_pp_delta(d_cur['ar'], d_prv['ar'])}) | "
+                f"FR: <b>{d_cur['fr']:.2f}%</b> ({_pp_delta(d_cur['fr'], d_prv['fr'])} DoD, {_pp_delta(d_cur['fr'], d_wow['fr'])} WoW)\n"
+                f"  └ Đơn rớt: <b>{int(d_cur['unful']):,}</b> (chưa nhận {int(d_cur['req'] - d_cur['acc']):,}, "
+                f"hủy sau nhận {int(d_cur['drop']):,} ~ {d_cur['drop_rate']:.1f}%)"
+            )
+            # Top services in region with DoD
+            svc_cur = sorted(_slice(r67, "period", latest, "region", reg), key=lambda x: -x["requested"])[:4]
+            svc_prv_map = {x["service_type"]: x for x in _slice(r67, "period", prev, "region", reg)}
+            svc_bits = []
+            for sv in svc_cur:
+                sp = svc_prv_map.get(sv["service_type"])
+                fr_d = f" {_pp_delta(sv['fr']*100, sp['fr']*100, 1)}" if sp else ""
+                rq_d = f" {_pct_delta(sv['requested'], sp['requested'], 0)}" if sp else ""
+                svc_bits.append(
+                    f"<code>{_esc(sv['service_type'])}</code> {sv['requested']:,} ({rq_d.strip()})•FR {sv['fr']*100:.1f}%{fr_d}"
+                )
+            if svc_bits:
+                out.append("  • <i>Dịch vụ:</i> " + " | ".join(svc_bits))
+
+        # 1B. Supply & Segment Mix (74433)
+        if s_cur["total_active"] > 0:
+            tot_s = s_cur["total_active"]
+            seg_parts = []
+            for seg in ("PT", "FT", "return", "NIM", "NLM"):
+                v_c = s_cur[f"seg_{seg}"]
+                v_p = s_prv[f"seg_{seg}"]
+                seg_parts.append(f"<code>{seg}</code> {v_c:,} ({_pct_delta(v_c, v_p, 0)})")
+            out.append(
+                f"🛵 <b>Nguồn Cung (Tag):</b> <b>{tot_s:,}</b> TX "
+                f"({_pct_delta(tot_s, s_prv['total_active'])} DoD | {_pct_delta(tot_s, s_wow['total_active'])} WoW)\n"
+                f"  ├ Segment: {' | '.join(seg_parts)}\n"
+                f"  └ Kênh chạy: Bike {s_cur['bike']:,} • Eco {s_cur['eco']:,} • 2H {s_cur['_2H']:,} • "
+                f"Bulky {s_cur['_2HBULKY']:,} • Pool {s_cur['pool']:,} • Food {s_cur['aifood']:,} • TMDT {s_cur['TMDT']:,}"
+            )
+
+        # 1C. Driver Economics, Engagement & Quality (75557 - ALL 20 METRICS)
+        if e_cur["drv"] > 0:
+            out.append(
+                f"💰 <b>Hiệu suất &amp; Thu nhập ({int(e_cur['drv']):,} TX):</b> "
+                f"TB <b>{e_cur['inc_per_drv']/1000:,.0f}k/TX</b> ({_pct_delta(e_cur['inc_per_drv'], e_prv['inc_per_drv'])} DoD | "
+                f"{_pct_delta(e_cur['inc_per_drv'], e_wow['inc_per_drv'])} WoW)\n"
+                f"  ├ EPH: <b>{e_cur['eph']/1000:,.1f}k</b> ({_pct_delta(e_cur['eph'], e_prv['eph'])}) | "
+                f"PPH: <b>{e_cur['pph']:.2f}</b> ({_pct_delta(e_cur['pph'], e_prv['pph'])}) | "
+                f"STP/TX: <b>{e_cur['stp_per_drv']:.1f}</b> | Online: <b>{e_cur['hrs_per_drv']:.1f}h/TX</b>\n"
+                f"  ├ Util: <b>{e_cur['util']:.1f}%</b> ({_pp_delta(e_cur['util'], e_prv['util'], 1)}) | "
+                f"Thưởng: <b>{e_cur['rew_pct']:.2f}%</b> ({e_cur['rew_per_stp']:,.0f}đ/STP) | "
+                f"Active/Rank: <b>{e_cur['active_rate']:.1f}%</b>\n"
+                f"  └ Chất lượng: AA <b>{e_cur['aa_pct']:.1f}%</b> • Hard <b>{e_cur['hard_pct']:.1f}%</b> • "
+                f"AR Noti <b>{e_cur['ar_noti']:.1f}%</b> • CR POC <b>{e_cur['cr_poc']:.2f}%</b> (Tổng CR {e_cur['cr_total']:.1f}%) • "
+                f"LCD <b>{int(e_cur['lcd']):,}</b> ({e_cur['lcd_pct']:.1f}%) • GDR <b>{e_cur['gdr_pct']:.1f}%</b> • "
+                f"⭐ <b>{e_cur['rating']:.2f}</b> (Bad: {int(e_cur['bad_rating'])})"
+            )
+
+    # ── SECTION 2: EXTRA AUTO-DISCOVERED TABS (IF ANY)
+    if bundle["extra_tabs"]:
+        out.append("\n━━━━━━━━━━━━━━━━━━━━")
+        out.append("📑 <b>DỮ LIỆU TỪ CÁC SHEET MỞ RỘNG</b>")
+        for tb in bundle["extra_tabs"]:
+            out.append(
+                f"• Tab <code>{_esc(tb['name'])}</code>: {tb['row_count']:,} dòng | "
+                f"Cột: <i>{_esc(', '.join(tb['columns'][:8]))}</i>"
+            )
+
+    # ── SECTION 3: DEEP CROSS-SHEET DIAGNOSTIC INSIGHTS & ACTIONABLE ALERTS
+    out.append("\n━━━━━━━━━━━━━━━━━━━━")
+    out.append("🧠 <b>PHÂN TÍCH CHÉO &amp; INSIGHTS HÀNH ĐỘNG</b>")
+
+    cross_insights = _build_cross_sheet_insights(r74, r67, r75, latest, prev, wow)
+    for bullet in cross_insights:
+        out.append(f"• {bullet}")
+
+    return "\n".join(out)
+
+
+def _build_cross_sheet_insights(
+    r74: list[dict[str, Any]],
+    r67: list[dict[str, Any]],
+    r75: list[dict[str, Any]],
+    latest: str,
+    prev: str | None,
+    wow: str | None,
+) -> list[str]:
+    insights: list[str] = []
+
+    cur67 = [x for x in r67 if x["period"] == latest]
+    prv67 = [x for x in r67 if x["period"] == prev] if prev else []
+    wow67 = [x for x in r67 if x["period"] == wow] if wow else []
+
+    cur74 = [x for x in r74 if x["order_date"] == latest]
+    prv74 = [x for x in r74 if x["order_date"] == prev] if prev else []
+
+    cur75 = [x for x in r75 if x["period"] == latest]
+    prv75 = [x for x in r75 if x["period"] == prev] if prev else []
+
+    # 1. Supply vs Demand Growth Balance (NW & Cities)
+    nw_d_cur = _agg_67888([x for x in cur67 if x["region"] == "NW"])
+    nw_d_prv = _agg_67888([x for x in prv67 if x["region"] == "NW"])
+    nw_s_cur = sum(x["total_active"] for x in cur74)
+    nw_s_prv = sum(x["total_active"] for x in prv74)
+    if nw_d_prv["req"] and nw_s_prv:
+        req_chg = (nw_d_cur["req"] - nw_d_prv["req"]) / nw_d_prv["req"] * 100
+        sup_chg = (nw_s_cur - nw_s_prv) / nw_s_prv * 100
+        gap = req_chg - sup_chg
+        balance_msg = (
+            "Cầu tăng nhanh hơn Cung (áp lực thiếu TX giờ cao điểm)"
+            if gap > 2.0
+            else ("Cung giữ nhịp tốt hơn đà giảm của Cầu (giúp FR cải thiện)" if gap < -1.5 else "Cung - Cầu biến động cân bằng")
+        )
+        insights.append(
+            f"<b>Cân bằng Cung - Cầu (NW):</b> Cầu biến động <b>{req_chg:+.1f}%</b> DoD trong khi Nguồn cung biến động "
+            f"<b>{sup_chg:+.1f}%</b> DoD → <i>{balance_msg}</i> (FR đạt <b>{nw_d_cur['fr']:.2f}%</b>, "
+            f"{_pp_delta(nw_d_cur['fr'], nw_d_prv['fr'])})."
+        )
+
+    # 2. Bottleneck Service & Auto-Accept Correlation across SGN vs HAN
+    sgn_75 = _agg_75557([x for x in cur75 if x["city_id"] == "SGN"])
+    han_75 = _agg_75557([x for x in cur75 if x["city_id"] == "HAN"])
+    sgn_67 = _agg_67888([x for x in cur67 if x["region"] == "SGN"])
+    han_67 = _agg_67888([x for x in cur67 if x["region"] == "HAN"])
+    if sgn_67["req"] and han_67["req"]:
+        weak_svcs = [x for x in cur67 if x["region"] in ("SGN", "HAN", "EXP") and x["requested"] >= 300]
+        worst_svc = min(weak_svcs, key=lambda x: x["fr"]) if weak_svcs else None
+        svc_clause = (
+            f"; điểm nghẽn lớn nhất là <code>{worst_svc['region']}-{worst_svc['service_type']}</code> "
+            f"(FR chỉ <b>{worst_svc['fr']*100:.1f}%</b>, AR <b>{worst_svc['ar']*100:.1f}%</b> trên {worst_svc['requested']:,} đơn)"
+            if worst_svc else ""
+        )
+        insights.append(
+            f"<b>Tương quan Auto-Accept &amp; SLA:</b> SGN duy trì FR <b>{sgn_67['fr']:.1f}%</b> nhờ tỷ lệ AA cao "
+            f"(<b>{sgn_75['aa_pct']:.1f}%</b>), trong khi HAN có AA thấp (<b>{han_75['aa_pct']:.1f}%</b>) dẫn tới AR/FR thấp hơn "
+            f"(AR <b>{han_67['ar']:.1f}%</b>, FR <b>{han_67['fr']:.1f}%</b>){svc_clause}."
+        )
+
+    # 3. Post-Accept Cancellation Leakage (CR POC vs Unfulfilled)
+    high_cr_segs = [x for x in cur75 if x["accept_order"] >= 300]
+    if high_cr_segs and nw_d_cur["unful"] > 0:
+        worst_cr = max(high_cr_segs, key=lambda x: x["cancel_poc"] / x["accept_order"])
+        w_rate = worst_cr["cancel_poc"] / worst_cr["accept_order"] * 100
+        drop_share = (nw_d_cur["drop"] / nw_d_cur["unful"] * 100) if nw_d_cur["unful"] else 0
+        insights.append(
+            f"<b>Rò rỉ đơn sau nhận (Cancel Leakage):</b> Toàn mạng lưới mất <b>{int(nw_d_cur['drop']):,}</b> đơn hủy sau khi TX đã nhận "
+            f"(chiếm <b>{drop_share:.1f}%</b> tổng đơn rớt). Nóng nhất ở <code>{worst_cr['city_id']}-{worst_cr['driver_segment']}</code> "
+            f"với CR POC <b>{w_rate:.1f}%</b> ({worst_cr['cancel_poc']:,} đơn hủy)."
+        )
+
+    # 4. Driver Unit Economics & Churn Risk (EPH, Utilization, LCD)
+    tot_75 = _agg_75557(cur75)
+    prv_75 = _agg_75557(prv75) if prv75 else {}
+    if tot_75["drv"] > 0:
+        eph_chg = _pct_delta(tot_75["eph"], prv_75.get("eph", 0))
+        inc_chg = _pct_delta(tot_75["inc_per_drv"], prv_75.get("inc_per_drv", 0))
+        # Find segment with highest LCD risk
+        lcd_segs = [x for x in cur75 if x["total_driver"] >= 100]
+        top_lcd = max(lcd_segs, key=lambda x: x["lcd_driver"] / x["total_driver"]) if lcd_segs else None
+        lcd_clause = (
+            f"; nhóm nguy cơ giảm hoạt động (LCD) cao nhất là <code>{top_lcd['city_id']}-{top_lcd['driver_segment']}</code> "
+            f"(<b>{top_lcd['lcd_driver']/top_lcd['total_driver']*100:.1f}%</b> ~ {top_lcd['lcd_driver']:,} TX)"
+            if top_lcd else ""
+        )
+        insights.append(
+            f"<b>Thu nhập &amp; Rủi ro Nguồn cung:</b> Thu nhập TB đạt <b>{tot_75['inc_per_drv']/1000:,.0f}k/TX</b> ({inc_chg} DoD), "
+            f"EPH đạt <b>{tot_75['eph']/1000:,.1f}k/h</b> ({eph_chg} DoD), Utilization <b>{tot_75['util']:.1f}%</b>{lcd_clause}."
+        )
+
+    # 5. Biggest Segment / Service Movers (DoD & WoW)
+    movers = []
+    for c in ("SGN", "HAN", "EXP"):
+        for t in ("FT", "PT", "return", "NIM", "NLM"):
+            v1 = sum(x["total_active"] for x in cur74 if x["city_id"] == c and x["tag"] == t)
+            v0 = sum(x["total_active"] for x in prv74 if x["city_id"] == c and x["tag"] == t)
+            if v0 >= 50:
+                movers.append(((v1 - v0) / v0 * 100.0, f"{c}-{t}", v1, v1 - v0))
+    if movers:
+        movers.sort()
+        worst_m = movers[0]
+        best_m = movers[-1]
+        insights.append(
+            f"<b>Biến động Segment mạnh nhất (DoD):</b> Tăng tốt nhất <code>{best_m[1]}</code> "
+            f"(<b>{best_m[0]:+.1f}%</b>, {best_m[3]:+,} TX) | Giảm mạnh nhất <code>{worst_m[1]}</code> "
+            f"(<b>{worst_m[0]:+.1f}%</b>, {worst_m[3]:+,} TX)."
+        )
 
     return insights
 
 
+# ── SPECIALIZED SINGLE-SHEET REPORTS (ENHANCED HTML + % DELTAS) ───────────────
 def fetch_ops_brief(force_refresh: bool = False) -> str:
-    """Return formatted Card 74433 summary + insights for the latest available date."""
+    """Alias /ops to the upgraded Full Cross-Sheet Executive Report."""
+    return fetch_full_executive_report(force_refresh=force_refresh)
+
+
+def fetch_supply_brief(force_refresh: bool = False) -> str:
+    """Detailed Card 74433 Supply by Segment & All 14 Service Columns + DoD/WoW."""
     rows, source = fetch_card_74433_rows(force_refresh=force_refresh)
     if not rows:
         raise RuntimeError("Chưa có dữ liệu Card 74433.")
     dates = sorted({r["order_date"] for r in rows})
     latest = dates[-1]
     prev = dates[-2] if len(dates) >= 2 else None
-    wow_date = dates[-8] if len(dates) >= 8 else None
+    wow = dates[-8] if len(dates) >= 8 else None
 
-    tot_latest = sum(r["total_active"] for r in rows if r["order_date"] == latest)
-    dod_str = ""
-    if prev:
-        tot_prev = sum(r["total_active"] for r in rows if r["order_date"] == prev)
-        if tot_prev > 0:
-            pct = (tot_latest - tot_prev) / tot_prev * 100
-            dod_str = f" | DoD {'+' if pct >= 0 else ''}{pct:.1f}%"
-    wow_str = ""
-    if wow_date:
-        tot_wow = sum(r["total_active"] for r in rows if r["order_date"] == wow_date)
-        if tot_wow > 0:
-            pct_w = (tot_latest - tot_wow) / tot_wow * 100
-            wow_str = f" | WoW {'+' if pct_w >= 0 else ''}{pct_w:.1f}%"
+    cur = [r for r in rows if r["order_date"] == latest]
+    prv = [r for r in rows if r["order_date"] == prev] if prev else []
+    wov = [r for r in rows if r["order_date"] == wow] if wow else []
 
-    insights = _build_insights(rows, dates)
+    tot_c = sum(x["total_active"] for x in cur)
+    tot_p = sum(x["total_active"] for x in prv)
+    tot_w = sum(x["total_active"] for x in wov)
 
-    # Compact Card 67888 NW/Region KPI line
-    kpi_summary = ""
-    try:
-        rows_67888, _ = fetch_card_67888_rows()
-        if rows_67888:
-            d6 = sorted({r["period"] for r in rows_67888})[-1]
-            kpi_lines = []
-            for reg in ("NW", "SGN", "HAN", "EXP"):
-                reg_rows = [r for r in rows_67888 if r["period"] == d6 and r["region"] == reg]
-                req_s = sum(r["requested"] for r in reg_rows)
-                acc_s = sum(r["accept"] for r in reg_rows)
-                comp_s = sum(r["completed"] for r in reg_rows)
-                if req_s > 0:
-                    kpi_lines.append(
-                        f"• `{reg}`: Req *{req_s:,}* | Comp *{comp_s:,}* | AR *{acc_s/req_s*100:.1f}%* | FR *{comp_s/req_s*100:.1f}%*"
-                    )
-            if kpi_lines:
-                kpi_summary = f"\n\n📦 *Card 67888 — Orders & KPI ({d6})* _(chi tiết: /kpi)_\n" + "\n".join(kpi_lines)
-    except Exception:
-        pass
-
-    return (
-        f"📊 *Card 74433 — Active Drivers theo Segment ({latest})*\n"
-        f"_Nguồn: {source}_ | Tổng Active: *{tot_latest:,}*{dod_str}{wow_str}\n\n"
-        + _format_day_table(rows, latest)
-        + kpi_summary
-        + "\n\n💡 *Insights nhanh*\n"
-        + "\n".join(f"• {line}" for line in insights)
-    )
-
-
-def _to_float(v: Any) -> float:
-    try:
-        return float(v)
-    except Exception:
-        return 0.0
-
-
-def fetch_card_67888_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
-    """Fetch Card 67888 rows from live Google Sheet CSV (tab 67888) or GitHub snapshot."""
-    if not force_refresh and os.path.exists(CACHE_67888_FILE):
-        try:
-            cached = json.loads(open(CACHE_67888_FILE, encoding="utf-8").read())
-            if time.time() - float(cached.get("ts", 0)) < CACHE_TTL_SEC and cached.get("rows"):
-                return cached["rows"], cached.get("source", "cache")
-        except Exception:
-            pass
-
-    def _norm6(r: dict[str, Any]) -> dict[str, Any]:
-        return {
-            "period": str(r.get("period", ""))[:10],
-            "region": str(r.get("region", "")).strip(),
-            "service_type": str(r.get("service_type", "")).strip(),
-            "requested": _to_int(r.get("requested", 0)),
-            "accept": _to_int(r.get("accept", 0)),
-            "completed": _to_int(r.get("completed", 0)),
-            "ar": _to_float(r.get("ar", 0)),
-            "fr": _to_float(r.get("fr", 0)),
-        }
-
-    rows: list[dict[str, Any]] = []
-    source = ""
-    try:
-        req = urllib.request.Request(SHEET_67888_CSV_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
-        with urllib.request.urlopen(req, timeout=8) as resp:
-            text = resp.read().decode("utf-8", errors="replace")
-        if text and not text.lstrip().startswith("<"):
-            parsed = [_norm6(r) for r in csv.DictReader(io.StringIO(text)) if r.get("period")]
-            if parsed:
-                rows = parsed
-                source = "Google Sheet Live (67888)"
-    except Exception:
-        pass
-
-    if not rows:
-        req = urllib.request.Request(GITHUB_67888_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
-        with urllib.request.urlopen(req, timeout=12) as resp:
-            raw_list = json.loads(resp.read().decode("utf-8"))
-        rows = [_norm6(r) for r in raw_list if r.get("period")]
-        source = "GitHub Snapshot (Card 67888)"
-
-    if rows:
-        try:
-            with open(CACHE_67888_FILE, "w", encoding="utf-8") as f:
-                json.dump({"ts": time.time(), "source": source, "rows": rows}, f, ensure_ascii=False)
-        except Exception:
-            pass
-    return rows, source
+    lines = [
+        f"🛵 <b>CHI TIẾT NGUỒN CUNG CARD 74433 — {latest}</b>",
+        f"<i>{source}</i> | NW Active: <b>{tot_c:,}</b> ({_pct_delta(tot_c, tot_p)} DoD | {_pct_delta(tot_c, tot_w)} WoW)",
+        "━━━━━━━━━━━━━━━━━━━━",
+    ]
+    for city in ("SGN", "HAN", "EXP"):
+        c_cur = sorted([r for r in cur if r["city_id"] == city], key=lambda x: -x["total_active"])
+        c_prv = {r["tag"]: r for r in prv if r["city_id"] == city}
+        c_wov = {r["tag"]: r for r in wov if r["city_id"] == city}
+        cs_c = sum(x["total_active"] for x in c_cur)
+        cs_p = sum(x["total_active"] for x in c_prv.values())
+        cs_w = sum(x["total_active"] for x in c_wov.values())
+        lines.append(
+            f"\n📍 <b>{city}</b> — Tổng: <b>{cs_c:,}</b> ({_pct_delta(cs_c, cs_p)} DoD | {_pct_delta(cs_c, cs_w)} WoW)"
+        )
+        for r in c_cur:
+            rp = c_prv.get(r["tag"], {})
+            rw = c_wov.get(r["tag"], {})
+            lines.append(
+                f"• <code>{r['tag']}</code>: <b>{r['total_active']:,}</b> "
+                f"({_pct_delta(r['total_active'], rp.get('total_active', 0))} DoD, {_pct_delta(r['total_active'], rw.get('total_active', 0))} WoW)\n"
+                f"  <i>1h:{r['active_1h']:,} • 2h:{r['active_2h']:,} • 4h:{r['active_4h']:,} | "
+                f"bike:{r['bike']:,} • eco:{r['eco']:,} • 2H:{r['_2H']:,} • bulky:{r['_2HBULKY']:,} • "
+                f"pool:{r['pool']:,} • food:{r['aifood']:,} • TMDT:{r['TMDT']:,} • inday:{r['INDAY']:,}</i>"
+            )
+    return "\n".join(lines)
 
 
 def fetch_kpi_brief(force_refresh: bool = False) -> str:
-    """Return formatted Card 67888 summary (Requested, Accept, Completed, AR, FR) + insights."""
+    """Detailed Card 67888 Orders, AR, FR, Unfulfilled & All Service Types + DoD/WoW."""
     rows, source = fetch_card_67888_rows(force_refresh=force_refresh)
     if not rows:
         raise RuntimeError("Chưa có dữ liệu Card 67888.")
@@ -335,202 +709,94 @@ def fetch_kpi_brief(force_refresh: bool = False) -> str:
     prv = [r for r in rows if r["period"] == prev] if prev else []
     wov = [r for r in rows if r["period"] == wow] if wow else []
 
-    def agg(sub: list[dict[str, Any]]) -> tuple[int, int, int, float, float]:
-        rq = sum(x["requested"] for x in sub)
-        ac = sum(x["accept"] for x in sub)
-        cp = sum(x["completed"] for x in sub)
-        return rq, ac, cp, (ac / rq * 100 if rq else 0.0), (cp / rq * 100 if rq else 0.0)
-
-    nw_rq, nw_ac, nw_cp, nw_ar, nw_fr = agg([r for r in cur if r["region"] == "NW"])
-    p_rq, _, p_cp, _, p_fr = agg([r for r in prv if r["region"] == "NW"])
-    w_rq, _, _, _, w_fr = agg([r for r in wov if r["region"] == "NW"])
-
-    dod_rq = f" ({(nw_rq - p_rq) / p_rq * 100:+.1f}% DoD)" if p_rq else ""
-    wow_rq = f" | {(nw_rq - w_rq) / w_rq * 100:+.1f}% WoW" if w_rq else ""
-    dod_fr = f" ({nw_fr - p_fr:+.2f}pp DoD)" if p_rq else ""
+    nw_c = _agg_67888([r for r in cur if r["region"] == "NW"])
+    nw_p = _agg_67888([r for r in prv if r["region"] == "NW"])
+    nw_w = _agg_67888([r for r in wov if r["region"] == "NW"])
 
     lines = [
-        f"📦 *Card 67888 — Orders & KPI theo Service Type ({latest})*",
-        f"_Nguồn: {source}_ | NW Requested: *{nw_rq:,}*{dod_rq}{wow_rq} | FR: *{nw_fr:.2f}%*{dod_fr}\n",
+        f"📦 <b>CHI TIẾT ĐƠN &amp; SLA CARD 67888 — {latest}</b>",
+        f"<i>{source}</i> | NW Req: <b>{int(nw_c['req']):,}</b> ({_pct_delta(nw_c['req'], nw_p['req'])} DoD | {_pct_delta(nw_c['req'], nw_w['req'])} WoW) | "
+        f"FR: <b>{nw_c['fr']:.2f}%</b> ({_pp_delta(nw_c['fr'], nw_p['fr'])} DoD)",
+        "━━━━━━━━━━━━━━━━━━━━",
     ]
     for reg in ("NW", "SGN", "HAN", "EXP"):
-        r_rows = [r for r in cur if r["region"] == reg]
-        rq, ac, cp, ar, fr = agg(r_rows)
-        if rq == 0:
+        rc = _agg_67888([r for r in cur if r["region"] == reg])
+        rp = _agg_67888([r for r in prv if r["region"] == reg])
+        rw = _agg_67888([r for r in wov if r["region"] == reg])
+        if rc["req"] == 0:
             continue
-        lines.append(f"*{reg}* — Req: *{rq:,}* | Acc: *{ac:,}* | Comp: *{cp:,}* | AR: *{ar:.1f}%* | FR: *{fr:.1f}%*")
-        top_svc = sorted(r_rows, key=lambda x: -x["requested"])[:5]
-        for s in top_svc:
+        lines.append(
+            f"\n🌐 <b>{reg}</b> — Req: <b>{int(rc['req']):,}</b> ({_pct_delta(rc['req'], rp['req'])} DoD, {_pct_delta(rc['req'], rw['req'])} WoW)\n"
+            f"  Acc: <b>{int(rc['acc']):,}</b> | Comp: <b>{int(rc['comp']):,}</b> | Rớt: <b>{int(rc['unful']):,}</b> | "
+            f"AR: <b>{rc['ar']:.1f}%</b> ({_pp_delta(rc['ar'], rp['ar'], 1)}) | FR: <b>{rc['fr']:.1f}%</b> ({_pp_delta(rc['fr'], rp['fr'], 1)})"
+        )
+        p_map = {x["service_type"]: x for x in prv if x["region"] == reg}
+        for s in sorted([r for r in cur if r["region"] == reg], key=lambda x: -x["requested"])[:7]:
+            sp = p_map.get(s["service_type"])
+            rq_d = _pct_delta(s["requested"], sp["requested"], 1) if sp else "N/A"
+            fr_d = _pp_delta(s["fr"] * 100, sp["fr"] * 100, 1) if sp else "N/A"
             lines.append(
-                f"• `{s['service_type']}`: Req {s['requested']:,}, Acc {s['accept']:,}, "
-                f"Comp {s['completed']:,} | AR *{s['ar']*100:.1f}%* | FR *{s['fr']*100:.1f}%*"
+                f"  • <code>{_esc(s['service_type'])}</code>: Req <b>{s['requested']:,}</b> ({rq_d}) | "
+                f"Comp {s['completed']:,} | AR <b>{s['ar']*100:.1f}%</b> | FR <b>{s['fr']*100:.1f}%</b> ({fr_d})"
             )
-        lines.append("")
-
-    # Insights separated by NW, SGN, HAN, EXP
-    insights = []
-    for reg in ("NW", "SGN", "HAN", "EXP"):
-        r_cur = [r for r in cur if r["region"] == reg]
-        rq, ac, cp, ar, fr = agg(r_cur)
-        if rq == 0:
-            continue
-        p_r_rq, _, _, _, p_r_fr = agg([r for r in prv if r["region"] == reg])
-        w_r_rq, _, _, _, w_r_fr = agg([r for r in wov if r["region"] == reg])
-        dod_s = f" | DoD Req {(rq - p_r_rq) / p_r_rq * 100:+.1f}%, FR {fr - p_r_fr:+.2f}pp" if p_r_rq else ""
-        wow_s = f" | WoW Req {(rq - w_r_rq) / w_r_rq * 100:+.1f}%" if w_r_rq else ""
-        svcs = [r for r in r_cur if r["requested"] >= 50]
-        weak = min(svcs, key=lambda x: x["fr"]) if svcs else None
-        weak_s = f" | Yếu nhất: `{weak['service_type']}` (FR *{weak['fr']*100:.1f}%*)" if weak else ""
-        insights.append(f"*{reg}:* *{cp:,}/{rq:,}* đơn (AR *{ar:.1f}%*, FR *{fr:.1f}%*){dod_s}{wow_s}{weak_s}.")
-
-    return "\n".join(lines).strip() + "\n\n💡 *Insights nhanh*\n" + "\n".join(f"• {x}" for x in insights)
-
-
-def fetch_card_75557_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
-    """Fetch Card 75557 rows from live Google Sheet CSV (tab 75557) or GitHub snapshot."""
-    if not force_refresh and os.path.exists(CACHE_75557_FILE):
-        try:
-            cached = json.loads(open(CACHE_75557_FILE, encoding="utf-8").read())
-            if time.time() - float(cached.get("ts", 0)) < CACHE_TTL_SEC and cached.get("rows"):
-                return cached["rows"], cached.get("source", "cache")
-        except Exception:
-            pass
-
-    def _norm7(r: dict[str, Any]) -> dict[str, Any]:
-        return {
-            "period": str(r.get("period", ""))[:10],
-            "city_id": str(r.get("city_id", "")).strip(),
-            "driver_segment": str(r.get("driver_segment", "")).strip(),
-            "ranking_driver": _to_int(r.get("ranking_driver", 0)),
-            "total_driver": _to_int(r.get("total_driver", 0)),
-            "total_stp": _to_int(r.get("total_stp", 0)),
-            "order_income": _to_float(r.get("order_income", 0)),
-            "reward_income": _to_float(r.get("reward_income", 0)),
-            "online_hours": _to_float(r.get("online_hours", 0)),
-            "busy_hours": _to_float(r.get("busy_hours", 0)),
-            "accept_order": _to_int(r.get("accept_order", 0)),
-            "cancel_poc": _to_int(r.get("cancel_poc", 0)),
-            "accept_noti": _to_int(r.get("accept_noti", 0)),
-            "total_noti": _to_int(r.get("total_noti", 0)),
-            "rating_order": _to_int(r.get("rating_order", 0)),
-            "rating_star": _to_int(r.get("rating_star", 0)),
-            "bad_rating_order": _to_int(r.get("bad_rating_order", 0)),
-            "total_aa_driver": _to_int(r.get("total_aa_driver", 0)),
-            "hard_driver": _to_int(r.get("hard_driver", 0)),
-            "lcd_driver": _to_int(r.get("lcd_driver", 0)),
-            "gdr_driver": _to_int(r.get("gdr_driver", 0)),
-        }
-
-    rows: list[dict[str, Any]] = []
-    source = ""
-    try:
-        req = urllib.request.Request(SHEET_75557_CSV_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
-        with urllib.request.urlopen(req, timeout=8) as resp:
-            text = resp.read().decode("utf-8", errors="replace")
-        if text and not text.lstrip().startswith("<"):
-            parsed = [_norm7(r) for r in csv.DictReader(io.StringIO(text)) if r.get("period")]
-            if parsed:
-                rows = parsed
-                source = "Google Sheet Live (75557)"
-    except Exception:
-        pass
-
-    if not rows:
-        req = urllib.request.Request(GITHUB_75557_URL, headers={"User-Agent": "DMAIChat_Bot/1.0"})
-        with urllib.request.urlopen(req, timeout=12) as resp:
-            raw_list = json.loads(resp.read().decode("utf-8"))
-        rows = [_norm7(r) for r in raw_list if r.get("period")]
-        source = "GitHub Snapshot (Card 75557)"
-
-    if rows:
-        try:
-            with open(CACHE_75557_FILE, "w", encoding="utf-8") as f:
-                json.dump({"ts": time.time(), "source": source, "rows": rows}, f, ensure_ascii=False)
-        except Exception:
-            pass
-    return rows, source
+    return "\n".join(lines)
 
 
 def fetch_driver_brief(force_refresh: bool = False) -> str:
-    """Return formatted Card 75557 summary (Driver Income, EPH, PPH, Util, AA, CR POC) + insights."""
+    """Detailed Card 75557 Driver Income, EPH, PPH, Util, AA, Hard, LCD, GDR, CR, Rating + DoD/WoW."""
     rows, source = fetch_card_75557_rows(force_refresh=force_refresh)
     if not rows:
         raise RuntimeError("Chưa có dữ liệu Card 75557.")
     dates = sorted({r["period"] for r in rows})
     latest = dates[-1]
     prev = dates[-2] if len(dates) >= 2 else None
+    wow = dates[-8] if len(dates) >= 8 else None
+
     cur = [r for r in rows if r["period"] == latest]
     prv = [r for r in rows if r["period"] == prev] if prev else []
+    wov = [r for r in rows if r["period"] == wow] if wow else []
 
-    def agg(sub: list[dict[str, Any]]) -> dict[str, float]:
-        drv = sum(x["total_driver"] for x in sub)
-        stp = sum(x["total_stp"] for x in sub)
-        inc = sum(x["order_income"] + x["reward_income"] for x in sub)
-        rew = sum(x["reward_income"] for x in sub)
-        onl = sum(x["online_hours"] for x in sub)
-        bsy = sum(x["busy_hours"] for x in sub)
-        aa = sum(x["total_aa_driver"] for x in sub)
-        acc = sum(x["accept_order"] for x in sub)
-        cpoc = sum(x["cancel_poc"] for x in sub)
-        anoti = sum(x["accept_noti"] for x in sub)
-        tnoti = sum(x["total_noti"] for x in sub)
-        return {
-            "drv": drv,
-            "inc_per_drv": inc / drv if drv else 0.0,
-            "eph": inc / onl if onl else 0.0,
-            "pph": stp / onl if onl else 0.0,
-            "util": bsy / onl * 100 if onl else 0.0,
-            "aa_pct": aa / drv * 100 if drv else 0.0,
-            "cr_poc": cpoc / acc * 100 if acc else 0.0,
-            "ar_noti": anoti / tnoti * 100 if tnoti else 0.0,
-            "rew_pct": rew / inc * 100 if inc else 0.0,
-        }
-
-    tot = agg(cur)
-    tot_p = agg(prv) if prv else {}
-    inc_dod = f" ({(tot['inc_per_drv'] - tot_p['inc_per_drv']) / tot_p['inc_per_drv'] * 100:+.1f}% DoD)" if tot_p.get("inc_per_drv") else ""
+    tc = _agg_75557(cur)
+    tp = _agg_75557(prv)
+    tw = _agg_75557(wov)
 
     lines = [
-        f"🛵 *Card 75557 — Driver Income & Efficiency ({latest})*",
-        f"_Nguồn: {source}_ | TB Thu nhập/TX: *{tot['inc_per_drv']/1000:,.0f}k*{inc_dod} | EPH: *{tot['eph']/1000:,.1f}k* | PPH: *{tot['pph']:.2f}*\n",
+        f"💰 <b>CHI TIẾT THU NHẬP &amp; CHẤT LƯỢNG TX CARD 75557 — {latest}</b>",
+        f"<i>{source}</i> | NW TX: <b>{int(tc['drv']):,}</b> | TB/TX: <b>{tc['inc_per_drv']/1000:,.0f}k</b> "
+        f"({_pct_delta(tc['inc_per_drv'], tp['inc_per_drv'])} DoD | {_pct_delta(tc['inc_per_drv'], tw['inc_per_drv'])} WoW) | "
+        f"EPH: <b>{tc['eph']/1000:,.1f}k</b> ({_pct_delta(tc['eph'], tp['eph'])})",
+        "━━━━━━━━━━━━━━━━━━━━",
     ]
     for city in ("SGN", "HAN", "EXP"):
         c_rows = sorted([r for r in cur if r["city_id"] == city], key=lambda x: -x["total_driver"])
         if not c_rows:
             continue
-        ca = agg(c_rows)
+        ca = _agg_75557(c_rows)
+        cp = _agg_75557([r for r in prv if r["city_id"] == city])
+        cw = _agg_75557([r for r in wov if r["city_id"] == city])
+        p_map = {r["driver_segment"]: r for r in prv if r["city_id"] == city}
         lines.append(
-            f"*{city}* — TX: *{int(ca['drv']):,}* | TB/TX: *{ca['inc_per_drv']/1000:,.0f}k* | "
-            f"EPH: *{ca['eph']/1000:,.1f}k* | PPH: *{ca['pph']:.2f}* | Util: *{ca['util']:.1f}%* | AA: *{ca['aa_pct']:.1f}%*"
+            f"\n🏙️ <b>{city}</b> — TX: <b>{int(ca['drv']):,}</b> ({_pct_delta(ca['drv'], cp['drv'])} DoD, {_pct_delta(ca['drv'], cw['drv'])} WoW) | "
+            f"Active/Rank: <b>{ca['active_rate']:.1f}%</b>\n"
+            f"  TB/TX: <b>{ca['inc_per_drv']/1000:,.0f}k</b> ({_pct_delta(ca['inc_per_drv'], cp['inc_per_drv'])}) | "
+            f"EPH: <b>{ca['eph']/1000:,.1f}k</b> | PPH: <b>{ca['pph']:.2f}</b> | Util: <b>{ca['util']:.1f}%</b> | "
+            f"Thưởng: <b>{ca['rew_pct']:.2f}%</b>\n"
+            f"  AA: <b>{ca['aa_pct']:.1f}%</b> • Hard: <b>{ca['hard_pct']:.1f}%</b> • LCD: <b>{int(ca['lcd']):,}</b> ({ca['lcd_pct']:.1f}%) • "
+            f"GDR: <b>{ca['gdr_pct']:.1f}%</b> • AR Noti: <b>{ca['ar_noti']:.1f}%</b> • CR POC: <b>{ca['cr_poc']:.2f}%</b> • ⭐<b>{ca['rating']:.2f}</b>"
         )
         for r in c_rows:
-            sa = agg([r])
+            sa = _agg_75557([r])
+            sp = _agg_75557([p_map[r["driver_segment"]]]) if r["driver_segment"] in p_map else {}
+            inc_d = _pct_delta(sa["inc_per_drv"], sp.get("inc_per_drv", 0), 1) if sp else "N/A"
             lines.append(
-                f"• `{r['driver_segment']}`: {r['total_driver']:,} TX | {sa['inc_per_drv']/1000:,.0f}k/TX | "
-                f"EPH {sa['eph']/1000:,.1f}k | PPH {sa['pph']:.2f} | AA {sa['aa_pct']:.0f}% | CR {sa['cr_poc']:.1f}%"
+                f"  • <code>{r['driver_segment']}</code>: <b>{r['total_driver']:,}</b> TX | "
+                f"<b>{sa['inc_per_drv']/1000:,.0f}k</b> ({inc_d}) | EPH {sa['eph']/1000:,.1f}k | PPH {sa['pph']:.2f} | "
+                f"Util {sa['util']:.0f}% | AA {sa['aa_pct']:.0f}% | LCD {int(sa['lcd'])} | CR {sa['cr_poc']:.1f}%"
             )
-        lines.append("")
-
-    insights = [
-        f"*NW:* TB/TX *{tot['inc_per_drv']/1000:,.0f}k*, EPH *{tot['eph']/1000:,.1f}k*, PPH *{tot['pph']:.2f}*, "
-        f"Util *{tot['util']:.1f}%*, AA *{tot['aa_pct']:.1f}%*, CR POC *{tot['cr_poc']:.2f}%* (Thưởng *{tot['rew_pct']:.2f}%*)."
-    ]
-    for city in ("SGN", "HAN", "EXP"):
-        c_rows = [r for r in cur if r["city_id"] == city]
-        if not c_rows:
-            continue
-        ca = agg(c_rows)
-        hi_cr = [r for r in c_rows if r["accept_order"] >= 100]
-        worst = max(hi_cr, key=lambda x: x["cancel_poc"] / x["accept_order"]) if hi_cr else None
-        w_note = f" | CR cao nhất: `{worst['driver_segment']}` (*{worst['cancel_poc']/worst['accept_order']*100:.1f}%*)" if worst else ""
-        insights.append(
-            f"*{city}:* *{int(ca['drv']):,}* TX | TB/TX *{ca['inc_per_drv']/1000:,.0f}k* | "
-            f"EPH *{ca['eph']/1000:,.1f}k* | PPH *{ca['pph']:.2f}* | AA *{ca['aa_pct']:.1f}%*{w_note}."
-        )
-
-    return "\n".join(lines).strip() + "\n\n💡 *Insights nhanh*\n" + "\n".join(f"• {x}" for x in insights)
+    return "\n".join(lines)
 
 
+# ── AI CONTEXT BUILDER (ALL SHEETS + PRE-COMPUTED DELTAS & TRENDS) ────────────
 def _extract_requested_dates(text: str, available_dates: list[str]) -> list[str]:
     found: list[str] = []
     for m in re.findall(r"(20\d{2}-\d{2}-\d{2})", text):
@@ -545,124 +811,99 @@ def _extract_requested_dates(text: str, available_dates: list[str]) -> list[str]
 
 
 def build_query_context(user_message: str) -> str:
-    """Build compact Card 74433 context (specific day, latest day, weekly & monthly trends) for AI."""
-    rows, source = fetch_card_74433_rows()
-    if not rows:
+    """Build comprehensive multi-sheet context with pre-computed DoD/WoW/WTD/MTD metrics for AI."""
+    bundle = fetch_all_sheets_parallel()
+    r74, r67, r75 = bundle["74433"], bundle["67888"], bundle["75557"]
+    if not r74 and not r67 and not r75:
         return ""
 
-    dates = sorted({r["order_date"] for r in rows})
-    target_dates = _extract_requested_dates(user_message, dates)
-    if not target_dates:
-        target_dates = dates[-2:] if len(dates) >= 2 else dates[-1:]
+    dates = sorted({r["order_date"] for r in r74} | {r["period"] for r in r67} | {r["period"] for r in r75})
+    req_dates = _extract_requested_dates(user_message, dates)
+    msg_low = user_message.lower()
+    wants_week = any(k in msg_low for k in ("tuần", "week", "đầu tuần", "7 ngày", "trend"))
 
-    parts = [f"Nguồn: {source} | Khoảng dữ liệu: {dates[0]} đến {dates[-1]} (945 dòng)"]
+    if req_dates:
+        target_dates = req_dates
+    elif wants_week:
+        target_dates = dates[-7:]
+    else:
+        # Include latest, prev (DoD), and 7-days-ago (WoW) so AI always has exact % deltas!
+        picks = [dates[-1]]
+        if len(dates) >= 2:
+            picks.append(dates[-2])
+        if len(dates) >= 8:
+            picks.append(dates[-8])
+        target_dates = sorted(set(picks))
 
-    for dt in target_dates:
-        day_r = [x for x in rows if x["order_date"] == dt]
-        tot_all = sum(x["total_active"] for x in day_r)
-        city_sums = " | ".join(
-            f"{c}={sum(x['total_active'] for x in day_r if x['city_id'] == c):,}"
-            for c in ("SGN", "HAN", "EXP")
-        )
-        parts.append(f"--- CHI TIẾT NGÀY {dt} (TỔNG ACTIVE TOÀN QUỐC={tot_all:,} | {city_sums}) ---")
-        for r in sorted(day_r, key=lambda x: (x["city_id"], x["tag"])):
+    parts: list[str] = [
+        f"Khoảng dữ liệu khả dụng: {dates[0]} -> {dates[-1]} | Ngày mới nhất: {dates[-1]}",
+        "BẢN TÓM TẮT EXECUTIVE ĐÃ TÍNH SẴN (% DoD, % WoW, Insights chéo):",
+        re.sub(r"<[^>]+>", "", fetch_full_executive_report()),
+    ]
+
+    # Detailed slices for requested/recent dates across all 3 cards
+    if r74:
+        parts.append("\n=== CHI TIẾT CARD 74433 (TÀI XẾ ACTIVE THEO TAG & 14 CỘT DỊCH VỤ) ===")
+        for dt in target_dates:
+            day_r = [x for x in r74 if x["order_date"] == dt]
+            if not day_r:
+                continue
+            tot_all = sum(x["total_active"] for x in day_r)
+            city_sums = " | ".join(f"{c}={sum(x['total_active'] for x in day_r if x['city_id'] == c):,}" for c in ("SGN", "HAN", "EXP"))
+            parts.append(f"[Ngày {dt}] TỔNG TX ACTIVE NW={tot_all:,} | {city_sums}")
+            for r in sorted(day_r, key=lambda x: (x["city_id"], x["tag"])):
+                parts.append(
+                    f"  {r['city_id']}|{r['tag']}: active={r['total_active']} (1h={r['active_1h']},2h={r['active_2h']},4h={r['active_4h']} | "
+                    f"bike={r['bike']},eco={r['eco']},pool={r['pool']},food={r['aifood']},2H={r['_2H']},bulky={r['_2HBULKY']},TMDT={r['TMDT']},inday={r['INDAY']})"
+                )
+
+    if r67:
+        parts.append("\n=== CHI TIẾT CARD 67888 (ĐƠN REQUESTED, ACCEPT, COMPLETED, AR, FR) ===")
+        for dt in target_dates:
+            d6_r = [x for x in r67 if x["period"] == dt]
+            if not d6_r:
+                continue
+            parts.append(f"[Ngày {dt}]")
+            for r in sorted(d6_r, key=lambda x: (x["region"], -x["requested"])):
+                parts.append(
+                    f"  {r['region']}|{r['service_type']}: req={r['requested']},acc={r['accept']},comp={r['completed']},unful={r['requested']-r['completed']}|AR={r['ar']*100:.2f}%,FR={r['fr']*100:.2f}%"
+                )
+
+    if r75:
+        parts.append("\n=== CHI TIẾT CARD 75557 (THU NHẬP, EPH, PPH, UTIL, AA, HARD, LCD, GDR, CR, RATING) ===")
+        for dt in target_dates:
+            d7_r = [x for x in r75 if x["period"] == dt]
+            if not d7_r:
+                continue
+            tot7 = sum(x["total_driver"] for x in d7_r)
+            c7_s = " | ".join(f"{c}={sum(x['total_driver'] for x in d7_r if x['city_id'] == c):,}" for c in ("SGN", "HAN", "EXP"))
+            parts.append(f"[Ngày {dt}] TỔNG TX={tot7:,} | {c7_s}")
+            for r in sorted(d7_r, key=lambda x: (x["city_id"], x["driver_segment"])):
+                sa = _agg_75557([r])
+                parts.append(
+                    f"  {r['city_id']}|{r['driver_segment']}: rank={r['ranking_driver']},active={r['total_driver']}({sa['active_rate']:.1f}%),hard={r['hard_driver']},aa={r['total_aa_driver']}({sa['aa_pct']:.0f}%),lcd={r['lcd_driver']},gdr={r['gdr_driver']} | "
+                    f"inc/drv={sa['inc_per_drv']:,.0f},rew%={sa['rew_pct']:.2f}%,EPH={sa['eph']:,.0f},PPH={sa['pph']:.2f},Util={sa['util']:.1f}%,hrs/drv={sa['hrs_per_drv']:.1f} | "
+                    f"AR_noti={sa['ar_noti']:.1f}%,CR_tot={sa['cr_total']:.1f}%,CR_poc={sa['cr_poc']:.2f}%({r['cancel_poc']}),Rating={sa['rating']:.2f},bad={r['bad_rating_order']}"
+                )
+
+    # Weekly & Monthly multi-sheet trends
+    if r67 and r75:
+        parts.append("\n=== XU HƯỚNG THEO THÁNG & 7 NGÀY GẦN NHẤT (TỔNG HỢP 3 SHEETS) ===")
+        months = sorted({r["period"][:7] for r in r67})
+        for m in months:
+            m67 = [r for r in r67 if r["period"].startswith(m)]
+            m75 = [r for r in r75 if r["period"].startswith(m)]
+            n_d = len({r["period"] for r in m67}) or 1
+            a67 = _agg_67888([r for r in m67 if r["region"] == "NW"])
+            a75 = _agg_75557(m75)
             parts.append(
-                f"{r['city_id']} | {r['tag']} | total={r['total_active']} | "
-                f"1h={r['active_1h']} 2h={r['active_2h']} 4h={r['active_4h']} | "
-                f"bike={r['bike']} eco={r['eco']} aibot={r['aibot']} pool={r['pool']} "
-                f"aifood={r['aifood']} TMDT={r['TMDT']} 2H={r['_2H']} 2HBULKY={r['_2HBULKY']} "
-                f"INDAY={r['INDAY']} 1HTMDT={r['_1HTMDT']}"
+                f"Tháng {m} ({n_d} ngày): NW Req={int(a67['req']):,} ({int(a67['req'])//n_d:,}/ng), Comp={int(a67['comp']):,}, "
+                f"AR={a67['ar']:.2f}%, FR={a67['fr']:.2f}% | TB TX/ng={int(a75['drv'])//n_d:,}, EPH={a75['eph']:,.0f}, PPH={a75['pph']:.2f}, Util={a75['util']:.1f}%, CR_poc={a75['cr_poc']:.2f}%"
             )
 
-    # Weekly trend (average daily active per week by city & tag)
-    weeks = sorted({r["week"] for r in rows if r["week"]})[-6:]
-    parts.append("--- TREND TUẦN (Tổng & TB ngày theo tuần/city/tag, 6 tuần gần nhất) ---")
-    for w in weeks:
-        w_rows = [r for r in rows if r["week"] == w]
-        n_days = len({r["order_date"] for r in w_rows}) or 1
-        by_ct: dict[tuple[str, str], int] = {}
-        for r in w_rows:
-            k = (r["city_id"], r["tag"])
-            by_ct[k] = by_ct.get(k, 0) + r["total_active"]
-        summary = ", ".join(f"{c}-{t}:{v//n_days}/ng" for (c, t), v in sorted(by_ct.items()))
-        parts.append(f"Tuần {w} ({n_days} ngày): {summary}")
-
-    # Monthly trend (Card 74433)
-    months = sorted({r["month"] for r in rows if r["month"]})
-    parts.append("--- TREND THÁNG CARD 74433 (TB ngày theo tháng/city/tag) ---")
-    for m in months:
-        m_rows = [r for r in rows if r["month"] == m]
-        n_days = len({r["order_date"] for r in m_rows}) or 1
-        by_ct = {}
-        for r in m_rows:
-            k = (r["city_id"], r["tag"])
-            by_ct[k] = by_ct.get(k, 0) + r["total_active"]
-        summary = ", ".join(f"{c}-{t}:{v//n_days}/ng" for (c, t), v in sorted(by_ct.items()))
-        parts.append(f"Tháng {m[:7]} ({n_days} ngày): {summary}")
-
-    # Card 67888 context (Requested, Accept, Completed, AR, FR by region & service_type)
-    try:
-        rows_67888, src_67888 = fetch_card_67888_rows()
-        if rows_67888:
-            d6_list = sorted({r["period"] for r in rows_67888})
-            t_dates6 = _extract_requested_dates(user_message, d6_list) or (d6_list[-2:] if len(d6_list) >= 2 else d6_list[-1:])
-            parts.append(f"\n=== CARD 67888 ({src_67888}: {d6_list[0]} -> {d6_list[-1]}) ===")
-            for dt in t_dates6:
-                parts.append(f"--- CHI TIẾT ĐƠN/KPI NGÀY {dt} ---")
-                for r in sorted([x for x in rows_67888 if x["period"] == dt], key=lambda x: (x["region"], -x["requested"])):
-                    parts.append(
-                        f"{r['region']} | {r['service_type']} | req={r['requested']} acc={r['accept']} "
-                        f"comp={r['completed']} | AR={r['ar']*100:.2f}% FR={r['fr']*100:.2f}%"
-                    )
-            # Monthly & last-7-days region summary
-            parts.append("--- TỔNG HỢP 7 NGÀY GẦN NHẤT & THEO THÁNG (CARD 67888) ---")
-            for label, cond in [("7d gần nhất", set(d6_list[-7:])), ("Tháng 11", {d for d in d6_list if d.startswith("2026-11")}), ("Tháng 10", {d for d in d6_list if d.startswith("2026-10")})]:
-                sub_all = [r for r in rows_67888 if r["period"] in cond]
-                if not sub_all:
-                    continue
-                reg_parts = []
-                for reg in ("NW", "SGN", "HAN", "EXP"):
-                    sr = [r for r in sub_all if r["region"] == reg]
-                    rq = sum(x["requested"] for x in sr)
-                    ac = sum(x["accept"] for x in sr)
-                    cp = sum(x["completed"] for x in sr)
-                    if rq:
-                        reg_parts.append(f"{reg}(req={rq:,},acc={ac:,},comp={cp:,},AR={ac/rq*100:.1f}%,FR={cp/rq*100:.1f}%)")
-                if reg_parts:
-                    parts.append(f"{label}: " + " | ".join(reg_parts))
-    except Exception as exc:
-        print(f"⚠️ Card 67888 context error: {exc}")
-
-    # Card 75557 context (Driver Income, EPH, PPH, Util, AA, CR POC, Rating)
-    try:
-        rows_75557, src_75557 = fetch_card_75557_rows()
-        if rows_75557:
-            d7_list = sorted({r["period"] for r in rows_75557})
-            t_dates7 = _extract_requested_dates(user_message, d7_list) or (d7_list[-2:] if len(d7_list) >= 2 else d7_list[-1:])
-            parts.append(f"\n=== CARD 75557 ({src_75557}: {d7_list[0]} -> {d7_list[-1]}) ===")
-            for dt in t_dates7:
-                d7_rows = [x for x in rows_75557 if x["period"] == dt]
-                tot7_all = sum(x["total_driver"] for x in d7_rows)
-                c7_sums = " | ".join(
-                    f"{c}={sum(x['total_driver'] for x in d7_rows if x['city_id'] == c):,}"
-                    for c in ("SGN", "HAN", "EXP")
-                )
-                parts.append(f"--- DRIVER INCOME & QUALITY NGÀY {dt} (TỔNG TX={tot7_all:,} | {c7_sums}) ---")
-                for r in sorted(d7_rows, key=lambda x: (x["city_id"], x["driver_segment"])):
-                    inc = r["order_income"] + r["reward_income"]
-                    drv = r["total_driver"] or 1
-                    onl = r["online_hours"] or 1
-                    acc = r["accept_order"] or 1
-                    tnoti = r["total_noti"] or 1
-                    rord = r["rating_order"] or 1
-                    parts.append(
-                        f"{r['city_id']} | {r['driver_segment']} | rank_drv={r['ranking_driver']} active={r['total_driver']} "
-                        f"hard={r['hard_driver']} aa={r['total_aa_driver']} lcd={r['lcd_driver']} gdr={r['gdr_driver']} | "
-                        f"inc/drv={inc/drv:,.0f} rew={r['reward_income']:,.0f} EPH={inc/onl:,.0f} PPH={r['total_stp']/onl:.2f} "
-                        f"Util={r['busy_hours']/onl*100:.1f}% AR_noti={r['accept_noti']/tnoti*100:.1f}% "
-                        f"CR_poc={r['cancel_poc']/acc*100:.2f}% Rating={r['rating_star']/rord:.2f}"
-                    )
-    except Exception as exc:
-        print(f"⚠️ Card 75557 context error: {exc}")
+    if bundle["extra_tabs"]:
+        parts.append("\n=== DỮ LIỆU CÁC TAB MỞ RỘNG TRÊN GOOGLE SHEET ===")
+        for tb in bundle["extra_tabs"]:
+            parts.append(f"Tab {tb['name']} ({tb['row_count']} dòng): {json.dumps(tb['sample_latest'], ensure_ascii=False)}")
 
     return "\n".join(parts)

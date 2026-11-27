@@ -3,6 +3,7 @@
 import json
 import os
 import sys
+import urllib.request
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from typing import Any
@@ -13,6 +14,19 @@ if str(ROOT_DIR) not in sys.path:
 
 import bot_core  # noqa: E402
 import ops_metrics  # noqa: E402
+
+
+def _send_typing(chat_id: Any) -> None:
+    try:
+        url = f"https://api.telegram.org/bot{bot_core.TOKEN}/sendChatAction"
+        req = urllib.request.Request(
+            url,
+            data=json.dumps({"chat_id": chat_id, "action": "typing"}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+        )
+        urllib.request.urlopen(req, timeout=3)
+    except Exception:
+        pass
 
 
 def process_update(update: dict[str, Any]) -> None:
@@ -31,51 +45,74 @@ def process_update(update: dict[str, Any]) -> None:
     if text.startswith("/"):
         cmd = text.split()[0].split("@")[0].lower()
         arg = text.partition(" ")[2].strip().lower()
-        if cmd in ("/ops", "/sgn"):
+        force_refresh = arg == "refresh"
+
+        if cmd in ("/report", "/ops", "/sgn"):
+            _send_typing(chat_id)
             refresh_note = ""
-            force_refresh = arg == "refresh"
             if force_refresh:
                 ok, info = ops_metrics.trigger_metabase_refresh()
-                refresh_note = "✅ Đã kích hoạt Metabase export mới.\n\n" if ok else f"⚠️ Metabase refresh cảnh báo: `{info}`\n\n"
+                refresh_note = (
+                    "✅ <i>Đã kích hoạt đồng bộ Metabase mới cho cả 3 Card (74433, 67888, 75557).</i>\n\n"
+                    if ok
+                    else f"⚠️ <i>Metabase refresh cảnh báo:</i> <code>{ops_metrics._esc(info)}</code>\n\n"
+                )
             try:
-                brief = ops_metrics.fetch_ops_brief(force_refresh=force_refresh)
-                bot_core.send_telegram_msg(chat_id, refresh_note + brief, reply_to_message_id=msg_id)
+                report_html = ops_metrics.fetch_full_executive_report(force_refresh=force_refresh)
+                bot_core.send_telegram_html(chat_id, refresh_note + report_html, reply_to_message_id=msg_id)
             except Exception as exc:
-                bot_core.send_telegram_msg(chat_id, f"⚠️ Không lấy được chỉ số Ops: `{exc}`", reply_to_message_id=msg_id)
+                bot_core.send_telegram_msg(chat_id, f"⚠️ Không tạo được báo cáo tổng hợp: `{exc}`", reply_to_message_id=msg_id)
             return
-        if cmd in ("/kpi", "/orders", "/perf"):
+
+        if cmd in ("/supply", "/active"):
+            _send_typing(chat_id)
             try:
-                brief = ops_metrics.fetch_kpi_brief(force_refresh=(arg == "refresh"))
-                bot_core.send_telegram_msg(chat_id, brief, reply_to_message_id=msg_id)
+                brief = ops_metrics.fetch_supply_brief(force_refresh=force_refresh)
+                bot_core.send_telegram_html(chat_id, brief, reply_to_message_id=msg_id)
+            except Exception as exc:
+                bot_core.send_telegram_msg(chat_id, f"⚠️ Không lấy được chỉ số Nguồn cung (Card 74433): `{exc}`", reply_to_message_id=msg_id)
+            return
+
+        if cmd in ("/kpi", "/orders", "/perf"):
+            _send_typing(chat_id)
+            try:
+                brief = ops_metrics.fetch_kpi_brief(force_refresh=force_refresh)
+                bot_core.send_telegram_html(chat_id, brief, reply_to_message_id=msg_id)
             except Exception as exc:
                 bot_core.send_telegram_msg(chat_id, f"⚠️ Không lấy được chỉ số KPI (Card 67888): `{exc}`", reply_to_message_id=msg_id)
             return
+
         if cmd in ("/driver", "/income"):
+            _send_typing(chat_id)
             try:
-                brief = ops_metrics.fetch_driver_brief(force_refresh=(arg == "refresh"))
-                bot_core.send_telegram_msg(chat_id, brief, reply_to_message_id=msg_id)
+                brief = ops_metrics.fetch_driver_brief(force_refresh=force_refresh)
+                bot_core.send_telegram_html(chat_id, brief, reply_to_message_id=msg_id)
             except Exception as exc:
                 bot_core.send_telegram_msg(chat_id, f"⚠️ Không lấy được chỉ số Driver (Card 75557): `{exc}`", reply_to_message_id=msg_id)
             return
+
         if cmd in ("/mac", "/health", "/mac_clean") and os.environ.get("VERCEL"):
-            bot_core.send_telegram_msg(
+            bot_core.send_telegram_html(
                 chat_id,
-                "💻 Lệnh `/mac` chỉ quét được phần cứng khi máy Mac đang bật.\n"
-                "☁️ Hiện tại `@DMAIChat_Bot` đang chạy **24/7 trên Vercel Cloud** — bạn có thể chat AI hoặc dùng `/status`, `/chatid`, `/help` bình thường kể cả khi tắt máy.",
+                "💻 Lệnh <code>/mac</code> chỉ quét được phần cứng khi máy Mac đang bật.\n"
+                "☁️ Hiện tại <code>@DMAIChat_Bot</code> đang chạy <b>24/7 trên Vercel Cloud</b> — "
+                "gõ <code>/report</code>, <code>/ops</code>, <code>/kpi</code>, <code>/supply</code>, <code>/driver</code> để xem báo cáo vận hành.",
                 reply_to_message_id=msg_id,
             )
             return
+
         if cmd == "/ask":
             query = text.partition(" ")[2].strip()
             if query:
                 bot_core.handle_natural_message(chat_id, f"@DMAIChat_Bot {query}", msg_id, message)
             else:
-                bot_core.send_telegram_msg(
+                bot_core.send_telegram_html(
                     chat_id,
-                    "💡 Dùng `/ask <câu hỏi>` hoặc tag `@DMAIChat_Bot <câu hỏi>` / reply tin nhắn của bot để trao đổi trong bất kỳ group nào.",
+                    "💡 Dùng <code>/ask &lt;câu hỏi&gt;</code> hoặc tag <code>@DMAIChat_Bot &lt;câu hỏi&gt;</code> / reply tin nhắn của bot để phân tích chuyên sâu.",
                     reply_to_message_id=msg_id,
                 )
             return
+
         bot_core.handle_command(chat_id, text, msg_id)
     else:
         bot_core.handle_natural_message(chat_id, text, msg_id, message)
@@ -99,6 +136,7 @@ class handler(BaseHTTPRequestHandler):
                 "ok": True,
                 "service": "dmai-chat-bot",
                 "bot": "@DMAIChat_Bot",
+                "version": "2.0-multi-sheet-executive",
                 "mode": "vercel-webhook",
                 "bot_configured": bool(bot_core.TOKEN),
                 "ai_configured": bool(

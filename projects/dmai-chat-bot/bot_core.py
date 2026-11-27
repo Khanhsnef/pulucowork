@@ -49,19 +49,105 @@ if not TOKEN:
 MONITOR_DIR = "Output/Ahamove/06. COMPETITIVE_INTEL/monitoring"
 
 # ── HELPER FUNCTIONS ──────────────────────────────────────────────────────────
+def _split_lines_safely(text, max_len=3800):
+    if not text or len(text) <= max_len:
+        return [text] if text else []
+    chunks = []
+    cur = ""
+    for line in text.splitlines(keepends=True):
+        if len(cur) + len(line) > max_len:
+            if cur:
+                chunks.append(cur.rstrip("\n"))
+            cur = line
+        else:
+            cur += line
+    if cur:
+        chunks.append(cur.rstrip("\n"))
+    return chunks
+
+
+def markdown_to_telegram_html(md_text):
+    """Convert LLM Markdown (**bold**, `code`, ### headers, bullets) into clean Telegram HTML."""
+    import html as _html
+    if not md_text:
+        return ""
+    lines = md_text.splitlines()
+    out_lines = []
+    in_code_block = False
+    for raw_line in lines:
+        stripped = raw_line.strip()
+        if stripped.startswith("```"):
+            in_code_block = not in_code_block
+            out_lines.append("<pre>" if in_code_block else "</pre>")
+            continue
+        if in_code_block:
+            out_lines.append(_html.escape(raw_line))
+            continue
+
+        line = _html.escape(raw_line)
+        # Headings ### Title -> <b>Title</b>
+        m_hd = re.match(r"^\s*#{1,4}\s+(.+)$", line)
+        if m_hd:
+            hdr = re.sub(r"\*\*(.+?)\*\*", r"\1", m_hd.group(1).strip())
+            out_lines.append(f"\n<b>{hdr}</b>")
+            continue
+
+        # Normalize bullet markers "*   " or "-   " -> "• "
+        line = re.sub(r"^(\s*)[\*\-]\s+", r"\1• ", line)
+        # Inline `code`
+        line = re.sub(r"`([^`]+)`", r"<code>\1</code>", line)
+        # Bold **text**
+        line = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", line)
+        # Italic *text* (single asterisk not adjacent to space)
+        line = re.sub(r"(?<!\*)\*([^\*\n]+?)\*(?!\*)", r"<i>\1</i>", line)
+        out_lines.append(line)
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(out_lines)).strip()
+
+
+def send_telegram_html(chat_id, html_text, reply_to_message_id=None):
+    """Send rich HTML-formatted Telegram message with safe line chunking & plain fallback."""
+    chunks = _split_lines_safely(html_text, max_len=3800)
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    last_res = None
+    for idx, chunk in enumerate(chunks):
+        payload = {
+            "chat_id": chat_id,
+            "text": chunk,
+            "parse_mode": "HTML",
+            "disable_web_page_preview": True,
+        }
+        if reply_to_message_id and idx == 0:
+            payload["reply_to_message_id"] = reply_to_message_id
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=12) as response:
+                last_res = json.loads(response.read().decode())
+        except Exception as e:
+            print(f"⚠️ HTML send warning: {e}. Retrying plain...")
+            plain = re.sub(r"<[^>]+>", "", chunk)
+            payload_fb = {"chat_id": chat_id, "text": plain}
+            if reply_to_message_id and idx == 0:
+                payload_fb["reply_to_message_id"] = reply_to_message_id
+            req_fb = urllib.request.Request(
+                url,
+                data=json.dumps(payload_fb).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+            )
+            try:
+                with urllib.request.urlopen(req_fb, timeout=12) as response:
+                    last_res = json.loads(response.read().decode())
+            except Exception as fb_err:
+                print(f"⚠️ Plain fallback failed: {fb_err}")
+    return last_res
+
+
 def send_telegram_msg(chat_id, text, reply_to_message_id=None):
-    if text and len(text) > 3900:
-        chunks = []
-        cur = ""
-        for line in text.splitlines(keepends=True):
-            if len(cur) + len(line) > 3900:
-                if cur:
-                    chunks.append(cur)
-                cur = line
-            else:
-                cur += line
-        if cur:
-            chunks.append(cur)
+    chunks = _split_lines_safely(text, max_len=3800)
+    if len(chunks) > 1:
         last_res = None
         for idx, ch in enumerate(chunks):
             last_res = send_telegram_msg(chat_id, ch, reply_to_message_id if idx == 0 else None)
@@ -316,11 +402,12 @@ def get_system_context(user_message=""):
     md_file_weekly, _ = (None, None) if is_ops_only else get_latest_report("*-weekly-market-brief.md")
     
     context = (
-        "Bạn là trợ lý AI chuyên nghiệp, nhiệt tình và thực tế của đội ngũ Driver Management Ahamove.\n"
-        "Nhiệm vụ của bạn là giải đáp các câu hỏi của các thành viên trong nhóm về thị trường, đối thủ (Grab, Be, XanhSM, SPX, ShopeeFood), "
-        "thông tin vận hành, quy trình chiến lược, OKRs và hệ thống phân hạng tài xế dựa trên tài liệu nội bộ được cung cấp.\n\n"
-        "Hãy phản hồi ngắn gọn (dưới 4 câu), tự nhiên và thực tế như một đồng nghiệp hoặc trợ lý đang chat trực tiếp (tránh văn phong robot, chào hỏi dài dòng).\n"
-        "Ưu tiên sử dụng tài liệu nội bộ được cung cấp để trả lời các câu hỏi chuyên môn. Đối với các câu hỏi ngoài lề (đời sống, thời tiết, tin tức mới...) hoặc khi tài liệu không có thông tin, bạn hãy sử dụng kết quả tìm kiếm từ công cụ Google Search được tích hợp để trả lời một cách chính xác nhất, tuyệt đối tránh việc từ chối trả lời do thiếu tài liệu.\n\n"
+        "Bạn là Chuyên gia Phân tích Vận hành & Chiến lược Tài xế (Senior Ops & Driver Strategy Analyst) của Ahamove.\n"
+        "Nhiệm vụ của bạn là phân tích sâu dữ liệu vận hành từ tất cả các bảng dữ liệu (Supply, Demand/SLA, Driver Income/Quality), "
+        "thị trường, đối thủ (Grab, Be, XanhSM, SPX, ShopeeFood), OKRs và chính sách phân hạng tài xế.\n\n"
+        "Phong cách trình bày: Trực diện (Lead with the answer), sắc bén, dẫn chứng bằng con số tuyệt đối kèm tỷ lệ % tăng/giảm (▲/▼ DoD, WoW, ±pp), "
+        "bố cục phân tách rõ ràng bằng tiêu đề & gạch đầu dòng dễ đọc trên điện thoại. "
+        "Với câu hỏi xã giao đơn giản thì trả lời ngắn gọn; với câu hỏi báo cáo/vận hành/phân tích thì lập báo cáo đầy đủ, sâu sắc, nhiều insights.\n\n"
     )
     
     loaded_files = []
@@ -417,12 +504,18 @@ def get_system_context(user_message=""):
             ops_ctx = ops_metrics.build_query_context(user_message)
             if ops_ctx:
                 context += (
-                    "### QUY TẮC TRẢ LỜI OPS INSIGHTS:\n"
-                    "- Khi trả lời hoặc đưa ra insights vận hành, BẮT BUỘC bóc tách riêng thành 4 mục rõ ràng: "
-                    "**1. NW (Nationwide)**, **2. SGN**, **3. HAN**, **4. EXP**.\n"
-                    "- Phân biệt chính xác: Card 74433 & Card 75557 là số lượng **Tài xế Active** (không gọi là đơn hàng); "
-                    "Card 67888 mới là số lượng **Đơn hàng** (Requested, Accept, Completed, AR, FR).\n\n"
-                    f"### DỮ LIỆU OPS (CARD 74433, 67888, 75557):\n{ops_ctx}\n\n"
+                    "### QUY TẮC LẬP BÁO CÁO & INSIGHTS VẬN HÀNH (BẮT BUỘC TUÂN THỦ):\n"
+                    "1. Đọc và kết hợp ĐẦY ĐỦ tất cả chỉ số từ cả 3 bảng: "
+                    "Card 67888 (Đơn hàng: Requested, Accept, Completed, Đơn rớt, AR, FR theo dịch vụ) + "
+                    "Card 74433 (Nguồn cung Tài xế Active theo Segment FT/PT/return/NIM/NLM & kênh dịch vụ) + "
+                    "Card 75557 (Thu nhập TB/TX, EPH, PPH, Utilization, Tỷ trọng thưởng, Active/Ranking, Auto-Accept %, Hard %, LCD, GDR, AR Noti, CR POC, Rating).\n"
+                    "2. Mọi chỉ số quan trọng PHẢI đi kèm **tỷ lệ tăng/giảm** (`▲/▼ +x.x% DoD`, `WoW`, hoặc `±x.xx pp`).\n"
+                    "3. Trình bày theo cấu trúc chuẩn dễ đọc:\n"
+                    "   - **📊 TÓM TẮT ĐIỀU HÀNH (Executive Summary):** 2-3 câu kết luận quan trọng nhất toàn mạng lưới.\n"
+                    "   - **🌐 1. NW (Toàn Quốc)** | **🏙️ 2. SGN** | **🏛️ 3. HAN** | **🧭 4. EXP**: Mỗi khu vực nêu rõ Cầu & SLA, Nguồn cung, Thu nhập & Chất lượng.\n"
+                    "   - **🧠 INSIGHTS CHÉO & ĐỀ XUẤT HÀNH ĐỘNG:** Chỉ rõ nguyên nhân gốc rễ (VD: tương quan giữa AA%/CR POC với FR, biến động Cung vs Cầu, cảnh báo nhóm LCD hoặc dịch vụ kéo tụt SLA) và hành động ưu tiên.\n"
+                    "4. Tuyệt đối KHÔNG gọi số tài xế ở Card 74433/75557 là 'đơn hàng'.\n\n"
+                    f"### DỮ LIỆU OPS ĐA CHIỀU (ALL SHEETS):\n{ops_ctx}\n\n"
                 )
         except Exception as exc:
             print(f"⚠️ Ops metrics context error: {exc}")
@@ -436,23 +529,21 @@ def handle_command(chat_id, text, msg_id):
 
     if cmd in ["/start", "/help"]:
         help_text = (
-            "🤖 *HƯỚNG DẪN SỬ DỤNG AHAMOVE SMARTOPS & MAC ADVISOR BOT* (`@DMAIChat_Bot`)\n"
+            "🤖 <b>HƯỚNG DẪN SỬ DỤNG AHAMOVE OPS ANALYST BOT</b> (<code>@DMAIChat_Bot</code>)\n"
             "━━━━━━━━━━━━━━━━━━━━\n"
-            "📌 *1. Tra cứu Báo cáo Thị trường & Đối thủ (Competitive Intel):*\n"
-            "• `/latest` — Xem báo cáo giám sát đối thủ (Grab, Be, XanhSM...) mới nhất trong ngày kèm file HTML.\n"
-            "• `/weekly` — Xem bản tin tổng hợp thị trường & đối thủ đầu tuần gần nhất.\n\n"
-            "🩺 *2. Kiểm tra & Tối ưu Sức khỏe Máy Mac (Mac Health Advisor):*\n"
-            "• `/mac` hoặc `/health` — Quét tức thì CPU Load, RAM, Swap, SSD trống & Top tiến trình ngốn tài nguyên (Chế độ an toàn Chỉ Đọc).\n"
-            "• `/mac_clean` — Dọn dẹp an toàn bộ nhớ đệm (Cache npm, Chrome, ShipIt, pip) & reset daemon chuột Logitech bị rò rỉ RAM (Không đóng cửa sổ làm việc).\n"
-            "• *(Tự động)*: Đúng `12:30 PM` hàng ngày, Bot tự động quét và gửi báo cáo sức khỏe máy Mac vào nhóm.\n\n"
-            "💻 *3. Trạng thái Hệ thống & Tiện ích:*\n"
-            "• `/status` — Kiểm tra trạng thái các luồng tự động hóa (Daily Intel, SGN Report, Mac Health, 1Office).\n"
-            "• `/chatid` — Xem mã `Chat ID` của nhóm hoặc cuộc trò chuyện hiện tại.\n"
-            "• `/help` — Hiển thị bảng hướng dẫn sử dụng đầy đủ này.\n\n"
-            "💬 *4. Trò chuyện & Hỏi đáp AI trực tiếp trong Nhóm:*\n"
-            "• Tag `@DMAIChat_Bot <câu hỏi>`, gọi `bot ơi <câu hỏi>`, hoặc **Reply (Trả lời)** trực tiếp tin nhắn của Bot để hỏi về dữ liệu vận hành, OKR, Driver Ranking, đối thủ hoặc tra cứu Google Search."
+            "📊 <b>1. Báo cáo Vận hành Đa chiều (Live Google Sheets — 3+ Cards):</b>\n"
+            "• <code>/report</code> hoặc <code>/ops</code> — <b>Báo cáo Tổng hợp Điều hành</b> (đọc toàn bộ Sheet 67888 + 74433 + 75557, tách riêng NW/SGN/HAN/EXP kèm % DoD, % WoW &amp; Insights chéo).\n"
+            "• <code>/ops refresh</code> — Kích hoạt đồng bộ mới từ Metabase cho cả 3 Card rồi xuất báo cáo.\n"
+            "• <code>/kpi</code> — Chi tiết Đơn hàng, Đơn rớt, AR &amp; FR theo từng <code>service_type</code> (Card 67888).\n"
+            "• <code>/supply</code> — Chi tiết Nguồn cung Tài xế theo Segment &amp; 14 kênh dịch vụ (Card 74433).\n"
+            "• <code>/driver</code> — Chi tiết Thu nhập, EPH, PPH, Utilization, AA%, Hard%, LCD, GDR, CR POC &amp; Rating (Card 75557).\n\n"
+            "📰 <b>2. Báo cáo Thị trường &amp; Đối thủ:</b>\n"
+            "• <code>/latest</code> — Báo cáo giám sát đối thủ mới nhất trong ngày.\n"
+            "• <code>/weekly</code> — Bản tin tổng hợp thị trường &amp; đối thủ đầu tuần.\n\n"
+            "💬 <b>3. Phân tích Chuyên sâu với AI trong mọi Group:</b>\n"
+            "• Tag <code>@DMAIChat_Bot &lt;câu hỏi&gt;</code>, gõ <code>/ask &lt;câu hỏi&gt;</code>, hoặc <b>Reply</b> tin nhắn của Bot để yêu cầu phân tích xu hướng tuần/tháng, so sánh ngày cụ thể, chẩn đoán nguyên nhân &amp; đề xuất hành động."
         )
-        send_telegram_msg(chat_id, help_text, reply_to_message_id=msg_id)
+        send_telegram_html(chat_id, help_text, reply_to_message_id=msg_id)
 
     elif cmd == "/chatid":
         send_telegram_msg(
@@ -602,7 +693,7 @@ def handle_natural_message(chat_id, text, msg_id, message):
     reply_text = None
     
     # Let's try Gemini first (disable googleSearch when internal Ops data is already in context)
-    use_search = "DỮ LIỆU OPS (" not in context
+    use_search = "DỮ LIỆU OPS ĐA CHIỀU" not in context
     if GEMINI_API_KEY and not reply_text:
         reply_text = call_gemini_api(text, context, GEMINI_API_KEY, use_search=use_search)
         
@@ -631,18 +722,20 @@ def handle_natural_message(chat_id, text, msg_id, message):
                 "- `ANTHROPIC_API_KEY`=\"key_của_bạn\""
             )
         
-    send_telegram_msg(chat_id, reply_text, reply_to_message_id=msg_id)
+    send_telegram_html(chat_id, markdown_to_telegram_html(reply_text), reply_to_message_id=msg_id)
 
 # ── MAIN LOOP (POLLING) ───────────────────────────────────────────────────────
 def register_bot_commands():
     commands = [
-        {"command": "help", "description": "Xem hướng dẫn sử dụng đầy đủ của Bot"},
-        {"command": "mac", "description": "Quét nhanh sức khỏe máy Mac (CPU, RAM, Swap, SSD)"},
-        {"command": "mac_clean", "description": "Dọn Cache rác máy Mac an toàn (không đóng app)"},
+        {"command": "report", "description": "Báo cáo vận hành tổng hợp (3 Sheets + Insights chéo)"},
+        {"command": "ops", "description": "Báo cáo tổng hợp điều hành (/ops refresh để đồng bộ mới)"},
+        {"command": "kpi", "description": "Chi tiết Đơn hàng, AR & FR theo dịch vụ (Card 67888)"},
+        {"command": "supply", "description": "Chi tiết Nguồn cung Tài xế theo Segment (Card 74433)"},
+        {"command": "driver", "description": "Chi tiết Thu nhập, EPH, PPH, AA, LCD, CR (Card 75557)"},
+        {"command": "ask", "description": "Hỏi chuyên sâu AI Analyst trong nhóm"},
         {"command": "latest", "description": "Xem báo cáo giám sát đối thủ mới nhất trong ngày"},
         {"command": "weekly", "description": "Xem bản tin thị trường & đối thủ đầu tuần"},
-        {"command": "status", "description": "Kiểm tra trạng thái hệ thống tự động hóa"},
-        {"command": "chatid", "description": "Lấy mã Chat ID của nhóm hiện tại"},
+        {"command": "help", "description": "Xem hướng dẫn sử dụng đầy đủ của Bot"},
     ]
     scopes = [
         {"type": "default"},
