@@ -50,6 +50,23 @@ MONITOR_DIR = "Output/Ahamove/06. COMPETITIVE_INTEL/monitoring"
 
 # ── HELPER FUNCTIONS ──────────────────────────────────────────────────────────
 def send_telegram_msg(chat_id, text, reply_to_message_id=None):
+    if text and len(text) > 3900:
+        chunks = []
+        cur = ""
+        for line in text.splitlines(keepends=True):
+            if len(cur) + len(line) > 3900:
+                if cur:
+                    chunks.append(cur)
+                cur = line
+            else:
+                cur += line
+        if cur:
+            chunks.append(cur)
+        last_res = None
+        for idx, ch in enumerate(chunks):
+            last_res = send_telegram_msg(chat_id, ch, reply_to_message_id if idx == 0 else None)
+        return last_res
+
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     payload = {
         "chat_id": chat_id,
@@ -200,8 +217,9 @@ def call_gemini_api(user_message, system_context, api_key):
             "googleSearch": {}
         }],
         "generationConfig": {
-            "maxOutputTokens": 2048,
-            "temperature": 0.4
+            "maxOutputTokens": 8192,
+            "temperature": 0.4,
+            "thinkingConfig": {"thinkingBudget": 512}
         }
     }
     
