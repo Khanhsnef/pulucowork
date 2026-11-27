@@ -138,14 +138,69 @@ def _format_day_table(rows: list[dict[str, Any]], target_date: str) -> str:
     return "\n".join(lines).strip()
 
 
+def _build_insights(rows: list[dict[str, Any]], dates: list[str]) -> list[str]:
+    latest = dates[-1]
+    prev = dates[-2] if len(dates) >= 2 else None
+    wow_date = dates[-8] if len(dates) >= 8 else None
+
+    cur_rows = [r for r in rows if r["order_date"] == latest]
+    prev_rows = [r for r in rows if r["order_date"] == prev] if prev else []
+    wow_rows = [r for r in rows if r["order_date"] == wow_date] if wow_date else []
+
+    tot_cur = sum(r["total_active"] for r in cur_rows) or 1
+    insights: list[str] = []
+
+    # 1. City DoD & WoW movers
+    city_parts = []
+    for city in ("SGN", "HAN", "EXP"):
+        c_cur = sum(r["total_active"] for r in cur_rows if r["city_id"] == city)
+        c_prev = sum(r["total_active"] for r in prev_rows if r["city_id"] == city)
+        c_wow = sum(r["total_active"] for r in wow_rows if r["city_id"] == city)
+        dod = f"{((c_cur - c_prev) / c_prev * 100):+.1f}%" if c_prev else "N/A"
+        wow = f"{((c_cur - c_wow) / c_wow * 100):+.1f}%" if c_wow else "N/A"
+        city_parts.append(f"{city} (DoD {dod}, WoW {wow})")
+    insights.append("Biến động khu vực: " + " | ".join(city_parts) + ".")
+
+    # 2. Segment mix (Core FT+PT vs Return vs New NIM+NLM)
+    ft_pt = sum(r["total_active"] for r in cur_rows if r["tag"] in ("FT", "PT"))
+    ret_cur = sum(r["total_active"] for r in cur_rows if r["tag"] == "return")
+    ret_prev = sum(r["total_active"] for r in prev_rows if r["tag"] == "return")
+    new_cur = sum(r["total_active"] for r in cur_rows if r["tag"] in ("NIM", "NLM"))
+    ret_dod = f" ({((ret_cur - ret_prev) / ret_prev * 100):+.1f}% DoD)" if ret_prev else ""
+    insights.append(
+        f"Cơ cấu lực lượng: Core `FT+PT` chiếm *{ft_pt / tot_cur * 100:.1f}%* ({ft_pt:,} TX), "
+        f"`return` đạt *{ret_cur:,}*{ret_dod}, tài xế mới (`NIM+NLM`) đạt *{new_cur:,}* ({new_cur / tot_cur * 100:.1f}%)."
+    )
+
+    # 3. Alert on sharpest DoD drop or service highlight
+    if prev_rows:
+        drops = []
+        for city in ("SGN", "HAN", "EXP"):
+            for tag in ("FT", "PT", "return", "NIM", "NLM"):
+                v1 = sum(r["total_active"] for r in cur_rows if r["city_id"] == city and r["tag"] == tag)
+                v0 = sum(r["total_active"] for r in prev_rows if r["city_id"] == city and r["tag"] == tag)
+                if v0 >= 50:
+                    pct = (v1 - v0) / v0 * 100
+                    drops.append((pct, city, tag, v1 - v0))
+        drops.sort()
+        if drops and drops[0][0] <= -3.0:
+            p, c, t, diff = drops[0]
+            insights.append(f"Điểm cần chú ý: `{c}-{t}` giảm mạnh nhất (*{p:.1f}%*, {diff:+,} TX so với hôm trước).")
+        else:
+            insights.append("Ổn định: Không có segment lớn nào giảm sâu (>3%) so với hôm trước.")
+
+    return insights
+
+
 def fetch_ops_brief(force_refresh: bool = False) -> str:
-    """Return formatted Card 74433 summary for the latest available date."""
+    """Return formatted Card 74433 summary + insights for the latest available date."""
     rows, source = fetch_card_74433_rows(force_refresh=force_refresh)
     if not rows:
         raise RuntimeError("Chưa có dữ liệu Card 74433.")
     dates = sorted({r["order_date"] for r in rows})
     latest = dates[-1]
     prev = dates[-2] if len(dates) >= 2 else None
+    wow_date = dates[-8] if len(dates) >= 8 else None
 
     tot_latest = sum(r["total_active"] for r in rows if r["order_date"] == latest)
     dod_str = ""
@@ -154,11 +209,21 @@ def fetch_ops_brief(force_refresh: bool = False) -> str:
         if tot_prev > 0:
             pct = (tot_latest - tot_prev) / tot_prev * 100
             dod_str = f" | DoD {'+' if pct >= 0 else ''}{pct:.1f}%"
+    wow_str = ""
+    if wow_date:
+        tot_wow = sum(r["total_active"] for r in rows if r["order_date"] == wow_date)
+        if tot_wow > 0:
+            pct_w = (tot_latest - tot_wow) / tot_wow * 100
+            wow_str = f" | WoW {'+' if pct_w >= 0 else ''}{pct_w:.1f}%"
+
+    insights = _build_insights(rows, dates)
 
     return (
         f"📊 *Card 74433 — Active Drivers theo Segment ({latest})*\n"
-        f"_Nguồn: {source} | Tổng Active: *{tot_latest:,}*{dod_str}_\n\n"
+        f"_Nguồn: {source}_ | Tổng Active: *{tot_latest:,}*{dod_str}{wow_str}\n\n"
         + _format_day_table(rows, latest)
+        + "\n\n💡 *Insights nhanh*\n"
+        + "\n".join(f"• {line}" for line in insights)
     )
 
 
