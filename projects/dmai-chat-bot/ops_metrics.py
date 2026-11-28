@@ -208,6 +208,7 @@ def _fetch_dataset(
 
     rows: list[dict[str, Any]] = []
     source = ""
+    sheet_rows: list[dict[str, Any]] = []
     try:
         req = urllib.request.Request(sheet_url, headers={"User-Agent": "DMAIChat_Bot/2.0"})
         with urllib.request.urlopen(req, timeout=8) as resp:
@@ -215,17 +216,25 @@ def _fetch_dataset(
         if text and not text.lstrip().startswith("<"):
             parsed = [normalizer(r) for r in csv.DictReader(io.StringIO(text)) if r.get(date_key)]
             if parsed:
+                sheet_rows = parsed
                 rows = parsed
                 source = f"Sheet Live ({label})"
     except Exception:
         pass
 
-    if not rows:
-        req = urllib.request.Request(github_url, headers={"User-Agent": "DMAIChat_Bot/2.0"})
-        with urllib.request.urlopen(req, timeout=12) as resp:
-            raw_list = json.loads(resp.read().decode("utf-8"))
-        rows = [normalizer(r) for r in raw_list if r.get(date_key)]
-        source = f"GitHub Snapshot ({label})"
+    try:
+        req_gh = urllib.request.Request(github_url, headers={"User-Agent": "DMAIChat_Bot/2.0"})
+        with urllib.request.urlopen(req_gh, timeout=10) as resp_gh:
+            raw_list = json.loads(resp_gh.read().decode("utf-8"))
+        gh_rows = [normalizer(r) for r in raw_list if r.get(date_key)]
+        if gh_rows:
+            gh_max = max((r.get(date_key, "") for r in gh_rows), default="")
+            sh_max = max((r.get(date_key, "") for r in sheet_rows), default="")
+            if not sheet_rows or gh_max > sh_max:
+                rows = gh_rows
+                source = f"GitHub Snapshot ({label})"
+    except Exception:
+        pass
 
     if rows:
         try:
@@ -644,6 +653,12 @@ def fetch_ops_brief(force_refresh: bool = False) -> str:
     return fetch_full_executive_report(force_refresh=force_refresh)
 
 
+def build_ops_brief_from_sheet(force_refresh: bool = False) -> str:
+    """Backward-compatible wrapper returning plain/markdown Ops Executive Report snapshot."""
+    report_html = fetch_full_executive_report(force_refresh=force_refresh)
+    return re.sub(r"<[^>]+>", "", report_html)
+
+
 def fetch_period_report(timeview: str = "week", force_refresh: bool = False) -> str:
     """Compact Executive Report for Weekly (WAU) or Monthly (MAU) using Card 75557 week/month + Card 67888."""
     is_week = timeview == "week"
@@ -898,6 +913,16 @@ def build_query_context(user_message: str) -> str:
         "BẢN TÓM TẮT EXECUTIVE ĐÃ TÍNH SẴN (% DoD, % WoW, Insights chéo):",
         re.sub(r"<[^>]+>", "", fetch_full_executive_report()),
     ]
+
+    try:
+        pulse_url = f"{GITHUB_RAW_BASE}/latest_ops_pulse.md"
+        req_p = urllib.request.Request(pulse_url, headers={"User-Agent": "DMAIChat_Bot/2.0"})
+        with urllib.request.urlopen(req_p, timeout=5) as resp_p:
+            pulse_txt = resp_p.read().decode("utf-8", errors="replace").strip()
+        if pulse_txt:
+            parts.append(f"\n=== BÁO CÁO NHANH SGN OPS DAILY PULSE MỚI NHẤT ===\n{pulse_txt}")
+    except Exception:
+        pass
 
     # Detailed slices for requested/recent dates across all 3 cards
     if r74:

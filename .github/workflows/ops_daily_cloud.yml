@@ -70,6 +70,32 @@ jobs:
               if rows:
                   Path(out_path).write_text(json.dumps(rows, ensure_ascii=False), encoding='utf-8')
                   print(f'Updated {out_path} ({len(rows)} rows)')
+
+          # Fallback for Card 74433 from SGN Overview Sheet (active by service tab) if fresher
+          try:
+              url_abs = 'https://docs.google.com/spreadsheets/d/1Nbc4NYg3u8TxEh1acuWvDH-p6_8Nz8bDNF3j4bLGWvM/gviz/tq?tqx=out:csv&sheet=active%20by%20service'
+              req_abs = urllib.request.Request(url_abs, headers={'User-Agent': 'GitHub-Actions/1.0'})
+              with urllib.request.urlopen(req_abs, timeout=30) as r_abs:
+                  txt_abs = r_abs.read().decode('utf-8', errors='replace')
+              cols = ['city_id','month','week','order_date','tag','total_active','active_1h','active_2h','active_4h','bike','eco','aibot','pool','aifood','TMDT','_2H','_2HBULKY','INDAY']
+              reader = csv.reader(io.StringIO(txt_abs))
+              next(reader, None)
+              abs_rows = []
+              for row in reader:
+                  if len(row) >= 18 and row[3].startswith('202'):
+                      item = {cols[i]: row[i].replace(',', '').strip() for i in range(18)}
+                      item['_1HTMDT'] = '0'
+                      abs_rows.append(item)
+              if abs_rows:
+                  p74 = Path('Output/Ahamove/04. OPS_METRICS/card_74433_63d.json')
+                  cur74 = json.loads(p74.read_text(encoding='utf-8')) if p74.exists() else []
+                  max_cur = max((x.get('order_date', '') for x in cur74), default='')
+                  max_abs = max((x.get('order_date', '') for x in abs_rows), default='')
+                  if max_abs >= max_cur:
+                      p74.write_text(json.dumps(abs_rows, ensure_ascii=False), encoding='utf-8')
+                      print(f'Synced card_74433_63d.json from active by service tab (latest: {max_abs}, {len(abs_rows)} rows)')
+          except Exception as e:
+              print(f'Fallback 74433 sync warning: {e}')
           "
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -99,8 +125,8 @@ jobs:
 
       - name: Install Dependencies & Chromium
         run: |
-          pip install requests pandas streamlit playwright
-          python3 -m playwright install chromium
+          pip install requests pandas streamlit plotly playwright
+          python3 -m playwright install --with-deps chromium
 
       - name: Run SGN Daily Telegram Report
         env:
@@ -110,19 +136,31 @@ jobs:
         run: python3 _scripts/sgn_daily_telegram_report.py
 
       - name: Update & Push Ops Pulse Snapshot for @DMAIChat_Bot
+        if: always()
         run: |
           python3 -c "
           import sys
           sys.path.insert(0, 'projects/dmai-chat-bot')
+          sys.path.insert(0, '_scripts')
           import ops_metrics
+          import sgn_daily_telegram_report
           from pathlib import Path
-          brief = ops_metrics.build_ops_brief_from_sheet()
-          Path('Output/Ahamove/04. OPS_METRICS/latest_ops_pulse.md').write_text(brief + '\n', encoding='utf-8')
-          print('Saved latest_ops_pulse.md')
+          parts = []
+          try:
+              parts.append(sgn_daily_telegram_report.build_brief())
+          except Exception as e:
+              print(f'SGN sheet brief warning: {e}')
+          try:
+              parts.append(ops_metrics.build_ops_brief_from_sheet())
+          except Exception as e:
+              print(f'Ops metrics brief warning: {e}')
+          if parts:
+              Path('Output/Ahamove/04. OPS_METRICS/latest_ops_pulse.md').write_text('\n\n---\n\n'.join(parts) + '\n', encoding='utf-8')
+              print('Saved latest_ops_pulse.md')
           "
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Output/Ahamove/04.\ OPS_METRICS/latest_ops_pulse.md
+          git add "Output/Ahamove/04. OPS_METRICS/latest_ops_pulse.md"
           if ! git diff --staged --quiet; then
             git commit -m "chore(ops): update daily SGN Ops Pulse snapshot"
             git push

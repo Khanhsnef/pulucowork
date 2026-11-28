@@ -33,13 +33,18 @@ if ($hasChanges) {
 
 # 4. Pull updates from GitHub
 Write-Info "Pulling latest changes (git pull --rebase origin main)..."
-try {
-    git fetch origin | Out-Null
-    $pullResult = git pull --rebase origin main 2>&1
+$oldEAP = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
+git fetch origin 2>&1 | Out-Null
+$pullResult = git pull --rebase origin main 2>&1
+$pullExitCode = $LASTEXITCODE
+$ErrorActionPreference = $oldEAP
+
+if ($pullExitCode -eq 0) {
     Write-Output $pullResult
     Write-Success "Pull successful!"
-} catch {
-    Write-ErrorMsg "Failed to pull from GitHub: $_"
+} else {
+    Write-ErrorMsg "Failed to pull from GitHub (exit code $pullExitCode): $pullResult"
     if ($stashed) {
         Write-WarningMsg "Restoring stashed changes..."
         git stash pop | Out-Null

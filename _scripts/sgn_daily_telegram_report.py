@@ -270,12 +270,13 @@ def capture_sections(url, out_dir):
             ok = page.evaluate(
                 """
                 ({text, marker}) => {
+                    const needle = text.toUpperCase();
                     const tables = Array.from(document.querySelectorAll('table'));
                     for (const table of tables) {
                         const rect = table.getBoundingClientRect();
                         const style = window.getComputedStyle(table);
                         const visible = rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
-                        if (visible && table.innerText.includes(text)) {
+                        if (visible && (table.innerText || '').toUpperCase().includes(needle)) {
                             table.setAttribute('data-capture-target', marker);
                             return true;
                         }
@@ -359,6 +360,12 @@ def run_report(send=True):
         raise RuntimeError("TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must exist in .env or environment")
 
     brief = build_brief()
+    if send:
+        log("Sending Telegram brief (text summary first)")
+        send_telegram_message(token, chat_id, brief)
+    else:
+        print(brief)
+
     port = find_free_port()
     url = f"http://127.0.0.1:{port}"
     log(f"Starting Streamlit on {url}")
@@ -390,14 +397,11 @@ def run_report(send=True):
             raise RuntimeError("Streamlit did not become ready in time")
         images = capture_sections(url, OUT_DIR)
         if send:
-            log("Sending Telegram brief")
-            send_telegram_message(token, chat_id, brief)
             for path, caption in images:
                 log(f"Sending {path.name}")
                 send_telegram_photo(token, chat_id, path, caption=caption)
         else:
             log("Dry run complete; not sending Telegram")
-            print(brief)
             for path, caption in images:
                 print(caption, path)
     finally:

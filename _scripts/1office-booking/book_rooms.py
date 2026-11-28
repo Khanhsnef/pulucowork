@@ -75,7 +75,7 @@ def main():
     log.info(f"Pre-flight session check: {session_status.get('reason')}")
 
     # Chờ tới đúng 16:00:01 (ICT) (Bỏ qua nếu SKIP_SLEEP=1)
-    if os.getenv("SKIP_SLEEP") != "1":
+    if os.getenv("SKIP_SLEEP", "").strip() != "1":
         now = datetime.now(ICT)
         target = now.replace(hour=16, minute=0, second=target_second, microsecond=0)
         wait_seconds = (target - now).total_seconds()
