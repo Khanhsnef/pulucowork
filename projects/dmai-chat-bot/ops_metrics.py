@@ -449,6 +449,24 @@ def _agg_75557(sub: list[dict[str, Any]]) -> dict[str, float]:
 
 
 # ── MASTER FULL CROSS-SHEET EXECUTIVE REPORT (HTML) ───────────────────────────
+def _pick_aligned_dates(
+    r74: list[dict[str, Any]],
+    r67: list[dict[str, Any]],
+    r75: list[dict[str, Any]],
+) -> tuple[str, str | None, str | None, list[str]]:
+    """Pick the latest date where core sheets have data (preventing empty 0 metrics when 1 sheet is 1 day ahead)."""
+    d74 = {r["order_date"] for r in r74 if r.get("order_date")}
+    d67 = {r["period"] for r in r67 if r.get("period")}
+    d75 = {r["period"] for r in r75 if r.get("period")}
+    common = sorted(d74 & d67 & d75)
+    union_all = sorted(d74 | d67 | d75)
+    base = common if common else union_all
+    latest = base[-1]
+    prev = base[-2] if len(base) >= 2 else None
+    wow = base[-8] if len(base) >= 8 else None
+    return latest, prev, wow, union_all
+
+
 def fetch_full_executive_report(force_refresh: bool = False) -> str:
     """Read ALL metrics across ALL sheets and produce a rich, scannable HTML Executive Report."""
     bundle = fetch_all_sheets_parallel(force_refresh=force_refresh)
@@ -456,13 +474,8 @@ def fetch_full_executive_report(force_refresh: bool = False) -> str:
     if not r74 and not r67 and not r75:
         raise RuntimeError("Chưa tải được dữ liệu từ các sheet.")
 
-    dates_all = sorted(
-        {r["order_date"] for r in r74} | {r["period"] for r in r67} | {r["period"] for r in r75}
-    )
-    latest = dates_all[-1]
-    prev = dates_all[-2] if len(dates_all) >= 2 else None
-    wow = dates_all[-8] if len(dates_all) >= 8 else None
-    last7_dates = set(dates_all[-8:-1]) if len(dates_all) >= 8 else set(dates_all[:-1])
+    latest, prev, wow, dates_all = _pick_aligned_dates(r74, r67, r75)
+    max_74 = max((r["order_date"] for r in r74), default=latest)
 
     def _slice(dataset: list[dict[str, Any]], d_key: str, dt: str | None, c_key: str | None = None, c_val: str | None = None) -> list[dict[str, Any]]:
         if not dt:
@@ -476,6 +489,9 @@ def fetch_full_executive_report(force_refresh: bool = False) -> str:
     out: list[str] = []
     out.append(f"🏛️ <b>OPS EXECUTIVE REPORT — {latest}</b>")
     out.append(f"<i>DoD vs {prev or 'N/A'} | WoW vs {wow or 'N/A'} | 3 Sheets Live</i>")
+    if max_74 > latest:
+        s74_new = sum(x["total_active"] for x in r74 if x["order_date"] == max_74)
+        out.append(f"<i>⚡ Card 74433 đã có trước ngày {max_74} (NW Active: {s74_new:,} TX) — xem /supply</i>")
     out.append("━━━━━━━━━━━━━━━━━━━━")
 
     for reg in ("NW", "SGN", "HAN", "EXP"):
@@ -890,7 +906,7 @@ def build_query_context(user_message: str) -> str:
     if not r74 and not r67 and not r75:
         return ""
 
-    dates = sorted({r["order_date"] for r in r74} | {r["period"] for r in r67} | {r["period"] for r in r75})
+    latest_common, prev_common, wow_common, dates = _pick_aligned_dates(r74, r67, r75)
     req_dates = _extract_requested_dates(user_message, dates)
     msg_low = user_message.lower()
     wants_week = any(k in msg_low for k in ("tuần", "week", "đầu tuần", "7 ngày", "trend"))
@@ -900,16 +916,17 @@ def build_query_context(user_message: str) -> str:
     elif wants_week:
         target_dates = dates[-7:]
     else:
-        # Include latest, prev (DoD), and 7-days-ago (WoW) so AI always has exact % deltas!
-        picks = [dates[-1]]
-        if len(dates) >= 2:
-            picks.append(dates[-2])
-        if len(dates) >= 8:
-            picks.append(dates[-8])
-        target_dates = sorted(set(picks))
+        # Always include latest_common, prev_common (DoD), wow_common (WoW), plus any newer date in dates[-1]
+        picks = {latest_common, dates[-1]}
+        if prev_common:
+            picks.add(prev_common)
+        if wow_common:
+            picks.add(wow_common)
+        target_dates = sorted(picks)
 
     parts: list[str] = [
-        f"Khoảng dữ liệu khả dụng: {dates[0]} -> {dates[-1]} | Ngày mới nhất: {dates[-1]}",
+        f"Khoảng dữ liệu khả dụng: {dates[0]} -> {dates[-1]} | Ngày đủ cả 3 Card mới nhất: {latest_common} (So sánh DoD vs {prev_common}, WoW vs {wow_common})",
+        "QUY TẮC SỐ LIỆU BẮT BUỘC: Luôn dùng đúng con số chính xác đã tính sẵn bên dưới (VD: EPH, Utilization, LCD%, CR POC của từng vùng NW/SGN/HAN/EXP), TUYỆT ĐỐI KHÔNG tự ước lượng kiểu 'khoảng 50-60%' hay lấy nhầm ngày DoD (prev) làm ngày báo cáo chính!",
         "BẢN TÓM TẮT EXECUTIVE ĐÃ TÍNH SẴN (% DoD, % WoW, Insights chéo):",
         re.sub(r"<[^>]+>", "", fetch_full_executive_report()),
     ]
@@ -959,8 +976,25 @@ def build_query_context(user_message: str) -> str:
             if not d7_r:
                 continue
             tot7 = sum(x["total_driver"] for x in d7_r)
+            nw7 = _agg_75557(d7_r)
             c7_s = " | ".join(f"{c}={sum(x['total_driver'] for x in d7_r if x['city_id'] == c):,}" for c in ("SGN", "HAN", "EXP"))
-            parts.append(f"[Ngày {dt}] TỔNG TX={tot7:,} | {c7_s}")
+            parts.append(
+                f"[Ngày {dt}] TỔNG NW: TX={tot7:,} ({c7_s}) | TB/TX={nw7['inc_per_drv']:,.0f}, EPH={nw7['eph']:,.0f}, "
+                f"PPH={nw7['pph']:.2f}, Util={nw7['util']:.1f}%, AA={nw7['aa_pct']:.1f}%, Hard={nw7['hard_pct']:.1f}%, "
+                f"LCD={int(nw7['lcd']):,}({nw7['lcd_pct']:.1f}%), GDR={nw7['gdr_pct']:.1f}%, CR_poc={nw7['cr_poc']:.2f}%({int(nw7['cpoc_cnt']):,})"
+            )
+            for city in ("SGN", "HAN", "EXP"):
+                c_sub = [x for x in d7_r if x["city_id"] == city]
+                if not c_sub:
+                    continue
+                ca = _agg_75557(c_sub)
+                parts.append(
+                    f"  [TỔNG VÙNG {city} ngày {dt}]: active={int(ca['drv']):,}({ca['active_rate']:.1f}%), "
+                    f"inc/drv={ca['inc_per_drv']:,.0f}, rew%={ca['rew_pct']:.2f}%, EPH={ca['eph']:,.0f}, PPH={ca['pph']:.2f}, "
+                    f"Util={ca['util']:.1f}%, AA={ca['aa_pct']:.1f}%, Hard={ca['hard_pct']:.1f}%, "
+                    f"LCD={int(ca['lcd']):,}({ca['lcd_pct']:.1f}%), GDR={ca['gdr_pct']:.1f}%, "
+                    f"AR_noti={ca['ar_noti']:.1f}%, CR_poc={ca['cr_poc']:.2f}%({int(ca['cpoc_cnt']):,}), Rating={ca['rating']:.2f}"
+                )
             for r in sorted(d7_r, key=lambda x: (x["city_id"], x["driver_segment"])):
                 sa = _agg_75557([r])
                 parts.append(
