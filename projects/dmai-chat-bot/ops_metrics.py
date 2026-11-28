@@ -28,6 +28,12 @@ SHEET_75557_WEEK_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET
 SHEET_75557_MONTH_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/export?format=csv&gid=1465916221"
 SHEET_HTMLVIEW_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/htmlview"
 
+# SGN Overview Live Sheet (contains up-to-date daily rows across SGN, HAN, Expansion)
+SGN_SHEET_ID = "1Nbc4NYg3u8TxEh1acuWvDH-p6_8Nz8bDNF3j4bLGWvM"
+SGN_DEMAND_ACTUAL_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SGN_SHEET_ID}/export?format=csv&gid=1614501851"
+SGN_ACTIVE_ACTUAL_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SGN_SHEET_ID}/export?format=csv&gid=79588814"
+SGN_ACTIVE_BY_SVC_CSV_URL = f"https://docs.google.com/spreadsheets/d/{SGN_SHEET_ID}/export?format=csv&gid=840346735"
+
 GITHUB_RAW_BASE = (
     "https://raw.githubusercontent.com/Khanhsnef/pulucowork/main/"
     "Output/Ahamove/04.%20OPS_METRICS"
@@ -246,24 +252,197 @@ def _fetch_dataset(
 
 
 def fetch_card_74433_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
-    return _fetch_dataset(
+    rows, source = _fetch_dataset(
         SHEET_74433_CSV_URL, GITHUB_74433_URL, CACHE_FILE_74433, "order_date", _normalize_74433, "74433", force_refresh
     )
+    # Check if SGN_ACTIVE_BY_SVC_CSV_URL has a newer date (e.g. when Metabase export 1gUU... is behind by 1 day)
+    try:
+        max_dt = max((r["order_date"] for r in rows), default="")
+        req = urllib.request.Request(SGN_ACTIVE_BY_SVC_CSV_URL, headers={"User-Agent": "DMAIChat_Bot/2.0"})
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            txt = resp.read().decode("utf-8", errors="replace")
+        cols = [
+            "city_id", "month", "week", "order_date", "tag",
+            "total_active", "active_1h", "active_2h", "active_4h",
+            "bike", "eco", "aibot", "pool", "aifood", "TMDT", "_2H", "_2HBULKY", "INDAY",
+        ]
+        reader = csv.reader(io.StringIO(txt))
+        next(reader, None)
+        abs_rows = []
+        for raw_r in reader:
+            if len(raw_r) >= 18 and raw_r[3].strip().startswith("202"):
+                d = {cols[i]: raw_r[i] for i in range(18)}
+                d["_1HTMDT"] = "0"
+                abs_rows.append(_normalize_74433(d))
+        if abs_rows:
+            abs_max = max((r["order_date"] for r in abs_rows), default="")
+            if abs_max > max_dt:
+                existing_dates = {r["order_date"] for r in rows}
+                for r in abs_rows:
+                    if r["order_date"] not in existing_dates:
+                        rows.append(r)
+                source = f"{source} + Live Sync ({abs_max})"
+    except Exception:
+        pass
+    return rows, source
 
 
 CACHE_FILE_74433 = CACHE_74433_FILE
 
 
 def fetch_card_67888_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
-    return _fetch_dataset(
+    rows, source = _fetch_dataset(
         SHEET_67888_CSV_URL, GITHUB_67888_URL, CACHE_67888_FILE, "period", _normalize_67888, "67888", force_refresh
     )
+    # Supplement missing newer dates from SGN_DEMAND_ACTUAL_CSV_URL (has SGN, HAN, Expansion by channel)
+    try:
+        max_dt = max((r["period"] for r in rows), default="")
+        req = urllib.request.Request(SGN_DEMAND_ACTUAL_CSV_URL, headers={"User-Agent": "DMAIChat_Bot/2.0"})
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            txt = resp.read().decode("utf-8", errors="replace")
+        reader = csv.reader(io.StringIO(txt))
+        next(reader, None)
+        newer_by_date: dict[str, list[tuple[str, str, int, int, int]]] = {}
+        for raw_r in reader:
+            if len(raw_r) >= 11 and raw_r[0].strip() > max_dt and raw_r[0].strip().startswith("202"):
+                dt = raw_r[0].strip()[:10]
+                prov_raw = raw_r[3].strip().upper()
+                reg = "EXP" if "EXP" in prov_raw else prov_raw
+                ch = raw_r[5].strip().upper()
+                if ch == "TRUCK" or reg not in ("SGN", "HAN", "EXP"):
+                    continue
+                rq = _to_int(raw_r[6])
+                ac = _to_int(raw_r[8])
+                cp = _to_int(raw_r[9])
+                newer_by_date.setdefault(dt, []).append((reg, ch, rq, ac, cp))
+        for dt, items in sorted(newer_by_date.items()):
+            # Add regional channel rows
+            nw_by_ch: dict[str, list[int]] = {}
+            for reg, ch, rq, ac, cp in items:
+                rows.append({
+                    "period": dt,
+                    "region": reg,
+                    "service_type": ch,
+                    "requested": rq,
+                    "accept": ac,
+                    "completed": cp,
+                    "ar": (ac / rq) if rq else 0.0,
+                    "fr": (cp / rq) if rq else 0.0,
+                })
+                agg = nw_by_ch.setdefault(ch, [0, 0, 0])
+                agg[0] += rq
+                agg[1] += ac
+                agg[2] += cp
+            for ch, (rq, ac, cp) in nw_by_ch.items():
+                rows.append({
+                    "period": dt,
+                    "region": "NW",
+                    "service_type": ch,
+                    "requested": rq,
+                    "accept": ac,
+                    "completed": cp,
+                    "ar": (ac / rq) if rq else 0.0,
+                    "fr": (cp / rq) if rq else 0.0,
+                })
+            source = f"{source} + Demand Actual ({dt})"
+    except Exception:
+        pass
+    return rows, source
 
 
 def fetch_card_75557_rows(force_refresh: bool = False) -> tuple[list[dict[str, Any]], str]:
-    return _fetch_dataset(
+    rows, source = _fetch_dataset(
         SHEET_75557_CSV_URL, GITHUB_75557_URL, CACHE_75557_FILE, "period", _normalize_75557, "75557", force_refresh
     )
+    # Supplement missing newer dates from SGN_ACTIVE_ACTUAL_CSV_URL (has active, completed_stp, online_hours, segment_driver)
+    # and carry forward unit rate ratios (EPH, Util, AA%, LCD%, CR_POC%) from the latest available Metabase date per (city_id, segment)
+    try:
+        max_dt = max((r["period"] for r in rows), default="")
+        prev_map: dict[tuple[str, str], dict[str, Any]] = {}
+        for r in rows:
+            if r["period"] == max_dt:
+                prev_map[(r["city_id"], r["driver_segment"].lower())] = r
+
+        req = urllib.request.Request(SGN_ACTIVE_ACTUAL_CSV_URL, headers={"User-Agent": "DMAIChat_Bot/2.0"})
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            txt = resp.read().decode("utf-8", errors="replace")
+        reader = csv.reader(io.StringIO(txt))
+        next(reader, None)
+        # Group by (dt, province, segment_view)
+        grouped: dict[tuple[str, str, str], dict[str, float]] = {}
+        for raw_r in reader:
+            if len(raw_r) >= 10 and raw_r[0].strip() > max_dt and raw_r[0].strip().startswith("202"):
+                dt = raw_r[0].strip()[:10]
+                city = raw_r[2].strip().upper()
+                seg = raw_r[4].strip()
+                if city not in ("SGN", "HAN", "EXP") or not seg:
+                    continue
+                act = _to_int(raw_r[6])
+                stp = _to_int(raw_r[7])
+                hrs = _to_float(raw_r[8])
+                rnk = _to_int(raw_r[9])
+                g = grouped.setdefault((dt, city, seg), {"act": 0, "stp": 0, "hrs": 0.0, "rnk": 0})
+                g["act"] += act
+                g["stp"] += stp
+                g["hrs"] += hrs
+                if rnk > g["rnk"]:
+                    g["rnk"] = rnk
+        for (dt, city, seg), g in sorted(grouped.items()):
+            act = int(g["act"])
+            stp = int(g["stp"])
+            hrs = float(g["hrs"])
+            rnk = int(g["rnk"])
+            ref = prev_map.get((city, seg.lower()), {})
+            ref_stp = ref.get("total_stp", 0) or 1
+            ref_hrs = ref.get("online_hours", 0.0) or 1.0
+            ref_drv = ref.get("total_driver", 0) or 1
+            ref_acc = ref.get("accept_order", 0) or stp
+            # Scale income & quality counts proportionally to actual STP / actual Hours / actual Drivers of date dt
+            o_inc = (ref.get("order_income", 0.0) / ref_stp * stp) if ref else 0.0
+            r_inc = (ref.get("reward_income", 0.0) / ref_stp * stp) if ref else 0.0
+            bsy = (ref.get("busy_hours", 0.0) / ref_hrs * hrs) if ref else (hrs * 0.72)
+            acc_ord = int(round(ref_acc / ref_stp * stp)) if ref else stp
+            canc_ord = int(round(ref.get("cancel_order", 0) / ref_stp * stp)) if ref else 0
+            canc_poc = int(round(ref.get("cancel_poc", 0) / ref_stp * stp)) if ref else 0
+            anoti = int(round(ref.get("accept_noti", 0) / ref_stp * stp)) if ref else 0
+            tnoti = int(round(ref.get("total_noti", 0) / ref_stp * stp)) if ref else 0
+            r_ord = int(round(ref.get("rating_order", 0) / ref_stp * stp)) if ref else 0
+            r_star = int(round(ref.get("rating_star", 0) / ref_stp * stp)) if ref else 0
+            bad_r = int(round(ref.get("bad_rating_order", 0) / ref_stp * stp)) if ref else 0
+            aa_drv = int(round(ref.get("total_aa_driver", 0) / ref_drv * act)) if ref else 0
+            hard_drv = int(round(ref.get("hard_driver", 0) / ref_drv * act)) if ref else 0
+            lcd_drv = int(round(ref.get("lcd_driver", 0) / ref_drv * act)) if ref else 0
+            lcd_kpi = int(round(ref.get("lcd_driver_kpi", 0) / ref_drv * act)) if ref else 0
+            gdr_drv = int(round(ref.get("gdr_driver", 0) / ref_drv * act)) if ref else 0
+            rows.append({
+                "period": dt,
+                "city_id": city,
+                "driver_segment": seg,
+                "ranking_driver": rnk or ref.get("ranking_driver", 0),
+                "total_driver": act,
+                "total_stp": stp,
+                "order_income": round(o_inc, 2),
+                "reward_income": round(r_inc, 2),
+                "online_hours": round(hrs, 2),
+                "busy_hours": round(bsy, 2),
+                "accept_order": acc_ord,
+                "cancel_order": canc_ord,
+                "cancel_poc": canc_poc,
+                "accept_noti": anoti,
+                "total_noti": tnoti,
+                "rating_order": r_ord,
+                "rating_star": r_star,
+                "bad_rating_order": bad_r,
+                "total_aa_driver": aa_drv,
+                "hard_driver": hard_drv,
+                "lcd_driver": lcd_drv,
+                "lcd_driver_kpi": lcd_kpi,
+                "gdr_driver": gdr_drv,
+            })
+            source = f"{source} + Active Actual ({dt})"
+    except Exception:
+        pass
+    return rows, source
 
 
 def _find_tab_csv_url(tab_name_hint: str) -> str:
